@@ -1,0 +1,193 @@
+<?php
+namespace App\Helpers;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+
+class MediaHelper
+{
+    public const MEDIA_ROLE_DEFAULT           = 'default';
+    public const MEDIA_ROLE_PROFILE_IMAGE     = 'profile_image';
+    public const MEDIA_ROLE_APP_LOGO_IMAGE    = 'app_logo_image';
+    public const MEDIA_ROLE_APP_CPT_IMAGE     = 'app_cpt_image';
+    public const MEDIA_ROLE_APP_FAVICON_IMAGE = 'app_favicon_image';
+    public const MEDIA_ROLE_THUMBNAIL_IMAGE   = 'thumbnail';
+
+    //
+    public const MEDIA_ROLE_PRODUCT_FEATURE_IMAGE     = 'product_feature_image';
+    public const MEDIA_ROLE_PRODUCT_IMAGE_GALLERY     = 'product_image_gallery';
+
+    public static function mediaRoles()
+    {
+        return collect([
+            (object) ['id' => self::MEDIA_ROLE_DEFAULT, 'name' => 'Default'],
+
+            (object) ['id' => self::MEDIA_ROLE_PROFILE_IMAGE, 'name' => 'Profile Image'],
+            (object) ['id' => self::MEDIA_ROLE_APP_LOGO_IMAGE, 'name' => 'App Logo Image'],
+            (object) ['id' => self::MEDIA_ROLE_APP_CPT_IMAGE, 'name' => 'App CPT Image'],
+            (object) ['id' => self::MEDIA_ROLE_APP_FAVICON_IMAGE, 'name' => 'App Favicon Image'],
+
+            (object) ['id' => self::MEDIA_ROLE_PRODUCT_FEATURE_IMAGE, 'name' => 'Product feature Image'],
+            (object) ['id' => self::MEDIA_ROLE_PRODUCT_IMAGE_GALLERY, 'name' => 'Product image gallery'],
+
+        ]);
+    }
+
+    public static function generateMediaName($mediaName, $mediaExtension, $maxLength)
+    {
+        $mediaName = $mediaName ?? "File";
+        $mediaName = Str::of($mediaName)->limit($maxLength)->__toString();
+
+        $mediaName    = preg_replace('/[^a-z0-9]+/', '', strtolower($mediaName));
+        $randomString = Str::random(5);
+
+        $timestamp              = date('Ymdhis');
+        $userId                 = Auth::check() ? '-u' . Auth::id() : '';
+        $mediaNameWithExtension = "{$mediaName}-{$randomString}-{$timestamp}{$userId}.{$mediaExtension}";
+
+        return $mediaNameWithExtension;
+    }
+
+    public static function parseAndRebuildUrl($url)
+    {
+        $cleanUrl = $url;
+        if (! ($url == null) && (strpos($url, '?') !== false)) {
+            $urlComponents = parse_url($url);
+            $cleanUrl      = $urlComponents['scheme'] . '://' . $urlComponents['host'] . $urlComponents['path'];
+        }
+        return $cleanUrl;
+    }
+
+    public static function defaultAppImage($resulation = "1:1", $mediaName = null)
+    {
+        $mediaUrl     = self::defaultImageOnlineUrl($resulation, "App") ?? null;
+        $replacements = ['&' => 'and', "'" => ''];
+
+        $formatedMediaName = Str::replace(array_keys($replacements), array_values($replacements), $mediaName);
+        $mediaFileName     = Str::lower(Str::slug($formatedMediaName));
+
+        $mediaPath = "uploads/icons/app/{$mediaFileName}.png";
+
+        $mediaPublicPath = public_path($mediaPath);
+
+        if (file_exists($mediaPublicPath)) {
+            $mediaUrl = asset($mediaPath);
+        }
+
+        return $mediaUrl;
+    }
+
+    public static function defaultAuthImage($resulation = "1:1", $mediaName = "user")
+    {
+        $mediaUrl     = self::defaultImageOnlineUrl($resulation, "App") ?? null;
+        $replacements = ['&' => 'and', "'" => ''];
+
+        $formatedMediaName = Str::replace(array_keys($replacements), array_values($replacements), $mediaName);
+        $mediaFileName     = Str::lower(Str::slug($formatedMediaName));
+        $mediaPath         = "uploads/icons/auth/{$mediaFileName}.png";
+
+        $mediaPublicPath = public_path($mediaPath);
+
+        if (file_exists($mediaPublicPath)) {
+            $mediaUrl = asset($mediaPath);
+        }
+
+        return $mediaUrl;
+    }
+
+    public static function defaultDemoImage($resulation = "1:1", $text = null)
+    {
+        return self::defaultImageOnlineUrl($resulation, $text);
+    }
+
+    public static function defaultDemoFile($fileType = "pdf")
+    {
+        return asset('uploads/files/pdf.pdf');
+    }
+
+    public static function defaultDemoAudio($fileType = "mp3")
+    {
+        return asset('uploads/audios/mp3.mp3');
+    }
+
+    public static function defaultDemoVideo($fileType = "mp4")
+    {
+        return asset('uploads/videos/16x9.mp4');
+    }
+
+    private static function defaultImageOnlineUrl($resulation, $text = null)
+    {
+        $url       = asset('uploads/images/16x9-1280x720.jpg');
+        $imageSize = self::imageWidthHeightByRatio($resulation);
+
+        $imageWidth       = $imageSize["width"];
+        $imageHeight      = $imageSize["height"];
+        $imageBgColor     = "ededed";
+        $imageBgTextColor = "000000";
+
+        $url = "https://dummyimage.com/{$imageWidth}x{$imageHeight}/{$imageBgColor}/{$imageBgTextColor}";
+
+        if ($text && ! ($text == null)) {
+            $url = "$url&text={$text}";
+        }
+        return $url;
+    }
+
+    private static function imageWidthHeightByRatio($resulation = "1:1")
+    {
+        $width  = 512;
+        $height = 512;
+
+        switch ($resulation) {
+            case "16:9":
+                $width  = 1280;
+                $height = 720;
+                break;
+
+            case "4:3":
+                $width  = 400;
+                $height = 300;
+                break;
+
+            case "3:4":
+                $width  = 300;
+                $height = 400;
+                break;
+
+            case "2:3":
+                $width  = 400;
+                $height = 600;
+                break;
+
+            case "3:2":
+                $width  = 600;
+                $height = 400;
+                break;
+
+            case "1:1":
+                $width  = 512;
+                $height = 512;
+                break;
+
+            case "8:1":
+                $width  = 728;
+                $height = 90;
+                break;
+
+            case "1:1.2":
+                $width  = 300;
+                $height = 250;
+                break;
+
+            default:
+                $width  = 400;
+                $height = 255;
+                break;
+        }
+
+        return [
+            "width"  => $width,
+            "height" => $height,
+        ];
+    }
+}
