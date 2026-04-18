@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    // Custom
+    "app_logo" => env("APP_LOGO"),
+    "app_favicon" => env("APP_FAVICON"),
+
 ];
