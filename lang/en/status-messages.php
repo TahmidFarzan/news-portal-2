@@ -1,0 +1,74 @@
+<?php
+
+return [
+
+    'activity_log'    => [
+        'delete' => [
+            'success' => 'Activity log deleted successfully.',
+            'failed'  => 'Failed to delete activity log.',
+        ],
+    ],
+
+    'user'            => [
+        'save'     => [
+            'success' => 'User saved successfully.',
+            'failed'  => 'Failed to save user.',
+        ],
+        'active'   => [
+            'success' => 'User active successfully.',
+            'failed'  => 'Failed to active user.',
+        ],
+        'inactive' => [
+            'success' => 'User inactive successfully.',
+            'failed'  => 'Failed to inactive user.',
+        ],
+        'delete'   => [
+            'success' => 'User deleted successfully.',
+            'failed'  => 'Failed to delete user.',
+        ],
+    ],
+
+    // Auth
+    'auth'            => [
+        'login'              => [
+            'success'         => 'Logged in successfully.',
+            'fail'            => 'Login failed.',
+            'credential_fail' => 'Login failed. Invalid credentials.',
+        ],
+        'logout'             => [
+            'success' => 'Logged out successfully.',
+            'fail'    => 'Logout failed.',
+        ],
+        'register'           => [
+            'success' => 'Registered successfully.',
+            'fail'    => 'Registration failed.',
+        ],
+        'reset_password'     => [
+            'success' => 'Password reset successfully.',
+            'fail'    => 'Password reset failed.',
+        ],
+        'forget_password'    => [
+            'success' => 'Password reset request sent successfully.',
+            'fail'    => 'Failed to send password reset request.',
+        ],
+        'email_verification' => [
+            'success'         => 'Email verified successfully.',
+            'fail'            => 'Email verification failed.',
+            'request_success' => 'Email verification link sent successfully.',
+            'request_fail'    => 'Failed to send email verification link.',
+            'expired'         => 'Verification link is invalid or expired.',
+        ],
+        'profile'            => [
+            'save' => [
+                'success' => 'Auth user profile saved successfully.',
+                'failed'  => 'Failed to save auth user profile.',
+            ],
+        ],
+        'account'            => [
+            'save' => [
+                'success' => 'Auth user account saved successfully.',
+                'failed'  => 'Failed to save auth user account.',
+            ],
+        ],
+    ],
+];
