@@ -4,16 +4,36 @@ import { usePage, router as inertia } from '@inertiajs/vue3'
 import { Toaster, toast } from 'vue-sonner'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faUser, faRightFromBracket, faArrowRightToBracket, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import {
+    faUser,
+    faRightFromBracket,
+    faArrowRightToBracket,
+    faSpinner,
+    faGauge,
+    faGears,
+    faXmark
+} from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faLinkedin, faGoogle } from '@fortawesome/free-brands-svg-icons'
 
-library.add(faUser, faRightFromBracket, faArrowRightToBracket, faSpinner, faFacebook, faLinkedin, faGoogle)
+library.add(
+    faUser,
+    faRightFromBracket,
+    faArrowRightToBracket,
+    faSpinner,
+    faGauge,
+    faGears,
+    faXmark,
+    faFacebook,
+    faLinkedin,
+    faGoogle
+)
 
 const pageReady = ref(false)
 const headerNavbar = ref(null)
 const showDropdown = ref(false)
 const showLogoutModal = ref(false)
 const loggingOut = ref(false)
+const dropdownRef = ref(null)
 
 provide("pageReady", pageReady)
 
@@ -33,6 +53,13 @@ const handlePageScroll = () => {
     if (!headerNavbar.value) return
     if (window.scrollY > 0) headerNavbar.value.classList.add('shadow-md', 'sticky', 'top-0', 'z-50')
     else headerNavbar.value.classList.remove('shadow-md', 'sticky', 'top-0', 'z-50')
+}
+
+function handleClickOutside(e) {
+    if (!dropdownRef.value) return
+    if (!dropdownRef.value.contains(e.target)) {
+        showDropdown.value = false
+    }
 }
 
 watch(flashMessage, (newVal) => {
@@ -59,54 +86,12 @@ onMounted(async () => {
     inertia.on('start', () => pageReady.value = false)
     inertia.on('finish', () => pageReady.value = true)
 
-    const enableGrabScroll = (selector) => {
-        const el = document.querySelector(selector)
-        if (!el) return
-
-        let isDown = false
-        let startX, scrollLeft
-        let touchStartX = 0, touchScrollLeft = 0
-
-        el.addEventListener('mousedown', (e) => {
-            isDown = true
-            startX = e.pageX - el.offsetLeft
-            scrollLeft = el.scrollLeft
-        })
-
-        el.addEventListener('mouseleave', () => isDown = false)
-        el.addEventListener('mouseup', () => isDown = false)
-
-        el.addEventListener('mousemove', (e) => {
-            if (!isDown) return
-            e.preventDefault()
-            const x = e.pageX - el.offsetLeft
-            el.scrollLeft = scrollLeft - (x - startX) * 1.5
-        })
-
-        el.addEventListener('wheel', (e) => {
-            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-                e.preventDefault()
-                el.scrollLeft += e.deltaY
-            }
-        }, { passive: false })
-
-        el.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].pageX
-            touchScrollLeft = el.scrollLeft
-        })
-
-        el.addEventListener('touchmove', (e) => {
-            const diff = (e.touches[0].pageX - touchStartX) * 1.3
-            el.scrollLeft = touchScrollLeft - diff
-        })
-    }
-
-    enableGrabScroll('.overflow-x-auto')
-
+    document.addEventListener('click', handleClickOutside)
     window.addEventListener('scroll', handlePageScroll)
 })
 
 onBeforeUnmount(() => {
+    document.removeEventListener('click', handleClickOutside)
     window.removeEventListener('scroll', handlePageScroll)
 })
 </script>
@@ -129,30 +114,55 @@ onBeforeUnmount(() => {
                     </a>
                 </div>
 
-                <div class="flex items-center space-x-3 overflow-x-auto">
+                <div class="flex items-center space-x-3 relative">
 
                     <a v-if="!authUser" :href="route('login')" class="flex items-center gap-1 text-gray-300">
                         <FontAwesomeIcon icon="arrow-right-to-bracket" />
                         <span>Login</span>
                     </a>
 
-                    <div v-if="authUser" class="relative">
-                        <button @click="showDropdown = !showDropdown" class="flex items-center gap-1">
+                    <div v-if="authUser" class="relative" ref="dropdownRef">
+
+                        <button @click.stop="showDropdown = !showDropdown" class="flex items-center gap-1">
                             <FontAwesomeIcon icon="user" />
                         </button>
 
-                        <div v-if="showDropdown"
-                            class="absolute right-0 mt-2 bg-white text-black shadow-lg rounded w-44">
-                            <a :href="route('auth-user.dashboard.index')" class="block px-3 py-2">Dashboard</a>
-                            <a :href="route('auth-user.profile.index')" class="block px-3 py-2">Profile</a>
-                            <a :href="route('auth-user.account.index')" class="block px-3 py-2">Account</a>
+                        <transition enter-active-class="transition ease-out duration-150"
+                            enter-from-class="opacity-0 scale-95 translate-y-1"
+                            enter-to-class="opacity-100 scale-100 translate-y-0"
+                            leave-active-class="transition ease-in duration-100"
+                            leave-from-class="opacity-100 scale-100 translate-y-0"
+                            leave-to-class="opacity-0 scale-95 translate-y-1">
+                            <div v-if="showDropdown"
+                                class="absolute right-0 mt-2 bg-white text-black shadow-md border border-gray-200 rounded-xl w-44 z-[999] origin-top-right">
 
-                            <button @click="showLogoutModal = true; showDropdown = false"
-                                class="flex items-center gap-2 w-full text-left px-3 py-2 text-red-500">
-                                <FontAwesomeIcon icon="right-from-bracket" />
-                                <span>Logout</span>
-                            </button>
-                        </div>
+                                <a @click="showDropdown = false" :href="route('auth-user.dashboard.index')"
+                                    class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
+                                    <FontAwesomeIcon icon="gauge" class="text-gray-500" />
+                                    Dashboard
+                                </a>
+
+                                <a @click="showDropdown = false" :href="route('auth-user.profile.index')"
+                                    class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
+                                    <FontAwesomeIcon icon="user" class="text-gray-500" />
+                                    Profile
+                                </a>
+
+                                <a @click="showDropdown = false" :href="route('auth-user.account.index')"
+                                    class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
+                                    <FontAwesomeIcon icon="gears" class="text-gray-500" />
+                                    Account
+                                </a>
+
+                                <button @click="showLogoutModal = true; showDropdown = false"
+                                    class="flex items-center gap-2 w-full text-left px-3 py-2 text-red-500 hover:bg-gray-100">
+                                    <FontAwesomeIcon icon="right-from-bracket" />
+                                    Logout
+                                </button>
+
+                            </div>
+                        </transition>
+
                     </div>
 
                 </div>
@@ -165,52 +175,76 @@ onBeforeUnmount(() => {
             </div>
         </div>
 
-        <div class="flex-1 max-w-7xl mx-auto px-4 py-4 relative">
+        <main class="flex-1 max-w-7xl mx-auto px-4 py-4 relative">
+
             <div v-if="!pageReady" class="fixed inset-0 bg-white/90 flex items-center justify-center z-50">
                 <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
             </div>
 
             <slot />
-        </div>
 
-        <footer class="bg-gray-100 py-3 mt-2">
-            <div
-                class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-2 text-sm text-gray-600">
+        </main>
 
-                <div>
+        <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
+            <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
+                <span class="text-center md:text-left w-full md:w-auto">
                     © {{ year }} {{ appName }}
-                </div>
-
-                <div>
+                </span>
+                <span class="text-center md:text-right w-full md:w-auto">
                     Developed by
                     <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank"
                         class="text-blue-600 hover:underline font-medium">
                         Seikh Md Tahmid Farzan
                     </a>
-                </div>
-
+                </span>
             </div>
         </footer>
 
         <Toaster richColors position="top-right" />
 
-        <div v-if="authUser && showLogoutModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white p-4 rounded shadow-md w-80">
-                <div class="mb-4">Logout Confirmation</div>
-                <div class="mb-4">Are you sure you want to logout?</div>
+        <transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="authUser && showLogoutModal"
+                class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-                <div class="flex justify-end space-x-2">
-                    <button @click="showLogoutModal = false" class="px-3 py-1 bg-gray-200">Cancel</button>
+                <transition enter-active-class="transition transform duration-200 ease-out"
+                    enter-from-class="opacity-0 scale-95 translate-y-2"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition transform duration-150 ease-in"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-2">
+                    <div class="bg-white p-5 rounded-xl shadow-lg w-80">
 
-                    <button @click="logoutHandler" class="flex items-center gap-2 px-3 py-1 bg-red-500 text-white">
-                        <FontAwesomeIcon v-if="!loggingOut" icon="right-from-bracket" />
-                        <FontAwesomeIcon v-else icon="spinner" spin />
-                        Logout
-                    </button>
-                </div>
+                        <div class="flex items-center gap-2 mb-3 text-red-500">
+                            <FontAwesomeIcon icon="right-from-bracket" />
+                            <span class="font-semibold text-gray-800">Logout Confirmation</span>
+                        </div>
+
+                        <div class="mb-4 text-gray-600">
+                            Are you sure you want to logout?
+                        </div>
+
+                        <div class="flex justify-end gap-2">
+                            <button @click="showLogoutModal = false"
+                                class="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+                                <FontAwesomeIcon icon="xmark" />
+                                Cancel
+                            </button>
+
+                            <button @click="logoutHandler"
+                                class="flex items-center gap-1 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                                <FontAwesomeIcon v-if="!loggingOut" icon="right-from-bracket" />
+                                <FontAwesomeIcon v-else icon="spinner" spin />
+                                Logout
+                            </button>
+                        </div>
+
+                    </div>
+                </transition>
 
             </div>
-        </div>
+        </transition>
 
     </div>
 </template>
