@@ -58,20 +58,4 @@ class SystemHelper {
             (object) ['id' => 'User', 'name' => 'User'],
         ]);
     }
-
-    public static function recordStatuses()
-    {
-        return collect([
-            (object) ['id' => 'Active', 'name' => 'Active'],
-            (object) ['id' => 'Inactive', 'name' => 'Inactive'],
-        ]);
-    }
-
-    public static function commissionTypes()
-    {
-        return collect([
-            (object) ['id' => 'Percentage', 'name' => 'Percentage'],
-            (object) ['id' => 'Amount', 'name' => 'Amount'],
-        ]);
-    }
 }
