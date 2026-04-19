@@ -69,20 +69,25 @@ function validateForm() {
 function handleProfileUpdate() {
     if (profileUpdateForm.processing) return
     if (!validateForm()) return
-
     const payload = {
         ...profileUpdateForm.data(),
-        gender: profileUpdateForm.gender?.id || null,
-        religion: profileUpdateForm.religion?.id || null,
-        marital_status: profileUpdateForm.marital_status?.id || null,
-        _method: 'patch'
-    }
+        ...{ _method: 'patch' },
+    };
 
     intertiaJsRoute.post(route('auth-user.profile.update'), payload, {
         forceFormData: true,
         preserveScroll: true,
         preserveState: true,
-    })
+        onSuccess: () => {
+            profileUpdateForm.clearErrors();
+            profileUpdateForm.processing = false;
+        },
+        onError: (errors) => {
+            profileUpdateForm.clearErrors()
+            profileUpdateForm.setError(errors);
+            profileUpdateForm.processing = false;
+        },
+    });
 }
 
 onMounted(async () => {
