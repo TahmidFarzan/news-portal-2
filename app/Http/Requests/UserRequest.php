@@ -26,7 +26,6 @@ class UserRequest extends FormRequest
             'religion'              => ["required", "in:Islam,Hindu,Christian,Other"],
             'marital_status'        => ["required", "in:Single,Married,Divorce,Separated,Other"],
 
-            'profession'            => ["nullable", "max:255"],
             'address'               => ["nullable"],
 
             "set_as_verify_email"   => ["required", "boolean"],
@@ -61,10 +60,6 @@ class UserRequest extends FormRequest
 
             'mobile.max'                   => __('form-requests.user.mobile.max'),
             'mobile.regex'                 => __('form-requests.user.mobile.regex'),
-
-            'profession.required'          => __('form-requests.user.profession.required'),
-            'profession.string'            => __('form-requests.user.profession.string'),
-            'profession.max'               => __('form-requests.user.profession.max'),
 
             'change_password.required'     => __('form-requests.user.change_password.required'),
             'change_password.boolean'      => __('form-requests.user.change_password.boolean'),

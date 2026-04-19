@@ -107,7 +107,6 @@ class UserManagementService
             $user->address        = $request->input('address');
             $user->religion       = $request->input('religion');
             $user->birth_date     = $request->input('birth_date');
-            $user->profession     = $request->input('profession');
             $user->marital_status = $request->input('marital_status');
 
             $user->is_default   = false;

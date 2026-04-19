@@ -39,7 +39,6 @@ const saveForm = useForm({
     gender: user?.gender || null,
     religion: user?.religion || null,
     birth_date: user?.birth_date ? formatDate(user?.birth_date, 'Y-m-d') : null,
-    profession: user?.profession || '',
     marital_status: user?.marital_status || null,
     mobile: user?.mobile || '',
     address: user?.address || '',
@@ -215,11 +214,6 @@ onMounted(async () => {
                         <VueTelInput v-model="saveForm.mobile"
                             :class="saveForm.errors.mobile ? 'border border-red-500 rounded' : ''" />
                         <p v-if="saveForm.errors.mobile" class="text-red-500 text-sm">{{ saveForm.errors.mobile }}</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Profession</label>
-                        <input v-model="saveForm.profession" class="border rounded px-3 py-2 w-full" />
                     </div>
 
                     <div class="md:col-span-2">

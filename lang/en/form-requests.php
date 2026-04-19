@@ -109,11 +109,6 @@ return [
                 'max'   => 'Mobile max char is 20.',
                 'regex' => 'Mobile must be number.',
             ],
-            'profession'     => [
-                'required' => 'Profession is required.',
-                'string'   => 'Profession must be string.',
-                'max'      => 'Profession max chars is 200.',
-            ],
             'profile_image'  => [
                 'image'      => 'Upload feature image must be image.',
                 'mimes'      => 'Upload feature image is mimes must be one out of [jpg,jpeg,png,webp].',
@@ -151,12 +146,6 @@ return [
             'max'   => 'Mobile max char is 20.',
             'regex' => 'Mobile must be number.',
         ],
-        'profession'            => [
-            'required' => 'Profession is required.',
-            'string'   => 'Profession must be string.',
-            'max'      => 'Profession max chars is 200.',
-        ],
-
         'change_password'       => [
             'required' => 'Change password is required.',
             'boolean'  => 'Change password must be true or false.',

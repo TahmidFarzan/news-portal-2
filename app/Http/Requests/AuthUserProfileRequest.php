@@ -23,7 +23,6 @@ class AuthUserProfileRequest extends FormRequest
             'mobile'            => ["nullable", "max:20", "regex:/^[+0-9 ]+$/"],
 
             'address'           => ["nullable"],
-            'profession'        => ["nullable", "max:255"],
         ];
     }
 
@@ -41,10 +40,6 @@ class AuthUserProfileRequest extends FormRequest
 
             'mobile.max'              => __('form-requests.auth.user_profile.mobile.max'),
             'mobile.regex'            => __('form-requests.auth.user_profile.mobile.regex'),
-
-            'profession.required'     => __('form-requests.auth.user_profile.profession.required'),
-            'profession.string'       => __('form-requests.auth.user_profile.profession.string'),
-            'profession.max'          => __('form-requests.auth.user_profile.profession.max'),
         ];
     }
 }

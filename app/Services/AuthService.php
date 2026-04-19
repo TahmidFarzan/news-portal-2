@@ -191,7 +191,6 @@ class AuthService
             $user->religion       = $request->input('religion');
             $user->marital_status = $request->input('marital_status');
             $user->mobile         = $request->input('mobile');
-            $user->profession     = $request->input('profession');
             $user->address     = $request->input('address');
             $user->save();
 

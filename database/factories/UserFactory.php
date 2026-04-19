@@ -30,7 +30,6 @@ class UserFactory extends Factory
             'religion'          => $this->faker->randomElement(['Islam', 'Hindu', 'Christian']),
 
             'marital_status'    => $this->faker->randomElement(['Single', 'Married', 'Divorced', 'Separated']),
-            'profession'        => $this->faker->jobTitle(),
             'mobile'            => "+8801" . $this->faker->numberBetween(3, 9) . $this->faker->numberBetween(10000000, 99999999),
 
             "created_by_id"     => $user?->id ?? "1",

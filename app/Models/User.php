@@ -31,7 +31,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 #[Fillable([
         'name', 'email', 'slug', 'password', 'is_default',
         'user_role_id', 'is_admin', 'marital_status',
-        'religion', 'gender', 'mobile', 'profession', 'birth_date',
+        'religion', 'gender', 'mobile', 'birth_date',
         'address', 'created_by_id',
     ])]
 #[Hidden([
@@ -74,7 +74,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
                 'gender',
                 'religion',
                 'address',
-                'profession',
                 'marital_status',
             ])
             ->useLogName('User')

@@ -136,10 +136,6 @@ onMounted(async () => {
                         <span class="font-medium text-gray-600">Marital status:</span>
                         {{ user?.marital_status?.name || 'N/A' }}
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Profession:</span>
-                        {{ user?.profession || 'N/A' }}
-                    </div>
                 </div>
             </div>
 

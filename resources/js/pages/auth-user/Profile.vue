@@ -32,7 +32,6 @@ const profileUpdateForm = useForm({
     gender: user?.gender || null,
     religion: user?.religion || null,
     birth_date: user?.birth_date ? formatDate(user?.birth_date, 'Y-m-d') : null,
-    profession: user?.profession || '',
     marital_status: user?.marital_status || null,
     mobile: user?.mobile || '',
     profile_image: null,
@@ -172,10 +171,6 @@ onMounted(async () => {
                                 {{ user?.age }}
                             </div>
                             <div>
-                                <span class="font-medium text-gray-600">Profession:</span>
-                                {{ user?.profession || 'N/A' }}
-                            </div>
-                            <div>
                                 <span class="font-medium text-gray-600">Address:</span>
                                 {{ user?.address || 'N/A' }}
                             </div>
@@ -278,20 +273,6 @@ onMounted(async () => {
 
                                 <p v-if="profileUpdateForm.errors.mobile" class="text-red-500 text-sm mt-1">
                                     {{ profileUpdateForm.errors.mobile }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-1">
-                                    Profession
-                                </label>
-
-                                <input v-model="profileUpdateForm.profession" class="border rounded px-3 py-2 w-full"
-                                    :class="profileUpdateForm.errors.profession ? 'border-red-500' : 'border-gray-300'"
-                                    placeholder="Enter profession" />
-
-                                <p v-if="profileUpdateForm.errors.profession" class="text-red-500 text-sm mt-1">
-                                    {{ profileUpdateForm.errors.profession }}
                                 </p>
                             </div>
 

@@ -18,8 +18,7 @@ return new class extends Migration
             $table->enum('gender', ['Male', 'Female', 'Other'])->nullable()->after('religion');
 
             $table->string('mobile', 20)->nullable()->after('religion');
-            $table->string('profession', 150)->nullable()->after('mobile');
-            $table->text('address')->nullable()->after('mobile');
+            $table->text('address')->nullable()->after('religion');
 
             $table->foreignId('supervisor_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('created_by_id')->nullable()->constrained('users')->cascadeOnDelete();
@@ -40,8 +39,6 @@ return new class extends Migration
                 'religion',
                 'gender',
                 'mobile',
-                'profession',
-
             ]);
             $table->dropForeign(['created_by_id']);
             $table->dropColumn('created_by_id');

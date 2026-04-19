@@ -28,20 +28,20 @@ class UserSeeder extends Seeder
         }
 
         // Seeder
-        $admin = UserRole::where("name", "Admin")->first();
+        $adminUserRole = UserRole::where("name", "Admin")->first();
         User::factory()->state([
             'name'              => "Default Admin",
             'email'             => "admin@gmail.com",
             'email_verified_at' => now(),
             "is_default"        => true,
-            "user_role_id"      => $admin?->id,
+            "user_role_id"      => $adminUserRole?->id,
             "created_by_id"     => null,
             'gender'            => 'Male',
             'religion'          => 'Islam',
             'marital_status'    => 'Single',
         ])->create();
 
-        for ($i = 0; $i < 115; $i++) {
+        for ($i = 0; $i < 15; $i++) {
             User::factory()->create();
         }
     }
