@@ -23,7 +23,7 @@ class UserRequest extends FormRequest
 
             'birth_date'            => ["nullable", "date"],
             'gender'                => ["required", "in:Male,Female,Other"],
-            'religion'              => ["required", "in:Islam,Hindu,Chistian,Other"],
+            'religion'              => ["required", "in:Islam,Hindu,Christian,Other"],
             'marital_status'        => ["required", "in:Single,Married,Divorce,Separated,Other"],
 
             'profession'            => ["nullable", "max:255"],

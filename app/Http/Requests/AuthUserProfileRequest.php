@@ -18,7 +18,7 @@ class AuthUserProfileRequest extends FormRequest
             'name'              => ["required", "max:255"],
             'birth_date'        => ["nullable", "date"],
             'gender'            => ["required", "in:Male,Female,Other"],
-            'religion'          => ["required", "in:Islam,Hindu,Chistian,Other"],
+            'religion'          => ["required", "in:Islam,Hindu,Christian,Other"],
             'marital_status'    => ["required", "in:Single,Married,Divorce,Separated,Other"],
             'mobile'            => ["nullable", "max:20", "regex:/^[+0-9 ]+$/"],
 

@@ -26,7 +26,7 @@ class SystemHelper {
         return collect([
             (object) ['id' => 'Islam', 'name' => 'Islam'],
             (object) ['id' => 'Hindu', 'name' => 'Hindu'],
-            (object) ['id' => 'Chistian', 'name' => 'Chistian'],
+            (object) ['id' => 'Christian', 'name' => 'Christian'],
             (object) ['id' => 'Other', 'name' => 'Other'],
         ]);
     }
