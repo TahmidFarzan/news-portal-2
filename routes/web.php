@@ -118,4 +118,7 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
 
 });
 
+Route::get('/', function () {
+    return redirect()->route('home');
+});
 Route::get('home', [PageController::class, 'home'])->name('home');

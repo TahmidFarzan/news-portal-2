@@ -10,6 +10,6 @@ class PageController extends Controller
 
     public function home()
     {
-        return Inertia::render('pages.Home');
+        return Inertia::render('Home');
     }
 }
