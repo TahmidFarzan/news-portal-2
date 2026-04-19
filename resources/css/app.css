@@ -1,1 +1,23 @@
 @import 'tailwindcss';
+
+/* Guest layout */
+.guest-layout .topbar .overflow-x-auto {
+    cursor: grab;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+}
+
+.guest-layout .topbar .overflow-x-auto:active {
+    cursor: grabbing;
+}
+
+.guest-layout .topbar .overflow-x-auto::-webkit-scrollbar {
+    height: 2px;
+}
+
+.guest-layout .topbar .overflow-x-auto::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+}
