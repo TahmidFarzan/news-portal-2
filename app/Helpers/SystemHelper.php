@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Helpers;
+
+use Illuminate\Support\Collection;
+
+class SystemHelper {
+	public static function perPages() {
+		return collect([
+            (object) ['id' => "10", 'name' => "10"],
+            (object) ['id' => "25", 'name' => "25"],
+            (object) ['id' => "50", 'name' => "50"],
+            (object) ['id' => "100", 'name' => "100"],
+        ]);
+	}
+
+    public static function genders(){
+        return collect([
+            (object) ['id' => 'Male', 'name' => 'Male'],
+            (object) ['id' => 'Female', 'name' => 'Female'],
+            (object) ['id' => 'Other', 'name' => 'Other'],
+        ]);
+    }
+
+    public static function religions(){
+        return collect([
+            (object) ['id' => 'Islam', 'name' => 'Islam'],
+            (object) ['id' => 'Hindu', 'name' => 'Hindu'],
+            (object) ['id' => 'Chistian', 'name' => 'Chistian'],
+            (object) ['id' => 'Other', 'name' => 'Other'],
+        ]);
+    }
+
+    public static function maritalStatuses(){
+        return collect([
+            (object) ['id' => 'Single', 'name' => 'Single'],
+            (object) ['id' => 'Married', 'name' => 'Married'],
+            (object) ['id' => 'Divorce', 'name' => 'Divorce'],
+            (object) ['id' => 'Separated', 'name' => 'Separated'],
+            (object) ['id' => 'Other', 'name' => 'Other'],
+        ]);
+    }
+
+    public static function activityLogEvents()
+    {
+        return collect([
+            (object) ['id' => 'Created', 'name' => 'Created'],
+            (object) ['id' => 'Updated', 'name' => 'Updated'],
+            (object) ['id' => 'Deleted', 'name' => 'Deleted'],
+            (object) ['id' => 'Trashed', 'name' => 'Trashed'],
+            (object) ['id' => 'Restored', 'name' => 'Restored'],
+        ]);
+    }
+
+    public static function activityLogSubjectTypes()
+    {
+        return collect([
+            (object) ['id' => 'User', 'name' => 'User'],
+        ]);
+    }
+
+    public static function recordStatuses()
+    {
+        return collect([
+            (object) ['id' => 'Active', 'name' => 'Active'],
+            (object) ['id' => 'Inactive', 'name' => 'Inactive'],
+        ]);
+    }
+
+    public static function commissionTypes()
+    {
+        return collect([
+            (object) ['id' => 'Percentage', 'name' => 'Percentage'],
+            (object) ['id' => 'Amount', 'name' => 'Amount'],
+        ]);
+    }
+}
