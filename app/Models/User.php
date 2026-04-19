@@ -1,32 +1,182 @@
 <?php
-
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+
+use App\Helpers\MediaHelper;
+
+use App\Observers\UserObserver;
+use App\Policies\UserPolicy;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+#[Table('users')]
+#[Fillable([
+        'name', 'email', 'slug', 'password', 'is_default',
+        'user_role_id', 'is_admin', 'marital_status',
+        'religion', 'gender', 'mobile', 'profession', 'birth_date',
+        'address', 'created_by_id', 'supervisor_id',
+    ])]
+#[Hidden([
+        'password', 'remember_token', 'is_default',
+    ])]
+#[UsePolicy(UserPolicy::class)]
+#[ObservedBy([UserObserver::class])]
+class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes, LogsActivity, HasSlug;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    protected $appends = [
+        'age', 'is_active',
+    ];
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'birth_date'        => 'date',
+            'created_at'        => 'datetime',
+            'updated_at'        => 'datetime',
+            'deleted_at'        => 'datetime',
+            'password'          => 'hashed',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'email',
+                'password',
+                'updated_at',
+                'deleted_at',
+                'email_verified_at',
+                'is_default',
+                'mobile',
+                'gender',
+                'religion',
+                'address',
+                'profession',
+                'marital_status',
+                'is_supervisor',
+                'is_admin',
+            ])
+            ->useLogName('User')
+            ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
+            ->logOnlyDirty()
+            ->logExcept([
+                'id',
+                'created_by_id',
+                'created_at',
+                'remember_token',
+            ])
+            ->dontLogEmptyChanges();
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->saveSlugsTo('slug')
+            ->generateSlugsFrom(function ($model) {
+                $mainSlug     = Str::uuid();
+                $randomString = Str::random(11);
+                $createdAt    = $model->created_at ?? now();
+                $createdAt    = $createdAt->format('HisdmY');
+                return "{$createdAt}-{$randomString}-{$mainSlug}";
+            })
+            ->doNotGenerateSlugsOnUpdate()
+            ->slugsShouldBeNoLongerThan(255);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function getAgeAttribute(): ?int
+    {
+        return $this->birth_date ? Carbon::parse($this->birth_date)->age : null;
+    }
+
+    public function getIsActiveAttribute(): bool
+    {
+        return ($this->deleted_at == null) ? true : false;
+    }
+
+    public function activityLogs(): MorphMany
+    {
+        return $this->morphMany(ActivityLog::class, 'subject');
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by_id');
+    }
+
+    public function createdUsers(): HasMany
+    {
+        return $this->hasMany(User::class, 'created_by_id');
+    }
+
+    public function userRole(): BelongsTo
+    {
+        return $this->belongsTo(UserRole::class);
+    }
+
+    public function updatedBy(): ?User
+    {
+        $latestActivity = $this->activityLogs()->latest()->first();
+        return $latestActivity ? $latestActivity->causer : null;
+    }
+
+    public function hasUserRole($userRoles): bool
+    {
+        if (! $this->userRole) {
+            return false;
+        }
+
+        $userRoles = (array) $userRoles;
+
+        return in_array(
+            strtolower($this->userRole->name),
+            array_map('strtolower', $userRoles)
+        );
+    }
+
+    public function profileImage(): ?Media
+    {
+        $image = null;
+        $collectionName = $this->media_collection_name;
+        $roleParameter = ["role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE];
+
+        if ($this->hasMedia($collectionName, $roleParameter)) {
+            $imageMedia = $this->getMedia($collectionName, $roleParameter)
+                ->filter(fn ($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
+                ->first();
+
+            if (isset($imageMedia)) {
+                $image = $imageMedia;
+            }
+        }
+
+        return $image;
     }
 }
