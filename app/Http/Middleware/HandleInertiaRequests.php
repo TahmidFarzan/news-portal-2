@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
                     'email'             => $requestUser->email,
                     'email_verified_at' => $requestUser->email_verified_at,
                     'slug'              => $requestUser->slug,
+                    'profile_image'     => $requestUser->profileImage() ?? null,
                 ]
                     : null,
             ],
