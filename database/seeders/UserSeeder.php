@@ -1,10 +1,13 @@
 <?php
 namespace Database\Seeders;
 
+use App\Helpers\MediaHelper;
 use App\Models\User;
 use App\Models\UserRole;
+use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserSeeder extends Seeder
 {
@@ -41,8 +44,32 @@ class UserSeeder extends Seeder
             'marital_status'    => 'Single',
         ])->create();
 
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 25; $i++) {
             User::factory()->create();
+        }
+
+        $profileImageUrl = MediaHelper::defaultAuthImage("1:1", "user");
+        if ($profileImageUrl) {
+            $users = User::orderBy("id", "desc")->get();
+            foreach ($users as $user) {
+                try {
+                    $headers = get_headers($profileImageUrl, 1);
+                    if (strpos($headers[0], '200') !== false) {
+                        $profileImageExtension = pathinfo($profileImageUrl, PATHINFO_EXTENSION);
+                        $profileImageExtension = in_array($profileImageExtension, ["png", "jpg", "jpeg"]) ? $profileImageExtension : "png";
+                        $profileImageFileName  = MediaHelper::generateMediaName($user->name, $profileImageExtension, 200);
+                        $user->addMediaFromUrl($profileImageUrl)
+                            ->usingName($user->name)
+                            ->usingFileName($profileImageFileName)
+                            ->withCustomProperties(['caption' => $user->name, 'alt' => $user->name, "role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE])
+                            ->toMediaCollection($user->media_collection_name);
+                    } else {
+                        Log::info("Image not accessable user: {$user->name}");
+                    }
+                } catch (Exception $ex) {
+                    Log::info("Failed to fetch Image for user {$user->name}: {$ex->getMessage()}");
+                }
+            }
         }
     }
 }
