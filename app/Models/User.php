@@ -32,7 +32,7 @@ use Spatie\Sluggable\SlugOptions;
         'name', 'email', 'slug', 'password', 'is_default',
         'user_role_id', 'is_admin', 'marital_status',
         'religion', 'gender', 'mobile', 'profession', 'birth_date',
-        'address', 'created_by_id', 'supervisor_id',
+        'address', 'created_by_id',
     ])]
 #[Hidden([
         'password', 'remember_token', 'is_default',
@@ -76,8 +76,6 @@ class User extends Authenticatable implements MustVerifyEmail
                 'address',
                 'profession',
                 'marital_status',
-                'is_supervisor',
-                'is_admin',
             ])
             ->useLogName('User')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
