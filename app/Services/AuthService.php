@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Services;
 
+use App\Helpers\MediaHelper;
 use App\Http\Requests\AuthUserAccountRequest;
 use App\Http\Requests\AuthUserProfileRequest;
 use App\Http\Requests\ForgotPasswordRequest;
@@ -9,6 +9,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified as VerifiedEvent;
@@ -18,7 +19,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
-use Exception;
 
 class AuthService
 {
@@ -52,7 +52,7 @@ class AuthService
         try {
             $credentials = $request->only('email', 'password');
 
-            if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+            if (! Auth::attempt($credentials, $request->boolean('remember'))) {
                 return ['status' => 'error', 'message' => __('status-messages.auth.login.credential_fail')];
             }
 
@@ -69,15 +69,15 @@ class AuthService
     {
         try {
             $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'created_by_id' => null,
-                'is_supervisor' => false,
+                'name'                   => $request->name,
+                'email'                  => $request->email,
+                'password'               => Hash::make($request->password),
+                'created_by_id'          => null,
+                'is_supervisor'          => false,
                 'is_suoer_administrator' => false,
-                'is_default' => false,
-                'created_at' => now(),
-                'updated_at' => null,
+                'is_default'             => false,
+                'created_at'             => now(),
+                'updated_at'             => null,
             ]);
 
             event(new Registered($user));
@@ -125,10 +125,10 @@ class AuthService
         try {
             $status = Password::reset(
                 [
-                    'email' => $request->email,
-                    'password' => $request->password,
+                    'email'                 => $request->email,
+                    'password'              => $request->password,
                     'password_confirmation' => $request->password_confirmation,
-                    'token' => $request->token,
+                    'token'                 => $request->token,
                 ],
                 function ($user) use ($request) {
                     $user->forceFill(['password' => Hash::make($request->password)])->save();
@@ -154,7 +154,7 @@ class AuthService
                 return ['status' => 'success', 'message' => __('status-messages.auth.email_verification.success')];
             }
 
-            if (!hash_equals((string)$hash, sha1($user->getEmailForVerification()))) {
+            if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
                 return ['status' => 'error', 'message' => __('status-messages.auth.email_verification.expired')];
             }
 
@@ -184,14 +184,16 @@ class AuthService
 
         try {
 
-            $user->name = $request->input('name');
-            $user->birth_date = $request->input('birth_date');
-            $user->gender = $request->input('gender');
-            $user->religion = $request->input('religion');
+            $user->name           = $request->input('name');
+            $user->birth_date     = $request->input('birth_date');
+            $user->gender         = $request->input('gender');
+            $user->religion       = $request->input('religion');
             $user->marital_status = $request->input('marital_status');
-            $user->mobile = $request->input('mobile');
-            $user->profession = $request->input('profession');
+            $user->mobile         = $request->input('mobile');
+            $user->profession     = $request->input('profession');
             $user->save();
+
+            self::saveUserProfileImage($request, $user);
 
             DB::commit();
 
@@ -211,9 +213,8 @@ class AuthService
         try {
             $requiresVerification = $request->input('email') !== Auth::user()->email;
 
-
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
+            $user->name              = $request->input('name');
+            $user->email             = $request->input('email');
             $user->email_verified_at = $requiresVerification ? null : $user->email_verified_at;
 
             if ($request->change_password == 1) {
@@ -234,6 +235,37 @@ class AuthService
 
             Log::error('Auth account update fail.', ['exception' => $exception, 'request_data' => $request->input()]);
             return ['status' => 'error', 'message' => __('status-messages.auth.account.save.fail')];
+        }
+    }
+
+    private static function saveUserProfileImage(AuthUserProfileRequest $request, User $user)
+    {
+        if (! $request->hasFile('profile_image')) {
+            return;
+        }
+
+        $existing = $user->profileImage();
+        if ($existing) {
+            $existing->delete();
+        }
+
+        $uploaded = $request->file('profile_image');
+
+        if ($uploaded) {
+            $name = MediaHelper::generateMediaName(
+                $user->name,
+                $uploaded->getClientOriginalExtension(),
+                200
+            );
+
+            $user->addMedia($uploaded)
+                ->usingFileName($name)
+                ->withCustomProperties([
+                    'alt'     => $user->name ?? null,
+                    'caption' => $user->name ?? null,
+                    'role'    => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE,
+                ])
+                ->toMediaCollection($user->media_collection_name);
         }
     }
 }

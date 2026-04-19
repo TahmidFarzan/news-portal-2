@@ -89,33 +89,35 @@ return [
         ],
 
         'user_profile'    => [
-            'name'              => [
+            'name'           => [
                 'required' => 'Name is required.',
                 'max'      => 'Name max char is 255.',
             ],
-            'birth_date'        => [
+            'birth_date'     => [
                 'date' => 'Birth date must be a date.',
             ],
-            'gender'            => [
+            'gender'         => [
                 'required' => 'Gender is required.',
             ],
-            'religion'          => [
+            'religion'       => [
                 'required' => 'Religion is required.',
             ],
-            'marital_status'    => [
+            'marital_status' => [
                 'required' => 'Marital status is required.',
             ],
-            'mobile'            => [
+            'mobile'         => [
                 'max'   => 'Mobile max char is 20.',
                 'regex' => 'Mobile must be number.',
             ],
-            'profession'        => [
+            'profession'     => [
                 'required' => 'Profession is required.',
                 'string'   => 'Profession must be string.',
                 'max'      => 'Profession max chars is 200.',
             ],
-            'profile_image_url' => [
-                'url' => 'Upload feature image must be url.',
+            'profile_image'  => [
+                'image'      => 'Upload feature image must be image.',
+                'mimes'      => 'Upload feature image is mimes must be one out of [jpg,jpeg,png,webp].',
+                'dimensions' => 'Upload feature image must be dimensions ratio is 1:1 and  size 512x512px.',
             ],
         ],
     ],

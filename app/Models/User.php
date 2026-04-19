@@ -1,9 +1,7 @@
 <?php
 namespace App\Models;
 
-
 use App\Helpers\MediaHelper;
-
 use App\Observers\UserObserver;
 use App\Policies\UserPolicy;
 use Carbon\Carbon;
@@ -16,7 +14,6 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -44,7 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable, SoftDeletes, LogsActivity, HasSlug;
 
     protected $appends = [
-        'age', 'is_active',
+        'age', 'is_active','media_collection_name'
     ];
 
     protected function casts(): array
@@ -109,6 +106,25 @@ class User extends Authenticatable implements MustVerifyEmail
         return 'slug';
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection("User");
+    }
+
+    public function registerMediaConversions($spatieMedia = null): void
+    {
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->quality(80)
+            ->performOnCollections("User")
+            ->queued();
+    }
+
+    public function getMediaCollectionNameAttribute(): string
+    {
+        return "User";
+    }
+
     public function getAgeAttribute(): ?int
     {
         return $this->birth_date ? Carbon::parse($this->birth_date)->age : null;
@@ -161,13 +177,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function profileImage(): ?Media
     {
-        $image = null;
+        $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter = ["role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE];
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE];
 
         if ($this->hasMedia($collectionName, $roleParameter)) {
             $imageMedia = $this->getMedia($collectionName, $roleParameter)
-                ->filter(fn ($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
+                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
                 ->first();
 
             if (isset($imageMedia)) {
