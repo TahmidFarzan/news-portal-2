@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
@@ -7,37 +6,51 @@ use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that's loaded on the first page visit.
-     *
-     * @see https://inertiajs.com/server-side-setup#root-template
-     *
-     * @var string
-     */
+
     protected $rootView = 'app';
 
-    /**
-     * Determines the current asset version.
-     *
-     * @see https://inertiajs.com/asset-versioning
-     */
     public function version(Request $request): ?string
     {
-        return parent::version($request);
+        $currentDate = now()->format('dmY');
+        $version     = "v{$currentDate}";
+
+        if (app()->environment('production')) {
+            $version = parent::version($request);
+        }
+        if (! $version) {
+            $version = "v{$currentDate}";
+        }
+
+        return $version;
     }
 
-    /**
-     * Define the props that are shared by default.
-     *
-     * @see https://inertiajs.com/shared-data
-     *
-     * @return array<string, mixed>
-     */
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
-            //
-        ];
+        $requestUser = $request->user();
+
+        $requestData = array_merge(parent::share($request), [
+
+            'auth'         => [
+                'user' => $requestUser
+                    ? [
+                    'name'              => $requestUser->name,
+                    'user_role'         => $requestUser->userRole,
+
+                    'email'             => $requestUser->email,
+                    'email_verified_at' => $requestUser->email_verified_at,
+                    'slug'              => $requestUser->slug,
+                ]
+                    : null,
+            ],
+
+            'flashMessage' => $request->session()->get('flash_message') ?? null,
+        ]);
+
+        return $requestData;
+
+        // return [
+        //     ...parent::share($request),
+        //     //
+        // ];
     }
 }
