@@ -24,6 +24,9 @@ use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
 #[Table('users')]
 #[Fillable([
         'name', 'email', 'slug', 'password', 'is_default',
@@ -36,9 +39,9 @@ use Spatie\Sluggable\SlugOptions;
     ])]
 #[UsePolicy(UserPolicy::class)]
 #[ObservedBy([UserObserver::class])]
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, HasMedia
 {
-    use HasFactory, Notifiable, SoftDeletes, LogsActivity, HasSlug;
+    use HasFactory, Notifiable, SoftDeletes, LogsActivity, HasSlug, InteractsWithMedia;
 
     protected $appends = [
         'age', 'is_active','media_collection_name'

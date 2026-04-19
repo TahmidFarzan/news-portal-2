@@ -132,7 +132,7 @@ onBeforeUnmount(() => {
                     <div class="relative" ref="dropdownRef">
 
                         <button @click="toggleDropdown" class="flex items-center gap-2">
-                            <img :src="authUser.profile_image_url || '/uploads/icons/auth/user.png'"
+                            <img :src="authUser?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
                                 class="w-8 h-8 rounded-full" />
                         </button>
 
