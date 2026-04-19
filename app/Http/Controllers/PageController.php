@@ -8,8 +8,8 @@ use Inertia\Inertia;
 class PageController extends Controller
 {
 
-    public function loginForm()
+    public function home()
     {
-        return Inertia::render('home');
+        return Inertia::render('pages.Home');
     }
 }
