@@ -43,6 +43,7 @@ class AuthService
         ]);
 
         $user->updated_by = $user->updatedBy() ?? null;
+        $user->profile_image = $user->profileImage() ?? null;
 
         return $user;
     }
@@ -191,6 +192,7 @@ class AuthService
             $user->marital_status = $request->input('marital_status');
             $user->mobile         = $request->input('mobile');
             $user->profession     = $request->input('profession');
+            $user->address     = $request->input('address');
             $user->save();
 
             self::saveUserProfileImage($request, $user);

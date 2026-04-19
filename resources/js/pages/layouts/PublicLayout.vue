@@ -10,7 +10,7 @@ import {
     faArrowRightToBracket,
     faSpinner,
     faGauge,
-    faGears,
+    faUserGear,
     faXmark
 } from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faLinkedin, faGoogle } from '@fortawesome/free-brands-svg-icons'
@@ -21,7 +21,7 @@ library.add(
     faArrowRightToBracket,
     faSpinner,
     faGauge,
-    faGears,
+    faUserGear,
     faXmark,
     faFacebook,
     faLinkedin,
@@ -150,7 +150,7 @@ onBeforeUnmount(() => {
 
                                 <a @click="showDropdown = false" :href="route('auth-user.account.index')"
                                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
-                                    <FontAwesomeIcon icon="gears" class="text-gray-500" />
+                                    <FontAwesomeIcon icon="user-gear" class="text-gray-500" />
                                     Account
                                 </a>
 

@@ -11,7 +11,6 @@ import {
     faBars,
     faUser,
     faXmark,
-    faGears,
     faUserGear,
     faChartLine,
     faRightFromBracket,
@@ -22,7 +21,6 @@ library.add(
     faBars,
     faUser,
     faXmark,
-    faGears,
     faUserGear,
     faChartLine,
     faRightFromBracket,
@@ -158,7 +156,7 @@ onBeforeUnmount(() => {
 
                                 <a :href="route('auth-user.account.index')"
                                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
-                                    <FontAwesomeIcon icon="gear" class="text-gray-500" />
+                                    <FontAwesomeIcon icon="user-gear" class="text-gray-500" />
                                     Account
                                 </a>
 

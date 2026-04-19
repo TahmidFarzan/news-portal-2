@@ -27,9 +27,9 @@ class UserFactory extends Factory
             'birth_date'        => $this->faker->dateTimeBetween('-25 years', '-18 years')->format('Y-m-d'),
 
             'gender'            => $this->faker->randomElement(['Male', 'Female']),
-            'religion'          => $this->faker->randomElement(['Islam', 'Hindu', 'Christian', 'Other']),
+            'religion'          => $this->faker->randomElement(['Islam', 'Hindu', 'Christian']),
 
-            'marital_status'    => $this->faker->randomElement(['Single', 'Married', 'Divorced', 'Separated', 'Other']),
+            'marital_status'    => $this->faker->randomElement(['Single', 'Married', 'Divorced', 'Separated']),
             'profession'        => $this->faker->jobTitle(),
             'mobile'            => "+8801" . $this->faker->numberBetween(3, 9) . $this->faker->numberBetween(10000000, 99999999),
 

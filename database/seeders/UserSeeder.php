@@ -36,7 +36,9 @@ class UserSeeder extends Seeder
             "is_default"        => true,
             "user_role_id"      => $admin?->id,
             "created_by_id"     => null,
-            "supervisor_id"       => null,
+            'gender'            => 'Male',
+            'religion'          => 'Islam',
+            'marital_status'    => 'Single',
         ])->create();
 
         for ($i = 0; $i < 115; $i++) {
