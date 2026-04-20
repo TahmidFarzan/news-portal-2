@@ -1,39 +1,16 @@
-<template>
-    <Head title="Email verification" />
-    <BRow :gutter-x="2" :gutter-y="2">
-        <BCol md="6" class="d-flex align-items-center justify-content-center bg-info bg-opacity-25 p-4">
-            <BImg src="/uploads/icons/auth/user-check.png" alt="User check" fluid class="w-75" />
-        </BCol>
-
-        <BCol md="12">
-            <BCard class="shadow-sm">
-                <h2 class="text-primary mb-2">Verify Your Email</h2>
-                <p class="text-muted mb-2">
-                    Before continuing, please check your email for a verification link.
-                </p>
-
-                <BForm @submit.prevent="handleResendVerification">
-                    <BButton type="submit" variant="primary"
-                        class="w-100 d-flex justify-content-center align-items-center" :disabled="resending" @click="handleResendVerification">
-                        <b-spinner small class="me-2" v-if="resending" label="Sending..." />
-                        {{ resending ? 'Resending...' : 'Resend Verification Email' }}
-                    </BButton>
-                </BForm>
-
-            </Bcard>
-        </BCol>
-    </BRow>
-</template>
-
 <script setup>
-import layout from '@/pages/layouts/AuthLayout.vue'
+import Layout from '@/pages/layouts/AuthLayout.vue'
 
-import { ref, onMounted, inject  } from 'vue'
-import { Head , router as intertiaJsRoute} from '@inertiajs/vue3'
+import { ref, onMounted, inject } from 'vue'
+import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
 
-import { BCard, BCol, BForm } from 'bootstrap-vue-next'
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-defineOptions({ layout })
+library.add(faSpinner)
+
+defineOptions({ layout: Layout })
 
 const pageReady = inject("pageReady")
 const resending = ref(false)
@@ -49,7 +26,44 @@ function handleResendVerification() {
     })
 }
 
-onMounted(async () => {
+onMounted(() => {
     pageReady.value = true
 })
 </script>
+
+<template>
+
+    <Head title="Email verification" />
+
+    <div class="w-full min-h-[70vh] flex flex-col md:flex-row items-center justify-center gap-6 p-4">
+
+        <div class="hidden md:flex items-center justify-center bg-blue-100 rounded-2xl p-6 w-full md:w-1/2">
+            <img src="/public/uploads/icons/auth/user-check.png" alt="User check" class="w-3/4 max-w-xs object-contain" />
+        </div>
+
+        <div class="w-full md:w-1/2">
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 text-center">
+
+                <h2 class="text-xl font-semibold text-blue-600 mb-2">
+                    Verify Your Email
+                </h2>
+
+                <p class="text-gray-600 text-sm mb-4">
+                    Before continuing, please check your email for a verification link.
+                </p>
+
+                <form @submit.prevent="handleResendVerification">
+
+                    <button type="submit" :disabled="resending"
+                        class="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded flex items-center justify-center gap-2">
+                        <FontAwesomeIcon v-if="resending" icon="spinner" spin />
+                        {{ resending ? 'Resending...' : 'Resend Verification Email' }}
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</template>
