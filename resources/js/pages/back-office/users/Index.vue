@@ -56,7 +56,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.user-manager.users.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.users.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -77,7 +77,7 @@ const handleDelete = (user) => {
     if (!user || deleteProcessing.value) return
 
     deleteProcessing.value = true
-    intertiaJsRoute.delete(route('back-office.user-manager.users.delete', { slug: user?.slug }), {
+    intertiaJsRoute.delete(route('back-office.users.delete', { slug: user?.slug }), {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -90,7 +90,7 @@ const handleInactive = (user) => {
     if (inactiveProcessing.value) return
     inactiveProcessing.value = user.slug
 
-    intertiaJsRoute.patch(route('back-office.user-manager.users.inactive', { slug: user?.slug }), {
+    intertiaJsRoute.patch(route('back-office.users.inactive', { slug: user?.slug }), {
         onFinish: () => inactiveProcessing.value = null,
     })
 }
@@ -99,7 +99,7 @@ const handleActive = (user) => {
     if (activeProcessing.value) return
     activeProcessing.value = user.slug
 
-    intertiaJsRoute.patch(route('back-office.user-manager.users.active', { slug: user?.slug }), {
+    intertiaJsRoute.patch(route('back-office.users.active', { slug: user?.slug }), {
         onFinish: () => activeProcessing.value = null,
     })
 }
@@ -111,7 +111,6 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'User manager', href: route('back-office.user-manager.index') },
                 { text: 'Users', active: true },
             ],
         })
@@ -128,7 +127,7 @@ onMounted(async () => {
     <div class="w-full space-y-6">
 
         <div class="flex justify-end">
-            <a :href="route('back-office.user-manager.users.create')"
+            <a :href="route('back-office.users.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2">
                 <FontAwesomeIcon icon="plus" />
                 Create
@@ -209,13 +208,13 @@ onMounted(async () => {
 
                         <td class="px-4 py-3 text-right flex justify-end gap-2">
 
-                            <a :href="route('back-office.user-manager.users.details', { slug: item.slug })"
+                            <a :href="route('back-office.users.details', { slug: item.slug })"
                                 class="px-3 py-1 text-xs border border-blue-500 text-blue-600 rounded hover:bg-blue-50 flex items-center gap-1">
                                 <FontAwesomeIcon icon="info" /> Details
                             </a>
 
                             <a v-if="canEdit(item)"
-                                :href="route('back-office.user-manager.users.edit', { slug: item.slug })"
+                                :href="route('back-office.users.edit', { slug: item.slug })"
                                 class="px-3 py-1 text-xs border border-blue-600 text-blue-700 rounded hover:bg-blue-50 flex items-center gap-1">
                                 <FontAwesomeIcon icon="pen" /> Edit
                             </a>

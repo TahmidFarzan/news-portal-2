@@ -36,7 +36,7 @@ const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.user-manager.users.delete', { slug: user?.slug }), {
+    intertiaJsRoute.delete(route('back-office.users.delete', { slug: user?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -45,7 +45,7 @@ const handleActive = () => {
     if (activeProcessing.value) return
     activeProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.user-manager.users.active', { slug: user?.slug }), {
+    intertiaJsRoute.patch(route('back-office.users.active', { slug: user?.slug }), {
         onFinish: () => activeProcessing.value = false
     })
 }
@@ -54,7 +54,7 @@ const handleInactive = () => {
     if (inactiveProcessing.value) return
     inactiveProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.user-manager.users.inactive', { slug: user?.slug }), {
+    intertiaJsRoute.patch(route('back-office.users.inactive', { slug: user?.slug }), {
         onFinish: () => inactiveProcessing.value = false
     })
 }
@@ -66,8 +66,7 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'User manager', href: route('back-office.user-manager.index') },
-                { text: 'Users', href: route('back-office.user-manager.users.index') },
+                { text: 'Users', href: route('back-office.users.index') },
                 { text: `${user?.name} details`, active: true }
             ],
         })
@@ -183,7 +182,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex justify-end gap-2">
 
-            <a v-if="canEdit(user)" :href="route('back-office.user-manager.users.edit', { slug: user?.slug })"
+            <a v-if="canEdit(user)" :href="route('back-office.users.edit', { slug: user?.slug })"
                 class="px-4 py-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-50 flex items-center gap-2">
                 <FontAwesomeIcon icon="pen" /> Edit
             </a>

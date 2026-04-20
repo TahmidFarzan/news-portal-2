@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\BackOffice\ActivityLogManagementController;
+//
+use App\Http\Controllers\BackOffice\ActivityLogController;
+use App\Http\Controllers\BackOffice\UserController;
 
-// BackOffice
-use App\Http\Controllers\BackOffice\UserManagerController;
+// Backoffice
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,7 +57,6 @@ Route::prefix('search')->name('search.')->group(function () {
         });
     });
 
-
     Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
 
     Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
@@ -91,29 +91,26 @@ Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(functi
 
 Route::prefix('back-office')->name('back-office.')->group(function () {
 
-    Route::prefix('user-manager')->name('user-manager.')->group(function () {
-        Route::get('/', [UserManagerController::class, 'index'])->name('index');
-        Route::prefix('users')->name('users.')->group(function () {
-            Route::get('/', [UserManagerController::class, 'userIndex'])->name('index');
-            Route::get('create', [UserManagerController::class, 'userCreate'])->name('create');
-            Route::get('edit/{slug}', [UserManagerController::class, 'userEdit'])->name('edit');
-            Route::get('details/{slug}', [UserManagerController::class, 'userDetails'])->name('details');
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'userIndex'])->name('index');
+        Route::get('create', [UserController::class, 'userCreate'])->name('create');
+        Route::get('edit/{slug}', [UserController::class, 'userEdit'])->name('edit');
+        Route::get('details/{slug}', [UserController::class, 'userDetails'])->name('details');
 
-            Route::post('save', [UserManagerController::class, 'userSave'])->name('save');
-            Route::patch('update/{slug}', [UserManagerController::class, 'userUpdate'])->name('update');
-            Route::delete('delete/{slug}', [UserManagerController::class, 'userDelete'])->name('delete');
-            Route::patch('active/{slug}', [UserManagerController::class, 'userActive'])->name('active');
-            Route::patch('inactive/{slug}', [UserManagerController::class, 'userInactive'])->name('inactive');
-        });
+        Route::post('save', [UserController::class, 'userSave'])->name('save');
+        Route::patch('update/{slug}', [UserController::class, 'userUpdate'])->name('update');
+        Route::delete('delete/{slug}', [UserController::class, 'userDelete'])->name('delete');
+        Route::patch('active/{slug}', [UserController::class, 'userActive'])->name('active');
+        Route::patch('inactive/{slug}', [UserController::class, 'userInactive'])->name('inactive');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
-        Route::get('index', [ActivityLogManagementController::class, 'index'])->name('index');
+        Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
-        Route::get('details/{slug}', [ActivityLogManagementController::class, 'details'])->name('details');
-        Route::get('{modelSlug}/show-all/{recordSlug}', [ActivityLogManagementController::class, 'indexForModel'])->name('show-all');
+        Route::get('details/{slug}', [ActivityLogController::class, 'details'])->name('details');
+        Route::get('{modelSlug}/show-all/{recordSlug}', [ActivityLogController::class, 'indexForModel'])->name('show-all');
 
-        Route::delete('delete/{slug}', [ActivityLogManagementController::class, 'delete'])->name('delete');
+        Route::delete('delete/{slug}', [ActivityLogController::class, 'delete'])->name('delete');
     });
 
 });

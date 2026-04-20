@@ -89,7 +89,7 @@ export const canAccessActivityLogMenu = (authUser) => {
     return false
 }
 
-export const canAccessUserManagerMenu = (authUser) => {
+export const canAccessUserManagementMenu = (authUser) => {
     if (!authUser) return false
 
     const authUserUserRole = getUserRole(authUser)

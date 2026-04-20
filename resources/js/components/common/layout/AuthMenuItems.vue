@@ -23,7 +23,7 @@ library.add(
     faGauge,
 )
 
-import { canAccessUserManagerMenu } from '@/composables/useAuthUserAccessPermissions'
+import { canAccessUserManagementMenu } from '@/composables/useAuthUserAccessPermissions'
 
 const { authUser } = defineProps({
     authUser: Object
@@ -32,12 +32,12 @@ const { authUser } = defineProps({
 const page = usePage()
 
 const subMenus = ref({
-    UserManager: false,
+    UserManagement: false,
     Reports: false,
 })
 
-const canAccessUserManagerMenuComputed = computed(() =>
-    canAccessUserManagerMenu(authUser)
+const canAccessUserManagementMenuComputed = computed(() =>
+    canAccessUserManagementMenu(authUser)
 )
 
 function toggleShowSubMenu(key) {
@@ -46,7 +46,7 @@ function toggleShowSubMenu(key) {
 
 function isSubMenuVisible(key) {
     const routeMap = {
-        UserManager: '/back-office/user-manager/*',
+        UserManagement: '/back-office/users/*',
         Reports: '/back-office/reports/*',
     }
 
@@ -80,24 +80,24 @@ function isCurrentPage(url) {
             Dashboard
         </a>
 
-        <button v-if="!authUser?.is_member" @click="toggleShowSubMenu('UserManager')"
+        <button v-if="!authUser?.is_member" @click="toggleShowSubMenu('UserManagement')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="users" />
-                User Manager
+                User Management
             </span>
-            <FontAwesomeIcon :icon="isSubMenuVisible('UserManager') ? 'chevron-up' : 'chevron-down'" />
+            <FontAwesomeIcon :icon="isSubMenuVisible('UserManagement') ? 'chevron-up' : 'chevron-down'" />
         </button>
 
         <transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0"
             enter-to-class="opacity-100 max-h-40" leave-active-class="transition-all duration-200 ease-in"
             leave-from-class="opacity-100 max-h-40" leave-to-class="opacity-0 max-h-0">
-            <div v-if="isSubMenuVisible('UserManager') && canAccessUserManagerMenuComputed"
+            <div v-if="isSubMenuVisible('UserManagement') && canAccessUserManagementMenuComputed"
                 class="ml-4 flex flex-col space-y-1 overflow-hidden">
 
-                <a :href="route('back-office.user-manager.users.index')"
+                <a :href="route('back-office.users.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-                    :class="isCurrentPage('/back-office/user-manager/users/*') ? 'bg-gray-200 font-medium' : ''">
+                    :class="isCurrentPage('/back-office/users/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="user" />
                     Users
                 </a>

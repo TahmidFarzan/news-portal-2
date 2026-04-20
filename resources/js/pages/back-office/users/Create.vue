@@ -126,12 +126,12 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.user-manager.users.update', { slug: user?.slug }),
+            route('back-office.users.update', { slug: user?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
         )
     } else {
-        saveForm.post(route('back-office.user-manager.users.save'), requestConfig)
+        saveForm.post(route('back-office.users.save'), requestConfig)
     }
 }
 
@@ -142,7 +142,7 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'User manager', href: route('back-office.user-manager.index') },
+                { text: 'Users', href: route('back-office.index') },
                 { text: isUpdate.value ? `${user?.name} edit` : 'Client create', active: true }
             ],
         })

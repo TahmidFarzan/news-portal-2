@@ -5,27 +5,27 @@ namespace App\Http\Controllers\BackOffice;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
-use App\Services\BackOffice\ActivityLogManagementService;
+use App\Services\BackOffice\ActivityLogService;
 use Inertia\Inertia;
 
-class ActivityLogManagementController extends Controller
+class ActivityLogController extends Controller
 {
-    protected ActivityLogManagementService $service;
+    protected ActivityLogService $activityLogService;
 
-    public function __construct(ActivityLogManagementService $service)
+    public function __construct(ActivityLogService $activityLogService)
     {
-        $this->service = $service;
+        $this->activityLogService = $activityLogService;
         $this->middleware(['auth', 'verified', 'user.role:admin']);
     }
 
     public function index(Request $request)
     {
         $showSubjectType = true;
-        $activityLog = $this->service->new();
+        $activityLog = $this->activityLogService->new();
 
         Gate::authorize('viewAny', $activityLog);
 
-        $activityLogs = $this->service->search(null, null, $request);
+        $activityLogs = $this->activityLogService->search(null, null, $request);
 
         return Inertia::render('back-office/activity-logs/Index', [
             'activityLogs' => $activityLogs,
@@ -36,11 +36,11 @@ class ActivityLogManagementController extends Controller
     public function indexForModel(?string $modelSlug = null, ?string $recordSlug = null, Request $request)
     {
         $showSubjectType = false;
-        $activityLog = $this->service->new();
+        $activityLog = $this->activityLogService->new();
 
         Gate::authorize('viewAny', $activityLog);
 
-        $activityLogs = $this->service->search($modelSlug, $recordSlug, $request);
+        $activityLogs = $this->activityLogService->search($modelSlug, $recordSlug, $request);
 
         return Inertia::render('back-office/activity-logs/Index', [
             'activityLogs' => $activityLogs,
@@ -50,8 +50,8 @@ class ActivityLogManagementController extends Controller
 
     public function details(string $slug)
     {
-        $activityLog = $this->service->findBySlug($slug);
-        $activityLog = $this->service->loadRelations($activityLog);
+        $activityLog = $this->activityLogService->findBySlug($slug);
+        $activityLog = $this->activityLogService->loadRelations($activityLog);
 
         Gate::authorize('view', $activityLog);
 
@@ -62,11 +62,11 @@ class ActivityLogManagementController extends Controller
 
     public function delete(string $slug)
     {
-        $activityLog = $this->service->findBySlug($slug);
+        $activityLog = $this->activityLogService->findBySlug($slug);
 
         Gate::authorize('delete', $activityLog);
 
-        $result = $this->service->delete($activityLog);
+        $result = $this->activityLogService->delete($activityLog);
 
         return to_route('back-office.activity-logs.index')->with('flash_message', [
             'message' => $result['message'],
