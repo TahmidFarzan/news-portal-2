@@ -26,6 +26,7 @@ use Spatie\Sluggable\SlugOptions;
 
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Table('users')]
 #[Fillable([
