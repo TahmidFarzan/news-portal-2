@@ -3,14 +3,13 @@
 namespace App\Observers;
 
 use App\Models\User;
-use Illuminate\Support\Str;
+use App\Jobs\DeleteUserRelationsJob;
 
 class UserObserver
 {
     public function deleting(User $user): void
     {
-        if ($user->activityLogs()->count() > 0) {
-            $user->activityLogs()->delete();
-        }
+        DeleteUserRelationsJob::dispatchSync($user->id);
     }
 }
+
