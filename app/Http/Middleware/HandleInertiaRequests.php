@@ -33,6 +33,8 @@ class HandleInertiaRequests extends Middleware
             $requestUser = Auth::user();
         }
 
+
+
         $requestData = array_merge(parent::share($request), [
 
             'auth'         => [
@@ -44,7 +46,7 @@ class HandleInertiaRequests extends Middleware
                     'email'             => $requestUser->email,
                     'email_verified_at' => $requestUser->email_verified_at,
                     'slug'              => $requestUser->slug,
-                    'profile_image'     => $requestUser->profile_image ?? null,
+                    'profile_image'     => $requestUser->profile_image?->toArray() ?? null,
                 ]
                     : null,
             ],
