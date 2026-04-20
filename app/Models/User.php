@@ -15,10 +15,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
@@ -162,7 +164,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     public function activityLogs(): MorphMany
     {
-        return $this->morphMany(ActivityLog::class, 'subject');
+        return $this->morphMany(Activity::class, 'subject');
     }
 
     public function createdBy(): BelongsTo
@@ -180,10 +182,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         return $this->belongsTo(UserRole::class);
     }
 
-    public function updatedBy(): ?User
+    public function latestActivityLog(): MorphOne
     {
-        $latestActivity = $this->activityLogs()->latest()->first();
-        return $latestActivity ? $latestActivity->causer : null;
+        return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
     public function hasUserRole($userRoles): bool

@@ -191,17 +191,6 @@ onMounted(async () => {
                         {{ media?.created_by?.name || 'N/A' }}
                     </div>
                 </div>
-
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2">
-                    <div>
-                        <span class="font-medium text-gray-600">Updated At:</span>
-                        {{ media?.updated_at ? formatDateTime(media.updated_at) : 'N/A' }}
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Updated By:</span>
-                        {{ media?.updated_by?.name || 'N/A' }}
-                    </div>
-                </div>
             </div>
 
         </div>

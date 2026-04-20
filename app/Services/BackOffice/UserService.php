@@ -38,11 +38,13 @@ class UserService
         $user->load([
             'userRole',
             'createdBy',
-            'activityLogs' => fn($query) => $query->latest(),
-            'activityLogs.causer',
-        ]);
 
-        $user->updatedBy = $user->updatedBy() ?? null;
+            'activityLogs' => fn($query) => $query->latest()->limit(10),
+            'activityLogs.causer',
+
+            'latestActivityLog',
+            'latestActivityLog.causer',
+        ]);
 
         return $user;
     }

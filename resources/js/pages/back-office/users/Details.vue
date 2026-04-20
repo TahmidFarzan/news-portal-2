@@ -168,7 +168,7 @@ onMounted(async () => {
                     </div>
                     <div>
                         <span class="font-medium text-gray-600">Updated By:</span>
-                        {{ user?.updated_by?.name || 'N/A' }}
+                        {{ user?.latest_activity_log?.causer?.name || 'N/A' }}
                     </div>
                 </div>
             </div>
