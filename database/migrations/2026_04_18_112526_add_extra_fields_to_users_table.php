@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('mobile', 20)->nullable()->after('religion');
             $table->text('address')->nullable()->after('religion');
 
-            $table->foreignId('supervisor_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('created_by_id')->nullable()->constrained('users')->cascadeOnDelete();
 
             $table->softDeletes();

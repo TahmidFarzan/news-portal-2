@@ -76,6 +76,17 @@ export const canActiveInactiveUser = (authUser, targetUser) => {
     return false
 }
 
+export const canDeleteMedia = (authUser, media) => {
+    if (!authUser, !media) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    if (authUserUserRole === 'news desk') return true
+
+    return false
+}
 
 
 // Menu Access Permission

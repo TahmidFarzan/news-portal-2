@@ -12,6 +12,7 @@ import {
     faChevronUp,
     faRectangleList,
     faGauge,
+    faPhotoFilm
 } from "@fortawesome/free-solid-svg-icons"
 
 library.add(
@@ -21,6 +22,7 @@ library.add(
     faChevronUp,
     faRectangleList,
     faGauge,
+    faPhotoFilm
 )
 
 import { canAccessUserManagementMenu } from '@/composables/useAuthUserAccessPermissions'
@@ -78,6 +80,13 @@ function isCurrentPage(url) {
             :class="isCurrentPage('/auth-user/dashboard/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gauge" />
             Dashboard
+        </a>
+
+        <a :href="route('back-office.medias.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/auth-user/medias/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="photo-film" />
+            Medias
         </a>
 
         <button v-if="!authUser?.is_member" @click="toggleShowSubMenu('UserManagement')"

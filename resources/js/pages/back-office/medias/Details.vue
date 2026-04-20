@@ -1,0 +1,245 @@
+<script setup>
+import Layout from '@/pages/layouts/AuthLayout.vue'
+import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
+import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
+
+import { ref, onMounted, nextTick, inject } from 'vue'
+import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
+
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
+import { faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons'
+
+import { formatDate, formatDateTime } from '@/composables/useDateTime'
+import { extractModelName, titleFormat } from '@/composables/useUtil'
+import { canDeleteMedia } from '@/composables/useAuthUserAccessPermissions'
+
+FontAwesomeLibrary.add(faTrash, faSpinner)
+
+defineOptions({ layout: Layout })
+
+const pageReady = inject("pageReady")
+const authUser = inject("authUser")
+
+const showDeleteModal = ref(false)
+const deleteProcessing = ref(false)
+
+const { media } = defineProps({
+    media: Object,
+})
+
+
+const canDelete = (media) => canDeleteMedia(authUser?.value, media)
+
+const handleDelete = () => {
+    if (deleteProcessing.value) return
+    deleteProcessing.value = true
+
+    intertiaJsRoute.delete(route('back-office.medias.delete', { slug: media?.slug }), {
+        onFinish: () => deleteProcessing.value = false
+    })
+}
+
+
+onMounted(async () => {
+    await nextTick()
+
+    window.dispatchEvent(
+        new CustomEvent('set-breadcrumb', {
+            detail: [
+                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
+                { text: 'Medias', href: route('back-office.medias.index') },
+                { text: `${media?.name} details`, active: true }
+            ],
+        })
+    )
+
+    pageReady.value = true
+})
+</script>
+
+<template>
+
+    <Head :title="`${media?.name} details`" />
+
+    <div class="w-full space-y-6">
+
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
+            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Basic Information</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                    <div>
+                        <span class="font-medium text-gray-600">Name:</span>
+                        {{ media?.name || 'N/A' }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-600">Collection name:</span>
+                        {{ media?.collection_name || 'N/A' }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-600">Model type:</span>
+                        {{ extractModelName(media?.model_type) || 'N/A' }}
+                    </div>
+
+                </div>
+
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                    <div>
+                        <span class="font-medium text-gray-600">Mime type:</span>
+                        {{ media?.mime_type || 'N/A' }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-600">Disk:</span>
+                        {{ media?.disk || 'N/A' }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-600">Size</span>
+                        {{ media?.size || 'N/A' }}
+                    </div>
+
+                </div>
+
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                    <div class="text-sm font-semibold text-gray-700 mb-2">
+                        Custom properties:
+                    </div>
+
+                    <div v-if="media?.custom_properties && Object.keys(media.custom_properties).length"
+                        class="space-y-2">
+
+                        <div v-for="(value, key) in media.custom_properties" :key="key"
+                            class="flex justify-between items-start border-b border-gray-100 pb-1">
+
+                            <span class="font-medium text-gray-600">
+                                {{ titleFormat(key) }}
+                            </span>
+
+                            <span class="text-gray-800 text-right">
+                                {{ value ? titleFormat(value) : 'N/A' }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <p v-else class="text-sm text-gray-500">
+                        Not available.
+                    </p>
+                </div>
+
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                    <div class="text-sm font-semibold text-gray-700 mb-2">
+                        Generated conversions:
+                    </div>
+
+                    <div v-if="media?.generated_conversions && Object.keys(media.generated_conversions).length"
+                        class="space-y-2">
+
+                        <div v-for="(value, key) in media.generated_conversions" :key="key"
+                            class="flex justify-between items-center border-b border-gray-100 pb-1">
+
+                            <span class="font-medium text-gray-600">
+                                {{ titleFormat(key) }}
+                            </span>
+
+                            <span :class="value ? 'text-green-600 font-medium' : 'text-red-500 font-medium'">
+                                {{ value ? 'Yes' : 'No' }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <p v-else class="text-sm text-gray-500">
+                        Not available.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-1 gap-4 mt-4">
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                    <div>
+                        <span class="font-medium text-gray-600">Media url:</span>
+                        {{ media?.media_url || 'N/A' }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-600">Order column:</span>
+                        {{ media?.order_column || 'N/A' }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-1 gap-4 mt-4">
+                <div class="border border-gray-200 rounded-xl p-4 text-sm">
+                    <span class="font-medium text-gray-600">Media:</span>
+                    <MediaRenderer :media="media" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
+            <h3 class="text-lg font-semibold mb-4 border-b pb-2">System Information</h3>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2">
+                    <div>
+                        <span class="font-medium text-gray-600">Created At:</span>
+                        {{ media?.created_at ? formatDateTime(media.created_at) : 'N/A' }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-600">Created By:</span>
+                        {{ media?.created_by?.name || 'N/A' }}
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2">
+                    <div>
+                        <span class="font-medium text-gray-600">Updated At:</span>
+                        {{ media?.updated_at ? formatDateTime(media.updated_at) : 'N/A' }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-600">Updated By:</span>
+                        {{ media?.updated_by?.name || 'N/A' }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
+            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Activity Logs</h3>
+            <RecentActivities :model-slug="'media'" :model="media" />
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex justify-end gap-2">
+
+            <button v-if="canDelete(media)" @click="showDeleteModal = true"
+                class="px-4 py-2 border border-red-500 text-red-600 rounded hover:bg-red-50 flex items-center gap-2">
+                <FontAwesomeIcon icon="trash" /> Delete
+            </button>
+
+        </div>
+
+        <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+            <div class="bg-white p-6 rounded-xl shadow-lg w-96">
+                <div class="font-semibold mb-2">Delete Confirmation</div>
+                <p class="mb-2">{{ media?.name }}</p>
+                <p class="text-sm text-gray-600 mb-4">
+                    This action cannot be undone.
+                </p>
+
+                <div class="flex justify-end gap-2">
+                    <button @click="showDeleteModal = false" class="px-3 py-1 bg-gray-200 rounded">
+                        Cancel
+                    </button>
+                    <button @click="handleDelete" :disabled="deleteProcessing"
+                        class="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
+                        <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

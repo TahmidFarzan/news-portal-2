@@ -23,15 +23,11 @@ class UserPolicy
 
     public function update(User $authUser, User $user): Response
     {
-        if( $authUser->hasUserRole("Admin")){
+        if ($authUser->hasUserRole("Admin")) {
             return Response::allow();
         }
 
-        if( $authUser->hasUserRole("Supervisor") && $user->hasUserRole("Member") && ($authUser->id === $user->supervisor_id)){
-            return Response::allow();
-        }
-
-        if ($authUser->hasUserRole("Member") && ($authUser->id === $user->id)) {
+        if ($authUser->hasUserRole("News desk") && ($authUser->id === $user->id)) {
             return Response::allow();
         }
 
@@ -44,15 +40,11 @@ class UserPolicy
             return Response::deny();
         }
 
-        if( $authUser->hasUserRole("Admin")){
+        if ($authUser->hasUserRole("Admin")) {
             return Response::allow();
         }
 
-        if( $authUser->hasUserRole("Supervisor") && $user->hasUserRole("Member") && ($authUser->id === $user->supervisor_id)){
-            return Response::allow();
-        }
-
-        if ($authUser->hasUserRole("Member") && ($authUser->id === $user->id)) {
+        if ($authUser->hasUserRole("News desk") && ($authUser->id === $user->id)) {
             return Response::allow();
         }
 
@@ -65,15 +57,11 @@ class UserPolicy
             return Response::deny();
         }
 
-        if( $authUser->hasUserRole("Admin")){
+        if ($authUser->hasUserRole("Admin")) {
             return Response::allow();
         }
 
-        if( $authUser->hasUserRole("Supervisor") && $user->hasUserRole("Member") && ($authUser->id === $user->supervisor_id)){
-            return Response::allow();
-        }
-
-        if ($authUser->hasUserRole("Member") && ($authUser->id === $user->id)) {
+        if ($authUser->hasUserRole("News desk") && ($authUser->id === $user->id)) {
             return Response::allow();
         }
 
@@ -86,15 +74,11 @@ class UserPolicy
             return Response::deny();
         }
 
-        if( $authUser->hasUserRole("Admin")){
+        if ($authUser->hasUserRole("Admin")) {
             return Response::allow();
         }
 
-        if( $authUser->hasUserRole("Supervisor") && $user->hasUserRole("Member") && ($authUser->id === $user->supervisor_id)){
-            return Response::allow();
-        }
-
-        if ($authUser->hasUserRole("Member") && ($authUser->id === $user->id)) {
+        if ($authUser->hasUserRole("News desk") && ($authUser->id === $user->id)) {
             return Response::allow();
         }
 

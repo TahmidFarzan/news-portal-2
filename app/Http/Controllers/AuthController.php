@@ -172,6 +172,7 @@ class AuthController extends Controller
         $user   = $this->authService->authUser();
         $result = $this->authService->accountUpdate($request, $user);
 
+
         return to_route('auth-user.account.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],

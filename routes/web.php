@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
 //
-use App\Http\Controllers\BackOffice\ActivityLogController;
-use App\Http\Controllers\BackOffice\UserController;
-
-// Backoffice
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
-use Illuminate\Support\Facades\Route;
+
+// Backoffice
+use App\Http\Controllers\BackOffice\ActivityLogController;
+use App\Http\Controllers\BackOffice\UserController;
+use App\Http\Controllers\BackOffice\MediaController;
 
 Route::middleware('guest')->group(function () {
     Route::prefix('login')->group(function () {
@@ -90,6 +91,13 @@ Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(functi
 });
 
 Route::prefix('back-office')->name('back-office.')->group(function () {
+
+    Route::prefix('medias')->name('medias.')->group(function () {
+        Route::get('/', [MediaController::class, 'index'])->name('index');
+        Route::get('details/{slug}', [MediaController::class, 'details'])->name('details');
+        Route::delete('delete/{slug}', [MediaController::class, 'delete'])->name('delete');
+
+    });
 
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');

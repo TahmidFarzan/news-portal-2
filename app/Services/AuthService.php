@@ -37,13 +37,13 @@ class AuthService
     public function loadRelations(User $user): User
     {
         $user->load([
+            'media',
             'createdBy',
             'activityLogs' => fn($query) => $query->latest(),
             'activityLogs.causer',
         ]);
 
         $user->updated_by = $user->updatedBy() ?? null;
-        $user->profile_image = $user->profileImage() ?? null;
 
         return $user;
     }

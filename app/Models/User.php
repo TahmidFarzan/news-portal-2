@@ -21,12 +21,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
-
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 #[Table('users')]
 #[Fillable([
@@ -45,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     use HasFactory, Notifiable, SoftDeletes, LogsActivity, HasSlug, InteractsWithMedia;
 
     protected $appends = [
-        'age', 'is_active','media_collection_name'
+        'age', 'is_active', 'media_collection_name', 'profile_image',
     ];
 
     protected function casts(): array
@@ -138,6 +137,29 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         return ($this->deleted_at == null) ? true : false;
     }
 
+    public function getProfileImageAttribute(): ?Media
+    {
+        $image          = null;
+        $collectionName = $this->media_collection_name;
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE];
+
+        if ($this->hasMedia($collectionName, $roleParameter)) {
+            $imageMedia = $this->getMedia($collectionName, $roleParameter)
+                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
+                ->first();
+
+            if (isset($imageMedia)) {
+
+                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion('webp') ? $imageMedia->getUrl('webp') : $imageMedia->getUrl();
+                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion('webp') ? $imageMedia->getSrcset('webp') : $imageMedia->getSrcset();
+
+                $image = $imageMedia;
+            }
+        }
+
+        return $image;
+    }
+
     public function activityLogs(): MorphMany
     {
         return $this->morphMany(ActivityLog::class, 'subject');
@@ -176,24 +198,5 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
             strtolower($this->userRole->name),
             array_map('strtolower', $userRoles)
         );
-    }
-
-    public function profileImage(): ?Media
-    {
-        $image          = null;
-        $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE];
-
-        if ($this->hasMedia($collectionName, $roleParameter)) {
-            $imageMedia = $this->getMedia($collectionName, $roleParameter)
-                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
-                ->first();
-
-            if (isset($imageMedia)) {
-                $image = $imageMedia;
-            }
-        }
-
-        return $image;
     }
 }

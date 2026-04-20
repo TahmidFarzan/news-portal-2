@@ -71,4 +71,11 @@ return [
             ],
         ],
     ],
+
+    'media'            => [
+        'delete'   => [
+            'success' => 'Media deleted successfully.',
+            'failed'  => 'Failed to media user.',
+        ],
+    ],
 ];
