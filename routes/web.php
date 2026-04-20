@@ -92,16 +92,16 @@ Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(functi
 Route::prefix('back-office')->name('back-office.')->group(function () {
 
     Route::prefix('users')->name('users.')->group(function () {
-        Route::get('/', [UserController::class, 'userIndex'])->name('index');
-        Route::get('create', [UserController::class, 'userCreate'])->name('create');
-        Route::get('edit/{slug}', [UserController::class, 'userEdit'])->name('edit');
-        Route::get('details/{slug}', [UserController::class, 'userDetails'])->name('details');
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('create', [UserController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [UserController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [UserController::class, 'details'])->name('details');
 
-        Route::post('save', [UserController::class, 'userSave'])->name('save');
-        Route::patch('update/{slug}', [UserController::class, 'userUpdate'])->name('update');
-        Route::delete('delete/{slug}', [UserController::class, 'userDelete'])->name('delete');
-        Route::patch('active/{slug}', [UserController::class, 'userActive'])->name('active');
-        Route::patch('inactive/{slug}', [UserController::class, 'userInactive'])->name('inactive');
+        Route::post('save', [UserController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [UserController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [UserController::class, 'delete'])->name('delete');
+        Route::patch('active/{slug}', [UserController::class, 'active'])->name('active');
+        Route::patch('inactive/{slug}', [UserController::class, 'inactive'])->name('inactive');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {

@@ -19,7 +19,7 @@ class UserController extends Controller
         $this->middleware(['auth', 'verified', 'user.role:admin,supervisor']);
     }
 
-    public function userIndex(Request $request)
+    public function index(Request $request)
     {
         $user = $this->userService->new();
         Gate::authorize('viewAny', $user);
@@ -31,7 +31,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userDetails(string $slug)
+    public function details(string $slug)
     {
         $user = $this->userService->findBySlug($slug);
         $user = $this->userService->loadRelations($user);
@@ -43,7 +43,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userCreate()
+    public function create()
     {
         $user = $this->userService->new();
         Gate::authorize('create', $user);
@@ -53,7 +53,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userEdit(string $slug)
+    public function edit(string $slug)
     {
         $user = $this->userService->findBySlug($slug);
         $user = $this->userService->loadRelations($user);
@@ -65,7 +65,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userSave(UserRequest $request)
+    public function save(UserRequest $request)
     {
         $user = $this->userService->new();
         Gate::authorize('create', $user);
@@ -78,7 +78,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userUpdate(UserRequest $request, string $slug)
+    public function update(UserRequest $request, string $slug)
     {
         $user = $this->userService->findBySlug($slug);
 
@@ -92,7 +92,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userActive(string $slug)
+    public function active(string $slug)
     {
         $user = $this->userService->findTrashedBySlug($slug);
 
@@ -106,7 +106,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userInactive(string $slug)
+    public function inactive(string $slug)
     {
         $user = $this->userService->findBySlug($slug);
 
@@ -120,7 +120,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userDelete(string $slug)
+    public function delete(string $slug)
     {
         $user = $this->userService->findWithTrashedBySlug($slug);
 
