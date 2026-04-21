@@ -62,137 +62,177 @@ onMounted(async () => {
 
     <div class="w-full space-y-6">
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Basic Information</h3>
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
-                    <div>
-                        <span class="font-medium text-gray-600">Name:</span>
-                        {{ category?.name || 'N/A' }}
+        <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold">Category Details</h2>
+
+            <div class="flex gap-2">
+                <a v-if="canEdit(category)" :href="route('back-office.categories.edit', { slug: category?.slug })"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
+                    <FontAwesomeIcon icon="pen" />
+                    Edit
+                </a>
+
+                <button v-if="canDelete(category)" @click="showDeleteModal = true"
+                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
+                    <FontAwesomeIcon icon="trash" />
+                    Delete
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Name</span>
+                        <span class="font-medium">{{ category?.name || 'N/A' }}</span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Language:</span>
-                        {{ category?.language?.name || 'N/A' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Language</span>
+                        <span class="font-medium">{{ category?.language?.name || 'N/A' }}</span>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
-                    <div>
-                        <span class="font-medium text-gray-600">Parent:</span>
-                        {{ category?.parent?.name || 'N/A' }}
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Parent</span>
+                        <span class="font-medium">{{ category?.parent?.name || 'N/A' }}</span>
                     </div>
+
                     <div>
-                        <span class="font-medium text-gray-600">Details:</span>
-                        {{ category?.details || 'N/A' }}
+                        <div class="text-gray-500 mb-1">Details</div>
+                        <div class="text-gray-700">{{ category?.details || 'N/A' }}</div>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
-                    <h5 class="text-lg font-semibold mb-3">Tree</h5>
+                <div class="border border-gray-200 rounded-lg p-4 space-y-3">
+                    <div class="text-gray-500">Tree</div>
 
-                    <div>
+                    <div class="flex flex-wrap gap-2">
                         <span v-for="node in category?.bloodline || []" :key="node.id"
-                            class="inline-block bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-md m-1">
+                            class="bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
                             {{ node.name }}
                         </span>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
-                    <ul class="divide-y divide-gray-200">
-                        <li class="p-4">
-                            <strong class="font-semibold text-gray-800">SEO Title</strong>:
-                            <span class="text-gray-600">
-                                {{ category?.seo_title || 'N/A' }}
-                            </span>
-                        </li>
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="text-gray-500 mb-2">SEO</div>
 
-                        <li class="p-4">
-                            <strong class="font-semibold text-gray-800">SEO Brief</strong>:
-                            <span class="text-gray-600">
-                                {{ category?.seo_brief || 'N/A' }}
-                            </span>
-                        </li>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Title</span>
+                            <span class="font-medium">{{ category?.seo_title || 'N/A' }}</span>
+                        </div>
 
-                        <li class="p-4">
-                            <strong class="font-semibold text-gray-800">SEO Keywords</strong>:
-                            <span class="text-gray-600">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Brief</span>
+                            <span class="font-medium">{{ category?.seo_brief || 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <div class="text-gray-500 mb-1">Keywords</div>
+                            <div class="text-gray-700">
                                 {{ category?.seo_keywords || 'N/A' }}
-                            </span>
-                        </li>
-                    </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">System Information</h3>
-            <div class="grid md:grid-cols-2 gap-4 text-sm">
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2">
-                    <div>
-                        <span class="font-medium text-gray-600">Created At:</span>
-                        {{ category?.created_at ? formatDateTime(category.created_at) : 'N/A' }}
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">System Information</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Created At</span>
+                        <span class="font-medium">
+                            {{ category?.created_at ? formatDateTime(category.created_at) : 'N/A' }}
+                        </span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Created By:</span>
-                        {{ category?.created_by?.name || 'N/A' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Created By</span>
+                        <span class="font-medium">
+                            {{ category?.created_by?.name || 'N/A' }}
+                        </span>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2">
-                    <div>
-                        <span class="font-medium text-gray-600">Updated At:</span>
-                        {{ category?.updated_at ? formatDateTime(category.updated_at) : 'N/A' }}
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Updated At</span>
+                        <span class="font-medium">
+                            {{ category?.updated_at ? formatDateTime(category.updated_at) : 'N/A' }}
+                        </span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Updated By:</span>
-                        {{ category?.latest_activity_log?.causer?.name || 'N/A' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Updated By</span>
+                        <span class="font-medium">
+                            {{ category?.latest_activity_log?.causer?.name || 'N/A' }}
+                        </span>
                     </div>
                 </div>
+
             </div>
-
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Activity Logs</h3>
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
             <RecentActivities :model-slug="'category'" :model="category" />
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex justify-end gap-2">
+        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showDeleteModal"
+                class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
 
-            <a v-if="canEdit(category)" :href="route('back-office.categories.edit', { slug: category?.slug })"
-                class="px-4 py-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-50 flex items-center gap-2">
-                <FontAwesomeIcon icon="pen" /> Edit
-            </a>
+                <Transition enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0 scale-95 translate-y-4"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-4">
+                    <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
+                        <h3 class="text-lg font-semibold text-red-600">
+                            Delete Category
+                        </h3>
 
-            <button v-if="canDelete(category)" @click="showDeleteModal = true"
-                class="px-4 py-2 border border-red-500 text-red-600 rounded hover:bg-red-50 flex items-center gap-2">
-                <FontAwesomeIcon icon="trash" /> Delete
-            </button>
+                        <p class="text-sm font-medium">
+                            {{ category?.name }}
+                        </p>
 
-        </div>
+                        <p class="text-sm text-gray-500">
+                            This action cannot be undone.
+                        </p>
 
-        <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                        <div class="flex justify-end gap-2 pt-2">
+                            <button @click="showDeleteModal = false"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
+                                Cancel
+                            </button>
 
-            <div class="bg-white p-6 rounded-xl shadow-lg w-96">
-                <div class="font-semibold mb-2">Delete Confirmation</div>
-                <p class="mb-2">{{ category?.name }}</p>
-                <p class="text-sm text-gray-600 mb-4">
-                    This action cannot be undone.
-                </p>
+                            <button @click="handleDelete" :disabled="deleteProcessing"
+                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </Transition>
 
-                <div class="flex justify-end gap-2">
-                    <button @click="showDeleteModal = false" class="px-3 py-1 bg-gray-200 rounded">
-                        Cancel
-                    </button>
-                    <button @click="handleDelete" :disabled="deleteProcessing"
-                        class="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
-                        <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                        Delete
-                    </button>
-                </div>
             </div>
-        </div>
+        </Transition>
+
     </div>
 </template>

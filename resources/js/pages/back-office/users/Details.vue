@@ -82,153 +82,207 @@ onMounted(async () => {
 
     <div class="w-full space-y-6">
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Basic Information</h3>
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
-                    <div>
-                        <span class="font-medium text-gray-600">Name:</span>
-                        {{ user?.name || 'N/A' }}
+        <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold">User Details</h2>
+
+            <div class="flex gap-2">
+                <a v-if="canEdit(user)" :href="route('back-office.users.edit', { slug: user?.slug })"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
+                    <FontAwesomeIcon icon="pen" />
+                    Edit
+                </a>
+
+                <button v-if="user?.is_active && canActiveInactive(user)" @click="handleInactive"
+                    :disabled="inactiveProcessing"
+                    class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
+                    <FontAwesomeIcon v-if="inactiveProcessing" icon="spinner" spin />
+                    <FontAwesomeIcon v-else icon="eye-slash" />
+                    Inactive
+                </button>
+
+                <button v-if="!user?.is_active && canActiveInactive(user)" @click="handleActive"
+                    :disabled="activeProcessing"
+                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
+                    <FontAwesomeIcon v-if="activeProcessing" icon="spinner" spin />
+                    <FontAwesomeIcon v-else icon="eye" />
+                    Active
+                </button>
+
+                <button v-if="canDelete(user)" @click="showDeleteModal = true"
+                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
+                    <FontAwesomeIcon icon="trash" />
+                    Delete
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Name</span>
+                        <span class="font-medium">{{ user?.name || 'N/A' }}</span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Email:</span>
-                        {{ user?.email || 'N/A' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Email</span>
+                        <span class="font-medium">{{ user?.email || 'N/A' }}</span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Mobile:</span>
-                        {{ user?.mobile || 'N/A' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Mobile</span>
+                        <span class="font-medium">{{ user?.mobile || 'N/A' }}</span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Active:</span>
-                        {{ user?.is_active ? 'Yes' : 'No' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Status</span>
+                        <span :class="user?.is_active ? 'text-green-600' : 'text-red-500'" class="font-medium">
+                            {{ user?.is_active ? 'Active' : 'Inactive' }}
+                        </span>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-xl p-4 flex justify-center">
+                <div class="border border-gray-200 rounded-lg p-4 flex items-center justify-center">
                     <img :src="user?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
                         class="w-40 h-40 object-cover rounded-xl border" />
                 </div>
+
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4 mt-4">
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
-                    <div>
-                        <span class="font-medium text-gray-600">Birth date:</span>
-                        {{ user?.birth_date ? formatDate(user?.birth_date) : 'N/A' }}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Birth Date</span>
+                        <span class="font-medium">
+                            {{ user?.birth_date ? formatDate(user?.birth_date) : 'N/A' }}
+                        </span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Gender:</span>
-                        {{ user?.gender?.name || 'N/A' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Gender</span>
+                        <span class="font-medium">{{ user?.gender?.name || 'N/A' }}</span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Age:</span>
-                        {{ user?.age || 'N/A' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Age</span>
+                        <span class="font-medium">{{ user?.age || 'N/A' }}</span>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
-                    <div>
-                        <span class="font-medium text-gray-600">Religion:</span>
-                        {{ user?.religion?.name || 'N/A' }}
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Religion</span>
+                        <span class="font-medium">{{ user?.religion?.name || 'N/A' }}</span>
                     </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Marital status:</span>
-                        {{ user?.marital_status?.name || 'N/A' }}
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Marital Status</span>
+                        <span class="font-medium">{{ user?.marital_status?.name || 'N/A' }}</span>
                     </div>
                 </div>
+
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4 mt-4">
-                <div class="border border-gray-200 rounded-xl p-4 text-sm">
-                    <span class="font-medium text-gray-600">User Role:</span>
-                    {{ user?.user_role?.name || 'N/A' }}
-                </div>
-            </div>
-
-        </div>
-
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">System Information</h3>
-            <div class="grid md:grid-cols-2 gap-4 text-sm">
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2">
-                    <div>
-                        <span class="font-medium text-gray-600">Created At:</span>
-                        {{ user?.created_at ? formatDateTime(user.created_at) : 'N/A' }}
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Created By:</span>
-                        {{ user?.created_by?.name || 'N/A'}}
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-xl p-4 space-y-2">
-                    <div>
-                        <span class="font-medium text-gray-600">Updated At:</span>
-                        {{ user?.updated_at ? formatDateTime(user.updated_at) : 'N/A' }}
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Updated By:</span>
-                        {{ user?.latest_activity_log?.causer?.name || 'N/A' }}
-                    </div>
+            <div class="border border-gray-200 rounded-lg p-4 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-500">User Role</span>
+                    <span class="font-medium">{{ user?.user_role?.name || 'N/A' }}</span>
                 </div>
             </div>
 
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Activity Logs</h3>
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">System Information</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Created At</span>
+                        <span class="font-medium">
+                            {{ user?.created_at ? formatDateTime(user.created_at) : 'N/A' }}
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Created By</span>
+                        <span class="font-medium">
+                            {{ user?.created_by?.name || 'N/A' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Updated At</span>
+                        <span class="font-medium">
+                            {{ user?.updated_at ? formatDateTime(user.updated_at) : 'N/A' }}
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Updated By</span>
+                        <span class="font-medium">
+                            {{ user?.latest_activity_log?.causer?.name || 'N/A' }}
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
             <RecentActivities :model-slug="'user'" :model="user" />
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex justify-end gap-2">
+        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showDeleteModal"
+                class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
 
-            <a v-if="canEdit(user)" :href="route('back-office.users.edit', { slug: user?.slug })"
-                class="px-4 py-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-50 flex items-center gap-2">
-                <FontAwesomeIcon icon="pen" /> Edit
-            </a>
+                <Transition enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0 scale-95 translate-y-4"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-4">
+                    <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
+                        <h3 class="text-lg font-semibold text-red-600">
+                            Delete User
+                        </h3>
 
-            <button v-if="user?.is_active && canActiveInactive(user)" @click="handleInactive"
-                :disabled="inactiveProcessing"
-                class="px-4 py-2 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 flex items-center gap-2">
-                <FontAwesomeIcon v-if="inactiveProcessing" icon="spinner" spin />
-                <FontAwesomeIcon icon="eye-slash" v-else />
-                Inactive
-            </button>
+                        <p class="text-sm font-medium">
+                            {{ user?.name }}
+                        </p>
 
-            <button v-if="!user?.is_active && canActiveInactive(user)" @click="handleActive"
-                :disabled="activeProcessing"
-                class="px-4 py-2 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 flex items-center gap-2">
-                <FontAwesomeIcon v-if="activeProcessing" icon="spinner" spin />
-                <FontAwesomeIcon icon="eye" v-else />
-                Active
-            </button>
+                        <p class="text-sm text-gray-500">
+                            This action cannot be undone.
+                        </p>
 
-            <button v-if="canDelete(user)" @click="showDeleteModal = true"
-                class="px-4 py-2 border border-red-500 text-red-600 rounded hover:bg-red-50 flex items-center gap-2">
-                <FontAwesomeIcon icon="trash" /> Delete
-            </button>
+                        <div class="flex justify-end gap-2 pt-2">
+                            <button @click="showDeleteModal = false"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
+                                Cancel
+                            </button>
 
-        </div>
+                            <button @click="handleDelete" :disabled="deleteProcessing"
+                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </Transition>
 
-        <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-
-            <div class="bg-white p-6 rounded-xl shadow-lg w-96">
-                <div class="font-semibold mb-2">Delete Confirmation</div>
-                <p class="mb-2">{{ user?.name }}</p>
-                <p class="text-sm text-gray-600 mb-4">
-                    This action cannot be undone.
-                </p>
-
-                <div class="flex justify-end gap-2">
-                    <button @click="showDeleteModal = false" class="px-3 py-1 bg-gray-200 rounded">
-                        Cancel
-                    </button>
-                    <button @click="handleDelete" :disabled="deleteProcessing" class="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
-                        <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                        Delete
-                    </button>
-                </div>
             </div>
-        </div>
+        </Transition>
+
     </div>
 </template>
