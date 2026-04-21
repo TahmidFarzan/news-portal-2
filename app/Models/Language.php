@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
@@ -29,7 +28,7 @@ use Spatie\Sluggable\SlugOptions;
 #[ObservedBy([LanguageObserver::class])]
 class Language extends Model
 {
-    use HasFactory, Notifiable, LogsActivity, HasSlug;
+    use HasFactory, LogsActivity, HasSlug;
 
     protected $appends = [];
 
