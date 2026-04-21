@@ -111,66 +111,53 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Activity logs" />
+    <Head title="Activity Logs" />
 
-    <div class="w-full">
+    <div class="w-full space-y-6">
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6 space-y-6">
+        <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold">Activity Logs</h2>
+        </div>
 
-            <form @submit.prevent="applyFilter" class="grid md:grid-cols-4 gap-4">
+        <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <div>
-                    <label class="block text-sm font-medium mb-1">Per Page</label>
-                    <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
-                        :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                        selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                        placeholder="Select" :error="filterForm.errors.per_page" v-if="pageReady" />
-                </div>
+                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="per_page"
+                    :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
+                    selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
+                    placeholder="Per page" />
 
-                <div v-if="showSubjectType && pageReady">
-                    <label class="block text-sm font-medium mb-1">Subject</label>
-                    <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="subject_type"
-                        :selectedItem="filterForm.subject_type" :apiUrl="route('search.activity-log-subject-types')"
-                        :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
-                        apiValueKey="id" placeholder="Select" :error="filterForm.errors.subject_type" />
-                </div>
+                <MultiSelectInfinityLoadingApi v-if="showSubjectType && pageReady" :form="filterForm"
+                    fieldName="subject_type" :selectedItem="filterForm.subject_type"
+                    :apiUrl="route('search.activity-log-subject-types')" :multiple="false" selectedLabelKey="name"
+                    selectedValueKey="id" apiLabelKey="name" apiValueKey="id" placeholder="Subject" />
 
-                <div>
-                    <label class="block text-sm font-medium mb-1">Causer</label>
-                    <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="causer_id"
-                        :selectedItem="filterForm.causer_id" :apiUrl="route('search.users')" :multiple="false"
-                        selectedLabelKey="name_with_user_role" selectedValueKey="id" apiLabelKey="name_with_user_role"
-                        apiValueKey="id" placeholder="Select" :error="filterForm.errors.causer_id" v-if="pageReady" />
-                </div>
+                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="causer_id"
+                    :selectedItem="filterForm.causer_id" :apiUrl="route('search.users')" :multiple="false"
+                    selectedLabelKey="name_with_user_role" selectedValueKey="id" apiLabelKey="name_with_user_role"
+                    apiValueKey="id" placeholder="Causer" />
 
-                <div>
-                    <label class="block text-sm font-medium mb-1">Date</label>
-                    <input type="date" v-model="filterForm.date" class="w-full border rounded px-3 py-2"
-                        :class="filterForm.errors.date ? 'border-red-500' : 'border-gray-300'" />
-                </div>
+                <input type="date" v-model="filterForm.date"
+                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-1">Search</label>
-                    <input type="search" v-model="filterForm.search" placeholder="Search logs..."
-                        class="w-full border rounded px-3 py-2"
-                        :class="filterForm.errors.search ? 'border-red-500' : 'border-gray-300'" />
-                </div>
+                <input type="search" v-model="filterForm.search" placeholder="Search logs..."
+                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none md:col-span-2" />
 
-                <div class="md:col-span-4 flex justify-center">
-                    <button type="submit" :disabled="filterForm.processing"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2">
+            </div>
 
-                        <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
-                        <FontAwesomeIcon icon="filter" />
-                        Filter
+            <div class="flex justify-end">
+                <button type="submit" :disabled="filterForm.processing"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition">
+                    <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
+                    <FontAwesomeIcon icon="filter" />
+                    Apply Filter
+                </button>
+            </div>
+        </form>
 
-                    </button>
-                </div>
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
 
-            </form>
-
-            <div class="overflow-x-auto border border-gray-200 rounded-xl">
-
+            <div class="overflow-x-auto">
                 <table class="min-w-full text-sm">
 
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
@@ -178,88 +165,87 @@ onMounted(async () => {
                             <th class="px-4 py-3 text-left">#</th>
                             <th class="px-4 py-3 text-left">Log Name</th>
                             <th class="px-4 py-3 text-left">Event</th>
-                            <th class="px-4 py-3 text-left">Created At</th>
-                            <th class="px-4 py-3 text-right">Action</th>
+                            <th class="px-4 py-3 text-left">Created</th>
+                            <th class="px-4 py-3 text-right">Actions</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in activityLogs?.data" :key="item.id" class="hover:bg-gray-50">
-
+                        <tr v-for="(item, index) in activityLogs?.data" :key="item.id"
+                            class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
-                            <td class="px-4 py-3">{{ item.log_name }}</td>
-                            <td class="px-4 py-3">{{ item.event }}</td>
-                            <td class="px-4 py-3 text-gray-500">{{ formatDateTime(item.created_at) }}</td>
-
-                            <td class="px-4 py-3 text-right flex justify-end gap-2">
-
-                                <a :href="route('back-office.activity-logs.details', { slug: item.slug })"
-                                    class="px-3 py-1 text-xs border border-blue-500 text-blue-600 rounded hover:bg-blue-50 flex items-center gap-1">
-                                    <FontAwesomeIcon icon="info" />
-                                    Details
-                                </a>
-
-                                <button @click="confirmDelete(item)"
-                                    class="px-3 py-1 text-xs border border-red-500 text-red-600 rounded hover:bg-red-50 flex items-center gap-1">
-                                    <FontAwesomeIcon icon="trash" />
-                                    Trash
-                                </button>
-
+                            <td class="px-4 py-3 font-medium">{{ item.log_name }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ item.event }}</td>
+                            <td class="px-4 py-3 text-gray-500">
+                                {{ formatDateTime(item.created_at) }}
                             </td>
 
+                            <td class="px-4 py-3 text-right">
+                                <div class="flex justify-end gap-2">
+
+                                    <a :href="route('back-office.activity-logs.details', { slug: item.slug })"
+                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
+                                        <FontAwesomeIcon icon="info" />
+                                    </a>
+
+                                    <button @click="confirmDelete(item)"
+                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border">
+                                        <FontAwesomeIcon icon="trash" />
+                                    </button>
+
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
 
                 </table>
-
             </div>
-
-            <ModelPagination :pagination="paginationOnly" />
-
         </div>
 
-        <transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
-            enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
+        <ModelPagination :pagination="paginationOnly" />
+
+        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div v-if="showDeleteModal"
+                class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
 
-                <transition enter-active-class="transition transform duration-200" enter-from-class="opacity-0 scale-95"
-                    enter-to-class="opacity-100 scale-100" leave-active-class="transition transform duration-150"
-                    leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-                    <div class="bg-white p-6 rounded-xl shadow-lg w-96">
+                <Transition enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0 scale-95 translate-y-4"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-4">
+                    <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
+                        <h3 class="text-lg font-semibold text-red-600">
+                            Delete Activity Log
+                        </h3>
 
-                        <div class="font-semibold mb-2">Delete Confirmation</div>
-
-                        <p class="text-sm text-gray-600 mb-4">
-                            <strong>{{ deletingRow?.log_name }}</strong>
+                        <p class="text-sm font-medium">
+                            {{ deletingRow?.log_name }}
                         </p>
 
-                        <p class="text-sm mb-4">
-                            Are you sure you want to delete this activity log?
+                        <p class="text-sm text-gray-500">
+                            This action cannot be undone.
                         </p>
 
-                        <div class="flex justify-end gap-2">
-
-                            <button @click="showDeleteModal = false" class="px-3 py-1 bg-gray-200 rounded">
+                        <div class="flex justify-end gap-2 pt-2">
+                            <button @click="showDeleteModal = false"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
                                 Cancel
                             </button>
 
                             <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
-                                class="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
-
+                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
                                 <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
                                 Delete
-
                             </button>
-
                         </div>
-
                     </div>
-                </transition>
+                </Transition>
 
             </div>
-        </transition>
+        </Transition>
 
     </div>
 </template>
-
