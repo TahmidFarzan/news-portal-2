@@ -30,6 +30,7 @@ class MediaCreatedListener
 
         activity('Media')
             ->performedOn($media)
+            ->event('created')
             ->causedBy(Auth::user() ?? null)
             ->withProperties([
                 'id'                    => $media->id,

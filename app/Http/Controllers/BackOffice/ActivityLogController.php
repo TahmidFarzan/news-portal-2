@@ -21,9 +21,6 @@ class ActivityLogController extends Controller
     public function index(Request $request)
     {
         $showSubjectType = true;
-        $activityLog = $this->activityLogService->new();
-
-        Gate::authorize('viewAny', $activityLog);
 
         $activityLogs = $this->activityLogService->search(null, null, $request);
 
@@ -36,9 +33,6 @@ class ActivityLogController extends Controller
     public function indexForModel(?string $modelSlug = null, ?string $recordSlug = null, Request $request)
     {
         $showSubjectType = false;
-        $activityLog = $this->activityLogService->new();
-
-        Gate::authorize('viewAny', $activityLog);
 
         $activityLogs = $this->activityLogService->search($modelSlug, $recordSlug, $request);
 
@@ -52,8 +46,6 @@ class ActivityLogController extends Controller
     {
         $activityLog = $this->activityLogService->findBySlug($slug);
         $activityLog = $this->activityLogService->loadRelations($activityLog);
-
-        Gate::authorize('view', $activityLog);
 
         return Inertia::render('back-office/activity-logs/Details', [
             'activityLog' => $activityLog,

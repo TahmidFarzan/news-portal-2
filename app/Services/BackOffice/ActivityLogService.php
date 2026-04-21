@@ -2,7 +2,7 @@
 
 namespace App\Services\BackOffice;
 
-use App\Models\ActivityLog;
+use Spatie\Activitylog\Models\Activity;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,31 +11,31 @@ use Illuminate\Support\Str;
 
 class ActivityLogService
 {
-    public function new(): ActivityLog
+    public function new(): Activity
     {
-        return new ActivityLog();
+        return new Activity();
     }
 
-    public function findBySlug(string $slug): ActivityLog
+    public function findBySlug(string $slug): Activity
     {
-        return ActivityLog::where('slug', $slug)->firstOrFail();
+        return Activity::where('slug', $slug)->firstOrFail();
     }
 
-    public function loadRelations(ActivityLog $activityLog): ActivityLog
+    public function loadRelations(Activity $activity): Activity
     {
-        $activityLog->load([
+        $activity->load([
             'causer',
             'subject',
         ]);
 
-        return $activityLog;
+        return $activity;
     }
 
     public function search(?string $modelSlug, ?string $recordSlug, Request $request)
     {
         $perPage = (int) $request->input('per_page', 10);
 
-        $query = ActivityLog::query();
+        $query = Activity::query();
 
         if ($modelSlug !== null && $recordSlug !== null) {
             $subjectModel = 'App\\Models\\' . Str::studly($modelSlug);
@@ -71,13 +71,13 @@ class ActivityLogService
             ->appends($request->all());
     }
 
-    public function delete(ActivityLog $activityLog): array
+    public function delete(Activity $activity): array
     {
         DB::beginTransaction();
 
         try {
 
-            $activityLog->delete();
+            $activity->delete();
 
             DB::commit();
 
@@ -90,7 +90,7 @@ class ActivityLogService
 
             Log::error('Activity log delete failed.', [
                 'exception'    => $exception,
-                'activity_log' => $activityLog,
+                'activity_log' => $activity,
             ]);
 
             return [

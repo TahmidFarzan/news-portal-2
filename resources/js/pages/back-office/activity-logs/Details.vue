@@ -76,8 +76,6 @@ onMounted(async () => {
                     activityLog?.description || 'N/A' }}</span></div>
                 <div><span class="font-medium text-gray-600">Causer:</span> <span class="ml-1">{{
                     activityLog?.causer?.name || 'System' }}</span></div>
-                <div><span class="font-medium text-gray-600">Batch uuid:</span> <span class="ml-1">{{
-                    activityLog?.batch_uuid || 'N/A' }}</span></div>
             </div>
         </div>
 

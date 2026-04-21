@@ -105,6 +105,29 @@ const handleActive = (user) => {
 }
 
 onMounted(async () => {
+
+    const urlParams = new URLSearchParams(window.location.search)
+
+    filterForm.per_page = urlParams.get('per_page') || ''
+    filterForm.created_by_id = urlParams.get('created_by_id') || ''
+    filterForm.user_role_id = urlParams.get('user_role_id') || ''
+    filterForm.date = urlParams.get('date') || ''
+    filterForm.search = urlParams.get('search') || ''
+
+    if (filterForm.created_by_id) {
+        const rCreatedBy = await fetchFromApi(
+            route('search.user', { slugOrId: filterForm.created_by_id })
+        )
+        filterForm.created_by_id = rCreatedBy || null
+    }
+
+    if (filterForm.user_role_id) {
+        const rUserRole = await fetchFromApi(
+            route('search.user-role', { slugOrId: filterForm.user_role_id })
+        )
+        filterForm.created_by_id = rUserRole || null
+    }
+
     await nextTick()
 
     window.dispatchEvent(
@@ -213,8 +236,7 @@ onMounted(async () => {
                                 <FontAwesomeIcon icon="info" /> Details
                             </a>
 
-                            <a v-if="canEdit(item)"
-                                :href="route('back-office.users.edit', { slug: item.slug })"
+                            <a v-if="canEdit(item)" :href="route('back-office.users.edit', { slug: item.slug })"
                                 class="px-3 py-1 text-xs border border-blue-600 text-blue-700 rounded hover:bg-blue-50 flex items-center gap-1">
                                 <FontAwesomeIcon icon="pen" /> Edit
                             </a>
