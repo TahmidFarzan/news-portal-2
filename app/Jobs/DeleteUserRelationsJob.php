@@ -42,12 +42,12 @@ class DeleteUserRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $user = User::find($this->userId);
 
-        if ($user && ($user->activities()->exists() || ($user->getMedia($user->media_collection_name)->count() > 0))) {
+        if ($user && ($user->activityLogs()->exists() || ($user->getMedia($user->media_collection_name)->count() > 0))) {
             DB::beginTransaction();
             try {
 
-                if ($user->activities()->exists()) {
-                    $user->activities()->delete();
+                if ($user->activityLogs()->exists()) {
+                    $user->activityLogs()->delete();
                 }
 
                 if ($user->getMedia($user->media_collection_name)->count() > 0) {

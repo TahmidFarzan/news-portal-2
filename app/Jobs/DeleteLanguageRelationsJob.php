@@ -42,12 +42,12 @@ class DeleteLanguageRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $language = Language::find($this->languageId);
 
-        if ($language && ($language->activities()->exists()) || ($language->categories()->exists())) {
+        if ($language && ($language->activityLogs()->exists()) || ($language->categories()->exists())) {
             DB::beginTransaction();
             try {
 
-                if ($language->activities()->exists()) {
-                    $language->activities()->delete();
+                if ($language->activityLogs()->exists()) {
+                    $language->activityLogs()->delete();
                 }
 
                 if ($language->categories()->exists()) {
