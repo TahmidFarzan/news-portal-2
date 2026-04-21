@@ -115,39 +115,62 @@ onMounted(async () => {
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
 
-            <form @submit.prevent="handleSave" class="space-y-4">
+            <form @submit.prevent="handleSave" class="space-y-6">
 
-                <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">Basic Information</h3>
 
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Name *</label>
-                        <input v-model="saveForm.name" class="border rounded px-3 py-2 w-full"
-                            :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
-                        <p v-if="saveForm.errors.name" class="text-red-500 text-sm">{{ saveForm.errors.name }}</p>
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Code *</label>
-                        <input v-model="saveForm.code" type="text" class="border rounded px-3 py-2 w-full"
-                            :class="saveForm.errors.code ? 'border-red-500' : 'border-gray-300'" />
-                        <p v-if="saveForm.errors.code" class="text-red-500 text-sm">{{ saveForm.errors.code }}</p>
-                    </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Name <span class="text-red-500">*</span>
+                            </label>
 
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-1">Details</label>
-                        <textarea v-model="saveForm.details" rows="3"
-                            class="border rounded px-3 py-2 w-full resize-none"></textarea>
-                    </div>
+                            <input v-model="saveForm.name" placeholder="Enter name"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
-                    <div class="text-center pt-2">
-                        <button type="submit" :disabled="saveForm.processing"
-                            class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded flex items-center gap-2 mx-auto">
-                            <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
-                            <FontAwesomeIcon v-else icon="save" />
-                            Save
-                        </button>
+                            <p v-if="saveForm.errors.name" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.name }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Code <span class="text-red-500">*</span>
+                            </label>
+
+                            <input v-model="saveForm.code" type="text" placeholder="Enter code"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.code ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.code" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.code }}
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                Details
+                            </label>
+
+                            <textarea v-model="saveForm.details" rows="4" placeholder="Enter details"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300"></textarea>
+                        </div>
+
                     </div>
                 </div>
+
+                <div class="flex justify-center">
+                    <button type="submit" :disabled="saveForm.processing"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition">
+                        <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
+                        <FontAwesomeIcon v-else icon="save" />
+                        Save
+                    </button>
+                </div>
+
             </form>
 
         </div>

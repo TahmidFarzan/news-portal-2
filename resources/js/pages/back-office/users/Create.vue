@@ -159,99 +159,158 @@ onMounted(async () => {
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
 
-            <form @submit.prevent="handleSave" class="space-y-4">
+            <form @submit.prevent="handleSave" class="space-y-6">
 
-                <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">Basic Information</h3>
 
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Name *</label>
-                        <input v-model="saveForm.name" class="border rounded px-3 py-2 w-full"
-                            :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
-                        <p v-if="saveForm.errors.name" class="text-red-500 text-sm">{{ saveForm.errors.name }}</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Email *</label>
-                        <input v-model="saveForm.email" type="email" class="border rounded px-3 py-2 w-full"
-                            :class="saveForm.errors.email ? 'border-red-500' : 'border-gray-300'" />
-                        <p v-if="saveForm.errors.email" class="text-red-500 text-sm">{{ saveForm.errors.email }}</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Birth Date</label>
-                        <input type="date" v-model="saveForm.birth_date" class="border rounded px-3 py-2 w-full" />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Gender *</label>
-                        <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="gender"
-                            :selectedItem="saveForm.gender" :apiUrl="route('search.genders')" :multiple="false"
-                            placeholder="Select" :error="saveForm.errors.gender" v-if="pageReady" />
-                        <p v-if="saveForm.errors.gender" class="text-red-500 text-sm">{{ saveForm.errors.gender }}</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Religion *</label>
-                        <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="religion"
-                            :selectedItem="saveForm.religion" :apiUrl="route('search.religions')" :multiple="false"
-                            placeholder="Select" :error="saveForm.errors.religion" v-if="pageReady" />
-                        <p v-if="saveForm.errors.religion" class="text-red-500 text-sm">{{ saveForm.errors.religion }}
-                        </p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Marital Status *</label>
-                        <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="marital_status"
-                            :selectedItem="saveForm.marital_status" :apiUrl="route('search.marital-statuses')"
-                            :multiple="false" placeholder="Select" :error="saveForm.errors.marital_status"
-                            v-if="pageReady" />
-                        <p v-if="saveForm.errors.marital_status" class="text-red-500 text-sm">{{
-                            saveForm.errors.marital_status }}</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Mobile</label>
-                        <VueTelInput v-model="saveForm.mobile"
-                            :class="saveForm.errors.mobile ? 'border border-red-500 rounded' : ''" />
-                        <p v-if="saveForm.errors.mobile" class="text-red-500 text-sm">{{ saveForm.errors.mobile }}</p>
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-1">Address</label>
-                        <textarea v-model="saveForm.address" rows="3"
-                            class="border rounded px-3 py-2 w-full resize-none"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">User Role *</label>
-                        <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="user_role_id"
-                            :selectedItem="user?.user_role" :apiUrl="route('search.user-roles')" :multiple="false"
-                            placeholder="Select" :error="saveForm.errors.user_role_id" v-if="pageReady" />
-                        <p v-if="saveForm.errors.user_role_id" class="text-red-500 text-sm">{{
-                            saveForm.errors.user_role_id }}</p>
-                    </div>
-
-                    <div class="flex gap-6 items-center md:col-span-2">
-
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" v-model="saveForm.set_as_verify_email" />
-                            <span class="text-sm">Set as verify email</span>
-                        </label>
-
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" v-model="saveForm.change_password" />
-                            <span class="text-sm">Change password</span>
-                        </label>
-
-                    </div>
-
-                    <div v-if="saveForm.change_password" class="grid md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
-                            <label class="block text-sm font-medium mb-1">New Password *</label>
+                            <label class="block text-sm font-medium mb-1">
+                                Name <span class="text-red-500">*</span>
+                            </label>
+
+                            <input v-model="saveForm.name" placeholder="Enter name"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.name" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.name }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Email <span class="text-red-500">*</span>
+                            </label>
+
+                            <input v-model="saveForm.email" type="email" placeholder="Enter email"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.email ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.email" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.email }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Birth Date
+                            </label>
+
+                            <input type="date" v-model="saveForm.birth_date"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Gender <span class="text-red-500">*</span>
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="gender"
+                                :selectedItem="saveForm.gender" :apiUrl="route('search.genders')" :multiple="false"
+                                placeholder="Select" :error="saveForm.errors.gender" />
+
+                            <p v-if="saveForm.errors.gender" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.gender }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Religion <span class="text-red-500">*</span>
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="religion"
+                                :selectedItem="saveForm.religion" :apiUrl="route('search.religions')" :multiple="false"
+                                placeholder="Select" :error="saveForm.errors.religion" />
+
+                            <p v-if="saveForm.errors.religion" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.religion }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Marital Status <span class="text-red-500">*</span>
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="marital_status"
+                                :selectedItem="saveForm.marital_status" :apiUrl="route('search.marital-statuses')"
+                                :multiple="false" placeholder="Select" :error="saveForm.errors.marital_status" />
+
+                            <p v-if="saveForm.errors.marital_status" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.marital_status }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Mobile
+                            </label>
+
+                            <VueTelInput v-model="saveForm.mobile" class="w-full border rounded-md px-2 py-1"
+                                :class="saveForm.errors.mobile ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.mobile" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.mobile }}
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                Address
+                            </label>
+
+                            <textarea v-model="saveForm.address" rows="3" placeholder="Enter address"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                User Role <span class="text-red-500">*</span>
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="user_role_id"
+                                :selectedItem="user?.user_role" :apiUrl="route('search.user-roles')" :multiple="false"
+                                placeholder="Select" :error="saveForm.errors.user_role_id" />
+
+                            <p v-if="saveForm.errors.user_role_id" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.user_role_id }}
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2 flex gap-6 items-center pt-2">
+
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" v-model="saveForm.set_as_verify_email" />
+                                <span class="text-sm">Set as verify email</span>
+                            </label>
+
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" v-model="saveForm.change_password" />
+                                <span class="text-sm">Change password</span>
+                            </label>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div v-if="saveForm.change_password" class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">Password</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                New Password <span class="text-red-500">*</span>
+                            </label>
+
                             <div class="relative">
                                 <input :type="showPassword ? 'text' : 'password'" v-model="saveForm.password"
-                                    class="border rounded px-3 py-2 w-full pr-10" />
+                                    class="w-full border rounded-md px-3 py-2 text-sm pr-10 focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
                                 <button type="button" @click="togglePasswordVisibility" class="absolute right-2 top-2">
                                     <FontAwesomeIcon :icon="showPassword ? 'eye-slash' : 'eye'" />
                                 </button>
@@ -259,11 +318,14 @@ onMounted(async () => {
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-1">Confirm Password *</label>
+                            <label class="block text-sm font-medium mb-1">
+                                Confirm Password <span class="text-red-500">*</span>
+                            </label>
+
                             <div class="relative">
                                 <input :type="showConfirmPassword ? 'text' : 'password'"
                                     v-model="saveForm.password_confirmation"
-                                    class="border rounded px-3 py-2 w-full pr-10" />
+                                    class="w-full border rounded-md px-3 py-2 text-sm pr-10 focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
                                 <button type="button" @click="toggleConfirmPasswordVisibility"
                                     class="absolute right-2 top-2">
                                     <FontAwesomeIcon :icon="showConfirmPassword ? 'eye-slash' : 'eye'" />
@@ -272,16 +334,17 @@ onMounted(async () => {
                         </div>
 
                     </div>
-
-                    <div class="text-center pt-2">
-                        <button type="submit" :disabled="saveForm.processing"
-                            class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded flex items-center gap-2 mx-auto">
-                            <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
-                            <FontAwesomeIcon v-else icon="save" />
-                            Save
-                        </button>
-                    </div>
                 </div>
+
+                <div class="flex justify-center">
+                    <button type="submit" :disabled="saveForm.processing"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition">
+                        <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
+                        <FontAwesomeIcon v-else icon="save" />
+                        Save
+                    </button>
+                </div>
+
             </form>
 
         </div>
