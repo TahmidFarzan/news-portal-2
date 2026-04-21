@@ -82,6 +82,20 @@ const handleDelete = (language) => {
 }
 
 onMounted(async () => {
+    const urlParams = new URLSearchParams(window.location.search)
+
+    filterForm.per_page = urlParams.get('per_page') || ''
+    filterForm.created_by_id = urlParams.get('created_by_id') || ''
+    filterForm.date = urlParams.get('date') || ''
+    filterForm.search = urlParams.get('search') || ''
+
+    if (filterForm.created_by_id) {
+        const rCreatedBy = await fetchFromApi(
+            route('search.user', { slugOrId: filterForm.created_by_id })
+        )
+        filterForm.created_by_id = rCreatedBy || null
+    }
+
     await nextTick()
 
     window.dispatchEvent(

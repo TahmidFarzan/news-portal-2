@@ -100,7 +100,7 @@ onMounted(async () => {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Languages', href: route('back-office.languages.index') },
-                { text: isUpdate.value ? `${language?.name} edit` : 'Client create', active: true }
+                { text: isUpdate.value ? `${language?.name} edit` : 'Language create', active: true }
             ],
         })
     )
@@ -111,7 +111,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${language?.name} edit` : 'Client create'" />
+    <Head :title="isUpdate ? `${language?.name} edit` : 'Language create'" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
