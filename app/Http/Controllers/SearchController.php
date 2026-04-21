@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Services\SearchService;
@@ -71,17 +70,44 @@ class SearchController extends Controller
         return response()->json($response);
     }
 
-    public function user(string|int $slugOrId)
+    public function languages(Request $request)
+    {
+        return response()->json($this->searchService->languages($request));
+    }
+
+    public function categories(Request $request)
+    {
+        return response()->json($this->searchService->categories($request));
+    }
+
+    public function categoryTree(Request $request)
+    {
+        return response()->json($this->searchService->categoryTree($request));
+    }
+
+    public function user(string | int $slugOrId)
     {
         $record = $this->searchService->user($slugOrId);
 
         return response()->json($record);
     }
 
-    public function userRole(string|int $slugOrId)
+    public function userRole(string | int $slugOrId)
     {
         $record = $this->searchService->userRole($slugOrId);
 
+        return response()->json($record);
+    }
+
+    public function language($slugOrId)
+    {
+        $record = $this->searchService->language($slugOrId);
+        return response()->json($record);
+    }
+
+    public function category($slugOrId)
+    {
+        $record = $this->searchService->category($slugOrId);
         return response()->json($record);
     }
 }

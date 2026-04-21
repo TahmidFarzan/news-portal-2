@@ -189,4 +189,24 @@ return [
             'unique'   => 'Code must be unique.',
         ],
     ],
+
+    'category'          => [
+        'name'                               => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be string.',
+            'max'      => 'Name max chars is 200.',
+            'unique'   => 'Name must be unique.',
+        ],
+
+
+        'parent_id'                          => [
+            'required'  => 'Parent is required.',
+            "not_found" => 'Parent is not exit.',
+        ],
+
+        'language_id'                          => [
+            'required'  => 'Language is required.',
+            "not_found" => 'Language is not exit.',
+        ],
+    ],
 ];

@@ -1,7 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
-import RecentCatgories from '@/components/back-office/category/RecentCatgories.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -11,7 +10,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
-import { canEditLanguage, canDeleteLanguage } from '@/composables/useAuthUserAccessPermissions'
+import { canEditCategory, canDeleteCategory } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
 
@@ -23,18 +22,18 @@ const authUser = inject("authUser")
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { language } = defineProps({
-    language: Object,
+const { category } = defineProps({
+    category: Object,
 })
 
-const canEdit = (language) => canEditLanguage(authUser?.value, language)
-const canDelete = (language) => canDeleteLanguage(authUser?.value, language)
+const canEdit = (category) => canEditCategory(authUser?.value, category)
+const canDelete = (category) => canDeleteCategory(authUser?.value, category)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.languages.delete', { slug: language?.slug }), {
+    intertiaJsRoute.delete(route('back-office.categories.delete', { slug: category?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -47,8 +46,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Languages', href: route('back-office.languages.index') },
-                { text: `${language?.name} details`, active: true }
+                { text: 'Categories', href: route('back-office.categories.index') },
+                { text: `${category?.name} details`, active: true }
             ],
         })
     )
@@ -59,7 +58,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${language?.name} details`" />
+    <Head :title="`${category?.name} details`" />
 
     <div class="w-full space-y-6">
 
@@ -69,17 +68,59 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div>
                         <span class="font-medium text-gray-600">Name:</span>
-                        {{ language?.name || 'N/A' }}
+                        {{ category?.name || 'N/A' }}
                     </div>
                     <div>
-                        <span class="font-medium text-gray-600">Code:</span>
-                        {{ language?.code || 'N/A' }}
+                        <span class="font-medium text-gray-600">Language:</span>
+                        {{ category?.language?.name || 'N/A' }}
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-xl p-4">
-                    <span class="font-medium text-gray-600">Details:</span>
-                    {{ language?.details || 'N/A' }}
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                    <div>
+                        <span class="font-medium text-gray-600">Parent:</span>
+                        {{ category?.parent?.name || 'N/A' }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-600">Details:</span>
+                        {{ category?.details || 'N/A' }}
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                    <h5 class="text-lg font-semibold mb-3">Tree</h5>
+
+                    <div>
+                        <span v-for="node in category?.bloodline || []" :key="node.id"
+                            class="inline-block bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-md m-1">
+                            {{ node.name }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                    <ul class="divide-y divide-gray-200">
+                        <li class="p-4">
+                            <strong class="font-semibold text-gray-800">SEO Title</strong>:
+                            <span class="text-gray-600">
+                                {{ category?.seo_title || 'N/A' }}
+                            </span>
+                        </li>
+
+                        <li class="p-4">
+                            <strong class="font-semibold text-gray-800">SEO Brief</strong>:
+                            <span class="text-gray-600">
+                                {{ category?.seo_brief || 'N/A' }}
+                            </span>
+                        </li>
+
+                        <li class="p-4">
+                            <strong class="font-semibold text-gray-800">SEO Keywords</strong>:
+                            <span class="text-gray-600">
+                                {{ category?.seo_keywords || 'N/A' }}
+                            </span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -91,22 +132,22 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2">
                     <div>
                         <span class="font-medium text-gray-600">Created At:</span>
-                        {{ language?.created_at ? formatDateTime(language.created_at) : 'N/A' }}
+                        {{ category?.created_at ? formatDateTime(category.created_at) : 'N/A' }}
                     </div>
                     <div>
                         <span class="font-medium text-gray-600">Created By:</span>
-                        {{ language?.created_by?.name || 'N/A' }}
+                        {{ category?.created_by?.name || 'N/A' }}
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2">
                     <div>
                         <span class="font-medium text-gray-600">Updated At:</span>
-                        {{ language?.updated_at ? formatDateTime(language.updated_at) : 'N/A' }}
+                        {{ category?.updated_at ? formatDateTime(category.updated_at) : 'N/A' }}
                     </div>
                     <div>
                         <span class="font-medium text-gray-600">Updated By:</span>
-                        {{ language?.latest_activity_log?.causer?.name || 'N/A' }}
+                        {{ category?.latest_activity_log?.causer?.name || 'N/A' }}
                     </div>
                 </div>
             </div>
@@ -114,23 +155,18 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Recent Catgories</h3>
-            <RecentCatgories :model="language" />
-        </div>
-
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
             <h3 class="text-lg font-semibold mb-4 border-b pb-2">Activity Logs</h3>
-            <RecentActivities :model-slug="'language'" :model="language" />
+            <RecentActivities :model-slug="'category'" :model="category" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex justify-end gap-2">
 
-            <a v-if="canEdit(language)" :href="route('back-office.languages.edit', { slug: language?.slug })"
+            <a v-if="canEdit(category)" :href="route('back-office.categories.edit', { slug: category?.slug })"
                 class="px-4 py-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-50 flex items-center gap-2">
                 <FontAwesomeIcon icon="pen" /> Edit
             </a>
 
-            <button v-if="canDelete(language)" @click="showDeleteModal = true"
+            <button v-if="canDelete(category)" @click="showDeleteModal = true"
                 class="px-4 py-2 border border-red-500 text-red-600 rounded hover:bg-red-50 flex items-center gap-2">
                 <FontAwesomeIcon icon="trash" /> Delete
             </button>
@@ -141,9 +177,9 @@ onMounted(async () => {
 
             <div class="bg-white p-6 rounded-xl shadow-lg w-96">
                 <div class="font-semibold mb-2">Delete Confirmation</div>
-                <p class="mb-2">{{ language?.name }}</p>
+                <p class="mb-2">{{ category?.name }}</p>
                 <p class="text-sm text-gray-600 mb-4">
-                    If you delete this, it will delete related categories. This action cannot be undone.
+                    This action cannot be undone.
                 </p>
 
                 <div class="flex justify-end gap-2">

@@ -2,6 +2,8 @@
 namespace App\Services;
 
 use App\Helpers\SystemHelper;
+use App\Models\Category;
+use App\Models\Language;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
@@ -244,6 +246,99 @@ class SearchService
         ];
     }
 
+    public function languages(Request $request): array
+    {
+        $query = Language::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+            'slug' => $row->slug,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function categories(Request $request): array
+    {
+        $query = Category::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('parent_id')) {
+            $query->where('parent_id', $request->input('parent_id'));
+        }
+
+        if ($request->filled('only_main') &&
+            $request->boolean('only_main') &&
+            ! $request->filled('parent_id')
+        ) {
+            $query->whereNull('parent_id');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
+            'has_descendants' => $row->has_descendants,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function categoryTree(Request $request): array
+    {
+        $query = Category::whereNull('parent_id');
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('parent_id')) {
+            $parent = $this->category($request->input('parent_id'));
+            $root   = self::rootCategoryParent($parent);
+            $query->where('id', $root->id);
+        }
+
+        $records = $query->orderBy('id', 'asc')
+            ->with(['children'])
+            ->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = self::formatCategoryTree($records->getCollection(), 0, null);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+            'per_page'     => $records->perPage(),
+        ];
+    }
+
     public function user(int | string $slugOrId): User
     {
         return User::where('id', $slugOrId)
@@ -254,5 +349,67 @@ class SearchService
     public function userRole(int | string $slugOrId): UserRole
     {
         return UserRole::where('id', $slugOrId)->firstOrFail();
+    }
+
+    public function category($slugOrId): Category
+    {
+        return Category::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
+
+    public function language($slugOrId): Language
+    {
+        return Language::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
+
+    private static function formatCategoryTree($records, $level = 0, $visited = null)
+    {
+        if ($visited === null) {
+            $visited = [];
+        }
+
+        $list = [];
+
+        foreach ($records as $record) {
+            if (in_array($record->id, $visited)) {
+                continue;
+            }
+
+            $visited[] = $record->id;
+
+            $list[] = [
+                'id'               => $record->id,
+                'name'             => $record->name,
+                'name_tree'        => $record->name_tree,
+                'indentation_name' => $record->indentation_name,
+            ];
+
+            if ($record->children && $record->children->isNotEmpty()) {
+                $list = array_merge(
+                    $list,
+                    self::formatCategoryTree($record->children, $level + 1, $visited)
+                );
+            }
+        }
+
+        return $list;
+    }
+
+    private static function rootCategoryParent(Category $record): Category
+    {
+        $parent = $record;
+
+        if ($record->parent_id !== null) {
+            $parent = $record->parent;
+
+            if ($parent->parent_id !== null) {
+                $parent = self::rootCategoryParent($parent);
+            }
+        }
+
+        return $parent;
     }
 }

@@ -26,6 +26,9 @@ class LanguageService
         $language->load([
             'createdBy',
 
+            'categories' => fn($query) => $query->latest()->limit(10),
+            'categories.parent',
+
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
 

@@ -5,10 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SitemapController;
 
 // Backoffice
 use App\Http\Controllers\BackOffice\UserController;
 use App\Http\Controllers\BackOffice\MediaController;
+use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\ActivityLogController;
 
@@ -49,20 +51,15 @@ Route::prefix('search')->name('search.')->group(function () {
 
     // Model || DB
     Route::get('users', [SearchController::class, 'users'])->name('users');
-
-    Route::prefix('users')->name('users.')->group(function () {
-        Route::prefix('supervisors')->name('supervisors.')->group(function () {
-            Route::prefix('nested-tree')->name('nested-tree.')->group(function () {
-                Route::get('/', [SearchController::class, 'userSupervisorsNestedTreeFull'])->name('full');
-                Route::get('{slugOrId}', [SearchController::class, 'userSupervisorsNestedTreeUserByUser'])->name('by-user');
-            });
-        });
-    });
-
     Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
+    Route::get('languages', [SearchController::class, 'languages'])->name('languages');
+    Route::get('categories', [SearchController::class, 'categories'])->name('categories');
+    Route::get('categoryTree', [SearchController::class, 'categoryTree'])->name('category-tree');
 
     Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
     Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
+    Route::get('category/{slugOrId}', [SearchController::class, 'category'])->name('category');
+    Route::get('language/{slugOrId}', [SearchController::class, 'language'])->name('language');
 });
 
 Route::middleware('auth')->group(function () {
@@ -124,6 +121,17 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [LanguageController::class, 'delete'])->name('delete');
     });
 
+    Route::prefix('categories')->name('categories.')->group(function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::get('create', [CategoryController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [CategoryController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [CategoryController::class, 'details'])->name('details');
+
+        Route::post('save', [CategoryController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [CategoryController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [CategoryController::class, 'delete'])->name('delete');
+    });
+
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
         Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
@@ -135,7 +143,15 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
 
 });
 
+Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
+    Route::get('index.xml', [SitemapController::class, 'index'])->name('index');
+    Route::prefix('newses')->name('newses.')->group(function () {
+        Route::get('categories.xml', [SitemapController::class, 'categories'])->name('categories');
+    });
+});
+
 Route::get('/', function () {
     return redirect()->route('home');
 });
 Route::get('home', [PageController::class, 'home'])->name('home');
+

@@ -14,7 +14,8 @@ import {
     faGauge,
     faPhotoFilm,
     faNewspaper,
-    faLanguage
+    faLanguage,
+    faLayerGroup
 } from "@fortawesome/free-solid-svg-icons"
 
 library.add(
@@ -26,7 +27,8 @@ library.add(
     faGauge,
     faPhotoFilm,
     faNewspaper,
-    faLanguage
+    faLanguage,
+    faLayerGroup
 )
 
 import {
@@ -50,6 +52,7 @@ const routeMap = {
     UserManagement: ['/back-office/users/*'],
     NewsManagement: [
         '/back-office/languages/*',
+        '/back-office/categories/*',
     ],
     Reports: ['/back-office/reports/*'],
 }
@@ -125,15 +128,22 @@ function isSubMenuVisible(key) {
 
                 <a :href="route('back-office.languages.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-                    :class="isAnyCurrentPage(routeMap.NewsManagement) ? 'bg-gray-200 font-medium' : ''">
+                    :class="isCurrentPage('/back-office/languages/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="language" />
                     Languages
+                </a>
+
+                <a :href="route('back-office.categories.index')"
+                    class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+                    :class="isCurrentPage('/back-office/categories/*') ? 'bg-gray-200 font-medium' : ''">
+                    <FontAwesomeIcon icon="layer-group" />
+                    Categories
                 </a>
 
             </div>
         </transition>
 
-        <button v-if="!authUser?.is_member" @click="toggleShowSubMenu('UserManagement')"
+        <button @click="toggleShowSubMenu('UserManagement')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="users" />

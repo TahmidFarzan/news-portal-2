@@ -2,14 +2,14 @@
 
 return [
 
-    'activity_log'    => [
+    'activity_log' => [
         'delete' => [
             'success' => 'Activity log deleted successfully.',
             'failed'  => 'Failed to delete activity log.',
         ],
     ],
 
-    'user'            => [
+    'user'         => [
         'save'     => [
             'success' => 'User saved successfully.',
             'failed'  => 'Failed to save user.',
@@ -28,23 +28,38 @@ return [
         ],
     ],
 
-    'language'            => [
-        'save'     => [
+    'language'     => [
+        'save'   => [
             'success' => 'Language saved successfully.',
             'failed'  => 'Failed to save language.',
         ],
-        'update'     => [
+        'update' => [
             'success' => 'Language updated successfully.',
             'failed'  => 'Failed to update language.',
         ],
-        'delete'   => [
+        'delete' => [
             'success' => 'Language deleted successfully.',
             'failed'  => 'Failed to delete language.',
         ],
     ],
 
+    'category'     => [
+        'save'   => [
+            'success' => 'Category saved successfully.',
+            'failed'  => 'Failed to save category.',
+        ],
+        'update' => [
+            'success' => 'Category updated successfully.',
+            'failed'  => 'Failed to update category.',
+        ],
+        'delete' => [
+            'success' => 'Category deleted successfully.',
+            'failed'  => 'Failed to delete category.',
+        ],
+    ],
+
     // Auth
-    'auth'            => [
+    'auth'         => [
         'login'              => [
             'success'         => 'Logged in successfully.',
             'fail'            => 'Login failed.',
@@ -87,8 +102,8 @@ return [
         ],
     ],
 
-    'media'            => [
-        'delete'   => [
+    'media'        => [
+        'delete' => [
             'success' => 'Media deleted successfully.',
             'failed'  => 'Failed to media user.',
         ],
