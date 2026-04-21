@@ -88,8 +88,52 @@ export const canDeleteMedia = (authUser, media) => {
     return false
 }
 
+// Language Access Permission
+export const canCreateLanguage = (authUser) => {
+    if (!authUser) return false
 
-// Menu Access Permission
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    return false
+}
+
+export const canEditLanguage = (authUser, language) => {
+    if (!authUser, !language) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    if (
+        authUserUserRole === 'news desk' &&
+        authUser.id === language?.created_by_id
+    ) {
+        return true
+    }
+
+    return false
+}
+
+export const canDeleteLanguage = (authUser, language) => {
+    if (!authUser, !language) return false
+
+
+    const authUserUserRole = getUserRole(authUser)
+    const languageUserRole = getUserRole(language)
+
+    if (authUserUserRole === 'admin') return true
+
+    if ((authUserUserRole === 'news desk') && (authUser.id === language?.created_by_id)) {
+        return true
+    }
+
+    return false
+}
+
+
+// Layout Menu Access Permission
 export const canAccessActivityLogMenu = (authUser) => {
     if (!authUser) return false
 
@@ -101,6 +145,19 @@ export const canAccessActivityLogMenu = (authUser) => {
 }
 
 export const canAccessUserManagementMenu = (authUser) => {
+    if (!authUser) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    if (authUserUserRole === 'news desk') return true
+
+    return false
+}
+
+
+export const canAccessNewsManagementMenu = (authUser) => {
     if (!authUser) return false
 
     const authUserUserRole = getUserRole(authUser)

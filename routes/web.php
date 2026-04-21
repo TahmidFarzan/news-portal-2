@@ -7,9 +7,10 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 
 // Backoffice
-use App\Http\Controllers\BackOffice\ActivityLogController;
 use App\Http\Controllers\BackOffice\UserController;
 use App\Http\Controllers\BackOffice\MediaController;
+use App\Http\Controllers\BackOffice\LanguageController;
+use App\Http\Controllers\BackOffice\ActivityLogController;
 
 Route::middleware('guest')->group(function () {
     Route::prefix('login')->group(function () {
@@ -110,6 +111,17 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [UserController::class, 'delete'])->name('delete');
         Route::patch('active/{slug}', [UserController::class, 'active'])->name('active');
         Route::patch('inactive/{slug}', [UserController::class, 'inactive'])->name('inactive');
+    });
+
+    Route::prefix('languages')->name('languages.')->group(function () {
+        Route::get('/', [LanguageController::class, 'index'])->name('index');
+        Route::get('create', [LanguageController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [LanguageController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [LanguageController::class, 'details'])->name('details');
+
+        Route::post('save', [LanguageController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [LanguageController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [LanguageController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {

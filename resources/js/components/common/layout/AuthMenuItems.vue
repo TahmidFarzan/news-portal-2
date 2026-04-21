@@ -12,7 +12,9 @@ import {
     faChevronUp,
     faRectangleList,
     faGauge,
-    faPhotoFilm
+    faPhotoFilm,
+    faNewspaper,
+    faLanguage
 } from "@fortawesome/free-solid-svg-icons"
 
 library.add(
@@ -22,10 +24,15 @@ library.add(
     faChevronUp,
     faRectangleList,
     faGauge,
-    faPhotoFilm
+    faPhotoFilm,
+    faNewspaper,
+    faLanguage
 )
 
-import { canAccessUserManagementMenu } from '@/composables/useAuthUserAccessPermissions'
+import {
+    canAccessUserManagementMenu,
+    canAccessNewsManagementMenu
+} from '@/composables/useAuthUserAccessPermissions'
 
 const { authUser } = defineProps({
     authUser: Object
@@ -36,24 +43,27 @@ const page = usePage()
 const subMenus = ref({
     UserManagement: false,
     Reports: false,
+    NewsManagement: false,
 })
+
+const routeMap = {
+    UserManagement: ['/back-office/users/*'],
+    NewsManagement: [
+        '/back-office/languages/*',
+    ],
+    Reports: ['/back-office/reports/*'],
+}
 
 const canAccessUserManagementMenuComputed = computed(() =>
     canAccessUserManagementMenu(authUser)
 )
 
+const canAccessNewsManagementMenuComputed = computed(() =>
+    canAccessNewsManagementMenu(authUser)
+)
+
 function toggleShowSubMenu(key) {
     subMenus.value[key] = !subMenus.value[key]
-}
-
-function isSubMenuVisible(key) {
-    const routeMap = {
-        UserManagement: '/back-office/users/*',
-        Reports: '/back-office/reports/*',
-    }
-
-    const inRoute = isCurrentPage(routeMap[key] || '')
-    return subMenus.value[key] || inRoute
 }
 
 function isCurrentPage(url) {
@@ -70,6 +80,16 @@ function isCurrentPage(url) {
 
     return currentUrl === cleanUrl
 }
+
+function isAnyCurrentPage(urls = []) {
+    return urls.some(url => isCurrentPage(url))
+}
+
+function isSubMenuVisible(key) {
+    const routes = routeMap[key] || []
+    const inRoute = isAnyCurrentPage(routes)
+    return subMenus.value[key] || inRoute
+}
 </script>
 
 <template>
@@ -82,12 +102,36 @@ function isCurrentPage(url) {
             Dashboard
         </a>
 
-        <a :href="route('back-office.medias.index')"
-            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+        <a :href="route('back-office.medias.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/medias/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="photo-film" />
             Medias
         </a>
+
+        <button @click="toggleShowSubMenu('NewsManagement')"
+            class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
+            <span class="flex items-center gap-2">
+                <FontAwesomeIcon icon="newspaper" />
+                News Management
+            </span>
+            <FontAwesomeIcon :icon="isSubMenuVisible('NewsManagement') ? 'chevron-up' : 'chevron-down'" />
+        </button>
+
+        <transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0"
+            enter-to-class="opacity-100 max-h-40" leave-active-class="transition-all duration-200 ease-in"
+            leave-from-class="opacity-100 max-h-40" leave-to-class="opacity-0 max-h-0">
+            <div v-if="isSubMenuVisible('NewsManagement') && canAccessNewsManagementMenuComputed"
+                class="ml-4 flex flex-col space-y-1 overflow-hidden">
+
+                <a :href="route('back-office.languages.index')"
+                    class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+                    :class="isAnyCurrentPage(routeMap.NewsManagement) ? 'bg-gray-200 font-medium' : ''">
+                    <FontAwesomeIcon icon="language" />
+                    Languages
+                </a>
+
+            </div>
+        </transition>
 
         <button v-if="!authUser?.is_member" @click="toggleShowSubMenu('UserManagement')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
@@ -106,7 +150,7 @@ function isCurrentPage(url) {
 
                 <a :href="route('back-office.users.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-                    :class="isCurrentPage('/back-office/users/*') ? 'bg-gray-200 font-medium' : ''">
+                    :class="isAnyCurrentPage(routeMap.UserManagement) ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="user" />
                     Users
                 </a>

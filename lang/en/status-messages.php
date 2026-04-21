@@ -28,6 +28,21 @@ return [
         ],
     ],
 
+    'language'            => [
+        'save'     => [
+            'success' => 'Language saved successfully.',
+            'failed'  => 'Failed to save language.',
+        ],
+        'update'     => [
+            'success' => 'Language updated successfully.',
+            'failed'  => 'Failed to update language.',
+        ],
+        'delete'   => [
+            'success' => 'Language deleted successfully.',
+            'failed'  => 'Failed to delete language.',
+        ],
+    ],
+
     // Auth
     'auth'            => [
         'login'              => [

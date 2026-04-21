@@ -1,11 +1,11 @@
 <?php
 
 return [
-    "api"  => [
+    "api"      => [
         'timeout' => 'Api responce timeout.',
     ],
 
-    'auth' => [
+    'auth'     => [
         'login'           => [
             'email'    => [
                 'required' => 'Please enter your email address.',
@@ -117,7 +117,7 @@ return [
         ],
     ],
 
-    'user' => [
+    'user'     => [
         'name'                  => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -172,6 +172,21 @@ return [
             'image'      => 'Upload feature image must be image.',
             'mimes'      => 'Upload feature image is mimes must be one out of [jpg,jpeg,png,webp].',
             'dimensions' => 'Upload feature image must be dimensions ratio is 1:1 and  size 512x512px.',
+        ],
+    ],
+
+    'language' => [
+        'name' => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be string.',
+            'max'      => 'Name max chars is 200.',
+            'unique'   => 'Name must be unique.',
+        ],
+        'code' => [
+            'required' => 'Code is required.',
+            'string'   => 'Code must be string.',
+            'max'      => 'Code max chars is 200.',
+            'unique'   => 'Code must be unique.',
         ],
     ],
 ];
