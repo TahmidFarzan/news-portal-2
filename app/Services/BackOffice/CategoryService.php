@@ -136,7 +136,7 @@ class CategoryService
         DB::beginTransaction();
 
         try {
-            $category->forceDelete();
+            $category->delete();
             DB::commit();
 
             return [
