@@ -37,7 +37,6 @@ const isUpdate = computed(() => !!category?.slug)
 const saveForm = useForm({
     name: category?.name || null,
     details: category?.details || null,
-    details: category?.details || null,
     has_parent: category?.has_parent || false,
     parent_id: category?.parent_id || null,
     language_id: category?.language_id || null,
