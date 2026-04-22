@@ -19,7 +19,6 @@ class CategoryRequest extends FormRequest
             "name"         => ["required", "string", "max:200"],
             "language_id"  => ["required", "integer"],
 
-            "brief"        => ["nullable"],
             "details"      => ["nullable"],
             "seo_title"    => ["nullable"],
             "seo_brief"    => ["nullable"],
