@@ -15,7 +15,8 @@ import {
     faPhotoFilm,
     faNewspaper,
     faLanguage,
-    faLayerGroup
+    faLayerGroup,
+    faTags
 } from "@fortawesome/free-solid-svg-icons"
 
 library.add(
@@ -28,7 +29,8 @@ library.add(
     faPhotoFilm,
     faNewspaper,
     faLanguage,
-    faLayerGroup
+    faLayerGroup,
+    faTags
 )
 
 import {
@@ -53,6 +55,7 @@ const routeMap = {
     NewsManagement: [
         '/back-office/languages/*',
         '/back-office/categories/*',
+        '/back-office/tags/*',
     ],
     Reports: ['/back-office/reports/*'],
 }
@@ -138,6 +141,13 @@ function isSubMenuVisible(key) {
                     :class="isCurrentPage('/back-office/categories/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="layer-group" />
                     Categories
+                </a>
+
+                <a :href="route('back-office.tags.index')"
+                    class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+                    :class="isCurrentPage('/back-office/tags/*') ? 'bg-gray-200 font-medium' : ''">
+                    <FontAwesomeIcon icon="tags" />
+                    Tags
                 </a>
 
             </div>

@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Helpers\SystemHelper;
 use App\Models\Category;
+use App\Models\Tag;
 use App\Models\Language;
 use App\Models\User;
 use App\Models\UserRole;
@@ -336,6 +337,31 @@ class SearchService
             'current_page' => $records->currentPage(),
             'last_page'    => $records->lastPage(),
             'per_page'     => $records->perPage(),
+        ];
+    }
+
+    public function tags(Request $request): array
+    {
+        $query = Tag::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
         ];
     }
 

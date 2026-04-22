@@ -176,6 +176,50 @@ export const canDeleteCategory = (authUser, category) => {
     return false
 }
 
+// Tag Access Permission
+export const canCreateTag = (authUser) => {
+    if (!authUser) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    return false
+}
+
+export const canEditTag = (authUser, tag) => {
+    if (!authUser, !tag) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    if (
+        authUserUserRole === 'news desk' &&
+        authUser.id === tag?.created_by_id
+    ) {
+        return true
+    }
+
+    return false
+}
+
+export const canDeleteTag = (authUser, tag) => {
+    if (!authUser, !tag) return false
+
+
+    const authUserUserRole = getUserRole(authUser)
+    const tagUserRole = getUserRole(tag)
+
+    if (authUserUserRole === 'admin') return true
+
+    if ((authUserUserRole === 'news desk') && (authUser.id === tag?.created_by_id)) {
+        return true
+    }
+
+    return false
+}
+
 
 // Layout Menu Access Permission
 export const canAccessActivityLogMenu = (authUser) => {

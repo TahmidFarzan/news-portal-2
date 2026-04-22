@@ -85,6 +85,11 @@ class SearchController extends Controller
         return response()->json($this->searchService->categoryTree($request));
     }
 
+    public function tags(Request $request)
+    {
+        return response()->json($this->searchService->tags($request));
+    }
+
     public function user(string | int $slugOrId)
     {
         $record = $this->searchService->user($slugOrId);

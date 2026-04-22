@@ -34,4 +34,19 @@ class SitemapController extends Controller
             ->header('Content-Type', 'application/xml');
     }
 
+    public function tags(Request $request)
+    {
+        if ($request->filled('page')) {
+            $records = $this->sitemapService->getTags($request);
+            return response()->view('sitemaps.attributes', compact('records'))
+                ->header('Content-Type', 'application/xml');
+        }
+
+        $routeFor = 'Tag';
+        $lastPage = $this->sitemapService->getTagsLastPageNo();
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+            ->header('Content-Type', 'application/xml');
+    }
+
 }

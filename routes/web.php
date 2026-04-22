@@ -10,6 +10,7 @@ use App\Http\Controllers\SitemapController;
 // Backoffice
 use App\Http\Controllers\BackOffice\UserController;
 use App\Http\Controllers\BackOffice\MediaController;
+use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\ActivityLogController;
@@ -54,6 +55,7 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
     Route::get('languages', [SearchController::class, 'languages'])->name('languages');
     Route::get('categories', [SearchController::class, 'categories'])->name('categories');
+    Route::get('tags', [SearchController::class, 'tags'])->name('tags');
     Route::get('categoryTree', [SearchController::class, 'categoryTree'])->name('category-tree');
 
     Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
@@ -132,6 +134,17 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [CategoryController::class, 'delete'])->name('delete');
     });
 
+    Route::prefix('tags')->name('tags.')->group(function () {
+        Route::get('/', [TagController::class, 'index'])->name('index');
+        Route::get('create', [TagController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [TagController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [TagController::class, 'details'])->name('details');
+
+        Route::post('save', [TagController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [TagController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [TagController::class, 'delete'])->name('delete');
+    });
+
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
         Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
@@ -147,6 +160,7 @@ Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
     Route::get('index.xml', [SitemapController::class, 'index'])->name('index');
     Route::prefix('newses')->name('newses.')->group(function () {
         Route::get('categories.xml', [SitemapController::class, 'categories'])->name('categories');
+        Route::get('tags.xml', [SitemapController::class, 'tags'])->name('tags');
     });
 });
 
