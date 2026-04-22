@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Log;
 
 class TagService
 {
-
     public function new (): Tag
     {
         return new Tag();
