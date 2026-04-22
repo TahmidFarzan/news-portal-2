@@ -175,7 +175,7 @@ class Category extends Model
 
         if ($this->ancestorsAndSelf()->breadthFirst()->count() > 0) {
             foreach ($this->ancestorsAndSelf()->breadthFirst()->get() as $rCategory) {
-                $breadcrumb = ['name' => $rCategory->name, 'url' => $rCategory->public_url, 'description' => $rCategory->description];
+                $breadcrumb = ['name' => $rCategory->name, 'url' => $rCategory->public_url, 'description' => $rCategory->details];
                 array_push($breadcrumbs, $breadcrumb);
             }
         }
