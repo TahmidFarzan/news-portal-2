@@ -76,8 +76,7 @@ class AuthService
                 'email'                  => $request->email,
                 'password'               => Hash::make($request->password),
                 'created_by_id'          => null,
-                'is_supervisor'          => false,
-                'is_suoer_administrator' => false,
+
                 'is_default'             => false,
                 'created_at'             => now(),
                 'updated_at'             => null,

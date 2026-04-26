@@ -32,7 +32,7 @@ use Spatie\Sluggable\SlugOptions;
 #[Table('users')]
 #[Fillable([
         'name', 'email', 'slug', 'password', 'is_default',
-        'user_role_id', 'is_admin', 'marital_status',
+        'user_role_id', 'marital_status',
         'religion', 'gender', 'mobile', 'birth_date',
         'address', 'created_by_id',
     ])]

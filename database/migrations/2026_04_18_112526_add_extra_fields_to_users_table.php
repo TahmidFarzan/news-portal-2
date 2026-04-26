@@ -12,7 +12,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->boolean('is_default')->default(false)->after('remember_token');
             $table->foreignId('user_role_id')->constrained('user_roles')->cascadeOnDelete();
-            $table->date('birth_date')->nullable()->after('is_admin');
+            $table->date('birth_date')->nullable()->after('user_role_id');
             $table->enum('marital_status', ['Single', 'Married', 'Divorced', 'Separated', 'Other'])->nullable()->after('birth_date');
             $table->enum('religion', ['Islam', 'Hindu', 'Christian', 'Other'])->nullable()->after('marital_status');
             $table->enum('gender', ['Male', 'Female', 'Other'])->nullable()->after('religion');
@@ -31,8 +31,6 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
                 'is_default',
-                'is_supervisor',
-                'is_admin',
 
                 'marital_status',
                 'religion',
