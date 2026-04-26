@@ -10,7 +10,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
-import { canEditTag, canDeleteTag } from '@/composables/useAuthUserAccessPermissions'
+import { canEditTrend, canDeleteTrend } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
 
@@ -22,18 +22,18 @@ const authUser = inject("authUser")
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { tag } = defineProps({
-    tag: Object,
+const { trend } = defineProps({
+    trend: Object,
 })
 
-const canEdit = (tag) => canEditTag(authUser?.value, tag)
-const canDelete = (tag) => canDeleteTag(authUser?.value, tag)
+const canEdit = (trend) => canEditTrend(authUser?.value, trend)
+const canDelete = (trend) => canDeleteTrend(authUser?.value, trend)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.tags.delete', { slug: tag?.slug }), {
+    intertiaJsRoute.delete(route('back-office.trends.delete', { slug: trend?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -45,8 +45,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Tags', href: route('back-office.tags.index') },
-                { text: `${tag?.name} details`, active: true }
+                { text: 'Trends', href: route('back-office.trends.index') },
+                { text: `${trend?.tag?.name} details`, active: true }
             ],
         })
     )
@@ -57,21 +57,21 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${tag?.name} details`" />
+    <Head :title="`${trend?.tag?.name} details`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Tag Details</h2>
+            <h2 class="text-lg font-semibold">Trend Details</h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(tag)" :href="route('back-office.tags.edit', { slug: tag?.slug })"
+                <a v-if="canEdit(trend)" :href="route('back-office.trends.edit', { slug: trend?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     Edit
                 </a>
 
-                <button v-if="canDelete(tag)" @click="showDeleteModal = true"
+                <button v-if="canDelete(trend)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
                     Delete
@@ -86,57 +86,54 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ tag?.name || 'N/A' }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ tag?.language?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">Is current trend</span>
+                        <span class="font-medium">{{ trend?.is_current ? "Yes" : "No" }}</span>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div>
-                        <div class="text-gray-500 mb-1">Details</div>
-                        <div class="text-gray-700">{{ tag?.details || 'N/A' }}</div>
-                    </div>
-                </div>
+                <div class="p-4 space-y-2"></div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="text-gray-500 mb-2">Trend Information</div>
+                    <div class="text-gray-500 mb-2">Tag Information</div>
 
-                    <div class="space-y-2 text-sm">
+                    <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Is Trend</span>
-                            <span class="font-medium">{{ tag?.trend ? "Yes" : "No" }}</span>
+                            <span class="text-gray-500">Name</span>
+                            <span class="font-medium">{{ trend?.tag?.name || 'N/A' }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Is current trend</span>
-                            <span class="font-medium">{{ tag?.trend?.is_current ? "Yes" : "No" }}</span>
+                            <span class="text-gray-500">Language</span>
+                            <span class="font-medium">{{ trend?.tag?.language?.name || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                        <div>
+                            <div class="text-gray-500 mb-1">Details</div>
+                            <div class="text-gray-700">{{ trend?.tag?.details || 'N/A' }}</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2" >
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="text-gray-500 mb-2">SEO</div>
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-500">Title</span>
-                            <span class="font-medium">{{ tag?.seo_title || 'N/A' }}</span>
+                            <span class="font-medium">{{ trend?.seo_title || 'N/A' }}</span>
                         </div>
 
                         <div class="flex justify-between">
                             <span class="text-gray-500">Brief</span>
-                            <span class="font-medium">{{ tag?.seo_brief || 'N/A' }}</span>
+                            <span class="font-medium">{{ trend?.seo_brief || 'N/A' }}</span>
                         </div>
 
                         <div>
                             <div class="text-gray-500 mb-1">Keywords</div>
                             <div class="text-gray-700">
-                                {{ tag?.seo_keywords || 'N/A' }}
+                                {{ trend?.seo_keywords || 'N/A' }}
                             </div>
                         </div>
                     </div>
@@ -154,14 +151,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created At</span>
                         <span class="font-medium">
-                            {{ tag?.created_at ? formatDateTime(tag.created_at) : 'N/A' }}
+                            {{ trend?.created_at ? formatDateTime(trend.created_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created By</span>
                         <span class="font-medium">
-                            {{ tag?.created_by?.name || 'N/A' }}
+                            {{ trend?.created_by?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -170,14 +167,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated At</span>
                         <span class="font-medium">
-                            {{ tag?.updated_at ? formatDateTime(tag.updated_at) : 'N/A' }}
+                            {{ trend?.updated_at ? formatDateTime(trend.updated_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated By</span>
                         <span class="font-medium">
-                            {{ tag?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ trend?.latest_activity_log?.causer?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -187,7 +184,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
-            <RecentActivities :model-slug="'tag'" :model="tag" />
+            <RecentActivities :model-slug="'trend'" :model="trend" />
         </div>
 
         <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
@@ -204,11 +201,11 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete Tag
+                            Delete Trend
                         </h3>
 
                         <p class="text-sm font-medium">
-                            {{ tag?.name }}
+                            {{ trend?.name }}
                         </p>
 
                         <p class="text-sm text-gray-500">

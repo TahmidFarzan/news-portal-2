@@ -11,6 +11,7 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\BackOffice\UserController;
 use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\TagController;
+use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\ActivityLogController;
@@ -143,6 +144,17 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::post('save', [TagController::class, 'save'])->name('save');
         Route::patch('update/{slug}', [TagController::class, 'update'])->name('update');
         Route::delete('delete/{slug}', [TagController::class, 'delete'])->name('delete');
+    });
+
+    Route::prefix('trends')->name('trends.')->group(function () {
+        Route::get('/', [TrendController::class, 'index'])->name('index');
+        Route::get('create', [TrendController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [TrendController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [TrendController::class, 'details'])->name('details');
+
+        Route::post('save', [TrendController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [TrendController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [TrendController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {

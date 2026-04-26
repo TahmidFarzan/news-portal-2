@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\Tag;
+use App\Models\Trend;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,20 +12,20 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
+class DeleteTrendRelationsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tagId;
+    public int $trendId;
 
-    public function __construct(int $tagId)
+    public function __construct(int $trendId)
     {
-        $this->tagId = $tagId;
+        $this->trendId = $trendId;
     }
 
     public function uniqueId(): string
     {
-        return "delete-relations-tag-{$this->tagId}";
+        return "delete-relations-trend-{$this->trendId}";
     }
 
     public function retryAfter()
@@ -40,18 +40,14 @@ class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $tag = Tag::find($this->tagId);
+        $trend = Trend::find($this->trendId);
 
-        if ($tag && ($tag->activityLogs()->exists()) || ($tag->trend)) {
+        if ($trend && ($trend->activityLogs()->exists())) {
             DB::beginTransaction();
             try {
 
-                if ($tag->activityLogs()->exists()) {
-                    $tag->activityLogs()->delete();
-                }
-
-                if ($tag->trend) {
-                    $tag->trend->delete();
+                if ($trend->activityLogs()->exists()) {
+                    $trend->activityLogs()->delete();
                 }
 
                 DB::commit();
@@ -59,7 +55,7 @@ class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
             } catch (Exception $ex) {
                 DB::rollback();
 
-                Log::error("Fail to delete tag relations.", [
+                Log::error("Fail to delete trend relations.", [
                     'exception' => $ex,
                 ]);
 

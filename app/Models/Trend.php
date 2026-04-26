@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Models;
 
-use App\Observers\TagObserver;
-use App\Policies\TagPolicy;
+use App\Observers\TrendObserver;
+use App\Policies\TrendPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -20,24 +21,22 @@ use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[Table('tags')]
+#[Table('trends')]
 #[Fillable([
-        'name', 'details', 'slug',
-        'language_id', 'created_by_id',
-        "seo_brief", 'seo_title', 'seo_keywords',
-    ])]
-#[UsePolicy(TagPolicy::class)]
-#[ObservedBy([TagObserver::class])]
-class Tag extends Model
+    'tag_id','is_current',
+    'created_by_id',
+])]
+#[UsePolicy(TrendPolicy::class)]
+#[ObservedBy([TrendObserver::class])]
+class Trend extends Model
 {
     use HasFactory, LogsActivity, HasSlug;
 
     protected $appends = [
-        'public_url', 'is_recent_created',
-        "feeds_rss_url", "feeds_atom_url", "sitemap_url",
+        'public_url',
     ];
 
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
             'created_at' => 'datetime',
@@ -50,10 +49,10 @@ class Tag extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'details', 'slug',
-                "seo_brief", 'seo_title', 'seo_keywords',
+                'tag_id','is_current',
+    'position','created_by_id',
             ])
-            ->useLogName('Tag')
+            ->useLogName('Trend')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
             ->logOnlyDirty()
             ->logExcept([
@@ -91,29 +90,6 @@ class Tag extends Model
         return $url ?? "";
     }
 
-    public function getFeedsAtomUrlAttribute(): string
-    {
-        return "";
-    }
-
-    public function getFeedsRSSUrlAttribute(): string
-    {
-        return "";
-    }
-
-    public function getSitemapUrlAttribute(): string
-    {
-        return route("sitemaps.newses.tags");
-    }
-
-    public function getIsRecentCreatedAttribute(): bool
-    {
-        $current         = now();
-        $publishedAt     = $this->created_at;
-        $intervalInHours = $current->diffInHours($publishedAt);
-        return $intervalInHours < 72;
-    }
-
     public function activityLogs(): MorphMany
     {
         return $this->morphMany(Activity::class, 'subject');
@@ -124,19 +100,14 @@ class Tag extends Model
         return $this->belongsTo(User::class, 'created_by_id');
     }
 
-    public function language(): BelongsTo
+    public function tag(): BelongsTo
     {
-        return $this->belongsTo(Language::class, 'language_id');
+        return $this->belongsTo(Tag::class);
     }
 
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
-    }
-
-    public function trend(): HasOne
-    {
-        return $this->hasOne(Trend::class);
     }
 
     public function navBreadcrumbs(): array
@@ -150,4 +121,5 @@ class Tag extends Model
 
         return $breadcrumbs;
     }
+
 }

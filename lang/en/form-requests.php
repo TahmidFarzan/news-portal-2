@@ -190,23 +190,48 @@ return [
         ],
     ],
 
-    'category'          => [
-        'name'                               => [
+    'category' => [
+        'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
             'max'      => 'Name max chars is 200.',
             'unique'   => 'Name must be unique.',
         ],
 
-
-        'parent_id'                          => [
+        'parent_id'   => [
             'required'  => 'Parent is required.',
             "not_found" => 'Parent is not exit.',
         ],
 
-        'language_id'                          => [
+        'language_id' => [
             'required'  => 'Language is required.',
             "not_found" => 'Language is not exit.',
+        ],
+    ],
+
+    'tag'      => [
+        'name'        => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be string.',
+            'max'      => 'Name max chars is 200.',
+            'unique'   => 'Name must be unique.',
+        ],
+
+        'language_id' => [
+            'required'  => 'Language is required.',
+            "not_found" => 'Language is not exit.',
+        ],
+    ],
+
+    'trend'    => [
+        'tag_id'   => [
+            'required'  => 'Tag is required.',
+            "not_found" => 'Tag is not exit.',
+            "unique"    => 'Tag must be unique.',
+        ],
+
+        'position' => [
+            'numeric' => 'Tag must be numeric.',
         ],
     ],
 ];

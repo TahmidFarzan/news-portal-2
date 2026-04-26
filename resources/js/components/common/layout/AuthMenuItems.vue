@@ -16,7 +16,8 @@ import {
     faNewspaper,
     faLanguage,
     faLayerGroup,
-    faTags
+    faTags,
+    faStar
 } from "@fortawesome/free-solid-svg-icons"
 
 library.add(
@@ -30,13 +31,15 @@ library.add(
     faNewspaper,
     faLanguage,
     faLayerGroup,
-    faTags
+    faTags,
+    faStar
 )
 
 import {
     canAccessUserManagementMenu,
     canAccessNewsManagementMenu
 } from '@/composables/useAuthUserAccessPermissions'
+import { faHotjar } from "@fortawesome/free-brands-svg-icons"
 
 const { authUser } = defineProps({
     authUser: Object
@@ -56,6 +59,7 @@ const routeMap = {
         '/back-office/languages/*',
         '/back-office/categories/*',
         '/back-office/tags/*',
+        '/back-office/trend/*',
     ],
     Reports: ['/back-office/reports/*'],
 }
@@ -148,6 +152,13 @@ function isSubMenuVisible(key) {
                     :class="isCurrentPage('/back-office/tags/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="tags" />
                     Tags
+                </a>
+
+                <a :href="route('back-office.trends.index')"
+                    class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+                    :class="isCurrentPage('/back-office/trends/*') ? 'bg-gray-200 font-medium' : ''">
+                    <FontAwesomeIcon icon="star" />
+                    Trend
                 </a>
 
             </div>

@@ -37,9 +37,6 @@ const isUpdate = computed(() => !!tag?.slug)
 const saveForm = useForm({
     name: tag?.name || null,
     details: tag?.details || null,
-    details: tag?.details || null,
-    has_parent: tag?.has_parent || false,
-    parent_id: tag?.parent_id || null,
     language_id: tag?.language_id || null,
     seo_brief: tag?.seo_brief || null,
     seo_title: tag?.seo_title || null,

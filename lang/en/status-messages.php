@@ -58,6 +58,36 @@ return [
         ],
     ],
 
+    'tag'     => [
+        'save'   => [
+            'success' => 'Tag saved successfully.',
+            'failed'  => 'Failed to save tag.',
+        ],
+        'update' => [
+            'success' => 'Tag updated successfully.',
+            'failed'  => 'Failed to update tag.',
+        ],
+        'delete' => [
+            'success' => 'Tag deleted successfully.',
+            'failed'  => 'Failed to delete tag.',
+        ],
+    ],
+
+    'trend'     => [
+        'save'   => [
+            'success' => 'Trend saved successfully.',
+            'failed'  => 'Failed to save trend.',
+        ],
+        'update' => [
+            'success' => 'Trend updated successfully.',
+            'failed'  => 'Failed to update trend.',
+        ],
+        'delete' => [
+            'success' => 'Trend deleted successfully.',
+            'failed'  => 'Failed to delete trend.',
+        ],
+    ],
+
     // Auth
     'auth'         => [
         'login'              => [

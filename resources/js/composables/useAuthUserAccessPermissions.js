@@ -220,6 +220,50 @@ export const canDeleteTag = (authUser, tag) => {
     return false
 }
 
+// Trend Access Permission
+export const canCreateTrend = (authUser) => {
+    if (!authUser) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    return false
+}
+
+export const canEditTrend = (authUser, trend) => {
+    if (!authUser, !trend) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    if (
+        authUserUserRole === 'news desk' &&
+        authUser.id === trend?.created_by_id
+    ) {
+        return true
+    }
+
+    return false
+}
+
+export const canDeleteTrend = (authUser, trend) => {
+    if (!authUser, !trend) return false
+
+
+    const authUserUserRole = getUserRole(authUser)
+    const trendUserRole = getUserRole(trend)
+
+    if (authUserUserRole === 'admin') return true
+
+    if ((authUserUserRole === 'news desk') && (authUser.id === trend?.created_by_id)) {
+        return true
+    }
+
+    return false
+}
+
 
 // Layout Menu Access Permission
 export const canAccessActivityLogMenu = (authUser) => {

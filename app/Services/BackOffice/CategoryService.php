@@ -64,7 +64,7 @@ class CategoryService
         }
 
         if ($request->filled('language_id')) {
-            $query->whereIn('id', $request->input('language_id'));
+            $query->where('language_id', $request->input('language_id'));
         }
 
         if ($request->filled('date')) {

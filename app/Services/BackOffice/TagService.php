@@ -25,6 +25,7 @@ class TagService
     public function loadRelations(Tag $tag): Tag
     {
         $tag->load([
+            'trend',
             'language',
 
             'createdBy',
@@ -43,14 +44,14 @@ class TagService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Tag::query();
+        $query = Tag::query()->with("trend");
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
         }
 
         if ($request->filled('language_id')) {
-            $query->whereIn('id', $request->input('language_id'));
+            $query->where('language_id', $request->input('language_id'));
         }
 
         if ($request->filled('date')) {
