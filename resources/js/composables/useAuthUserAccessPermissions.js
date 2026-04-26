@@ -333,7 +333,7 @@ export const canAccessUserManagementMenu = (authUser) => {
 }
 
 
-export const canAccessNewsManagementMenu = (authUser) => {
+export const canAccessNewsAttributesMenu = (authUser) => {
     if (!authUser) return false
 
     const authUserUserRole = getUserRole(authUser)

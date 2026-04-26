@@ -39,7 +39,7 @@ library.add(
 
 import {
     canAccessUserManagementMenu,
-    canAccessNewsManagementMenu
+    canAccessNewsAttributesMenu
 } from '@/composables/useAuthUserAccessPermissions'
 import { faHotjar } from "@fortawesome/free-brands-svg-icons"
 
@@ -52,12 +52,12 @@ const page = usePage()
 const subMenus = ref({
     UserManagement: false,
     Reports: false,
-    NewsManagement: false,
+    NewsAttributes: false,
 })
 
 const routeMap = {
     UserManagement: ['/back-office/users/*'],
-    NewsManagement: [
+    NewsAttributes: [
         '/back-office/languages/*',
         '/back-office/categories/*',
         '/back-office/tags/*',
@@ -71,8 +71,8 @@ const canAccessUserManagementMenuComputed = computed(() =>
     canAccessUserManagementMenu(authUser)
 )
 
-const canAccessNewsManagementMenuComputed = computed(() =>
-    canAccessNewsManagementMenu(authUser)
+const canAccessNewsAttributesMenuComputed = computed(() =>
+    canAccessNewsAttributesMenu(authUser)
 )
 
 function toggleShowSubMenu(key) {
@@ -121,19 +121,19 @@ function isSubMenuVisible(key) {
             Medias
         </a>
 
-        <button @click="toggleShowSubMenu('NewsManagement')"
+        <button @click="toggleShowSubMenu('NewsAttributes')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
-                <FontAwesomeIcon icon="newspaper" />
-                News Management
+                <FontAwesomeIcon icon="layer-group" />
+                News Attributes
             </span>
-            <FontAwesomeIcon :icon="isSubMenuVisible('NewsManagement') ? 'chevron-up' : 'chevron-down'" />
+            <FontAwesomeIcon :icon="isSubMenuVisible('NewsAttributes') ? 'chevron-up' : 'chevron-down'" />
         </button>
 
         <transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0"
             enter-to-class="opacity-100 max-h-40" leave-active-class="transition-all duration-200 ease-in"
             leave-from-class="opacity-100 max-h-40" leave-to-class="opacity-0 max-h-0">
-            <div v-if="isSubMenuVisible('NewsManagement') && canAccessNewsManagementMenuComputed"
+            <div v-if="isSubMenuVisible('NewsAttributes') && canAccessNewsAttributesMenuComputed"
                 class="ml-4 flex flex-col space-y-1 overflow-hidden">
 
                 <a :href="route('back-office.languages.index')"
