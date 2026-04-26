@@ -88,6 +88,22 @@ return [
         ],
     ],
 
+
+    'location'     => [
+        'save'   => [
+            'success' => 'Location saved successfully.',
+            'failed'  => 'Failed to save location.',
+        ],
+        'update' => [
+            'success' => 'Location updated successfully.',
+            'failed'  => 'Failed to update location.',
+        ],
+        'delete' => [
+            'success' => 'Location deleted successfully.',
+            'failed'  => 'Failed to delete location.',
+        ],
+    ],
+
     // Auth
     'auth'         => [
         'login'              => [

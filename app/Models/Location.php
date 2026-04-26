@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
 
-use App\Observers\CategoryObserver;
-use App\Policies\CategoryPolicy;
+use App\Observers\LocationObserver;
+use App\Policies\LocationPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
@@ -21,21 +20,21 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
-#[Table('categories')]
+#[Table('locations')]
 #[Fillable([
-        'name', 'details', 'parent_id', 'slug',
+        'name', 'details', 'parent_id', 'slug', 'category_id',
         'language_id', 'name_tree', "slug_tree", 'created_by_id',
-        "seo_brief", 'seo_title', 'seo_keywords',
+        'latitude','longitude',
     ])]
-#[UsePolicy(CategoryPolicy::class)]
-#[ObservedBy([CategoryObserver::class])]
-class Category extends Model
+#[UsePolicy(LocationPolicy::class)]
+#[ObservedBy([LocationObserver::class])]
+class Location extends Model
 {
     use HasFactory, LogsActivity, HasSlug, HasRecursiveRelationships;
 
     protected $appends = [
-        'public_url', 'is_recent_created', "has_parent", "indentation_name",
-        "has_descendants", "feeds_rss_url", "feeds_atom_url", "sitemap_url",
+        'public_url', "has_parent", "indentation_name",
+        "has_descendants",
     ];
 
     protected function casts(): array
@@ -51,11 +50,10 @@ class Category extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'details', 'parent_id', 'slug',
-                'name_tree', "slug_tree",
-                "seo_brief", 'seo_title', 'seo_keywords',
+                'name', 'details', 'parent_id', 'slug', 'category_id',
+                'latitude','longitude','name_tree', "slug_tree",
             ])
-            ->useLogName('Category')
+            ->useLogName('Location')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
             ->logOnlyDirty()
             ->logExcept([
@@ -98,29 +96,6 @@ class Category extends Model
         return $url ?? "";
     }
 
-    public function getFeedsAtomUrlAttribute(): string
-    {
-        return "";
-    }
-
-    public function getFeedsRSSUrlAttribute(): string
-    {
-        return "";
-    }
-
-    public function getSitemapUrlAttribute(): string
-    {
-        return route("sitemaps.newses.categories");
-    }
-
-    public function getIsRecentCreatedAttribute(): bool
-    {
-        $current         = now();
-        $publishedAt     = $this->created_at;
-        $intervalInHours = $current->diffInHours($publishedAt);
-        return $intervalInHours < 72;
-    }
-
     public function getHasParentAttribute(): bool
     {
         return isset($this->parent_id) ? true : false;
@@ -155,14 +130,14 @@ class Category extends Model
         return $this->belongsTo(User::class, 'created_by_id');
     }
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class, 'language_id');
-    }
-
-    public function locations(): HasMany
-    {
-        return $this->hasMany(Location::class);
     }
 
     public function latestActivityLog(): MorphOne
@@ -172,7 +147,7 @@ class Category extends Model
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Location::class);
     }
 
     public function navBreadcrumbs(): array
@@ -180,8 +155,8 @@ class Category extends Model
         $breadcrumbs = [];
 
         if ($this->ancestorsAndSelf()->breadthFirst()->count() > 0) {
-            foreach ($this->ancestorsAndSelf()->breadthFirst()->get() as $rCategory) {
-                $breadcrumb = ['name' => $rCategory->name, 'url' => $rCategory->public_url, 'description' => $rCategory->details];
+            foreach ($this->ancestorsAndSelf()->breadthFirst()->get() as $rLocation) {
+                $breadcrumb = ['name' => $rLocation->name, 'url' => $rLocation->public_url, 'description' => $rLocation->details];
                 array_push($breadcrumbs, $breadcrumb);
             }
         }

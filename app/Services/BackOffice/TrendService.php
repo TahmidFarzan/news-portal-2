@@ -2,7 +2,6 @@
 namespace App\Services\BackOffice;
 
 use App\Http\Requests\TrendRequest;
-use App\Models\Tag;
 use App\Models\Trend;
 use Exception;
 use Illuminate\Http\Request;
@@ -58,7 +57,7 @@ class TrendService
         if ($request->filled("search")) {
             $languageId = $request->input('language_id');
             $query->whereHas('tag', function ($tagQuery) use ($languageId) {
-                $tagQuery->where('language_id' , $languageId);
+                $tagQuery->where('language_id', $languageId);
             });
 
         }
@@ -74,8 +73,8 @@ class TrendService
         }
 
         if ($request->filled("date")) {
-            $date    = $request->input('date');
-            $date    = is_string($date) ? new \DateTime($date) : $date;
+            $date = $request->input('date');
+            $date = is_string($date) ? new \DateTime($date) : $date;
             $query->whereDate("created_at", '<=', $date);
         }
 
@@ -83,8 +82,7 @@ class TrendService
             $searchValue = $request->input('search');
             $query->whereHas('tag', function ($query) use ($searchValue) {
                 $query->where('name', 'like', '%' . $searchValue . '%')
-                    ->orWhere('brief', 'like', '%' . $searchValue . '%')
-                    ->orWhere('description', 'like', '%' . $searchValue . '%')
+                    ->orWhere('details', 'like', "%{$searchValue}%")
                     ->orWhere('seo_brief', 'like', '%' . $searchValue . '%')
                     ->orWhere('seo_description', 'like', '%' . $searchValue . '%')
                     ->orWhere('seo_title', 'like', '%' . $searchValue . '%');
@@ -105,8 +103,8 @@ class TrendService
             $isNew = empty($trend->id);
             $event = $isNew ? "save" : "update";
 
-            $trend->tag_id = $request->input('tag_id');
-            $trend->is_current = $request->input('is_current') ? true : false;
+            $trend->tag_id        = $request->input('tag_id');
+            $trend->is_current    = $request->input('is_current') ? true : false;
             $trend->created_by_id = $isNew ? Auth::id() : $trend->created_by_id;
 
             $trend->save();

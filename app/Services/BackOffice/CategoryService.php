@@ -32,6 +32,8 @@ class CategoryService
     public function loadRelations(Category $category): Category
     {
         $category->load([
+            "locations",
+
             'parent',
             'bloodline',
 
@@ -78,7 +80,10 @@ class CategoryService
 
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('code', 'like', "%{$search}%");
+                    ->orWhere('details', 'like', "%{$search}%")
+                    ->orWhere('seo_brief', 'like', '%' . $search . '%')
+                    ->orWhere('seo_description', 'like', '%' . $search . '%')
+                    ->orWhere('seo_title', 'like', '%' . $search . '%');
             });
         }
 
@@ -103,6 +108,7 @@ class CategoryService
 
             $category->name          = $request->input('name');
             $category->details       = $request->input('details');
+            $category->language_id   = $request->input('language_id');
             $category->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
             $category->seo_title     = $request->input('seo_title', $request->input('name'));
             $category->seo_brief     = $request->input('seo_brief', $request->input('brief'));

@@ -1,31 +1,42 @@
 <?php
 namespace App\Services\BackOffice;
 
-use App\Helpers\TagifyHelper;
-use App\Http\Requests\TagRequest;
-use App\Models\Tag;
+use App\Http\Requests\LocationRequest;
+use App\Models\Location;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class TagService
+class LocationService
 {
-    public function new (): Tag
+    public function getLocationTreeById(int $id): array
     {
-        return new Tag();
+        $location = Location::where('id', $id)->firstOrFail();
+
+        return $location->bloodline()->pluck('id')->toArray();
     }
 
-    public function find(string $slug): Tag
+    public function new (): Location
     {
-        return Tag::where('slug', $slug)->firstOrFail();
+        return new Location();
     }
 
-    public function loadRelations(Tag $tag): Tag
+    public function find(string $slug): Location
     {
-        $tag->load([
-            'trend',
+        return Location::where('slug', $slug)->firstOrFail();
+    }
+
+    public function loadRelations(Location $location): Location
+    {
+        $location->load([
+            'category',
+            'category.parent',
+
+            'parent',
+            'bloodline',
+
             'language',
 
             'createdBy',
@@ -37,17 +48,25 @@ class TagService
             'latestActivityLog.causer',
         ]);
 
-        return $tag;
+        return $location;
     }
 
     public function search(Request $request)
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Tag::query()->with("trend");
+        $query = Location::query()->with("parent");
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
+        }
+
+        if ($request->filled('category_id')) {
+            $query->whereIn('category_id', $request->input('category_id'));
+        }
+
+        if ($request->filled('parent_id')) {
+            $query->whereIn('id', $this->getLocationTreeById((int) $request->input('parent_id')));
         }
 
         if ($request->filled('language_id')) {
@@ -65,10 +84,7 @@ class TagService
 
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('details', 'like', "%{$search}%")
-                    ->orWhere('seo_brief', 'like', '%' . $search . '%')
-                    ->orWhere('seo_description', 'like', '%' . $search . '%')
-                    ->orWhere('seo_title', 'like', '%' . $search . '%');
+                    ->orWhere('details', 'like', "%{$search}%");
             });
         }
 
@@ -77,72 +93,65 @@ class TagService
             ->appends($request->all());
     }
 
-    public function save(TagRequest $request, Tag $tag): array
+    public function save(LocationRequest $request, Location $location): array
     {
         DB::beginTransaction();
 
         try {
-            $isNew = empty($tag->id);
+            $isNew = empty($location->id);
             $event = $isNew ? "save" : "update";
 
-            $seoKeywords = null;
+            $location->name          = $request->input('name');
+            $location->details       = $request->input('details');
+            $location->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
+            $location->category_id   = $request->input('category_id');
+            $location->language_id   = $request->input('language_id');
+            $location->created_by_id = $isNew ? Auth::id() : $location->created_by_id;
 
-            if ($request->input('seo_keywords')) {
-                $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
-            }
-
-            $tag->name          = $request->input('name');
-            $tag->details       = $request->input('details');
-            $tag->language_id   = $request->input('language_id');
-            $tag->seo_title     = $request->input('seo_title', $request->input('name'));
-            $tag->seo_brief     = $request->input('seo_brief', $request->input('brief'));
-            $tag->seo_keywords  = $seoKeywords;
-            $tag->created_by_id = $isNew ? Auth::id() : $tag->created_by_id;
-
-            $tag->save();
+            $location->save();
 
             DB::commit();
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.tag.{$event}.success"),
+                'message' => __("status-messages.location.{$event}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error("Failed to {$event} tag.", [
+            Log::error("Failed to {$event} location.", [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.tag.save.failed'),
+                'message' => __('status-messages.location.save.failed'),
             ];
         }
     }
 
-    public function delete(Tag $tag): array
+    public function delete(Location $location): array
     {
         DB::beginTransaction();
 
         try {
-            $tag->delete();
+            $location->delete();
             DB::commit();
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.tag.delete.success'),
+                'message' => __('status-messages.location.delete.success'),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error('Tag delete failed.', [
+            Log::error('Location delete failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.tag.delete.failed'),
+                'message' => __('status-messages.location.delete.failed'),
             ];
         }
     }

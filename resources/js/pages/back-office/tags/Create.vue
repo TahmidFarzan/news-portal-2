@@ -10,18 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { VueTelInput } from 'vue-tel-input'
-
-import { formatDate } from '@/composables/useDateTime'
-import {
-    showPassword,
-    showConfirmPassword,
-    togglePasswordVisibility,
-    toggleConfirmPasswordVisibility,
-} from '@/composables/usePassword'
-
-import 'vue-tel-input/vue-tel-input.css'
-
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })

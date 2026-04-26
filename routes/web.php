@@ -1,20 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-//
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\SitemapController;
+//
+use App\Http\Controllers\BackOffice\ActivityLogController;
+use App\Http\Controllers\BackOffice\CategoryController;
+use App\Http\Controllers\BackOffice\LanguageController;
+use App\Http\Controllers\BackOffice\LocationController;
 
 // Backoffice
-use App\Http\Controllers\BackOffice\UserController;
 use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
-use App\Http\Controllers\BackOffice\CategoryController;
-use App\Http\Controllers\BackOffice\LanguageController;
-use App\Http\Controllers\BackOffice\ActivityLogController;
+use App\Http\Controllers\BackOffice\UserController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SitemapController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     Route::prefix('login')->group(function () {
@@ -56,8 +57,10 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
     Route::get('languages', [SearchController::class, 'languages'])->name('languages');
     Route::get('categories', [SearchController::class, 'categories'])->name('categories');
+    Route::get('locations', [SearchController::class, 'locations'])->name('locations');
     Route::get('tags', [SearchController::class, 'tags'])->name('tags');
-    Route::get('categoryTree', [SearchController::class, 'categoryTree'])->name('category-tree');
+    Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
+    Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
 
     Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
     Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
@@ -157,6 +160,17 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [TrendController::class, 'delete'])->name('delete');
     });
 
+    Route::prefix('locations')->name('locations.')->group(function () {
+        Route::get('/', [LocationController::class, 'index'])->name('index');
+        Route::get('create', [LocationController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [LocationController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [LocationController::class, 'details'])->name('details');
+
+        Route::post('save', [LocationController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [LocationController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [LocationController::class, 'delete'])->name('delete');
+    });
+
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
         Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
@@ -180,4 +194,3 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 Route::get('home', [PageController::class, 'home'])->name('home');
-

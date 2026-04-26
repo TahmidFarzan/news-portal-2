@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\Category;
+use App\Models\Location;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,20 +12,20 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class DeleteCategoryRelationsJob implements ShouldQueue, ShouldBeUnique
+class DeleteLocationRelationsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $categoryId;
+    public int $locationId;
 
-    public function __construct(int $categoryId)
+    public function __construct(int $locationId)
     {
-        $this->categoryId = $categoryId;
+        $this->locationId = $locationId;
     }
 
     public function uniqueId(): string
     {
-        return "delete-relations-category-{$this->categoryId}";
+        return "delete-relations-location-{$this->locationId}";
     }
 
     public function retryAfter()
@@ -40,18 +40,14 @@ class DeleteCategoryRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $category = Category::find($this->categoryId);
+        $location = Location::find($this->locationId);
 
-        if ($category && ($category->activityLogs()->exists()) || ($category->locations()->exists())) {
+        if ($location && ($location->activityLogs()->exists())) {
             DB::beginTransaction();
             try {
 
-                if ($category->activityLogs()->exists()) {
-                    $category->activityLogs()->delete();
-                }
-
-                if ($category->locations()->exists()) {
-                    $category->locations()->delete();
+                if ($location->activityLogs()->exists()) {
+                    $location->activityLogs()->delete();
                 }
 
                 DB::commit();
@@ -59,7 +55,7 @@ class DeleteCategoryRelationsJob implements ShouldQueue, ShouldBeUnique
             } catch (Exception $ex) {
                 DB::rollback();
 
-                Log::error("Fail to delete category relations.", [
+                Log::error("Fail to delete location relations.", [
                     'exception' => $ex,
                 ]);
 

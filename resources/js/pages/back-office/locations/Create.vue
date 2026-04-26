@@ -16,21 +16,19 @@ defineOptions({ layout: Layout })
 
 const pageReady = inject("pageReady")
 
-const { category } = defineProps({
-    category: Object,
+const { location } = defineProps({
+    location: Object,
 })
 
-const isUpdate = computed(() => !!category?.slug)
+const isUpdate = computed(() => !!location?.slug)
 
 const saveForm = useForm({
-    name: category?.name || null,
-    details: category?.details || null,
-    has_parent: category?.has_parent || false,
-    parent_id: category?.parent_id || null,
-    language_id: category?.language_id || null,
-    seo_brief: category?.seo_brief || null,
-    seo_title: category?.seo_title || null,
-    seo_keywords: category?.seo_keywords ? category.seo_keywords.split(',') : [],
+    name: location?.name || null,
+    details: location?.details || null,
+    has_parent: location?.has_parent || false,
+    parent_id: location?.parent_id || null,
+    language_id: location?.language_id || null,
+    category_id: location?.category_id || null,
 })
 
 function validateForm() {
@@ -48,7 +46,7 @@ function validateForm() {
     }
 
     if (saveForm.has_parent && !saveForm.parent_id) {
-        saveForm.setError('parent_id', 'Parent category is required.')
+        saveForm.setError('parent_id', 'Parent location is required.')
         valid = false
     }
 
@@ -82,12 +80,12 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.categories.update', { slug: category?.slug }),
+            route('back-office.locations.update', { slug: location?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
         )
     } else {
-        saveForm.post(route('back-office.categories.save'), requestConfig)
+        saveForm.post(route('back-office.locations.save'), requestConfig)
     }
 }
 
@@ -99,8 +97,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Categories', href: route('back-office.categories.index') },
-                { text: isUpdate.value ? `${category?.name} edit` : 'Category create', active: true }
+                { text: 'Locations', href: route('back-office.locations.index') },
+                { text: isUpdate.value ? `${location?.name} edit` : 'Location create', active: true }
             ],
         })
     )
@@ -111,7 +109,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${category?.name} edit` : 'Category create'" />
+    <Head :title="isUpdate ? `${location?.name} edit` : 'Location create'" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -129,12 +127,13 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="language_id"
-                                :selectedItem="category?.language" :apiUrl="route('search.categories')" :error="saveForm.errors.language_id"
+                                :selectedItem="location?.language" :apiUrl="route('search.locations')" :error="saveForm.errors.language_id"
                                 :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
                             </p>
                         </div>
+
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
@@ -193,8 +192,8 @@ onMounted(async () => {
                                 Parent <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :selectedItem="category?.parent"
-                                fieldName="parent_id" :form="saveForm" :apiUrl="route('search.category-tree')"
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :selectedItem="location?.parent"
+                                fieldName="parent_id" :form="saveForm" :apiUrl="route('search.location-tree')"
                                 :error="saveForm.errors.parent_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id"
                                 :multiple="false" placeholder="Select parent" />
@@ -208,49 +207,23 @@ onMounted(async () => {
                 </div>
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">SEO Settings</h3>
+                    <h3 class="text-base font-semibold">Category</h3>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <div>
-                            <label class="block text-sm font-medium mb-1">
-                                SEO Title
-                            </label>
-
-                            <input v-model="saveForm.seo_title" type="text" placeholder="Enter SEO title"
-                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
-
-                            <p v-if="saveForm.errors.seo_title" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.seo_title }}
-                            </p>
-                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                SEO Brief
+                                Category
                             </label>
 
-                            <textarea v-if="pageReady" v-model="saveForm.seo_brief" rows="3"
-                                placeholder="Enter SEO brief"
-                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :selectedItem="location?.category"
+                                fieldName="category_id" :form="saveForm" :apiUrl="route('search.location-tree')"
+                                :error="saveForm.errors.category_id" selectedLabelKey="indentation_name"
+                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id"
+                                :multiple="false" placeholder="Select category" />
 
-                            <p v-if="saveForm.errors.seo_brief" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.seo_brief }}
-                            </p>
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium mb-1">
-                                SEO Keywords
-                            </label>
-
-                            <MultiSelectTaggableSelect :selectedItem="saveForm.seo_keywords" fieldName="seo_keywords"
-                                :form="saveForm" :error="saveForm.errors.seo_keywords" placeholder="Add keywords" />
-
-                            <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.seo_keywords }}
+                            <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.category_id }}
                             </p>
                         </div>
 

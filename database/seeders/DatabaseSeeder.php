@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TagSeeder::class);
 
         $this->call(TrendSeeder::class);
+        $this->call(LocationSeeder::class);
     }
 }

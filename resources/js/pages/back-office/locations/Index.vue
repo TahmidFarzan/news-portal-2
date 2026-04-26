@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useUtil'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateCategory, canEditCategory, canDeleteCategory, } from '@/composables/useAuthUserAccessPermissions'
+import { canCreateLocation, canEditLocation, canDeleteLocation, } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 
@@ -30,13 +30,13 @@ const deletingRow = ref(null)
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { categories } = defineProps({
-    categories: Object,
+const { locations } = defineProps({
+    locations: Object,
 })
 
 const paginationOnly = computed(() => {
-    if (!categories) return {}
-    const { data, ...rest } = categories
+    if (!locations) return {}
+    const { data, ...rest } = locations
     return rest
 })
 
@@ -45,6 +45,7 @@ const filterForm = useForm({
     created_by_id: null,
     parent_id: '',
     language_id: '',
+    category_id: '',
     date: '',
     search: '',
 })
@@ -53,7 +54,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.categories.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.locations.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -61,20 +62,20 @@ const applyFilter = () => {
     })
 }
 
-const confirmDelete = (category) => {
-    deletingRow.value = category
+const confirmDelete = (location) => {
+    deletingRow.value = location
     showDeleteModal.value = true
 }
 
-const canCreate = () => canCreateCategory(authUser?.value)
-const canEdit = (category) => canEditCategory(authUser?.value, category)
-const canDelete = (category) => canDeleteCategory(authUser?.value, category)
+const canCreate = () => canCreateLocation(authUser?.value)
+const canEdit = (location) => canEditLocation(authUser?.value, location)
+const canDelete = (location) => canDeleteLocation(authUser?.value, location)
 
-const handleDelete = (category) => {
-    if (!category || deleteProcessing.value) return
+const handleDelete = (location) => {
+    if (!location || deleteProcessing.value) return
 
     deleteProcessing.value = true
-    intertiaJsRoute.delete(route('back-office.categories.delete', { slug: category?.slug }), {
+    intertiaJsRoute.delete(route('back-office.locations.delete', { slug: location?.slug }), {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -90,15 +91,24 @@ onMounted(async () => {
     filterForm.created_by_id = urlParams.get('created_by_id') || ''
     filterForm.parent_id = urlParams.get('parent_id') || ''
     filterForm.language_id = urlParams.get('language_id') || ''
+    filterForm.category_id = urlParams.get('category_id') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
 
     if (filterForm.parent_id) {
         const rParent = await fetchFromApi(
-            route('search.category', { slugOrId: filterForm.parent_id })
+            route('search.location', { slugOrId: filterForm.parent_id })
         )
 
         filterForm.parent_id = rParent || null
+    }
+
+    if (filterForm.category_id) {
+        const rCategory = await fetchFromApi(
+            route('search.category', { slugOrId: filterForm.category_id })
+        )
+
+        filterForm.category_id = rCategory || null
     }
 
     if (filterForm.language_id) {
@@ -122,7 +132,7 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Categories', active: true },
+                { text: 'Locations', active: true },
             ],
         })
     )
@@ -133,14 +143,14 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Categories" />
+    <Head title="Locations" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Categories</h2>
+            <h2 class="text-lg font-semibold">Locations</h2>
 
-            <a v-if="canCreate()" :href="route('back-office.categories.create')"
+            <a v-if="canCreate()" :href="route('back-office.locations.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
                 Create
@@ -164,13 +174,18 @@ onMounted(async () => {
 
                 <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="parent_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.parent_id"
-                    apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.category-tree')"
+                    apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.location-tree')"
                     :multiple="false" placeholder="Parent" />
+
+                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="category_id"
+                    selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.category_id"
+                    apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.category-tree')"
+                    :multiple="false" placeholder="Category" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search category..."
+                <input type="search" v-model="filterForm.search" placeholder="Search location..."
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -201,8 +216,7 @@ onMounted(async () => {
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in categories?.data" :key="item.id"
-                            class="hover:bg-gray-50 transition">
+                        <tr v-for="(item, index) in locations?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.name }}</td>
                             <td class="px-4 py-3 text-gray-600">
@@ -215,13 +229,13 @@ onMounted(async () => {
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
-                                    <a :href="route('back-office.categories.details', { slug: item.slug })"
+                                    <a :href="route('back-office.locations.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canEdit(item)"
-                                        :href="route('back-office.categories.edit', { slug: item.slug })"
+                                        :href="route('back-office.locations.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
@@ -256,7 +270,7 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete Category
+                            Delete Location
                         </h3>
 
                         <p class="text-sm font-medium">

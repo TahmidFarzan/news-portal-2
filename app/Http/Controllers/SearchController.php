@@ -80,14 +80,24 @@ class SearchController extends Controller
         return response()->json($this->searchService->categories($request));
     }
 
+    public function tags(Request $request)
+    {
+        return response()->json($this->searchService->tags($request));
+    }
+
+    public function locations(Request $request)
+    {
+        return response()->json($this->searchService->locations($request));
+    }
+
     public function categoryTree(Request $request)
     {
         return response()->json($this->searchService->categoryTree($request));
     }
 
-    public function tags(Request $request)
+    public function locationTree(Request $request)
     {
-        return response()->json($this->searchService->tags($request));
+        return response()->json($this->searchService->locationTree($request));
     }
 
     public function user(string | int $slugOrId)
@@ -113,6 +123,12 @@ class SearchController extends Controller
     public function category($slugOrId)
     {
         $record = $this->searchService->category($slugOrId);
+        return response()->json($record);
+    }
+
+    public function location($slugOrId)
+    {
+        $record = $this->searchService->locations($slugOrId);
         return response()->json($record);
     }
 }

@@ -1,6 +1,5 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import RecentLocations from '@/components/back-office/location/RecentLocations.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
@@ -11,7 +10,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
-import { canEditCategory, canDeleteCategory } from '@/composables/useAuthUserAccessPermissions'
+import { canEditLocation, canDeleteLocation } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
 
@@ -23,18 +22,18 @@ const authUser = inject("authUser")
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { category } = defineProps({
-    category: Object,
+const { location } = defineProps({
+    location: Object,
 })
 
-const canEdit = (category) => canEditCategory(authUser?.value, category)
-const canDelete = (category) => canDeleteCategory(authUser?.value, category)
+const canEdit = (location) => canEditLocation(authUser?.value, location)
+const canDelete = (location) => canDeleteLocation(authUser?.value, location)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.categories.delete', { slug: category?.slug }), {
+    intertiaJsRoute.delete(route('back-office.locations.delete', { slug: location?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -47,8 +46,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Categories', href: route('back-office.categories.index') },
-                { text: `${category?.name} details`, active: true }
+                { text: 'Locations', href: route('back-office.locations.index') },
+                { text: `${location?.name} details`, active: true }
             ],
         })
     )
@@ -59,21 +58,21 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${category?.name} details`" />
+    <Head :title="`${location?.name} details`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Category Details</h2>
+            <h2 class="text-lg font-semibold">Location Details</h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(category)" :href="route('back-office.categories.edit', { slug: category?.slug })"
+                <a v-if="canEdit(location)" :href="route('back-office.locations.edit', { slug: location?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     Edit
                 </a>
 
-                <button v-if="canDelete(category)" @click="showDeleteModal = true"
+                <button v-if="canDelete(location)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
                     Delete
@@ -89,24 +88,24 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ category?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ location?.name || 'N/A' }}</span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ category?.language?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ location?.language?.name || 'N/A' }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Parent</span>
-                        <span class="font-medium">{{ category?.parent?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ location?.parent?.name || 'N/A' }}</span>
                     </div>
 
                     <div>
                         <div class="text-gray-500 mb-1">Details</div>
-                        <div class="text-gray-700">{{ category?.details || 'N/A' }}</div>
+                        <div class="text-gray-700">{{ location?.details || 'N/A' }}</div>
                     </div>
                 </div>
 
@@ -114,7 +113,7 @@ onMounted(async () => {
                     <div class="text-gray-500">Tree</div>
 
                     <div class="flex flex-wrap gap-2">
-                        <span v-for="node in category?.bloodline || []" :key="node.id"
+                        <span v-for="node in location?.bloodline || []" :key="node.id"
                             class="bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
                             {{ node.name }}
                         </span>
@@ -122,23 +121,23 @@ onMounted(async () => {
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">SEO</div>
+                    <div class="text-gray-500 mb-2">Category</div>
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-500">Title</span>
-                            <span class="font-medium">{{ category?.seo_title || 'N/A' }}</span>
+                            <span class="font-medium">{{ location?.category?.name || 'N/A' }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Brief</span>
-                            <span class="font-medium">{{ category?.seo_brief || 'N/A' }}</span>
+                            <span class="text-gray-500">Parent</span>
+                            <span class="font-medium">{{ location?.category?.parent?.name || 'N/A' }}</span>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">Keywords</div>
+                            <div class="text-gray-500 mb-1">Details</div>
                             <div class="text-gray-700">
-                                {{ category?.seo_keywords || 'N/A' }}
+                                {{ location?.category?.details || 'N/A' }}
                             </div>
                         </div>
                     </div>
@@ -156,14 +155,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created At</span>
                         <span class="font-medium">
-                            {{ category?.created_at ? formatDateTime(category.created_at) : 'N/A' }}
+                            {{ location?.created_at ? formatDateTime(location.created_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created By</span>
                         <span class="font-medium">
-                            {{ category?.created_by?.name || 'N/A' }}
+                            {{ location?.created_by?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -172,14 +171,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated At</span>
                         <span class="font-medium">
-                            {{ category?.updated_at ? formatDateTime(category.updated_at) : 'N/A' }}
+                            {{ location?.updated_at ? formatDateTime(location.updated_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated By</span>
                         <span class="font-medium">
-                            {{ category?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ location?.latest_activity_log?.causer?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -188,13 +187,8 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Recent Locations</h3>
-            <RecentLocations :model="category" />
-        </div>
-
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
-            <RecentActivities :model-slug="'category'" :model="category" />
+            <RecentActivities :model-slug="'location'" :model="location" />
         </div>
 
         <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
@@ -211,11 +205,11 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete Category
+                            Delete Location
                         </h3>
 
                         <p class="text-sm font-medium">
-                            {{ category?.name }}
+                            {{ location?.name }}
                         </p>
 
                         <p class="text-sm text-gray-500">

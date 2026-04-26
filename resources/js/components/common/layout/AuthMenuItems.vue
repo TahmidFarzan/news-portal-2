@@ -17,7 +17,8 @@ import {
     faLanguage,
     faLayerGroup,
     faTags,
-    faStar
+    faStar,
+    faGlobe
 } from "@fortawesome/free-solid-svg-icons"
 
 library.add(
@@ -32,7 +33,8 @@ library.add(
     faLanguage,
     faLayerGroup,
     faTags,
-    faStar
+    faStar,
+    faGlobe
 )
 
 import {
@@ -59,7 +61,8 @@ const routeMap = {
         '/back-office/languages/*',
         '/back-office/categories/*',
         '/back-office/tags/*',
-        '/back-office/trend/*',
+        '/back-office/trends/*',
+        '/back-office/locations/*',
     ],
     Reports: ['/back-office/reports/*'],
 }
@@ -158,7 +161,14 @@ function isSubMenuVisible(key) {
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/trends/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="star" />
-                    Trend
+                    Trends
+                </a>
+
+                <a :href="route('back-office.locations.index')"
+                    class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+                    :class="isCurrentPage('/back-office/locations/*') ? 'bg-gray-200 font-medium' : ''">
+                    <FontAwesomeIcon icon="globe" />
+                    Locations
                 </a>
 
             </div>

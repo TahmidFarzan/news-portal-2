@@ -3,8 +3,9 @@ namespace App\Services;
 
 use App\Helpers\SystemHelper;
 use App\Models\Category;
-use App\Models\Tag;
 use App\Models\Language;
+use App\Models\Location;
+use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
@@ -310,6 +311,81 @@ class SearchService
         ];
     }
 
+    public function tags(Request $request): array
+    {
+        $query = Tag::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('only_trend') && $request->input('only_trend') == true) {
+            $query->whereHas('trend');
+        }
+
+        if ($request->filled('except_trend') && $request->input('except_trend') == true) {
+            $query->whereDoesntHave('trend');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+            'slug' => $row->slug,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function locations(Request $request): array
+    {
+        $query = Location::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('parent_id')) {
+            $query->where('parent_id', $request->input('parent_id'));
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        if ($request->filled('only_main') &&
+            $request->boolean('only_main') &&
+            ! $request->filled('parent_id')
+        ) {
+            $query->whereNull('parent_id');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
+            'has_descendants' => $row->has_descendants,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
     public function categoryTree(Request $request): array
     {
         $query = Category::whereNull('parent_id');
@@ -340,28 +416,37 @@ class SearchService
         ];
     }
 
-    public function tags(Request $request): array
+    public function locationTree(Request $request): array
     {
-        $query = Tag::query();
+        $query = Location::whereNull('parent_id');
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
-        $records = $query->orderBy('id', 'desc')
+        if ($request->filled('parent_id')) {
+            $parent = $this->location($request->input('parent_id'));
+            $root   = self::rootLocationParent($parent);
+            $query->where('id', $root->id);
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        $records = $query->orderBy('id', 'asc')
+            ->with(['children'])
+            ->orderBy('id', 'desc')
             ->paginate($request->input('per_page', 25));
 
-        $list = $records->map(fn($row) => [
-            'id'              => $row->id,
-            'name'            => $row->name,
-            'slug'            => $row->slug,
-        ]);
+        $list = self::formatLocationTree($records->getCollection(), 0, null);
 
         return [
             'items'        => $list,
             'total'        => $records->total(),
             'current_page' => $records->currentPage(),
             'last_page'    => $records->lastPage(),
+            'per_page'     => $records->perPage(),
         ];
     }
 
@@ -387,6 +472,13 @@ class SearchService
     public function language($slugOrId): Language
     {
         return Language::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
+
+    public function location($slugOrId): Location
+    {
+        return Location::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }
@@ -433,6 +525,54 @@ class SearchService
 
             if ($parent->parent_id !== null) {
                 $parent = self::rootCategoryParent($parent);
+            }
+        }
+
+        return $parent;
+    }
+
+    private static function formatLocationTree($records, $level = 0, $visited = null)
+    {
+        if ($visited === null) {
+            $visited = [];
+        }
+
+        $list = [];
+
+        foreach ($records as $record) {
+            if (in_array($record->id, $visited)) {
+                continue;
+            }
+
+            $visited[] = $record->id;
+
+            $list[] = [
+                'id'               => $record->id,
+                'name'             => $record->name,
+                'name_tree'        => $record->name_tree,
+                'indentation_name' => $record->indentation_name,
+            ];
+
+            if ($record->children && $record->children->isNotEmpty()) {
+                $list = array_merge(
+                    $list,
+                    self::formatLocationTree($record->children, $level + 1, $visited)
+                );
+            }
+        }
+
+        return $list;
+    }
+
+    private static function rootLocationParent(Location $record): Location
+    {
+        $parent = $record;
+
+        if ($record->parent_id !== null) {
+            $parent = $record->parent;
+
+            if ($parent->parent_id !== null) {
+                $parent = self::rootLocationParent($parent);
             }
         }
 
