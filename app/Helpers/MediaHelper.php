@@ -13,8 +13,8 @@ class MediaHelper
     public const MEDIA_ROLE_APP_FAVICON_IMAGE = 'app_favicon_image';
     public const MEDIA_ROLE_THUMBNAIL_IMAGE   = 'thumbnail';
 
-    public const EVENT_DESKTOP_BANNER_IMAGE     = 'event_desktop_banner_image';
-    public const EVENT_MOBILE_BANNER_IMAGE     = 'event_mobile_banner_image';
+    public const EVENT_DESKTOP_BANNER_IMAGE = 'event_desktop_banner_image';
+    public const EVENT_MOBILE_BANNER_IMAGE  = 'event_mobile_banner_image';
 
     public static function mediaRoles()
     {
@@ -59,7 +59,7 @@ class MediaHelper
 
     public static function defaultAppImage($resulation = "1:1", $mediaName = null)
     {
-        $mediaUrl     = self::defaultImageOnlineUrl($resulation, "App") ?? null;
+        $mediaUrl     = self::demoImageUrlByResulation($resulation, "App") ?? null;
         $replacements = ['&' => 'and', "'" => ''];
 
         $formatedMediaName = Str::replace(array_keys($replacements), array_values($replacements), $mediaName);
@@ -78,7 +78,7 @@ class MediaHelper
 
     public static function defaultAuthImage($resulation = "1:1", $mediaName = "user")
     {
-        $mediaUrl     = self::defaultImageOnlineUrl($resulation, "App") ?? null;
+        $mediaUrl     = self::demoImageUrlByResulation($resulation, "App") ?? null;
         $replacements = ['&' => 'and', "'" => ''];
 
         $formatedMediaName = Str::replace(array_keys($replacements), array_values($replacements), $mediaName);
@@ -94,20 +94,30 @@ class MediaHelper
         return $mediaUrl;
     }
 
-    public static function defaultDemoImage($resulation = "1:1", $text = null)
+    public static function demoImageUrlByResulation($resulation = "1:1", $text = null)
     {
-        return self::defaultImageOnlineUrl($resulation, $text);
+        return self::imageUrlGenerateFormOnlineByResulation($resulation, $text);
     }
 
-    private static function defaultImageOnlineUrl($resulation, $text = null)
+    public static function demoImageUrl($imageWidth, $imageHeight, $text = null)
     {
-        $url       = asset('uploads/images/16x9-1280x720.jpg');
+        return self::imageUrlGenerateFormOnline($imageWidth, $imageHeight, $text);
+    }
+
+    private static function imageUrlGenerateFormOnlineByResulation($resulation, $text = null)
+    {
         $imageSize = self::imageWidthHeightByRatio($resulation);
 
-        $imageWidth       = $imageSize["width"];
-        $imageHeight      = $imageSize["height"];
-        $imageBgColor     = "ededed";
-        $imageBgTextColor = "000000";
+        $imageWidth  = $imageSize["width"];
+        $imageHeight = $imageSize["height"];
+
+        return self::imageUrlGenerateFormOnline($imageWidth, $imageHeight, $text);
+    }
+
+    private static function imageUrlGenerateFormOnline($imageWidth, $imageHeight, $text = null, $imageBgColor = "ededed", $imageBgTextColor = "000000")
+    {
+        $imageBgColor     = $imageBgColor ?? "ededed";
+        $imageBgTextColor = $imageBgTextColor ?? "000000";
 
         $url = "https://dummyimage.com/{$imageWidth}x{$imageHeight}/{$imageBgColor}/{$imageBgTextColor}";
 
