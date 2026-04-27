@@ -16,51 +16,37 @@ class SearchController extends Controller
 
     public function genders(Request $request)
     {
-        $response = $this->searchService->genders($request);
-
-        return response()->json($response);
+        return response()->json($this->searchService->genders($request));
     }
 
     public function perPages(Request $request)
     {
-        $response = $this->searchService->perPages($request);
-
-        return response()->json($response);
+        return response()->json($this->searchService->perPages($request));
     }
 
     public function religions(Request $request)
     {
-        $response = $this->searchService->religions($request);
-
-        return response()->json($response);
+        return response()->json($this->searchService->religions($request));
     }
 
     public function maritalStatuses(Request $request)
     {
-        $response = $this->searchService->maritalStatuses($request);
-
-        return response()->json($response);
+        return response()->json($this->searchService->maritalStatuses($request));
     }
 
     public function activityLogEvents(Request $request)
     {
-        $response = $this->searchService->activityLogEvents($request);
-
-        return response()->json($response);
+        return response()->json($this->searchService->activityLogEvents($request));
     }
 
     public function activityLogSubjectTypes(Request $request)
     {
-        $response = $this->searchService->activityLogSubjectTypes($request);
-
-        return response()->json($response);
+        return response()->json($this->searchService->activityLogSubjectTypes($request));
     }
 
     public function users(Request $request)
     {
-        $response = $this->searchService->users($request);
-
-        return response()->json($response);
+        return response()->json($this->searchService->users($request));
     }
 
     public function userRoles(Request $request)
@@ -110,40 +96,31 @@ class SearchController extends Controller
 
     public function user(string | int $slugOrId)
     {
-        $record = $this->searchService->user($slugOrId);
-
-        return response()->json($record);
+        return response()->json($this->searchService->user($slugOrId));
     }
 
     public function userRole(string | int $slugOrId)
     {
-        $record = $this->searchService->userRole($slugOrId);
-
-        return response()->json($record);
+        return response()->json($this->searchService->userRole($slugOrId));
     }
 
     public function newsUserType(string | int $slugOrId)
     {
-        $record = $this->searchService->newsUserType($slugOrId);
-
-        return response()->json($record);
+        return response()->json($this->searchService->newsUserType($slugOrId));
     }
 
     public function language($slugOrId)
     {
-        $record = $this->searchService->language($slugOrId);
-        return response()->json($record);
+        return response()->json($this->searchService->language($slugOrId));
     }
 
     public function category($slugOrId)
     {
-        $record = $this->searchService->category($slugOrId);
-        return response()->json($record);
+        return response()->json($this->searchService->category($slugOrId));
     }
 
     public function location($slugOrId)
     {
-        $record = $this->searchService->locations($slugOrId);
-        return response()->json($record);
+        return response()->json($this->searchService->locations($slugOrId));
     }
 }
