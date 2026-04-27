@@ -55,7 +55,7 @@ class CategoryCacheService
     public function cachedRecords($key, $perPage = null, $page = 1)
     {
         CacheServerHelper::cachedData(
-            "product category {$key} page {$page}",
+            "category {$key} page {$page}",
             $this->dbRecords($perPage, $page),
             $this->cahedTime,
             ['category', $key]
@@ -65,7 +65,7 @@ class CategoryCacheService
     public function cachedRecordsCount($key)
     {
         CacheServerHelper::cachedData(
-            "product category {$key} count",
+            "category {$key} count",
             $this->dbRecordsCount(),
             $this->cahedTime,
             ['category', $key]
@@ -75,7 +75,7 @@ class CategoryCacheService
     public function cachedLastPageNo($key)
     {
         CacheServerHelper::cachedData(
-            "product category {$key} last page no",
+            "category {$key} last page no",
             $this->dbLastPageNo(),
             $this->cahedTime,
             ['category', $key]
@@ -88,7 +88,7 @@ class CategoryCacheService
 
     public function recordsCount($key)
     {
-        $cacheKey = "product category {$key} count";
+        $cacheKey = "category {$key} count";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -110,7 +110,7 @@ class CategoryCacheService
 
     public function lastPageNo($key)
     {
-        $cacheKey = "product category {$key} last page no";
+        $cacheKey = "category {$key} last page no";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -132,7 +132,7 @@ class CategoryCacheService
 
     public function records($key, $perPage = null, $page = 1)
     {
-        $cacheKey = "product category {$key} page {$page}";
+        $cacheKey = "category {$key} page {$page}";
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,

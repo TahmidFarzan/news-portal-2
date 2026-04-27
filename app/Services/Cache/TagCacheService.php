@@ -55,7 +55,7 @@ class TagCacheService
     public function cachedRecords($key, $perPage = null, $page = 1)
     {
         CacheServerHelper::cachedData(
-            "product tag {$key} page {$page}",
+            "tag {$key} page {$page}",
             $this->dbRecords($perPage, $page),
             $this->cahedTime,
             ['tag', $key]
@@ -65,7 +65,7 @@ class TagCacheService
     public function cachedRecordsCount($key)
     {
         CacheServerHelper::cachedData(
-            "product tag {$key} count",
+            "tag {$key} count",
             $this->dbRecordsCount(),
             $this->cahedTime,
             ['tag', $key]
@@ -75,7 +75,7 @@ class TagCacheService
     public function cachedLastPageNo($key)
     {
         CacheServerHelper::cachedData(
-            "product tag {$key} last page no",
+            "tag {$key} last page no",
             $this->dbLastPageNo(),
             $this->cahedTime,
             ['tag', $key]
@@ -88,7 +88,7 @@ class TagCacheService
 
     public function recordsCount($key)
     {
-        $cacheKey = "product tag {$key} count";
+        $cacheKey = "tag {$key} count";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -110,7 +110,7 @@ class TagCacheService
 
     public function lastPageNo($key)
     {
-        $cacheKey = "product tag {$key} last page no";
+        $cacheKey = "tag {$key} last page no";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -132,7 +132,7 @@ class TagCacheService
 
     public function records($key, $perPage = null, $page = 1)
     {
-        $cacheKey = "product tag {$key} page {$page}";
+        $cacheKey = "tag {$key} page {$page}";
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
