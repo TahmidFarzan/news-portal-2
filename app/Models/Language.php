@@ -22,9 +22,9 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('languages')]
 #[Fillable([
-        'name', 'code', 'slug',
-        'detail', 'created_by_id',
-    ])]
+    'name', 'code', 'slug',
+    'detail', 'created_by_id',
+])]
 #[UsePolicy(LanguagePolicy::class)]
 #[ObservedBy([LanguageObserver::class])]
 class Language extends Model

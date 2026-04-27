@@ -22,10 +22,10 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('tags')]
 #[Fillable([
-        'name', 'details', 'slug',
-        'language_id', 'created_by_id',
-        "seo_brief", 'seo_title', 'seo_keywords',
-    ])]
+    'name', 'details', 'slug',
+    'language_id', 'created_by_id',
+    "seo_brief", 'seo_title', 'seo_keywords',
+])]
 #[UsePolicy(TagPolicy::class)]
 #[ObservedBy([TagObserver::class])]
 class Tag extends Model

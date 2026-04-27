@@ -23,10 +23,10 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('categories')]
 #[Fillable([
-        'name', 'details', 'parent_id', 'slug',
-        'language_id', 'name_tree', "slug_tree", 'created_by_id',
-        "seo_brief", 'seo_title', 'seo_keywords',
-    ])]
+    'name', 'details', 'parent_id', 'slug',
+    'language_id', 'name_tree', "slug_tree", 'created_by_id',
+    "seo_brief", 'seo_title', 'seo_keywords',
+])]
 #[UsePolicy(CategoryPolicy::class)]
 #[ObservedBy([CategoryObserver::class])]
 class Category extends Model

@@ -31,14 +31,14 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('users')]
 #[Fillable([
-        'name', 'email', 'slug', 'password', 'is_default',
-        'user_role_id', 'marital_status',
-        'religion', 'gender', 'mobile', 'birth_date',
-        'address', 'created_by_id',
-    ])]
+    'name', 'email', 'slug', 'password', 'is_default',
+    'user_role_id', 'marital_status',
+    'religion', 'gender', 'mobile', 'birth_date',
+    'address', 'created_by_id',
+])]
 #[Hidden([
-        'password', 'remember_token', 'is_default',
-    ])]
+    'password', 'remember_token', 'is_default',
+])]
 #[UsePolicy(UserPolicy::class)]
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements MustVerifyEmail, HasMedia
