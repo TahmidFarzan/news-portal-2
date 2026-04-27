@@ -127,6 +127,27 @@ onMounted(async () => {
                     </div>
                 </div>
 
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="text-gray-500 mb-2">Sitemap</div>
+
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Sitemap url</span>
+                            <span class="font-medium">{{ event?.sitemap_url || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Feeds (RSS)</span>
+                        <span class="font-medium">{{ event?.feeds_rss_url || 'N/A' }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Feeds (ATOM)</span>
+                        <span class="font-medium">{{ event?.feeds_atom_url || 'N/A' }}</span>
+                    </div>
+                </div>
+
             </div>
         </div>
 

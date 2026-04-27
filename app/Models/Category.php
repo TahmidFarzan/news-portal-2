@@ -110,7 +110,7 @@ class Category extends Model
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.newses.categories");
+        return "";
     }
 
     public function getIsRecentCreatedAttribute(): bool

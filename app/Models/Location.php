@@ -110,7 +110,7 @@ class Location extends Model
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.newses.locations");
+        return "";
     }
 
     public function getHasParentAttribute(): bool

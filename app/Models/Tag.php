@@ -103,7 +103,7 @@ class Tag extends Model
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.newses.tags");
+        return "";
     }
 
     public function getIsRecentCreatedAttribute(): bool
