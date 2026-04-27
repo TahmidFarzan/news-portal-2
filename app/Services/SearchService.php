@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
+use App\Models\NewsUserType;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserRole;
@@ -412,6 +413,35 @@ class SearchService
         ];
     }
 
+    public function newsUserTypes(Request $request): array
+    {
+
+        $query = NewsUserType::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        $records = $query
+            ->orderByDesc('id')
+            ->paginate($request->input('per_page', 25));
+
+        $items = $records->map(fn($newsUserType) => [
+            'id'   => $newsUserType->id,
+            'name' => $newsUserType->name,
+        ]);
+
+        return [
+            'items'        => $items,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
     public function categoryTree(Request $request): array
     {
         $query = Category::whereNull('parent_id');
@@ -486,6 +516,11 @@ class SearchService
     public function userRole(int | string $slugOrId): UserRole
     {
         return UserRole::where('id', $slugOrId)->firstOrFail();
+    }
+
+    public function newsUserType(int | string $slugOrId): NewsUserType
+    {
+        return NewsUserType::where('id', $slugOrId)->firstOrFail();
     }
 
     public function category($slugOrId): Category

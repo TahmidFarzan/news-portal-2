@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 // use App\Models\User;
@@ -13,12 +12,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(UserRoleSeeder::class);
+        $this->call(NewsUserTypeSeeder::class);
+
         $this->call(UserSeeder::class);
 
         $this->call(LanguageSeeder::class);
+
         $this->call(CategorySeeder::class);
         $this->call(TagSeeder::class);
-
         $this->call(TrendSeeder::class);
         $this->call(LocationSeeder::class);
         $this->call(EventSeeder::class);
