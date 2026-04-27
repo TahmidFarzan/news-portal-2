@@ -4,6 +4,7 @@ namespace Database\Factories;
 use App\Models\Language;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Helpers\SystemHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -13,7 +14,7 @@ class EventFactory extends Factory
 {
     public function definition(): array
     {
-        $adminUserRole = UserRole::where("name", "Admin")->inRandomOrder()->first();
+        $adminUserRole = UserRole::where("name", SystemHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
         $language      = Language::where("code", "en_us")->first() ?? null;
 

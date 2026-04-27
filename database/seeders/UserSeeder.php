@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Helpers\SystemHelper;
 
 class UserSeeder extends Seeder
 {
@@ -31,7 +32,7 @@ class UserSeeder extends Seeder
         }
 
         // Seeder
-        $adminUserRole = UserRole::where("name", "Admin")->first();
+        $adminUserRole = UserRole::where("name", SystemHelper::USER_ROLE_ADMIN)->first();
         User::factory()->state([
             'name'              => "Default Admin",
             'email'             => "admin@gmail.com",
