@@ -8,6 +8,14 @@
                 $url = route("sitemaps.newses.categories");
             break;
 
+            case 'Tag':
+                $url = route("sitemaps.newses.tags");
+            break;
+
+            case 'Event':
+                $url = route("sitemaps.newses.events");
+            break;
+
             default:
                 $url = route("sitemaps.newses.categories");
             break;

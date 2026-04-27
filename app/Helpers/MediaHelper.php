@@ -13,9 +13,8 @@ class MediaHelper
     public const MEDIA_ROLE_APP_FAVICON_IMAGE = 'app_favicon_image';
     public const MEDIA_ROLE_THUMBNAIL_IMAGE   = 'thumbnail';
 
-    //
-    public const MEDIA_ROLE_PRODUCT_FEATURE_IMAGE     = 'product_feature_image';
-    public const MEDIA_ROLE_PRODUCT_IMAGE_GALLERY     = 'product_image_gallery';
+    public const EVENT_DESKTOP_BANNER_IMAGE     = 'event_desktop_banner_image';
+    public const EVENT_MOBILE_BANNER_IMAGE     = 'event_mobile_banner_image';
 
     public static function mediaRoles()
     {
@@ -27,8 +26,8 @@ class MediaHelper
             (object) ['id' => self::MEDIA_ROLE_APP_CPT_IMAGE, 'name' => 'App CPT Image'],
             (object) ['id' => self::MEDIA_ROLE_APP_FAVICON_IMAGE, 'name' => 'App Favicon Image'],
 
-            (object) ['id' => self::MEDIA_ROLE_PRODUCT_FEATURE_IMAGE, 'name' => 'Product feature Image'],
-            (object) ['id' => self::MEDIA_ROLE_PRODUCT_IMAGE_GALLERY, 'name' => 'Product image gallery'],
+            (object) ['id' => self::EVENT_DESKTOP_BANNER_IMAGE, 'name' => 'Event desktop banner image'],
+            (object) ['id' => self::EVENT_MOBILE_BANNER_IMAGE, 'name' => 'Event mobile banner image'],
 
         ]);
     }
@@ -98,21 +97,6 @@ class MediaHelper
     public static function defaultDemoImage($resulation = "1:1", $text = null)
     {
         return self::defaultImageOnlineUrl($resulation, $text);
-    }
-
-    public static function defaultDemoFile($fileType = "pdf")
-    {
-        return asset('uploads/files/pdf.pdf');
-    }
-
-    public static function defaultDemoAudio($fileType = "mp3")
-    {
-        return asset('uploads/audios/mp3.mp3');
-    }
-
-    public static function defaultDemoVideo($fileType = "mp4")
-    {
-        return asset('uploads/videos/16x9.mp4');
     }
 
     private static function defaultImageOnlineUrl($resulation, $text = null)

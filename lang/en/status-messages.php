@@ -58,7 +58,7 @@ return [
         ],
     ],
 
-    'tag'     => [
+    'tag'          => [
         'save'   => [
             'success' => 'Tag saved successfully.',
             'failed'  => 'Failed to save tag.',
@@ -73,7 +73,7 @@ return [
         ],
     ],
 
-    'trend'     => [
+    'trend'        => [
         'save'   => [
             'success' => 'Trend saved successfully.',
             'failed'  => 'Failed to save trend.',
@@ -88,7 +88,6 @@ return [
         ],
     ],
 
-
     'location'     => [
         'save'   => [
             'success' => 'Location saved successfully.',
@@ -101,6 +100,21 @@ return [
         'delete' => [
             'success' => 'Location deleted successfully.',
             'failed'  => 'Failed to delete location.',
+        ],
+    ],
+
+    'event'        => [
+        'save'   => [
+            'success' => 'Event saved successfully.',
+            'failed'  => 'Failed to save event.',
+        ],
+        'update' => [
+            'success' => 'Event updated successfully.',
+            'failed'  => 'Failed to update event.',
+        ],
+        'delete' => [
+            'success' => 'Event deleted successfully.',
+            'failed'  => 'Failed to delete event.',
         ],
     ],
 

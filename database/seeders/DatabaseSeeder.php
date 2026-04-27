@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(TrendSeeder::class);
         $this->call(LocationSeeder::class);
+        $this->call(EventSeeder::class);
     }
 }

@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Helpers\SystemHelper;
 use App\Models\Category;
+use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
 use App\Models\Tag;
@@ -376,6 +377,31 @@ class SearchService
             'slug'            => $row->slug,
             'parent'          => $row->parent,
             'has_descendants' => $row->has_descendants,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function events(Request $request): array
+    {
+        $query = Event::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+            'slug' => $row->slug,
         ]);
 
         return [

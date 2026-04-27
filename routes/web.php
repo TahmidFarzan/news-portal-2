@@ -6,6 +6,7 @@ use App\Http\Controllers\BackOffice\ActivityLogController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
+use App\Http\Controllers\BackOffice\EventController;
 
 // Backoffice
 use App\Http\Controllers\BackOffice\MediaController;
@@ -57,8 +58,10 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
     Route::get('languages', [SearchController::class, 'languages'])->name('languages');
     Route::get('categories', [SearchController::class, 'categories'])->name('categories');
-    Route::get('locations', [SearchController::class, 'locations'])->name('locations');
     Route::get('tags', [SearchController::class, 'tags'])->name('tags');
+    Route::get('locations', [SearchController::class, 'locations'])->name('locations');
+    Route::get('events', [SearchController::class, 'events'])->name('events');
+
     Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
     Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
 
@@ -171,6 +174,18 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [LocationController::class, 'delete'])->name('delete');
     });
 
+
+    Route::prefix('events')->name('events.')->group(function () {
+        Route::get('/', [EventController::class, 'index'])->name('index');
+        Route::get('create', [EventController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [EventController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [EventController::class, 'details'])->name('details');
+
+        Route::post('save', [EventController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [EventController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [EventController::class, 'delete'])->name('delete');
+    });
+
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
         Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
@@ -187,6 +202,7 @@ Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
     Route::prefix('newses')->name('newses.')->group(function () {
         Route::get('categories.xml', [SitemapController::class, 'categories'])->name('categories');
         Route::get('tags.xml', [SitemapController::class, 'tags'])->name('tags');
+        Route::get('events.xml', [SitemapController::class, 'events'])->name('events');
     });
 });
 

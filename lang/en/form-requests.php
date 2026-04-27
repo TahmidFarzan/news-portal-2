@@ -257,4 +257,30 @@ return [
             'required' => 'Category is required.',
         ],
     ],
+
+    'event'    => [
+        'name'                 => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be string.',
+            'max'      => 'Name max chars is 200.',
+            'unique'   => 'Name must be unique.',
+        ],
+
+        'desktop_banner_image' => [
+            'image'      => 'Desktop banner image must be image.',
+            'mimes'      => 'Desktop banner image must have valid mimes[image/*].',
+            'dimensions' => 'Desktop banner image must width 1300px & Height 90px.',
+        ],
+
+        'mobile_banner_image'  => [
+            'image'      => 'Mobile banner image must be image.',
+            'mimes'      => 'Mobile banner image must have valid mimes[image/*].',
+            'dimensions' => 'Mobile banner image must width 400px & Height 90px.',
+        ],
+
+        'language_id'          => [
+            'required'  => 'Language is required.',
+            "not_found" => 'Language is not exit.',
+        ],
+    ],
 ];

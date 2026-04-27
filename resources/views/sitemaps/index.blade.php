@@ -4,4 +4,12 @@
         <loc>{{ route('sitemaps.newses.categories') }}</loc>
         <lastmod>{{ now()->format('Y-m-d\TH:i:sP') }}</lastmod>
 	</sitemap>
+    <sitemap>
+        <loc>{{ route('sitemaps.newses.tags') }}</loc>
+        <lastmod>{{ now()->format('Y-m-d\TH:i:sP') }}</lastmod>
+	</sitemap>
+    <sitemap>
+        <loc>{{ route('sitemaps.newses.events') }}</loc>
+        <lastmod>{{ now()->format('Y-m-d\TH:i:sP') }}</lastmod>
+	</sitemap>
 </sitemapindex>

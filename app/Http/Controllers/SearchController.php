@@ -90,6 +90,11 @@ class SearchController extends Controller
         return response()->json($this->searchService->locations($request));
     }
 
+    public function events(Request $request)
+    {
+        return response()->json($this->searchService->events($request));
+    }
+
     public function categoryTree(Request $request)
     {
         return response()->json($this->searchService->categoryTree($request));

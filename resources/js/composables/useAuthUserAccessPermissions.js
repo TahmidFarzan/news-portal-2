@@ -251,7 +251,6 @@ export const canEditTrend = (authUser, trend) => {
 export const canDeleteTrend = (authUser, trend) => {
     if (!authUser, !trend) return false
 
-
     const authUserUserRole = getUserRole(authUser)
     const trendUserRole = getUserRole(trend)
 
@@ -295,7 +294,6 @@ export const canEditLocation = (authUser, location) => {
 export const canDeleteLocation = (authUser, location) => {
     if (!authUser, !location) return false
 
-
     const authUserUserRole = getUserRole(authUser)
     const locationUserRole = getUserRole(location)
 
@@ -308,6 +306,48 @@ export const canDeleteLocation = (authUser, location) => {
     return false
 }
 
+// Event Access Permission
+export const canCreateEvent = (authUser) => {
+    if (!authUser) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    return false
+}
+
+export const canEditEvent = (authUser, event) => {
+    if (!authUser, !event) return false
+
+    const authUserUserRole = getUserRole(authUser)
+
+    if (authUserUserRole === 'admin') return true
+
+    if (
+        authUserUserRole === 'news desk' &&
+        authUser.id === event?.created_by_id
+    ) {
+        return true
+    }
+
+    return false
+}
+
+export const canDeleteEvent = (authUser, event) => {
+    if (!authUser, !event) return false
+
+    const authUserUserRole = getUserRole(authUser)
+    const eventUserRole = getUserRole(event)
+
+    if (authUserUserRole === 'admin') return true
+
+    if ((authUserUserRole === 'news desk') && (authUser.id === event?.created_by_id)) {
+        return true
+    }
+
+    return false
+}
 
 // Layout Menu Access Permission
 export const canAccessActivityLogMenu = (authUser) => {

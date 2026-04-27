@@ -49,4 +49,20 @@ class SitemapController extends Controller
             ->header('Content-Type', 'application/xml');
     }
 
+
+    public function events(Request $request)
+    {
+        if ($request->filled('page')) {
+            $records = $this->sitemapService->getEvents($request);
+            return response()->view('sitemaps.attributes', compact('records'))
+                ->header('Content-Type', 'application/xml');
+        }
+
+        $routeFor = 'Event';
+        $lastPage = $this->sitemapService->getEventsLastPageNo();
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+            ->header('Content-Type', 'application/xml');
+    }
+
 }
