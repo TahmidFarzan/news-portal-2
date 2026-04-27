@@ -1,386 +1,237 @@
-export const getUserRole = (user) => user?.user_role?.name?.toLowerCase()
-
-export const hasUserRole = (user, userRoles) => {
-    if (!user) return false
-
-    const currentUserRole = getUserRole(user)
-    if (!currentUserRole) return false
-
-    const userRoleList = (Array.isArray(userRoles) ? userRoles : [userRoles])
-        .map(r => r.toLowerCase())
-
-    return userRoleList.includes(currentUserRole)
+const userRoles = {
+    Admin: 'Admin',
+    NewsDesk: 'News Desk',
 }
 
-// User Access Permission
+// Normalize user role once
+export const getUserRole = (user) =>
+    user?.user_role?.name?.toLowerCase()
+
+// Helper
+const isAdmin = (role) =>
+    role === userRoles.Admin.toLowerCase()
+
+const isNewsDesk = (role) =>
+    role === userRoles.NewsDesk.toLowerCase()
+
+// ================= USER =================
+
 export const canCreateUser = (authUser) => {
     if (!authUser) return false
 
-    const authUserUserRole = getUserRole(authUser)
-
-    if (authUserUserRole === 'admin') return true
-
-    return false
+    const role = getUserRole(authUser)
+    return isAdmin(role)
 }
 
 export const canEditUser = (authUser, targetUser) => {
-    if (!authUser, !targetUser) return false
+    if (!authUser || !targetUser) return false
 
-    const authUserUserRole = getUserRole(authUser)
-    const targetUserUserRole = getUserRole(targetUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if (
-        authUserUserRole === 'news desk' &&
-        authUser.id === targetUser?.id
-    ) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === targetUser.id
 }
 
 export const canDeleteUser = (authUser, targetUser) => {
-    if (!authUser, !targetUser) return false
-
+    if (!authUser || !targetUser) return false
     if (targetUser?.is_default) return false
 
-    const authUserUserRole = getUserRole(authUser)
-    const targetUserUserRole = getUserRole(targetUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if ((authUserUserRole === 'news desk') && (authUser.id === targetUser?.id)) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === targetUser.id
 }
 
 export const canActiveInactiveUser = (authUser, targetUser) => {
-    if (!authUser, !targetUser) return false
-
+    if (!authUser || !targetUser) return false
     if (targetUser?.is_default) return false
 
-    const authUserUserRole = getUserRole(authUser)
-    const targetUserUserRole = getUserRole(targetUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-
-    if ((authUserUserRole === 'news desk') && (authUser.id === targetUser?.id)) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === targetUser.id
 }
 
 export const canDeleteMedia = (authUser, media) => {
-    if (!authUser, !media) return false
+    if (!authUser || !media) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
-
-    if (authUserUserRole === 'news desk') return true
-
-    return false
+    return isAdmin(role) || isNewsDesk(role)
 }
 
-// Language Access Permission
+// ================= LANGUAGE =================
+
 export const canCreateLanguage = (authUser) => {
     if (!authUser) return false
-
-    const authUserUserRole = getUserRole(authUser)
-
-    if (authUserUserRole === 'admin') return true
-
-    return false
+    return isAdmin(getUserRole(authUser))
 }
 
 export const canEditLanguage = (authUser, language) => {
-    if (!authUser, !language) return false
+    if (!authUser || !language) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if (
-        authUserUserRole === 'news desk' &&
-        authUser.id === language?.created_by_id
-    ) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === language.created_by_id
 }
 
 export const canDeleteLanguage = (authUser, language) => {
-    if (!authUser, !language) return false
+    if (!authUser || !language) return false
 
+    const role = getUserRole(authUser)
 
-    const authUserUserRole = getUserRole(authUser)
-    const languageUserRole = getUserRole(language)
+    if (isAdmin(role)) return true
 
-    if (authUserUserRole === 'admin') return true
-
-    if ((authUserUserRole === 'news desk') && (authUser.id === language?.created_by_id)) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === language.created_by_id
 }
 
-// Category Access Permission
-export const canCreateCategory = (authUser) => {
-    if (!authUser) return false
+// ================= CATEGORY =================
 
-    const authUserUserRole = getUserRole(authUser)
-
-    if (authUserUserRole === 'admin') return true
-
-    return false
-}
+export const canCreateCategory = (authUser) =>
+    authUser && isAdmin(getUserRole(authUser))
 
 export const canEditCategory = (authUser, category) => {
-    if (!authUser, !category) return false
+    if (!authUser || !category) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if (
-        authUserUserRole === 'news desk' &&
-        authUser.id === category?.created_by_id
-    ) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === category.created_by_id
 }
 
 export const canDeleteCategory = (authUser, category) => {
-    if (!authUser, !category) return false
+    if (!authUser || !category) return false
 
+    const role = getUserRole(authUser)
 
-    const authUserUserRole = getUserRole(authUser)
-    const categoryUserRole = getUserRole(category)
+    if (isAdmin(role)) return true
 
-    if (authUserUserRole === 'admin') return true
-
-    if ((authUserUserRole === 'news desk') && (authUser.id === category?.created_by_id)) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === category.created_by_id
 }
 
-// Tag Access Permission
-export const canCreateTag = (authUser) => {
-    if (!authUser) return false
+// ================= TAG =================
 
-    const authUserUserRole = getUserRole(authUser)
-
-    if (authUserUserRole === 'admin') return true
-
-    return false
-}
+export const canCreateTag = (authUser) =>
+    authUser && isAdmin(getUserRole(authUser))
 
 export const canEditTag = (authUser, tag) => {
-    if (!authUser, !tag) return false
+    if (!authUser || !tag) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if (
-        authUserUserRole === 'news desk' &&
-        authUser.id === tag?.created_by_id
-    ) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === tag.created_by_id
 }
 
 export const canDeleteTag = (authUser, tag) => {
-    if (!authUser, !tag) return false
+    if (!authUser || !tag) return false
 
+    const role = getUserRole(authUser)
 
-    const authUserUserRole = getUserRole(authUser)
-    const tagUserRole = getUserRole(tag)
+    if (isAdmin(role)) return true
 
-    if (authUserUserRole === 'admin') return true
-
-    if ((authUserUserRole === 'news desk') && (authUser.id === tag?.created_by_id)) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === tag.created_by_id
 }
 
-// Trend Access Permission
-export const canCreateTrend = (authUser) => {
-    if (!authUser) return false
+// ================= TREND =================
 
-    const authUserUserRole = getUserRole(authUser)
-
-    if (authUserUserRole === 'admin') return true
-
-    return false
-}
+export const canCreateTrend = (authUser) =>
+    authUser && isAdmin(getUserRole(authUser))
 
 export const canEditTrend = (authUser, trend) => {
-    if (!authUser, !trend) return false
+    if (!authUser || !trend) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if (
-        authUserUserRole === 'news desk' &&
-        authUser.id === trend?.created_by_id
-    ) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === trend.created_by_id
 }
 
 export const canDeleteTrend = (authUser, trend) => {
-    if (!authUser, !trend) return false
+    if (!authUser || !trend) return false
 
-    const authUserUserRole = getUserRole(authUser)
-    const trendUserRole = getUserRole(trend)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if ((authUserUserRole === 'news desk') && (authUser.id === trend?.created_by_id)) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === trend.created_by_id
 }
 
-// Location Access Permission
-export const canCreateLocation = (authUser) => {
-    if (!authUser) return false
+// ================= LOCATION =================
 
-    const authUserUserRole = getUserRole(authUser)
-
-    if (authUserUserRole === 'admin') return true
-
-    return false
-}
+export const canCreateLocation = (authUser) =>
+    authUser && isAdmin(getUserRole(authUser))
 
 export const canEditLocation = (authUser, location) => {
-    if (!authUser, !location) return false
+    if (!authUser || !location) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if (
-        authUserUserRole === 'news desk' &&
-        authUser.id === location?.created_by_id
-    ) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === location.created_by_id
 }
 
 export const canDeleteLocation = (authUser, location) => {
-    if (!authUser, !location) return false
+    if (!authUser || !location) return false
 
-    const authUserUserRole = getUserRole(authUser)
-    const locationUserRole = getUserRole(location)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if ((authUserUserRole === 'news desk') && (authUser.id === location?.created_by_id)) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === location.created_by_id
 }
 
-// Event Access Permission
-export const canCreateEvent = (authUser) => {
-    if (!authUser) return false
+// ================= EVENT =================
 
-    const authUserUserRole = getUserRole(authUser)
-
-    if (authUserUserRole === 'admin') return true
-
-    return false
-}
+export const canCreateEvent = (authUser) =>
+    authUser && isAdmin(getUserRole(authUser))
 
 export const canEditEvent = (authUser, event) => {
-    if (!authUser, !event) return false
+    if (!authUser || !event) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if (
-        authUserUserRole === 'news desk' &&
-        authUser.id === event?.created_by_id
-    ) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === event.created_by_id
 }
 
 export const canDeleteEvent = (authUser, event) => {
-    if (!authUser, !event) return false
+    if (!authUser || !event) return false
 
-    const authUserUserRole = getUserRole(authUser)
-    const eventUserRole = getUserRole(event)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
+    if (isAdmin(role)) return true
 
-    if ((authUserUserRole === 'news desk') && (authUser.id === event?.created_by_id)) {
-        return true
-    }
-
-    return false
+    return isNewsDesk(role) && authUser.id === event.created_by_id
 }
 
-// Layout Menu Access Permission
-export const canAccessActivityLogMenu = (authUser) => {
-    if (!authUser) return false
+// ================= MENU =================
 
-    const authUserUserRole = getUserRole(authUser)
-
-    if (authUserUserRole === 'admin') return true
-
-    return false
-}
+export const canAccessActivityLogMenu = (authUser) =>
+    authUser && isAdmin(getUserRole(authUser))
 
 export const canAccessUserManagementMenu = (authUser) => {
     if (!authUser) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
-
-    if (authUserUserRole === 'news desk') return true
-
-    return false
+    return isAdmin(role) || isNewsDesk(role)
 }
-
 
 export const canAccessNewsAttributesMenu = (authUser) => {
     if (!authUser) return false
 
-    const authUserUserRole = getUserRole(authUser)
+    const role = getUserRole(authUser)
 
-    if (authUserUserRole === 'admin') return true
-
-    if (authUserUserRole === 'news desk') return true
-
-    return false
+    return isAdmin(role) || isNewsDesk(role)
 }

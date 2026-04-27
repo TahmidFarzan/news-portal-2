@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Auth\Access\Response;
+use App\Helpers\SystemHelper;
 
 class CategoryPolicy
 {
@@ -25,11 +26,11 @@ class CategoryPolicy
 
     public function update(User $authUser, Category $category): Response
     {
-        if ($authUser->hasUserRole("Admin")) {
+        if ($authUser->hasUserRole(SystemHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
         }
 
-        if ($authUser->hasUserRole("News desk") && ($authUser->id === $category->created_by_id)) {
+        if ($authUser->systemHelper::USER_ROLE_NEWS_DESK && ($authUser->id === $category->created_by_id)) {
             return Response::allow();
         }
 
@@ -39,11 +40,11 @@ class CategoryPolicy
     public function delete(User $authUser, Category $category): Response
     {
 
-        if ($authUser->hasUserRole("Admin")) {
+        if ($authUser->hasUserRole(SystemHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
         }
 
-        if ($authUser->hasUserRole("News desk") && ($authUser->id === $category->created_by_id)) {
+        if ($authUser->hasUserRole(SystemHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $category->created_by_id)) {
             return Response::allow();
         }
 

@@ -99,7 +99,7 @@ class UserRequest extends FormRequest
                 }
 
                 if ($userRole) {
-                    if (! $authUser->hasUserRole("Admin")) {
+                    if (! $authUser->hasUserRole(SystemHelper::USER_ROLE_ADMIN)) {
                         $validator->errors()->add(
                             'user_role_id', __("form-requests.user.user_role_id.do_not_have_permission"),
                         );

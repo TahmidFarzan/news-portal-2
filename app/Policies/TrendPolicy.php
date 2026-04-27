@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Trend;
 use Illuminate\Auth\Access\Response;
+use App\Helpers\SystemHelper;
 
 class TrendPolicy
 {
@@ -25,11 +26,11 @@ class TrendPolicy
 
     public function update(User $authUser, Trend $trend): Response
     {
-        if ($authUser->hasUserRole("Admin")) {
+        if ($authUser->hasUserRole(SystemHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
         }
 
-        if ($authUser->hasUserRole("News desk") && ($authUser->id === $trend->created_by_id)) {
+        if ($authUser->systemHelper::USER_ROLE_NEWS_DESK && ($authUser->id === $trend->created_by_id)) {
             return Response::allow();
         }
 
@@ -38,11 +39,11 @@ class TrendPolicy
 
     public function delete(User $authUser, Trend $trend): Response
     {
-        if ($authUser->hasUserRole("Admin")) {
+        if ($authUser->hasUserRole(SystemHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
         }
 
-        if ($authUser->hasUserRole("News desk") && ($authUser->id === $trend->created_by_id)) {
+        if ($authUser->systemHelper::USER_ROLE_NEWS_DESK && ($authUser->id === $trend->created_by_id)) {
             return Response::allow();
         }
 
