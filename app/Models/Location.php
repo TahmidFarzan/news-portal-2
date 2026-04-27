@@ -22,10 +22,11 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('locations')]
 #[Fillable([
-        'name', 'details', 'parent_id', 'slug', 'category_id',
-        'language_id', 'name_tree', "slug_tree", 'created_by_id',
-        'latitude','longitude',
-    ])]
+    'name', 'details', 'parent_id', 'slug', 'category_id',
+    'language_id', 'name_tree', "slug_tree", 'created_by_id',
+    "seo_brief", 'seo_title', 'seo_keywords',
+    'latitude','longitude',
+])]
 #[UsePolicy(LocationPolicy::class)]
 #[ObservedBy([LocationObserver::class])]
 class Location extends Model
@@ -34,7 +35,8 @@ class Location extends Model
 
     protected $appends = [
         'public_url', "has_parent", "indentation_name",
-        "has_descendants",
+        "has_descendants","feeds_rss_url", "feeds_atom_url", "sitemap_url",
+
     ];
 
     protected function casts(): array
@@ -94,6 +96,21 @@ class Location extends Model
         $url = null;
 
         return $url ?? "";
+    }
+
+    public function getFeedsAtomUrlAttribute(): string
+    {
+        return "";
+    }
+
+    public function getFeedsRSSUrlAttribute(): string
+    {
+        return "";
+    }
+
+    public function getSitemapUrlAttribute(): string
+    {
+        return route("sitemaps.newses.locations");
     }
 
     public function getHasParentAttribute(): bool

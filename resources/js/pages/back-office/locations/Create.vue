@@ -29,6 +29,9 @@ const saveForm = useForm({
     parent_id: location?.parent_id || null,
     language_id: location?.language_id || null,
     category_id: location?.category_id || null,
+    seo_brief: location?.seo_brief || null,
+    seo_title: location?.seo_title || null,
+    seo_keywords: location?.seo_keywords ? location.seo_keywords.split(',') : [],
 })
 
 function validateForm() {
@@ -224,6 +227,56 @@ onMounted(async () => {
 
                             <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.category_id }}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">SEO Settings</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                SEO Title
+                            </label>
+
+                            <input v-model="saveForm.seo_title" type="text" placeholder="Enter SEO title"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.seo_title" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.seo_title }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                SEO Brief
+                            </label>
+
+                            <textarea v-if="pageReady" v-model="saveForm.seo_brief" rows="3"
+                                placeholder="Enter SEO brief"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
+
+                            <p v-if="saveForm.errors.seo_brief" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.seo_brief }}
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                SEO Keywords
+                            </label>
+
+                            <MultiSelectTaggableSelect :selectedItem="saveForm.seo_keywords" fieldName="seo_keywords"
+                                :form="saveForm" :error="saveForm.errors.seo_keywords" placeholder="Add keywords" />
+
+                            <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.seo_keywords }}
                             </p>
                         </div>
 

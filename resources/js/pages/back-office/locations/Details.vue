@@ -143,6 +143,29 @@ onMounted(async () => {
                     </div>
                 </div>
 
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="text-gray-500 mb-2">SEO</div>
+
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Title</span>
+                            <span class="font-medium">{{ location?.seo_title || 'N/A' }}</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Brief</span>
+                            <span class="font-medium">{{ location?.seo_brief || 'N/A' }}</span>
+                        </div>
+
+                        <div>
+                            <div class="text-gray-500 mb-1">Keywords</div>
+                            <div class="text-gray-700">
+                                {{ location?.seo_keywords || 'N/A' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 

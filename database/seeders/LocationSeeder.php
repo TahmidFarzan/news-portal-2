@@ -63,7 +63,7 @@ class LocationSeeder extends Seeder
                 'longitude' => 91.7832,
                 'districts' => collect([
                     (object) ['name' => 'Chattogram', 'details' => 'Main seaport', 'latitude' => 22.3569, 'longitude' => 91.7832],
-                    (object) ['name' => 'Cox\'s Bazar', 'details' => 'Sea beach', 'latitude' => 21.4272, 'longitude' => 92.0058],
+                    (object) ['name' => "Cox's Bazar", 'details' => 'Sea beach', 'latitude' => 21.4272, 'longitude' => 92.0058],
                     (object) ['name' => 'Cumilla', 'details' => 'Historic city', 'latitude' => 23.4607, 'longitude' => 91.1809],
                     (object) ['name' => 'Feni', 'details' => 'Trade district', 'latitude' => 23.0159, 'longitude' => 91.3976],
                     (object) ['name' => 'Brahmanbaria', 'details' => 'Cultural district', 'latitude' => 23.9571, 'longitude' => 91.1115],
@@ -179,16 +179,20 @@ class LocationSeeder extends Seeder
     public function createLocation(?Location $parent, $location, $language, ?Category $category): Location
     {
         $saveLocation = Location::factory()->state([
-            'name'        => $location->name,
-            'details'     => $location->details ?? null,
-            'parent_id'   => $parent?->id,
-            'language_id' => $language?->id,
-            'category_id' => $category?->id ?? null,
-            'name_tree'   => ($parent ? $parent->name . ' - ' : '') . $location->name,
-            'slug_tree'   => ($parent ? $parent->slug . '/' : '') . Str::slug($location->name),
+            'name'         => $location->name,
+            'details'      => $location->details ?? null,
+            'parent_id'    => $parent?->id,
+            'language_id'  => $language?->id,
+            'category_id'  => $category?->id ?? null,
+            'name_tree'    => ($parent ? $parent->name . ' - ' : '') . $location->name,
+            'slug_tree'    => ($parent ? $parent->slug . '/' : '') . Str::slug($location->name),
 
-            'latitude'    => $location->latitude ?? null,
-            'longitude'   => $location->longitude ?? null,
+            'seo_title'    => $location->name,
+            'seo_brief'    => $location->details ?? null,
+            'seo_keywords' => $location->seo_keywords ?? null,
+
+            'latitude'     => $location->latitude ?? null,
+            'longitude'    => $location->longitude ?? null,
         ])->create();
 
         if (! empty($location->sub_categories)) {

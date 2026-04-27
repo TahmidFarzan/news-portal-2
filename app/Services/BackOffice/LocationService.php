@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\BackOffice;
 
+use App\Helpers\TagifyHelper;
 use App\Http\Requests\LocationRequest;
 use App\Models\Location;
 use Exception;
@@ -84,7 +85,10 @@ class LocationService
 
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('details', 'like', "%{$search}%");
+                    ->orWhere('details', 'like', "%{$search}%")
+                    ->orWhere('seo_brief', 'like', '%' . $search . '%')
+                    ->orWhere('seo_description', 'like', '%' . $search . '%')
+                    ->orWhere('seo_title', 'like', '%' . $search . '%');
             });
         }
 
@@ -98,14 +102,23 @@ class LocationService
         DB::beginTransaction();
 
         try {
-            $isNew = empty($location->id);
+            $isNew       = empty($location->id);
             $statusEvent = $isNew ? "save" : "update";
+
+            $seoKeywords = null;
+
+            if ($request->input('seo_keywords')) {
+                $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
+            }
 
             $location->name          = $request->input('name');
             $location->details       = $request->input('details');
             $location->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
             $location->category_id   = $request->input('category_id');
             $location->language_id   = $request->input('language_id');
+            $location->seo_title     = $request->input('seo_title', $request->input('name'));
+            $location->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+            $location->seo_keywords  = $seoKeywords;
             $location->created_by_id = $isNew ? Auth::id() : $location->created_by_id;
 
             $location->save();

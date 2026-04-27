@@ -202,6 +202,7 @@ Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
     Route::prefix('newses')->name('newses.')->group(function () {
         Route::get('categories.xml', [SitemapController::class, 'categories'])->name('categories');
         Route::get('tags.xml', [SitemapController::class, 'tags'])->name('tags');
+        Route::get('locations.xml', [SitemapController::class, 'locations'])->name('locations');
         Route::get('events.xml', [SitemapController::class, 'events'])->name('events');
     });
 });

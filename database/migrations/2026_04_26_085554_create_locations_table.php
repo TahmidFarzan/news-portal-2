@@ -24,6 +24,10 @@ return new class extends Migration
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
 
+            $table->string('seo_title', 255)->nullable();
+            $table->text('seo_brief')->nullable();
+            $table->text('seo_keywords')->nullable();
+
             $table->foreignId('created_by_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });

@@ -3,23 +3,28 @@ namespace App\Services;
 
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\EventCacheService;
+use App\Services\Cache\LocationCacheService;
 use App\Services\Cache\TagCacheService;
 use Illuminate\Http\Request;
 
 class SitemapService
 {
     protected CategoryCacheService $categoryCacheService;
+    protected LocationCacheService $locationCacheService;
     protected EventCacheService $eventCacheService;
     protected TagCacheService $tagCacheService;
 
     public function __construct(
         CategoryCacheService $categoryCacheService,
-        EventCacheService $eventCacheService,
         TagCacheService $tagCacheService,
+        LocationCacheService $locationCacheService,
+        EventCacheService $eventCacheService
     ) {
         $this->categoryCacheService = $categoryCacheService;
-        $this->eventCacheService = $eventCacheService;
         $this->tagCacheService      = $tagCacheService;
+        $this->locationCacheService = $locationCacheService;
+        $this->eventCacheService    = $eventCacheService;
+
     }
 
     public function getCategories(Request $request)
@@ -42,6 +47,17 @@ class SitemapService
     public function getTagsLastPageNo()
     {
         return $this->tagCacheService->lastPageNo('sitemap');
+    }
+
+    public function getLocations(Request $request)
+    {
+        $page = $request->query('page', 1);
+        return $this->locationCacheService->records('sitemap', null, $page);
+    }
+
+    public function getLocationsLastPageNo()
+    {
+        return $this->locationCacheService->lastPageNo('sitemap');
     }
 
     public function getEvents(Request $request)

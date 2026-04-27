@@ -49,6 +49,20 @@ class SitemapController extends Controller
             ->header('Content-Type', 'application/xml');
     }
 
+    public function locations(Request $request)
+    {
+        if ($request->filled('page')) {
+            $records = $this->sitemapService->getLocations($request);
+            return response()->view('sitemaps.attributes', compact('records'))
+                ->header('Content-Type', 'application/xml');
+        }
+
+        $routeFor = 'Location';
+        $lastPage = $this->sitemapService->getLocationsLastPageNo();
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+            ->header('Content-Type', 'application/xml');
+    }
 
     public function events(Request $request)
     {
