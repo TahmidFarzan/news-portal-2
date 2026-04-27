@@ -75,7 +75,7 @@ class LanguageService
 
         try {
             $isNew = empty($language->id);
-            $event = $isNew ?  "save": "update";
+            $statusEvent = $isNew ?  "save": "update";
 
             $language->name          = $request->input('name');
             $language->code          = $request->input('code');
@@ -88,13 +88,13 @@ class LanguageService
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.language.{$event}.success"),
+                'message' => __("status-messages.language.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
 
-            Log::error("Failed to {$event} language.", [
+            Log::error("Failed to {$statusEvent} language.", [
                 'exception' => $exception,
             ]);
 

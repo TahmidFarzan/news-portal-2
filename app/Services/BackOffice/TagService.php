@@ -83,7 +83,7 @@ class TagService
 
         try {
             $isNew = empty($tag->id);
-            $event = $isNew ? "save" : "update";
+            $statusEvent = $isNew ? "save" : "update";
 
             $seoKeywords = null;
 
@@ -105,12 +105,12 @@ class TagService
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.tag.{$event}.success"),
+                'message' => __("status-messages.tag.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error("Failed to {$event} tag.", [
+            Log::error("Failed to {$statusEvent} tag.", [
                 'exception' => $exception,
             ]);
 

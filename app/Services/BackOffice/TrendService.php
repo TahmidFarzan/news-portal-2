@@ -101,7 +101,7 @@ class TrendService
 
         try {
             $isNew = empty($trend->id);
-            $event = $isNew ? "save" : "update";
+            $statusEvent = $isNew ? "save" : "update";
 
             $trend->tag_id        = $request->input('tag_id');
             $trend->is_current    = $request->input('is_current') ? true : false;
@@ -113,12 +113,12 @@ class TrendService
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.trend.{$event}.success"),
+                'message' => __("status-messages.trend.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error("Failed to {$event} trend.", [
+            Log::error("Failed to {$statusEvent} trend.", [
                 'exception' => $exception,
             ]);
 

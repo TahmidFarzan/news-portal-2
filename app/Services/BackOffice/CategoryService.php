@@ -98,7 +98,7 @@ class CategoryService
 
         try {
             $isNew = empty($category->id);
-            $event = $isNew ? "save" : "update";
+            $statusEvent = $isNew ? "save" : "update";
 
             $seoKeywords = null;
 
@@ -121,12 +121,12 @@ class CategoryService
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.category.{$event}.success"),
+                'message' => __("status-messages.category.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error("Failed to {$event} category.", [
+            Log::error("Failed to {$statusEvent} category.", [
                 'exception' => $exception,
             ]);
 

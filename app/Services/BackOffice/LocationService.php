@@ -99,7 +99,7 @@ class LocationService
 
         try {
             $isNew = empty($location->id);
-            $event = $isNew ? "save" : "update";
+            $statusEvent = $isNew ? "save" : "update";
 
             $location->name          = $request->input('name');
             $location->details       = $request->input('details');
@@ -114,12 +114,12 @@ class LocationService
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.location.{$event}.success"),
+                'message' => __("status-messages.location.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error("Failed to {$event} location.", [
+            Log::error("Failed to {$statusEvent} location.", [
                 'exception' => $exception,
             ]);
 
