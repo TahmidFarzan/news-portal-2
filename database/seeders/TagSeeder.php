@@ -5,6 +5,7 @@ use App\Models\Language;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\SystemHelper;
 
 class TagSeeder extends Seeder
 {
@@ -27,7 +28,7 @@ class TagSeeder extends Seeder
             Tag::truncate();
         }
 
-        $language = Language::where("code", "en_us")->first() ?? null;
+        $language = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
         $tags     = collect([
 
             (object) ['name' => 'National', 'details' => 'National news', 'seo_keywords' => 'national news, country updates'],

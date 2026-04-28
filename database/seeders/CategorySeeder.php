@@ -7,6 +7,7 @@ use App\Models\Language;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Helpers\SystemHelper;
 
 class CategorySeeder extends Seeder
 {
@@ -29,7 +30,7 @@ class CategorySeeder extends Seeder
             Category::truncate();
         }
 
-        $language = Language::where("code", "en_us")->first() ?? null;
+        $language = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
 
         $categories = collect([
 

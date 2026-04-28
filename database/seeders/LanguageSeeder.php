@@ -4,6 +4,7 @@ namespace Database\Seeders;
 use App\Models\Language;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\SystemHelper;
 
 class LanguageSeeder extends Seeder
 {
@@ -28,7 +29,7 @@ class LanguageSeeder extends Seeder
 
         $languages = collect([
             (object) ['name' => 'Bangla', 'code' => 'bn_bd'],
-            (object) ['name' => 'English', 'code' => 'en_us'],
+            (object) ['name' => 'English', 'code' => SystemHelper::DEFAULT_LANGUAGE_CODE],
         ]);
 
         foreach ($languages as $language) {

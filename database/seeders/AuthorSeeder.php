@@ -62,7 +62,7 @@ class AuthorSeeder extends Seeder
             (object) ['name' => 'Tapan Kumar Bose', 'details' => 'Writer and researcher', 'seo_keywords' => 'tapan kumar bose, south asia studies'],
 
         ]);
-        $language = Language::where("code", "en_us")->first() ?? null;
+        $language = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
 
         foreach ($authors as $author) {
             Author::factory()->state([

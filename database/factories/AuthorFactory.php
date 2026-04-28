@@ -19,7 +19,7 @@ class AuthorFactory extends Factory
         $adminUserRole = UserRole::where("name", SystemHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
 
-        $language      = Language::where("code","en_us")->first() ?? null;
+        $language      = Language::where("code",SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
 
         $name    = $this->faker->name();
         $details = $this->faker->sentence();

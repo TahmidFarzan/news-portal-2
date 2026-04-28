@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use App\Helpers\SystemHelper;
 
 class EventSeeder extends Seeder
 {
@@ -30,7 +31,7 @@ class EventSeeder extends Seeder
             Event::truncate();
         }
 
-        $language = Language::where("code", "en_us")->first() ?? null;
+        $language = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
 
         $events = collect([
 

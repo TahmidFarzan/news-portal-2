@@ -6,6 +6,8 @@ class SystemHelper
     public const USER_ROLE_ADMIN     = 'Admin';
     public const USER_ROLE_NEWS_DESK = 'News Desk';
 
+    public const DEFAULT_LANGUAGE_CODE = "en_us";
+
     public static function perPages()
     {
         return collect([

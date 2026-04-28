@@ -7,6 +7,7 @@ use App\Models\Location;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Helpers\SystemHelper;
 
 class LocationSeeder extends Seeder
 {
@@ -29,7 +30,7 @@ class LocationSeeder extends Seeder
             Location::truncate();
         }
 
-        $language       = Language::where("code", "en_us")->first() ?? null;
+        $language       = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
         $nationCategory = Category::where("name", 'National')->first() ?? null;
 
         $locations = collect([
