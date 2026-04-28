@@ -142,7 +142,7 @@ class Event extends Model implements HasMedia
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::EVENT_DESKTOP_BANNER_IMAGE];
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE];
 
         if ($this->hasMedia($collectionName, $roleParameter)) {
             $imageMedia = $this->getMedia($collectionName, $roleParameter)
@@ -165,7 +165,7 @@ class Event extends Model implements HasMedia
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::EVENT_MOBILE_BANNER_IMAGE];
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE];
 
         if ($this->hasMedia($collectionName, $roleParameter)) {
             $imageMedia = $this->getMedia($collectionName, $roleParameter)

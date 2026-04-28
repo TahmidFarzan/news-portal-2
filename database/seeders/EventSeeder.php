@@ -89,7 +89,7 @@ class EventSeeder extends Seeder
                         $event->addMediaFromUrl($desktopBannerImageUrl)
                             ->usingName($event->name)
                             ->usingFileName($desktopBannerImageFileName)
-                            ->withCustomProperties(['caption' => $event->name, 'alt' => $event->name, "role" => MediaHelper::EVENT_DESKTOP_BANNER_IMAGE])
+                            ->withCustomProperties(['caption' => $event->name, 'alt' => $event->name, "role" => MediaHelper::MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE])
                             ->toMediaCollection($event->media_collection_name);
                     } else {
                         Log::info("Image not accessable user: {$event->name}");
@@ -113,7 +113,7 @@ class EventSeeder extends Seeder
                         $event->addMediaFromUrl($mobileBannerImageUrl)
                             ->usingName($event->name)
                             ->usingFileName($mobileBannerImageFileName)
-                            ->withCustomProperties(['caption' => $event->name, 'alt' => $event->name, "role" => MediaHelper::EVENT_MOBILE_BANNER_IMAGE])
+                            ->withCustomProperties(['caption' => $event->name, 'alt' => $event->name, "role" => MediaHelper::MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE])
                             ->toMediaCollection($event->media_collection_name);
                     } else {
                         Log::info("Image not accessable user: {$event->name}");
