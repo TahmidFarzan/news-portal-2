@@ -104,6 +104,26 @@ onMounted(async () => {
                     </div>
                 </div>
 
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div>
+                        <div class="text-gray-500 mb-1">Desktop banner image</div>
+                        <div class="text-gray-700">
+                            <img :src="author?.desktop_banner_image?.media_url || '/uploads/images/event-desktop.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div>
+                        <div class="text-gray-500 mb-1">Mobile banner image</div>
+                        <div class="text-gray-700">
+                            <img :src="author?.mobile_banner_image?.media_url || '/uploads/images/event-mobile.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="border border-gray-200 rounded-lg p-4">
                     <div class="text-gray-500 mb-2">SEO</div>
 
