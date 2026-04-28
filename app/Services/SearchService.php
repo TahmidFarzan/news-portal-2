@@ -488,6 +488,12 @@ class SearchService
         return UserRole::where('id', $slugOrId)->firstOrFail();
     }
 
+    public function language($slugOrId): Language
+    {
+        return Language::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
 
     public function category($slugOrId): Category
     {
@@ -496,9 +502,9 @@ class SearchService
             ->firstOrFail();
     }
 
-    public function language($slugOrId): Language
+    public function tag($slugOrId): Tag
     {
-        return Language::where('id', $slugOrId)
+        return Tag::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }
@@ -506,6 +512,13 @@ class SearchService
     public function location($slugOrId): Location
     {
         return Location::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
+
+    public function event($slugOrId): Event
+    {
+        return Event::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }

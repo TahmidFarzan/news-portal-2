@@ -109,8 +109,18 @@ class SearchController extends Controller
         return response()->json($this->searchService->category($slugOrId));
     }
 
+    public function tag($slugOrId)
+    {
+        return response()->json($this->searchService->tag($slugOrId));
+    }
+
     public function location($slugOrId)
     {
         return response()->json($this->searchService->locations($slugOrId));
+    }
+
+    public function event($slugOrId)
+    {
+        return response()->json($this->searchService->event($slugOrId));
     }
 }

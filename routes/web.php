@@ -67,8 +67,11 @@ Route::prefix('search')->name('search.')->group(function () {
 
     Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
     Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
-    Route::get('category/{slugOrId}', [SearchController::class, 'category'])->name('category');
     Route::get('language/{slugOrId}', [SearchController::class, 'language'])->name('language');
+    Route::get('category/{slugOrId}', [SearchController::class, 'category'])->name('category');
+    Route::get('tag/{slugOrId}', [SearchController::class, 'tag'])->name('tag');
+    Route::get('location/{slugOrId}', [SearchController::class, 'location'])->name('location');
+    Route::get('event/{slugOrId}', [SearchController::class, 'event'])->name('event');
 });
 
 Route::middleware('auth')->group(function () {
