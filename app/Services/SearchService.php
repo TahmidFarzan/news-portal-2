@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\SystemHelper;
+use App\Models\Author;
 use App\Models\Category;
 use App\Models\Event;
 use App\Models\Language;
@@ -412,6 +413,31 @@ class SearchService
         ];
     }
 
+    public function authors(Request $request): array
+    {
+        $query = Author::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+            'slug' => $row->slug,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
     public function categoryTree(Request $request): array
     {
         $query = Category::whereNull('parent_id');
@@ -519,6 +545,13 @@ class SearchService
     public function event($slugOrId): Event
     {
         return Event::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
+
+    public function author($slugOrId): Author
+    {
+        return Author::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }

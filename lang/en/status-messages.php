@@ -118,6 +118,21 @@ return [
         ],
     ],
 
+    'author'        => [
+        'save'   => [
+            'success' => 'Author saved successfully.',
+            'failed'  => 'Failed to save author.',
+        ],
+        'update' => [
+            'success' => 'Author updated successfully.',
+            'failed'  => 'Failed to update author.',
+        ],
+        'delete' => [
+            'success' => 'Author deleted successfully.',
+            'failed'  => 'Failed to delete author.',
+        ],
+    ],
+
     // Auth
     'auth'         => [
         'login'              => [

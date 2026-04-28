@@ -79,6 +79,11 @@ class SearchController extends Controller
         return response()->json($this->searchService->events($request));
     }
 
+    public function authors(Request $request)
+    {
+        return response()->json($this->searchService->authors($request));
+    }
+
     public function categoryTree(Request $request)
     {
         return response()->json($this->searchService->categoryTree($request));
@@ -122,5 +127,10 @@ class SearchController extends Controller
     public function event($slugOrId)
     {
         return response()->json($this->searchService->event($slugOrId));
+    }
+
+    public function author($slugOrId)
+    {
+        return response()->json($this->searchService->author($slugOrId));
     }
 }

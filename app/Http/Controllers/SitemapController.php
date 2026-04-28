@@ -79,4 +79,19 @@ class SitemapController extends Controller
             ->header('Content-Type', 'application/xml');
     }
 
+    public function authors(Request $request)
+    {
+        if ($request->filled('page')) {
+            $records = $this->sitemapService->getAuthors($request);
+            return response()->view('sitemaps.attributes', compact('records'))
+                ->header('Content-Type', 'application/xml');
+        }
+
+        $routeFor = 'Author';
+        $lastPage = $this->sitemapService->getAuthorsLastPageNo();
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+            ->header('Content-Type', 'application/xml');
+    }
+
 }

@@ -19,7 +19,7 @@ import {
     faTags,
     faStar,
     faFan,
-    faGlobe,
+    faGlobe
 
 } from "@fortawesome/free-solid-svg-icons"
 
@@ -37,8 +37,7 @@ library.add(
     faTags,
     faStar,
     faFan,
-    faGlobe
-
+    faGlobe,
 )
 
 import {
@@ -68,6 +67,7 @@ const routeMap = {
         '/back-office/trends/*',
         '/back-office/locations/*',
         '/back-office/events/*',
+        '/back-office/author/*',
     ],
     Reports: ['/back-office/reports/*'],
 }
@@ -181,6 +181,13 @@ function isSubMenuVisible(key) {
                     :class="isCurrentPage('/back-office/events/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="fan" />
                     Events
+                </a>
+
+                <a :href="route('back-office.authors.index')"
+                    class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+                    :class="isCurrentPage('/back-office/authors/*') ? 'bg-gray-200 font-medium' : ''">
+                    <FontAwesomeIcon icon="users" />
+                    Authors
                 </a>
 
             </div>

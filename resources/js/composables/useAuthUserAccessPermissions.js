@@ -215,6 +215,31 @@ export const canDeleteEvent = (authUser, event) => {
     return isNewsDesk(role) && authUser.id === event.created_by_id
 }
 
+// ================= AUTHOR =================
+
+export const canCreateAuthor = (authUser) =>
+    authUser && isAdmin(getUserRole(authUser))
+
+export const canEditAuthor = (authUser, author) => {
+    if (!authUser || !author) return false
+
+    const role = getUserRole(authUser)
+
+    if (isAdmin(role)) return true
+
+    return isNewsDesk(role) && authUser.id === author.created_by_id
+}
+
+export const canDeleteAuthor = (authUser, author) => {
+    if (!authUser || !author) return false
+
+    const role = getUserRole(authUser)
+
+    if (isAdmin(role)) return true
+
+    return isNewsDesk(role) && authUser.id === author.created_by_id
+}
+
 // ================= MENU =================
 
 export const canAccessActivityLogMenu = (authUser) =>

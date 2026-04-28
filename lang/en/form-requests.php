@@ -283,4 +283,20 @@ return [
             "not_found" => 'Language is not exit.',
         ],
     ],
+
+    'author'   => [
+        'name'          => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be string.',
+            'max'      => 'Name max chars is 200.',
+            'unique'   => 'Name must be unique.',
+        ],
+
+        'profile_image' => [
+            'image'      => 'Profile image image must be image.',
+            'mimes'      => 'Profile image image must have valid mimes[image/*].',
+            'dimensions' => 'Profile image image must have ratio 1:1 with min-width 512px & min-height 512px.',
+        ],
+
+    ],
 ];

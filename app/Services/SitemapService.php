@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Services\Cache\AuthorCacheService;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\EventCacheService;
 use App\Services\Cache\LocationCacheService;
@@ -12,19 +13,21 @@ class SitemapService
     protected CategoryCacheService $categoryCacheService;
     protected LocationCacheService $locationCacheService;
     protected EventCacheService $eventCacheService;
+    protected AuthorCacheService $authorCacheService;
     protected TagCacheService $tagCacheService;
 
     public function __construct(
         CategoryCacheService $categoryCacheService,
         TagCacheService $tagCacheService,
         LocationCacheService $locationCacheService,
-        EventCacheService $eventCacheService
+        EventCacheService $eventCacheService,
+        AuthorCacheService $authorCacheService,
     ) {
         $this->categoryCacheService = $categoryCacheService;
         $this->tagCacheService      = $tagCacheService;
         $this->locationCacheService = $locationCacheService;
         $this->eventCacheService    = $eventCacheService;
-
+        $this->authorCacheService   = $authorCacheService;
     }
 
     public function getCategories(Request $request)
@@ -69,5 +72,16 @@ class SitemapService
     public function getEventsLastPageNo()
     {
         return $this->eventCacheService->lastPageNo('sitemap');
+    }
+
+    public function getAuthors(Request $request)
+    {
+        $page = $request->query('page', 1);
+        return $this->authorCacheService->records('sitemap', null, $page);
+    }
+
+    public function getAuthorsLastPageNo()
+    {
+        return $this->authorCacheService->lastPageNo('sitemap');
     }
 }
