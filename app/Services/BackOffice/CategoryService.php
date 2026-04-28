@@ -111,7 +111,7 @@ class CategoryService
             $category->language_id   = $request->input('language_id');
             $category->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
             $category->seo_title     = $request->input('seo_title', $request->input('name'));
-            $category->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+            $category->seo_brief     = $request->input('seo_brief', $request->input('details'));
             $category->seo_keywords  = $seoKeywords;
             $category->created_by_id = $isNew ? Auth::id() : $category->created_by_id;
 

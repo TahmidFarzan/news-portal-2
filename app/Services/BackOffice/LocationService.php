@@ -117,7 +117,7 @@ class LocationService
             $location->category_id   = $request->input('category_id');
             $location->language_id   = $request->input('language_id');
             $location->seo_title     = $request->input('seo_title', $request->input('name'));
-            $location->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+            $location->seo_brief     = $request->input('seo_brief', $request->input('details'));
             $location->seo_keywords  = $seoKeywords;
             $location->created_by_id = $isNew ? Auth::id() : $location->created_by_id;
 

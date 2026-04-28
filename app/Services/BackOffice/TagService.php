@@ -95,7 +95,7 @@ class TagService
             $tag->details       = $request->input('details');
             $tag->language_id   = $request->input('language_id');
             $tag->seo_title     = $request->input('seo_title', $request->input('name'));
-            $tag->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+            $tag->seo_brief     = $request->input('seo_brief', $request->input('details'));
             $tag->seo_keywords  = $seoKeywords;
             $tag->created_by_id = $isNew ? Auth::id() : $tag->created_by_id;
 

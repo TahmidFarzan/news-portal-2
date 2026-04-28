@@ -96,7 +96,7 @@ class EventService
             $event->language_id = $request->input('language_id');
 
             $event->seo_title     = $request->input('seo_title', $request->input('name'));
-            $event->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+            $event->seo_brief     = $request->input('seo_brief', $request->input('details'));
             $event->seo_keywords  = $seoKeywords;
             $event->created_by_id = $isNew ? Auth::id() : $event->created_by_id;
 
