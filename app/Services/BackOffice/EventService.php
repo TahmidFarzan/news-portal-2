@@ -67,7 +67,6 @@ class EventService
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('details', 'like', "%{$search}%")
                     ->orWhere('seo_brief', 'like', '%' . $search . '%')
-                    ->orWhere('seo_description', 'like', '%' . $search . '%')
                     ->orWhere('seo_title', 'like', '%' . $search . '%');
             });
         }
