@@ -105,6 +105,16 @@ export const canEditCategory = (authUser, category) => {
     return isNewsDesk(role) && authUser.id === category.created_by_id
 }
 
+export const canEditCategory = (authUser, category) => {
+    if (!authUser || !category) return false
+
+    const role = getUserRole(authUser)
+
+    if (isAdmin(role)) return true
+
+    return isNewsDesk(role) && authUser.id === category.created_by_id
+}
+
 export const canDeleteCategory = (authUser, category) => {
     if (!authUser || !category) return false
 
@@ -114,6 +124,7 @@ export const canDeleteCategory = (authUser, category) => {
 
     return isNewsDesk(role) && authUser.id === category.created_by_id
 }
+
 
 // ================= TAG =================
 
