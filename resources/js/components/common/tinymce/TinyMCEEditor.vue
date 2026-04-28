@@ -1,0 +1,239 @@
+<template>
+    <div>
+        <Editor v-if="pageReady && form" v-model="form[inputField]" :init="editorInit"
+            :license-key="tinymceLicenceKey" />
+
+        <BFormInput v-if="pageReady && form" v-model="form['editor_media_ids']" size="sm" type="hidden" />
+
+        <SelectMediaFromMediaLibery ref="mediaLibrary" v-model:showModal="showMediaLibrary"
+            :fetch-url="route('search.medias')" :media-type="'All'" :multiple="true" input-prefix="editor"
+            @media-selected="handleMediaSelected" :hide-default-open-button="true" />
+    </div>
+</template>
+
+<script setup>
+import { computed, inject, ref } from 'vue'
+import Editor from '@tinymce/tinymce-vue'
+import { BFormInput } from 'bootstrap-vue-next'
+import SelectMediaFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
+import axios from 'axios'
+
+import 'tinymce/tinymce'
+import 'tinymce/models/dom'
+import 'tinymce/themes/silver'
+import 'tinymce/icons/default'
+import 'tinymce/plugins/lists'
+import 'tinymce/plugins/link'
+import 'tinymce/plugins/table'
+import 'tinymce/plugins/code'
+import 'tinymce/plugins/help'
+import 'tinymce/plugins/wordcount'
+import 'tinymce/plugins/preview'
+import 'tinymce/plugins/fullscreen'
+import 'tinymce/plugins/media'
+import 'tinymce/plugins/charmap'
+import 'tinymce/plugins/emoticons'
+import 'tinymce/plugins/searchreplace'
+import 'tinymce/plugins/autosave'
+import 'tinymce/plugins/pagebreak'
+import 'tinymce/plugins/importcss'
+import 'tinymce/plugins/visualblocks'
+import 'tinymce/plugins/visualchars'
+import 'tinymce/plugins/codesample'
+import 'tinymce/plugins/anchor'
+import 'tinymce/plugins/advlist'
+
+const {
+    form,
+    inputField,
+    errorField = '',
+    isSimple = true,
+    textBoxHeight = 450,
+    enableMediaUpload = false,
+    enableSelectFormMediaLibery = false
+} = defineProps({
+    form: { type: Object, required: true },
+    inputField: { type: String, required: true },
+    errorField: { type: String, default: '' },
+    isSimple: { type: Boolean, default: true },
+    textBoxHeight: { type: Number, default: 450 },
+    enableMediaUpload: { type: Boolean, default: false },
+    enableSelectFormMediaLibery: { type: Boolean, default: false },
+})
+
+const pageReady = inject('pageReady')
+
+const tinymceLicenceKey = import.meta.env.VITE_TINY_MCE_TEXT_EDITOR_LICENSE_KEY || 'gpl'
+
+const showMediaLibrary = ref(false)
+const mediaLibrary = ref(null)
+
+const editorInit = computed(() => {
+    const config = {
+        base_url: '/vendor/tinymce',
+        suffix: '.min',
+        height: textBoxHeight,
+        toolbar_sticky: false,
+        menubar: false,
+        automatic_uploads: false,
+        relative_urls: false,
+        remove_script_host: false,
+        convert_urls: false,
+        media_live_embeds: true,
+        valid_elements: '*[*]',
+        extended_valid_elements: '*[*]',
+        entity_encoding: 'raw',
+        content_css: false,
+        plugins:
+            'lists link table code help wordcount preview fullscreen media charmap emoticons searchreplace autosave pagebreak importcss visualblocks visualchars codesample anchor advlist',
+        toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | table | code',
+    }
+
+    if (!isSimple) {
+        config.menubar = 'file edit view insert format tools table help'
+        config.toolbar =
+            (enableSelectFormMediaLibery ? 'openMediaLibraryButton | ' : '') +
+            (enableMediaUpload
+                ? 'insertImageButton insertFileButton insertVideoButton insertAudioButton | '
+                : '') +
+            'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | ' +
+            'alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | ' +
+            'forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview save print | media link anchor codesample | ltr rtl'
+
+        config.setup = (editor) => {
+            if (enableSelectFormMediaLibery) {
+                editor.ui.registry.addButton('openMediaLibraryButton', {
+                    text: 'Open Media Library',
+                    onAction: () => {
+                        showMediaLibrary.value = true
+                        if (mediaLibrary.value) mediaLibrary.value.openModal()
+                    },
+                })
+            }
+
+            if (enableMediaUpload) {
+                const uploadUrl = '/back-office/medias/quick-save'
+                const addButton = (name, text, type, accept) => {
+                    editor.ui.registry.addButton(name, {
+                        text,
+                        onAction: async () => {
+                            const input = document.createElement('input')
+                            input.type = 'file'
+                            input.accept = accept
+                            input.style.display = 'none'
+                            document.body.appendChild(input)
+
+                            input.onchange = async (e) => {
+                                const file = e.target.files[0]
+                                if (!file) return input.remove()
+
+                                const caption = prompt(`Enter ${type} caption:`, '') || ''
+                                const alt = prompt(`Enter ${type} alt text:`, '') || ''
+
+                                const formData = new FormData()
+                                formData.append('caption', caption)
+                                formData.append('alt', alt)
+                                formData.append('media', file)
+
+                                try {
+                                    const response = await axios.post(uploadUrl, formData, {
+                                        headers: { 'Content-Type': 'multipart/form-data' },
+                                    })
+                                    const media = response.data?.media || {}
+                                    const mediaUrl = media?.media_url || media?.url || ''
+                                    const id = media?.id || ''
+                                    let html = ''
+
+                                    switch (type) {
+                                        case 'image':
+                                            html = `<a data-fancybox="content-images" data-src="${mediaUrl}" data-caption="${caption}" class="mb-2 mt-2"><img src="${mediaUrl}" class="img img-fluid object-fit-scale border rounded d-block"></a>`
+                                            break
+                                        case 'video':
+                                            html = `<div class="ratio ratio-16x9 mb-2 mt-2"><video controls src="${mediaUrl}" class="file-embed border rounded"></video></div>`
+                                            break
+                                        case 'audio':
+                                            html = `<div class="ratio ratio-16x9 mb-2 mt-2"><audio controls src="${mediaUrl}" class="file-embed border rounded"></audio></div>`
+                                            break
+                                        case 'file':
+                                            const embed = confirm('Do you want to embed the file?')
+                                            if (embed) {
+                                                html = `<div class="w-100 h-auto"><iframe src="${mediaUrl}" title="${caption}" width="100%" height="500"></iframe></div>`
+                                            } else {
+                                                const anchorText = prompt('Enter link text:', media?.name || 'Download File')
+                                                const target = confirm('Open in new tab?') ? ' target="_blank"' : ''
+                                                html = `<a href="${mediaUrl}"${target} class="btn btn-sm btn-link">${anchorText}</a>`
+                                            }
+                                            break
+                                    }
+
+                                    editor.insertContent(html)
+                                    if (id) updateEditorMediaIds(id)
+                                } catch (err) {
+                                    console.error(err)
+                                    editor.notificationManager.open({
+                                        text: `Upload failed: ${err.message}`,
+                                        type: 'error',
+                                        timeout: 5000,
+                                    })
+                                } finally {
+                                    input.remove()
+                                }
+                            }
+
+                            input.click()
+                        },
+                    })
+                }
+
+                addButton('insertImageButton', 'Insert Image', 'image', 'image/*')
+                addButton('insertFileButton', 'Insert File', 'file', '.csv,.pdf,.doc,.docx,.txt,.xlsx,.xls')
+                addButton('insertVideoButton', 'Insert Video', 'video', 'video/*')
+                addButton('insertAudioButton', 'Insert Audio', 'audio', 'audio/*')
+
+                const updateEditorMediaIds = (id) => {
+                    if (!form['editor_media_ids']) form['editor_media_ids'] = ''
+                    if (form['editor_media_ids'].length > 0) form['editor_media_ids'] += ','
+                    form['editor_media_ids'] += id
+                }
+            }
+        }
+    }
+
+    return config
+})
+
+const handleMediaSelected = (selected) => {
+    const editor = tinymce.activeEditor
+    if (!editor) return
+
+    const selectedArray = Array.isArray(selected) ? selected : [selected]
+
+    selectedArray.forEach((media) => {
+        const type = media.media_type || media.type || media.mime_type?.split('/')[0] || 'file'
+        const id = media.id
+        const url = media.url || media.media_url
+        const caption = media.caption || media.alt || ''
+        let html = ''
+
+        switch (type) {
+            case 'image':
+                html = `<a data-fancybox="content-images" data-src="${url}" data-caption="${caption}" class="mb-2 mt-2"><img src="${url}" class="img img-fluid object-fit-scale border rounded d-block"></a>`
+                break
+            case 'video':
+                html = `<div class="ratio ratio-16x9 mb-2 mt-2"><video controls src="${url}" class="file-embed border rounded"></video></div>`
+                break
+            case 'audio':
+                html = `<div class="ratio ratio-16x9 mb-2 mt-2"><audio controls src="${url}" class="file-embed border rounded"></audio></div>`
+                break
+            default:
+                html = `<div class="w-100 h-auto"><iframe src="${url}" title="${caption}" width="100%" height="500"></iframe></div>`
+                break
+        }
+
+        editor.insertContent(html)
+        if (!form['editor_media_ids']) form['editor_media_ids'] = ''
+        if (form['editor_media_ids'].length > 0) form['editor_media_ids'] += ','
+        form['editor_media_ids'] += id
+    })
+}
+</script>
