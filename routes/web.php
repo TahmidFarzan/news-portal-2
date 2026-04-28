@@ -61,7 +61,6 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('tags', [SearchController::class, 'tags'])->name('tags');
     Route::get('locations', [SearchController::class, 'locations'])->name('locations');
     Route::get('events', [SearchController::class, 'events'])->name('events');
-    Route::get('news-user-types', [SearchController::class, 'newsUserTypes'])->name('news-user-types');
 
     Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
     Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
@@ -70,7 +69,6 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
     Route::get('category/{slugOrId}', [SearchController::class, 'category'])->name('category');
     Route::get('language/{slugOrId}', [SearchController::class, 'language'])->name('language');
-    Route::get('news-user-type/{slugOrId}', [SearchController::class, 'newsUserType'])->name('news-user-type');
 });
 
 Route::middleware('auth')->group(function () {

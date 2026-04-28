@@ -79,11 +79,6 @@ class SearchController extends Controller
         return response()->json($this->searchService->events($request));
     }
 
-    public function newsUserTypes(Request $request)
-    {
-        return response()->json($this->searchService->newsUserTypes($request));
-    }
-
     public function categoryTree(Request $request)
     {
         return response()->json($this->searchService->categoryTree($request));
@@ -102,11 +97,6 @@ class SearchController extends Controller
     public function userRole(string | int $slugOrId)
     {
         return response()->json($this->searchService->userRole($slugOrId));
-    }
-
-    public function newsUserType(string | int $slugOrId)
-    {
-        return response()->json($this->searchService->newsUserType($slugOrId));
     }
 
     public function language($slugOrId)

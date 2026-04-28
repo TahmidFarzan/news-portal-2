@@ -6,12 +6,6 @@ class SystemHelper
     public const USER_ROLE_ADMIN     = 'Admin';
     public const USER_ROLE_NEWS_DESK = 'News Desk';
 
-    public const NEWS_USER_TYPE_AUTHOR         = 'Author';
-    public const NEWS_USER_TYPE_SPICIAL_AUTHOR = 'Spical Author';
-
-    public const NEWS_USER_TYPE_EDITOR     = 'Editor';
-    public const NEWS_USER_TYPE_SUB_EDITOR = 'Sub Editor';
-
     public static function perPages()
     {
         return collect([
