@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\SystemHelper;
+use App\Helpers\MediaHelper;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Event;
@@ -12,6 +13,8 @@ use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class SearchService
 {
@@ -428,6 +431,48 @@ class SearchService
             'id'   => $row->id,
             'name' => $row->name,
             'slug' => $row->slug,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function medias(Request $request): array
+    {
+        $query = Media::query();
+
+        if ($request->filled('search')) {
+            $query->where(fn($q) =>
+                $q->where('name', 'like', '%' . $request->input('search') . '%')
+                    ->orWhere('custom_properties->alt', 'like', '%' . $request->input('search') . '%')
+                    ->orWhere('custom_properties->caption', 'like', '%' . $request->input('search') . '%')
+            );
+        }
+
+        if ($request->filled('media_type') &&
+            Str::lower($request->input('media_type')) !== 'all'
+        ) {
+            $query->where('mime_type', 'like', $request->input('media_type') . '%');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 50));
+
+        $list = $records->map(fn($media) => [
+            'id'              => $media->id,
+            'name'            => $media->name,
+            'uuid'            => $media->uuid,
+            'media_mime_type' => $media->mime_type,
+            'caption'         => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
+            'alt'             => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
+            'media_type'      => $media->getTypeFromMime(),
+            'url'             => $media->getUrl(),
+            'media_url'       => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
+            'media_srcset'    => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
         ]);
 
         return [

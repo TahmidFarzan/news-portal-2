@@ -64,6 +64,8 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('events', [SearchController::class, 'events'])->name('events');
     Route::get('authors', [SearchController::class, 'authors'])->name('authors');
 
+    Route::get('medias', [SearchController::class, 'medias'])->name('medias');
+
     Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
     Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
 

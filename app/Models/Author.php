@@ -97,8 +97,8 @@ class Author extends Model implements HasMedia
 
     public function registerMediaConversions($spatieMedia = null): void
     {
-        $this->addMediaConversion('webp')
-            ->format('webp')
+        $this->addMediaConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+            ->format(MediaHelper::DEFAULT_MEDIA_CONVERSION)
             ->quality(80)
             ->performOnCollections("Author")
             ->queued();
@@ -152,8 +152,8 @@ class Author extends Model implements HasMedia
 
             if (isset($imageMedia)) {
 
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion('webp') ? $imageMedia->getUrl('webp') : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion('webp') ? $imageMedia->getSrcset('webp') : $imageMedia->getSrcset();
+                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $imageMedia->getUrl();
+                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $imageMedia->getSrcset();
 
                 $image = $imageMedia;
             }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Activitylog\Models\Activity;
+use App\Helpers\MediaHelper;
 
 class MediaService
 {
@@ -26,8 +27,8 @@ class MediaService
         $media->load([
             'model',
         ]);
-        $media->media_url = $media->hasGeneratedConversion('webp') ?  $media->getUrl('webp') :  $media->getUrl();
-        $media->media_srcset = $media->hasGeneratedConversion('webp') ?  $media->getSrcset('webp') :  $media->getSrcset();
+        $media->media_url = $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ?  $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) :  $media->getUrl();
+        $media->media_srcset = $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ?  $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) :  $media->getSrcset();
         $media->activity_logs = $this->activityLogs($media);
         $media = $media->toArray();
         return $media;

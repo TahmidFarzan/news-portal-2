@@ -84,6 +84,11 @@ class SearchController extends Controller
         return response()->json($this->searchService->authors($request));
     }
 
+    public function medias(Request $request)
+    {
+        return response()->json($this->searchService->medias($request));
+    }
+
     public function categoryTree(Request $request)
     {
         return response()->json($this->searchService->categoryTree($request));
