@@ -150,12 +150,8 @@ onMounted(async () => {
                                 Details
                             </label>
 
-                            <textarea v-if="pageReady" v-model="saveForm.details" rows="4" placeholder="Enter details"
-                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.details ? 'border-red-500' : 'border-gray-300'"></textarea>
-
-                                <TinyMCEEditor inputField="details" :form="saveForm" erroField="details"
-                                    :isSimple="true" :enableMediaUpload="false" :enableSelectFormMediaLibery="false"/>
+                            <TinyMCEEditor inputField="details" :form="saveForm" erroField="details" :isSimple="true"
+                                :enableMediaUpload="false" :enableSelectFormMediaLibery="false" />
 
                             <p v-if="saveForm.errors.details" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.details }}
@@ -183,7 +179,7 @@ onMounted(async () => {
                             </p>
 
                             <img :src="author?.profile_image?.media_url || '/uploads/images/desktop-mobile.png'"
-                            class="object-cover rounded-xl border border-gray-200 mt-2"/>
+                                class="object-cover rounded-xl border border-gray-200 mt-2" />
                         </div>
 
                     </div>
