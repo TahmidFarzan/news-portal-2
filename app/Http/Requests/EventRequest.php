@@ -70,12 +70,6 @@ class EventRequest extends FormRequest
                     $sameQuery->where("id", "!=", $event->id);
                 }
 
-                if (! empty($data["has_parent"])) {
-                    $sameQuery->where("parent_id", $data["parent_id"]);
-                } else {
-                    $sameQuery->whereNull("parent_id");
-                }
-
                 if ($sameQuery->count() > 0) {
                     $validator->errors()->add(
                         'name',
