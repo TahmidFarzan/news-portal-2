@@ -14,7 +14,7 @@
 <script setup>
 import { computed, inject, ref } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
-import { BFormInput } from 'bootstrap-vue-next'
+import tinymce from 'tinymce/tinymce'
 import SelectMediaFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
 import axios from 'axios'
 
@@ -26,13 +26,13 @@ import 'tinymce/plugins/lists'
 import 'tinymce/plugins/link'
 import 'tinymce/plugins/table'
 import 'tinymce/plugins/code'
-import 'tinymce/plugins/help'
+
 import 'tinymce/plugins/wordcount'
 import 'tinymce/plugins/preview'
 import 'tinymce/plugins/fullscreen'
 import 'tinymce/plugins/media'
 import 'tinymce/plugins/charmap'
-import 'tinymce/plugins/emoticons'
+
 import 'tinymce/plugins/searchreplace'
 import 'tinymce/plugins/autosave'
 import 'tinymce/plugins/pagebreak'
@@ -42,6 +42,10 @@ import 'tinymce/plugins/visualchars'
 import 'tinymce/plugins/codesample'
 import 'tinymce/plugins/anchor'
 import 'tinymce/plugins/advlist'
+
+
+import 'tinymce/skins/ui/oxide/skin.css'
+import 'tinymce/skins/content/default/content.css'
 
 const {
     form,
@@ -70,8 +74,8 @@ const mediaLibrary = ref(null)
 
 const editorInit = computed(() => {
     const config = {
-        base_url: '/vendor/tinymce',
-        suffix: '.min',
+        skin: false,
+        content_css: false,
         height: textBoxHeight,
         toolbar_sticky: false,
         menubar: false,
@@ -83,14 +87,14 @@ const editorInit = computed(() => {
         valid_elements: '*[*]',
         extended_valid_elements: '*[*]',
         entity_encoding: 'raw',
-        content_css: false,
+
         plugins:
-            'lists link table code help wordcount preview fullscreen media charmap emoticons searchreplace autosave pagebreak importcss visualblocks visualchars codesample anchor advlist',
+            'lists link table code wordcount preview fullscreen media charmap searchreplace autosave pagebreak importcss visualblocks visualchars codesample anchor advlist',
         toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | table | code',
     }
 
     if (!isSimple) {
-        config.menubar = 'file edit view insert format tools table help'
+        config.menubar = 'file edit view insert format tools table'
         config.toolbar =
             (enableSelectFormMediaLibery ? 'openMediaLibraryButton | ' : '') +
             (enableMediaUpload
@@ -98,7 +102,7 @@ const editorInit = computed(() => {
                 : '') +
             'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | ' +
             'alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | ' +
-            'forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview save print | media link anchor codesample | ltr rtl'
+            'forecolor backcolor removeformat | pagebreak | charmap | fullscreen preview save print | media link anchor codesample | ltr rtl'
 
         config.setup = (editor) => {
             if (enableSelectFormMediaLibery) {
@@ -146,22 +150,22 @@ const editorInit = computed(() => {
 
                                     switch (type) {
                                         case 'image':
-                                            html = `<a data-fancybox="content-images" data-src="${mediaUrl}" data-caption="${caption}" class="mb-2 mt-2"><img src="${mediaUrl}" class="img img-fluid object-fit-scale border rounded d-block"></a>`
+                                            html = `<a data-fancybox="content-images" data-src="${mediaUrl}" data-caption="${caption}" class="mb-2 mt-2"><img src="${mediaUrl}" class="img img-fluid object-fit-scale border border-gray-300 rounded d-block"></a>`
                                             break
                                         case 'video':
-                                            html = `<div class="ratio ratio-16x9 mb-2 mt-2"><video controls src="${mediaUrl}" class="file-embed border rounded"></video></div>`
+                                            html = `<div class="relative w-full pt-[56.25%] mb-2 mt-2"><video controls src="${mediaUrl}" class="absolute top-0 left-0 w-full h-full object-cover border border-gray-300 rounded"></video></div>`
                                             break
                                         case 'audio':
-                                            html = `<div class="ratio ratio-16x9 mb-2 mt-2"><audio controls src="${mediaUrl}" class="file-embed border rounded"></audio></div>`
+                                            html = `<div class="relative w-full pt-[56.25%] mb-2 mt-2"><audio controls src="${mediaUrl}" class="absolute top-0 left-0 w-full h-full object-cover border border-gray-300 rounded"></audio></div>`
                                             break
                                         case 'file':
                                             const embed = confirm('Do you want to embed the file?')
                                             if (embed) {
-                                                html = `<div class="w-100 h-auto"><iframe src="${mediaUrl}" title="${caption}" width="100%" height="500"></iframe></div>`
+                                                html = `<div class="w-full h-auto"><iframe src="${mediaUrl}" title="${caption}" width="100%" height="500"></iframe></div>`
                                             } else {
                                                 const anchorText = prompt('Enter link text:', media?.name || 'Download File')
                                                 const target = confirm('Open in new tab?') ? ' target="_blank"' : ''
-                                                html = `<a href="${mediaUrl}"${target} class="btn btn-sm btn-link">${anchorText}</a>`
+                                                html = `<a href="${mediaUrl}"${target} class="inline-block px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${anchorText}</a>`
                                             }
                                             break
                                     }
@@ -217,16 +221,16 @@ const handleMediaSelected = (selected) => {
 
         switch (type) {
             case 'image':
-                html = `<a data-fancybox="content-images" data-src="${url}" data-caption="${caption}" class="mb-2 mt-2"><img src="${url}" class="img img-fluid object-fit-scale border rounded d-block"></a>`
+                html = `<a data-fancybox="content-images" data-src="${url}" data-caption="${caption}" class="block my-2"><img src="${url}" class="w-full h-auto object-cover border border-gray-300 rounded"></a>`
                 break
             case 'video':
-                html = `<div class="ratio ratio-16x9 mb-2 mt-2"><video controls src="${url}" class="file-embed border rounded"></video></div>`
+                html = `<div class="relative w-full pt-[56.25%] my-2"><video controls src="${url}" class="absolute top-0 left-0 w-full h-full object-cover border border-gray-300 rounded"></video></div>`
                 break
             case 'audio':
-                html = `<div class="ratio ratio-16x9 mb-2 mt-2"><audio controls src="${url}" class="file-embed border rounded"></audio></div>`
+                html = `<div class="relative w-full pt-[56.25%] my-2"><audio controls src="${url}" class="absolute top-0 left-0 w-full h-full object-cover border border-gray-300 rounded"></audio></div>`
                 break
             default:
-                html = `<div class="w-100 h-auto"><iframe src="${url}" title="${caption}" width="100%" height="500"></iframe></div>`
+                html = `<div class="w-full h-auto my-2"><iframe src="${url}" title="${caption}" width="100%" height="500"></iframe></div>`
                 break
         }
 

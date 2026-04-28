@@ -1,48 +1,102 @@
 <template>
     <div>
-        <BButton v-if="!disableOpenMediaButton" variant="light" size="sm" class="border border-dark mb-2"
-            @click="openModal" :hidden="hideDefaultOpenButton">
+        <button
+            v-if="!disableOpenMediaButton"
+            type="button"
+            class="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-400 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-2"
+            @click="openModal"
+            :hidden="hideDefaultOpenButton"
+        >
             Open Media Library
-        </BButton>
+        </button>
 
-        <BModal v-model="showModal" :title="`${galleryTitle} gallery`" size="xl" scrollable hide-header-close
-            no-close-on-backdrop teleport="body" @hide="resetSelection">
-            <BRow>
-                <BCol md="6" class="mb-2">
-                    <BFormInput v-model="search" size="sm" placeholder="Search..." @input="handleSearch" />
-                </BCol>
+        <!-- Modal Backdrop -->
+        <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto" @click.self="showModal = false">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" @click="showModal = false"></div>
 
-                <BCol cols="12">
-                    <BRow class="g-2">
-                        <BCol v-if="!loading && mediaList.length === 0" cols="12" class="text-center text-muted">
-                            No media found.
-                        </BCol>
+                <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
+                    <!-- Modal Header -->
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-medium text-gray-900">{{ galleryTitle }} gallery</h3>
+                            <button @click="showModal = false" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
 
-                        <BCol v-for="media in mediaList" :key="media.id" cols="12" md="4" lg="3">
-                            <BCard :class="[
-                                'h-100',
-                                'media-item',
-                                { 'border-primary': isSelected(media.id), 'border-2': isSelected(media.id) }
-                            ]" @click="toggleMedia(media)">
+                    <!-- Modal Body -->
+                    <div class="px-6 py-4 overflow-y-auto" style="max-height: 70vh;">
+                        <div class="mb-4">
+                            <input
+                                v-model="search"
+                                type="text"
+                                class="w-full px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Search..."
+                                @input="handleSearch"
+                            />
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            <div v-if="!loading && mediaList.length === 0" class="col-span-full text-center text-gray-500 py-8">
+                                No media found.
+                            </div>
+
+                            <div
+                                v-for="media in mediaList"
+                                :key="media.id"
+                                @click="toggleMedia(media)"
+                                :class="[
+                                    'cursor-pointer transition-all duration-200 hover:scale-102',
+                                    isSelected(media.id)
+                                        ? 'ring-2 ring-blue-500 rounded-lg'
+                                        : 'hover:shadow-md'
+                                ]"
+                            >
                                 <MediaRenderer :media="media" />
-                            </BCard>
-                        </BCol>
-                    </BRow>
-                </BCol>
+                            </div>
+                        </div>
 
-                <BCol cols="12" class="mt-3 text-center" v-if="lastPage !== null && page < lastPage">
-                    <BButton variant="secondary" size="sm" @click="loadMore" :disabled="loading">
-                        <BSpinner small class="me-2" v-if="loading" /> {{ loading ? 'Loading...' : 'Load more' }}
-                    </BButton>
-                </BCol>
-            </BRow>
+                        <div class="mt-4 text-center" v-if="lastPage !== null && page < lastPage">
+                            <button
+                                type="button"
+                                @click="loadMore"
+                                :disabled="loading"
+                                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2"
+                            >
+                                <svg v-if="loading" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{ loading ? 'Loading...' : 'Load more' }}
+                            </button>
+                        </div>
+                    </div>
 
-            <template #footer>
-                <BButton variant="secondary" size="sm" @click="showModal = false">Close</BButton>
-                <BButton variant="success" size="sm" @click="confirmSelection" :disabled="!hasSelection">Select
-                </BButton>
-            </template>
-        </BModal>
+                    <!-- Modal Footer -->
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-2">
+                        <button
+                            type="button"
+                            @click="showModal = false"
+                            class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                            Close
+                        </button>
+                        <button
+                            type="button"
+                            @click="confirmSelection"
+                            :disabled="!hasSelection"
+                            class="px-3 py-1 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -50,7 +104,6 @@
 import MediaRenderer from './MediaRenderer.vue'
 import { ref, watch, computed } from 'vue'
 import axios from 'axios'
-import { BModal, BButton, BFormInput, BRow, BCol, BCard, BSpinner } from 'bootstrap-vue-next'
 
 const {
     disableOpenMediaButton = false,
@@ -149,16 +202,7 @@ defineExpose({ openModal })
 </script>
 
 <style scoped>
-.media-item {
-    cursor: pointer;
-    transition: border-color 0.3s, transform 0.2s;
-}
-
-.media-item:hover {
+.hover\:scale-102:hover {
     transform: scale(1.02);
-}
-
-.media-item.border-primary {
-    border: 2px solid #0d6efd !important;
 }
 </style>
