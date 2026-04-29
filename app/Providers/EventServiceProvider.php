@@ -1,15 +1,14 @@
 <?php
-
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Event;
-
+use App\Events\MediaUpdatedEvent;
 use App\Listeners\MediaCreatedListener;
-use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
-
-use Spatie\Activitylog\Models\Activity;
+use App\Listeners\MediaUpdatedListener;
 use App\Observers\ActivityObserver;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\ServiceProvider;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -23,6 +22,11 @@ class EventServiceProvider extends ServiceProvider
         Event::listen(
             MediaHasBeenAddedEvent::class,
             [MediaCreatedListener::class, 'handle']
+        );
+
+        Event::listen(
+            MediaUpdatedEvent::class,
+            [MediaUpdatedListener::class, 'handle']
         );
         Activity::observe(ActivityObserver::class);
     }

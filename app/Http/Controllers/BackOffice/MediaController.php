@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\BackOffice;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MediaQuickRequest;
 use App\Services\BackOffice\MediaService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -32,6 +33,11 @@ class MediaController extends Controller
         return Inertia::render('back-office/medias/Details', [
             'media' => $media,
         ]);
+    }
+
+    public function quickSave(MediaQuickRequest $request)
+    {
+        return $this->mediaService->quickSave($request);
     }
 
     public function delete(string $slug)

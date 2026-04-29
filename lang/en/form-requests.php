@@ -1,11 +1,11 @@
 <?php
 
 return [
-    "api"      => [
+    "api"         => [
         'timeout' => 'Api responce timeout.',
     ],
 
-    'auth'     => [
+    'auth'        => [
         'login'           => [
             'email'    => [
                 'required' => 'Please enter your email address.',
@@ -117,7 +117,21 @@ return [
         ],
     ],
 
-    'user'     => [
+    'media_quick' => [
+        'alt'     => [
+            'string' => 'Alt must be string.',
+        ],
+
+        'caption' => [
+            'string' => 'Caption must be string.',
+        ],
+
+        'media'   => [
+            'required'    => 'Media is required.',
+        ],
+    ],
+
+    'user'        => [
         'name'                  => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -175,7 +189,7 @@ return [
         ],
     ],
 
-    'language' => [
+    'language'    => [
         'name' => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -190,7 +204,7 @@ return [
         ],
     ],
 
-    'category' => [
+    'category'    => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -209,7 +223,7 @@ return [
         ],
     ],
 
-    'tag'      => [
+    'tag'         => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -223,7 +237,7 @@ return [
         ],
     ],
 
-    'trend'    => [
+    'trend'       => [
         'tag_id'   => [
             'required'  => 'Tag is required.',
             "not_found" => 'Tag is not exit.',
@@ -235,7 +249,7 @@ return [
         ],
     ],
 
-    'location' => [
+    'location'    => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -258,7 +272,7 @@ return [
         ],
     ],
 
-    'event'    => [
+    'event'       => [
         'name'                 => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -284,7 +298,7 @@ return [
         ],
     ],
 
-    'author'   => [
+    'author'      => [
         'name'          => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',

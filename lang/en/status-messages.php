@@ -9,6 +9,17 @@ return [
         ],
     ],
 
+    'media'        => [
+        'delete' => [
+            'success' => 'Media deleted successfully.',
+            'failed'  => 'Failed to media user.',
+        ],
+        'save'   => [
+            'success' => 'Media saved successfully.',
+            'failed'  => 'Failed to save media.',
+        ],
+    ],
+
     'user'         => [
         'save'     => [
             'success' => 'User saved successfully.',
@@ -174,13 +185,6 @@ return [
                 'success' => 'Auth user account saved successfully.',
                 'failed'  => 'Failed to save auth user account.',
             ],
-        ],
-    ],
-
-    'media'        => [
-        'delete' => [
-            'success' => 'Media deleted successfully.',
-            'failed'  => 'Failed to media user.',
         ],
     ],
 ];

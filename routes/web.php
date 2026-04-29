@@ -113,7 +113,7 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::get('details/{slug}', [MediaController::class, 'details'])->name('details');
         Route::delete('delete/{slug}', [MediaController::class, 'delete'])->name('delete');
 
-        Route::post('quick-save', [MediaController::class, 'quickSave'])->name('quick-save');  // Need to add latter
+        Route::post('quick-save', [MediaController::class, 'quickSave'])->name('quick-save');
 
     });
 
