@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\SystemHelper;
+use App\Helpers\NewsHelper;
 use App\Helpers\UserHelper;
 use App\Helpers\MediaHelper;
 use App\Models\Author;
@@ -152,6 +153,32 @@ class SearchService
     public function activityLogSubjectTypes(Request $request): array
     {
         $options = SystemHelper::activityLogSubjectTypes();
+
+        if ($request->filled('search')) {
+            $search  = $request->input('search');
+            $options = $options->filter(
+                fn($row) =>
+                stripos((string) $row->id, $search) !== false ||
+                stripos($row->name, $search) !== false
+            );
+        }
+
+        $items = $options->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+        ]);
+
+        return [
+            'items'        => $items,
+            'total'        => 1,
+            'current_page' => 1,
+            'last_page'    => 1,
+        ];
+    }
+
+    public function homePageSectionCategories(Request $request): array
+    {
+        $options = NewsHelper::homePageSectionCategories();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');

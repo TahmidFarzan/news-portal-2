@@ -51,8 +51,7 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('activity-log-events', [SearchController::class, 'activityLogEvents'])->name('activity-log-events');
     Route::get('activity-log-subject-types', [SearchController::class, 'activityLogSubjectTypes'])->name('activity-log-subject-types');
 
-    Route::get('record-statuses', [SearchController::class, 'recordStatuses'])->name('record-statuses');
-    Route::get('commission-types', [SearchController::class, 'commissionTypes'])->name('commission-types');
+    Route::get('home-page-section-categories', [SearchController::class, 'homePageSectionCategories'])->name('home-page-section-categories');
 
     // Model || DB
     Route::get('users', [SearchController::class, 'users'])->name('users');
