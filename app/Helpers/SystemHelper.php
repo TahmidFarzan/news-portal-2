@@ -1,12 +1,12 @@
 <?php
-
 namespace App\Helpers;
 
 use Illuminate\Support\Collection;
 
 class SystemHelper
 {
-    public const DEFAULT_LANGUAGE_CODE = "en_us";
+    public const DEFAULT_LANGUAGE_CODE     = "en_us";
+    public const EXTRA_LANGUAGE_BN_BD_CODE = "bn_bd";
 
     private const PER_PAGE_10  = "10";
     private const PER_PAGE_25  = "25";
@@ -24,9 +24,9 @@ class SystemHelper
     public static function perPages(): Collection
     {
         return collect([
-            (object) ['id' => self::PER_PAGE_10,  'name' => '10'],
-            (object) ['id' => self::PER_PAGE_25,  'name' => '25'],
-            (object) ['id' => self::PER_PAGE_50,  'name' => '50'],
+            (object) ['id' => self::PER_PAGE_10, 'name' => '10'],
+            (object) ['id' => self::PER_PAGE_25, 'name' => '25'],
+            (object) ['id' => self::PER_PAGE_50, 'name' => '50'],
             (object) ['id' => self::PER_PAGE_100, 'name' => '100'],
         ]);
     }
@@ -34,10 +34,10 @@ class SystemHelper
     public static function activityLogEvents(): Collection
     {
         return collect([
-            (object) ['id' => self::ACTIVITY_LOG_CREATED,  'name' => 'Created'],
-            (object) ['id' => self::ACTIVITY_LOG_UPDATED,  'name' => 'Updated'],
-            (object) ['id' => self::ACTIVITY_LOG_DELETED,  'name' => 'Deleted'],
-            (object) ['id' => self::ACTIVITY_LOG_TRASHED,  'name' => 'Trashed'],
+            (object) ['id' => self::ACTIVITY_LOG_CREATED, 'name' => 'Created'],
+            (object) ['id' => self::ACTIVITY_LOG_UPDATED, 'name' => 'Updated'],
+            (object) ['id' => self::ACTIVITY_LOG_DELETED, 'name' => 'Deleted'],
+            (object) ['id' => self::ACTIVITY_LOG_TRASHED, 'name' => 'Trashed'],
             (object) ['id' => self::ACTIVITY_LOG_RESTORED, 'name' => 'Restored'],
         ]);
     }

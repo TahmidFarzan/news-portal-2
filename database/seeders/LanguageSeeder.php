@@ -28,7 +28,7 @@ class LanguageSeeder extends Seeder
         }
 
         $languages = collect([
-            (object) ['name' => 'Bangla', 'code' => 'bn_bd'],
+            (object) ['name' => 'Bangla', 'code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE],
             (object) ['name' => 'English', 'code' => SystemHelper::DEFAULT_LANGUAGE_CODE],
         ]);
 
