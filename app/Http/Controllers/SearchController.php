@@ -114,32 +114,32 @@ class SearchController extends Controller
         return response()->json($this->searchService->userRole($slugOrId));
     }
 
-    public function language($slugOrId)
+    public function language(string | int $slugOrId)
     {
         return response()->json($this->searchService->language($slugOrId));
     }
 
-    public function category($slugOrId)
+    public function category(string | int $slugOrId)
     {
         return response()->json($this->searchService->category($slugOrId));
     }
 
-    public function tag($slugOrId)
+    public function tag(string | int $slugOrId)
     {
         return response()->json($this->searchService->tag($slugOrId));
     }
 
-    public function location($slugOrId)
+    public function location(string | int $slugOrId)
     {
-        return response()->json($this->searchService->locations($slugOrId));
+        return response()->json($this->searchService->location($slugOrId));
     }
 
-    public function event($slugOrId)
+    public function event(string | int $slugOrId)
     {
         return response()->json($this->searchService->event($slugOrId));
     }
 
-    public function author($slugOrId)
+    public function author(string | int $slugOrId)
     {
         return response()->json($this->searchService->author($slugOrId));
     }
