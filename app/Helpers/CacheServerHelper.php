@@ -1,13 +1,20 @@
 <?php
+
 namespace App\Helpers;
 
-use Exception;
+use Throwable;
+use Closure;
+use DateTimeInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 
 class CacheServerHelper
 {
+    const oneDayInSecond = 86400;
+    const sixHoursInSecond = 21600;
+
     protected static function driver(): string
     {
         return config('cache.default');
@@ -15,20 +22,25 @@ class CacheServerHelper
 
     protected static function supportsTags(): bool
     {
-        return ! in_array(self::driver(), ['file', 'array'], true);
+        return !in_array(self::driver(), ['file', 'array'], true);
+    }
+
+    protected static function ttl(int $seconds): DateTimeInterface
+    {
+        return Carbon::now()->addSeconds($seconds);
     }
 
     public static function isConnected(): bool
     {
-        if (! config('cache.enable') || ! config('cache.default')) {
+        if (!config('cache.enable') || !config('cache.default')) {
             return false;
         }
 
         try {
-            Cache::put('__cache_test__', true, 1);
+            Cache::put('__cache_test__', true, self::ttl(2));
             Cache::forget('__cache_test__');
             return true;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             Log::error('Cache store not available: ' . $ex->getMessage());
             return false;
         }
@@ -40,111 +52,114 @@ class CacheServerHelper
     }
 
     /* -----------------------------------------------------------------
-     |  STORE
-     |-----------------------------------------------------------------*/
+    |  STORE
+    |-----------------------------------------------------------------*/
 
     public static function cachedData(
         string $key,
         mixed $data,
-        int $expireTime = 86400,
+        int $expireTime = self::oneDayInSecond,
         array $tags = []
     ): void {
-        if (! self::isConnected()) {
+        if (!self::isConnected()) {
             return;
         }
 
         $key = self::keyGenerate($key);
 
         try {
-            if (! empty($tags) && self::supportsTags()) {
-                Cache::tags($tags)->put($key, $data, $expireTime);
-            } else {
-                Cache::put($key, $data, $expireTime);
-            }
-        } catch (Exception $ex) {
+            $store = (!empty($tags) && self::supportsTags())
+                ? Cache::tags($tags)
+                : Cache::store();
+
+            $store->put($key, $data, self::ttl($expireTime));
+
+        } catch (Throwable $ex) {
             Log::error("Failed to cache '{$key}': " . $ex->getMessage());
         }
     }
 
     /* -----------------------------------------------------------------
-     |  READ
-     |-----------------------------------------------------------------*/
+    |  READ
+    |-----------------------------------------------------------------*/
 
     public static function getCachedData(
         string $key,
         array $tags = []
     ): mixed {
-        if (! self::isConnected()) {
+        if (!self::isConnected()) {
             return null;
         }
 
         $key = self::keyGenerate($key);
 
         try {
-            if (! empty($tags) && self::supportsTags()) {
-                return Cache::tags($tags)->get($key);
-            }
+            $store = (!empty($tags) && self::supportsTags())
+                ? Cache::tags($tags)
+                : Cache::store();
 
-            return Cache::get($key);
-        } catch (Exception $ex) {
+            return $store->get($key);
+
+        } catch (Throwable $ex) {
             Log::error("Failed to retrieve cached '{$key}': " . $ex->getMessage());
             return null;
         }
     }
 
     /* -----------------------------------------------------------------
-     |  DELETE
-     |-----------------------------------------------------------------*/
+    |  DELETE
+    |-----------------------------------------------------------------*/
 
     public static function clearCached(string $key, array $tags = []): void
     {
-        if (! self::isConnected()) {
+        if (!self::isConnected()) {
             return;
         }
 
         $key = self::keyGenerate($key);
 
         try {
-            if (! empty($tags) && self::supportsTags()) {
-                Cache::tags($tags)->forget($key);
-            } else {
-                Cache::forget($key);
-            }
-        } catch (Exception $ex) {
+            $store = (!empty($tags) && self::supportsTags())
+                ? Cache::tags($tags)
+                : Cache::store();
+
+            $store->forget($key);
+
+        } catch (Throwable $ex) {
             Log::error("Failed to clear cached '{$key}': " . $ex->getMessage());
         }
     }
 
     /* -----------------------------------------------------------------
-     |  CLEAR BY TAG (PRIMARY STRATEGY)
-     |-----------------------------------------------------------------*/
+    |  CLEAR BY TAG
+    |-----------------------------------------------------------------*/
 
-    public static function clearCachedByTag(string | array $tags): void
+    public static function clearCachedByTag(string|array $tags): void
     {
-        if (! self::isConnected() || ! self::supportsTags()) {
+        if (!self::isConnected() || !self::supportsTags()) {
             return;
         }
 
         try {
             Cache::tags((array) $tags)->flush();
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             Log::error('Cache tag flush failed: ' . $ex->getMessage());
         }
     }
 
     /* -----------------------------------------------------------------
-     |  CLEAR ALL
-     |-----------------------------------------------------------------*/
+    |  CLEAR ALL
+    |-----------------------------------------------------------------*/
 
     public static function clearAllCached(): void
     {
-        if (! self::isConnected()) {
+        if (!self::isConnected()) {
             return;
         }
 
         try {
             Cache::flush();
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             Log::error('Cache flush failed: ' . $ex->getMessage());
         }
     }
