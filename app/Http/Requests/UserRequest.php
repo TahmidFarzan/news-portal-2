@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\UserHelper;
 
 class UserRequest extends FormRequest
 {
@@ -99,7 +100,7 @@ class UserRequest extends FormRequest
                 }
 
                 if ($userRole) {
-                    if (! $authUser->hasUserRole(SystemHelper::USER_ROLE_ADMIN)) {
+                    if (! $authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
                         $validator->errors()->add(
                             'user_role_id', __("form-requests.user.user_role_id.do_not_have_permission"),
                         );

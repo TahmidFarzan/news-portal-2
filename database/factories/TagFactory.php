@@ -6,12 +6,13 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Helpers\SystemHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Helpers\UserHelper;
 
 class TagFactory extends Factory
 {
     public function definition(): array
     {
-        $adminUserRole = UserRole::where("name", SystemHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
+        $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
         $language      = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
 

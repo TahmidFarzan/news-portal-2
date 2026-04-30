@@ -5,13 +5,13 @@ use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Helpers\SystemHelper;
+use App\Helpers\UserHelper;
 
 class LanguageFactory extends Factory
 {
     public function definition(): array
     {
-        $adminUserRole = UserRole::where("name", SystemHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
+        $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::query()->inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
 
         return [

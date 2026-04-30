@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Location;
 use Illuminate\Auth\Access\Response;
-use App\Helpers\SystemHelper;
+use App\Helpers\UserHelper;
 
 class LocationPolicy
 {
@@ -26,11 +26,11 @@ class LocationPolicy
 
     public function update(User $authUser, Location $location): Response
     {
-        if ($authUser->hasUserRole(SystemHelper::USER_ROLE_ADMIN)) {
+        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
         }
 
-        if ($authUser->systemHelper::USER_ROLE_NEWS_DESK && ($authUser->id === $location->created_by_id)) {
+        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $location->created_by_id)) {
             return Response::allow();
         }
 
@@ -40,11 +40,11 @@ class LocationPolicy
     public function delete(User $authUser, Location $location): Response
     {
 
-        if ($authUser->hasUserRole(SystemHelper::USER_ROLE_ADMIN)) {
+        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
         }
 
-        if ($authUser->systemHelper::USER_ROLE_NEWS_DESK && ($authUser->id === $location->created_by_id)) {
+        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $location->created_by_id)) {
             return Response::allow();
         }
 

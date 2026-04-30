@@ -1,7 +1,7 @@
 <?php
 namespace Database\Factories;
 
-use App\Helpers\SystemHelper;
+use App\Helpers\UserHelper;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -14,8 +14,8 @@ class UserFactory extends Factory
 
     public function definition(): array
     {
-        $newsDeskUserRole = UserRole::where("name", SystemHelper::USER_ROLE_NEWS_DESK)->first();
-        $adminUserRole    = UserRole::where("name", SystemHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
+        $newsDeskUserRole = UserRole::where("name", UserHelper::USER_ROLE_NEWS_DESK)->first();
+        $adminUserRole    = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
 
         $user = User::query()->inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
 

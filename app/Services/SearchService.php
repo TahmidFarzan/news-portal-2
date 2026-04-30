@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\SystemHelper;
+use App\Helpers\UserHelper;
 use App\Helpers\MediaHelper;
 use App\Models\Author;
 use App\Models\Category;
@@ -20,7 +21,7 @@ class SearchService
 {
     public function genders(Request $request): array
     {
-        $options = SystemHelper::genders();
+        $options = UserHelper::genders();
 
         if ($request->filled('search')) {
             $search  = strtolower($request->input('search'));
@@ -72,7 +73,7 @@ class SearchService
 
     public function religions(Request $request): array
     {
-        $options = SystemHelper::religions();
+        $options = UserHelper::religions();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');
@@ -98,7 +99,7 @@ class SearchService
 
     public function maritalStatuses(Request $request): array
     {
-        $options = SystemHelper::maritalStatuses();
+        $options = UserHelper::maritalStatuses();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');

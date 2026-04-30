@@ -5,7 +5,7 @@ use App\Models\UserRole;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Helpers\SystemHelper;
+use App\Helpers\UserHelper;
 
 class UserRoleSeeder extends Seeder
 {
@@ -28,7 +28,7 @@ class UserRoleSeeder extends Seeder
             UserRole::truncate();
         }
 
-        foreach ([SystemHelper::USER_ROLE_ADMIN , SystemHelper::USER_ROLE_NEWS_DESK] as $role) {
+        foreach ([UserHelper::USER_ROLE_ADMIN , UserHelper::USER_ROLE_NEWS_DESK] as $role) {
             UserRole::factory()->state([
                 'name' => $role,
             ])->create();
