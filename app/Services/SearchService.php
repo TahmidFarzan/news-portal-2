@@ -1,10 +1,10 @@
 <?php
 namespace App\Services;
 
-use App\Helpers\SystemHelper;
-use App\Helpers\NewsHelper;
-use App\Helpers\UserHelper;
 use App\Helpers\MediaHelper;
+use App\Helpers\NewsHelper;
+use App\Helpers\SystemHelper;
+use App\Helpers\UserHelper;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Event;
@@ -14,6 +14,7 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -587,79 +588,46 @@ class SearchService
         return UserRole::where('id', $slugOrId)->firstOrFail();
     }
 
-    public function language($slugOrId): Language
+    public function language(int | string $slugOrId): Language
     {
         return Language::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }
 
-    public function category($slugOrId): Category
+    public function category(int | string $slugOrId): Category
     {
         return Category::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }
 
-    public function tag($slugOrId): Tag
+    public function tag(int | string $slugOrId): Tag
     {
         return Tag::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }
 
-    public function location($slugOrId): Location
+    public function location(int | string $slugOrId): Location
     {
         return Location::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }
 
-    public function event($slugOrId): Event
+    public function event(int | string $slugOrId): Event
     {
         return Event::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }
 
-    public function author($slugOrId): Author
+    public function author(int | string $slugOrId): Author
     {
         return Author::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
-    }
-
-    private static function formatCategoryTree($records, $level = 0, $visited = null)
-    {
-        if ($visited === null) {
-            $visited = [];
-        }
-
-        $list = [];
-
-        foreach ($records as $record) {
-            if (in_array($record->id, $visited)) {
-                continue;
-            }
-
-            $visited[] = $record->id;
-
-            $list[] = [
-                'id'               => $record->id,
-                'name'             => $record->name,
-                'name_tree'        => $record->name_tree,
-                'indentation_name' => $record->indentation_name,
-            ];
-
-            if ($record->children && $record->children->isNotEmpty()) {
-                $list = array_merge(
-                    $list,
-                    self::formatCategoryTree($record->children, $level + 1, $visited)
-                );
-            }
-        }
-
-        return $list;
     }
 
     private static function rootCategoryParent(Category $record): Category
@@ -677,39 +645,6 @@ class SearchService
         return $parent;
     }
 
-    private static function formatLocationTree($records, $level = 0, $visited = null)
-    {
-        if ($visited === null) {
-            $visited = [];
-        }
-
-        $list = [];
-
-        foreach ($records as $record) {
-            if (in_array($record->id, $visited)) {
-                continue;
-            }
-
-            $visited[] = $record->id;
-
-            $list[] = [
-                'id'               => $record->id,
-                'name'             => $record->name,
-                'name_tree'        => $record->name_tree,
-                'indentation_name' => $record->indentation_name,
-            ];
-
-            if ($record->children && $record->children->isNotEmpty()) {
-                $list = array_merge(
-                    $list,
-                    self::formatLocationTree($record->children, $level + 1, $visited)
-                );
-            }
-        }
-
-        return $list;
-    }
-
     private static function rootLocationParent(Location $record): Location
     {
         $parent = $record;
@@ -724,4 +659,69 @@ class SearchService
 
         return $parent;
     }
+
+    private static function formatCategoryTree(Collection $records, int $level = 0, ?array $visited = null): array
+    {
+        $visited ??= [];
+
+        $list = [];
+
+        foreach ($records as $record) {
+
+            if (in_array($record->id, $visited, true)) {
+                continue;
+            }
+
+            $visited[] = $record->id;
+
+            $list[] = [
+                'id'               => $record->id,
+                'name'             => $record->name,
+                'name_tree'        => $record->name_tree,
+                'indentation_name' => $record->indentation_name,
+            ];
+
+            if (! empty($record->children) && $record->children->isNotEmpty()) {
+                $list = array_merge(
+                    $list,
+                    self::formatCategoryTree($record->children, $level + 1, $visited)
+                );
+            }
+        }
+
+        return $list;
+    }
+
+    private static function formatLocationTree(Collection $records, int $level = 0, ?array $visited = null): array
+    {
+        $visited ??= [];
+
+        $list = [];
+
+        foreach ($records as $record) {
+
+            if (in_array($record->id, $visited, true)) {
+                continue;
+            }
+
+            $visited[] = $record->id;
+
+            $list[] = [
+                'id'               => $record->id,
+                'name'             => $record->name,
+                'name_tree'        => $record->name_tree,
+                'indentation_name' => $record->indentation_name,
+            ];
+
+            if (! empty($record->children) && $record->children->isNotEmpty()) {
+                $list = array_merge(
+                    $list,
+                    self::formatLocationTree($record->children, $level + 1, $visited)
+                );
+            }
+        }
+
+        return $list;
+    }
+
 }
