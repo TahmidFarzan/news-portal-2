@@ -319,6 +319,10 @@ class SearchService
             $query->where('parent_id', $request->input('parent_id'));
         }
 
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
         if ($request->filled('only_main') &&
             $request->boolean('only_main') &&
             ! $request->filled('parent_id')
@@ -351,6 +355,10 @@ class SearchService
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
         }
 
         if ($request->filled('only_trend') && $request->input('only_trend') == true) {
@@ -394,6 +402,10 @@ class SearchService
             $query->where('category_id', $request->input('category_id'));
         }
 
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
         if ($request->filled('only_main') &&
             $request->boolean('only_main') &&
             ! $request->filled('parent_id')
@@ -428,6 +440,10 @@ class SearchService
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
         $records = $query->orderBy('id', 'desc')
             ->paginate($request->input('per_page', 25));
 
@@ -451,6 +467,10 @@ class SearchService
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
         }
 
         $records = $query->orderBy('id', 'desc')
@@ -520,6 +540,10 @@ class SearchService
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
         if ($request->filled('parent_id')) {
             $parent = $this->category($request->input('parent_id'));
             $root   = self::rootCategoryParent($parent);
@@ -558,6 +582,10 @@ class SearchService
 
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->input('category_id'));
+        }
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
         }
 
         $records = $query->orderBy('id', 'asc')
