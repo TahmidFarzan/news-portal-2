@@ -2,8 +2,8 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
-use App\Observers\EventObserver;
-use App\Policies\EventPolicy;
+use App\Observers\NewsObserver;
+use App\Policies\NewsPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
@@ -20,35 +20,44 @@ use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
-#[Table('events')]
+#[Table('newses')]
 #[Fillable([
-        'name', 'brief', 'slug',
-        'language_id', 'created_by_id',
+        'news_type', 'language_id', 'event_id', 'location_id',
+        'heading', 'sub_heading', "content_shoulder", 'brief',
+        "body", 'video_url',
+        'writer', 'author_id',
+        'slug_tree', 'heading_tree',
         "seo_brief", 'seo_title', 'seo_keywords',
+        'page_section', 'parent_id',
+        'created_by_id', 'slug', 'is_published',
     ])]
-#[UsePolicy(EventPolicy::class)]
-#[ObservedBy([EventObserver::class])]
-class Event extends Model implements HasMedia
+#[UsePolicy(NewsPolicy::class)]
+#[ObservedBy([NewsObserver::class])]
+class News extends Model implements HasMedia
 {
-    use HasFactory, LogsActivity, HasSlug, InteractsWithMedia;
+    use HasFactory, LogsActivity, HasSlug, InteractsWithMedia, HasRecursiveRelationships;
 
     protected $appends = [
-        'public_url', 'is_recent_created',
-        "feeds_rss_url", "feeds_atom_url", "sitemap_url",
-        'media_collection_name',
-        'desktop_banner_image', 'mobile_banner_image',
+        'public_url',
+        'is_recent_created', "has_parent", "indentation_name",
+        "has_descendants", "feeds_rss_url", "feeds_atom_url",
+        'main_category',
+        'thumbnail', 'feature_image',
     ];
 
     protected function casts(): array
     {
         return [
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
+            'is_published' => 'boolean',
+            'created_at'   => 'datetime',
+            'updated_at'   => 'datetime',
+            'deleted_at'   => 'datetime',
         ];
     }
 
@@ -56,10 +65,16 @@ class Event extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'brief', 'slug',
+                'news_type', 'language_id', 'event_id', 'location_id',
+                'heading', 'sub_heading', "content_shoulder", 'brief',
+                "body", 'video_url',
+                'writer', 'author_id',
+                'slug_tree', 'heading_tree',
                 "seo_brief", 'seo_title', 'seo_keywords',
+                'page_section', 'parent_id',
+                'slug', 'is_published',
             ])
-            ->useLogName('Event')
+            ->useLogName('News')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
             ->logOnlyDirty()
             ->logExcept([
@@ -90,6 +105,11 @@ class Event extends Model implements HasMedia
         return 'slug';
     }
 
+    public function getParentKeyName()
+    {
+        return 'parent_id';
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection($this->media_collection_name);
@@ -97,6 +117,7 @@ class Event extends Model implements HasMedia
 
     public function registerMediaConversions($spatieMedia = null): void
     {
+
         $this->addMediaConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
             ->format(MediaHelper::DEFAULT_MEDIA_CONVERSION)
             ->quality(80)
@@ -106,7 +127,7 @@ class Event extends Model implements HasMedia
 
     public function getMediaCollectionNameAttribute(): string
     {
-        return "Event";
+        return "News";
     }
 
     public function getPublicUrlAttribute(): string
@@ -126,9 +147,28 @@ class Event extends Model implements HasMedia
         return "";
     }
 
-    public function getSitemapUrlAttribute(): string
+    public function getHasParentAttribute(): bool
     {
-        return "";
+        return isset($this->parent_id) ? true : false;
+    }
+
+    public function getHasDescendantsAttribute(): bool
+    {
+        return ($this->descendants()->count() > 0) ? true : false;
+    }
+
+    public function getIndentationNameAttribute(): ?string
+    {
+        if (! $this->name_tree) {
+            return null;
+        }
+
+        $parts = explode(' - ', $this->name_tree);
+
+        $last        = trim(array_pop($parts));
+        $transformed = str_repeat('-- ', count($parts)) . $last;
+
+        return trim($transformed);
     }
 
     public function getIsRecentCreatedAttribute(): bool
@@ -139,11 +179,16 @@ class Event extends Model implements HasMedia
         return $intervalInHours < 72;
     }
 
-    public function getDesktopBannerImageAttribute(): ?Media
+    public function getMainCategoryAttribute(): ?Category
+    {
+        return $this->categories()->wherePivot('is_main', true)->first() ?? null;
+    }
+
+    public function getThumbnailAttribute(): ?Media
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE];
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_NEWS_THUMBNAIL_IMAGE];
 
         if ($this->hasMedia($collectionName, $roleParameter)) {
             $imageMedia = $this->getMedia($collectionName, $roleParameter)
@@ -162,11 +207,11 @@ class Event extends Model implements HasMedia
         return $image;
     }
 
-    public function getMobileBannerImageAttribute(): ?Media
+    public function getFeatureImageAttribute(): ?Media
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE];
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE];
 
         if ($this->hasMedia($collectionName, $roleParameter)) {
             $imageMedia = $this->getMedia($collectionName, $roleParameter)
@@ -195,9 +240,29 @@ class Event extends Model implements HasMedia
         return $this->belongsTo(User::class, 'created_by_id');
     }
 
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class)->withTimestamps()->withPivot('is_main');
+    }
+
+    public function contributors(): BelongsToMany
+    {
+        return $this->belongsToMany(Contributor::class)->withTimestamps();
+    }
+
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class);
+    }
+
     public function language(): BelongsTo
     {
-        return $this->belongsTo(Language::class, 'language_id');
+        return $this->belongsTo(Language::class);
+    }
+
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(Location::class);
     }
 
     public function latestActivityLog(): MorphOne
@@ -205,22 +270,81 @@ class Event extends Model implements HasMedia
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function newses(): HasMany
+    public function parent(): BelongsTo
     {
-        return $this->hasMany(News::class);
+        return $this->belongsTo(News::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
     public function navBreadcrumbs(): array
     {
-        $breadcrumbs = [];
+        $mainCategory = $this->main_category;
 
-        if ($this->ancestorsAndSelf()->breadthFirst()->count() > 0) {
-            foreach ($this->ancestorsAndSelf()->breadthFirst()->get() as $rEvent) {
-                $breadcrumb = ['name' => $rEvent->name, 'url' => $rEvent->public_url, 'description' => $rEvent->brief];
-                array_push($breadcrumbs, $breadcrumb);
-            }
+        if (! $mainCategory) {
+            return [];
         }
 
-        return $breadcrumbs;
+        return $mainCategory
+            ->ancestorsAndSelf()
+            ->breadthFirst()
+            ->get()
+            ->map(fn($category) => [
+                'name'        => $category->name,
+                'url'         => $category->public_url,
+                'description' => $category->brief,
+            ])
+            ->toArray();
     }
+
+    public function images(): ?MediaCollection
+    {
+        $images         = null;
+        $collectionName = $this->media_collection_name;
+
+        if ($this->hasMedia($collectionName)) {
+            $images = $this->getMedia($collectionName)->filter(function ($mediaItem) {
+                return stripos($mediaItem->mime_type, 'image/') === 0;
+            })->sortBy([
+                ['order_column', 'asc'],
+                ['id', 'asc'],
+            ]);
+        }
+        return $images;
+    }
+    public function videos(): ?MediaCollection
+    {
+        $videos         = null;
+        $collectionName = $this->media_collection_name;
+
+        if ($this->hasMedia($collectionName)) {
+            $videos = $this->getMedia($collectionName)->filter(function ($mediaItem) {
+                return stripos($mediaItem->mime_type, 'video/') === 0;
+            })->sortBy([
+                ['order_column', 'asc'],
+                ['id', 'asc'],
+            ]);
+        }
+        return $videos;
+    }
+
+    public function audios(): ?MediaCollection
+    {
+        $audios         = null;
+        $collectionName = $this->media_collection_name;
+
+        if ($this->hasMedia($collectionName)) {
+            $audios = $this->getMedia($collectionName)->filter(function ($mediaItem) {
+                return stripos($mediaItem->mime_type, 'audio/') === 0;
+            })->sortBy([
+                ['order_column', 'asc'],
+                ['id', 'asc'],
+            ]);
+        }
+        return $audios;
+    }
+
 }

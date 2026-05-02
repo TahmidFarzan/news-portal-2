@@ -3,8 +3,8 @@
 use App\Http\Controllers\AuthController;
 //
 use App\Http\Controllers\BackOffice\ActivityLogController;
-use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\CategoryController;
+use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
@@ -227,6 +227,8 @@ Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
     Route::get('events.xml', [SitemapController::class, 'events'])->name('events');
     Route::get('contributors.xml', [SitemapController::class, 'contributors'])->name('contributors');
 
+    Route::get('newses.xml', [SitemapController::class, 'newses'])->name('newses');
+    Route::get('latest-newses.xml', [SitemapController::class, 'latestNewses'])->name('latest-newses');
 });
 
 Route::get('/', function () {

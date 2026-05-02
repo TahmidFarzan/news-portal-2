@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -22,10 +23,10 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('tags')]
 #[Fillable([
-    'name', 'brief', 'slug',
-    'language_id', 'created_by_id',
-    "seo_brief", 'seo_title', 'seo_keywords',
-])]
+        'name', 'brief', 'slug',
+        'language_id', 'created_by_id',
+        "seo_brief", 'seo_title', 'seo_keywords',
+    ])]
 #[UsePolicy(TagPolicy::class)]
 #[ObservedBy([TagObserver::class])]
 class Tag extends Model
@@ -132,6 +133,11 @@ class Tag extends Model
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
+    }
+
+    public function newses(): HasMany
+    {
+        return $this->hasMany(News::class);
     }
 
     public function trend(): HasOne

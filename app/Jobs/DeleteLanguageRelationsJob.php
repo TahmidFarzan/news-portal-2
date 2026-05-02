@@ -70,6 +70,10 @@ class DeleteLanguageRelationsJob implements ShouldQueue, ShouldBeUnique
                     $language->events()->delete();
                 }
 
+                if ($language->newses()->exists()) {
+                    $language->newses()->delete();
+                }
+
                 DB::commit();
 
             } catch (Exception $ex) {

@@ -116,6 +116,11 @@ class Language extends Model
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
+    public function newses(): HasMany
+    {
+        return $this->hasMany(News::class);
+    }
+
     public function tags(): HasMany
     {
         return $this->hasMany(Tag::class);

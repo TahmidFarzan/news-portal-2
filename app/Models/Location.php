@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
@@ -22,11 +23,11 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('locations')]
 #[Fillable([
-    'name', 'brief', 'parent_id', 'slug', 'category_id',
-    'language_id', 'name_tree', "slug_tree", 'created_by_id',
-    "seo_brief", 'seo_title', 'seo_keywords',
-    'latitude','longitude',
-])]
+        'name', 'brief', 'parent_id', 'slug', 'category_id',
+        'language_id', 'name_tree', "slug_tree", 'created_by_id',
+        "seo_brief", 'seo_title', 'seo_keywords',
+        'latitude', 'longitude',
+    ])]
 #[UsePolicy(LocationPolicy::class)]
 #[ObservedBy([LocationObserver::class])]
 class Location extends Model
@@ -35,7 +36,7 @@ class Location extends Model
 
     protected $appends = [
         'public_url', "has_parent", "indentation_name",
-        "has_descendants","feeds_rss_url", "feeds_atom_url", "sitemap_url",
+        "has_descendants", "feeds_rss_url", "feeds_atom_url", "sitemap_url",
 
     ];
 
@@ -53,7 +54,7 @@ class Location extends Model
         return LogOptions::defaults()
             ->logOnly([
                 'name', 'brief', 'parent_id', 'slug', 'category_id',
-                'latitude','longitude','name_tree', "slug_tree",
+                'latitude', 'longitude', 'name_tree', "slug_tree",
             ])
             ->useLogName('Location')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
@@ -160,6 +161,11 @@ class Location extends Model
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
+    }
+
+    public function newses(): HasMany
+    {
+        return $this->hasMany(News::class);
     }
 
     public function parent(): BelongsTo

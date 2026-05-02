@@ -42,7 +42,7 @@ class DeleteCategoryRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $category = Category::find($this->categoryId);
 
-        if ($category && ($category->activityLogs()->exists()) || ($category->locations()->exists())) {
+        if ($category && ($category->activityLogs()->exists()) || ($category->locations()->exists()) || ($category->newses()->exists())) {
             DB::beginTransaction();
             try {
 
@@ -52,6 +52,10 @@ class DeleteCategoryRelationsJob implements ShouldQueue, ShouldBeUnique
 
                 if ($category->locations()->exists()) {
                     $category->locations()->delete();
+                }
+
+                if ($category->newses()->exists()) {
+                    $category->newses()->delete();
                 }
 
                 DB::commit();

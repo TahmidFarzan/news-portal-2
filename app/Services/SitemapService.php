@@ -1,10 +1,11 @@
 <?php
 namespace App\Services;
 
-use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\CategoryCacheService;
+use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\EventCacheService;
 use App\Services\Cache\LocationCacheService;
+use App\Services\Cache\NewsCacheService;
 use App\Services\Cache\TagCacheService;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,7 @@ class SitemapService
     protected EventCacheService $eventCacheService;
     protected ContributorCacheService $contributorCacheService;
     protected TagCacheService $tagCacheService;
+    protected NewsCacheService $newsCacheService;
 
     public function __construct(
         CategoryCacheService $categoryCacheService,
@@ -22,12 +24,14 @@ class SitemapService
         LocationCacheService $locationCacheService,
         EventCacheService $eventCacheService,
         ContributorCacheService $contributorCacheService,
+        NewsCacheService $newsCacheService
     ) {
-        $this->categoryCacheService = $categoryCacheService;
-        $this->tagCacheService      = $tagCacheService;
-        $this->locationCacheService = $locationCacheService;
-        $this->eventCacheService    = $eventCacheService;
-        $this->contributorCacheService   = $contributorCacheService;
+        $this->categoryCacheService    = $categoryCacheService;
+        $this->tagCacheService         = $tagCacheService;
+        $this->locationCacheService    = $locationCacheService;
+        $this->eventCacheService       = $eventCacheService;
+        $this->contributorCacheService = $contributorCacheService;
+        $this->newsCacheService        = $newsCacheService;
     }
 
     public function getCategories(Request $request)
@@ -83,5 +87,21 @@ class SitemapService
     public function getContributorsLastPageNo()
     {
         return $this->contributorCacheService->lastPageNo('sitemap');
+    }
+
+    public function latestNewsesGetNewses()
+    {
+        return $this->newsCacheService->getLatest("sitemap", null);
+    }
+
+    public function getNewses(Request $request)
+    {
+        $page = $request->query('page', 1);
+        return $this->newsCacheService->records("sitemap", null, $page);
+    }
+
+    public function getNewsesLastPageNo()
+    {
+        return $this->newsCacheService->lastPageNo("sitemap");
     }
 }

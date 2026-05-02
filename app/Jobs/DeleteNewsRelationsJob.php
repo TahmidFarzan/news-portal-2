@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\Tag;
+use App\Models\News;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,20 +12,20 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
+class DeleteNewsRelationsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tagId;
+    public int $newsId;
 
-    public function __construct(int $tagId)
+    public function __construct(int $newsId)
     {
-        $this->tagId = $tagId;
+        $this->newsId = $newsId;
     }
 
     public function uniqueId(): string
     {
-        return "delete-relations-tag-{$this->tagId}";
+        return "delete-relations-news-{$this->newsId}";
     }
 
     public function retryAfter()
@@ -40,22 +40,18 @@ class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $tag = Tag::find($this->tagId);
+        $news = News::find($this->newsId);
 
-        if ($tag && ($tag->activityLogs()->exists()) || ($tag->trend) || $tag->newses()->exists()) {
+        if ($news && ($news->activityLogs()->exists()) || ($news->getMedia($news->media_collection_name)->count() > 0)) {
             DB::beginTransaction();
             try {
 
-                if ($tag->activityLogs()->exists()) {
-                    $tag->activityLogs()->delete();
+                if ($news->activityLogs()->exists()) {
+                    $news->activityLogs()->delete();
                 }
 
-                if ($tag->trend) {
-                    $tag->trend->delete();
-                }
-
-                if ($tag->newses()->exists()) {
-                    $tag->newses()->delete();
+                if ($news->getMedia($news->media_collection_name)->count() > 0) {
+                    $news->clearMediaCollection($news->media_collection_name);
                 }
 
                 DB::commit();
@@ -63,7 +59,7 @@ class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
             } catch (Exception $ex) {
                 DB::rollback();
 
-                Log::error("Fail to delete tag relations.", [
+                Log::error("Fail to delete news relations.", [
                     'exception' => $ex,
                 ]);
 

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
@@ -25,10 +26,10 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('contributors')]
 #[Fillable([
-    'name', 'brief', 'slug', 'profile_details',
-    'language_id', 'created_by_id',
-    "seo_brief", 'seo_title', 'seo_keywords',
-])]
+        'name', 'brief', 'slug', 'profile_details',
+        'language_id', 'created_by_id',
+        "seo_brief", 'seo_title', 'seo_keywords',
+    ])]
 #[UsePolicy(ContributorPolicy::class)]
 #[ObservedBy([ContributorObserver::class])]
 class Contributor extends Model implements HasMedia
@@ -178,6 +179,11 @@ class Contributor extends Model implements HasMedia
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
+    }
+
+    public function newses(): HasMany
+    {
+        return $this->hasMany(News::class);
     }
 
     public function navBreadcrumbs(): array

@@ -42,7 +42,7 @@ class DeleteEventRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $event = Event::find($this->eventId);
 
-        if ($event && ($event->activityLogs()->exists()) || ($event->getMedia($event->media_collection_name)->count() > 0)) {
+        if ($event && ($event->activityLogs()->exists()) || ($event->getMedia($event->media_collection_name)->count() > 0) || ($event->newses()->exists())) {
             DB::beginTransaction();
             try {
 
@@ -52,6 +52,10 @@ class DeleteEventRelationsJob implements ShouldQueue, ShouldBeUnique
 
                 if ($event->getMedia($event->media_collection_name)->count() > 0) {
                     $event->clearMediaCollection($event->media_collection_name);
+                }
+
+                if ($event->newses()->exists()) {
+                    $event->newses()->delete();
                 }
 
                 DB::commit();

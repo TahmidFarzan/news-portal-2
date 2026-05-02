@@ -11,9 +11,11 @@ class MediaHelper
     public const MEDIA_ROLE_DEFAULT           = 'default';
     public const MEDIA_ROLE_PROFILE_IMAGE     = 'profile_image';
     public const MEDIA_ROLE_APP_LOGO_IMAGE    = 'app_logo_image';
-    public const MEDIA_ROLE_APP_CPT_IMAGE     = 'app_cpt_image';
     public const MEDIA_ROLE_APP_FAVICON_IMAGE = 'app_favicon_image';
-    public const MEDIA_ROLE_THUMBNAIL_IMAGE   = 'thumbnail';
+
+    public const MEDIA_ROLE_NEWS_FEATURE_IMAGE   = 'news_feature_image';
+    public const MEDIA_ROLE_NEWS_CONTENT_IMAGE   = 'news_content_image';
+    public const MEDIA_ROLE_NEWS_THUMBNAIL_IMAGE = 'news_thumbnail';
 
     public const MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE = 'event_desktop_banner_image';
     public const MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE  = 'event_mobile_banner_image';
@@ -23,9 +25,13 @@ class MediaHelper
         return collect([
             (object) ['id' => self::MEDIA_ROLE_DEFAULT, 'name' => 'Default'],
 
+            (object) ['id' => self::MEDIA_ROLE_NEWS_FEATURE_IMAGE, 'name' => 'News feature image'],
+            (object) ['id' => self::MEDIA_ROLE_NEWS_THUMBNAIL_IMAGE, 'name' => 'News thumbnail'],
+            (object) ['id' => self::MEDIA_ROLE_NEWS_CONTENT_IMAGE, 'name' => 'News content image'],
+
             (object) ['id' => self::MEDIA_ROLE_PROFILE_IMAGE, 'name' => 'Profile Image'],
+
             (object) ['id' => self::MEDIA_ROLE_APP_LOGO_IMAGE, 'name' => 'App Logo Image'],
-            (object) ['id' => self::MEDIA_ROLE_APP_CPT_IMAGE, 'name' => 'App CPT Image'],
             (object) ['id' => self::MEDIA_ROLE_APP_FAVICON_IMAGE, 'name' => 'App Favicon Image'],
 
             (object) ['id' => self::MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE, 'name' => 'Event desktop banner image'],
@@ -34,7 +40,7 @@ class MediaHelper
         ]);
     }
 
-    public static function generateMediaName($mediaName, $mediaExtension, $maxLength)
+    public static function generateMediaName(string $mediaName, string $mediaExtension, string | int $maxLength)
     {
         $mediaName = $mediaName ?? "File";
         $mediaName = Str::of($mediaName)->limit($maxLength)->__toString();
