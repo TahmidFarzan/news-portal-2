@@ -3,7 +3,6 @@ namespace App\Models;
 
 use App\Observers\LanguageObserver;
 use App\Policies\LanguagePolicy;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -11,6 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
@@ -22,9 +22,9 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('languages')]
 #[Fillable([
-    'name', 'code', 'slug',
-    'detail', 'created_by_id',
-])]
+        'name', 'code', 'slug',
+        'detail', 'created_by_id',
+    ])]
 #[UsePolicy(LanguagePolicy::class)]
 #[ObservedBy([LanguageObserver::class])]
 class Language extends Model
@@ -96,8 +96,28 @@ class Language extends Model
         return $this->hasMany(Category::class);
     }
 
+    public function contributors(): HasMany
+    {
+        return $this->hasMany(Contributor::class);
+    }
+
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    public function locations(): HasMany
+    {
+        return $this->hasMany(Location::class);
+    }
+
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
+    }
+
+    public function tags(): HasMany
+    {
+        return $this->hasMany(Tag::class);
     }
 }
