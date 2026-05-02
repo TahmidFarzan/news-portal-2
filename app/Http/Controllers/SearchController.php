@@ -49,6 +49,11 @@ class SearchController extends Controller
         return response()->json($this->searchService->homePageSectionCategories($request));
     }
 
+    public function newsTypes(Request $request)
+    {
+        return response()->json($this->searchService->newsTypes($request));
+    }
+
     public function users(Request $request)
     {
         return response()->json($this->searchService->users($request));
