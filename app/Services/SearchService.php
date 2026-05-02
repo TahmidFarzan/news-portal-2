@@ -177,9 +177,9 @@ class SearchService
         ];
     }
 
-    public function homePageSectionCategories(Request $request): array
+    public function pageSections(Request $request): array
     {
-        $options = NewsHelper::homePageSectionCategories();
+        $options = NewsHelper::pageSections();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');

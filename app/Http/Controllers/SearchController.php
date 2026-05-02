@@ -44,9 +44,9 @@ class SearchController extends Controller
         return response()->json($this->searchService->activityLogSubjectTypes($request));
     }
 
-    public function homePageSectionCategories(Request $request)
+    public function pageSections(Request $request)
     {
-        return response()->json($this->searchService->homePageSectionCategories($request));
+        return response()->json($this->searchService->pageSections($request));
     }
 
     public function newsTypes(Request $request)
