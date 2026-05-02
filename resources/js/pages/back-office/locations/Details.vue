@@ -104,8 +104,8 @@ onMounted(async () => {
                     </div>
 
                     <div>
-                        <div class="text-gray-500 mb-1">Details</div>
-                        <div class="text-gray-700">{{ location?.details || 'N/A' }}</div>
+                        <div class="text-gray-500 mb-1">Brief</div>
+                        <div class="text-gray-700">{{ location?.brief || 'N/A' }}</div>
                     </div>
                 </div>
 
@@ -135,9 +135,9 @@ onMounted(async () => {
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">Details</div>
+                            <div class="text-gray-500 mb-1">Brief</div>
                             <div class="text-gray-700">
-                                {{ location?.category?.details || 'N/A' }}
+                                {{ location?.category?.brief || 'N/A' }}
                             </div>
                         </div>
                     </div>

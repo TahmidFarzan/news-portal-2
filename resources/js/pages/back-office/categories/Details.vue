@@ -105,8 +105,8 @@ onMounted(async () => {
                     </div>
 
                     <div>
-                        <div class="text-gray-500 mb-1">Details</div>
-                        <div class="text-gray-700">{{ category?.details || 'N/A' }}</div>
+                        <div class="text-gray-500 mb-1">Brief</div>
+                        <div class="text-gray-700">{{ category?.brief || 'N/A' }}</div>
                     </div>
                 </div>
 

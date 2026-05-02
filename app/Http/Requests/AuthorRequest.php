@@ -14,14 +14,16 @@ class AuthorRequest extends FormRequest
     public function rules()
     {
         return [
-            "name"          => ["required", "string", "max:200"],
+            "name"            => ["required", "string", "max:200"],
 
-            "details"       => ["nullable"],
-            "seo_title"     => ["nullable"],
-            "seo_brief"     => ["nullable"],
-            "seo_keywords"  => ["nullable"],
+            "brief"           => ["nullable"],
+            "profile_details" => ["nullable"],
 
-            "profile_image" => ["nullable", "image", "mimetypes:image/*", "dimensions:ratio=1/1,min_width=512,min_height=512"],
+            "seo_title"       => ["nullable"],
+            "seo_brief"       => ["nullable"],
+            "seo_keywords"    => ["nullable"],
+
+            "profile_image"   => ["nullable", "image", "mimetypes:image/*", "dimensions:ratio=1/1,min_width=512,min_height=512"],
         ];
     }
 

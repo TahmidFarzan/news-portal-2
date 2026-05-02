@@ -99,9 +99,9 @@ onMounted(async () => {
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-1">Details</div>
+                    <div class="text-gray-500 mb-1">Brief</div>
                     <div class="text-sm text-gray-700">
-                        {{ language?.details || 'N/A' }}
+                        {{ language?.brief || 'N/A' }}
                     </div>
                 </div>
 

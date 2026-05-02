@@ -1,11 +1,11 @@
 <?php
 namespace Database\Factories;
 
+use App\Helpers\SystemHelper;
+use App\Helpers\UserHelper;
 use App\Models\Language;
 use App\Models\User;
 use App\Models\UserRole;
-use App\Helpers\SystemHelper;
-use App\Helpers\UserHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,20 +19,16 @@ class EventFactory extends Factory
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
         $language      = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
 
-        $name    = $this->faker->name();
-        $details = $this->faker->sentence();
+        $name  = $this->faker->name();
+        $brief = $this->faker->sentence();
 
         return [
             'name'          => $name,
-            'details'       => $details,
-
+            'brief'         => $brief,
             'seo_title'     => $name,
-            'seo_brief'     => $details,
-
+            'seo_brief'     => $brief,
             "is_current"    => false,
-
             "language_id"   => $language?->id ?? "1",
-
             "created_by_id" => $user?->id ?? "1",
         ];
     }

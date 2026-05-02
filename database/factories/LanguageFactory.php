@@ -1,11 +1,11 @@
 <?php
 namespace Database\Factories;
 
+use App\Helpers\UserHelper;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Helpers\UserHelper;
 
 class LanguageFactory extends Factory
 {
@@ -17,7 +17,7 @@ class LanguageFactory extends Factory
         return [
             'name'          => $this->faker->name(),
             'code'          => Str::snake(Str::lower($this->faker->unique()->lexify('??'))),
-            'details'       => $this->faker->sentence(),
+            'brief'         => $this->faker->sentence(),
             "created_by_id" => $user?->id ?? "1",
         ];
     }

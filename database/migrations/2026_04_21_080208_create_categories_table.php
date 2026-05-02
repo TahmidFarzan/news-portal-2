@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
             $table->string('name', 255);
             $table->foreignId('parent_id')->nullable()->constrained('categories')->cascadeOnDelete();
-            $table->text('details')->nullable();
+            $table->text('brief')->nullable();
             $table->string('slug')->unique();
 
             $table->text('slug_tree');

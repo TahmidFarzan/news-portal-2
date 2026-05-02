@@ -35,7 +35,7 @@ const isUpdate = computed(() => !!language?.slug)
 const saveForm = useForm({
     name: language?.name || '',
     code: language?.code || '',
-    details: language?.details || '',
+    brief: language?.brief || '',
 })
 
 function validateForm() {
@@ -152,10 +152,10 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                Details
+                                Brief
                             </label>
 
-                            <textarea v-model="saveForm.details" rows="4" placeholder="Enter details"
+                            <textarea v-model="saveForm.brief" rows="4" placeholder="Enter brief"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300"></textarea>
                         </div>
 

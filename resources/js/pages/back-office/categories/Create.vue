@@ -24,7 +24,7 @@ const isUpdate = computed(() => !!category?.slug)
 
 const saveForm = useForm({
     name: category?.name || null,
-    details: category?.details || null,
+    brief: category?.brief || null,
     has_parent: category?.has_parent || false,
     parent_id: category?.parent_id || null,
     language_id: category?.language_id || null,
@@ -152,15 +152,15 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                Details
+                                Brief
                             </label>
 
-                            <textarea v-if="pageReady" v-model="saveForm.details" rows="4" placeholder="Enter details"
+                            <textarea v-if="pageReady" v-model="saveForm.brief" rows="4" placeholder="Enter brief"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.details ? 'border-red-500' : 'border-gray-300'"></textarea>
+                                :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
-                            <p v-if="saveForm.errors.details" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.details }}
+                            <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.brief }}
                             </p>
                         </div>
 

@@ -22,7 +22,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('locations')]
 #[Fillable([
-    'name', 'details', 'parent_id', 'slug', 'category_id',
+    'name', 'brief', 'parent_id', 'slug', 'category_id',
     'language_id', 'name_tree', "slug_tree", 'created_by_id',
     "seo_brief", 'seo_title', 'seo_keywords',
     'latitude','longitude',
@@ -52,7 +52,7 @@ class Location extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'details', 'parent_id', 'slug', 'category_id',
+                'name', 'brief', 'parent_id', 'slug', 'category_id',
                 'latitude','longitude','name_tree', "slug_tree",
             ])
             ->useLogName('Location')
@@ -173,7 +173,7 @@ class Location extends Model
 
         if ($this->ancestorsAndSelf()->breadthFirst()->count() > 0) {
             foreach ($this->ancestorsAndSelf()->breadthFirst()->get() as $rLocation) {
-                $breadcrumb = ['name' => $rLocation->name, 'url' => $rLocation->public_url, 'description' => $rLocation->details];
+                $breadcrumb = ['name' => $rLocation->name, 'url' => $rLocation->public_url, 'description' => $rLocation->brief];
                 array_push($breadcrumbs, $breadcrumb);
             }
         }

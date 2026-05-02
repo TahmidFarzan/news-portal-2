@@ -23,7 +23,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('categories')]
 #[Fillable([
-    'name', 'details', 'parent_id', 'slug',
+    'name', 'brief', 'parent_id', 'slug',
     'language_id', 'name_tree', "slug_tree", 'created_by_id',
     "seo_brief", 'seo_title', 'seo_keywords',
 ])]
@@ -51,7 +51,7 @@ class Category extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'details', 'parent_id', 'slug',
+                'name', 'brief', 'parent_id', 'slug',
                 'name_tree', "slug_tree",
                 "seo_brief", 'seo_title', 'seo_keywords',
             ])
@@ -181,7 +181,7 @@ class Category extends Model
 
         if ($this->ancestorsAndSelf()->breadthFirst()->count() > 0) {
             foreach ($this->ancestorsAndSelf()->breadthFirst()->get() as $rCategory) {
-                $breadcrumb = ['name' => $rCategory->name, 'url' => $rCategory->public_url, 'description' => $rCategory->details];
+                $breadcrumb = ['name' => $rCategory->name, 'url' => $rCategory->public_url, 'description' => $rCategory->brief];
                 array_push($breadcrumbs, $breadcrumb);
             }
         }

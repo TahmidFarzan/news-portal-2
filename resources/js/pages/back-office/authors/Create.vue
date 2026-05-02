@@ -25,7 +25,8 @@ const isUpdate = computed(() => !!author?.slug)
 
 const saveForm = useForm({
     name: author?.name || null,
-    details: author?.details || null,
+    brief: author?.brief || null,
+    profile_details: author?.profile_details || null,
     language_id: author?.language_id || null,
     profile_image: null,
     seo_brief: author?.seo_brief || null,
@@ -147,14 +148,28 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                Details
+                                Brief
                             </label>
 
-                            <TinyMCEEditor inputField="details" :form="saveForm" erroField="details" :isSimple="true"
+                            <textarea v-if="pageReady" v-model="saveForm.brief" rows="4" placeholder="Enter brief"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
+
+                            <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.brief }}
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                Profile details
+                            </label>
+
+                            <TinyMCEEditor inputField="profile_details" :form="saveForm" erroField="profile_details" :isSimple="true"
                                 :enableMediaUpload="false" :enableSelectFormMediaLibery="false" />
 
-                            <p v-if="saveForm.errors.details" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.details }}
+                            <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.profile_details }}
                             </p>
                         </div>
 
@@ -162,13 +177,13 @@ onMounted(async () => {
                 </div>
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">Banner Image</h3>
+                    <h3 class="text-base font-semibold">Profile Image</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Desktop Banner Image
+                                Profile Image
                             </label>
                             <input type="file" @change="e => saveForm.profile_image = e.target.files[0]"
                                 class="border rounded px-3 py-2 w-full"
@@ -178,8 +193,8 @@ onMounted(async () => {
                                 {{ saveForm.errors.profile_image }}
                             </p>
 
-                            <img :src="author?.profile_image?.media_url || '/uploads/images/desktop-mobile.png'"
-                                class="object-cover rounded-xl border border-gray-200 mt-2" />
+                            <img :src="author?.profile_image?.media_url || '/public/uploads/icons/auth/user.png'"
+                                class="object-cover rounded-xl border border-gray-200 mt-2 w-32 h-32" />
                         </div>
 
                     </div>

@@ -18,7 +18,7 @@ class EventRequest extends FormRequest
             "name"                 => ["required", "string", "max:200"],
             "language_id"          => ["required", "integer"],
 
-            "details"              => ["nullable"],
+            "brief"              => ["nullable"],
             "seo_title"            => ["nullable"],
             "seo_brief"            => ["nullable"],
             "seo_keywords"         => ["nullable"],

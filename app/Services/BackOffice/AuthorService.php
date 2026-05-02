@@ -1,8 +1,8 @@
 <?php
 namespace App\Services\BackOffice;
 
-use App\Helpers\TagifyHelper;
 use App\Helpers\MediaHelper;
+use App\Helpers\TagifyHelper;
 use App\Http\Requests\AuthorRequest;
 use App\Models\Author;
 use Exception;
@@ -65,7 +65,7 @@ class AuthorService
 
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('details', 'like', "%{$search}%")
+                    ->orWhere('brief', 'like', "%{$search}%")
                     ->orWhere('seo_brief', 'like', '%' . $search . '%')
                     ->orWhere('seo_title', 'like', '%' . $search . '%');
             });
@@ -81,7 +81,7 @@ class AuthorService
         DB::beginTransaction();
 
         try {
-            $isNew = empty($author->id);
+            $isNew       = empty($author->id);
             $statusEvent = $isNew ? "save" : "update";
 
             $seoKeywords = null;
@@ -90,13 +90,14 @@ class AuthorService
                 $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
             }
 
-            $author->name          = $request->input('name');
-            $author->details       = $request->input('details');
-            $author->language_id   = $request->input('language_id');
-            $author->seo_title     = $request->input('seo_title', $request->input('name'));
-            $author->seo_brief     = $request->input('seo_brief', $request->input('details'));
-            $author->seo_keywords  = $seoKeywords;
-            $author->created_by_id = $isNew ? Auth::id() : $author->created_by_id;
+            $author->name            = $request->input('name');
+            $author->brief           = $request->input('brief');
+            $author->profile_details = $request->input('profile_details');
+            $author->language_id     = $request->input('language_id');
+            $author->seo_title       = $request->input('seo_title', $request->input('name'));
+            $author->seo_brief       = $request->input('seo_brief', $request->input('brief'));
+            $author->seo_keywords    = $seoKeywords;
+            $author->created_by_id   = $isNew ? Auth::id() : $author->created_by_id;
 
             self::saveProfileImage($request, $author);
 
@@ -148,7 +149,7 @@ class AuthorService
         }
     }
 
-        private static function saveProfileImage(AuthorRequest $request, Author $author)
+    private static function saveProfileImage(AuthorRequest $request, Author $author)
     {
         if (! $request->hasFile('profile_image')) {
             return;
@@ -178,6 +179,5 @@ class AuthorService
                 ->toMediaCollection($author->media_collection_name);
         }
     }
-
 
 }

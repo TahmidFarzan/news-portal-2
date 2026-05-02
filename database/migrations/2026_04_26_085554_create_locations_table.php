@@ -15,7 +15,7 @@ return new class extends Migration
 
             $table->string('name', 255);
             $table->foreignId('parent_id')->nullable()->constrained('locations')->cascadeOnDelete();
-            $table->text('details')->nullable();
+            $table->text('brief')->nullable();
             $table->string('slug')->unique();
 
             $table->text('slug_tree');

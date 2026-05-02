@@ -98,8 +98,8 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
-                        <div class="text-gray-500 mb-1">Details</div>
-                        <div class="text-gray-700">{{ tag?.details || 'N/A' }}</div>
+                        <div class="text-gray-500 mb-1">Brief</div>
+                        <div class="text-gray-700">{{ tag?.brief || 'N/A' }}</div>
                     </div>
                 </div>
 

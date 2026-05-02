@@ -16,7 +16,7 @@ class LanguageRequest extends FormRequest
         return [
             'name'    => ['required', 'string', 'max:255'],
             'code'    => ['required', 'string', 'max:255', Rule::unique('languages')->ignore($this->route('slug'), 'slug')],
-            'details' => ['nullable'],
+            'brief' => ['nullable'],
         ];
     }
 

@@ -80,7 +80,7 @@ class CategoryService
 
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('details', 'like', "%{$search}%")
+                    ->orWhere('brief', 'like', "%{$search}%")
                     ->orWhere('seo_brief', 'like', '%' . $search . '%')
                     ->orWhere('seo_title', 'like', '%' . $search . '%');
             });
@@ -106,11 +106,11 @@ class CategoryService
             }
 
             $category->name          = $request->input('name');
-            $category->details       = $request->input('details');
+            $category->brief       = $request->input('brief');
             $category->language_id   = $request->input('language_id');
             $category->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
             $category->seo_title     = $request->input('seo_title', $request->input('name'));
-            $category->seo_brief     = $request->input('seo_brief', $request->input('details'));
+            $category->seo_brief     = $request->input('seo_brief', $request->input('brief'));
             $category->seo_keywords  = $seoKeywords;
             $category->created_by_id = $isNew ? Auth::id() : $category->created_by_id;
 

@@ -17,16 +17,15 @@ use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
-
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 #[Table('authors')]
 #[Fillable([
-    'name', 'details', 'slug',
+    'name', 'brief', 'slug', 'profile_details',
     'language_id', 'created_by_id',
     "seo_brief", 'seo_title', 'seo_keywords',
 ])]
@@ -42,7 +41,6 @@ class Author extends Model implements HasMedia
         'media_collection_name', 'profile_image',
     ];
 
-
     protected function casts(): array
     {
         return [
@@ -56,7 +54,7 @@ class Author extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'details', 'slug',
+                'name', 'brief', 'slug',
                 "seo_brief", 'seo_title', 'seo_keywords',
             ])
             ->useLogName('Author')
@@ -139,7 +137,7 @@ class Author extends Model implements HasMedia
         return $intervalInHours < 72;
     }
 
-        public function getProfileImageAttribute(): ?Media
+    public function getProfileImageAttribute(): ?Media
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
@@ -188,7 +186,7 @@ class Author extends Model implements HasMedia
         $breadcrumbs[] = [
             'name'        => $this->name,
             'url'         => $this->public_url,
-            'description' => $this->details,
+            'description' => $this->brief,
         ];
 
         return $breadcrumbs;

@@ -13,7 +13,8 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
             $table->string('slug')->unique();
-            $table->text('details')->nullable();
+            $table->text('brief')->nullable();
+            $table->longText('profile_details')->nullable();
 
             $table->string('seo_title', 255)->nullable();
             $table->text('seo_brief')->nullable();

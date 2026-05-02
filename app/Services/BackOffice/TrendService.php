@@ -82,7 +82,7 @@ class TrendService
             $searchValue = $request->input('search');
             $query->whereHas('tag', function ($query) use ($searchValue) {
                 $query->where('name', 'like', '%' . $searchValue . '%')
-                    ->orWhere('details', 'like', "%{$searchValue}%")
+                    ->orWhere('brief', 'like', "%{$searchValue}%")
                     ->orWhere('seo_brief', 'like', '%' . $searchValue . '%')
 
                     ->orWhere('seo_title', 'like', '%' . $searchValue . '%');

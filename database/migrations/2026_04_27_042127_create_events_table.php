@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
             $table->string('name', 255);
-            $table->text('details')->nullable();
+            $table->text('brief')->nullable();
             $table->string('banner_position')->nullable();
             $table->boolean('is_current')->default(false);
             $table->string('slug')->unique();

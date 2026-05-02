@@ -25,7 +25,7 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('events')]
 #[Fillable([
-    'name', 'details', 'slug',
+    'name', 'brief', 'slug',
     'language_id', 'created_by_id',
     "seo_brief", 'seo_title', 'seo_keywords',
 ])]
@@ -55,7 +55,7 @@ class Event extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'details', 'slug',
+                'name', 'brief', 'slug',
                 "seo_brief", 'seo_title', 'seo_keywords',
             ])
             ->useLogName('Event')
@@ -210,7 +210,7 @@ class Event extends Model implements HasMedia
 
         if ($this->ancestorsAndSelf()->breadthFirst()->count() > 0) {
             foreach ($this->ancestorsAndSelf()->breadthFirst()->get() as $rEvent) {
-                $breadcrumb = ['name' => $rEvent->name, 'url' => $rEvent->public_url, 'description' => $rEvent->details];
+                $breadcrumb = ['name' => $rEvent->name, 'url' => $rEvent->public_url, 'description' => $rEvent->brief];
                 array_push($breadcrumbs, $breadcrumb);
             }
         }

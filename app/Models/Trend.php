@@ -116,7 +116,7 @@ class Trend extends Model
         $breadcrumbs[] = [
             'name'        => $this->name,
             'url'         => $this->public_url,
-            'description' => $this->details,
+            'description' => $this->brief,
         ];
 
         return $breadcrumbs;

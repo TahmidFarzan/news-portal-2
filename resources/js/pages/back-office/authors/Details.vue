@@ -108,9 +108,18 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
-                        <div class="text-gray-500 mb-1">Details</div>
-                        <div class="text-gray-700">{{ author?.details || 'N/A' }}
-                            <div v-html="author?.details || 'N/A'"></div>
+                        <div class="text-gray-500 mb-1">Brief</div>
+                        <div class="text-gray-700">
+                            {{ author?.brief || 'N/A' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div>
+                        <div class="text-gray-500 mb-1">Profile details</div>
+                        <div class="text-gray-700">
+                            <div v-html="author?.profile_details || 'N/A'"></div>
                         </div>
                     </div>
                 </div>

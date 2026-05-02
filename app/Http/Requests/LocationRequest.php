@@ -21,7 +21,7 @@ class LocationRequest extends FormRequest
             "language_id"  => ["required", "integer"],
             "category_id"  => ["nullable", "integer"],
 
-            "details"      => ["nullable"],
+            "brief"      => ["nullable"],
             "parent_id"    => ["nullable", "required_if:has_parent,true", "integer"],
         ];
     }

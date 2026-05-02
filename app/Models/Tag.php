@@ -22,7 +22,7 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('tags')]
 #[Fillable([
-    'name', 'details', 'slug',
+    'name', 'brief', 'slug',
     'language_id', 'created_by_id',
     "seo_brief", 'seo_title', 'seo_keywords',
 ])]
@@ -50,7 +50,7 @@ class Tag extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'details', 'slug',
+                'name', 'brief', 'slug',
                 "seo_brief", 'seo_title', 'seo_keywords',
             ])
             ->useLogName('Tag')
@@ -145,7 +145,7 @@ class Tag extends Model
         $breadcrumbs[] = [
             'name'        => $this->name,
             'url'         => $this->public_url,
-            'description' => $this->details,
+            'description' => $this->brief,
         ];
 
         return $breadcrumbs;

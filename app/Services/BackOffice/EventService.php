@@ -65,7 +65,7 @@ class EventService
 
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('details', 'like', "%{$search}%")
+                    ->orWhere('brief', 'like', "%{$search}%")
                     ->orWhere('seo_brief', 'like', '%' . $search . '%')
                     ->orWhere('seo_title', 'like', '%' . $search . '%');
             });
@@ -91,11 +91,11 @@ class EventService
             }
 
             $event->name        = $request->input('name');
-            $event->details     = $request->input('details');
+            $event->brief     = $request->input('brief');
             $event->language_id = $request->input('language_id');
 
             $event->seo_title     = $request->input('seo_title', $request->input('name'));
-            $event->seo_brief     = $request->input('seo_brief', $request->input('details'));
+            $event->seo_brief     = $request->input('seo_brief', $request->input('brief'));
             $event->seo_keywords  = $seoKeywords;
             $event->created_by_id = $isNew ? Auth::id() : $event->created_by_id;
 
