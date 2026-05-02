@@ -90,7 +90,7 @@ class Author extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection("Author");
+        $this->addMediaCollection($this->media_collection_name);
     }
 
     public function registerMediaConversions($spatieMedia = null): void
@@ -98,7 +98,7 @@ class Author extends Model implements HasMedia
         $this->addMediaConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
             ->format(MediaHelper::DEFAULT_MEDIA_CONVERSION)
             ->quality(80)
-            ->performOnCollections("Author")
+            ->performOnCollections($this->media_collection_name)
             ->queued();
     }
 

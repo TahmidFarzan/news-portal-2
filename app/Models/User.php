@@ -112,7 +112,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection("User");
+        $this->addMediaCollection($this->media_collection_name);
     }
 
     public function registerMediaConversions($spatieMedia = null): void
@@ -120,7 +120,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         $this->addMediaConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
             ->format(MediaHelper::DEFAULT_MEDIA_CONVERSION)
             ->quality(80)
-            ->performOnCollections("User")
+            ->performOnCollections($this->media_collection_name)
             ->queued();
     }
 
