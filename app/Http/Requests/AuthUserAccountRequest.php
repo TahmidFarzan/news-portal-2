@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 
 class AuthUserAccountRequest extends FormRequest
 {
-    public function authorize()
+    public function contributorize()
     {
         return true;
     }

@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Services\Cache\AuthorCacheService;
+use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\EventCacheService;
 use App\Services\Cache\LocationCacheService;
@@ -13,7 +13,7 @@ class SitemapService
     protected CategoryCacheService $categoryCacheService;
     protected LocationCacheService $locationCacheService;
     protected EventCacheService $eventCacheService;
-    protected AuthorCacheService $authorCacheService;
+    protected ContributorCacheService $contributorCacheService;
     protected TagCacheService $tagCacheService;
 
     public function __construct(
@@ -21,13 +21,13 @@ class SitemapService
         TagCacheService $tagCacheService,
         LocationCacheService $locationCacheService,
         EventCacheService $eventCacheService,
-        AuthorCacheService $authorCacheService,
+        ContributorCacheService $contributorCacheService,
     ) {
         $this->categoryCacheService = $categoryCacheService;
         $this->tagCacheService      = $tagCacheService;
         $this->locationCacheService = $locationCacheService;
         $this->eventCacheService    = $eventCacheService;
-        $this->authorCacheService   = $authorCacheService;
+        $this->contributorCacheService   = $contributorCacheService;
     }
 
     public function getCategories(Request $request)
@@ -74,14 +74,14 @@ class SitemapService
         return $this->eventCacheService->lastPageNo('sitemap');
     }
 
-    public function getAuthors(Request $request)
+    public function getContributors(Request $request)
     {
         $page = $request->query('page', 1);
-        return $this->authorCacheService->records('sitemap', null, $page);
+        return $this->contributorCacheService->records('sitemap', null, $page);
     }
 
-    public function getAuthorsLastPageNo()
+    public function getContributorsLastPageNo()
     {
-        return $this->authorCacheService->lastPageNo('sitemap');
+        return $this->contributorCacheService->lastPageNo('sitemap');
     }
 }

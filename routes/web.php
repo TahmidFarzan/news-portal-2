@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 //
 use App\Http\Controllers\BackOffice\ActivityLogController;
-use App\Http\Controllers\BackOffice\AuthorController;
+use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\EventController;
 use App\Http\Controllers\BackOffice\LanguageController;
@@ -62,7 +62,7 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('tags', [SearchController::class, 'tags'])->name('tags');
     Route::get('locations', [SearchController::class, 'locations'])->name('locations');
     Route::get('events', [SearchController::class, 'events'])->name('events');
-    Route::get('authors', [SearchController::class, 'authors'])->name('authors');
+    Route::get('contributors', [SearchController::class, 'contributors'])->name('contributors');
 
     Route::get('medias', [SearchController::class, 'medias'])->name('medias');
 
@@ -76,7 +76,7 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('tag/{slugOrId}', [SearchController::class, 'tag'])->name('tag');
     Route::get('location/{slugOrId}', [SearchController::class, 'location'])->name('location');
     Route::get('event/{slugOrId}', [SearchController::class, 'event'])->name('event');
-    Route::get('author/{slugOrId}', [SearchController::class, 'author'])->name('author');
+    Route::get('contributor/{slugOrId}', [SearchController::class, 'contributor'])->name('contributor');
 
 });
 
@@ -196,15 +196,15 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [EventController::class, 'delete'])->name('delete');
     });
 
-    Route::prefix('authors')->name('authors.')->group(function () {
-        Route::get('/', [AuthorController::class, 'index'])->name('index');
-        Route::get('create', [AuthorController::class, 'create'])->name('create');
-        Route::get('edit/{slug}', [AuthorController::class, 'edit'])->name('edit');
-        Route::get('details/{slug}', [AuthorController::class, 'details'])->name('details');
+    Route::prefix('contributors')->name('contributors.')->group(function () {
+        Route::get('/', [ContributorController::class, 'index'])->name('index');
+        Route::get('create', [ContributorController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [ContributorController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [ContributorController::class, 'details'])->name('details');
 
-        Route::post('save', [AuthorController::class, 'save'])->name('save');
-        Route::patch('update/{slug}', [AuthorController::class, 'update'])->name('update');
-        Route::delete('delete/{slug}', [AuthorController::class, 'delete'])->name('delete');
+        Route::post('save', [ContributorController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [ContributorController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [ContributorController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
@@ -225,7 +225,7 @@ Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
         Route::get('tags.xml', [SitemapController::class, 'tags'])->name('tags');
         Route::get('locations.xml', [SitemapController::class, 'locations'])->name('locations');
         Route::get('events.xml', [SitemapController::class, 'events'])->name('events');
-        Route::get('authors.xml', [SitemapController::class, 'authors'])->name('authors');
+        Route::get('contributors.xml', [SitemapController::class, 'contributors'])->name('contributors');
     });
 });
 

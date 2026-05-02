@@ -2,8 +2,8 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
-use App\Observers\AuthorObserver;
-use App\Policies\AuthorPolicy;
+use App\Observers\ContributorObserver;
+use App\Policies\ContributorPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -23,15 +23,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[Table('authors')]
+#[Table('contributors')]
 #[Fillable([
     'name', 'brief', 'slug', 'profile_details',
     'language_id', 'created_by_id',
     "seo_brief", 'seo_title', 'seo_keywords',
 ])]
-#[UsePolicy(AuthorPolicy::class)]
-#[ObservedBy([AuthorObserver::class])]
-class Author extends Model implements HasMedia
+#[UsePolicy(ContributorPolicy::class)]
+#[ObservedBy([ContributorObserver::class])]
+class Contributor extends Model implements HasMedia
 {
     use HasFactory, LogsActivity, HasSlug, InteractsWithMedia;
 
@@ -57,7 +57,7 @@ class Author extends Model implements HasMedia
                 'name', 'brief', 'slug',
                 "seo_brief", 'seo_title', 'seo_keywords',
             ])
-            ->useLogName('Author')
+            ->useLogName('Contributor')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
             ->logOnlyDirty()
             ->logExcept([
@@ -104,7 +104,7 @@ class Author extends Model implements HasMedia
 
     public function getMediaCollectionNameAttribute(): string
     {
-        return "Author";
+        return "Contributor";
     }
 
     public function getPublicUrlAttribute(): string

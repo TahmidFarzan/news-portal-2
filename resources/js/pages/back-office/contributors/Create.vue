@@ -17,21 +17,21 @@ defineOptions({ layout: Layout })
 
 const pageReady = inject("pageReady")
 
-const { author } = defineProps({
-    author: Object,
+const { contributor } = defineProps({
+    contributor: Object,
 })
 
-const isUpdate = computed(() => !!author?.slug)
+const isUpdate = computed(() => !!contributor?.slug)
 
 const saveForm = useForm({
-    name: author?.name || null,
-    brief: author?.brief || null,
-    profile_details: author?.profile_details || null,
-    language_id: author?.language_id || null,
+    name: contributor?.name || null,
+    brief: contributor?.brief || null,
+    profile_details: contributor?.profile_details || null,
+    language_id: contributor?.language_id || null,
     profile_image: null,
-    seo_brief: author?.seo_brief || null,
-    seo_title: author?.seo_title || null,
-    seo_keywords: author?.seo_keywords ? author.seo_keywords.split(',') : [],
+    seo_brief: contributor?.seo_brief || null,
+    seo_title: contributor?.seo_title || null,
+    seo_keywords: contributor?.seo_keywords ? contributor.seo_keywords.split(',') : [],
 })
 
 function validateForm() {
@@ -78,12 +78,12 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.authors.update', { slug: author?.slug }),
+            route('back-office.contributors.update', { slug: contributor?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
         )
     } else {
-        saveForm.post(route('back-office.authors.save'), requestConfig)
+        saveForm.post(route('back-office.contributors.save'), requestConfig)
     }
 }
 
@@ -95,8 +95,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Authors', href: route('back-office.authors.index') },
-                { text: isUpdate.value ? `${author?.name} edit` : 'Author create', active: true }
+                { text: 'Contributors', href: route('back-office.contributors.index') },
+                { text: isUpdate.value ? `${contributor?.name} edit` : 'Contributor create', active: true }
             ],
         })
     )
@@ -107,7 +107,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${author?.name} edit` : 'Author create'" />
+    <Head :title="isUpdate ? `${contributor?.name} edit` : 'Contributor create'" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -125,7 +125,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="language_id"
-                                :selectedItem="author?.language" :apiUrl="route('search.languages')"
+                                :selectedItem="contributor?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -193,7 +193,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.profile_image }}
                             </p>
 
-                            <img :src="author?.profile_image?.media_url || '/public/uploads/icons/auth/user.png'"
+                            <img :src="contributor?.profile_image?.media_url || '/public/uploads/icons/auth/user.png'"
                                 class="object-cover rounded-xl border border-gray-200 mt-2 w-32 h-32" />
                         </div>
 

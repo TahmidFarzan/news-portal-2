@@ -298,7 +298,7 @@ return [
         ],
     ],
 
-    'author'      => [
+    'contributor'      => [
         'name'          => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',

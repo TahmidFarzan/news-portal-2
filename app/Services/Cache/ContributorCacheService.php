@@ -2,14 +2,14 @@
 namespace App\Services\Cache;
 
 use App\Helpers\CacheServerHelper;
-use App\Models\Author;
+use App\Models\Contributor;
 
-class AuthorCacheService
+class ContributorCacheService
 {
     private int $cahedTime = 86400;
     private int $perPage   = 5000;
 
-    protected array $baseAuthors = ['author'];
+    protected array $baseContributors = ['contributor'];
 
     public function isConnected()
     {
@@ -22,8 +22,8 @@ class AuthorCacheService
 
     public function clearCached()
     {
-        CacheServerHelper::clearCachedByTag(['author', 'public']);
-        CacheServerHelper::clearCachedByTag(['author', 'sitemap']);
+        CacheServerHelper::clearCachedByTag(['contributor', 'public']);
+        CacheServerHelper::clearCachedByTag(['contributor', 'sitemap']);
     }
 
     /* -------------------------------------------------
@@ -32,7 +32,7 @@ class AuthorCacheService
 
     public function dbRecordsCount()
     {
-        return Author::count();
+        return Contributor::count();
     }
 
     public function dbLastPageNo($perPage = null)
@@ -45,7 +45,7 @@ class AuthorCacheService
     {
         $perPage = $perPage ?? $this->perPage;
 
-        return Author::orderBy('id', 'asc')->with("language")->paginate($perPage, ['*'], 'page', $page);
+        return Contributor::orderBy('id', 'asc')->with("language")->paginate($perPage, ['*'], 'page', $page);
     }
 
     /* -------------------------------------------------
@@ -55,30 +55,30 @@ class AuthorCacheService
     public function cachedRecords($key, $perPage = null, $page = 1)
     {
         CacheServerHelper::cachedData(
-            "author {$key} page {$page}",
+            "contributor {$key} page {$page}",
             $this->dbRecords($perPage, $page),
             $this->cahedTime,
-            ['author', $key]
+            ['contributor', $key]
         );
     }
 
     public function cachedRecordsCount($key)
     {
         CacheServerHelper::cachedData(
-            "author {$key} count",
+            "contributor {$key} count",
             $this->dbRecordsCount(),
             $this->cahedTime,
-            ['author', $key]
+            ['contributor', $key]
         );
     }
 
     public function cachedLastPageNo($key)
     {
         CacheServerHelper::cachedData(
-            "author {$key} last page no",
+            "contributor {$key} last page no",
             $this->dbLastPageNo(),
             $this->cahedTime,
-            ['author', $key]
+            ['contributor', $key]
         );
     }
 
@@ -88,11 +88,11 @@ class AuthorCacheService
 
     public function recordsCount($key)
     {
-        $cacheKey = "author {$key} count";
+        $cacheKey = "contributor {$key} count";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['author', $key]
+            ['contributor', $key]
         );
 
         if ($count === null) {
@@ -101,7 +101,7 @@ class AuthorCacheService
                 $cacheKey,
                 $count,
                 $this->cahedTime,
-                ['author', $key]
+                ['contributor', $key]
             );
         }
 
@@ -110,11 +110,11 @@ class AuthorCacheService
 
     public function lastPageNo($key)
     {
-        $cacheKey = "author {$key} last page no";
+        $cacheKey = "contributor {$key} last page no";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['author', $key]
+            ['contributor', $key]
         );
 
         if ($lastPage === null) {
@@ -123,7 +123,7 @@ class AuthorCacheService
                 $cacheKey,
                 $lastPage,
                 $this->cahedTime,
-                ['author', $key]
+                ['contributor', $key]
             );
         }
 
@@ -132,11 +132,11 @@ class AuthorCacheService
 
     public function records($key, $perPage = null, $page = 1)
     {
-        $cacheKey = "author {$key} page {$page}";
+        $cacheKey = "contributor {$key} page {$page}";
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['author', $key]
+            ['contributor', $key]
         );
 
         if ($records === null) {
@@ -145,7 +145,7 @@ class AuthorCacheService
                 $cacheKey,
                 $records,
                 $this->cahedTime,
-                ['author', $key]
+                ['contributor', $key]
             );
         }
 

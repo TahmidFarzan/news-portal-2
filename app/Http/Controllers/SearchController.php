@@ -89,9 +89,9 @@ class SearchController extends Controller
         return response()->json($this->searchService->events($request));
     }
 
-    public function authors(Request $request)
+    public function contributors(Request $request)
     {
-        return response()->json($this->searchService->authors($request));
+        return response()->json($this->searchService->contributors($request));
     }
 
     public function medias(Request $request)
@@ -144,8 +144,8 @@ class SearchController extends Controller
         return response()->json($this->searchService->event($slugOrId));
     }
 
-    public function author(string | int $slugOrId)
+    public function contributor(string | int $slugOrId)
     {
-        return response()->json($this->searchService->author($slugOrId));
+        return response()->json($this->searchService->contributor($slugOrId));
     }
 }

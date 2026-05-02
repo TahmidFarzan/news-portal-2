@@ -3,83 +3,83 @@ namespace Database\Seeders;
 
 use App\Helpers\MediaHelper;
 use App\Helpers\SystemHelper;
-use App\Models\Author;
+use App\Models\Contributor;
 use App\Models\Language;
 use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class AuthorSeeder extends Seeder
+class ContributorSeeder extends Seeder
 {
     public function run(): void
     {
         if (env("DB_CONNECTION") === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
-            Author::query()->delete();
-            DB::statement("DELETE FROM sqlite_sequence WHERE name='authors'");
+            Contributor::query()->delete();
+            DB::statement("DELETE FROM sqlite_sequence WHERE name='contributors'");
             DB::statement('PRAGMA foreign_keys = ON;');
         }
 
         if (env("DB_CONNECTION") === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            Author::truncate();
+            Contributor::truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
 
         if (in_array(env("DB_CONNECTION"), ['pgsql', 'sqlsrv'])) {
-            Author::truncate();
+            Contributor::truncate();
         }
 
         $languages = Language::all()->keyBy('code');
 
-        $authorsByLanguageGroups = $this->authorsByLanguageGroups();
-        foreach ($authorsByLanguageGroups as $authorsByLanguageGroup) {
-            $language = $languages[$authorsByLanguageGroup->language_code] ?? null;
-            foreach ($authorsByLanguageGroup->authors as $author) {
-                Author::factory()->state([
-                    'name'            => $author->name,
-                    'brief'           => $author->brief ?? null,
-                    'profile_details' => $author->profile_details ?? null,
+        $contributorsByLanguageGroups = $this->contributorsByLanguageGroups();
+        foreach ($contributorsByLanguageGroups as $contributorsByLanguageGroup) {
+            $language = $languages[$contributorsByLanguageGroup->language_code] ?? null;
+            foreach ($contributorsByLanguageGroup->contributors as $contributor) {
+                Contributor::factory()->state([
+                    'name'            => $contributor->name,
+                    'brief'           => $contributor->brief ?? null,
+                    'profile_details' => $contributor->profile_details ?? null,
                     "language_id"     => $language?->id ?? "1",
 
-                    'seo_title'       => $author->name,
-                    'seo_brief'       => $author->brief ?? null,
-                    'seo_keywords'    => $author->seo_keywords ?? null,
+                    'seo_title'       => $contributor->name,
+                    'seo_brief'       => $contributor->brief ?? null,
+                    'seo_keywords'    => $contributor->seo_keywords ?? null,
                 ])->create();
             }
         }
 
         $profileImageUrl = MediaHelper::defaultAuthImage("1:1", "user");
         if ($profileImageUrl) {
-            $authors = Author::orderBy("id", "desc")->get();
-            foreach ($authors as $author) {
+            $contributors = Contributor::orderBy("id", "desc")->get();
+            foreach ($contributors as $contributor) {
                 try {
                     $headers = get_headers($profileImageUrl, 1);
                     if (strpos($headers[0], '200') !== false) {
                         $profileImageExtension = pathinfo($profileImageUrl, PATHINFO_EXTENSION);
                         $profileImageExtension = in_array($profileImageExtension, ["png", "jpg", "jpeg"]) ? $profileImageExtension : "png";
-                        $profileImageFileName  = MediaHelper::generateMediaName($author->name, $profileImageExtension, 200);
-                        $author->addMediaFromUrl($profileImageUrl)
-                            ->usingName($author->name)
+                        $profileImageFileName  = MediaHelper::generateMediaName($contributor->name, $profileImageExtension, 200);
+                        $contributor->addMediaFromUrl($profileImageUrl)
+                            ->usingName($contributor->name)
                             ->usingFileName($profileImageFileName)
-                            ->withCustomProperties(['caption' => $author->name, 'alt' => $author->name, "role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE])
-                            ->toMediaCollection($author->media_collection_name);
+                            ->withCustomProperties(['caption' => $contributor->name, 'alt' => $contributor->name, "role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE])
+                            ->toMediaCollection($contributor->media_collection_name);
                     } else {
-                        Log::info("Image not accessable author {$author->name}");
+                        Log::info("Image not accessable contributor {$contributor->name}");
                     }
                 } catch (Exception $ex) {
-                    Log::info("Failed to fetch Image for author {$author->name}: {$ex->getMessage()}");
+                    Log::info("Failed to fetch Image for contributor {$contributor->name}: {$ex->getMessage()}");
                 }
             }
         }
     }
-    private function authorsByLanguageGroups()
+    private function contributorsByLanguageGroups()
     {
         return collect([
             (object) [
                 'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
-                'authors'       => collect([
+                'contributors'       => collect([
 
                     (object) [
                         'name'            => 'Tahmima Anam',
@@ -239,7 +239,7 @@ class AuthorSeeder extends Seeder
 
             (object) [
                 'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
-                'authors'       => collect([
+                'contributors'       => collect([
                     (object) [
                         'name'            => 'তাহমিমা আনাম',
                         'brief'           => 'বাংলাদেশি ঔপন্যাসিক ও লেখিকা',

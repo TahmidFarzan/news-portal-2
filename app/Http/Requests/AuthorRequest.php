@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Requests;
 
-use App\Models\Author;
+use App\Models\Contributor;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AuthorRequest extends FormRequest
+class ContributorRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -30,34 +30,34 @@ class AuthorRequest extends FormRequest
     public function messages()
     {
         return [
-            "name.required"            => __("form-requests.author.name.required"),
-            "name.string"              => __("form-requests.author.name.string"),
-            "name.max"                 => __("form-requests.author.name.max"),
+            "name.required"            => __("form-requests.contributor.name.required"),
+            "name.string"              => __("form-requests.contributor.name.string"),
+            "name.max"                 => __("form-requests.contributor.name.max"),
 
-            "profile_image.image"      => __("form-requests.author.desktop_banner_image.image"),
-            "profile_image.mimes"      => __("form-requests.author.desktop_banner_image.mimes"),
-            "profile_image.dimensions" => __("form-requests.author.desktop_banner_image.dimensions"),
+            "profile_image.image"      => __("form-requests.contributor.desktop_banner_image.image"),
+            "profile_image.mimes"      => __("form-requests.contributor.desktop_banner_image.mimes"),
+            "profile_image.dimensions" => __("form-requests.contributor.desktop_banner_image.dimensions"),
         ];
     }
 
     public function withValidator($validator)
     {
-        $author = Author::where('slug', $this->route('slug'))->first();
+        $contributor = Contributor::where('slug', $this->route('slug'))->first();
 
-        $validator->after(function ($validator) use ($author) {
+        $validator->after(function ($validator) use ($contributor) {
             $data = $validator->getData();
 
             if (! empty($data["name"])) {
-                $sameQuery = Author::where("name", $data["name"]);
+                $sameQuery = Contributor::where("name", $data["name"]);
 
-                if ($author) {
-                    $sameQuery->where("id", "!=", $author->id);
+                if ($contributor) {
+                    $sameQuery->where("id", "!=", $contributor->id);
                 }
 
                 if ($sameQuery->count() > 0) {
                     $validator->errors()->add(
                         'name',
-                        __("form-requests.author.name.unique")
+                        __("form-requests.contributor.name.unique")
                     );
                 }
             }

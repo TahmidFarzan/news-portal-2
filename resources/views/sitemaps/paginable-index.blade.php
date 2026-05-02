@@ -20,8 +20,8 @@
                 $url = route('sitemaps.newses.locations');
                 break;
 
-            case 'Author':
-                $url = route('sitemaps.newses.authors');
+            case 'Contributor':
+                $url = route('sitemaps.newses.contributors');
                 break;
 
             default:

@@ -9,9 +9,9 @@ use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Author>
+ * @extends Factory<Contributor>
  */
-class AuthorFactory extends Factory
+class ContributorFactory extends Factory
 {
     public function definition(): array
     {

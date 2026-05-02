@@ -10,7 +10,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
-import { canEditAuthor, canDeleteAuthor } from '@/composables/useAuthUserAccessPermissions'
+import { canEditContributor, canDeleteContributor } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
 
@@ -22,18 +22,18 @@ const authUser = inject("authUser")
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { author } = defineProps({
-    author: Object,
+const { contributor } = defineProps({
+    contributor: Object,
 })
 
-const canEdit = (author) => canEditAuthor(authUser?.value, author)
-const canDelete = (author) => canDeleteAuthor(authUser?.value, author)
+const canEdit = (contributor) => canEditContributor(authUser?.value, contributor)
+const canDelete = (contributor) => canDeleteContributor(authUser?.value, contributor)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.authors.delete', { slug: author?.slug }), {
+    intertiaJsRoute.delete(route('back-office.contributors.delete', { slug: contributor?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -45,8 +45,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Authors', href: route('back-office.authors.index') },
-                { text: `${author?.name} details`, active: true }
+                { text: 'Contributors', href: route('back-office.contributors.index') },
+                { text: `${contributor?.name} details`, active: true }
             ],
         })
     )
@@ -57,21 +57,21 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${author?.name} details`" />
+    <Head :title="`${contributor?.name} details`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Author Details</h2>
+            <h2 class="text-lg font-semibold">Contributor Details</h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(author)" :href="route('back-office.authors.edit', { slug: author?.slug })"
+                <a v-if="canEdit(contributor)" :href="route('back-office.contributors.edit', { slug: contributor?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     Edit
                 </a>
 
-                <button v-if="canDelete(author)" @click="showDeleteModal = true"
+                <button v-if="canDelete(contributor)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
                     Delete
@@ -87,12 +87,12 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ author?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ contributor?.name || 'N/A' }}</span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ author?.language?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ contributor?.language?.name || 'N/A' }}</span>
                     </div>
                 </div>
 
@@ -100,7 +100,7 @@ onMounted(async () => {
                     <div>
                         <div class="text-gray-500 mb-1">Profile Image</div>
                         <div class="text-gray-700">
-                            <img :src="author?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
+                            <img :src="contributor?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
                                 class="w-32 h-32 object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>
@@ -110,7 +110,7 @@ onMounted(async () => {
                     <div>
                         <div class="text-gray-500 mb-1">Brief</div>
                         <div class="text-gray-700">
-                            {{ author?.brief || 'N/A' }}
+                            {{ contributor?.brief || 'N/A' }}
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,7 @@ onMounted(async () => {
                     <div>
                         <div class="text-gray-500 mb-1">Profile details</div>
                         <div class="text-gray-700">
-                            <div v-html="author?.profile_details || 'N/A'"></div>
+                            <div v-html="contributor?.profile_details || 'N/A'"></div>
                         </div>
                     </div>
                 </div>
@@ -130,18 +130,18 @@ onMounted(async () => {
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-500">Title</span>
-                            <span class="font-medium">{{ author?.seo_title || 'N/A' }}</span>
+                            <span class="font-medium">{{ contributor?.seo_title || 'N/A' }}</span>
                         </div>
 
                         <div class="flex justify-between">
                             <span class="text-gray-500">Brief</span>
-                            <span class="font-medium">{{ author?.seo_brief || 'N/A' }}</span>
+                            <span class="font-medium">{{ contributor?.seo_brief || 'N/A' }}</span>
                         </div>
 
                         <div>
                             <div class="text-gray-500 mb-1">Keywords</div>
                             <div class="text-gray-700">
-                                {{ author?.seo_keywords || 'N/A' }}
+                                {{ contributor?.seo_keywords || 'N/A' }}
                             </div>
                         </div>
                     </div>
@@ -153,18 +153,18 @@ onMounted(async () => {
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-500">Sitemap url</span>
-                            <span class="font-medium">{{ author?.sitemap_url || 'N/A' }}</span>
+                            <span class="font-medium">{{ contributor?.sitemap_url || 'N/A' }}</span>
                         </div>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Feeds (RSS)</span>
-                        <span class="font-medium">{{ author?.feeds_rss_url || 'N/A' }}</span>
+                        <span class="font-medium">{{ contributor?.feeds_rss_url || 'N/A' }}</span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Feeds (ATOM)</span>
-                        <span class="font-medium">{{ author?.feeds_atom_url || 'N/A' }}</span>
+                        <span class="font-medium">{{ contributor?.feeds_atom_url || 'N/A' }}</span>
                     </div>
                 </div>
 
@@ -180,14 +180,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created At</span>
                         <span class="font-medium">
-                            {{ author?.created_at ? formatDateTime(author.created_at) : 'N/A' }}
+                            {{ contributor?.created_at ? formatDateTime(contributor.created_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created By</span>
                         <span class="font-medium">
-                            {{ author?.created_by?.name || 'N/A' }}
+                            {{ contributor?.created_by?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -196,14 +196,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated At</span>
                         <span class="font-medium">
-                            {{ author?.updated_at ? formatDateTime(author.updated_at) : 'N/A' }}
+                            {{ contributor?.updated_at ? formatDateTime(contributor.updated_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated By</span>
                         <span class="font-medium">
-                            {{ author?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ contributor?.latest_activity_log?.causer?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -213,7 +213,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
-            <RecentActivities :model-slug="'author'" :model="author" />
+            <RecentActivities :model-slug="'contributor'" :model="contributor" />
         </div>
 
         <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
@@ -230,11 +230,11 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete Author
+                            Delete Contributor
                         </h3>
 
                         <p class="text-sm font-medium">
-                            {{ author?.name }}
+                            {{ contributor?.name }}
                         </p>
 
                         <p class="text-sm text-gray-500">

@@ -3,29 +3,29 @@ namespace App\Services\BackOffice;
 
 use App\Helpers\MediaHelper;
 use App\Helpers\TagifyHelper;
-use App\Http\Requests\AuthorRequest;
-use App\Models\Author;
+use App\Http\Requests\ContributorRequest;
+use App\Models\Contributor;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class AuthorService
+class ContributorService
 {
-    public function new (): Author
+    public function new (): Contributor
     {
-        return new Author();
+        return new Contributor();
     }
 
-    public function find(string $slug): Author
+    public function find(string $slug): Contributor
     {
-        return Author::where('slug', $slug)->firstOrFail();
+        return Contributor::where('slug', $slug)->firstOrFail();
     }
 
-    public function loadRelations(Author $author): Author
+    public function loadRelations(Contributor $contributor): Contributor
     {
-        $author->load([
+        $contributor->load([
             'language',
 
             'createdBy',
@@ -37,14 +37,14 @@ class AuthorService
             'latestActivityLog.causer',
         ]);
 
-        return $author;
+        return $contributor;
     }
 
     public function search(Request $request)
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Author::query();
+        $query = Contributor::query();
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
@@ -76,12 +76,12 @@ class AuthorService
             ->appends($request->all());
     }
 
-    public function save(AuthorRequest $request, Author $author): array
+    public function save(ContributorRequest $request, Contributor $contributor): array
     {
         DB::beginTransaction();
 
         try {
-            $isNew       = empty($author->id);
+            $isNew       = empty($contributor->id);
             $statusEvent = $isNew ? "save" : "update";
 
             $seoKeywords = null;
@@ -90,72 +90,72 @@ class AuthorService
                 $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
             }
 
-            $author->name            = $request->input('name');
-            $author->brief           = $request->input('brief');
-            $author->profile_details = $request->input('profile_details');
-            $author->language_id     = $request->input('language_id');
-            $author->seo_title       = $request->input('seo_title', $request->input('name'));
-            $author->seo_brief       = $request->input('seo_brief', $request->input('brief'));
-            $author->seo_keywords    = $seoKeywords;
-            $author->created_by_id   = $isNew ? Auth::id() : $author->created_by_id;
+            $contributor->name            = $request->input('name');
+            $contributor->brief           = $request->input('brief');
+            $contributor->profile_details = $request->input('profile_details');
+            $contributor->language_id     = $request->input('language_id');
+            $contributor->seo_title       = $request->input('seo_title', $request->input('name'));
+            $contributor->seo_brief       = $request->input('seo_brief', $request->input('brief'));
+            $contributor->seo_keywords    = $seoKeywords;
+            $contributor->created_by_id   = $isNew ? Auth::id() : $contributor->created_by_id;
 
-            self::saveProfileImage($request, $author);
+            self::saveProfileImage($request, $contributor);
 
-            $author->save();
+            $contributor->save();
 
             DB::commit();
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.author.{$statusEvent}.success"),
+                'message' => __("status-messages.contributor.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error("Failed to {$statusEvent} author.", [
+            Log::error("Failed to {$statusEvent} contributor.", [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.author.save.failed'),
+                'message' => __('status-messages.contributor.save.failed'),
             ];
         }
     }
 
-    public function delete(Author $author): array
+    public function delete(Contributor $contributor): array
     {
         DB::beginTransaction();
 
         try {
-            $author->delete();
+            $contributor->delete();
             DB::commit();
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.author.delete.success'),
+                'message' => __('status-messages.contributor.delete.success'),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error('Author delete failed.', [
+            Log::error('Contributor delete failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.author.delete.failed'),
+                'message' => __('status-messages.contributor.delete.failed'),
             ];
         }
     }
 
-    private static function saveProfileImage(AuthorRequest $request, Author $author)
+    private static function saveProfileImage(ContributorRequest $request, Contributor $contributor)
     {
         if (! $request->hasFile('profile_image')) {
             return;
         }
 
-        $existing = $author->getProfileImageAttribute();
+        $existing = $contributor->getProfileImageAttribute();
         if ($existing) {
             $existing->delete();
         }
@@ -164,19 +164,19 @@ class AuthorService
 
         if ($uploaded) {
             $name = MediaHelper::generateMediaName(
-                $author->name,
+                $contributor->name,
                 $uploaded->getClientOriginalExtension(),
                 200
             );
 
-            $author->addMedia($uploaded)
+            $contributor->addMedia($uploaded)
                 ->usingFileName($name)
                 ->withCustomProperties([
                     'alt'     => $user->name ?? null,
                     'caption' => $user->name ?? null,
                     'role'    => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE,
                 ])
-                ->toMediaCollection($author->media_collection_name);
+                ->toMediaCollection($contributor->media_collection_name);
         }
     }
 

@@ -129,18 +129,18 @@ return [
         ],
     ],
 
-    'author'        => [
+    'contributor'        => [
         'save'   => [
-            'success' => 'Author saved successfully.',
-            'failed'  => 'Failed to save author.',
+            'success' => 'Contributor saved successfully.',
+            'failed'  => 'Failed to save contributor.',
         ],
         'update' => [
-            'success' => 'Author updated successfully.',
-            'failed'  => 'Failed to update author.',
+            'success' => 'Contributor updated successfully.',
+            'failed'  => 'Failed to update contributor.',
         ],
         'delete' => [
-            'success' => 'Author deleted successfully.',
-            'failed'  => 'Failed to delete author.',
+            'success' => 'Contributor deleted successfully.',
+            'failed'  => 'Failed to delete contributor.',
         ],
     ],
 

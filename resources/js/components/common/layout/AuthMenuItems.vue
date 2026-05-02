@@ -67,7 +67,7 @@ const routeMap = {
         '/back-office/trends/*',
         '/back-office/locations/*',
         '/back-office/events/*',
-        '/back-office/author/*',
+        '/back-office/contributor/*',
     ],
     Reports: ['/back-office/reports/*'],
 }
@@ -183,11 +183,11 @@ function isSubMenuVisible(key) {
                     Events
                 </a>
 
-                <a :href="route('back-office.authors.index')"
+                <a :href="route('back-office.contributors.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-                    :class="isCurrentPage('/back-office/authors/*') ? 'bg-gray-200 font-medium' : ''">
+                    :class="isCurrentPage('/back-office/contributors/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="users" />
-                    Authors
+                    Contributors
                 </a>
 
             </div>

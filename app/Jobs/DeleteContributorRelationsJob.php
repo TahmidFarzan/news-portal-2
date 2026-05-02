@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\Author;
+use App\Models\Contributor;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,20 +12,20 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class DeleteAuthorRelationsJob implements ShouldQueue, ShouldBeUnique
+class DeleteContributorRelationsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $authorId;
+    public int $contributorId;
 
-    public function __construct(int $authorId)
+    public function __construct(int $contributorId)
     {
-        $this->authorId = $authorId;
+        $this->contributorId = $contributorId;
     }
 
     public function uniqueId(): string
     {
-        return "delete-relations-author-{$this->authorId}";
+        return "delete-relations-contributor-{$this->contributorId}";
     }
 
     public function retryAfter()
@@ -40,18 +40,18 @@ class DeleteAuthorRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $author = Author::find($this->authorId);
+        $contributor = Contributor::find($this->contributorId);
 
-        if ($author && ($author->activityLogs()->exists()) || ($author->trend)) {
+        if ($contributor && ($contributor->activityLogs()->exists()) || ($contributor->trend)) {
             DB::beginTransaction();
             try {
 
-                if ($author->activityLogs()->exists()) {
-                    $author->activityLogs()->delete();
+                if ($contributor->activityLogs()->exists()) {
+                    $contributor->activityLogs()->delete();
                 }
 
-                if ($author->trend) {
-                    $author->trend->delete();
+                if ($contributor->trend) {
+                    $contributor->trend->delete();
                 }
 
                 DB::commit();
@@ -59,7 +59,7 @@ class DeleteAuthorRelationsJob implements ShouldQueue, ShouldBeUnique
             } catch (Exception $ex) {
                 DB::rollback();
 
-                Log::error("Fail to delete author relations.", [
+                Log::error("Fail to delete contributor relations.", [
                     'exception' => $ex,
                 ]);
 

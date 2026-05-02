@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Services\Cache\AuthorCacheService;
+use App\Services\Cache\ContributorCacheService;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,15 +12,15 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SyncAuthorSitemapJob implements ShouldQueue, ShouldBeUnique
+class SyncContributorSitemapJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public AuthorCacheService $authorCacheService;
+    public ContributorCacheService $contributorCacheService;
 
     public function __construct()
     {
-        $this->authorCacheService = app(AuthorCacheService::class);
+        $this->contributorCacheService = app(ContributorCacheService::class);
     }
 
     public function progressCooldown(): int
@@ -32,7 +32,7 @@ class SyncAuthorSitemapJob implements ShouldQueue, ShouldBeUnique
     {
         $currentTime = time();
         $uqRandom    = Str::random(15);
-        return "author-sitemap-sync-jobs-{$uqRandom}-{$currentTime}";
+        return "contributor-sitemap-sync-jobs-{$uqRandom}-{$currentTime}";
     }
 
     public function retryAfter()
@@ -48,11 +48,11 @@ class SyncAuthorSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $dbRecordCount     = $this->authorCacheService->dbRecordsCount();
-            $cachedRecordTotal = $this->authorCacheService->recordsCount("sitemap");
+            $dbRecordCount     = $this->contributorCacheService->dbRecordsCount();
+            $cachedRecordTotal = $this->contributorCacheService->recordsCount("sitemap");
 
-            $dbLastPageNo     = $this->authorCacheService->dbLastPageNo(null);
-            $cachedLastPageNo = $this->authorCacheService->lastPageNo("sitemap");
+            $dbLastPageNo     = $this->contributorCacheService->dbLastPageNo(null);
+            $cachedLastPageNo = $this->contributorCacheService->lastPageNo("sitemap");
 
             if (! ($cachedRecordTotal == $dbRecordCount)) {
                 $pageStart = $cachedLastPageNo;
@@ -67,14 +67,14 @@ class SyncAuthorSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->authorCacheService->cachedRecords("sitemap", null, $page);
+                    $this->contributorCacheService->cachedRecords("sitemap", null, $page);
                 }
             }
 
-            $this->authorCacheService->cachedRecordsCount("sitemap");
-            $this->authorCacheService->cachedLastPageNo("sitemap");
+            $this->contributorCacheService->cachedRecordsCount("sitemap");
+            $this->contributorCacheService->cachedLastPageNo("sitemap");
         } catch (Exception $ex) {
-            Log::error('Author sitemap sync job error: ' . $ex->getMessage());
+            Log::error('Contributor sitemap sync job error: ' . $ex->getMessage());
 
             throw $ex;
         }

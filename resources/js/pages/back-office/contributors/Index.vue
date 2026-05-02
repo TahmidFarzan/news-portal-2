@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useUtil'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateAuthor, canEditAuthor, canDeleteAuthor, } from '@/composables/useAuthUserAccessPermissions'
+import { canCreateContributor, canEditContributor, canDeleteContributor, } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 
@@ -30,13 +30,13 @@ const deletingRow = ref(null)
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { authors } = defineProps({
-    authors: Object,
+const { contributors } = defineProps({
+    contributors: Object,
 })
 
 const paginationOnly = computed(() => {
-    if (!authors) return {}
-    const { data, ...rest } = authors
+    if (!contributors) return {}
+    const { data, ...rest } = contributors
     return rest
 })
 
@@ -53,7 +53,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.authors.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.contributors.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -61,20 +61,20 @@ const applyFilter = () => {
     })
 }
 
-const confirmDelete = (author) => {
-    deletingRow.value = author
+const confirmDelete = (contributor) => {
+    deletingRow.value = contributor
     showDeleteModal.value = true
 }
 
-const canCreate = () => canCreateAuthor(authUser?.value)
-const canEdit = (author) => canEditAuthor(authUser?.value, author)
-const canDelete = (author) => canDeleteAuthor(authUser?.value, author)
+const canCreate = () => canCreateContributor(authUser?.value)
+const canEdit = (contributor) => canEditContributor(authUser?.value, contributor)
+const canDelete = (contributor) => canDeleteContributor(authUser?.value, contributor)
 
-const handleDelete = (author) => {
-    if (!author || deleteProcessing.value) return
+const handleDelete = (contributor) => {
+    if (!contributor || deleteProcessing.value) return
 
     deleteProcessing.value = true
-    intertiaJsRoute.delete(route('back-office.authors.delete', { slug: author?.slug }), {
+    intertiaJsRoute.delete(route('back-office.contributors.delete', { slug: contributor?.slug }), {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -113,7 +113,7 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Authors', active: true },
+                { text: 'Contributors', active: true },
             ],
         })
     )
@@ -124,14 +124,14 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Authors" />
+    <Head title="Contributors" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Authors</h2>
+            <h2 class="text-lg font-semibold">Contributors</h2>
 
-            <a v-if="canCreate()" :href="route('back-office.authors.create')"
+            <a v-if="canCreate()" :href="route('back-office.contributors.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
                 Create
@@ -156,7 +156,7 @@ onMounted(async () => {
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search author..."
+                <input type="search" v-model="filterForm.search" placeholder="Search contributor..."
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -186,7 +186,7 @@ onMounted(async () => {
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in authors?.data" :key="item.id" class="hover:bg-gray-50 transition">
+                        <tr v-for="(item, index) in contributors?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.name }}</td>
                             <td class="px-4 py-3 text-gray-500">
@@ -196,12 +196,12 @@ onMounted(async () => {
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
-                                    <a :href="route('back-office.authors.details', { slug: item.slug })"
+                                    <a :href="route('back-office.contributors.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)" :href="route('back-office.authors.edit', { slug: item.slug })"
+                                    <a v-if="canEdit(item)" :href="route('back-office.contributors.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
@@ -236,7 +236,7 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete Author
+                            Delete Contributor
                         </h3>
 
                         <p class="text-sm font-medium">

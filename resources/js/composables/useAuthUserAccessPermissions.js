@@ -216,29 +216,29 @@ export const canDeleteEvent = (authUser, event) => {
     return isNewsDesk(role) && authUser.id === event.created_by_id
 }
 
-// ================= AUTHOR =================
+// ================= CONTRIBUTOR =================
 
-export const canCreateAuthor = (authUser) =>
+export const canCreateContributor = (authUser) =>
     authUser && isAdmin(getUserRole(authUser))
 
-export const canEditAuthor = (authUser, author) => {
-    if (!authUser || !author) return false
+export const canEditContributor = (authUser, contributor) => {
+    if (!authUser || !contributor) return false
 
     const role = getUserRole(authUser)
 
     if (isAdmin(role)) return true
 
-    return isNewsDesk(role) && authUser.id === author.created_by_id
+    return isNewsDesk(role) && authUser.id === contributor.created_by_id
 }
 
-export const canDeleteAuthor = (authUser, author) => {
-    if (!authUser || !author) return false
+export const canDeleteContributor = (authUser, contributor) => {
+    if (!authUser || !contributor) return false
 
     const role = getUserRole(authUser)
 
     if (isAdmin(role)) return true
 
-    return isNewsDesk(role) && authUser.id === author.created_by_id
+    return isNewsDesk(role) && authUser.id === contributor.created_by_id
 }
 
 // ================= MENU =================

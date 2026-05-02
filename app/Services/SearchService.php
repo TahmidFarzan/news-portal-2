@@ -5,7 +5,7 @@ use App\Helpers\MediaHelper;
 use App\Helpers\NewsHelper;
 use App\Helpers\SystemHelper;
 use App\Helpers\UserHelper;
-use App\Models\Author;
+use App\Models\Contributor;
 use App\Models\Category;
 use App\Models\Event;
 use App\Models\Language;
@@ -487,9 +487,9 @@ class SearchService
         ];
     }
 
-    public function authors(Request $request): array
+    public function contributors(Request $request): array
     {
-        $query = Author::query();
+        $query = Contributor::query();
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
@@ -677,9 +677,9 @@ class SearchService
             ->firstOrFail();
     }
 
-    public function author(int | string $slugOrId): Author
+    public function contributor(int | string $slugOrId): Contributor
     {
-        return Author::where('id', $slugOrId)
+        return Contributor::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }

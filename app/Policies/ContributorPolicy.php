@@ -3,18 +3,18 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Author;
+use App\Models\Contributor;
 use Illuminate\Auth\Access\Response;
 use App\Helpers\UserHelper;
 
-class AuthorPolicy
+class ContributorPolicy
 {
     public function viewAny(User $authUser): Response
     {
         return Response::allow();
     }
 
-    public function view(User $authUser, Author $author): Response
+    public function view(User $authUser, Contributor $contributor): Response
     {
         return Response::allow();
     }
@@ -24,27 +24,27 @@ class AuthorPolicy
         return Response::allow();
     }
 
-    public function update(User $authUser, Author $author): Response
+    public function update(User $authUser, Contributor $contributor): Response
     {
         if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
         }
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $author->created_by_id)) {
+        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $contributor->created_by_id)) {
             return Response::allow();
         }
 
         return Response::deny();
     }
 
-    public function delete(User $authUser, Author $author): Response
+    public function delete(User $authUser, Contributor $contributor): Response
     {
 
         if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
         }
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $author->created_by_id)) {
+        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $contributor->created_by_id)) {
             return Response::allow();
         }
         return Response::deny();
