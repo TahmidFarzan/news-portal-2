@@ -220,13 +220,13 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
 
 Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
     Route::get('index.xml', [SitemapController::class, 'index'])->name('index');
-    Route::prefix('newses')->name('newses.')->group(function () {
-        Route::get('categories.xml', [SitemapController::class, 'categories'])->name('categories');
-        Route::get('tags.xml', [SitemapController::class, 'tags'])->name('tags');
-        Route::get('locations.xml', [SitemapController::class, 'locations'])->name('locations');
-        Route::get('events.xml', [SitemapController::class, 'events'])->name('events');
-        Route::get('contributors.xml', [SitemapController::class, 'contributors'])->name('contributors');
-    });
+
+    Route::get('categories.xml', [SitemapController::class, 'categories'])->name('categories');
+    Route::get('tags.xml', [SitemapController::class, 'tags'])->name('tags');
+    Route::get('locations.xml', [SitemapController::class, 'locations'])->name('locations');
+    Route::get('events.xml', [SitemapController::class, 'events'])->name('events');
+    Route::get('contributors.xml', [SitemapController::class, 'contributors'])->name('contributors');
+
 });
 
 Route::get('/', function () {
