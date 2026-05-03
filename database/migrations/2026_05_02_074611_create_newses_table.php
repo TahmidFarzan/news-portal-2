@@ -14,6 +14,8 @@ return new class extends Migration
 
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
 
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+
             $table->foreignId('event_id')->nullable()->constrained('events')->cascadeOnDelete();
             $table->foreignId('location_id')->nullable()->constrained('locations')->cascadeOnDelete();
 

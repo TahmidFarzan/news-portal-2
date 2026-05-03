@@ -218,20 +218,6 @@ class CategorySeeder extends Seeder
             (object) [
                 'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
                 'categories'    => collect([
-
-                    (object) [
-                        'name'           => 'Environment',
-                        'brief'        => 'Environment news',
-                        'seo_keywords'   => 'environment',
-                        'sub_categories' => collect([
-                            (object) ['name' => 'Climate Change', 'brief' => 'Climate', 'seo_keywords' => 'climate'],
-                            (object) ['name' => 'Pollution', 'brief' => 'Pollution', 'seo_keywords' => 'pollution'],
-                            (object) ['name' => 'Wildlife', 'brief' => 'Wildlife', 'seo_keywords' => 'wildlife'],
-                            (object) ['name' => 'Disasters', 'brief' => 'Disasters', 'seo_keywords' => 'disaster'],
-                            (object) ['name' => 'Sustainability', 'brief' => 'Sustainability', 'seo_keywords' => 'green'],
-                        ]),
-                    ],
-
                     (object) [
                         'name'           => 'জাতীয়',
                         'brief'        => 'জাতীয় সংবাদ ও আপডেট',

@@ -49,7 +49,7 @@ class EventSeeder extends Seeder
             }
         }
 
-        $desktopBannerImageUrl = asset("uploads/images/event-desktop.png");
+        $desktopBannerImageUrl = asset("uploads/images/event/desktop.png");
         if ($desktopBannerImageUrl) {
             $events = Event::orderBy("id", "desc")->get();
             foreach ($events as $event) {
@@ -73,7 +73,7 @@ class EventSeeder extends Seeder
             }
         }
 
-        $mobileBannerImageUrl = asset("uploads/images/event-mobile.png");
+        $mobileBannerImageUrl = asset("uploads/images/event/mobile.png");
         if ($mobileBannerImageUrl) {
             $events = Event::orderBy("id", "desc")->get();
             foreach ($events as $event) {

@@ -108,7 +108,7 @@ onMounted(async () => {
                     <div>
                         <div class="text-gray-500 mb-1">Desktop banner image</div>
                         <div class="text-gray-700">
-                            <img :src="event?.desktop_banner_image?.media_url || '/uploads/images/event-desktop.png'"
+                            <img :src="event?.desktop_banner_image?.media_url || '/uploads/images/event/desktop.png'"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>
@@ -118,7 +118,7 @@ onMounted(async () => {
                     <div>
                         <div class="text-gray-500 mb-1">Mobile banner image</div>
                         <div class="text-gray-700">
-                            <img :src="event?.mobile_banner_image?.media_url || '/uploads/images/event-mobile.png'"
+                            <img :src="event?.mobile_banner_image?.media_url || '/uploads/images/event/mobile.png'"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>

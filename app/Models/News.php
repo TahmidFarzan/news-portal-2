@@ -28,7 +28,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('newses')]
 #[Fillable([
-        'news_type', 'language_id', 'event_id', 'location_id',
+        'news_type', 'language_id', 'category_id','event_id', 'location_id',
         'heading', 'sub_heading', "content_shoulder", 'brief',
         "body", 'video_url',
         'writer', 'author_id',
@@ -47,7 +47,6 @@ class News extends Model implements HasMedia
         'public_url',
         'is_recent_created', "has_parent", "indentation_name",
         "has_descendants", "feeds_rss_url", "feeds_atom_url",
-        'main_category',
         'thumbnail', 'feature_image',
     ];
 
@@ -65,7 +64,7 @@ class News extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'news_type', 'language_id', 'event_id', 'location_id',
+                'news_type', 'language_id', 'category_id', 'event_id', 'location_id',
                 'heading', 'sub_heading', "content_shoulder", 'brief',
                 "body", 'video_url',
                 'writer', 'author_id',
@@ -179,11 +178,6 @@ class News extends Model implements HasMedia
         return $intervalInHours < 72;
     }
 
-    public function getMainCategoryAttribute(): ?Category
-    {
-        return $this->categories()->wherePivot('is_main', true)->first() ?? null;
-    }
-
     public function getThumbnailAttribute(): ?Media
     {
         $image          = null;
@@ -240,9 +234,9 @@ class News extends Model implements HasMedia
         return $this->belongsTo(User::class, 'created_by_id');
     }
 
-    public function categories(): BelongsToMany
+    public function category(): BelongsTo
     {
-        return $this->belongsToMany(Category::class)->withTimestamps()->withPivot('is_main');
+        return $this->belongsTo(Category::class);
     }
 
     public function contributors(): BelongsToMany
@@ -282,7 +276,7 @@ class News extends Model implements HasMedia
 
     public function navBreadcrumbs(): array
     {
-        $mainCategory = $this->main_category;
+        $mainCategory = $this->category;
 
         if (! $mainCategory) {
             return [];

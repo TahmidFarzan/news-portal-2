@@ -179,7 +179,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.desktop_banner_image }}
                             </p>
 
-                            <img :src="event?.desktop_banner_image?.media_url || '/uploads/images/event-desktop.png'"
+                            <img :src="event?.desktop_banner_image?.media_url || '/uploads/images/event/desktop.png'"
                             class="object-cover rounded-xl border border-gray-200 mt-2"/>
                         </div>
 
@@ -195,7 +195,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.mobile_banner_image }}
                             </p>
 
-                            <img :src="event?.mobile_banner_image?.media_url || '/uploads/images/event-mobile.png'"
+                            <img :src="event?.mobile_banner_image?.media_url || '/uploads/images/event/mobile.png'"
                             class="object-cover rounded-xl border border-gray-200 mt-2"/>
                         </div>
 
