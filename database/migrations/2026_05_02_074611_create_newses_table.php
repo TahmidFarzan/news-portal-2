@@ -30,16 +30,12 @@ return new class extends Migration
 
             $table->string('writer', 255)->nullable();
 
-            $table->text('slug_tree');
-            $table->text('heading_tree');
 
             $table->string('seo_title', 255)->nullable();
             $table->text('seo_brief')->nullable();
             $table->text('seo_keywords')->nullable();
 
             $table->string('page_section', 255)->nullable();
-
-            $table->foreignId('parent_id')->nullable()->constrained('news')->cascadeOnDelete();
 
             $table->foreignId('created_by_id')->constrained('users')->cascadeOnDelete();
             $table->string('slug')->unique();

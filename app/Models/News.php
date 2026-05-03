@@ -24,7 +24,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('newses')]
 #[Fillable([
@@ -34,18 +33,18 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
         'writer', 'author_id',
         'slug_tree', 'heading_tree',
         "seo_brief", 'seo_title', 'seo_keywords',
-        'page_section', 'parent_id',
+        'page_section',
         'created_by_id', 'slug', 'is_published',
     ])]
 #[UsePolicy(NewsPolicy::class)]
 #[ObservedBy([NewsObserver::class])]
 class News extends Model implements HasMedia
 {
-    use HasFactory, LogsActivity, HasSlug, InteractsWithMedia, HasRecursiveRelationships;
+    use HasFactory, LogsActivity, HasSlug, InteractsWithMedia;
 
     protected $appends = [
         'public_url',
-        'is_recent_created', "has_parent", "indentation_name",
+        'is_recent_created', "indentation_name",
         "has_descendants", "feeds_rss_url", "feeds_atom_url",
         'thumbnail', 'feature_image',
     ];
@@ -70,7 +69,7 @@ class News extends Model implements HasMedia
                 'writer', 'author_id',
                 'slug_tree', 'heading_tree',
                 "seo_brief", 'seo_title', 'seo_keywords',
-                'page_section', 'parent_id',
+                'page_section',
                 'slug', 'is_published',
             ])
             ->useLogName('News')
@@ -102,11 +101,6 @@ class News extends Model implements HasMedia
     public function getRouteKeyName(): string
     {
         return 'slug';
-    }
-
-    public function getParentKeyName()
-    {
-        return 'parent_id';
     }
 
     public function registerMediaCollections(): void
@@ -144,11 +138,6 @@ class News extends Model implements HasMedia
     public function getFeedsRSSUrlAttribute(): string
     {
         return "";
-    }
-
-    public function getHasParentAttribute(): bool
-    {
-        return isset($this->parent_id) ? true : false;
     }
 
     public function getHasDescendantsAttribute(): bool
@@ -262,11 +251,6 @@ class News extends Model implements HasMedia
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
-    }
-
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(News::class);
     }
 
     public function tags(): BelongsToMany
