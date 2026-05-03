@@ -69,6 +69,8 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
     Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
 
+    Route::get('newses', [SearchController::class, 'newses'])->name('newses');
+
     Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
     Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
     Route::get('language/{slugOrId}', [SearchController::class, 'language'])->name('language');

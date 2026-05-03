@@ -5,11 +5,12 @@ use App\Helpers\MediaHelper;
 use App\Helpers\NewsHelper;
 use App\Helpers\SystemHelper;
 use App\Helpers\UserHelper;
-use App\Models\Contributor;
 use App\Models\Category;
+use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
+use App\Models\News;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserRole;
@@ -548,6 +549,49 @@ class SearchService
             'url'             => $media->getUrl(),
             'media_url'       => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
             'media_srcset'    => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function newses(Request $request): array
+    {
+        $query = News::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        if ($request->filled('event_id')) {
+            $query->where('event_id', $request->input('event_id'));
+        }
+
+        if ($request->filled('location_id')) {
+            $query->where('location_id', $request->input('location_id'));
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 50));
+
+        $list = $records->map(fn($news) => [
+            'id'               => $news->id,
+            'headline'         => $news->headline,
+            'sub_headline'     => $news->sub_headline,
+            'content_shoulder' => $news->content_shoulder,
+            'slug'             => $news->slug,
         ]);
 
         return [
