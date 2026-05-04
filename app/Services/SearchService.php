@@ -588,8 +588,8 @@ class SearchService
 
         $list = $records->map(fn($news) => [
             'id'               => $news->id,
-            'headline'         => $news->headline,
-            'sub_headline'     => $news->sub_headline,
+            'title'         => $news->title,
+            'sub_title'     => $news->sub_title,
             'content_shoulder' => $news->content_shoulder,
             'slug'             => $news->slug,
         ]);

@@ -137,7 +137,7 @@ class Tag extends Model
 
     public function newses(): HasMany
     {
-        return $this->hasMany(News::class);
+        return $this->hasMany(News::class, 'news_tag');
     }
 
     public function trend(): HasOne

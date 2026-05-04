@@ -31,18 +31,14 @@ class NewsFactory extends Factory
 
         $newsType = NewsHelper::NEWS_TYPE_STORY;
 
-        $headline        = $this->faker->name();
-        $subHeading      = $this->faker->name();
+        $title        = $this->faker->name();
+        $subTitle      = $this->faker->name();
         $contentShoulder = $this->faker->sentence(3);
         $brief           = $this->faker->sentence();
         $body            = $this->faker->sentence(100);
         $videoUrl        = ($newsType == NewsHelper::NEWS_TYPE_VIDEO) ? "https://www.youtube.com/embed/RfFqXoZuio4" : null;
 
-        $subHeadingTree = $headline;
-        $slugTree       = Str::slug($headline);
-
         $isPublished = $this->faker->boolean(50);
-
 
         return [
             "news_type"        => $newsType,
@@ -53,8 +49,8 @@ class NewsFactory extends Factory
             "event_id"         => $event?->id ?? null,
             "location_id"      => $location?->id ?? null,
 
-            'heading'          => $headline,
-            'sub_heading'      => $subHeading,
+            'title'          => $title,
+            'sub_title'      => $subTitle,
             'content_shoulder' => $contentShoulder,
             'brief'            => $brief,
 
@@ -64,7 +60,7 @@ class NewsFactory extends Factory
 
 
 
-            'seo_title'        => $headline,
+            'seo_title'        => $title,
             'seo_brief'        => $brief,
             'seo_keywords'     => null,
 

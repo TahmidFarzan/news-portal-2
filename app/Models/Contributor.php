@@ -183,7 +183,7 @@ class Contributor extends Model implements HasMedia
 
     public function newses(): HasMany
     {
-        return $this->hasMany(News::class);
+        return $this->hasMany(News::class,'contributor_news' );
     }
 
     public function navBreadcrumbs(): array

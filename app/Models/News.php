@@ -27,8 +27,8 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('newses')]
 #[Fillable([
-        'news_type', 'language_id', 'category_id','event_id', 'location_id',
-        'heading', 'sub_heading', "content_shoulder", 'brief',
+        'news_type', 'language_id', 'category_id', 'event_id', 'location_id',
+        'title', 'sub_title', "content_shoulder", 'brief',
         "body", 'video_url',
         'writer', 'author_id',
         "seo_brief", 'seo_title', 'seo_keywords',
@@ -63,7 +63,7 @@ class News extends Model implements HasMedia
         return LogOptions::defaults()
             ->logOnly([
                 'news_type', 'language_id', 'category_id', 'event_id', 'location_id',
-                'heading', 'sub_heading', "content_shoulder", 'brief',
+                'title', 'sub_title', "content_shoulder", 'brief',
                 "body", 'video_url',
                 'writer', 'author_id',
 
@@ -229,7 +229,7 @@ class News extends Model implements HasMedia
 
     public function contributors(): BelongsToMany
     {
-        return $this->belongsToMany(Contributor::class)->withTimestamps();
+        return $this->belongsToMany(Contributor::class,'contributor_news' )->withTimestamps();
     }
 
     public function event(): BelongsTo
@@ -254,7 +254,7 @@ class News extends Model implements HasMedia
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class)->withTimestamps();
+        return $this->belongsToMany(Tag::class, 'news_tag')->withTimestamps();
     }
 
     public function navBreadcrumbs(): array

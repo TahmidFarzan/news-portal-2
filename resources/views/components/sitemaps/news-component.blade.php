@@ -15,8 +15,8 @@
         @foreach ($news->images() as $image)
             <image:image>
                 <image:loc>{{ $image->getUrl() }}</image:loc>
-                <image:caption>{{ $image->getCustomProperty('caption') ?? $news->headline }}</image:caption>
-                <image:title>{{ $image->getCustomProperty('alt') ?? $news->headline }}</image:title>
+                <image:caption>{{ $image->getCustomProperty('caption') ?? $news->title }}</image:caption>
+                <image:title>{{ $image->getCustomProperty('alt') ?? $news->title }}</image:title>
             </image:image>
         @endforeach
     @endif
@@ -25,7 +25,7 @@
         @foreach ($news->videos() as $video)
             <video:video>
                 <video:content_loc>{{ $video->getUrl() }}</video:content_loc>
-                <video:title>{{ $video->getCustomProperty('title') ?? $news->headline }}</video:title>
+                <video:title>{{ $video->getCustomProperty('title') ?? $news->title }}</video:title>
                 <video:description>{{ $video->getCustomProperty('description') ?? $news->brief }}</video:description>
                 <video:publication_date>{{ $video->created_at->format('Y-m-d\TH:i:sP') }}</video:publication_date>
             </video:video>
@@ -36,7 +36,7 @@
         @foreach ($news->audios() as $audio)
             <audio:audio>
                 <audio:content_loc>{{ $audio->getUrl() }}</audio:content_loc>
-                <audio:title>{{ $audio->getCustomProperty('title') ?? $news->headline }}</audio:title>
+                <audio:title>{{ $audio->getCustomProperty('title') ?? $news->title }}</audio:title>
                 <audio:description>{{ $audio->getCustomProperty('description') ?? $news->brief }}</audio:description>
                 <audio:publication_date>{{ $audio->created_at->format('Y-m-d\TH:i:sP') }}</audio:publication_date>
             </audio:audio>
@@ -48,7 +48,7 @@
             <news:name>{{ config('app.name') }}</news:name>
             <news:language>{{ $news->lannguage->code }}</news:language>
         </news:publication>
-        <news:title>{{ $news->headline }}</news:title>
+        <news:title>{{ $news->title }}</news:title>
         <news:publication_date>{{ $news->created_at->format('Y-m-d\TH:i:sP') }}</news:publication_date>
         <news:keywords>{{ $keywords }}</news:keywords>
     </news:news>

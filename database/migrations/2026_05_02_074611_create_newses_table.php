@@ -19,9 +19,9 @@ return new class extends Migration
             $table->foreignId('event_id')->nullable()->constrained('events')->cascadeOnDelete();
             $table->foreignId('location_id')->nullable()->constrained('locations')->cascadeOnDelete();
 
-            $table->string('heading', 255);
+            $table->string('title', 255);
 
-            $table->string('sub_heading', 255)->nullable();
+            $table->string('sub_title', 255)->nullable();
             $table->string('content_shoulder', 100)->nullable();
             $table->text('brief')->nullable();
 
