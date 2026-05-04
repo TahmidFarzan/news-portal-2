@@ -31,7 +31,6 @@ use Spatie\Sluggable\SlugOptions;
         'heading', 'sub_heading', "content_shoulder", 'brief',
         "body", 'video_url',
         'writer', 'author_id',
-        'slug_tree', 'heading_tree',
         "seo_brief", 'seo_title', 'seo_keywords',
         'page_section',
         'created_by_id', 'slug', 'is_published',
@@ -67,7 +66,7 @@ class News extends Model implements HasMedia
                 'heading', 'sub_heading', "content_shoulder", 'brief',
                 "body", 'video_url',
                 'writer', 'author_id',
-                'slug_tree', 'heading_tree',
+
                 "seo_brief", 'seo_title', 'seo_keywords',
                 'page_section',
                 'slug', 'is_published',

@@ -62,8 +62,7 @@ class NewsFactory extends Factory
 
             "video_url"        => $videoUrl,
 
-            'heading_tree'     => $subHeadingTree,
-            'slug_tree'        => $slugTree,
+
 
             'seo_title'        => $headline,
             'seo_brief'        => $brief,
