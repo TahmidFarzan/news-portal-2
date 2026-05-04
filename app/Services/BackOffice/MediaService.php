@@ -125,26 +125,39 @@ class MediaService
 
     public static function transferSingleMediaByMediaId(int $mediaId, $targetModel): void
     {
-        $media = Media::with("model")->findOrFail($mediaId);
+        DB::beginTransaction();
+        try {
+            $media = Media::with("model")->findOrFail($mediaId);
 
-        $sourceModel = $media->model;
+            $sourceModel = $media->model;
 
-        if (! $sourceModel || ! $targetModel || ! $media) {
-            return;
-        }
-
-        if ($media && $targetModel) {
-            $media->model_id        = $targetModel->id;
-            $media->model_type      = $targetModel->getMorphClass();
-            $media->name            = $targetModel->name ?? $targetModel->title ?? $media->name;
-            $media->collection_name = $targetModel->media_collection_name;
-            $media->setCustomProperty('caption', $media->getCustomProperty('caption') ?? $product->name ?? null);
-            $media->setCustomProperty('alt', $media->getCustomProperty('alt') ?? $product->name ?? null);
-            $media->save();
-
-            if ($sourceModel instanceof MediaUpload && $sourceModel->getMedia($sourceModel->media_collection_name)->isEmpty()) {
-                $sourceModel->delete();
+            if (! $sourceModel || ! $targetModel || ! $media) {
+                return;
             }
+
+            if ($media && $targetModel) {
+                $media->model_id        = $targetModel->id;
+                $media->model_type      = $targetModel->getMorphClass();
+                $media->name            = $targetModel->name ?? $targetModel->title ?? $media->name;
+                $media->collection_name = $targetModel->media_collection_name;
+                $media->setCustomProperty('caption', $media->getCustomProperty('caption') ?? $product->name ?? null);
+                $media->setCustomProperty('alt', $media->getCustomProperty('alt') ?? $product->name ?? null);
+                $media->save();
+
+                if ($sourceModel instanceof MediaUpload && $sourceModel->getMedia($sourceModel->media_collection_name)->isEmpty()) {
+                    $sourceModel->delete();
+                }
+
+                DB::commit();
+            }
+        } catch (Exception $exception) {
+            DB::rollback();
+
+            $targeModelName = $targetModel->name ?? $targetModel->title ?? "";
+
+            Log::error("Failed to transfer media {$targeModelName}.", [
+                'exception' => $exception,
+            ]);
         }
     }
 
