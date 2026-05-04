@@ -8,6 +8,7 @@ use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
+use App\Http\Controllers\BackOffice\NewsController;
 
 // Backoffice
 use App\Http\Controllers\BackOffice\MediaController;
@@ -207,6 +208,18 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::post('save', [ContributorController::class, 'save'])->name('save');
         Route::patch('update/{slug}', [ContributorController::class, 'update'])->name('update');
         Route::delete('delete/{slug}', [ContributorController::class, 'delete'])->name('delete');
+    });
+
+    Route::prefix('newses')->name('newses.')->group(function () {
+        Route::get('/', [NewsController::class, 'index'])->name('index');
+        Route::get('create', [NewsController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [NewsController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [NewsController::class, 'details'])->name('details');
+
+        Route::post('save', [NewsController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [NewsController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [NewsController::class, 'delete'])->name('delete');
+        Route::patch('restore/{slug}', [NewsController::class, 'restore'])->name('restore');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {

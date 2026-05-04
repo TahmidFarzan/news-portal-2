@@ -144,6 +144,26 @@ return [
         ],
     ],
 
+    'news'        => [
+        'save'   => [
+            'success' => 'News saved successfully.',
+            'failed'  => 'Failed to save news.',
+        ],
+        'update' => [
+            'success' => 'News updated successfully.',
+            'failed'  => 'Failed to update news.',
+        ],
+        'delete' => [
+            'success' => 'News deleted successfully.',
+            'failed'  => 'Failed to delete news.',
+        ],
+
+        'restore' => [
+            'success' => 'News restore successfully.',
+            'failed'  => 'Failed to restore news.',
+        ],
+    ],
+
     // Auth
     'auth'         => [
         'login'              => [

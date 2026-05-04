@@ -313,4 +313,72 @@ return [
         ],
 
     ],
+
+    'name'      => [
+        'title'          => [
+            'required' => 'Title is required.',
+            'string'   => 'Title must be string.',
+            'max'      => 'Title max chars is 200.',
+            'unique'   => 'Title must be unique.',
+        ],
+        'news_type' => [
+            'required' => 'News type is required.',
+            "not_found" => 'News type is not exit.',
+        ],
+        'language_id'          => [
+            'required' => 'Language is required.',
+            "not_found" => 'Language is not exit.',
+        ],
+        'category_id'          => [
+            'required' => 'Category is required.',
+            "not_found" => 'Category is not exit.',
+        ],
+
+        'event_id'          => [
+            "not_found" => 'Event is not exit.',
+        ],
+
+         'location_id'          => [
+            "not_found" => 'Location is not exit.',
+        ],
+
+        'contributor_ids'          => [
+            "not_found" => 'Contributors is not exit.',
+        ],
+
+        'tag_ids'          => [
+            "not_found" => 'Tags is not exit.',
+        ],
+
+        'video_url'          => [
+            "url" => 'Must be a url.',
+        ],
+
+        'upload_feature_image'          => [
+            'image'      => 'Upload feature image must be image.',
+            'mimes'      => 'Upload feature image must have valid mimes[image/*].',
+            'dimensions' => 'Upload feature image must width 1280px & Height 720px.',
+            "select_one" => 'Select one out of [Upload or select from media]',
+        ],
+        'media_selected_feature_image_url'          => [
+            'image'      => 'Upload feature image must be image.',
+            'mimes'      => 'Upload feature image must have valid mimes[image/*].',
+            'dimensions' => 'Upload feature image must width 1280px & Height 720px.',
+            "select_one" => 'Select one out of [Upload or select from media]',
+        ],
+
+        'upload_thumbnail'          => [
+            'image'      => 'Upload feature image must be image.',
+            'mimes'      => 'Upload feature image must have valid mimes[image/*].',
+            'dimensions' => 'Upload feature image must min-width 400px & Height 225px.',
+            "select_one" => 'Select one out of [Upload or select from media]',
+        ],
+        'media_selected_thumbnail_url'          => [
+            'image'      => 'Upload feature image must be image.',
+            'mimes'      => 'Upload feature image must have valid mimes[image/*].',
+            'dimensions' => 'Upload feature image must min-width 400px & Height 225px.',
+            "select_one" => 'Select one out of [Upload or select from media]',
+        ],
+
+    ],
 ];
