@@ -196,7 +196,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         $userRoles = (array) $userRoles;
 
         return in_array(
-            strtolower($this->userRole->name),
+            Str::lower(Str::snake($this->userRole->name)),
             array_map('strtolower', $userRoles)
         );
     }
