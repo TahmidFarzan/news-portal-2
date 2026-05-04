@@ -204,7 +204,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "National",
-                        'name'             => "PM Opens Four-Day DC Conference in Dhaka",
+                        'headline'             => "PM Opens Four-Day DC Conference in Dhaka",
                         'sub_heading'      => "Field officials told to deliver government pledges",
                         'content_shoulder' => "",
                         'brief'            => "Prime Minister Tarique Rahman opened the DC Conference in Dhaka, directing field administrators to focus on public service delivery.",
@@ -215,7 +215,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "National",
-                        'name'             => "PM Says Government Inherited Tk30 Lakh Crore Debt Burden",
+                        'headline'             => "PM Says Government Inherited Tk30 Lakh Crore Debt Burden",
                         'sub_heading'      => "",
                         'content_shoulder' => "Debt Burden",
                         'brief'            => "The prime minister said the new government began work under heavy debt pressure while facing political and social challenges.",
@@ -226,7 +226,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "National",
-                        'name'             => "PM Urges DCs to Work With Spirit of Progress",
+                        'headline'             => "PM Urges DCs to Work With Spirit of Progress",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Deputy commissioners were asked to play a proactive role in fulfilling government promises through transparent administration.",
@@ -237,7 +237,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "National",
-                        'name'             => "Dhaka-Sylhet Road and Rail Connectivity Upgrade Planned",
+                        'headline'             => "Dhaka-Sylhet Road and Rail Connectivity Upgrade Planned",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The government plans to upgrade Dhaka-Sylhet road and rail links to improve travel, trade and regional economic connectivity.",
@@ -248,7 +248,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "National",
-                        'name'             => "DC Conference Begins With 498 Public Service Proposals",
+                        'headline'             => "DC Conference Begins With 498 Public Service Proposals",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The annual DC Conference began with hundreds of proposals, with health-sector issues receiving the highest attention.",
@@ -259,7 +259,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Politics",
-                        'name'             => "Jamaat Secretary General Warns of Constitutional Crisis",
+                        'headline'             => "Jamaat Secretary General Warns of Constitutional Crisis",
                         'sub_heading'      => "Party alleges referendum verdict is being ignored",
                         'content_shoulder' => "",
                         'brief'            => "Jamaat leader Mia Golam Porwar alleged the government is pushing Bangladesh toward a political and constitutional crisis.",
@@ -270,7 +270,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Politics",
-                        'name'             => "Jamaat Urges Government to Protect Press Freedom",
+                        'headline'             => "Jamaat Urges Government to Protect Press Freedom",
                         'sub_heading'      => "",
                         'content_shoulder' => "Press Freedom",
                         'brief'            => "Jamaat called for effective measures to ensure media freedom, journalist safety and transparency in information flow.",
@@ -281,7 +281,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Politics",
-                        'name'             => "Information Minister Says Free Media Is BNP Commitment",
+                        'headline'             => "Information Minister Says Free Media Is BNP Commitment",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Information Minister Zahir Uddin Swapon said free and independent media is a key commitment of the present government.",
@@ -292,7 +292,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Politics",
-                        'name'             => "Mirza Fakhrul Says Bangladesh Is Rebounding From Past Crisis",
+                        'headline'             => "Mirza Fakhrul Says Bangladesh Is Rebounding From Past Crisis",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "BNP Secretary General Mirza Fakhrul Islam Alamgir said Bangladesh has begun recovering from years of political decline.",
@@ -303,7 +303,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Politics",
-                        'name'             => "Moyeen Khan Calls Workers the Nation’s Builders",
+                        'headline'             => "Moyeen Khan Calls Workers the Nation’s Builders",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "BNP leader Abdul Moyeen Khan said workers are the true builders of the nation and central to Bangladesh’s development.",
@@ -314,7 +314,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Government",
-                        'name'             => "PM Issues Directives on Government Priorities for Field Administration",
+                        'headline'             => "PM Issues Directives on Government Priorities for Field Administration",
                         'sub_heading'      => "DCs told to make administration dynamic and people-friendly",
                         'content_shoulder' => "",
                         'brief'            => "The prime minister outlined government priorities for field administration during the opening of the DC Conference.",
@@ -325,7 +325,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Government",
-                        'name'             => "Government Measures Help Restore Economic Momentum",
+                        'headline'             => "Government Measures Help Restore Economic Momentum",
                         'sub_heading'      => "",
                         'content_shoulder' => "Economic Momentum",
                         'brief'            => "A report says government actions on fuel supply, export financing and agro-industries are helping restore economic activity.",
@@ -336,7 +336,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Government",
-                        'name'             => "Government Approved Procurement of 9,000MT Lentils",
+                        'headline'             => "Government Approved Procurement of 9,000MT Lentils",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Cabinet purchase committee approved buying 9,000 metric tonnes of lentils to strengthen national reserves.",
@@ -347,7 +347,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Government",
-                        'name'             => "Home Minister Visits Ramna Model Police Station",
+                        'headline'             => "Home Minister Visits Ramna Model Police Station",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Home Minister Salahuddin Ahmed visited Ramna Model Police Station to observe policing and service delivery activities.",
@@ -358,7 +358,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Government",
-                        'name'             => "Chief Justice to Meet DCs and Divisional Commissioners",
+                        'headline'             => "Chief Justice to Meet DCs and Divisional Commissioners",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Chief Justice Zubayer Rahman Chowdhury will meet divisional commissioners and deputy commissioners on May 5.",
@@ -369,7 +369,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Law & Order",
-                        'name'             => "51 Crime Suspects Arrested in Tejgaon Police Drives",
+                        'headline'             => "51 Crime Suspects Arrested in Tejgaon Police Drives",
                         'sub_heading'      => "DMP conducts coordinated drives in several crime-prone areas",
                         'content_shoulder' => "",
                         'brief'            => "Police arrested 51 suspects during routine operations in Tejgaon and nearby areas of Dhaka city.",
@@ -380,7 +380,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Law & Order",
-                        'name'             => "Three Arrested Over Arson at Primary Education Store",
+                        'headline'             => "Three Arrested Over Arson at Primary Education Store",
                         'sub_heading'      => "",
                         'content_shoulder' => "Arson Arrests",
                         'brief'            => "Police arrested three people in connection with an arson attack at a Directorate of Primary Education store in Mirpur.",
@@ -391,7 +391,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Law & Order",
-                        'name'             => "Two Arrested in Demra With Firearms and Walkie-Talkie",
+                        'headline'             => "Two Arrested in Demra With Firearms and Walkie-Talkie",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "RAB arrested two suspected robbers in Demra while they were allegedly preparing to commit dacoity.",
@@ -402,7 +402,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Law & Order",
-                        'name'             => "PBI Arrests One in Tk60 Lakh Australia Job Scam",
+                        'headline'             => "PBI Arrests One in Tk60 Lakh Australia Job Scam",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Police Bureau of Investigation arrested a suspect linked to an alleged overseas job fraud ring.",
@@ -413,7 +413,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Law & Order",
-                        'name'             => "DB Arrests One With 1,000 Yaba Pills in Rajshahi",
+                        'headline'             => "DB Arrests One With 1,000 Yaba Pills in Rajshahi",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Rajshahi DB police arrested a suspected drug dealer and recovered 1,000 yaba tablets during a raid.",
@@ -424,7 +424,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Elections",
-                        'name'             => "EC Gazettes 49 Women MPs Elected Unopposed",
+                        'headline'             => "EC Gazettes 49 Women MPs Elected Unopposed",
                         'sub_heading'      => "Reserved seat voting not required after uncontested nominations",
                         'content_shoulder' => "",
                         'brief'            => "The Election Commission gazetted 49 women as elected MPs in reserved seats of the 13th National Parliament.",
@@ -435,7 +435,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Elections",
-                        'name'             => "EC Sets May 12 Poll Date for Women’s Reserved Seats",
+                        'headline'             => "EC Sets May 12 Poll Date for Women’s Reserved Seats",
                         'sub_heading'      => "",
                         'content_shoulder' => "Reserved Seats",
                         'brief'            => "The Election Commission announced the schedule for women’s reserved seats, setting May 12 as the voting date.",
@@ -446,7 +446,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Elections",
-                        'name'             => "EC Publishes Voter List for Women’s Reserved Seat Election",
+                        'headline'             => "EC Publishes Voter List for Women’s Reserved Seat Election",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Election Commission published the voter list for the women’s reserved seat election process in parliament.",
@@ -457,7 +457,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Elections",
-                        'name'             => "Low Turnout and Irregularity Claims Mark Bogura-6 By-Polls",
+                        'headline'             => "Low Turnout and Irregularity Claims Mark Bogura-6 By-Polls",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Reports from Bogura-6 by-polls highlighted low voter turnout and allegations of irregularities during voting.",
@@ -468,7 +468,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Elections",
-                        'name'             => "59.44% Turnout Recorded in 13th National Election",
+                        'headline'             => "59.44% Turnout Recorded in 13th National Election",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Election Commission confirmed 59.44 percent voter turnout in Bangladesh’s 13th National Parliamentary Election.",
@@ -479,7 +479,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Public Policy",
-                        'name'             => "Government Opens DC Conference With Policy Directives",
+                        'headline'             => "Government Opens DC Conference With Policy Directives",
                         'sub_heading'      => "Field administration asked to align work with national priorities",
                         'content_shoulder' => "",
                         'brief'            => "The prime minister used the DC Conference to outline policy priorities for district-level administration.",
@@ -490,7 +490,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Public Policy",
-                        'name'             => "DSCC Launches Hawker Rehabilitation Under New Policy Framework",
+                        'headline'             => "DSCC Launches Hawker Rehabilitation Under New Policy Framework",
                         'sub_heading'      => "",
                         'content_shoulder' => "Hawker Policy",
                         'brief'            => "Dhaka South City Corporation launched a hawker rehabilitation programme under a proposed city vending policy.",
@@ -501,7 +501,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Public Policy",
-                        'name'             => "JS Removes Age Limits for BSEC and IDRA Appointments",
+                        'headline'             => "JS Removes Age Limits for BSEC and IDRA Appointments",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Parliament passed amendments removing age caps for top appointments at BSEC and insurance regulator IDRA.",
@@ -512,7 +512,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Public Policy",
-                        'name'             => "Government Cuts Office Hours to Save Energy",
+                        'headline'             => "Government Cuts Office Hours to Save Energy",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The government announced austerity measures including shorter office hours and early market closures to save energy.",
@@ -523,7 +523,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Public Policy",
-                        'name'             => "WASA Amendment Bill Gives Government Appointment Powers",
+                        'headline'             => "WASA Amendment Bill Gives Government Appointment Powers",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Parliament passed a WASA amendment bill allowing government to appoint, remove officials and dissolve boards.",
@@ -534,7 +534,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International",
-                        'name'             => "Senior Iranian Officer Says Fresh Conflict With US Likely",
+                        'headline'             => "Senior Iranian Officer Says Fresh Conflict With US Likely",
                         'sub_heading'      => "Iran’s latest proposal fails to calm regional tensions",
                         'content_shoulder' => "",
                         'brief'            => "A senior Iranian officer warned that renewed conflict with the US remains likely as Trump cast doubt on Tehran’s latest peace proposal through Pakistan.",
@@ -545,7 +545,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International",
-                        'name'             => "Israel Says Two Gaza Flotilla Activists Taken for Questioning",
+                        'headline'             => "Israel Says Two Gaza Flotilla Activists Taken for Questioning",
                         'sub_heading'      => "",
                         'content_shoulder' => "Gaza Flotilla",
                         'brief'            => "Israel said two activists from a Gaza-bound aid flotilla were brought in for questioning after more than 50 vessels were intercepted at sea by forces.",
@@ -556,7 +556,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International",
-                        'name'             => "Iran War Pushes Up Travel Costs and Airline Pressure",
+                        'headline'             => "Iran War Pushes Up Travel Costs and Airline Pressure",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Jet fuel prices have surged since the Iran war began, raising airline operating costs and pushing up fares for travellers across major routes worldwide.",
@@ -567,7 +567,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International",
-                        'name'             => "Trump Says US Navy Acting Like Pirates Amid Iran Blockade",
+                        'headline'             => "Trump Says US Navy Acting Like Pirates Amid Iran Blockade",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Donald Trump described a US Navy seizure of cargo and oil during the Iran blockade as tensions continue around the strategic Strait of Hormuz.",
@@ -578,7 +578,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International",
-                        'name'             => "Nato Seeks Details on US Troop Cut From Germany",
+                        'headline'             => "Nato Seeks Details on US Troop Cut From Germany",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Nato said it is working with Washington to understand a decision to cut US troops in Germany amid a dispute over Iran policy and defence burden.",
@@ -589,7 +589,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Global Politics",
-                        'name'             => "Trump Administration Accused of Defying Lower Court Rulings",
+                        'headline'             => "Trump Administration Accused of Defying Lower Court Rulings",
                         'sub_heading'      => "Judicial tensions grow over immigration, spending and executive power",
                         'content_shoulder' => "",
                         'brief'            => "The Trump administration faces accusations of repeated noncompliance with lower court rulings across immigration, spending and staffing cases.",
@@ -600,7 +600,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Global Politics",
-                        'name'             => "US Plans to Withdraw 5,000 Troops From Germany",
+                        'headline'             => "US Plans to Withdraw 5,000 Troops From Germany",
                         'sub_heading'      => "",
                         'content_shoulder' => "Troop Drawdown",
                         'brief'            => "The Pentagon said about 5,000 US troops will leave Germany within the next year as Washington reviews its wider European force posture.",
@@ -611,7 +611,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Global Politics",
-                        'name'             => "May Day Protests Worldwide Demand Relief From Rising Costs",
+                        'headline'             => "May Day Protests Worldwide Demand Relief From Rising Costs",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Workers and activists held May Day rallies across the world demanding higher wages, better conditions and relief from inflation and fuel costs.",
@@ -622,7 +622,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Global Politics",
-                        'name'             => "UK PM Eyes New Powers to Ban Some Pro-Palestinian Marches",
+                        'headline'             => "UK PM Eyes New Powers to Ban Some Pro-Palestinian Marches",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "British Prime Minister Keir Starmer said some pro-Palestinian marches could be banned amid rising antisemitism and public safety concerns.",
@@ -633,7 +633,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Global Politics",
-                        'name'             => "Abortion Pill Makers Ask US Supreme Court to Restore Mail Access",
+                        'headline'             => "Abortion Pill Makers Ask US Supreme Court to Restore Mail Access",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Two drugmakers asked the US Supreme Court to restore mail-order access to mifepristone after an appeals court paused deliveries nationwide.",
@@ -644,7 +644,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Diplomacy",
-                        'name'             => "Dhaka and EU Seek Stronger Ties and Broader Cooperation",
+                        'headline'             => "Dhaka and EU Seek Stronger Ties and Broader Cooperation",
                         'sub_heading'      => "Bangladesh and EU review trade, investment and partnership agenda",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh and the European Union discussed stronger relations, trade, investment and wider cooperation during a meeting in Dhaka this week.",
@@ -655,7 +655,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Diplomacy",
-                        'name'             => "Bangladesh and India Move to Restore Full Visa Services",
+                        'headline'             => "Bangladesh and India Move to Restore Full Visa Services",
                         'sub_heading'      => "",
                         'content_shoulder' => "Visa Normalisation",
                         'brief'            => "Bangladesh and India are moving toward full-scale visa operations after months of strained ties and limited processing for travellers.",
@@ -666,7 +666,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Diplomacy",
-                        'name'             => "Iran Sends New US Talks Proposal Through Pakistan",
+                        'headline'             => "Iran Sends New US Talks Proposal Through Pakistan",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Iran delivered a new proposal for talks with the United States through mediator Pakistan as war-related negotiations remain stalled.",
@@ -677,7 +677,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Diplomacy",
-                        'name'             => "Bangladesh FM Urges Global Action to Contain Energy Crisis",
+                        'headline'             => "Bangladesh FM Urges Global Action to Contain Energy Crisis",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Foreign Minister Khalilur Rahman called for coordinated global action to contain energy shocks affecting developing economies and trade.",
@@ -688,7 +688,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Diplomacy",
-                        'name'             => "Russian Ambassador Meets Jatiya Sangsad Speaker",
+                        'headline'             => "Russian Ambassador Meets Jatiya Sangsad Speaker",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Russian ambassador and the parliament speaker discussed cooperation in education, energy, manpower and artificial intelligence in Dhaka.",
@@ -699,7 +699,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Conflicts",
-                        'name'             => "Fresh Middle East War Developments Include Lebanon Strikes",
+                        'headline'             => "Fresh Middle East War Developments Include Lebanon Strikes",
                         'sub_heading'      => "Israeli strikes in southern Lebanon kill three amid fragile truce",
                         'content_shoulder' => "",
                         'brief'            => "Fresh updates from the Middle East war reported renewed Lebanon strikes, Iran talks uncertainty and US troop plans in Europe amid tension.",
@@ -710,7 +710,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Conflicts",
-                        'name'             => "Russia Says Ukrainian Drone Attack Killed Two Teenagers",
+                        'headline'             => "Russia Says Ukrainian Drone Attack Killed Two Teenagers",
                         'sub_heading'      => "",
                         'content_shoulder' => "Drone Attack",
                         'brief'            => "Russian officials said a Ukrainian drone attack killed two teenagers on a motorcycle in Belgorod near the Ukraine border, according to reports.",
@@ -721,7 +721,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Conflicts",
-                        'name'             => "Two Gaza Flotilla Activists Questioned After Israeli Interception",
+                        'headline'             => "Two Gaza Flotilla Activists Questioned After Israeli Interception",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Israeli authorities questioned two Gaza flotilla activists after intercepting aid vessels bound for the Palestinian territory, officials said.",
@@ -732,7 +732,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Conflicts",
-                        'name'             => "Mali Jihadists Call for Unified Front and Begin Bamako Blockade",
+                        'headline'             => "Mali Jihadists Call for Unified Front and Begin Bamako Blockade",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Mali jihadist groups reportedly called for a unified front and began a blockade around Bamako amid worsening insecurity in the Sahel region.",
@@ -743,7 +743,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Conflicts",
-                        'name'             => "Renewed US-Iran Fighting Seen as Likely by Iranian Officer",
+                        'headline'             => "Renewed US-Iran Fighting Seen as Likely by Iranian Officer",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "An Iranian military figure said renewed fighting with the US was likely as Trump questioned Tehran’s new negotiating proposal through Pakistan.",
@@ -754,7 +754,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "World Economy",
-                        'name'             => "Iran War Raises Airline Costs and Fares Worldwide",
+                        'headline'             => "Iran War Raises Airline Costs and Fares Worldwide",
                         'sub_heading'      => "Fuel prices and Hormuz disruption squeeze airline operations",
                         'content_shoulder' => "",
                         'brief'            => "The Iran war has sharply increased jet fuel prices, forcing airlines to consider surcharges, cancellations and higher fares for travellers.",
@@ -765,7 +765,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "World Economy",
-                        'name'             => "UN Chief Warns Hormuz Closure Is Strangling Global Economy",
+                        'headline'             => "UN Chief Warns Hormuz Closure Is Strangling Global Economy",
                         'sub_heading'      => "",
                         'content_shoulder' => "Hormuz Closure",
                         'brief'            => "UN Secretary-General Antonio Guterres warned the prolonged closure of the Strait of Hormuz is hurting the global economy and energy flows.",
@@ -776,7 +776,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "World Economy",
-                        'name'             => "WTO Talks Fail to Extend E-Commerce Duty Moratorium",
+                        'headline'             => "WTO Talks Fail to Extend E-Commerce Duty Moratorium",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The WTO failed to extend a long-running ban on customs duties for cross-border digital transmissions after divided talks in Cameroon.",
@@ -787,7 +787,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "World Economy",
-                        'name'             => "Berkshire Hathaway Profit Rises as Investment Gains Improve",
+                        'headline'             => "Berkshire Hathaway Profit Rises as Investment Gains Improve",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Berkshire Hathaway reported higher profit, supported by investment gains and stronger performance in key operating businesses, reports said.",
@@ -798,7 +798,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "World Economy",
-                        'name'             => "Global Markets Tread Water on Earnings and Jobs Outlook",
+                        'headline'             => "Global Markets Tread Water on Earnings and Jobs Outlook",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Global markets stayed cautious as investors weighed corporate earnings, jobs data, energy costs and geopolitical risks from the Middle East.",
@@ -809,7 +809,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Organizations",
-                        'name'             => "UN Extends South Sudan Peacekeeping Mission But Shrinks It",
+                        'headline'             => "UN Extends South Sudan Peacekeeping Mission But Shrinks It",
                         'sub_heading'      => "Security Council renews UNMISS while reducing the troop ceiling",
                         'content_shoulder' => "",
                         'brief'            => "The UN Security Council extended its South Sudan mission for one year but reduced its authorized military size after a compromise vote.",
@@ -820,7 +820,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Organizations",
-                        'name'             => "Nato Reviews US Decision to Cut Germany Troop Presence",
+                        'headline'             => "Nato Reviews US Decision to Cut Germany Troop Presence",
                         'sub_heading'      => "",
                         'content_shoulder' => "Nato Review",
                         'brief'            => "Nato said it is working with the United States to understand the planned troop reduction in Germany and its wider impact on European defence.",
@@ -831,7 +831,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Organizations",
-                        'name'             => "WTO Faces Criticism After E-Commerce Moratorium Talks Fail",
+                        'headline'             => "WTO Faces Criticism After E-Commerce Moratorium Talks Fail",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The WTO faced US criticism after members failed to extend the moratorium on duties for electronic transmissions amid global trade tension.",
@@ -842,7 +842,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Organizations",
-                        'name'             => "UN Chief Raises Alarm Over Hormuz Impact on Global Economy",
+                        'headline'             => "UN Chief Raises Alarm Over Hormuz Impact on Global Economy",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "UN chief Antonio Guterres warned that the Strait of Hormuz crisis is worsening global economic stress during the Middle East war.",
@@ -853,7 +853,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Organizations",
-                        'name'             => "IAEA Role Highlighted as Iran Defends Enrichment Supervision",
+                        'headline'             => "IAEA Role Highlighted as Iran Defends Enrichment Supervision",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Iran’s UN mission referred to IAEA supervision while defending its position on uranium enrichment during the crisis and new US talks.",
@@ -864,7 +864,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Business",
-                        'name'             => "Bangladesh Economy and Trade Regain Momentum After Policy Steps",
+                        'headline'             => "Bangladesh Economy and Trade Regain Momentum After Policy Steps",
                         'sub_heading'      => "Fuel supply, export financing and agro-industry support help recovery",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s economy and trade sector are regaining momentum after fuel, export finance and agro-industry support measures.",
@@ -875,7 +875,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Business",
-                        'name'             => "Haor Farmers Forced to Sell Wet Boro Paddy at Lower Prices",
+                        'headline'             => "Haor Farmers Forced to Sell Wet Boro Paddy at Lower Prices",
                         'sub_heading'      => "",
                         'content_shoulder' => "Paddy Price Pressure",
                         'brief'            => "Haor farmers are selling wet Boro paddy at lower prices as harvest pressure, debt and storage limits weaken their bargaining power.",
@@ -886,7 +886,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Business",
-                        'name'             => "Biman Signs Boeing Deal to Buy 14 New Aircraft",
+                        'headline'             => "Biman Signs Boeing Deal to Buy 14 New Aircraft",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Biman Bangladesh Airlines signed a Boeing deal to buy 14 aircraft as the national carrier moves ahead with fleet expansion plans.",
@@ -897,7 +897,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Business",
-                        'name'             => "Beef Prices Rise in Dhaka as Food Costs Increase",
+                        'headline'             => "Beef Prices Rise in Dhaka as Food Costs Increase",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Beef prices in Dhaka rose by Tk20 per kg after vegetables, chicken, eggs and soybean oil also became costlier in city markets.",
@@ -908,7 +908,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Business",
-                        'name'             => "Chattogram Port Records Highest Single-Day Container Handling",
+                        'headline'             => "Chattogram Port Records Highest Single-Day Container Handling",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Newmooring Container Terminal handled 5,709 TEUs in a single day, setting a record for container operations at Chattogram Port.",
@@ -919,7 +919,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Stock Market",
-                        'name'             => "DSE Index Falls Despite Higher Trading Activity",
+                        'headline'             => "DSE Index Falls Despite Higher Trading Activity",
                         'sub_heading'      => "Investors stay cautious as selling pressure hits listed shares",
                         'content_shoulder' => "",
                         'brief'            => "Dhaka stocks ended lower despite higher turnover as selling pressure and investor caution pulled the DSE indices down.",
@@ -930,7 +930,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Stock Market",
-                        'name'             => "Dhaka Stocks Jump 161 Points After Iran Ceasefire News",
+                        'headline'             => "Dhaka Stocks Jump 161 Points After Iran Ceasefire News",
                         'sub_heading'      => "",
                         'content_shoulder' => "DSE Rally",
                         'brief'            => "Bangladesh’s stock market surged after Iran ceasefire news, with DSEX gaining 161 points and market value rising sharply.",
@@ -941,7 +941,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Stock Market",
-                        'name'             => "DSE Bars Trading of Five Islamic Banks Before Merger",
+                        'headline'             => "DSE Bars Trading of Five Islamic Banks Before Merger",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Dhaka Stock Exchange barred share trading of five Islamic banks ahead of their planned merger into a new banking entity.",
@@ -952,7 +952,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Stock Market",
-                        'name'             => "BSEC Explores Flexible IPO Proceeds Rules",
+                        'headline'             => "BSEC Explores Flexible IPO Proceeds Rules",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "BSEC discussed allowing more flexibility in using IPO funds for debt repayment to make the capital market more attractive.",
@@ -963,7 +963,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Stock Market",
-                        'name'             => "Stocks Manage Modest Gain as Buyers Return",
+                        'headline'             => "Stocks Manage Modest Gain as Buyers Return",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh stocks posted a modest gain as buyers returned to selected shares amid hopes of stronger corporate earnings.",
@@ -974,7 +974,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Banking",
-                        'name'             => "More Than Half of Local Banks Ineligible for Dividend Payouts",
+                        'headline'             => "More Than Half of Local Banks Ineligible for Dividend Payouts",
                         'sub_heading'      => "Rising bad loans and provisioning gaps weaken bank finances",
                         'content_shoulder' => "",
                         'brief'            => "More than half of Bangladesh’s scheduled banks may not pay dividends this year due to bad loans and provisioning shortfalls.",
@@ -985,7 +985,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Banking",
-                        'name'             => "Bangladesh Bank Waives Provisioning for Funds Stuck in Five Banks",
+                        'headline'             => "Bangladesh Bank Waives Provisioning for Funds Stuck in Five Banks",
                         'sub_heading'      => "",
                         'content_shoulder' => "Provision Relief",
                         'brief'            => "Bangladesh Bank waived provisioning requirements for funds stuck in five merging Shariah-based banks to ease pressure.",
@@ -996,7 +996,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Banking",
-                        'name'             => "Sammilito Islamic Bank Merger Faces Structural Questions",
+                        'headline'             => "Sammilito Islamic Bank Merger Faces Structural Questions",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The planned merger of five Shariah-based banks into Sammilito Islamic Bank has entered a new phase of structural review.",
@@ -1007,7 +1007,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Banking",
-                        'name'             => "BB Revises Interest Rates on Long-Term Financing Facility",
+                        'headline'             => "BB Revises Interest Rates on Long-Term Financing Facility",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Bank revised interest rates under its long-term financing facility to support industrial and investment activity.",
@@ -1018,7 +1018,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Banking",
-                        'name'             => "Bangladesh Bank Allows Staff Bonuses at Some Banks",
+                        'headline'             => "Bangladesh Bank Allows Staff Bonuses at Some Banks",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Bank eased restrictions so commercial banks with operating profit can reward staff for special achievements.",
@@ -1029,7 +1029,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Corporate",
-                        'name'             => "Walton Holds Global Distributor Meet 2026 in Nepal",
+                        'headline'             => "Walton Holds Global Distributor Meet 2026 in Nepal",
                         'sub_heading'      => "Bangladeshi electronics brand gathers over 250 global partners",
                         'content_shoulder' => "",
                         'brief'            => "Walton held its Global Distributor Meet 2026 in Kathmandu, bringing together more than 250 partners and distributors.",
@@ -1040,7 +1040,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Corporate",
-                        'name'             => "Unique Hotel CEO Wins Who’s Who Bangladesh Award 2026",
+                        'headline'             => "Unique Hotel CEO Wins Who’s Who Bangladesh Award 2026",
                         'sub_heading'      => "",
                         'content_shoulder' => "Corporate Recognition",
                         'brief'            => "Unique Hotel CEO Md Shakawath Hossain received the Who’s Who Bangladesh Award 2026 in the Professionals category.",
@@ -1051,7 +1051,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Corporate",
-                        'name'             => "Unilever Plans Small Price Hikes Amid Iran War Cost Pressure",
+                        'headline'             => "Unilever Plans Small Price Hikes Amid Iran War Cost Pressure",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Unilever said it will raise prices in small doses to manage higher costs driven by uncertainty from the Iran war.",
@@ -1062,7 +1062,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Corporate",
-                        'name'             => "Electromart Wins Three Bangladesh Retail Awards",
+                        'headline'             => "Electromart Wins Three Bangladesh Retail Awards",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Electromart won three Bangladesh Retail Awards 2026, including recognition in electronics retail and new market penetration.",
@@ -1073,7 +1073,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Corporate",
-                        'name'             => "Biman Boeing Purchase Signals Major Corporate Expansion",
+                        'headline'             => "Biman Boeing Purchase Signals Major Corporate Expansion",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Biman’s $3.7 billion Boeing aircraft purchase plan marks a major expansion move for the national carrier’s corporate strategy.",
@@ -1084,7 +1084,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Startups",
-                        'name'             => "iFarmer Secures $1.5 Million From Symbiotics",
+                        'headline'             => "iFarmer Secures $1.5 Million From Symbiotics",
                         'sub_heading'      => "International capital continues backing Bangladesh agritech infrastructure",
                         'content_shoulder' => "",
                         'brief'            => "Bangladeshi agritech startup iFarmer secured $1.5 million from Symbiotics to strengthen its agriculture financing model.",
@@ -1095,7 +1095,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Startups",
-                        'name'             => "Bangladesh Startups Face Funding Crunch as Boom Slows",
+                        'headline'             => "Bangladesh Startups Face Funding Crunch as Boom Slows",
                         'sub_heading'      => "",
                         'content_shoulder' => "Funding Crunch",
                         'brief'            => "Bangladesh’s startup ecosystem is facing a funding crunch as the growth story slows and investors become more cautious.",
@@ -1106,7 +1106,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Startups",
-                        'name'             => "Gold Kinen Recognised at Bangladesh Retail Awards 2026",
+                        'headline'             => "Gold Kinen Recognised at Bangladesh Retail Awards 2026",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Gold Kinen, Bangladesh’s first gold savings app, received recognition in the Best Retail Startup category this year.",
@@ -1117,7 +1117,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Startups",
-                        'name'             => "SBAC Bank Transfers Funds to Bangladesh Startup Investment Company",
+                        'headline'             => "SBAC Bank Transfers Funds to Bangladesh Startup Investment Company",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "SBAC Bank transferred over Tk2.58 crore to Bangladesh Startup Investment Company to support innovative entrepreneurs.",
@@ -1128,7 +1128,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Startups",
-                        'name'             => "Bangladesh EV Market Opens Space for Startup Innovation",
+                        'headline'             => "Bangladesh EV Market Opens Space for Startup Innovation",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s electric vehicle market is creating startup opportunities in logistics, gig work and last-mile fleet services.",
@@ -1139,7 +1139,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Trade",
-                        'name'             => "Exports Unlikely to Recover Without Middle East Crisis Solution",
+                        'headline'             => "Exports Unlikely to Recover Without Middle East Crisis Solution",
                         'sub_heading'      => "Energy prices and supply concerns weigh on Bangladesh’s export outlook",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s exports may struggle to recover unless the Middle East crisis eases and energy-related cost pressure declines.",
@@ -1150,7 +1150,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Trade",
-                        'name'             => "Bangladesh Looks Beyond Hormuz for Fertiliser Imports",
+                        'headline'             => "Bangladesh Looks Beyond Hormuz for Fertiliser Imports",
                         'sub_heading'      => "",
                         'content_shoulder' => "Import Diversification",
                         'brief'            => "Bangladesh is exploring fertiliser import options beyond Hormuz routes as the Middle East crisis threatens key supply channels.",
@@ -1161,7 +1161,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Trade",
-                        'name'             => "Low-Interest Pre-Shipment Credit Relaunched for Exporters",
+                        'headline'             => "Low-Interest Pre-Shipment Credit Relaunched for Exporters",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Bank relaunched low-interest pre-shipment credit to help exporters manage global uncertainty and trade pressure.",
@@ -1172,7 +1172,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Trade",
-                        'name'             => "Rising Energy Costs Threaten Export Competitiveness",
+                        'headline'             => "Rising Energy Costs Threaten Export Competitiveness",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Rising global energy prices and domestic fuel adjustments are increasing production and transport costs for exporters.",
@@ -1183,7 +1183,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Trade",
-                        'name'             => "Finance Minister Promises Reforms to Ease Business and Expand Incentives",
+                        'headline'             => "Finance Minister Promises Reforms to Ease Business and Expand Incentives",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Finance Minister Amir Khosru Mahmud Chowdhury pledged reforms to improve ease of doing business and expand export incentives.",
@@ -1194,7 +1194,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Technology",
-                        'name'             => "Smart Classrooms Project Set to Modernize Secondary Education",
+                        'headline'             => "Smart Classrooms Project Set to Modernize Secondary Education",
                         'sub_heading'      => "Government moves to make classrooms more digital and interactive",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh has taken an initiative to introduce smart classrooms in selected secondary institutions to modernize teaching.",
@@ -1205,7 +1205,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Technology",
-                        'name'             => "Hour of AI Campaign Launched in Secondary Schools Nationwide",
+                        'headline'             => "Hour of AI Campaign Launched in Secondary Schools Nationwide",
                         'sub_heading'      => "",
                         'content_shoulder' => "AI Learning Push",
                         'brief'            => "A month-long Hour of AI campaign began in secondary schools to develop coding, programming and artificial intelligence skills.",
@@ -1216,7 +1216,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Technology",
-                        'name'             => "Digital Device and Innovation Expo Showcases Local Tech Ambitions",
+                        'headline'             => "Digital Device and Innovation Expo Showcases Local Tech Ambitions",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s major technology showcase highlighted student innovations, digital devices, startups and local manufacturing capacity.",
@@ -1227,7 +1227,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Technology",
-                        'name'             => "Civic Tech Innovation Expo Highlights Youth-Led Digital Governance",
+                        'headline'             => "Civic Tech Innovation Expo Highlights Youth-Led Digital Governance",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "UNDP and the ICT Division hosted a civic technology expo to support digital governance, inclusion and youth-led innovation.",
@@ -1238,7 +1238,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Technology",
-                        'name'             => "Broadband Expo Places Internet at Center of Smart Bangladesh Vision",
+                        'headline'             => "Broadband Expo Places Internet at Center of Smart Bangladesh Vision",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Broadband Expo 2026 highlighted internet service providers, technology firms and policy goals for a smarter Bangladesh.",
@@ -1249,7 +1249,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "AI",
-                        'name'             => "Hour of AI Campaign Begins Across Secondary Schools",
+                        'headline'             => "Hour of AI Campaign Begins Across Secondary Schools",
                         'sub_heading'      => "Students to receive basic exposure to AI, coding and programming",
                         'content_shoulder' => "",
                         'brief'            => "The national Hour of AI campaign has started in schools to introduce students to artificial intelligence and programming.",
@@ -1260,7 +1260,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "AI",
-                        'name'             => "AI to Feature in Viva for Private Institution Head Recruitment",
+                        'headline'             => "AI to Feature in Viva for Private Institution Head Recruitment",
                         'sub_heading'      => "",
                         'content_shoulder' => "AI Viva Assessment",
                         'brief'            => "AI will help assess appearance, body language and knowledge during viva exams for private educational institution head recruitment.",
@@ -1271,7 +1271,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "AI",
-                        'name'             => "EWU Seminar Discusses AI and Cybersecurity Skills",
+                        'headline'             => "EWU Seminar Discusses AI and Cybersecurity Skills",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "East West University held a seminar on artificial intelligence and cybersecurity, urging students to build strong technical foundations.",
@@ -1282,7 +1282,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "AI",
-                        'name'             => "Experts Warn Bangladesh Must Close AI Skills Gap",
+                        'headline'             => "Experts Warn Bangladesh Must Close AI Skills Gap",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Experts say weak data governance, limited research links and policy delays could slow Bangladesh’s AI readiness.",
@@ -1293,7 +1293,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "AI",
-                        'name'             => "AI Automation Puts Workforce Skills in Focus",
+                        'headline'             => "AI Automation Puts Workforce Skills in Focus",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "AI automation is pushing Bangladesh to rethink workforce training as industries prepare for productivity changes and job shifts.",
@@ -1304,7 +1304,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Gadgets",
-                        'name'             => "Mobile Phone Prices Set to Fall After Import Duty Cut",
+                        'headline'             => "Mobile Phone Prices Set to Fall After Import Duty Cut",
                         'sub_heading'      => "NBR cuts customs duty on imported handsets to ease consumer costs",
                         'content_shoulder' => "",
                         'brief'            => "Imported mobile phone prices are expected to fall after the National Board of Revenue reduced handset customs duty.",
@@ -1315,7 +1315,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Gadgets",
-                        'name'             => "Digital Device Expo Opens Space for Smart Devices and Innovation",
+                        'headline'             => "Digital Device Expo Opens Space for Smart Devices and Innovation",
                         'sub_heading'      => "",
                         'content_shoulder' => "Device Showcase",
                         'brief'            => "Digital Device and Innovation Expo 2026 displayed smart devices, student projects and local technology products in Dhaka.",
@@ -1326,7 +1326,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Gadgets",
-                        'name'             => "Government Legalizes Stock-Lot Phones Within BTRC Timeline",
+                        'headline'             => "Government Legalizes Stock-Lot Phones Within BTRC Timeline",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The government approved legalization of stock-lot mobile phones imported within the BTRC deadline under the NEIR system.",
@@ -1337,7 +1337,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Gadgets",
-                        'name'             => "NEIR Rollout Pushes Mobile Market Toward Formal Regulation",
+                        'headline'             => "NEIR Rollout Pushes Mobile Market Toward Formal Regulation",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s NEIR rollout is expected to reduce illegal handset sales and support formal smartphone market regulation.",
@@ -1348,7 +1348,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Gadgets",
-                        'name'             => "Local Tech Products Gain Spotlight at Dhaka Innovation Expo",
+                        'headline'             => "Local Tech Products Gain Spotlight at Dhaka Innovation Expo",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Local technology products and student-built devices received attention during the Digital Device and Innovation Expo in Dhaka.",
@@ -1359,7 +1359,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Software",
-                        'name'             => "National Source Code Policy Draft Published by ICT Division",
+                        'headline'             => "National Source Code Policy Draft Published by ICT Division",
                         'sub_heading'      => "Public Money, Public Code policy targets transparency and reuse",
                         'content_shoulder' => "",
                         'brief'            => "The ICT Division published the draft National Source Code Policy to treat publicly funded software as a national resource.",
@@ -1370,7 +1370,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Software",
-                        'name'             => "Rajshahi University Medical Centre Launches Automation Software",
+                        'headline'             => "Rajshahi University Medical Centre Launches Automation Software",
                         'sub_heading'      => "",
                         'content_shoulder' => "Healthcare Automation",
                         'brief'            => "Rajshahi University Medical Centre launched automation software and an online portal to make healthcare services faster.",
@@ -1381,7 +1381,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Software",
-                        'name'             => "ICT Ministerial Recommendations Emphasize Data Governance",
+                        'headline'             => "ICT Ministerial Recommendations Emphasize Data Governance",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Former ICT adviser Faiz Ahmad Taiyeb left recommendations covering broadband, data governance and digital transformation.",
@@ -1392,7 +1392,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Software",
-                        'name'             => "Government Email Software Tender Signals Service Upgrade",
+                        'headline'             => "Government Email Software Tender Signals Service Upgrade",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A tender update for government email software points to efforts to strengthen official digital communication systems.",
@@ -1403,7 +1403,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Software",
-                        'name'             => "Civic Tech Expo Promotes Software Solutions for Public Inclusion",
+                        'headline'             => "Civic Tech Expo Promotes Software Solutions for Public Inclusion",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The civic technology expo promoted software-driven solutions for digital governance, inclusion and youth participation.",
@@ -1414,7 +1414,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Internet",
-                        'name'             => "Broadband Seen as Main Driving Force for Smart Bangladesh",
+                        'headline'             => "Broadband Seen as Main Driving Force for Smart Bangladesh",
                         'sub_heading'      => "Expo highlights connectivity, AI use and digital public-service goals",
                         'content_shoulder' => "",
                         'brief'            => "Broadband Expo 2026 highlighted high-speed internet as a key driver of Smart Bangladesh and digital public services.",
@@ -1425,7 +1425,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Internet",
-                        'name'             => "Bangladesh Calls for Digital Push at UN Forum",
+                        'headline'             => "Bangladesh Calls for Digital Push at UN Forum",
                         'sub_heading'      => "",
                         'content_shoulder' => "Digital Divide",
                         'brief'            => "Bangladesh called for coordinated global action to bridge the digital divide and strengthen data systems at a UN forum.",
@@ -1436,7 +1436,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Internet",
-                        'name'             => "Starlink Service Keeps Satellite Internet in Bangladesh Debate",
+                        'headline'             => "Starlink Service Keeps Satellite Internet in Bangladesh Debate",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Starlink’s Bangladesh launch kept satellite internet in focus as users discussed rural access, cost and service reliability.",
@@ -1447,7 +1447,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Internet",
-                        'name'             => "BSCCL Internet Price Cut Expected to Reduce Connectivity Costs",
+                        'headline'             => "BSCCL Internet Price Cut Expected to Reduce Connectivity Costs",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Submarine Cable Company decided to reduce internet prices by 10 percent for different service categories.",
@@ -1458,7 +1458,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Internet",
-                        'name'             => "Carnival Internet Expands Rural Broadband Marketplace",
+                        'headline'             => "Carnival Internet Expands Rural Broadband Marketplace",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Carnival Internet launched an ecosystem marketplace app after expanding broadband to hundreds of upazilas and villages.",
@@ -1469,7 +1469,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cybersecurity",
-                        'name'             => "EWU Seminar Highlights AI and Cybersecurity Threat Readiness",
+                        'headline'             => "EWU Seminar Highlights AI and Cybersecurity Threat Readiness",
                         'sub_heading'      => "Speakers urge students to build stronger technical foundations",
                         'content_shoulder' => "",
                         'brief'            => "A seminar at East West University discussed how AI and cybersecurity skills are becoming essential for modern digital threats.",
@@ -1480,7 +1480,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cybersecurity",
-                        'name'             => "Evilginx Pro Raises Alarm Over Two-Factor Authentication Safety",
+                        'headline'             => "Evilginx Pro Raises Alarm Over Two-Factor Authentication Safety",
                         'sub_heading'      => "",
                         'content_shoulder' => "2FA Phishing Threat",
                         'brief'            => "A new phishing tool called Evilginx Pro is raising concern because it can bypass two-factor authentication by stealing session cookies.",
@@ -1491,7 +1491,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cybersecurity",
-                        'name'             => "Cybersecurity Threats Grow More Dangerous in the Age of AI",
+                        'headline'             => "Cybersecurity Threats Grow More Dangerous in the Age of AI",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Cybersecurity experts warn that AI-driven attacks, fraud and digital risks are becoming more sophisticated in 2026.",
@@ -1502,7 +1502,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cybersecurity",
-                        'name'             => "Election Digital Preparedness Faces AI and Cybersecurity Questions",
+                        'headline'             => "Election Digital Preparedness Faces AI and Cybersecurity Questions",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Experts raised concerns about AI risks and cybersecurity gaps in election-related digital infrastructure before national polls.",
@@ -1513,7 +1513,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cybersecurity",
-                        'name'             => "Public Software Policy Stresses Security and Reusability",
+                        'headline'             => "Public Software Policy Stresses Security and Reusability",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The draft National Source Code Policy emphasizes security, transparency and reuse of publicly funded software systems.",
@@ -1524,7 +1524,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Sports",
-                        'name'             => "Nationwide Notun Kuri Sports Begins With Over 160,000 Registrations",
+                        'headline'             => "Nationwide Notun Kuri Sports Begins With Over 160,000 Registrations",
                         'sub_heading'      => "Youth talent hunt starts across eight sporting disciplines",
                         'content_shoulder' => "",
                         'brief'            => "Notun Kuri Sports began with over 160,000 adolescent registrations across football, cricket, chess, martial arts, badminton, athletics and kabaddi.",
@@ -1535,7 +1535,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Sports",
-                        'name'             => "New Zealand Beat Bangladesh to Level T20I Series",
+                        'headline'             => "New Zealand Beat Bangladesh to Level T20I Series",
                         'sub_heading'      => "",
                         'content_shoulder' => "Series Levelled",
                         'brief'            => "New Zealand defeated Bangladesh by six wickets in a rain-curtailed third T20I, levelling the three-match series 1-1 in Dhaka.",
@@ -1546,7 +1546,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Sports",
-                        'name'             => "Dhaka Premier League Returns With New Rules and Player Facilities",
+                        'headline'             => "Dhaka Premier League Returns With New Rules and Player Facilities",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Dhaka Premier League will return on May 4 with new rules focused on professionalism, player welfare and match integrity.",
@@ -1557,7 +1557,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Sports",
-                        'name'             => "Bangladesh Championship League Final Round Starts Sunday",
+                        'headline'             => "Bangladesh Championship League Final Round Starts Sunday",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The final round of Bangladesh Championship League football begins with two matches at Bashundhara and Gazipur venues.",
@@ -1568,7 +1568,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Sports",
-                        'name'             => "Sinner and Zverev Reach Madrid Open Final",
+                        'headline'             => "Sinner and Zverev Reach Madrid Open Final",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Jannik Sinner defeated Arthur Fils to reach the Madrid Open final, where he will face second seed Alexander Zverev.",
@@ -1579,7 +1579,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cricket",
-                        'name'             => "Jacobs’ Blitz Denies Bangladesh as T20I Series Ends Level",
+                        'headline'             => "Jacobs’ Blitz Denies Bangladesh as T20I Series Ends Level",
                         'sub_heading'      => "New Zealand chase revised target after Bangladesh batting collapse",
                         'content_shoulder' => "",
                         'brief'            => "Bevon Jacobs struck an unbeaten 62 as New Zealand beat Bangladesh by six wickets and levelled the T20I series in Dhaka.",
@@ -1590,7 +1590,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cricket",
-                        'name'             => "Tigresses Suffer T20I Whitewash After Narrow Sri Lanka Defeat",
+                        'headline'             => "Tigresses Suffer T20I Whitewash After Narrow Sri Lanka Defeat",
                         'sub_heading'      => "",
                         'content_shoulder' => "Tigresses Whitewashed",
                         'brief'            => "Bangladesh Women suffered a 3-0 T20I whitewash after losing to Sri Lanka by three runs in a rain-shortened match in Sylhet.",
@@ -1601,7 +1601,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cricket",
-                        'name'             => "DPL to Kick Off With Phone Ban and Integrity Measures",
+                        'headline'             => "DPL to Kick Off With Phone Ban and Integrity Measures",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Dhaka Premier League will begin with strict dressing-room rules, including a mobile phone ban for players and officials.",
@@ -1612,7 +1612,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cricket",
-                        'name'             => "CCDM Confirms Single-League Format for DPDCL Season",
+                        'headline'             => "CCDM Confirms Single-League Format for DPDCL Season",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Dhaka Premier Division Cricket League will follow a single-league format this season, removing Super League and relegation stages.",
@@ -1623,7 +1623,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Cricket",
-                        'name'             => "Liton Says Lower-Order Collapse Is a Growing Concern",
+                        'headline'             => "Liton Says Lower-Order Collapse Is a Growing Concern",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh T20 captain Liton Das said repeated lower-order failures remain a serious concern after the New Zealand series.",
@@ -1634,7 +1634,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Football",
-                        'name'             => "Bangladesh Drawn With India and Maldives in SAFF Women’s Championship",
+                        'headline'             => "Bangladesh Drawn With India and Maldives in SAFF Women’s Championship",
                         'sub_heading'      => "Defending champions placed in Group B for Goa tournament",
                         'content_shoulder' => "",
                         'brief'            => "Defending champions Bangladesh were drawn with India and Maldives in Group B of the SAFF Women’s Championship 2026.",
@@ -1645,7 +1645,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Football",
-                        'name'             => "Kool-BSJA Media Cup Football Draw and Jerseys Unveiled",
+                        'headline'             => "Kool-BSJA Media Cup Football Draw and Jerseys Unveiled",
                         'sub_heading'      => "",
                         'content_shoulder' => "Media Football Festival",
                         'brief'            => "The Kool-BSJA Media Cup Football Tournament draw and jersey unveiling were held before the five-day competition in Dhaka.",
@@ -1656,7 +1656,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Football",
-                        'name'             => "Final Round of Bangladesh Championship League Begins",
+                        'headline'             => "Final Round of Bangladesh Championship League Begins",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The last round of Bangladesh Championship League football begins with fixtures at Bashundhara Kings arena and Gazipur.",
@@ -1667,7 +1667,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Football",
-                        'name'             => "City Club Thrash Chittagong Abahani as Saheed Hits Hat-Trick",
+                        'headline'             => "City Club Thrash Chittagong Abahani as Saheed Hits Hat-Trick",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Saheed Mia scored a hat-trick as City Club beat Chittagong Abahani 6-0 in Bangladesh Championship League football.",
@@ -1678,7 +1678,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Football",
-                        'name'             => "SAFF U-20 Winning Bangladesh Team Gets Reception Plan",
+                        'headline'             => "SAFF U-20 Winning Bangladesh Team Gets Reception Plan",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s SAFF U-20 winning football team is set to receive a public reception after beating India in the final.",
@@ -1689,7 +1689,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Tennis",
-                        'name'             => "Sinner Beats Fils to Reach Madrid Open Final Against Zverev",
+                        'headline'             => "Sinner Beats Fils to Reach Madrid Open Final Against Zverev",
                         'sub_heading'      => "World number one extends winning run before Masters final",
                         'content_shoulder' => "",
                         'brief'            => "Jannik Sinner defeated Arthur Fils in straight sets to reach the Madrid Open final, where he will face Alexander Zverev.",
@@ -1700,7 +1700,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Tennis",
-                        'name'             => "Rybakina Crashes Out as Sabalenka Reaches Madrid Quarter-Finals",
+                        'headline'             => "Rybakina Crashes Out as Sabalenka Reaches Madrid Quarter-Finals",
                         'sub_heading'      => "",
                         'content_shoulder' => "Madrid Upset",
                         'brief'            => "Elena Rybakina suffered a shock Madrid Open defeat, while Aryna Sabalenka battled past Naomi Osaka to reach the quarter-finals.",
@@ -1711,7 +1711,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Tennis",
-                        'name'             => "Kostyuk Wins First WTA 1000 Title in Madrid",
+                        'headline'             => "Kostyuk Wins First WTA 1000 Title in Madrid",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Marta Kostyuk claimed the biggest title of her career by defeating Mirra Andreeva in the Madrid Open women’s final.",
@@ -1722,7 +1722,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Tennis",
-                        'name'             => "Zarif Abrar Reaches Quarter-Finals at World Tennis Tour Junior Dhaka",
+                        'headline'             => "Zarif Abrar Reaches Quarter-Finals at World Tennis Tour Junior Dhaka",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s Zarif Abrar reached the quarter-finals of the World Tennis Tour Junior J30 Dhaka after beating Arjan Singh.",
@@ -1733,7 +1733,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Tennis",
-                        'name'             => "Bangladeshi Tennis Coaches Build Strong Reputation in China",
+                        'headline'             => "Bangladeshi Tennis Coaches Build Strong Reputation in China",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladeshi tennis coaches are earning recognition in China, where nearly 50 coaches now work as skilled trainers.",
@@ -1744,7 +1744,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Local Sports",
-                        'name'             => "Notun Kuri Sports Inaugurated Across Bangladesh",
+                        'headline'             => "Notun Kuri Sports Inaugurated Across Bangladesh",
                         'sub_heading'      => "Youth competition begins with live district-level opening events",
                         'content_shoulder' => "",
                         'brief'            => "Notun Kuri Sports-2026 was inaugurated nationwide, with the main ceremony held at Sylhet District Stadium and events across districts.",
@@ -1755,7 +1755,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Local Sports",
-                        'name'             => "Notun Kuri Sports-2026 Officially Opens in Rajshahi",
+                        'headline'             => "Notun Kuri Sports-2026 Officially Opens in Rajshahi",
                         'sub_heading'      => "",
                         'content_shoulder' => "Rajshahi Opening",
                         'brief'            => "Rajshahi joined the nationwide inauguration of Notun Kuri Sports-2026 through an event at Muktijuddho Smriti Stadium.",
@@ -1766,7 +1766,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Local Sports",
-                        'name'             => "BSJA Media Cup to Feature 32 Media Houses in Dhaka",
+                        'headline'             => "BSJA Media Cup to Feature 32 Media Houses in Dhaka",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Kool-BSJA Media Cup Football Tournament will feature 32 media houses in a five-day event at the BFF artificial turf.",
@@ -1777,7 +1777,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Local Sports",
-                        'name'             => "Khelaghar and Chattogram City FC Win BCL Matches",
+                        'headline'             => "Khelaghar and Chattogram City FC Win BCL Matches",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Khelaghar Samaj Kalyan Samity and Chattogram City Football Club won their Bangladesh Championship League fixtures.",
@@ -1788,7 +1788,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Local Sports",
-                        'name'             => "City Club Register Big BCL Win With Saheed Hat-Trick",
+                        'headline'             => "City Club Register Big BCL Win With Saheed Hat-Trick",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "City Club beat Chittagong Abahani 6-0 as Saheed Mia scored a hat-trick in Bangladesh Championship League football.",
@@ -1799,7 +1799,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International Sports",
-                        'name'             => "Mohamed Salah to Miss Rest of Liverpool Season With Hamstring Injury",
+                        'headline'             => "Mohamed Salah to Miss Rest of Liverpool Season With Hamstring Injury",
                         'sub_heading'      => "Egypt winger expected to recover before 2026 World Cup",
                         'content_shoulder' => "",
                         'brief'            => "Mohamed Salah will miss the rest of Liverpool’s season after suffering a hamstring injury during a Premier League match.",
@@ -1810,7 +1810,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International Sports",
-                        'name'             => "Barcelona Beat Osasuna to Move Closer to LaLiga Title",
+                        'headline'             => "Barcelona Beat Osasuna to Move Closer to LaLiga Title",
                         'sub_heading'      => "",
                         'content_shoulder' => "LaLiga Race",
                         'brief'            => "Barcelona moved closer to the LaLiga title after beating Osasuna, extending their lead near the end of the season.",
@@ -1821,7 +1821,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International Sports",
-                        'name'             => "FIFA Reopens Last-Minute Sales for 2026 World Cup Tickets",
+                        'headline'             => "FIFA Reopens Last-Minute Sales for 2026 World Cup Tickets",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "FIFA reopened last-minute ticket sales for all 104 matches of the 2026 World Cup across the United States, Mexico and Canada.",
@@ -1832,7 +1832,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International Sports",
-                        'name'             => "Bayern Rescue Late Draw Against Heidenheim",
+                        'headline'             => "Bayern Rescue Late Draw Against Heidenheim",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bayern Munich rescued a late draw against Heidenheim after rotating heavily following their Champions League defeat.",
@@ -1843,7 +1843,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "International Sports",
-                        'name'             => "Iran Officials Seek FIFA Meeting Over World Cup Issues",
+                        'headline'             => "Iran Officials Seek FIFA Meeting Over World Cup Issues",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Iran football officials are seeking talks with FIFA over World Cup-related issues after travel and airport complications.",
@@ -1854,7 +1854,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Entertainment",
-                        'name'             => "Dhallywood Finds Fresh Momentum as Cinema Halls Draw Crowds",
+                        'headline'             => "Dhallywood Finds Fresh Momentum as Cinema Halls Draw Crowds",
                         'sub_heading'      => "Audience turnout signals renewed confidence in local cinema",
                         'content_shoulder' => "",
                         'brief'            => "Dhallywood is seeing renewed audience interest as cinema halls report stronger turnout and fresh energy around local film releases.",
@@ -1865,7 +1865,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Entertainment",
-                        'name'             => "Afran Nisho-Starrer Domm Continues Strong Run in Cineplexes",
+                        'headline'             => "Afran Nisho-Starrer Domm Continues Strong Run in Cineplexes",
                         'sub_heading'      => "",
                         'content_shoulder' => "Houseful Screenings",
                         'brief'            => "Bangladeshi film Domm continues to attract large audiences in cineplexes and multiplexes after its successful theatrical release.",
@@ -1876,7 +1876,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Entertainment",
-                        'name'             => "Filmmakers Prepare Crowded Eid Release Lineup",
+                        'headline'             => "Filmmakers Prepare Crowded Eid Release Lineup",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladeshi filmmakers are preparing a busy Eid release season, with several commercial titles planned for cinema halls.",
@@ -1887,7 +1887,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Entertainment",
-                        'name'             => "Warfaze Partners With Zippo for Collectible Music Editions",
+                        'headline'             => "Warfaze Partners With Zippo for Collectible Music Editions",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladeshi rock band Warfaze partnered with Zippo to launch collectible editions inspired by the band’s music legacy.",
@@ -1898,7 +1898,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Entertainment",
-                        'name'             => "BTV Plans Special Band Music Show for Eid Viewers",
+                        'headline'             => "BTV Plans Special Band Music Show for Eid Viewers",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Television will air a special band music programme during Eid featuring several popular local bands.",
@@ -1909,7 +1909,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Movies",
-                        'name'             => "Domm Set for International Premiere After Domestic Success",
+                        'headline'             => "Domm Set for International Premiere After Domestic Success",
                         'sub_heading'      => "True-story film gains overseas attention after strong local run",
                         'content_shoulder' => "",
                         'brief'            => "Afran Nisho-starrer Domm is set for international premiere after drawing strong crowds in Bangladesh cineplexes.",
@@ -1920,7 +1920,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Movies",
-                        'name'             => "Dhallywood Comeback Raises Hope for Cinema Hall Business",
+                        'headline'             => "Dhallywood Comeback Raises Hope for Cinema Hall Business",
                         'sub_heading'      => "",
                         'content_shoulder' => "Cinema Revival",
                         'brief'            => "Dhallywood’s recent audience growth is raising hopes that cinema halls can recover through stronger local releases.",
@@ -1931,7 +1931,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Movies",
-                        'name'             => "Manusher Bagan Becomes First 2026 Film to Receive Certification",
+                        'headline'             => "Manusher Bagan Becomes First 2026 Film to Receive Certification",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Impress Telefilm’s Manusher Bagan became the first Bangladeshi movie of 2026 to receive certification from the film board.",
@@ -1942,7 +1942,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Movies",
-                        'name'             => "Top Dhallywood Stars Line Up for Eid 2026 Releases",
+                        'headline'             => "Top Dhallywood Stars Line Up for Eid 2026 Releases",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Top Dhallywood stars are preparing major Eid 2026 releases, including commercial films expected to draw festival crowds.",
@@ -1953,7 +1953,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Movies",
-                        'name'             => "Three Bangladeshi Films Enter Asia’s Top Cinema List",
+                        'headline'             => "Three Bangladeshi Films Enter Asia’s Top Cinema List",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Three Bangladeshi films were named among Asia’s best films of 2025, giving local cinema wider regional recognition.",
@@ -1964,7 +1964,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Music",
-                        'name'             => "Miles Set to Perform at BMBAA Unplugged Event",
+                        'headline'             => "Miles Set to Perform at BMBAA Unplugged Event",
                         'sub_heading'      => "Legendary Bangla band joins exclusive music night in Dhaka",
                         'content_shoulder' => "",
                         'brief'            => "Iconic Bangla band Miles is set to perform at the BMBAA Unplugged event organised by the Bangladesh MBA Association.",
@@ -1975,7 +1975,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Music",
-                        'name'             => "Fuad Reimagines Prothom Bangladesh for New Generation",
+                        'headline'             => "Fuad Reimagines Prothom Bangladesh for New Generation",
                         'sub_heading'      => "",
                         'content_shoulder' => "Patriotic Song Revival",
                         'brief'            => "Composer Fuad Almuktadir released a reimagined version of Prothom Bangladesh on Independence Day for younger listeners.",
@@ -1986,7 +1986,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Music",
-                        'name'             => "Warfaze Marks Cultural Milestone With Zippo Collaboration",
+                        'headline'             => "Warfaze Marks Cultural Milestone With Zippo Collaboration",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Warfaze’s collectible Zippo collaboration places Bangla rock culture into a new lifestyle merchandise space.",
@@ -1997,7 +1997,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Music",
-                        'name'             => "Eid Celebrations Bring Wave of New Music Releases",
+                        'headline'             => "Eid Celebrations Bring Wave of New Music Releases",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Eid festivities are being marked by a wide range of new songs from established and emerging Bangladeshi artistes.",
@@ -2008,7 +2008,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Music",
-                        'name'             => "Bangladesh Releases First Fully AI-Generated Cinematic Music Video",
+                        'headline'             => "Bangladesh Releases First Fully AI-Generated Cinematic Music Video",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh entered a new phase of music innovation with Nijhum Raat, described as its first fully AI-generated cinematic music video.",
@@ -2019,7 +2019,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "TV Shows",
-                        'name'             => "BTV Launches New Magazine Show Abhinandan",
+                        'headline'             => "BTV Launches New Magazine Show Abhinandan",
                         'sub_heading'      => "Programme honours talent, dedication and inspiring journeys",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Television launched Abhinandan, a new magazine show focused on talent, dedication and inspiring life journeys.",
@@ -2030,7 +2030,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "TV Shows",
-                        'name'             => "Duronto TV Rolls Out Pahela Baishakh Special Programmes",
+                        'headline'             => "Duronto TV Rolls Out Pahela Baishakh Special Programmes",
                         'sub_heading'      => "",
                         'content_shoulder' => "Baishakh Specials",
                         'brief'            => "Duronto TV prepared special Pahela Baishakh programmes including drama, dance and children-focused festive content.",
@@ -2041,7 +2041,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "TV Shows",
-                        'name'             => "Duronto TV Plans International Mother Language Day Specials",
+                        'headline'             => "Duronto TV Plans International Mother Language Day Specials",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Duronto TV announced special programmes for International Mother Language Day, including films, dance and telefilm content.",
@@ -2052,7 +2052,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "TV Shows",
-                        'name'             => "BTV to Air Eid Band Show With Popular Bangladeshi Groups",
+                        'headline'             => "BTV to Air Eid Band Show With Popular Bangladeshi Groups",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Television will broadcast a special Eid band show featuring popular local bands and festive performances.",
@@ -2063,7 +2063,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "TV Shows",
-                        'name'             => "Behind the Fame Podcast Opens With Mehazabien Chowdhury",
+                        'headline'             => "Behind the Fame Podcast Opens With Mehazabien Chowdhury",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Rumman Rashid Khan launched celebrity podcast Behind the Fame with Mehazabien Chowdhury as the first guest.",
@@ -2074,7 +2074,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Celebrities",
-                        'name'             => "Actor Shams Suman Dies at 61 in Dhaka",
+                        'headline'             => "Actor Shams Suman Dies at 61 in Dhaka",
                         'sub_heading'      => "National Award-winning actor remembered for stage, TV and film work",
                         'content_shoulder' => "",
                         'brief'            => "National Award-winning actor Shams Suman died while undergoing treatment at a private hospital in Dhaka at age 61.",
@@ -2085,7 +2085,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Celebrities",
-                        'name'             => "Veteran Actor Ilias Javed Passes Away in Uttara",
+                        'headline'             => "Veteran Actor Ilias Javed Passes Away in Uttara",
                         'sub_heading'      => "",
                         'content_shoulder' => "Veteran Actor Dies",
                         'brief'            => "Veteran Bangladeshi film actor Ilias Javed passed away at his Uttara residence after suffering from illness for a long time.",
@@ -2096,7 +2096,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Celebrities",
-                        'name'             => "Jaya Ahsan Mourns Rahul Arunoday Banerjee’s Death",
+                        'headline'             => "Jaya Ahsan Mourns Rahul Arunoday Banerjee’s Death",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Jaya Ahsan shared an emotional post after the death of Tollywood actor Rahul Arunoday Banerjee during a shoot.",
@@ -2107,7 +2107,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Celebrities",
-                        'name'             => "Actor Tinu Karim Dies After Casting Vote in Barishal",
+                        'headline'             => "Actor Tinu Karim Dies After Casting Vote in Barishal",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Television actor Tinu Karim passed away in Barishal after suffering a heart attack shortly after casting his vote.",
@@ -2118,7 +2118,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "Celebrities",
-                        'name'             => "Artistes Turn Up at Polls and Share Voting Moments Online",
+                        'headline'             => "Artistes Turn Up at Polls and Share Voting Moments Online",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladeshi artistes and cultural figures joined the national election day by voting and sharing moments with followers.",
@@ -2129,7 +2129,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "OTT",
-                        'name'             => "Saif Ali Khan Returns to Netflix With Kartavya",
+                        'headline'             => "Saif Ali Khan Returns to Netflix With Kartavya",
                         'sub_heading'      => "Crime drama expected to premiere on Netflix in mid-May",
                         'content_shoulder' => "",
                         'brief'            => "Saif Ali Khan is set to return to Netflix with Kartavya, a brooding crime drama reportedly eyeing a May premiere.",
@@ -2140,7 +2140,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "OTT",
-                        'name'             => "HBO Max Launch Plan Includes Bangladesh and Asia Pacific Markets",
+                        'headline'             => "HBO Max Launch Plan Includes Bangladesh and Asia Pacific Markets",
                         'sub_heading'      => "",
                         'content_shoulder' => "Streaming Expansion",
                         'brief'            => "HBO Max plans to launch in Bangladesh and other Asia Pacific markets, expanding access to major global entertainment brands.",
@@ -2151,7 +2151,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "OTT",
-                        'name'             => "Omimangshito Finally Set for Release After Certification Dispute",
+                        'headline'             => "Omimangshito Finally Set for Release After Certification Dispute",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Raihan Rafi’s OTT content Omimangshito is finally set for release after delays linked to certification review.",
@@ -2162,7 +2162,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "OTT",
-                        'name'             => "Toffee’s Concert Streaming Model Shows Demand for Digital Events",
+                        'headline'             => "Toffee’s Concert Streaming Model Shows Demand for Digital Events",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Toffee’s earlier live concert streaming model continues to show how Bangladeshi audiences use OTT platforms for music events.",
@@ -2173,7 +2173,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "OTT",
-                        'name'             => "Celebrity Podcasts Add New Digital Entertainment Format",
+                        'headline'             => "Celebrity Podcasts Add New Digital Entertainment Format",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Celebrity podcast Behind the Fame reflects growing viewer interest in long-form digital entertainment and online interviews.",
@@ -2186,7 +2186,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Health",
 
-                        'name'             => "Health card plan aims to widen basic healthcare access",
+                        'headline'             => "Health card plan aims to widen basic healthcare access",
                         'sub_heading'      => "Government priority on marginalised patients",
                         'content_shoulder' => "",
                         'brief'            => "A planned health card and stronger hospital monitoring may expand affordable healthcare access for marginalised families across Bangladesh.",
@@ -2202,7 +2202,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Health",
 
-                        'name'             => "Government moves to tighten animal feed safety",
+                        'headline'             => "Government moves to tighten animal feed safety",
                         'sub_heading'      => "",
                         'content_shoulder' => "Farm to table",
                         'brief'            => "Bangladesh plans stronger animal feed controls to protect food safety, livestock quality, and public health from farm to table.",
@@ -2218,7 +2218,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Health",
 
-                        'name'             => "Heart disease prevention gets renewed policy attention",
+                        'headline'             => "Heart disease prevention gets renewed policy attention",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Officials and cardiology experts urged lifestyle awareness, prevention, and stronger collaboration to reduce heart disease risks nationwide.",
@@ -2234,7 +2234,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Health",
 
-                        'name'             => "New maternal hospital opens in Cox’s Bazar refugee camp",
+                        'headline'             => "New maternal hospital opens in Cox’s Bazar refugee camp",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A new maternal hospital in Cox’s Bazar is offering emergency obstetric care, C-sections, ultrasound, and newborn services.",
@@ -2250,7 +2250,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Health",
 
-                        'name'             => "District proposals expose rural healthcare shortages",
+                        'headline'             => "District proposals expose rural healthcare shortages",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Deputy commissioners have proposed ICU, manpower, ambulance, equipment, and hospital capacity upgrades for rural healthcare.",
@@ -2266,7 +2266,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Medical News",
 
-                        'name'             => "Medical university expansion stalled by project delays",
+                        'headline'             => "Medical university expansion stalled by project delays",
                         'sub_heading'      => "Postgraduate training faces infrastructure gap",
                         'content_shoulder' => "",
                         'brief'            => "Several public medical universities remain unable to offer full postgraduate courses because of delayed infrastructure and staffing.",
@@ -2282,7 +2282,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Medical News",
 
-                        'name'             => "New resident doctors urged to serve with compassion",
+                        'headline'             => "New resident doctors urged to serve with compassion",
                         'sub_heading'      => "",
                         'content_shoulder' => "Doctor training",
                         'brief'            => "More than one thousand resident doctors joined postgraduate training with calls for compassion, skill, and research-oriented service.",
@@ -2298,7 +2298,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Medical News",
 
-                        'name'             => "BMU vice-chancellor stresses modern diagnostic labs",
+                        'headline'             => "BMU vice-chancellor stresses modern diagnostic labs",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Medical University leaders said hospital quality depends heavily on modern laboratories and accurate diagnosis.",
@@ -2314,7 +2314,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Medical News",
 
-                        'name'             => "Mobile cardiac units planned for village-level care",
+                        'headline'             => "Mobile cardiac units planned for village-level care",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Advanced mobile medical and surgical units may help deliver cardiac care to rural patients who cannot easily reach major hospitals.",
@@ -2330,7 +2330,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Medical News",
 
-                        'name'             => "Cervical cancer awareness highlighted as lifesaving tool",
+                        'headline'             => "Cervical cancer awareness highlighted as lifesaving tool",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Health experts said awareness, screening, and early prevention are essential to reduce cervical cancer deaths among women.",
@@ -2346,7 +2346,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Public Health",
 
-                        'name'             => "Measles-rubella campaign expands nationwide from May",
+                        'headline'             => "Measles-rubella campaign expands nationwide from May",
                         'sub_heading'      => "Emergency drive targets missed children",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s emergency measles-rubella campaign targets young children after a surge in infections and immunity gaps.",
@@ -2362,7 +2362,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Public Health",
 
-                        'name'             => "Suspected measles deaths keep pressure on health system",
+                        'headline'             => "Suspected measles deaths keep pressure on health system",
                         'sub_heading'      => "",
                         'content_shoulder' => "Outbreak response",
                         'brief'            => "DGHS data showed fresh suspected measles deaths and more than one thousand suspected cases in a day, raising response concerns.",
@@ -2378,7 +2378,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Public Health",
 
-                        'name'             => "Rainfall raises concern over dengue transmission",
+                        'headline'             => "Rainfall raises concern over dengue transmission",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Experts warned that ongoing rainfall may increase Aedes breeding and dengue transmission risk across Bangladesh in coming months.",
@@ -2394,7 +2394,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Public Health",
 
-                        'name'             => "DGHS records 14 fresh dengue cases overnight",
+                        'headline'             => "DGHS records 14 fresh dengue cases overnight",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Health officials reported new dengue hospitalisations across several divisions as Bangladesh monitors early-season transmission.",
@@ -2410,7 +2410,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Public Health",
 
-                        'name'             => "Vaccine procurement warning adds urgency to measles response",
+                        'headline'             => "Vaccine procurement warning adds urgency to measles response",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Reports on measles vaccine procurement gaps intensified concern over coverage shortfalls and outbreak control in Bangladesh.",
@@ -2426,7 +2426,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Diseases",
 
-                        'name'             => "Cumilla reports another child death with measles-like symptoms",
+                        'headline'             => "Cumilla reports another child death with measles-like symptoms",
                         'sub_heading'      => "District death count rises",
                         'content_shoulder' => "",
                         'brief'            => "A nine-month-old child died with measles-like symptoms in Cumilla, raising concern over child infection and hospital response.",
@@ -2442,7 +2442,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Diseases",
 
-                        'name'             => "Rangpur child dies after measles-like illness",
+                        'headline'             => "Rangpur child dies after measles-like illness",
                         'sub_heading'      => "",
                         'content_shoulder' => "Child infection",
                         'brief'            => "A child admitted to Rangpur Medical College Hospital with measles-like symptoms died as new cases appeared in the division.",
@@ -2458,7 +2458,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Diseases",
 
-                        'name'             => "National suspected measles toll reaches alarming level",
+                        'headline'             => "National suspected measles toll reaches alarming level",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s suspected measles figures continued rising with new deaths, confirmed admissions, and thousands of hospital recoveries.",
@@ -2474,7 +2474,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Diseases",
 
-                        'name'             => "Early dengue pattern keeps hospitals on alert",
+                        'headline'             => "Early dengue pattern keeps hospitals on alert",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Fresh dengue cases across multiple divisions indicate that hospitals and local authorities need early mosquito-control preparation.",
@@ -2490,7 +2490,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Diseases",
 
-                        'name'             => "Heart disease described as major public health challenge",
+                        'headline'             => "Heart disease described as major public health challenge",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Officials warned that heart disease remains a major challenge and urged preventive habits, awareness, and stronger specialist cooperation.",
@@ -2506,7 +2506,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Nutrition",
 
-                        'name'             => "Experts urge nutrition to be placed at centre of health systems",
+                        'headline'             => "Experts urge nutrition to be placed at centre of health systems",
                         'sub_heading'      => "Malnutrition weakens treatment outcomes",
                         'content_shoulder' => "",
                         'brief'            => "Nutrition experts called for a multisector approach linking health, climate, development, and infectious disease response.",
@@ -2522,7 +2522,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Nutrition",
 
-                        'name'             => "Food insecurity warning raises nutrition concerns",
+                        'headline'             => "Food insecurity warning raises nutrition concerns",
                         'sub_heading'      => "",
                         'content_shoulder' => "Household diets",
                         'brief'            => "Bangladesh’s high food insecurity numbers show that affordability, income, and diet quality remain serious nutrition risks.",
@@ -2538,7 +2538,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Nutrition",
 
-                        'name'             => "Food safety debate links affordability with nutrition quality",
+                        'headline'             => "Food safety debate links affordability with nutrition quality",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Food crisis analysis says Bangladesh is not facing famine, but millions still struggle with adequate and nutritious diets.",
@@ -2554,7 +2554,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Nutrition",
 
-                        'name'             => "Animal feed control tied to safer meat milk and eggs",
+                        'headline'             => "Animal feed control tied to safer meat milk and eggs",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Government animal feed regulation aims to improve the safety of meat, milk, and eggs consumed by Bangladeshi families.",
@@ -2570,7 +2570,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Nutrition",
 
-                        'name'             => "Malnutrition remains priority during National Nutrition Week",
+                        'headline'             => "Malnutrition remains priority during National Nutrition Week",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Health officials said stunting and poor nutrition still require stronger coordination, data systems, and policy action.",
@@ -2586,7 +2586,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Mental Health",
 
-                        'name'             => "Government launches programme to reduce adolescent suicide risk",
+                        'headline'             => "Government launches programme to reduce adolescent suicide risk",
                         'sub_heading'      => "Teachers and students to receive training",
                         'content_shoulder' => "",
                         'brief'            => "A pilot programme will train students and teachers to reduce adolescent suicide risk and support emotional well-being.",
@@ -2602,7 +2602,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Mental Health",
 
-                        'name'             => "Bangladesh mental health crisis deepens amid treatment gaps",
+                        'headline'             => "Bangladesh mental health crisis deepens amid treatment gaps",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Stigma, few specialists, Dhaka-centred services, and low awareness are pushing many mental health patients toward unsafe options.",
@@ -2618,7 +2618,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Mental Health",
 
-                        'name'             => "Mental health rights protection needs stronger implementation",
+                        'headline'             => "Mental health rights protection needs stronger implementation",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Legal experts said Bangladesh needs stronger rights-based mental health protection, policy implementation, and stigma reduction.",
@@ -2634,7 +2634,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Mental Health",
 
-                        'name'             => "DSHE orders mental health programme in all schools and colleges",
+                        'headline'             => "DSHE orders mental health programme in all schools and colleges",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Schools and colleges have been instructed to introduce scientific lifestyle and mental health services programmes nationwide.",
@@ -2650,7 +2650,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Mental Health",
 
-                        'name'             => "Experts warn stigma keeps youth from mental healthcare",
+                        'headline'             => "Experts warn stigma keeps youth from mental healthcare",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Mental health specialists say stigma and fear of judgment stop many students and workers from seeking treatment early.",
@@ -2666,7 +2666,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Education",
 
-                        'name'             => "Rohingya camp volunteer teachers receive formal certificates",
+                        'headline'             => "Rohingya camp volunteer teachers receive formal certificates",
                         'sub_heading'      => "Training aims to improve classroom learning",
                         'content_shoulder' => "",
                         'brief'            => "Around 1,100 Rohingya camp volunteer teachers received formal certificates after training to improve classroom learning quality.",
@@ -2682,7 +2682,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Education",
 
-                        'name'             => "Government to publish white paper on education sector",
+                        'headline'             => "Government to publish white paper on education sector",
                         'sub_heading'      => "",
                         'content_shoulder' => "Sector accountability",
                         'brief'            => "The education ministry plans a white paper on alleged irregularities and corruption in the education sector during past rule.",
@@ -2698,7 +2698,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Education",
 
-                        'name'             => "Free uniforms shoes and bags to reach students from July",
+                        'headline'             => "Free uniforms shoes and bags to reach students from July",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The government will begin giving free uniforms, shoes and school bags to selected primary and secondary students from July.",
@@ -2714,7 +2714,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Education",
 
-                        'name'             => "HSC and equivalent examinations scheduled to begin on July 2",
+                        'headline'             => "HSC and equivalent examinations scheduled to begin on July 2",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The 2026 HSC and equivalent examinations will begin on July 2, with authorities aiming to complete exams within five weeks.",
@@ -2730,7 +2730,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Education",
 
-                        'name'             => "UGC prepares policy for ethical AI use in higher education",
+                        'headline'             => "UGC prepares policy for ethical AI use in higher education",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The University Grants Commission is preparing a national policy to ensure ethical AI use in higher education institutions.",
@@ -2746,7 +2746,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Schools",
 
-                        'name'             => "Primary students to get dress shoes and jute bags from July",
+                        'headline'             => "Primary students to get dress shoes and jute bags from July",
                         'sub_heading'      => "Pilot support starts in selected schools",
                         'content_shoulder' => "",
                         'brief'            => "Class-I students in selected government primary schools will receive free dress, shoes and jute school bags from July.",
@@ -2762,7 +2762,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Schools",
 
-                        'name'             => "Selected Dhaka schools begin blended classroom model",
+                        'headline'             => "Selected Dhaka schools begin blended classroom model",
                         'sub_heading'      => "",
                         'content_shoulder' => "Hybrid classes",
                         'brief'            => "Selected Dhaka schools are shifting to three days online and three days in-person classes under a pilot education model.",
@@ -2778,7 +2778,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Schools",
 
-                        'name'             => "Teacher absenteeism hurts primary education in Hatiya",
+                        'headline'             => "Teacher absenteeism hurts primary education in Hatiya",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Inspections in Hatiya found empty classrooms, weak oversight and falling attendance in remote island primary schools.",
@@ -2794,7 +2794,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Schools",
 
-                        'name'             => "Religious teacher recruitment plan targets primary schools",
+                        'headline'             => "Religious teacher recruitment plan targets primary schools",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The government is considering recruiting around 9,000 religious teachers to strengthen moral education in primary schools.",
@@ -2810,7 +2810,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Schools",
 
-                        'name'             => "Free schooling age extension under government discussion",
+                        'headline'             => "Free schooling age extension under government discussion",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The government is considering extending free schooling to children up to age 13 to support skill-based education goals.",
@@ -2826,7 +2826,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Universities",
 
-                        'name'             => "Former DU VC joins Grameen University as senior adviser",
+                        'headline'             => "Former DU VC joins Grameen University as senior adviser",
                         'sub_heading'      => "New campus being built in Gazipur",
                         'content_shoulder' => "",
                         'brief'            => "Former Dhaka University vice-chancellor Niaz Ahmed has joined Grameen University as senior adviser amid campus development.",
@@ -2842,7 +2842,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Universities",
 
-                        'name'             => "Education minister urges universities to protect intellectual property",
+                        'headline'             => "Education minister urges universities to protect intellectual property",
                         'sub_heading'      => "",
                         'content_shoulder' => "Research protection",
                         'brief'            => "The education minister called for stronger university action to protect innovation, research and intellectual property rights.",
@@ -2858,7 +2858,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Universities",
 
-                        'name'             => "Gazipur Agricultural University leads agri universities in Asia ranking",
+                        'headline'             => "Gazipur Agricultural University leads agri universities in Asia ranking",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Gazipur Agricultural University secured the top position among Bangladesh agricultural universities in THE Asia rankings.",
@@ -2874,7 +2874,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Universities",
 
-                        'name'             => "Modern labs and library opened at DU pharmacy faculty",
+                        'headline'             => "Modern labs and library opened at DU pharmacy faculty",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Dhaka University pharmacy faculty inaugurated two modern laboratories and a seminar library to support education and research.",
@@ -2890,7 +2890,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Universities",
 
-                        'name'             => "Dhaka Central University ordinance formally issued",
+                        'headline'             => "Dhaka Central University ordinance formally issued",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The government issued an ordinance forming Dhaka Central University to oversee seven public colleges in the capital.",
@@ -2906,7 +2906,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Exams",
 
-                        'name'             => "Nearly 28,000 absent on fifth day of SSC exams",
+                        'headline'             => "Nearly 28,000 absent on fifth day of SSC exams",
                         'sub_heading'      => "Absence remains high in public examinations",
                         'content_shoulder' => "",
                         'brief'            => "A total of 27,891 examinees were absent on the fifth day of the ongoing SSC and equivalent examinations nationwide.",
@@ -2922,7 +2922,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Exams",
 
-                        'name'             => "Over 32,000 absent from SSC English second paper test",
+                        'headline'             => "Over 32,000 absent from SSC English second paper test",
                         'sub_heading'      => "",
                         'content_shoulder' => "Exam attendance",
                         'brief'            => "More than 32,000 candidates were absent from the English second paper test of SSC and equivalent examinations.",
@@ -2938,7 +2938,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Exams",
 
-                        'name'             => "More than 34,000 absent on third day of SSC exams",
+                        'headline'             => "More than 34,000 absent on third day of SSC exams",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The third day of SSC and equivalent examinations saw 34,054 candidates absent, keeping attendance concerns in focus.",
@@ -2954,7 +2954,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Exams",
 
-                        'name'             => "Wrong question set leads to action against centre officials",
+                        'headline'             => "Wrong question set leads to action against centre officials",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Three centre officials were relieved after around 100 Habiganj Dakhil candidates received the wrong question paper.",
@@ -2970,7 +2970,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Exams",
 
-                        'name'             => "HSC routine published for nine general education boards",
+                        'headline'             => "HSC routine published for nine general education boards",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The HSC routine was published for nine general education boards, with written examinations scheduled to start on July 2.",
@@ -2986,7 +2986,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Scholarships",
 
-                        'name'             => "Sixteen DU students receive Tk 2.5 lakh in scholarships",
+                        'headline'             => "Sixteen DU students receive Tk 2.5 lakh in scholarships",
                         'sub_heading'      => "Memorial trust funds support students",
                         'content_shoulder' => "",
                         'brief'            => "Sixteen Dhaka University students received around Tk 2.5 lakh in scholarships under two memorial trust funds.",
@@ -3002,7 +3002,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Scholarships",
 
-                        'name'             => "Foundation awards scholarships to DU business students",
+                        'headline'             => "Foundation awards scholarships to DU business students",
                         'sub_heading'      => "",
                         'content_shoulder' => "Merit support",
                         'brief'            => "The Dabir-Sohani-Suraiya Foundation awarded scholarships to financially challenged DU business studies students.",
@@ -3018,7 +3018,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Scholarships",
 
-                        'name'             => "Primary scholarship examination begins under national schedule",
+                        'headline'             => "Primary scholarship examination begins under national schedule",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The Primary Scholarship Examination 2025 began with the Bangla test and continued under the nationwide examination schedule.",
@@ -3034,7 +3034,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Scholarships",
 
-                        'name'             => "Malaysia considers more scholarships for Bangladeshi students",
+                        'headline'             => "Malaysia considers more scholarships for Bangladeshi students",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Malaysia expressed readiness to consider expanding scholarship allocations for Bangladeshi students in higher education.",
@@ -3050,7 +3050,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Scholarships",
 
-                        'name'             => "Government considers doubling scholarship amounts",
+                        'headline'             => "Government considers doubling scholarship amounts",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A draft proposal would double scholarship amounts across primary, junior, SSC, HSC and honours education levels.",
@@ -3066,7 +3066,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Policy",
 
-                        'name'             => "White paper planned on past education sector irregularities",
+                        'headline'             => "White paper planned on past education sector irregularities",
                         'sub_heading'      => "Investigation scope may be wide",
                         'content_shoulder' => "",
                         'brief'            => "The education ministry plans to publish a white paper examining alleged irregularities and corruption in the sector.",
@@ -3082,7 +3082,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Policy",
 
-                        'name'             => "UGC drafts ethical AI policy for universities",
+                        'headline'             => "UGC drafts ethical AI policy for universities",
                         'sub_heading'      => "",
                         'content_shoulder' => "AI governance",
                         'brief'            => "The University Grants Commission is drafting a national policy for ethical artificial intelligence use in universities.",
@@ -3098,7 +3098,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Policy",
 
-                        'name'             => "Education ministry weighs free schooling up to age 13",
+                        'headline'             => "Education ministry weighs free schooling up to age 13",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Officials are considering free schooling up to age 13 as part of a skill-based and career-oriented education reform plan.",
@@ -3114,7 +3114,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Policy",
 
-                        'name'             => "Third language plan raises school curriculum debate",
+                        'headline'             => "Third language plan raises school curriculum debate",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A proposed third language at secondary level has opened debate over implementation, teacher capacity and student workload.",
@@ -3130,7 +3130,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Policy",
 
-                        'name'             => "UGC drafting anti-plagiarism policy for higher education",
+                        'headline'             => "UGC drafting anti-plagiarism policy for higher education",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The UGC is collecting stakeholder opinions on an anti-plagiarism policy for academic and research reports in universities.",
@@ -3146,7 +3146,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Lifestyle",
 
-                        'name'             => "Shompa Kabir showcases Bangladeshi food on MasterChef USA",
+                        'headline'             => "Shompa Kabir showcases Bangladeshi food on MasterChef USA",
                         'sub_heading'      => "Halibut bhuna earns global attention",
                         'content_shoulder' => "",
                         'brief'            => "Bangladeshi-origin chef Shompa Kabir brought halibut bhuna to MasterChef USA, giving local cuisine global attention.",
@@ -3162,7 +3162,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Lifestyle",
 
-                        'name'             => "Sylhet rainy season travel gains fresh appeal",
+                        'headline'             => "Sylhet rainy season travel gains fresh appeal",
                         'sub_heading'      => "",
                         'content_shoulder' => "Monsoon escape",
                         'brief'            => "Sylhet’s Ratargul, Jaflong and rainy landscapes are being promoted as ideal monsoon escapes for Bangladeshi travellers.",
@@ -3178,7 +3178,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Lifestyle",
 
-                        'name'             => "Sabina Khan brings Bangladeshi flavours to MasterChef UK",
+                        'headline'             => "Sabina Khan brings Bangladeshi flavours to MasterChef UK",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladeshi-origin Sabina Khan entered MasterChef UK 2026 with a cooking style rooted in memory and sustainability.",
@@ -3194,7 +3194,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Lifestyle",
 
-                        'name'             => "Asad Sattar redefines youth culture through Arka",
+                        'headline'             => "Asad Sattar redefines youth culture through Arka",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Entrepreneur Asad Sattar is reshaping Dhaka youth lifestyle by blending fashion, community events and culture.",
@@ -3210,7 +3210,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Lifestyle",
 
-                        'name'             => "Art galleries become meaningful dating spaces in Dhaka",
+                        'headline'             => "Art galleries become meaningful dating spaces in Dhaka",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Young couples are turning to art galleries as calmer, conversation-friendly alternatives to cafés and restaurants.",
@@ -3226,7 +3226,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Fashion",
 
-                        'name'             => "Teep returns as a bold urban fashion statement",
+                        'headline'             => "Teep returns as a bold urban fashion statement",
                         'sub_heading'      => "Traditional mark gains modern styling",
                         'content_shoulder' => "",
                         'brief'            => "The Bengali teep is being styled with jeans, sneakers and office wear, turning tradition into modern self-expression.",
@@ -3242,7 +3242,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Fashion",
 
-                        'name'             => "Slow fashion gains ground among conscious shoppers",
+                        'headline'             => "Slow fashion gains ground among conscious shoppers",
                         'sub_heading'      => "",
                         'content_shoulder' => "Buy less better",
                         'brief'            => "Slow fashion is encouraging Bangladeshi consumers to choose durable fabrics, local craft and versatile clothing.",
@@ -3258,7 +3258,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Fashion",
 
-                        'name'             => "Bangladeshi designer Tanvir Mahidy debuts at London Fashion Week",
+                        'headline'             => "Bangladeshi designer Tanvir Mahidy debuts at London Fashion Week",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Designer Tanvir Mahidy’s London Fashion Week debut placed Bangladeshi identity and denim activism on a global runway.",
@@ -3274,7 +3274,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Fashion",
 
-                        'name'             => "Spring saree trends favour florals and bold prints",
+                        'headline'             => "Spring saree trends favour florals and bold prints",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bright floral sarees, contrasting colours and playful blouse styles are shaping spring fashion in Bangladesh.",
@@ -3290,7 +3290,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Fashion",
 
-                        'name'             => "Panjabi and Kabuli sets shape Eid menswear",
+                        'headline'             => "Panjabi and Kabuli sets shape Eid menswear",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Traditional panjabi looks and modern Kabuli sets remained key Eid fashion choices for Bangladeshi men this season.",
@@ -3306,7 +3306,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Travel",
 
-                        'name'             => "Sylhet monsoon guide highlights Ratargul and Jaflong",
+                        'headline'             => "Sylhet monsoon guide highlights Ratargul and Jaflong",
                         'sub_heading'      => "Rain transforms popular nature spots",
                         'content_shoulder' => "",
                         'brief'            => "Sylhet’s rainy season travel guide highlights Ratargul Swamp Forest, Jaflong and local food as key attractions.",
@@ -3322,7 +3322,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Travel",
 
-                        'name'             => "Nepal trekking guide targets first-time Bangladeshi travellers",
+                        'headline'             => "Nepal trekking guide targets first-time Bangladeshi travellers",
                         'sub_heading'      => "",
                         'content_shoulder' => "Beginner trek tips",
                         'brief'            => "A Nepal trekking guide advises Bangladeshi beginners to choose reliable boots, backpacks and realistic routes.",
@@ -3338,7 +3338,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Travel",
 
-                        'name'             => "Hajj flights set to carry Bangladeshi pilgrims",
+                        'headline'             => "Hajj flights set to carry Bangladeshi pilgrims",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh is preparing hajj flights for 78,500 pilgrims, making pilgrimage travel a major seasonal movement.",
@@ -3354,7 +3354,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Travel",
 
-                        'name'             => "Quick international getaways become popular from Dhaka",
+                        'headline'             => "Quick international getaways become popular from Dhaka",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Short international trips from Dhaka are being promoted for workers and students seeking quick breaks abroad.",
@@ -3370,7 +3370,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Travel",
 
-                        'name'             => "Netrokona promoted as quiet nature escape",
+                        'headline'             => "Netrokona promoted as quiet nature escape",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Netrokona’s China Clay Hills, Birishiri Lake and quieter landscapes are being promoted for crowd-free domestic travel.",
@@ -3386,7 +3386,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Food",
 
-                        'name'             => "Shompa Kabir wins MasterChef apron with halibut bhuna",
+                        'headline'             => "Shompa Kabir wins MasterChef apron with halibut bhuna",
                         'sub_heading'      => "Bangladeshi dish impresses global judges",
                         'content_shoulder' => "",
                         'brief'            => "Shompa Kabir’s halibut bhuna with rice and daal earned a MasterChef USA apron and celebrated Bangladeshi cuisine.",
@@ -3402,7 +3402,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Food",
 
-                        'name'             => "Bhorta celebrated as Bangladesh’s humble comfort food",
+                        'headline'             => "Bhorta celebrated as Bangladesh’s humble comfort food",
                         'sub_heading'      => "",
                         'content_shoulder' => "Simple food joy",
                         'brief'            => "Bhorta is being celebrated as a humble Bangladeshi food that proves flavour does not need expensive ingredients.",
@@ -3418,7 +3418,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Food",
 
-                        'name'             => "Baishakh sweets keep family food memories alive",
+                        'headline'             => "Baishakh sweets keep family food memories alive",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Traditional Baishakh sweets are being remembered as edible family memories passed through generations in Bangladesh.",
@@ -3434,7 +3434,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Food",
 
-                        'name'             => "Nayeem Ashraf returns to build culinary industry",
+                        'headline'             => "Nayeem Ashraf returns to build culinary industry",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Chef Nayeem Ashraf returned to Bangladesh with plans to strengthen professional culinary training and hospitality.",
@@ -3450,7 +3450,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Food",
 
-                        'name'             => "High-protein iftar ideas use everyday Bangladeshi foods",
+                        'headline'             => "High-protein iftar ideas use everyday Bangladeshi foods",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Everyday items like eggs, lentils, chickpeas, yoghurt, fish and chicken are being promoted for healthier iftar meals.",
@@ -3466,7 +3466,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Relationships",
 
-                        'name'             => "Art galleries become calmer dating spots for young couples",
+                        'headline'             => "Art galleries become calmer dating spots for young couples",
                         'sub_heading'      => "Culture helps start better conversations",
                         'content_shoulder' => "",
                         'brief'            => "Young couples are choosing art galleries for quieter dates that encourage conversation, observation and compatibility.",
@@ -3482,7 +3482,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Relationships",
 
-                        'name'             => "Money secrecy raises relationship red flag debate",
+                        'headline'             => "Money secrecy raises relationship red flag debate",
                         'sub_heading'      => "",
                         'content_shoulder' => "Financial honesty",
                         'brief'            => "A relationship debate asks how much financial information partners should share before trust becomes affected.",
@@ -3498,7 +3498,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Relationships",
 
-                        'name'             => "Love marriage and arranged marriage debate continues in Dhaka",
+                        'headline'             => "Love marriage and arranged marriage debate continues in Dhaka",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Young Dhakaites are debating whether love marriage or modern arranged marriage better fits today’s expectations.",
@@ -3514,7 +3514,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Relationships",
 
-                        'name'             => "Marriage expenses reshape family decisions in Bangladesh",
+                        'headline'             => "Marriage expenses reshape family decisions in Bangladesh",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Inflation and rising event costs are changing how middle-class families plan weddings and relationship milestones.",
@@ -3530,7 +3530,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Relationships",
 
-                        'name'             => "Young generation questions pressure around marriage",
+                        'headline'             => "Young generation questions pressure around marriage",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Many young Bangladeshis feel exhausted by family expectations, social judgment and pressure linked to marriage.",
@@ -3546,7 +3546,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Culture",
 
-                        'name'             => "Ethnological museum in Chattogram faces declining visitors",
+                        'headline'             => "Ethnological museum in Chattogram faces declining visitors",
                         'sub_heading'      => "Rare cultural collection needs revival",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s only ethnological museum is facing neglect, fewer visitors and calls for digital preservation.",
@@ -3562,7 +3562,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Culture",
 
-                        'name'             => "Boishakhi Shobhajatra name chosen for New Year procession",
+                        'headline'             => "Boishakhi Shobhajatra name chosen for New Year procession",
                         'sub_heading'      => "",
                         'content_shoulder' => "Festival identity",
                         'brief'            => "The culture ministry announced that the Pohela Boishakh procession would be renamed Boishakhi Shobhajatra.",
@@ -3578,7 +3578,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Culture",
 
-                        'name'             => "Dhaka amateur radio community keeps global links alive",
+                        'headline'             => "Dhaka amateur radio community keeps global links alive",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s amateur radio operators are keeping a technical culture alive through rooftop communication and global contact.",
@@ -3594,7 +3594,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Culture",
 
-                        'name'             => "Bangladeshi wedding culture changes under inflation pressure",
+                        'headline'             => "Bangladeshi wedding culture changes under inflation pressure",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Inflation is changing wedding culture as families balance social expectations with rising costs and limited income.",
@@ -3610,7 +3610,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Culture",
 
-                        'name'             => "Rooftop radio story reflects Bangladesh’s hidden hobby culture",
+                        'headline'             => "Rooftop radio story reflects Bangladesh’s hidden hobby culture",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A Dhaka rooftop radio story shows how dedicated hobbyists preserve community, science and communication culture.",
@@ -3626,7 +3626,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Science",
 
-                        'name'             => "Young Scientist Congress puts AI at centre of science agenda",
+                        'headline'             => "Young Scientist Congress puts AI at centre of science agenda",
                         'sub_heading'      => "Researchers showcase future-focused ideas",
                         'content_shoulder' => "",
                         'brief'            => "Young scientists from Bangladesh showcased AI-focused research and innovation at a national science congress in Dhaka.",
@@ -3642,7 +3642,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Science",
 
-                        'name'             => "National AI institute plan gains fresh policy attention",
+                        'headline'             => "National AI institute plan gains fresh policy attention",
                         'sub_heading'      => "",
                         'content_shoulder' => "AI future",
                         'brief'            => "The government has discussed establishing a national AI institute to support data security, research and applied innovation.",
@@ -3658,7 +3658,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Science",
 
-                        'name'             => "Science and technology fair begins in Gaibandha",
+                        'headline'             => "Science and technology fair begins in Gaibandha",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A weeklong science and technology fair in Gaibandha is encouraging students and citizens to explore practical innovation.",
@@ -3674,7 +3674,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Science",
 
-                        'name'             => "Bangladesh Academy of Sciences hosts young researchers",
+                        'headline'             => "Bangladesh Academy of Sciences hosts young researchers",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Academy of Sciences gathered young researchers to strengthen science, technology and innovation capacity.",
@@ -3690,7 +3690,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Science",
 
-                        'name'             => "Officials call science vital for development and security",
+                        'headline'             => "Officials call science vital for development and security",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Science and technology leaders said research, STEM education and innovation are essential for national progress and security.",
@@ -3706,7 +3706,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Space",
 
-                        'name'             => "Lalmonirhat aerospace university aims to produce astronauts",
+                        'headline'             => "Lalmonirhat aerospace university aims to produce astronauts",
                         'sub_heading'      => "Aviation campus highlights space ambition",
                         'content_shoulder' => "",
                         'brief'            => "Lalmonirhat’s aviation and aerospace university has been described as a future hub for astronauts and aviation experts.",
@@ -3722,7 +3722,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Space",
 
-                        'name'             => "Bangladesh astronomy enthusiasts prepare for national round",
+                        'headline'             => "Bangladesh astronomy enthusiasts prepare for national round",
                         'sub_heading'      => "",
                         'content_shoulder' => "Young stargazers",
                         'brief'            => "The national round of BDOAA 2026 gathered bright young astronomy enthusiasts from across Bangladesh at IUB.",
@@ -3738,7 +3738,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Space",
 
-                        'name'             => "Eta Aquarid meteor shower draws attention from skywatchers",
+                        'headline'             => "Eta Aquarid meteor shower draws attention from skywatchers",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Skywatchers in Bangladesh can follow the Eta Aquarid meteor shower, though bright moonlight may reduce visibility.",
@@ -3754,7 +3754,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Space",
 
-                        'name'             => "Bangladeshi students’ space settlement success inspires schools",
+                        'headline'             => "Bangladeshi students’ space settlement success inspires schools",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladeshi students’ international space settlement design win continues to inspire school-level science learning.",
@@ -3770,7 +3770,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Space",
 
-                        'name'             => "Bangladesh’s Artemis Accords role keeps space cooperation in focus",
+                        'headline'             => "Bangladesh’s Artemis Accords role keeps space cooperation in focus",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s signing of the Artemis Accords remains a major step in peaceful international space cooperation.",
@@ -3786,7 +3786,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Research",
 
-                        'name'             => "BAU scientist develops chemical-free paddy protection device",
+                        'headline'             => "BAU scientist develops chemical-free paddy protection device",
                         'sub_heading'      => "Grain Guard targets storage losses",
                         'content_shoulder' => "",
                         'brief'            => "A Bangladesh Agricultural University scientist has introduced an ultrasonic device to protect stored paddy without chemicals.",
@@ -3802,7 +3802,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Research",
 
-                        'name'             => "BLRI researches climate-resilient fodder crops",
+                        'headline'             => "BLRI researches climate-resilient fodder crops",
                         'sub_heading'      => "",
                         'content_shoulder' => "Livestock science",
                         'brief'            => "Bangladesh Livestock Research Institute is studying fodder crops that can withstand drought, salinity and changing weather.",
@@ -3818,7 +3818,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Research",
 
-                        'name'             => "IRRI partnership pushes next-generation rice research",
+                        'headline'             => "IRRI partnership pushes next-generation rice research",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s agriculture ministry signalled stronger cooperation with IRRI for next-generation rice research and food security.",
@@ -3834,7 +3834,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Research",
 
-                        'name'             => "Dhaka University urged to become research-oriented",
+                        'headline'             => "Dhaka University urged to become research-oriented",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A government adviser called for transforming Dhaka University into a stronger research-oriented institution.",
@@ -3850,7 +3850,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Research",
 
-                        'name'             => "Pharma sector urged to strengthen innovation capacity",
+                        'headline'             => "Pharma sector urged to strengthen innovation capacity",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s pharmaceutical sector may use extra transition time to strengthen research, innovation and global readiness.",
@@ -3866,7 +3866,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Innovation",
 
-                        'name'             => "Government promises proper recognition for innovators",
+                        'headline'             => "Government promises proper recognition for innovators",
                         'sub_heading'      => "IP services to be modernised",
                         'content_shoulder' => "",
                         'brief'            => "The government said it is working to recognise innovators, researchers and creative people through easier service systems.",
@@ -3882,7 +3882,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Innovation",
 
-                        'name'             => "Civic tech expo highlights youth-led digital solutions",
+                        'headline'             => "Civic tech expo highlights youth-led digital solutions",
                         'sub_heading'      => "",
                         'content_shoulder' => "Digital inclusion",
                         'brief'            => "UNDP and the ICT Division hosted a civic technology expo highlighting youth-led solutions for digital governance.",
@@ -3898,7 +3898,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Innovation",
 
-                        'name'             => "Student innovation signals future potential in Hathazari",
+                        'headline'             => "Student innovation signals future potential in Hathazari",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Student projects and local awards in Hathazari highlighted how young innovators can support future development.",
@@ -3914,7 +3914,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Innovation",
 
-                        'name'             => "Solar power proposed as escape from energy trap",
+                        'headline'             => "Solar power proposed as escape from energy trap",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Experts said solar energy could help Bangladesh address fuel pressure and move toward a more resilient power system.",
@@ -3930,7 +3930,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Innovation",
 
-                        'name'             => "Bangladesh losing innovation race sparks fresh debate",
+                        'headline'             => "Bangladesh losing innovation race sparks fresh debate",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A policy debate warned that low research spending is holding back Bangladesh’s innovation potential against regional competitors.",
@@ -3946,7 +3946,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Tech Research",
 
-                        'name'             => "AI Olympiad regional round draws young tech enthusiasts",
+                        'headline'             => "AI Olympiad regional round draws young tech enthusiasts",
                         'sub_heading'      => "Dhaka event shows AI education momentum",
                         'content_shoulder' => "",
                         'brief'            => "The Dhaka regional round of Bangladesh AI Olympiad 2026 gathered young technology learners at BUBT.",
@@ -3962,7 +3962,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Tech Research",
 
-                        'name'             => "Kaggle workshop trains future AI leaders",
+                        'headline'             => "Kaggle workshop trains future AI leaders",
                         'sub_heading'      => "",
                         'content_shoulder' => "Data skills",
                         'brief'            => "A Bangladesh AI Olympiad-linked Kaggle workshop focused on building practical machine learning and data science skills.",
@@ -3978,7 +3978,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Tech Research",
 
-                        'name'             => "UGC prepares ethical AI policy for higher education",
+                        'headline'             => "UGC prepares ethical AI policy for higher education",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The University Grants Commission is preparing guidance for ethical AI use in teaching, research and assessment.",
@@ -3994,7 +3994,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Tech Research",
 
-                        'name'             => "Bangladesh urges stronger data systems at UN forum",
+                        'headline'             => "Bangladesh urges stronger data systems at UN forum",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh called for bridging the digital divide and strengthening data systems through international cooperation.",
@@ -4010,7 +4010,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Tech Research",
 
-                        'name'             => "Renewable transition research warns energy crisis may persist",
+                        'headline'             => "Renewable transition research warns energy crisis may persist",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "CPD warned Bangladesh’s energy crisis cannot be solved fully without a decisive shift to renewable power systems.",
@@ -4026,7 +4026,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Discoveries",
 
-                        'name'             => "Grain Guard discovery offers safer paddy storage option",
+                        'headline'             => "Grain Guard discovery offers safer paddy storage option",
                         'sub_heading'      => "Ultrasonic device avoids harmful chemicals",
                         'content_shoulder' => "",
                         'brief'            => "A BAU researcher’s ultrasonic Grain Guard device offers farmers a chemical-free way to protect stored paddy.",
@@ -4042,7 +4042,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Discoveries",
 
-                        'name'             => "Climate-resilient fodder research points to safer livestock future",
+                        'headline'             => "Climate-resilient fodder research points to safer livestock future",
                         'sub_heading'      => "",
                         'content_shoulder' => "Farm resilience",
                         'brief'            => "BLRI’s work on drought and salinity-tolerant fodder may improve livestock nutrition under changing climate conditions.",
@@ -4058,7 +4058,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Discoveries",
 
-                        'name'             => "Next-generation rice work targets climate pressure",
+                        'headline'             => "Next-generation rice work targets climate pressure",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s renewed rice research push may help farmers respond to climate stress, salinity and food security pressure.",
@@ -4074,7 +4074,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Discoveries",
 
-                        'name'             => "Astronomy olympiad reveals strong student interest in space science",
+                        'headline'             => "Astronomy olympiad reveals strong student interest in space science",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s astronomy competition scene is revealing growing student interest in space science and observation.",
@@ -4090,7 +4090,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Discoveries",
 
-                        'name'             => "Science fairs uncover practical student innovations",
+                        'headline'             => "Science fairs uncover practical student innovations",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Local science fairs are helping uncover student-made projects that connect classroom ideas with community needs.",
@@ -4106,7 +4106,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Environment",
 
-                        'name'             => "April rainfall rises far above normal across Bangladesh",
+                        'headline'             => "April rainfall rises far above normal across Bangladesh",
                         'sub_heading'      => "BMD warns of heatwaves and low pressure",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh saw April rainfall 75.7 percent above normal, with Sylhet recording extreme rain and BMD warning of heatwaves in May.",
@@ -4122,7 +4122,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Environment",
 
-                        'name'             => "Hill cutting and forest land sales continue in Cox’s Bazar",
+                        'headline'             => "Hill cutting and forest land sales continue in Cox’s Bazar",
                         'sub_heading'      => "",
                         'content_shoulder' => "Forest crime watch",
                         'brief'            => "Protected forest land in Cox’s Bazar’s Khurushkul is being cut, occupied and sold, raising fresh environmental concern.",
@@ -4138,7 +4138,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Environment",
 
-                        'name'             => "Barishal water plant returns to reduce groundwater pressure",
+                        'headline'             => "Barishal water plant returns to reduce groundwater pressure",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Rupatali surface water treatment plant resumed operation in Barishal to provide safer water and reduce groundwater extraction.",
@@ -4154,7 +4154,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Environment",
 
-                        'name'             => "Police move to form special unit for environmental crimes",
+                        'headline'             => "Police move to form special unit for environmental crimes",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh Police is discussing a dedicated environmental crime unit to tackle river grabbing, pollution and hill cutting.",
@@ -4170,7 +4170,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Environment",
 
-                        'name'             => "Clean and green Dhaka plan puts pollution control in focus",
+                        'headline'             => "Clean and green Dhaka plan puts pollution control in focus",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A 12-point plan for Dhaka includes tree planting, electric buses, ETP monitoring and action against illegal brick kilns.",
@@ -4186,7 +4186,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Climate Change",
 
-                        'name'             => "Bangladesh faces new climate reality as heatwaves intensify",
+                        'headline'             => "Bangladesh faces new climate reality as heatwaves intensify",
                         'sub_heading'      => "Longer hotter spells worry experts",
                         'content_shoulder' => "",
                         'brief'            => "Meteorologists warn that Bangladesh heatwaves are lasting longer, covering wider areas and reaching higher temperatures.",
@@ -4202,7 +4202,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Climate Change",
 
-                        'name'             => "Rising heat may sharply increase deaths by 2050",
+                        'headline'             => "Rising heat may sharply increase deaths by 2050",
                         'sub_heading'      => "",
                         'content_shoulder' => "Heat mortality risk",
                         'brief'            => "A global climate mortality report projects Bangladesh among countries most affected by future heat-related deaths.",
@@ -4218,7 +4218,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Climate Change",
 
-                        'name'             => "BMD warns low pressure systems may form in Bay",
+                        'headline'             => "BMD warns low pressure systems may form in Bay",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "After unusually heavy April rainfall, BMD warned that one or two low-pressure systems may form in the Bay of Bengal.",
@@ -4234,7 +4234,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Climate Change",
 
-                        'name'             => "Children remain highly exposed to climate shocks",
+                        'headline'             => "Children remain highly exposed to climate shocks",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Children in Bangladesh remain highly exposed to floods, heat, storms and climate-linked health and education disruption.",
@@ -4250,7 +4250,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Climate Change",
 
-                        'name'             => "Heatwave forecasts keep public health services on alert",
+                        'headline'             => "Heatwave forecasts keep public health services on alert",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "BMD forecasts in April warned of possible heatwaves and monitored Bay systems as temperatures rose across Bangladesh.",
@@ -4266,7 +4266,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Pollution",
 
-                        'name'             => "Noise Awareness Day puts invisible pollution in spotlight",
+                        'headline'             => "Noise Awareness Day puts invisible pollution in spotlight",
                         'sub_heading'      => "Mobile courts and rallies held nationwide",
                         'content_shoulder' => "",
                         'brief'            => "International Noise Awareness Day was observed across Bangladesh with rallies, discussions and mobile court drives.",
@@ -4282,7 +4282,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Pollution",
 
-                        'name'             => "Dhaka air again ranks among world’s worst",
+                        'headline'             => "Dhaka air again ranks among world’s worst",
                         'sub_heading'      => "",
                         'content_shoulder' => "Urban air risk",
                         'brief'            => "Dhaka’s air quality again ranked among the world’s worst, keeping particulate pollution a major urban health concern.",
@@ -4298,7 +4298,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Pollution",
 
-                        'name'             => "Industrial waste threatens rivers in Narsingdi",
+                        'headline'             => "Industrial waste threatens rivers in Narsingdi",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Unchecked industrial pollution is endangering rivers in Narsingdi and affecting nearby communities and ecosystems.",
@@ -4314,7 +4314,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Pollution",
 
-                        'name'             => "ETP monitoring planned for industries near Dhaka rivers",
+                        'headline'             => "ETP monitoring planned for industries near Dhaka rivers",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Authorities say ETPs are mandatory for polluting industries and real-time monitoring cameras are being installed.",
@@ -4330,7 +4330,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Pollution",
 
-                        'name'             => "Mobile courts target black smoke and brick kiln pollution",
+                        'headline'             => "Mobile courts target black smoke and brick kiln pollution",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Regular mobile court drives are targeting black smoke vehicles, construction dust and illegal brick kilns around Dhaka.",
@@ -4346,7 +4346,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Wildlife",
 
-                        'name'             => "Dead elephant found mutilated in Rangamati forest",
+                        'headline'             => "Dead elephant found mutilated in Rangamati forest",
                         'sub_heading'      => "Experts allege poor carcass protection",
                         'content_shoulder' => "",
                         'brief'            => "A 60-year-old wild elephant found dead in Rangamati was later discovered mutilated, raising conservation concerns.",
@@ -4362,7 +4362,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Wildlife",
 
-                        'name'             => "Rare freshwater crocodile caught safely in Padma",
+                        'headline'             => "Rare freshwater crocodile caught safely in Padma",
                         'sub_heading'      => "",
                         'content_shoulder' => "Rare river rescue",
                         'brief'            => "A rare freshwater crocodile caught in a fishing trap in Faridpur’s Padma River was secured and handed to authorities.",
@@ -4378,7 +4378,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Wildlife",
 
-                        'name'             => "Old wild elephant dies after injuries in Rangamati",
+                        'headline'             => "Old wild elephant dies after injuries in Rangamati",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A 60-year-old male elephant died in Rangamati after long-standing injuries, with another elephant seen guarding the carcass.",
@@ -4394,7 +4394,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Wildlife",
 
-                        'name'             => "Endangered Bengal Slow Loris rescued in Habiganj",
+                        'headline'             => "Endangered Bengal Slow Loris rescued in Habiganj",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Forest officials rescued an endangered Bengal Slow Loris from a house in Habiganj and planned release into Satchari forest.",
@@ -4410,7 +4410,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Wildlife",
 
-                        'name'             => "Sundarbans tigers face uncertain future despite conservation work",
+                        'headline'             => "Sundarbans tigers face uncertain future despite conservation work",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Bangladesh’s Sundarbans tiger conservation faces pressure from habitat loss, salinity, storms, poaching and human conflict.",
@@ -4426,7 +4426,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Disasters",
 
-                        'name'             => "Lightning strikes kill ten people across five districts",
+                        'headline'             => "Lightning strikes kill ten people across five districts",
                         'sub_heading'      => "Storms also kill dozens of cattle",
                         'content_shoulder' => "",
                         'brief'            => "Lightning strikes killed ten people and more than 50 cattle in Patuakhali, Jamalpur, Mymensingh, Barguna and Shariatpur.",
@@ -4442,7 +4442,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Disasters",
 
-                        'name'             => "Khowai embankment breach floods haor croplands",
+                        'headline'             => "Khowai embankment breach floods haor croplands",
                         'sub_heading'      => "",
                         'content_shoulder' => "Haor flood risk",
                         'brief'            => "A 50-metre breach in the Khowai River embankment flooded haor croplands in Habiganj after sudden water pressure.",
@@ -4458,7 +4458,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Disasters",
 
-                        'name'             => "Wall collapse during heavy rain kills woman in Chattogram",
+                        'headline'             => "Wall collapse during heavy rain kills woman in Chattogram",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "A woman died after a wall collapsed during heavy rain in Chattogram’s Karnaphuli, showing urban disaster risk.",
@@ -4474,7 +4474,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Disasters",
 
-                        'name'             => "Rain and landslides strand hundreds in Moulvibazar",
+                        'headline'             => "Rain and landslides strand hundreds in Moulvibazar",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Heavy rain, storms and landslides battered Moulvibazar, stranding residents and raising fresh flood fears.",
@@ -4490,7 +4490,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Disasters",
 
-                        'name'             => "BMD forecasts heavy rain and thunderstorm risk nationwide",
+                        'headline'             => "BMD forecasts heavy rain and thunderstorm risk nationwide",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "BMD forecast rain, thunderstorms, lightning and gusty winds across Bangladesh, with heavy rain likely in three divisions.",
@@ -4506,7 +4506,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Sustainability",
 
-                        'name'             => "SMEs could cut over 14 million tons of carbon yearly",
+                        'headline'             => "SMEs could cut over 14 million tons of carbon yearly",
                         'sub_heading'      => "Study highlights solar and factory efficiency",
                         'content_shoulder' => "",
                         'brief'            => "A study says Bangladesh SMEs could reduce 14.09 million tons of carbon emissions annually through targeted energy transition.",
@@ -4522,7 +4522,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Sustainability",
 
-                        'name'             => "Solar irrigation seen as path out of energy pressure",
+                        'headline'             => "Solar irrigation seen as path out of energy pressure",
                         'sub_heading'      => "",
                         'content_shoulder' => "Clean farm power",
                         'brief'            => "Energy experts say converting diesel irrigation pumps to solar could reduce fuel use, imports and farmer costs.",
@@ -4538,7 +4538,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Sustainability",
 
-                        'name'             => "Rupatali water plant supports sustainable urban supply",
+                        'headline'             => "Rupatali water plant supports sustainable urban supply",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Barishal’s reopened surface water treatment plant may reduce groundwater extraction and improve sustainable water access.",
@@ -4554,7 +4554,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Sustainability",
 
-                        'name'             => "Dhaka green plan includes trees electric buses and ETPs",
+                        'headline'             => "Dhaka green plan includes trees electric buses and ETPs",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "The clean Dhaka plan combines tree planting, electric buses, zero-soil spaces and industrial waste treatment monitoring.",
@@ -4570,7 +4570,7 @@ class NewsSeeder extends Seeder
 
                         "category_name"    => "Sustainability",
 
-                        'name'             => "RMG green transition debate urges buyer responsibility",
+                        'headline'             => "RMG green transition debate urges buyer responsibility",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "Experts say global buyers must share costs as Bangladesh’s garment sector faces pressure to become greener.",
@@ -4590,7 +4590,7 @@ class NewsSeeder extends Seeder
                 'newses'        => collect([
                     (object) [
                         "category_name"    => "জাতীয়",
-                        'name'             => "ডিসি সম্মেলনে মাঠ প্রশাসনকে জনবান্ধব হওয়ার নির্দেশ",
+                        'headline'             => "ডিসি সম্মেলনে মাঠ প্রশাসনকে জনবান্ধব হওয়ার নির্দেশ",
                         'sub_heading'      => "প্রশাসনে স্বচ্ছতা ও জবাবদিহি বাড়ানোর ওপর জোর",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকায় ডিসি সম্মেলনের উদ্বোধনে মাঠ প্রশাসনকে জনসেবা সহজ, হয়রানিমুক্ত ও রাজনৈতিক পরিচয়ের ঊর্ধ্বে রাখার নির্দেশনা দিয়েছেন প্রধানমন্ত্রী।",
@@ -4601,7 +4601,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জাতীয়",
-                        'name'             => "ঋণের বোঝা নিয়েই কাজ শুরু করেছে সরকার",
+                        'headline'             => "ঋণের বোঝা নিয়েই কাজ শুরু করেছে সরকার",
                         'sub_heading'      => "",
                         'content_shoulder' => "অর্থনীতি ও প্রশাসন",
                         'brief'            => "সরকারি দায়িত্ব নেওয়ার পর বড় ঋণচাপ, দুর্বল অর্থনীতি ও প্রশাসনিক চ্যালেঞ্জের মধ্যেই কাজ শুরু করার কথা জানিয়েছেন প্রধানমন্ত্রী।",
@@ -4612,7 +4612,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জাতীয়",
-                        'name'             => "এআই ও ডিজিটাল দক্ষতায় উন্নতির তাগিদ প্রধানমন্ত্রীর",
+                        'headline'             => "এআই ও ডিজিটাল দক্ষতায় উন্নতির তাগিদ প্রধানমন্ত্রীর",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চতুর্থ শিল্পবিপ্লবের যুগে জনপ্রশাসনকে দক্ষ, স্বচ্ছ ও সময়োপযোগী করতে এআই ও ডিজিটাল প্রযুক্তিতে এগোনোর তাগিদ দেওয়া হয়েছে।",
@@ -4623,7 +4623,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জাতীয়",
-                        'name'             => "গণমাধ্যমের স্বাধীনতা ও আস্থা পুনর্গঠনে আলোচনা",
+                        'headline'             => "গণমাধ্যমের স্বাধীনতা ও আস্থা পুনর্গঠনে আলোচনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "গণমাধ্যমের বিশ্বাসযোগ্যতা, স্বাধীনভাবে কাজের পরিবেশ ও সাংবাদিকদের নিরাপত্তা নিয়ে ঢাকায় আলোচনায় উদ্বেগ প্রকাশ করা হয়েছে।",
@@ -4634,7 +4634,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জাতীয়",
-                        'name'             => "ডিসি সম্মেলনে ৪৯৮ প্রস্তাব নিয়ে আলোচনা",
+                        'headline'             => "ডিসি সম্মেলনে ৪৯৮ প্রস্তাব নিয়ে আলোচনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চার দিনের জেলা প্রশাসক সম্মেলনে সারা দেশের বিভাগীয় কমিশনার ও ডিসিদের পাঠানো ৪৯৮টি প্রস্তাব নিয়ে আলোচনা হচ্ছে।",
@@ -4645,7 +4645,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রাজনীতি",
-                        'name'             => "সংস্কার বাস্তবায়নে সরকারকে চাপ দেওয়ার আহ্বান এনসিপির",
+                        'headline'             => "সংস্কার বাস্তবায়নে সরকারকে চাপ দেওয়ার আহ্বান এনসিপির",
                         'sub_heading'      => "জুলাই সনদ বাস্তবায়ন না হলে কর্তৃত্ববাদ ফেরার আশঙ্কা",
                         'content_shoulder' => "",
                         'brief'            => "এনসিপির জাতীয় কনভেনশনে বক্তারা অভিযোগ করেছেন, নির্বাচনী প্রতিশ্রুতি অনুযায়ী সংস্কার বাস্তবায়নে সরকার পিছিয়ে যাচ্ছে।",
@@ -4656,7 +4656,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রাজনীতি",
-                        'name'             => "ক্ষমতার বাহানায় সংস্কার না করার অভিযোগ আখতারের",
+                        'headline'             => "ক্ষমতার বাহানায় সংস্কার না করার অভিযোগ আখতারের",
                         'sub_heading'      => "",
                         'content_shoulder' => "সংস্কার বিতর্ক",
                         'brief'            => "এনসিপি নেতা আখতার হোসেন অভিযোগ করেছেন, নির্বাচিত প্রতিনিধিদের দায়িত্বকে সরকার ক্ষমতার দৃষ্টিতে দেখছে।",
@@ -4667,7 +4667,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রাজনীতি",
-                        'name'             => "এনসিপি ও এবি পার্টি একীভূত হওয়া নিয়ে আলোচনা",
+                        'headline'             => "এনসিপি ও এবি পার্টি একীভূত হওয়া নিয়ে আলোচনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "এনসিপি ও এবি পার্টির মধ্যে আদর্শগত মিল, জোট রাজনীতি ও নেতাকর্মী যোগদান ঘিরে একীভূত হওয়ার গুঞ্জন তৈরি হয়েছে।",
@@ -4678,7 +4678,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রাজনীতি",
-                        'name'             => "ছাত্রদলের একযোগে ২৯ কমিটি অনুমোদন",
+                        'headline'             => "ছাত্রদলের একযোগে ২৯ কমিটি অনুমোদন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দেশের বিশ্ববিদ্যালয়, কলেজ, মেডিক্যাল কলেজ, জেলা ও মহানগর পর্যায়ে ছাত্রদলের ২৯টি কমিটি অনুমোদন দেওয়া হয়েছে।",
@@ -4689,7 +4689,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রাজনীতি",
-                        'name'             => "দলিত ও হরিজনদের নিয়ে এনসিপি সমর্থিত সংগঠনের আত্মপ্রকাশ",
+                        'headline'             => "দলিত ও হরিজনদের নিয়ে এনসিপি সমর্থিত সংগঠনের আত্মপ্রকাশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "প্রান্তিক জনগোষ্ঠীর অধিকার প্রতিষ্ঠায় এনসিপির সমর্থনে জাতীয় জনজাতি জোট নামে নতুন সংগঠনের আত্মপ্রকাশ হয়েছে।",
@@ -4700,7 +4700,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সরকার",
-                        'name'             => "রাজনৈতিক পরিচয়ে বৈষম্য না করার নির্দেশ",
+                        'headline'             => "রাজনৈতিক পরিচয়ে বৈষম্য না করার নির্দেশ",
                         'sub_heading'      => "সরকারি সেবা সবার জন্য সমান রাখতে মাঠ প্রশাসনকে বার্তা",
                         'content_shoulder' => "",
                         'brief'            => "প্রধানমন্ত্রী বলেছেন, মতভেদ থাকলেও সরকারি সেবা, ন্যায়বিচার ও সুযোগ-সুবিধায় রাজনৈতিক পরিচয় যেন কোনো বাধা না হয়।",
@@ -4711,7 +4711,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সরকার",
-                        'name'             => "মোবাইল কোর্ট জোরদারে জেলা প্রশাসকদের নির্দেশ",
+                        'headline'             => "মোবাইল কোর্ট জোরদারে জেলা প্রশাসকদের নির্দেশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "আইন প্রয়োগ",
                         'brief'            => "বিদ্যুৎ সাশ্রয়, খাদ্যে ভেজাল রোধ, বাল্যবিবাহ বন্ধ ও সাম্প্রদায়িক সম্প্রীতি রক্ষায় মোবাইল কোর্ট জোরদারের নির্দেশ দেওয়া হয়েছে।",
@@ -4722,7 +4722,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সরকার",
-                        'name'             => "ডিসি সম্মেলনে সরকারের নীতি ও উন্নয়ন কর্মসূচি পর্যালোচনা",
+                        'headline'             => "ডিসি সম্মেলনে সরকারের নীতি ও উন্নয়ন কর্মসূচি পর্যালোচনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সরকারের নীতি, উন্নয়ন কর্মসূচি ও মাঠ প্রশাসনের জনস্বার্থ সংশ্লিষ্ট প্রস্তাব নিয়ে জেলা প্রশাসক সম্মেলনে আলোচনা শুরু হয়েছে।",
@@ -4733,7 +4733,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সরকার",
-                        'name'             => "প্রশাসনে সততা, মেধা ও দক্ষতাকে নীতি বললেন প্রধানমন্ত্রী",
+                        'headline'             => "প্রশাসনে সততা, মেধা ও দক্ষতাকে নীতি বললেন প্রধানমন্ত্রী",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "প্রশাসনে পদোন্নতি ও বদলির ক্ষেত্রে সততা, মেধা ও দক্ষতাকে গুরুত্ব দেওয়ার কথা বলেছেন প্রধানমন্ত্রী।",
@@ -4744,7 +4744,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সরকার",
-                        'name'             => "গণপরিবহনে শৃঙ্খলা আনতে নতুন পরিকল্পনা",
+                        'headline'             => "গণপরিবহনে শৃঙ্খলা আনতে নতুন পরিকল্পনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকার গণপরিবহনে শৃঙ্খলা ফেরাতে পিংক বাস, বাইসাইকেল রাইড শেয়ারিং, ই-বাস ও মনোরেলসহ নানা পরিকল্পনা নেওয়া হয়েছে।",
@@ -4755,7 +4755,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আইন ও শৃঙ্খলা",
-                        'name'             => "মোহাম্মদপুরের অপরাধ দমনে রায়েরবাজারে নতুন থানা হবে",
+                        'headline'             => "মোহাম্মদপুরের অপরাধ দমনে রায়েরবাজারে নতুন থানা হবে",
                         'sub_heading'      => "ডিএমপি বলছে চাঁদাবাজ, অস্ত্রধারী ও মাদকচক্রের বিরুদ্ধে অভিযান চলছে",
                         'content_shoulder' => "",
                         'brief'            => "মোহাম্মদপুর ও আশপাশের অপরাধ নিয়ন্ত্রণে রায়েরবাজার এলাকায় নতুন থানা করার কথা জানিয়েছে ঢাকা মহানগর পুলিশ।",
@@ -4766,7 +4766,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আইন ও শৃঙ্খলা",
-                        'name'             => "৩০ লাখ টাকার কাপড় লুটের ঘটনায় পাঁচজন গ্রেপ্তার",
+                        'headline'             => "৩০ লাখ টাকার কাপড় লুটের ঘটনায় পাঁচজন গ্রেপ্তার",
                         'sub_heading'      => "",
                         'content_shoulder' => "ঢাকায় অভিযান",
                         'brief'            => "বিমানবন্দর এলাকায় চালককে বিভ্রান্ত করে আমদানিকৃত গার্মেন্টস কাপড় লুটের ঘটনায় পাঁচজনকে গ্রেপ্তার করেছে পুলিশ।",
@@ -4777,7 +4777,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আইন ও শৃঙ্খলা",
-                        'name'             => "নৌ পুলিশের ওপর গুলির মামলার আসামি ঢাকায় গ্রেপ্তার",
+                        'headline'             => "নৌ পুলিশের ওপর গুলির মামলার আসামি ঢাকায় গ্রেপ্তার",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কুষ্টিয়ার পদ্মা নদীতে নৌ পুলিশের ওপর গুলির ঘটনায় করা মামলার প্রধান আসামিকে রাজধানী থেকে গ্রেপ্তার করেছে র‍্যাব।",
@@ -4788,7 +4788,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আইন ও শৃঙ্খলা",
-                        'name'             => "তেজগাঁও বিভাগে অভিযানে ৫১ জন গ্রেপ্তার",
+                        'headline'             => "তেজগাঁও বিভাগে অভিযানে ৫১ জন গ্রেপ্তার",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকা মহানগর পুলিশের তেজগাঁও বিভাগের বিভিন্ন অপরাধপ্রবণ এলাকায় নিয়মিত অভিযানে ৫১ জনকে গ্রেপ্তার করা হয়েছে।",
@@ -4799,7 +4799,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আইন ও শৃঙ্খলা",
-                        'name'             => "ঘুষের অভিযোগের পর মিরপুর থানার ওসি প্রত্যাহার",
+                        'headline'             => "ঘুষের অভিযোগের পর মিরপুর থানার ওসি প্রত্যাহার",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঘুষ নেওয়ার অভিযোগ ওঠার কয়েক দিনের মধ্যে মিরপুর মডেল থানার ওসিকে ডিএমপি সদর দপ্তরে সংযুক্ত করা হয়েছে।",
@@ -4810,7 +4810,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "নির্বাচন",
-                        'name'             => "সংরক্ষিত নারী আসনে নুসরাত তাবাসসুমের মনোনয়ন বৈধ দাবি",
+                        'headline'             => "সংরক্ষিত নারী আসনে নুসরাত তাবাসসুমের মনোনয়ন বৈধ দাবি",
                         'sub_heading'      => "নির্ধারিত সময়ের পরে জমা দেওয়া মনোনয়ন নিয়ে আইনি জটিলতা ছিল",
                         'content_shoulder' => "",
                         'brief'            => "সংরক্ষিত নারী আসনে এনসিপি নেত্রী নুসরাত তাবাসসুমের মনোনয়নপত্র বৈধ ঘোষণা করা হয়েছে বলে দাবি করেছে দলটি।",
@@ -4821,7 +4821,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "নির্বাচন",
-                        'name'             => "গণভোটের রায় মানার আহ্বান ১১ দলীয় নেতাদের",
+                        'headline'             => "গণভোটের রায় মানার আহ্বান ১১ দলীয় নেতাদের",
                         'sub_heading'      => "",
                         'content_shoulder' => "গণভোট বিতর্ক",
                         'brief'            => "চট্টগ্রামের গণমিছিলে ১১ দলীয় ঐক্যের নেতারা জুলাই সনদ ও গণভোটের রায় বাস্তবায়নের দাবি জানিয়েছেন।",
@@ -4832,7 +4832,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "নির্বাচন",
-                        'name'             => "এনসিপির আসন হিসাব ঘিরে সংরক্ষিত নারী আসনের আলোচনা",
+                        'headline'             => "এনসিপির আসন হিসাব ঘিরে সংরক্ষিত নারী আসনের আলোচনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ত্রয়োদশ সংসদ নির্বাচনের পর এনসিপির আসনসংখ্যা ও সংরক্ষিত নারী আসনের হিসাব নতুন রাজনৈতিক আলোচনার জন্ম দিয়েছে।",
@@ -4843,7 +4843,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "নির্বাচন",
-                        'name'             => "স্থানীয় সরকার অধ্যাদেশ নিয়ে নির্বাচিত প্রতিনিধিদের অপসারণ বিতর্ক",
+                        'headline'             => "স্থানীয় সরকার অধ্যাদেশ নিয়ে নির্বাচিত প্রতিনিধিদের অপসারণ বিতর্ক",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "স্থানীয় সরকার প্রতিনিধিদের অপসারণের ক্ষমতা নিয়ে রাজনৈতিক নেতারা সংসদ, সরকার ও নির্বাচনী জবাবদিহি প্রশ্ন তুলেছেন।",
@@ -4854,7 +4854,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "নির্বাচন",
-                        'name'             => "জোট রাজনীতির পরে দলীয় পুনর্গঠনে নজর নতুন দলগুলোর",
+                        'headline'             => "জোট রাজনীতির পরে দলীয় পুনর্গঠনে নজর নতুন দলগুলোর",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নির্বাচনের পর এনসিপি, এবি পার্টি ও জোটসঙ্গীদের মধ্যে সাংগঠনিক পুনর্গঠন ও সম্ভাব্য মেরুকরণ নিয়ে আলোচনা বাড়ছে।",
@@ -4865,7 +4865,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জননীতি",
-                        'name'             => "বাজেট অর্থ ১৫ এপ্রিলের মধ্যে ছাড়ের প্রস্তাব ডিসিদের",
+                        'headline'             => "বাজেট অর্থ ১৫ এপ্রিলের মধ্যে ছাড়ের প্রস্তাব ডিসিদের",
                         'sub_heading'      => "ডিসি সম্মেলনে উন্নয়ন প্রকল্প বাস্তবায়ন দ্রুত করার আলোচনা",
                         'content_shoulder' => "",
                         'brief'            => "ডিসিদের প্রস্তাবে বাজেটের অর্থ দ্রুত ছাড়, সড়ক উন্নয়ন, শিক্ষা ও স্বাস্থ্যসেবা নিয়ে একাধিক জননীতি প্রস্তাব এসেছে।",
@@ -4876,7 +4876,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জননীতি",
-                        'name'             => "ঢাকার গণপরিবহনে পিংক বাস ও মনোরেলের পরিকল্পনা",
+                        'headline'             => "ঢাকার গণপরিবহনে পিংক বাস ও মনোরেলের পরিকল্পনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "নগর নীতি",
                         'brief'            => "রাজধানীর গণপরিবহন ব্যবস্থায় নারী যাত্রী, ই-বাস, সাইকেল সেবা ও মনোরেলসহ সমন্বিত পরিকল্পনার কথা উঠে এসেছে।",
@@ -4887,7 +4887,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জননীতি",
-                        'name'             => "খাদ্যে ভেজাল ও বাল্যবিবাহে কঠোর হওয়ার নির্দেশ",
+                        'headline'             => "খাদ্যে ভেজাল ও বাল্যবিবাহে কঠোর হওয়ার নির্দেশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জনস্বার্থ রক্ষায় খাদ্যে ভেজাল, বাল্যবিবাহ, বিদ্যুৎ সাশ্রয় ও সাম্প্রদায়িক সম্প্রীতি নিয়ে মাঠ প্রশাসনকে সক্রিয় হতে বলা হয়েছে।",
@@ -4898,7 +4898,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জননীতি",
-                        'name'             => "প্রতিবন্ধী শিক্ষার্থীদের শিক্ষা অবৈতনিক করার প্রস্তাব",
+                        'headline'             => "প্রতিবন্ধী শিক্ষার্থীদের শিক্ষা অবৈতনিক করার প্রস্তাব",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ডিসিদের প্রস্তাবে দরিদ্র পরিবারের প্রতিবন্ধী শিক্ষার্থীদের জন্য অবৈতনিক শিক্ষা ও অন্তর্ভুক্তিমূলক শিক্ষাক্রমের বিষয় এসেছে।",
@@ -4909,7 +4909,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জননীতি",
-                        'name'             => "পুলিশ সপ্তাহে ১০৭ সদস্যকে পদক দেওয়ার প্রস্তুতি",
+                        'headline'             => "পুলিশ সপ্তাহে ১০৭ সদস্যকে পদক দেওয়ার প্রস্তুতি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পুলিশ সপ্তাহে বিপিএম ও পিপিএম পদকের জন্য ১০৭ জন সদস্য মনোনীত হওয়ায় আইনশৃঙ্খলা বাহিনীর স্বীকৃতি নীতিও আলোচনায় এসেছে।",
@@ -4920,7 +4920,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক",
-                        'name'             => "ইসরায়েলি আদালতে তোলা হচ্ছে সুমুদ ফ্লোটিলার দুই অ্যাক্টিভিস্টকে",
+                        'headline'             => "ইসরায়েলি আদালতে তোলা হচ্ছে সুমুদ ফ্লোটিলার দুই অ্যাক্টিভিস্টকে",
                         'sub_heading'      => "গাজাগামী ত্রাণবহর আটক ঘিরে নতুন আন্তর্জাতিক চাপ",
                         'content_shoulder' => "",
                         'brief'            => "গাজা অভিমুখী সুমুদ ফ্লোটিলা থেকে আটক দুই বিদেশি অ্যাক্টিভিস্টকে ইসরায়েলি আদালতে হাজির করা হচ্ছে, মানবিক ত্রাণ ইস্যুতে বিতর্ক বাড়ছে।",
@@ -4931,7 +4931,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক",
-                        'name'             => "ইরান নিয়ে ট্রাম্পের সামনে দুটি পথ, দাবি আইআরজিসির",
+                        'headline'             => "ইরান নিয়ে ট্রাম্পের সামনে দুটি পথ, দাবি আইআরজিসির",
                         'sub_heading'      => "",
                         'content_shoulder' => "তেহরানের কঠোর বার্তা",
                         'brief'            => "ইরানের আইআরজিসি দাবি করেছে, যুক্তরাষ্ট্রের সামনে এখন সামরিক অভিযান অথবা কঠিন চুক্তি—এই দুই পথের বাইরে বাস্তব বিকল্প কমে গেছে।",
@@ -4942,7 +4942,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক",
-                        'name'             => "গাজার ধ্বংসস্তূপের নিচে এখনও আট হাজার মরদেহ থাকার আশঙ্কা",
+                        'headline'             => "গাজার ধ্বংসস্তূপের নিচে এখনও আট হাজার মরদেহ থাকার আশঙ্কা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "গাজায় ধ্বংসস্তূপ অপসারণের ধীরগতির কারণে হাজারো ফিলিস্তিনির মরদেহ এখনও চাপা পড়ে আছে বলে জাতিসংঘ কর্মকর্তার বরাতে খবর প্রকাশিত হয়েছে।",
@@ -4953,7 +4953,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক",
-                        'name'             => "ইরানের ১৪ দফা শান্তি প্রস্তাব পর্যালোচনায় যুক্তরাষ্ট্র",
+                        'headline'             => "ইরানের ১৪ দফা শান্তি প্রস্তাব পর্যালোচনায় যুক্তরাষ্ট্র",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চলমান যুদ্ধ অবসানের লক্ষ্যে ইরানের পাঠানো ১৪ দফা শান্তি প্রস্তাব নিয়ে ওয়াশিংটনে পর্যালোচনা শুরু হলেও ট্রাম্প সন্দিহান।",
@@ -4964,7 +4964,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক",
-                        'name'             => "লেবাননে ইসরায়েলি হামলায় ২৪ ঘণ্টায় নিহত ৪১",
+                        'headline'             => "লেবাননে ইসরায়েলি হামলায় ২৪ ঘণ্টায় নিহত ৪১",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "লেবাননের দক্ষিণাঞ্চলে ইসরায়েলি বিমান হামলায় ২৪ ঘণ্টায় অন্তত ৪১ জন নিহতের খবর এসেছে, যুদ্ধবিরতি লঙ্ঘনের অভিযোগও উঠেছে।",
@@ -4975,7 +4975,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব রাজনীতি",
-                        'name'             => "মার্কিন সেনা প্রত্যাহার নিয়ে জার্মানি ও ন্যাটোর উদ্বেগ",
+                        'headline'             => "মার্কিন সেনা প্রত্যাহার নিয়ে জার্মানি ও ন্যাটোর উদ্বেগ",
                         'sub_heading'      => "ইউরোপের নিরাপত্তা ব্যয় বাড়ানোর চাপ আরও স্পষ্ট",
                         'content_shoulder' => "",
                         'brief'            => "জার্মানি থেকে পাঁচ হাজার মার্কিন সেনা প্রত্যাহারের সিদ্ধান্তকে ঘিরে বার্লিন ও ন্যাটোতে নিরাপত্তা, প্রতিরক্ষা ব্যয় ও জোটের ভবিষ্যৎ নিয়ে উদ্বেগ তৈরি হয়েছে।",
@@ -4986,7 +4986,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব রাজনীতি",
-                        'name'             => "তাইওয়ানের প্রেসিডেন্টকে ‘ইঁদুর’ বলল চীন",
+                        'headline'             => "তাইওয়ানের প্রেসিডেন্টকে ‘ইঁদুর’ বলল চীন",
                         'sub_heading'      => "",
                         'content_shoulder' => "চীন-তাইওয়ান উত্তেজনা",
                         'brief'            => "এসোয়াতিনি সফর ঘিরে তাইওয়ানের প্রেসিডেন্ট লাই চিং-তেকে কড়া ভাষায় আক্রমণ করেছে চীন, পাল্টা জবাব দিয়েছে তাইপে।",
@@ -4997,7 +4997,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব রাজনীতি",
-                        'name'             => "যুক্তরাষ্ট্র থেকে আরও যুদ্ধবিমান কিনবে ইসরায়েল",
+                        'headline'             => "যুক্তরাষ্ট্র থেকে আরও যুদ্ধবিমান কিনবে ইসরায়েল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ইরান যুদ্ধের অভিজ্ঞতার পর যুক্তরাষ্ট্র থেকে এফ-৩৫ ও এফ-১৫আই যুদ্ধবিমানের নতুন স্কোয়াড্রন কেনার পরিকল্পনায় এগোচ্ছে ইসরায়েল।",
@@ -5008,7 +5008,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব রাজনীতি",
-                        'name'             => "পোস্টাল ব্যালটে কারসাজির অভিযোগে নির্বাচন কমিশনে তৃণমূল",
+                        'headline'             => "পোস্টাল ব্যালটে কারসাজির অভিযোগে নির্বাচন কমিশনে তৃণমূল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কলকাতায় ইভিএম স্ট্রংরুমে পোস্টাল ব্যালট নিয়ে কারসাজির অভিযোগ তুলে নির্বাচন কমিশনে অভিযোগ জানিয়েছে তৃণমূল কংগ্রেস।",
@@ -5019,7 +5019,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব রাজনীতি",
-                        'name'             => "চীনা শোধনাগারে মার্কিন নিষেধাজ্ঞা অমান্যের নির্দেশ বেইজিংয়ের",
+                        'headline'             => "চীনা শোধনাগারে মার্কিন নিষেধাজ্ঞা অমান্যের নির্দেশ বেইজিংয়ের",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ইরান থেকে তেল কেনার অভিযোগে চীনা শোধনাগারের ওপর দেওয়া মার্কিন নিষেধাজ্ঞা অমান্যের নির্দেশ দিয়েছে বেইজিং।",
@@ -5030,7 +5030,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কূটনীতি",
-                        'name'             => "পূর্ণাঙ্গ ভিসা চালুর পথে ঢাকা-দিল্লি সম্পর্ক",
+                        'headline'             => "পূর্ণাঙ্গ ভিসা চালুর পথে ঢাকা-দিল্লি সম্পর্ক",
                         'sub_heading'      => "টানাপোড়েন কাটিয়ে ভিসা কার্যক্রম স্বাভাবিক করার উদ্যোগ",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকা ও দিল্লির সাম্প্রতিক টানাপোড়েন কাটাতে ভারত বাংলাদেশিদের জন্য পূর্ণাঙ্গ ভিসা কার্যক্রম চালুর পথে হাঁটছে।",
@@ -5041,7 +5041,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কূটনীতি",
-                        'name'             => "ইরানের জন্য সীমান্ত পথ খুলে দিলো পাকিস্তান",
+                        'headline'             => "ইরানের জন্য সীমান্ত পথ খুলে দিলো পাকিস্তান",
                         'sub_heading'      => "",
                         'content_shoulder' => "আঞ্চলিক কূটনীতি",
                         'brief'            => "সমুদ্রবন্দর অবরোধের মুখে থাকা ইরানের জন্য নিজেদের স্থল বাণিজ্য পথ খুলে দিয়েছে পাকিস্তান, যুক্তরাষ্ট্রের প্রতিক্রিয়া নিয়ে প্রশ্ন উঠেছে।",
@@ -5052,7 +5052,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কূটনীতি",
-                        'name'             => "ইরানের শান্তি প্রস্তাবে পাকিস্তানের মধ্যস্থতার ইঙ্গিত",
+                        'headline'             => "ইরানের শান্তি প্রস্তাবে পাকিস্তানের মধ্যস্থতার ইঙ্গিত",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ইরানের ১৪ দফা শান্তি পরিকল্পনা পাকিস্তানের মাধ্যমে যুক্তরাষ্ট্রের কাছে পৌঁছেছে বলে খবর, মধ্যস্থতা কূটনীতিতে ইসলামাবাদের ভূমিকা বাড়ছে।",
@@ -5063,7 +5063,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কূটনীতি",
-                        'name'             => "জার্মানি থেকে সেনা প্রত্যাহার ইস্যুতে ন্যাটোর সঙ্গে আলোচনা",
+                        'headline'             => "জার্মানি থেকে সেনা প্রত্যাহার ইস্যুতে ন্যাটোর সঙ্গে আলোচনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জার্মানি থেকে মার্কিন সেনা প্রত্যাহারের সিদ্ধান্তের বিস্তারিত জানতে যুক্তরাষ্ট্রের সঙ্গে কাজ করছে ন্যাটো, জোটে সমন্বয়ের চেষ্টা চলছে।",
@@ -5074,7 +5074,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কূটনীতি",
-                        'name'             => "ইসরায়েলের কর্মকাণ্ডের নিন্দা জানালো ফ্রান্স",
+                        'headline'             => "ইসরায়েলের কর্মকাণ্ডের নিন্দা জানালো ফ্রান্স",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পশ্চিম জেরুজালেমে ফ্রেঞ্চ ক্যাথলিক নানের ওপর হামলার পর ইসরায়েলের খ্রিষ্টানবিরোধী কর্মকাণ্ডের নিন্দা জানিয়েছে ফ্রান্স।",
@@ -5085,7 +5085,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংঘাত",
-                        'name'             => "লেবাননে ইসরায়েলি হামলায় যুদ্ধবিরতি প্রশ্নের মুখে",
+                        'headline'             => "লেবাননে ইসরায়েলি হামলায় যুদ্ধবিরতি প্রশ্নের মুখে",
                         'sub_heading'      => "দক্ষিণ লেবাননে প্রাণহানি বাড়ায় আঞ্চলিক সংঘাতের ঝুঁকি",
                         'content_shoulder' => "",
                         'brief'            => "দক্ষিণ লেবাননে ইসরায়েলি হামলায় ২৪ ঘণ্টায় ৪১ জন নিহতের খবরে যুদ্ধবিরতি বাস্তবতা ও সীমান্ত নিরাপত্তা আবার প্রশ্নের মুখে পড়েছে।",
@@ -5096,7 +5096,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংঘাত",
-                        'name'             => "গাজার ধ্বংসস্তূপ সরাতে বছরের পর বছর লাগার আশঙ্কা",
+                        'headline'             => "গাজার ধ্বংসস্তূপ সরাতে বছরের পর বছর লাগার আশঙ্কা",
                         'sub_heading'      => "",
                         'content_shoulder' => "গাজা মানবিক সংকট",
                         'brief'            => "গাজায় ধ্বংসস্তূপের নিচে হাজারো মরদেহ থাকার আশঙ্কা এবং অপসারণে দীর্ঘ সময় লাগার তথ্য মানবিক বিপর্যয়কে আরও স্পষ্ট করছে।",
@@ -5107,7 +5107,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংঘাত",
-                        'name'             => "যুক্তরাষ্ট্রের সঙ্গে ফের যুদ্ধের আশঙ্কা জানালো ইরান",
+                        'headline'             => "যুক্তরাষ্ট্রের সঙ্গে ফের যুদ্ধের আশঙ্কা জানালো ইরান",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ইরানের সামরিক নেতৃত্ব সতর্ক করেছে, যুক্তরাষ্ট্র কোনো চুক্তিতে স্থায়ীভাবে প্রতিশ্রুতিবদ্ধ না থাকলে সংঘাত আবার শুরু হতে পারে।",
@@ -5118,7 +5118,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংঘাত",
-                        'name'             => "ইয়েমেন উপকূলে তেলবাহী জাহাজ ছিনতাইয়ের খবর",
+                        'headline'             => "ইয়েমেন উপকূলে তেলবাহী জাহাজ ছিনতাইয়ের খবর",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "হরমুজ সংকটের মধ্যেই ইয়েমেন উপকূলে এমটি ইউরেকা নামের তেলবাহী জাহাজ ছিনতাইয়ের খবর সামুদ্রিক নিরাপত্তা উদ্বেগ বাড়িয়েছে।",
@@ -5129,7 +5129,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংঘাত",
-                        'name'             => "গাজাগামী ত্রাণবহর আটক ঘিরে ইসরায়েলে আদালত প্রক্রিয়া",
+                        'headline'             => "গাজাগামী ত্রাণবহর আটক ঘিরে ইসরায়েলে আদালত প্রক্রিয়া",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সুমুদ ফ্লোটিলার অ্যাক্টিভিস্টদের আদালতে তোলার ঘটনা গাজায় অবরোধ, ত্রাণ প্রবেশ ও মানবিক আইনের বিতর্ককে সামনে এনেছে।",
@@ -5140,7 +5140,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব অর্থনীতি",
-                        'name'             => "চীনা শোধনাগারে মার্কিন নিষেধাজ্ঞা অমান্যের নির্দেশ",
+                        'headline'             => "চীনা শোধনাগারে মার্কিন নিষেধাজ্ঞা অমান্যের নির্দেশ",
                         'sub_heading'      => "ইরানি তেল বাণিজ্য ঘিরে ওয়াশিংটন-বেইজিং অর্থনৈতিক টানাপোড়েন",
                         'content_shoulder' => "",
                         'brief'            => "ইরান থেকে তেল কেনার অভিযোগে চীনা শোধনাগারের ওপর মার্কিন নিষেধাজ্ঞা জারির পর তা অমান্যের নির্দেশ দিয়েছে বেইজিং।",
@@ -5151,7 +5151,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব অর্থনীতি",
-                        'name'             => "স্পিরিট এয়ারলাইন্স বন্ধে জ্বালানি বাজারের চাপ সামনে",
+                        'headline'             => "স্পিরিট এয়ারলাইন্স বন্ধে জ্বালানি বাজারের চাপ সামনে",
                         'sub_heading'      => "",
                         'content_shoulder' => "জ্বালানি দামের ধাক্কা",
                         'brief'            => "ইরান যুদ্ধের প্রভাবে জেট ফুয়েলের দাম বাড়ায় সংকটে পড়া স্পিরিট এয়ারলাইন্স কার্যক্রম বন্ধের সিদ্ধান্ত নিয়েছে বলে খবর এসেছে।",
@@ -5162,7 +5162,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব অর্থনীতি",
-                        'name'             => "চার দেশে ৮৬০ কোটি ডলারের অস্ত্র বিক্রির অনুমোদন যুক্তরাষ্ট্রের",
+                        'headline'             => "চার দেশে ৮৬০ কোটি ডলারের অস্ত্র বিক্রির অনুমোদন যুক্তরাষ্ট্রের",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ইসরায়েল, কাতার, কুয়েত ও আমিরাতের কাছে ৮৬০ কোটি ডলারের অস্ত্র বিক্রির অনুমোদন দিয়েছে যুক্তরাষ্ট্রের পররাষ্ট্র দপ্তর।",
@@ -5173,7 +5173,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব অর্থনীতি",
-                        'name'             => "পাকিস্তানের স্থলপথে ইরানের বাণিজ্য নতুন স্বস্তি পেল",
+                        'headline'             => "পাকিস্তানের স্থলপথে ইরানের বাণিজ্য নতুন স্বস্তি পেল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সমুদ্রবন্দর অবরোধে ক্ষতিগ্রস্ত ইরানের জন্য পাকিস্তানের স্থল ট্রানজিট সুবিধা বাণিজ্য ও সরবরাহ ব্যবস্থায় নতুন সুযোগ তৈরি করেছে।",
@@ -5184,7 +5184,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ব অর্থনীতি",
-                        'name'             => "ইসরায়েলের যুদ্ধবিমান কেনা প্রতিরক্ষা বাজারে বড় লেনদেন",
+                        'headline'             => "ইসরায়েলের যুদ্ধবিমান কেনা প্রতিরক্ষা বাজারে বড় লেনদেন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "এফ-৩৫ ও এফ-১৫আই যুদ্ধবিমানের নতুন স্কোয়াড্রন কেনার ইসরায়েলি সিদ্ধান্ত যুক্তরাষ্ট্রের প্রতিরক্ষা শিল্পের জন্য বড় বাজার সংকেত।",
@@ -5195,7 +5195,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক সংস্থা",
-                        'name'             => "গাজা ধ্বংসস্তূপ নিয়ে জাতিসংঘ কর্মকর্তার সতর্কতা",
+                        'headline'             => "গাজা ধ্বংসস্তূপ নিয়ে জাতিসংঘ কর্মকর্তার সতর্কতা",
                         'sub_heading'      => "ধ্বংসাবশেষের নিচে মরদেহ ও পুনর্গঠনের দীর্ঘ সংকট",
                         'content_shoulder' => "",
                         'brief'            => "জাতিসংঘ সংশ্লিষ্ট কর্মকর্তার উদ্ধৃতিতে গাজায় ধ্বংসস্তূপের নিচে হাজারো মরদেহ থাকার আশঙ্কা মানবিক সংস্থাগুলোর উদ্বেগ বাড়িয়েছে।",
@@ -5206,7 +5206,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক সংস্থা",
-                        'name'             => "ন্যাটো বলছে ইউরোপকে নিরাপত্তার দায় বেশি নিতে হবে",
+                        'headline'             => "ন্যাটো বলছে ইউরোপকে নিরাপত্তার দায় বেশি নিতে হবে",
                         'sub_heading'      => "",
                         'content_shoulder' => "জোট নিরাপত্তা বার্তা",
                         'brief'            => "জার্মানি থেকে মার্কিন সেনা প্রত্যাহারের সিদ্ধান্তের পর ন্যাটো বলেছে, ইউরোপের প্রতিরক্ষা বিনিয়োগ ও দায়িত্ববণ্টন বাড়ানো দরকার।",
@@ -5217,7 +5217,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক সংস্থা",
-                        'name'             => "জাতিসংঘ অনুমোদনহীন নিষেধাজ্ঞার বিরোধিতা করল চীন",
+                        'headline'             => "জাতিসংঘ অনুমোদনহীন নিষেধাজ্ঞার বিরোধিতা করল চীন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চীনের বাণিজ্য মন্ত্রণালয় বলেছে, জাতিসংঘের অনুমোদনহীন একতরফা মার্কিন নিষেধাজ্ঞা আন্তর্জাতিক আইনবিরোধী।",
@@ -5228,7 +5228,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক সংস্থা",
-                        'name'             => "ইউরোপীয় নিরাপত্তায় জোটভিত্তিক সমন্বয়ের তাগিদ",
+                        'headline'             => "ইউরোপীয় নিরাপত্তায় জোটভিত্তিক সমন্বয়ের তাগিদ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "মার্কিন সেনা কমানোর সম্ভাবনার মধ্যে জার্মানি ব্রিটেন, ফ্রান্স, পোল্যান্ড ও ইতালির সঙ্গে প্রতিরক্ষা সমন্বয় বাড়াতে চাইছে।",
@@ -5239,7 +5239,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক সংস্থা",
-                        'name'             => "মানবিক ত্রাণবহর আটক নিয়ে আন্তর্জাতিক সংগঠনগুলোর নজর",
+                        'headline'             => "মানবিক ত্রাণবহর আটক নিয়ে আন্তর্জাতিক সংগঠনগুলোর নজর",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "গাজাগামী সুমুদ ফ্লোটিলার অ্যাক্টিভিস্টদের আদালতে তোলার ঘটনায় মানবিক ত্রাণ ও আন্তর্জাতিক আইন নিয়ে চাপ বাড়ছে।",
@@ -5250,7 +5250,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যবসা",
-                        'name'             => "দেশে লিড সনদ পাওয়া পোশাক কারখানা এখন ২৮৪টি",
+                        'headline'             => "দেশে লিড সনদ পাওয়া পোশাক কারখানা এখন ২৮৪টি",
                         'sub_heading'      => "সবুজ শিল্পায়নে নতুন মাইলফলক ছুঁল তৈরি পোশাক খাত",
                         'content_shoulder' => "",
                         'brief'            => "তৈরি পোশাক খাতে নতুন চার কারখানা লিড সনদ পাওয়ায় দেশে পরিবেশবান্ধব পোশাক কারখানার সংখ্যা বেড়ে ২৮৪টিতে দাঁড়িয়েছে।",
@@ -5261,7 +5261,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যবসা",
-                        'name'             => "বৃষ্টির প্রভাবে রাজধানীর বাজারে সবজির দাম বেড়েছে",
+                        'headline'             => "বৃষ্টির প্রভাবে রাজধানীর বাজারে সবজির দাম বেড়েছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "বাজারে দামের চাপ",
                         'brief'            => "টানা বৃষ্টি ও পরিবহন ব্যয় বাড়ার কারণে রাজধানীর বাজারে সবজি সরবরাহ কমেছে, ক্রেতাদের খরচও সপ্তাহের ব্যবধানে বেড়েছে।",
@@ -5272,7 +5272,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যবসা",
-                        'name'             => "মেহেরপুরে ৫৫ কোটি টাকার লিচু বাণিজ্যের সম্ভাবনা",
+                        'headline'             => "মেহেরপুরে ৫৫ কোটি টাকার লিচু বাণিজ্যের সম্ভাবনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চাহিদা ও উৎপাদন বাড়ায় মেহেরপুরে চলতি মৌসুমে প্রায় ৫৫ কোটি টাকার লিচু বিক্রির আশা করছেন স্থানীয় চাষি ও ব্যবসায়ীরা।",
@@ -5283,7 +5283,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যবসা",
-                        'name'             => "নতুন বাজেটে করের বাড়তি চাপ নিয়ে ব্যবসায় উদ্বেগ",
+                        'headline'             => "নতুন বাজেটে করের বাড়তি চাপ নিয়ে ব্যবসায় উদ্বেগ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নতুন বাজেটে উত্তরাধিকার কর ও অন্যান্য কর কাঠামো নিয়ে আলোচনার কারণে ব্যবসায়ী ও সাধারণ করদাতাদের মধ্যে খরচ বাড়ার শঙ্কা তৈরি হয়েছে।",
@@ -5294,7 +5294,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যবসা",
-                        'name'             => "বিদেশি ঋণ পরিশোধে চাপ বাড়ছে অর্থনীতিতে",
+                        'headline'             => "বিদেশি ঋণ পরিশোধে চাপ বাড়ছে অর্থনীতিতে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চলতি অর্থবছরের প্রথম ৯ মাসে বিদেশি ঋণ পরিশোধ সাড়ে তিন বিলিয়ন ডলার ছাড়ানোয় বৈদেশিক মুদ্রা ব্যবস্থাপনায় চাপ বেড়েছে।",
@@ -5305,7 +5305,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শেয়ার বাজার",
-                        'name'             => "তালিকাভুক্ত সাত ব্যাংকের মুনাফা ও লভ্যাংশ ঘোষণা",
+                        'headline'             => "তালিকাভুক্ত সাত ব্যাংকের মুনাফা ও লভ্যাংশ ঘোষণা",
                         'sub_heading'      => "সাউথইস্ট, যমুনা ও ব্যাংক এশিয়ার মুনাফায় বড় প্রবৃদ্ধি",
                         'content_shoulder' => "",
                         'brief'            => "শেয়ারবাজারে তালিকাভুক্ত সাত ব্যাংক ২০২৫ সালের মুনাফা ও লভ্যাংশ ঘোষণা করেছে, বেশির ভাগ ব্যাংকের মুনাফা বেড়েছে।",
@@ -5316,7 +5316,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শেয়ার বাজার",
-                        'name'             => "ইসলামী ব্যাংক ‘এ’ থেকে ‘জেড’ ক্যাটাগরিতে নেমেছে",
+                        'headline'             => "ইসলামী ব্যাংক ‘এ’ থেকে ‘জেড’ ক্যাটাগরিতে নেমেছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "বিনিয়োগকারীর সতর্কতা",
                         'brief'            => "লভ্যাংশ না দেওয়াসহ আর্থিক দুর্বলতার কারণে ইসলামী ব্যাংককে শেয়ারবাজারে ‘এ’ থেকে ‘জেড’ ক্যাটাগরিতে নামানো হয়েছে।",
@@ -5327,7 +5327,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শেয়ার বাজার",
-                        'name'             => "পুঁজিবাজারের অর্থায়ন মোট স্থায়ী মূলধনের মাত্র ৬ শতাংশ",
+                        'headline'             => "পুঁজিবাজারের অর্থায়ন মোট স্থায়ী মূলধনের মাত্র ৬ শতাংশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশে দীর্ঘমেয়াদি শিল্প অর্থায়নে পুঁজিবাজারের অবদান খুব কম, মোট স্থায়ী মূলধনের তুলনায় তা মাত্র ৬ শতাংশের কাছাকাছি।",
@@ -5338,7 +5338,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শেয়ার বাজার",
-                        'name'             => "রেকিট বেনকিজার প্রতিশেয়ারে ১৭৩ টাকা লভ্যাংশ দেবে",
+                        'headline'             => "রেকিট বেনকিজার প্রতিশেয়ারে ১৭৩ টাকা লভ্যাংশ দেবে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "শেয়ারবাজারে তালিকাভুক্ত রেকিট বেনকিজার ২০২৫ সালের জন্য শেয়ারপ্রতি ১৭৩ টাকা নগদ লভ্যাংশ দেওয়ার ঘোষণা দিয়েছে।",
@@ -5349,7 +5349,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শেয়ার বাজার",
-                        'name'             => "ডিএসইতে সূচক ইতিবাচক, লেনদেনে সতর্ক বিনিয়োগকারী",
+                        'headline'             => "ডিএসইতে সূচক ইতিবাচক, লেনদেনে সতর্ক বিনিয়োগকারী",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকা স্টক এক্সচেঞ্জে দিনের লেনদেনের শুরুতে সূচক ইতিবাচক থাকলেও বিনিয়োগকারীদের মধ্যে সতর্ক অবস্থান দেখা গেছে।",
@@ -5360,7 +5360,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যাংকিং",
-                        'name'             => "বন্ধ কারখানা চালু করতে বিশেষ তহবিল আনছে বাংলাদেশ ব্যাংক",
+                        'headline'             => "বন্ধ কারখানা চালু করতে বিশেষ তহবিল আনছে বাংলাদেশ ব্যাংক",
                         'sub_heading'      => "চলতি মূলধন সহায়তায় উৎপাদন ও কর্মসংস্থান ফেরানোর উদ্যোগ",
                         'content_shoulder' => "",
                         'brief'            => "বাজার চাহিদা ও ক্রয়াদেশ থাকা বন্ধ কারখানা চালু করতে কম সুদের বিশেষ তহবিল গঠনের উদ্যোগ নিয়েছে বাংলাদেশ ব্যাংক।",
@@ -5371,7 +5371,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যাংকিং",
-                        'name'             => "২০২৫ সালে কয়েকটি ব্যাংকের মুনাফায় বড় উল্লম্ফন",
+                        'headline'             => "২০২৫ সালে কয়েকটি ব্যাংকের মুনাফায় বড় উল্লম্ফন",
                         'sub_heading'      => "",
                         'content_shoulder' => "ব্যাংক মুনাফা",
                         'brief'            => "পূবালী, ডাচ্-বাংলা ও প্রাইমসহ কয়েকটি ব্যাংক ২০২৫ সালে বড় মুনাফা দেখিয়েছে, তবে ঋণ প্রবৃদ্ধি নিয়ে উদ্বেগ রয়ে গেছে।",
@@ -5382,7 +5382,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যাংকিং",
-                        'name'             => "সিটি ব্যাংকের প্রথম প্রান্তিকে নিট মুনাফা বেড়েছে ১৬২ শতাংশ",
+                        'headline'             => "সিটি ব্যাংকের প্রথম প্রান্তিকে নিট মুনাফা বেড়েছে ১৬২ শতাংশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চলতি বছরের প্রথম প্রান্তিকে সিটি ব্যাংকের নিট মুনাফা ২৪১ কোটি টাকায় উঠেছে, আগের বছরের একই সময়ে ছিল ৯২ কোটি টাকা।",
@@ -5393,7 +5393,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যাংকিং",
-                        'name'             => "সম্মিলিত ইসলামী ব্যাংক উদ্যোগ অনিশ্চয়তায়",
+                        'headline'             => "সম্মিলিত ইসলামী ব্যাংক উদ্যোগ অনিশ্চয়তায়",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দুর্বল পাঁচ ইসলামি ব্যাংক একীভূত করে সম্মিলিত ইসলামী ব্যাংক গঠনের উদ্যোগ নতুন করে অনিশ্চয়তার মুখে পড়েছে।",
@@ -5404,7 +5404,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ব্যাংকিং",
-                        'name'             => "ডলারের দাম নিয়ন্ত্রণে ফরওয়ার্ড বুকিংয়ে কড়াকড়ি",
+                        'headline'             => "ডলারের দাম নিয়ন্ত্রণে ফরওয়ার্ড বুকিংয়ে কড়াকড়ি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বিনিময় হারজনিত ঝুঁকি কমাতে গ্রাহকের প্রকৃত প্রয়োজনের বিপরীতে ফরওয়ার্ড বৈদেশিক মুদ্রা বিক্রির নির্দেশ দেওয়া হয়েছে।",
@@ -5415,7 +5415,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কর্পোরেট",
-                        'name'             => "বিএটিবির ঘোষিত ৩০ শতাংশ নগদ লভ্যাংশ অনুমোদন",
+                        'headline'             => "বিএটিবির ঘোষিত ৩০ শতাংশ নগদ লভ্যাংশ অনুমোদন",
                         'sub_heading'      => "অনলাইন এজিএমে শেয়ারধারীদের সম্মতি পেল কোম্পানি",
                         'content_shoulder' => "",
                         'brief'            => "ব্রিটিশ আমেরিকান টোব্যাকো বাংলাদেশ ২০২৫ সালের জন্য ঘোষিত ৩০ শতাংশ নগদ লভ্যাংশ এজিএমে অনুমোদন পেয়েছে।",
@@ -5426,7 +5426,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কর্পোরেট",
-                        'name'             => "৯ মাসে ৬৪৩ কোটি টাকা মুনাফা করেছে ওয়ালটন",
+                        'headline'             => "৯ মাসে ৬৪৩ কোটি টাকা মুনাফা করেছে ওয়ালটন",
                         'sub_heading'      => "",
                         'content_shoulder' => "কর্পোরেট ফলাফল",
                         'brief'            => "ওয়ালটনের নয় মাসের আর্থিক প্রতিবেদনে মুনাফা ৬৪৩ কোটি টাকা হলেও ভ্যাট বৃদ্ধির কারণে লাভে কিছু চাপ দেখা গেছে।",
@@ -5437,7 +5437,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কর্পোরেট",
-                        'name'             => "যুক্তরাষ্ট্রের ব্যবসাপ্রতিষ্ঠান বাংলাদেশের উন্নয়ন প্রকল্পে আগ্রহী",
+                        'headline'             => "যুক্তরাষ্ট্রের ব্যবসাপ্রতিষ্ঠান বাংলাদেশের উন্নয়ন প্রকল্পে আগ্রহী",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশের অবকাঠামো ও উন্নয়ন প্রকল্পে অংশ নিতে যুক্তরাষ্ট্রের ব্যবসাপ্রতিষ্ঠানগুলো আগ্রহ দেখিয়েছে বলে আলোচনায় উঠে এসেছে।",
@@ -5448,7 +5448,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কর্পোরেট",
-                        'name'             => "কর না কমালে বিনিয়োগে গতি আসবে না, ব্যবসায়ীদের মত",
+                        'headline'             => "কর না কমালে বিনিয়োগে গতি আসবে না, ব্যবসায়ীদের মত",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "মেট্রো চেম্বার ও ব্যবসায়ী মহলের আলোচনায় করভার কমানো না হলে কর্পোরেট বিনিয়োগ আরও কমে যাওয়ার আশঙ্কা জানানো হয়েছে।",
@@ -5459,7 +5459,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "কর্পোরেট",
-                        'name'             => "পোশাক খাতে বৈশ্বিক সংকট ও বাণিজ্যনীতির চাপ",
+                        'headline'             => "পোশাক খাতে বৈশ্বিক সংকট ও বাণিজ্যনীতির চাপ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "রপ্তানিমুখী পোশাক খাতে বৈশ্বিক চাহিদা, বাণিজ্যনীতি ও উৎপাদন ব্যয়ের চাপ কর্পোরেট পরিকল্পনায় নতুন ঝুঁকি তৈরি করছে।",
@@ -5470,7 +5470,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্টার্টআপ",
-                        'name'             => "৩৯ ব্যাংকের ৬০০ কোটি টাকায় স্টার্টআপ বিনিয়োগ কোম্পানি",
+                        'headline'             => "৩৯ ব্যাংকের ৬০০ কোটি টাকায় স্টার্টআপ বিনিয়োগ কোম্পানি",
                         'sub_heading'      => "তরুণ উদ্যোক্তাদের পুঁজি ও পরামর্শ দিতে বিএসআইসির যাত্রা",
                         'content_shoulder' => "",
                         'brief'            => "দেশের ৩৯টি ব্যাংকের উদ্যোগে ৬০০ কোটি টাকা মূলধনে বাংলাদেশ স্টার্টআপ ইনভেস্টমেন্ট কোম্পানি গঠিত হয়েছে।",
@@ -5481,7 +5481,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্টার্টআপ",
-                        'name'             => "প্রাইম ব্যাংক স্টার্টআপে সর্বোচ্চ ৮ কোটি টাকা ঋণ দেবে",
+                        'headline'             => "প্রাইম ব্যাংক স্টার্টআপে সর্বোচ্চ ৮ কোটি টাকা ঋণ দেবে",
                         'sub_heading'      => "",
                         'content_shoulder' => "উদ্যোক্তা অর্থায়ন",
                         'brief'            => "স্টার্টআপ তহবিলের আওতায় প্রাইম ব্যাংক নতুন ও বিকাশমান উদ্যোগকে বয়সভেদে সর্বোচ্চ ৮ কোটি টাকা পর্যন্ত ঋণ দেবে।",
@@ -5492,7 +5492,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্টার্টআপ",
-                        'name'             => "স্টার্টআপ খাতকে কাঠামোবদ্ধ করতে স্কেলআপ প্রোগ্রাম",
+                        'headline'             => "স্টার্টআপ খাতকে কাঠামোবদ্ধ করতে স্কেলআপ প্রোগ্রাম",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দেশের স্টার্টআপ খাতকে টেকসই ও বিনিয়োগ প্রস্তুত করতে স্টার্টআপ অ্যান্ড স্কেলআপ প্রোগ্রাম নিয়ে কাজ চলছে।",
@@ -5503,7 +5503,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্টার্টআপ",
-                        'name'             => "স্টার্টআপ বাংলাদেশ ও লাইটক্যাসলের কৌশলগত জোট",
+                        'headline'             => "স্টার্টআপ বাংলাদেশ ও লাইটক্যাসলের কৌশলগত জোট",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশের স্টার্টআপ ইকোসিস্টেম এগিয়ে নিতে স্টার্টআপ বাংলাদেশ ও লাইটক্যাসল পার্টনার্স কৌশলগত সমঝোতায় যুক্ত হয়েছে।",
@@ -5514,7 +5514,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্টার্টআপ",
-                        'name'             => "অনলাইন গ্রোসারি স্টার্টআপগুলোর টিকে থাকা কঠিন হচ্ছে",
+                        'headline'             => "অনলাইন গ্রোসারি স্টার্টআপগুলোর টিকে থাকা কঠিন হচ্ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "লজিস্টিকস ব্যয়, গ্রাহক ধরে রাখা ও মুনাফা অর্জনের চাপের কারণে দেশের অনলাইন গ্রোসারি স্টার্টআপগুলো কঠিন সময় পার করছে।",
@@ -5525,7 +5525,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বাণিজ্য",
-                        'name'             => "দোকানপাট রাত ৯টা পর্যন্ত খোলা রাখার দাবি দোকানমালিকদের",
+                        'headline'             => "দোকানপাট রাত ৯টা পর্যন্ত খোলা রাখার দাবি দোকানমালিকদের",
                         'sub_heading'      => "ঈদ বাজারে বিক্রি বাড়াতে সময় বাড়ানোর অনুরোধ",
                         'content_shoulder' => "",
                         'brief'            => "ঈদ উপলক্ষে ক্রেতার চাপ ও ব্যবসায়িক ক্ষতি পুষিয়ে নিতে দোকানপাট রাত ৯টা পর্যন্ত খোলা রাখার দাবি জানিয়েছেন দোকানমালিকরা।",
@@ -5536,7 +5536,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বাণিজ্য",
-                        'name'             => "ঢাকা আন্তর্জাতিক বাণিজ্য মেলায় বিক্রি ৩৯৩ কোটি টাকা",
+                        'headline'             => "ঢাকা আন্তর্জাতিক বাণিজ্য মেলায় বিক্রি ৩৯৩ কোটি টাকা",
                         'sub_heading'      => "",
                         'content_shoulder' => "মেলায় রপ্তানি আদেশ",
                         'brief'            => "৩০তম ঢাকা আন্তর্জাতিক বাণিজ্য মেলায় ৩৯৩ কোটি টাকার পণ্য বিক্রি হয়েছে এবং ২২৪ কোটি টাকার রপ্তানি আদেশ মিলেছে।",
@@ -5547,7 +5547,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বাণিজ্য",
-                        'name'             => "বাণিজ্য ঘাটতি বেড়ে ১৬.৯১ বিলিয়ন ডলারে",
+                        'headline'             => "বাণিজ্য ঘাটতি বেড়ে ১৬.৯১ বিলিয়ন ডলারে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চলতি অর্থবছরের প্রথম আট মাসে আমদানি ও রপ্তানির ব্যবধানে দেশের বাণিজ্য ঘাটতি বেড়ে ১৬.৯১ বিলিয়ন ডলারে দাঁড়িয়েছে।",
@@ -5558,7 +5558,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বাণিজ্য",
-                        'name'             => "দাম বাড়তেই বাজারে ফিরেছে সয়াবিন তেল",
+                        'headline'             => "দাম বাড়তেই বাজারে ফিরেছে সয়াবিন তেল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নতুন দামে বোতলজাত ও খোলা সয়াবিন তেলের দাম বাড়ার পর বাজারে সরবরাহ স্বাভাবিক হতে শুরু করেছে বলে ব্যবসায়ীরা বলছেন।",
@@ -5569,7 +5569,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বাণিজ্য",
-                        'name'             => "আদার বাজারে অস্থিরতা, দুই সপ্তাহে কেজিতে বেড়েছে ২০ টাকা",
+                        'headline'             => "আদার বাজারে অস্থিরতা, দুই সপ্তাহে কেজিতে বেড়েছে ২০ টাকা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "আমদানি নির্ভরতা ও সরবরাহ চাপের কারণে আদার বাজারে অস্থিরতা তৈরি হয়েছে, দুই সপ্তাহে কেজিতে দাম বেড়েছে প্রায় ২০ টাকা।",
@@ -5580,7 +5580,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি",
-                        'name'             => "জেমিনি চ্যাটবটে সরাসরি ফাইল তৈরির সুবিধা যুক্ত",
+                        'headline'             => "জেমিনি চ্যাটবটে সরাসরি ফাইল তৈরির সুবিধা যুক্ত",
                         'sub_heading'      => "পিডিএফ, ওয়ার্ড ও এক্সেল ফাইল বানানো যাবে চ্যাট থেকেই",
                         'content_shoulder' => "",
                         'brief'            => "গুগল জেমিনিতে নতুন সুবিধা যুক্ত করেছে, যার মাধ্যমে ব্যবহারকারীরা চ্যাটের মধ্যেই পিডিএফ, ওয়ার্ড, এক্সেলসহ নানা ফাইল তৈরি করতে পারবেন।",
@@ -5591,7 +5591,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি",
-                        'name'             => "ঢাকায় অনুষ্ঠিত হলো বাংলাদেশ এআই অলিম্পিয়াডের আঞ্চলিক পর্ব",
+                        'headline'             => "ঢাকায় অনুষ্ঠিত হলো বাংলাদেশ এআই অলিম্পিয়াডের আঞ্চলিক পর্ব",
                         'sub_heading'      => "",
                         'content_shoulder' => "শিক্ষার্থীদের এআই উৎসব",
                         'brief'            => "বিইউবিটিতে তৃতীয় বাংলাদেশ এআই অলিম্পিয়াডের ঢাকা আঞ্চলিক পর্বে কয়েক শ শিক্ষার্থী কুইজ ও কোডিং চ্যালেঞ্জে অংশ নিয়েছে।",
@@ -5602,7 +5602,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি",
-                        'name'             => "ঢাকায় বিওয়াইডি বাংলাদেশের এক্সক্লুসিভ শোরুম চালু",
+                        'headline'             => "ঢাকায় বিওয়াইডি বাংলাদেশের এক্সক্লুসিভ শোরুম চালু",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নিউ এনার্জি ভেহিকেল বাজারে উপস্থিতি বাড়াতে ঢাকায় বিওয়াইডি বাংলাদেশের সবচেয়ে বড় এক্সক্লুসিভ শোরুম উদ্বোধন করেছে।",
@@ -5613,7 +5613,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি",
-                        'name'             => "অস্কারে এআই দিয়ে তৈরি অভিনেতা ও চিত্রনাট্য অযোগ্য ঘোষণা",
+                        'headline'             => "অস্কারে এআই দিয়ে তৈরি অভিনেতা ও চিত্রনাট্য অযোগ্য ঘোষণা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "অস্কারের নতুন নিয়মে স্পষ্ট করা হয়েছে, অভিনয় ও চিত্রনাট্য অস্কার বিবেচনায় আসতে হলে তা মানুষের কাজ হিসেবে প্রমাণযোগ্য হতে হবে।",
@@ -5624,7 +5624,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি",
-                        'name'             => "রেডিটের সার্চ ইঞ্জিন ব্যবহারকারী বেড়েছে ৩০ শতাংশ",
+                        'headline'             => "রেডিটের সার্চ ইঞ্জিন ব্যবহারকারী বেড়েছে ৩০ শতাংশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "এআইভিত্তিক অনুসন্ধান সুবিধা ও ব্যবহারবান্ধব সার্চ উন্নয়নের কারণে রেডিটের নিজস্ব সার্চ ইঞ্জিনে ব্যবহারকারী উল্লেখযোগ্যভাবে বেড়েছে।",
@@ -5635,7 +5635,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "এআই",
-                        'name'             => "বাংলাদেশ এআই অলিম্পিয়াডের জাতীয় পর্ব হবে ১৬ মে",
+                        'headline'             => "বাংলাদেশ এআই অলিম্পিয়াডের জাতীয় পর্ব হবে ১৬ মে",
                         'sub_heading'      => "আঞ্চলিক পর্ব শেষে ঢাকায় চূড়ান্ত প্রতিযোগিতা",
                         'content_shoulder' => "",
                         'brief'            => "শিক্ষার্থীদের এআই দক্ষতা বাড়াতে তৃতীয় বাংলাদেশ এআই অলিম্পিয়াডের জাতীয় পর্ব ১৬ মে ঢাকার বিইউবিটিতে আয়োজন করা হবে।",
@@ -5646,7 +5646,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "এআই",
-                        'name'             => "বাংলায় বিনামূল্যে এআই শেখার কোর্স চালু",
+                        'headline'             => "বাংলায় বিনামূল্যে এআই শেখার কোর্স চালু",
                         'sub_heading'      => "",
                         'content_shoulder' => "এআই শিক্ষা",
                         'brief'            => "বাংলাদেশের শিক্ষার্থী, শিক্ষক ও কর্মজীবীদের জন্য বাংলায় তৈরি বিনামূল্যের এআই শেখার কোর্স আনুষ্ঠানিকভাবে চালু হয়েছে।",
@@ -5657,7 +5657,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "এআই",
-                        'name'             => "চ্যাটজিপিটি ইমেজেস ২.০ বাস্তবসম্মত ছবি তৈরিতে উন্নতি এনেছে",
+                        'headline'             => "চ্যাটজিপিটি ইমেজেস ২.০ বাস্তবসম্মত ছবি তৈরিতে উন্নতি এনেছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ওপেনএআইয়ের নতুন ছবি তৈরির মডেল আরও বাস্তবসম্মত আলো, টেক্সচার, ভাষা বোঝা ও নকশার সূক্ষ্মতা ধরে রাখতে সক্ষম।",
@@ -5668,7 +5668,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "এআই",
-                        'name'             => "এআই বদলে দিচ্ছে আট ঘণ্টার কাজের হিসাব",
+                        'headline'             => "এআই বদলে দিচ্ছে আট ঘণ্টার কাজের হিসাব",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সিলিকন ভ্যালির এআই স্টার্টআপগুলোতে দীর্ঘ কর্মঘণ্টা ও ৯৯৬ সংস্কৃতি নিয়ে শ্রম অধিকার ও প্রযুক্তি প্রতিযোগিতা প্রশ্নে আলোচনা বাড়ছে।",
@@ -5679,7 +5679,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "এআই",
-                        'name'             => "ক্রোম ব্রাউজারের এআই মোডে স্প্লিট-স্ক্রিন সুবিধা",
+                        'headline'             => "ক্রোম ব্রাউজারের এআই মোডে স্প্লিট-স্ক্রিন সুবিধা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "গুগল ক্রোমের এআই মোডে নতুন স্প্লিট-স্ক্রিন ও মাল্টিমোডাল অনুসন্ধান সুবিধা যুক্ত করেছে, যাতে তথ্য খোঁজা সহজ হয়।",
@@ -5690,7 +5690,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গ্যাজেট",
-                        'name'             => "বিওয়াইডি আনছে প্লাগ-ইন হাইব্রিড সেডান",
+                        'headline'             => "বিওয়াইডি আনছে প্লাগ-ইন হাইব্রিড সেডান",
                         'sub_heading'      => "জ্বালানি ছাড়াই ৮০ কিলোমিটার চলার দাবি",
                         'content_shoulder' => "",
                         'brief'            => "বিওয়াইডি দেশের বাজারে নতুন প্লাগ-ইন হাইব্রিড সেডান আনছে, যা পূর্ণ বৈদ্যুতিক মোডে ৮০ কিলোমিটার চলতে পারে বলে দাবি করা হয়েছে।",
@@ -5701,7 +5701,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গ্যাজেট",
-                        'name'             => "টিম কুকের বিদায়বেলায় আইফোনের চাহিদায় নতুন রেকর্ড",
+                        'headline'             => "টিম কুকের বিদায়বেলায় আইফোনের চাহিদায় নতুন রেকর্ড",
                         'sub_heading'      => "",
                         'content_shoulder' => "অ্যাপল গ্যাজেট বাজার",
                         'brief'            => "অ্যাপলের নেতৃত্ব পরিবর্তন নিয়ে জল্পনার মধ্যেই আইফোনের চাহিদা নতুন রেকর্ডে পৌঁছেছে বলে প্রযুক্তি বাজারে আলোচনা তৈরি হয়েছে।",
@@ -5712,7 +5712,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গ্যাজেট",
-                        'name'             => "বাংলাদেশে আইফোন ১৬ প্রো ম্যাক্সের চাহিদা বেশি",
+                        'headline'             => "বাংলাদেশে আইফোন ১৬ প্রো ম্যাক্সের চাহিদা বেশি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দাম বেশি হলেও বাংলাদেশে আইফোন ১৬ সিরিজের মধ্যে প্রো ম্যাক্স মডেলের চাহিদা সবচেয়ে বেশি বলে মোবাইল বাজারের বিক্রেতারা জানিয়েছেন।",
@@ -5723,7 +5723,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গ্যাজেট",
-                        'name'             => "টেকনোর নতুন স্মার্টফোন সিরিজ বাংলাদেশের বাজারে",
+                        'headline'             => "টেকনোর নতুন স্মার্টফোন সিরিজ বাংলাদেশের বাজারে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশের মোবাইল বাজারে টেকনোর নতুন স্মার্টফোন সিরিজ আসায় বাজেট ও মিডরেঞ্জ ক্রেতাদের জন্য আরও বিকল্প তৈরি হয়েছে।",
@@ -5734,7 +5734,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গ্যাজেট",
-                        'name'             => "মেমোরি চিপ সংকটে স্মার্টফোনের দাম বাড়ার আশঙ্কা",
+                        'headline'             => "মেমোরি চিপ সংকটে স্মার্টফোনের দাম বাড়ার আশঙ্কা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বিশ্ববাজারে মেমোরি চিপ সংকটের প্রভাব বাংলাদেশেও পড়তে পারে, ফলে স্মার্টফোনের দাম ১০ থেকে ২৫ শতাংশ বাড়ার আশঙ্কা রয়েছে।",
@@ -5745,7 +5745,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সফটওয়্যার",
-                        'name'             => "হোয়াটসঅ্যাপে নতুন স্পয়লার ফিচার আসছে",
+                        'headline'             => "হোয়াটসঅ্যাপে নতুন স্পয়লার ফিচার আসছে",
                         'sub_heading'      => "ট্যাপ না করলে লুকানো বার্তা দেখা যাবে না",
                         'content_shoulder' => "",
                         'brief'            => "হোয়াটসঅ্যাপ এমন একটি স্পয়লার ফিচার আনছে, যেখানে ব্যবহারকারী ট্যাপ না করা পর্যন্ত নির্দিষ্ট বার্তা বা তথ্য দেখা যাবে না।",
@@ -5756,7 +5756,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সফটওয়্যার",
-                        'name'             => "আইওএস ২৭-এ আসছে এআইনির্ভর ফটো এডিটিং টুল",
+                        'headline'             => "আইওএস ২৭-এ আসছে এআইনির্ভর ফটো এডিটিং টুল",
                         'sub_heading'      => "",
                         'content_shoulder' => "অ্যাপল সফটওয়্যার",
                         'brief'            => "অ্যাপলের পরবর্তী আইওএস সংস্করণে এআইনির্ভর নতুন ফটো এডিটিং টুল যুক্ত হতে পারে, যা ছবি সম্পাদনাকে আরও সহজ করবে।",
@@ -5767,7 +5767,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সফটওয়্যার",
-                        'name'             => "ইনস্টাগ্রামে অন্যের ছবি বা পোস্ট শেয়ারে কড়াকড়ি",
+                        'headline'             => "ইনস্টাগ্রামে অন্যের ছবি বা পোস্ট শেয়ারে কড়াকড়ি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ইনস্টাগ্রামে অন্যের ছবি, পোস্ট বা কনটেন্ট শেয়ারের ক্ষেত্রে নতুন কড়াকড়ি আসায় কপিরাইট ও গোপনীয়তা নিয়ে আলোচনা বাড়ছে।",
@@ -5778,7 +5778,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সফটওয়্যার",
-                        'name'             => "ইউটিউবে ব্যবহারকারীদের জন্য নতুন আকর্ষণীয় ফিচার",
+                        'headline'             => "ইউটিউবে ব্যবহারকারীদের জন্য নতুন আকর্ষণীয় ফিচার",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ইউটিউব ব্যবহারকারীদের ভিডিও দেখা, খোঁজা ও কনটেন্ট ব্যবস্থাপনা সহজ করতে নতুন ফিচার নিয়ে আসছে বলে প্রযুক্তি খবরে জানানো হয়েছে।",
@@ -5789,7 +5789,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সফটওয়্যার",
-                        'name'             => "হারানো এয়ারপড খুঁজে দিতে বিশেষ অ্যাপের সুবিধা",
+                        'headline'             => "হারানো এয়ারপড খুঁজে দিতে বিশেষ অ্যাপের সুবিধা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "হারানো এয়ারপড বা ছোট ব্লুটুথ ডিভাইস খুঁজে পেতে বিশেষ অ্যাপ ব্যবহারকারীদের অবস্থান শনাক্তে সহায়তা করতে পারে।",
@@ -5800,7 +5800,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ইন্টারনেট",
-                        'name'             => "জুলাই অভ্যুত্থানে সরকারের সিদ্ধান্তে ইন্টারনেট সেবা বন্ধ হয়েছিল",
+                        'headline'             => "জুলাই অভ্যুত্থানে সরকারের সিদ্ধান্তে ইন্টারনেট সেবা বন্ধ হয়েছিল",
                         'sub_heading'      => "জবানবন্দিতে ব্যান্ডউইথ সরবরাহ বন্ধের তথ্য উঠে এসেছে",
                         'content_shoulder' => "",
                         'brief'            => "জুলাই অভ্যুত্থানের সময় সারাদেশে ইন্টারনেট সেবা বন্ধ হওয়া নিয়ে জবানবন্দিতে সরকারের সিদ্ধান্তের বিষয়টি উঠে এসেছে।",
@@ -5811,7 +5811,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ইন্টারনেট",
-                        'name'             => "রেডিট সার্চে এআই সুবিধা যোগে ব্যবহারকারী বাড়ছে",
+                        'headline'             => "রেডিট সার্চে এআই সুবিধা যোগে ব্যবহারকারী বাড়ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "অনলাইন অনুসন্ধান",
                         'brief'            => "রেডিট সার্চে এআই সুবিধা যুক্ত হওয়ায় ব্যবহারকারীরা কমিউনিটির তথ্য, আলোচনার উত্তর ও অভিজ্ঞতা আরও সহজে খুঁজে পাচ্ছেন।",
@@ -5822,7 +5822,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ইন্টারনেট",
-                        'name'             => "এক্সের কমিউনিটিজ ফিচার বন্ধ হচ্ছে",
+                        'headline'             => "এক্সের কমিউনিটিজ ফিচার বন্ধ হচ্ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জনপ্রিয়তা না পাওয়ায় সামাজিক যোগাযোগমাধ্যম এক্স কমিউনিটিজ ফিচার বন্ধ করার সিদ্ধান্ত নিয়েছে বলে প্রযুক্তি প্রতিবেদনে জানা গেছে।",
@@ -5833,7 +5833,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ইন্টারনেট",
-                        'name'             => "মোবাইল ডাটার দাম দেড় বছরে ৫০ শতাংশ পর্যন্ত বেড়েছে",
+                        'headline'             => "মোবাইল ডাটার দাম দেড় বছরে ৫০ শতাংশ পর্যন্ত বেড়েছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দেড় বছরে মোবাইল ডাটার দাম ৫০ শতাংশ পর্যন্ত বাড়ার খবর গ্রাহক, শিক্ষার্থী ও অনলাইন কাজনির্ভর মানুষের ব্যয় বাড়িয়েছে।",
@@ -5844,7 +5844,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ইন্টারনেট",
-                        'name'             => "এনইআইআর পরীক্ষায় সাময়িকভাবে মোবাইল সংযোগ বন্ধ হতে পারে",
+                        'headline'             => "এনইআইআর পরীক্ষায় সাময়িকভাবে মোবাইল সংযোগ বন্ধ হতে পারে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "এনইআইআর পরীক্ষামূলক কার্যক্রমের সময় কিছু অনিবন্ধিত মোবাইল সংযোগ সাময়িকভাবে বন্ধ হতে পারে বলে প্রযুক্তি খবরে জানানো হয়েছে।",
@@ -5855,7 +5855,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সাইবার নিরাপত্তা",
-                        'name'             => "সাইবার নিরাপত্তা বিল ২০২৬ সংসদে পাস",
+                        'headline'             => "সাইবার নিরাপত্তা বিল ২০২৬ সংসদে পাস",
                         'sub_heading'      => "নতুন আইনি কাঠামোর পথে ডিজিটাল নিরাপত্তা খাত",
                         'content_shoulder' => "",
                         'brief'            => "সাইবার সিকিউরিটি অর্ডিন্যান্স ২০২৫ বাতিল করে সাইবার নিরাপত্তা বিল ২০২৬ জাতীয় সংসদে কণ্ঠভোটে পাস হয়েছে।",
@@ -5866,7 +5866,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সাইবার নিরাপত্তা",
-                        'name'             => "ব্রিটেনের ৪০ শতাংশ প্রতিষ্ঠানেই এক বছরে সাইবার হামলা",
+                        'headline'             => "ব্রিটেনের ৪০ শতাংশ প্রতিষ্ঠানেই এক বছরে সাইবার হামলা",
                         'sub_heading'      => "",
                         'content_shoulder' => "প্রতিষ্ঠানে নিরাপত্তা ঝুঁকি",
                         'brief'            => "ব্রিটেনের উল্লেখযোগ্য সংখ্যক প্রতিষ্ঠান এক বছরে সাইবার হামলার শিকার হওয়ায় কর্পোরেট নিরাপত্তা ও ডেটা সুরক্ষা নিয়ে উদ্বেগ বেড়েছে।",
@@ -5877,7 +5877,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সাইবার নিরাপত্তা",
-                        'name'             => "টিকটক ক্লোন অ্যাপ থেকে ব্যাংক তথ্য চুরির সতর্কতা",
+                        'headline'             => "টিকটক ক্লোন অ্যাপ থেকে ব্যাংক তথ্য চুরির সতর্কতা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নকল টিকটক অ্যাপ ইনস্টল করলে ব্যাংক ও অনলাইন লেনদেনের তথ্য চুরি হতে পারে বলে সাইবার নিরাপত্তা সতর্কতা দেওয়া হয়েছে।",
@@ -5888,7 +5888,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সাইবার নিরাপত্তা",
-                        'name'             => "৪০ শতাংশ অ্যান্ড্রয়েড ফোন ঝুঁকিতে, সতর্ক করল গুগল",
+                        'headline'             => "৪০ শতাংশ অ্যান্ড্রয়েড ফোন ঝুঁকিতে, সতর্ক করল গুগল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পুরোনো নিরাপত্তা প্যাচ, সন্দেহজনক অ্যাপ ও দুর্বল কনফিগারেশনের কারণে বহু অ্যান্ড্রয়েড ফোন সাইবার ঝুঁকিতে আছে।",
@@ -5899,7 +5899,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সাইবার নিরাপত্তা",
-                        'name'             => "হাইব্রিড কর্মপরিবেশে নিরাপত্তা জোরদারে সফোসের সমাধান",
+                        'headline'             => "হাইব্রিড কর্মপরিবেশে নিরাপত্তা জোরদারে সফোসের সমাধান",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "রিমোট ও হাইব্রিড কাজের নিরাপত্তা ঝুঁকি মোকাবিলায় সফোস ওয়ার্কস্পেস প্রোটেকশন নামে নতুন সাইবার সমাধান আনছে।",
@@ -5910,7 +5910,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খেলাধুলা",
-                        'name'             => "ক্রীড়া কূটনীতিতে জোর দিচ্ছে সরকার",
+                        'headline'             => "ক্রীড়া কূটনীতিতে জোর দিচ্ছে সরকার",
                         'sub_heading'      => "তৃণমূল থেকে প্রতিভা তুলে এনে বিশ্বমঞ্চে বাংলাদেশকে এগিয়ে নেওয়ার লক্ষ্য",
                         'content_shoulder' => "",
                         'brief'            => "যুব ও ক্রীড়া প্রতিমন্ত্রী বলেছেন, তৃণমূল থেকে প্রতিভাবান খেলোয়াড় খুঁজে বের করে আন্তর্জাতিক ক্রীড়াঙ্গনে বাংলাদেশকে এগিয়ে নিতে কাজ চলছে।",
@@ -5921,7 +5921,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খেলাধুলা",
-                        'name'             => "চীন বিশ্বকাপে যাচ্ছেন বাংলাদেশের ১৩ আর্চার",
+                        'headline'             => "চীন বিশ্বকাপে যাচ্ছেন বাংলাদেশের ১৩ আর্চার",
                         'sub_heading'      => "",
                         'content_shoulder' => "বিশ্বকাপ আর্চারি",
                         'brief'            => "চীনের সাংহাইয়ে বিশ্বকাপ আর্চারি স্টেজ-২ চ্যাম্পিয়নশিপে রিকার্ভ ও কম্পাউন্ড মিলিয়ে ১০ ইভেন্টে অংশ নেবে বাংলাদেশ।",
@@ -5932,7 +5932,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খেলাধুলা",
-                        'name'             => "সন্তান রেখে বিশ্বকাপে যাচ্ছেন আর্চার নাসরিন",
+                        'headline'             => "সন্তান রেখে বিশ্বকাপে যাচ্ছেন আর্চার নাসরিন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "১৩ মাসের সন্তান রেখে দেশের হয়ে বিশ্বকাপ আর্চারিতে অংশ নিতে যাচ্ছেন নাসরিন আক্তার, পরিবার ও কোচের সহায়তায় প্রস্তুতি নিচ্ছেন তিনি।",
@@ -5943,7 +5943,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খেলাধুলা",
-                        'name'             => "আজ টিভিতে পিএসএল ফাইনালসহ ব্যস্ত খেলার দিন",
+                        'headline'             => "আজ টিভিতে পিএসএল ফাইনালসহ ব্যস্ত খেলার দিন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "আজ টিভিতে ক্রিকেট, ফুটবল ও আন্তর্জাতিক লিগের বেশ কয়েকটি গুরুত্বপূর্ণ ম্যাচ দেখা যাবে, পিএসএল ফাইনাল ঘিরে বাড়তি আগ্রহ তৈরি হয়েছে।",
@@ -5954,7 +5954,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খেলাধুলা",
-                        'name'             => "এশিয়া কাপ আর্চারিতে সাফল্য পাওয়া আর্চারদের পুরস্কার",
+                        'headline'             => "এশিয়া কাপ আর্চারিতে সাফল্য পাওয়া আর্চারদের পুরস্কার",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "এশিয়া কাপ আর্চারিতে স্বর্ণজয়ী বাংলাদেশি আর্চার ও কোচিং স্টাফদের নগদ পুরস্কার দেওয়া হয়েছে, উৎসাহ বাড়ছে খেলোয়াড়দের।",
@@ -5965,7 +5965,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ক্রিকেট",
-                        'name'             => "হারের পর ব্যাটিং নিয়ে লিটনের আক্ষেপ",
+                        'headline'             => "হারের পর ব্যাটিং নিয়ে লিটনের আক্ষেপ",
                         'sub_heading'      => "নিউজিল্যান্ডের বিপক্ষে সিরিজ নির্ধারণী ম্যাচে বড় সংগ্রহ গড়তে পারেনি বাংলাদেশ",
                         'content_shoulder' => "",
                         'brief'            => "নিউজিল্যান্ডের কাছে তৃতীয় টি-টোয়েন্টিতে ৬ উইকেটে হারের পর বাংলাদেশ অধিনায়ক লিটন দাস ব্যাটিং ব্যর্থতার কথা স্বীকার করেছেন।",
@@ -5976,7 +5976,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ক্রিকেট",
-                        'name'             => "শেষ ম্যাচ জিতে সিরিজে সমতা ফেরাল নিউজিল্যান্ড",
+                        'headline'             => "শেষ ম্যাচ জিতে সিরিজে সমতা ফেরাল নিউজিল্যান্ড",
                         'sub_heading'      => "",
                         'content_shoulder' => "সিরিজ হাতছাড়া বাংলাদেশ",
                         'brief'            => "মিরপুরে শেষ টি-টোয়েন্টিতে বাংলাদেশকে হারিয়ে নিউজিল্যান্ড সিরিজে সমতা ফিরিয়েছে, ইতিহাস গড়ার সুযোগ হারিয়েছে স্বাগতিকরা।",
@@ -5987,7 +5987,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ক্রিকেট",
-                        'name'             => "বাংলাদেশ নারী দলকে হোয়াইটওয়াশ করেছে শ্রীলঙ্কা",
+                        'headline'             => "বাংলাদেশ নারী দলকে হোয়াইটওয়াশ করেছে শ্রীলঙ্কা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সিলেটে তৃতীয় ও শেষ টি-টোয়েন্টিতে ৩ রানে হেরে বাংলাদেশ নারী দল শ্রীলঙ্কার কাছে ৩-০ ব্যবধানে সিরিজ হারল।",
@@ -5998,7 +5998,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ক্রিকেট",
-                        'name'             => "ওয়ানডে র‌্যাঙ্কিংয়ে বাংলাদেশের তিন পেসারের বড় লাফ",
+                        'headline'             => "ওয়ানডে র‌্যাঙ্কিংয়ে বাংলাদেশের তিন পেসারের বড় লাফ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নিউজিল্যান্ডের বিপক্ষে ওয়ানডে সিরিজ জয়ের পর শরিফুল, মোস্তাফিজ ও নাহিদ রানা আইসিসি র‌্যাঙ্কিংয়ে বড় উন্নতি করেছেন।",
@@ -6009,7 +6009,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ক্রিকেট",
-                        'name'             => "পিএসএলের ফাইনালে খেলার অনুমতি পেলেন নাহিদ রানা",
+                        'headline'             => "পিএসএলের ফাইনালে খেলার অনুমতি পেলেন নাহিদ রানা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশ ক্রিকেট বোর্ড আগের সিদ্ধান্ত পুনর্বিবেচনা করে নাহিদ রানাকে পিএসএল ফাইনালে পেশোয়ার জালমির হয়ে খেলার অনুমতি দিয়েছে।",
@@ -6020,7 +6020,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফুটবল",
-                        'name'             => "স্বপ্ন এখনও বেঁচে আছে, বললেন আর্সেনাল কোচ",
+                        'headline'             => "স্বপ্ন এখনও বেঁচে আছে, বললেন আর্সেনাল কোচ",
                         'sub_heading'      => "ফুলহামকে হারিয়ে প্রিমিয়ার লিগের শিরোপা দৌড়ে নিজেদের আশা ধরে রেখেছে আর্সেনাল",
                         'content_shoulder' => "",
                         'brief'            => "ফুলহামকে ৩-০ গোলে হারানোর পর আর্সেনাল কোচ মিকেল আর্তেতা বলেছেন, শিরোপার স্বপ্ন এখনও বেঁচে আছে।",
@@ -6031,7 +6031,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফুটবল",
-                        'name'             => "৩ গোলে এগিয়ে থেকেও হারল মেসির ইন্টার মায়ামি",
+                        'headline'             => "৩ গোলে এগিয়ে থেকেও হারল মেসির ইন্টার মায়ামি",
                         'sub_heading'      => "",
                         'content_shoulder' => "মায়ামির বড় ধাক্কা",
                         'brief'            => "অরল্যান্ডো সিটির বিপক্ষে ৩-০ গোলে এগিয়ে থেকেও ৪-৩ ব্যবধানে হেরে গেছে ইন্টার মায়ামি, হতাশ হয়েছেন লিওনেল মেসি।",
@@ -6042,7 +6042,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফুটবল",
-                        'name'             => "লা লিগা শিরোপার আরও কাছে বার্সেলোনা",
+                        'headline'             => "লা লিগা শিরোপার আরও কাছে বার্সেলোনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ওসাসুনাকে ২-১ গোলে হারিয়ে লা লিগার শীর্ষে ব্যবধান বাড়িয়েছে বার্সেলোনা, রিয়ালের ফলের ওপর নির্ভর করছে উৎসবের সময়।",
@@ -6053,7 +6053,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফুটবল",
-                        'name'             => "মামুনুলের বিদায়ী ম্যাচ জয়ে রাঙাল ফর্টিস",
+                        'headline'             => "মামুনুলের বিদায়ী ম্যাচ জয়ে রাঙাল ফর্টিস",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশ ফুটবলের অভিজ্ঞ মিডফিল্ডার মামুনুল ইসলামের বিদায়ী ম্যাচে রহমতগঞ্জকে ৩-২ গোলে হারিয়েছে ফর্টিস এফসি।",
@@ -6064,7 +6064,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফুটবল",
-                        'name'             => "বিএসজেএ মিডিয়া কাপ ফুটবলে ৩২ সংবাদমাধ্যম",
+                        'headline'             => "বিএসজেএ মিডিয়া কাপ ফুটবলে ৩২ সংবাদমাধ্যম",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কুল-বিএসজেএ মিডিয়া কাপ ফুটবল টুর্নামেন্টে দেশের ৩২ সংবাদমাধ্যম অংশ নিচ্ছে, ড্র ও জার্সি উন্মোচন সম্পন্ন হয়েছে।",
@@ -6075,7 +6075,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেনিস",
-                        'name'             => "ফ্রেঞ্চ ওপেনে খেলছেন না কার্লোস আলকারেজ",
+                        'headline'             => "ফ্রেঞ্চ ওপেনে খেলছেন না কার্লোস আলকারেজ",
                         'sub_heading'      => "কব্জির চোটে বর্তমান চ্যাম্পিয়নের রোলাঁ গারো মিশন শেষ হওয়ার আগেই থেমে গেল",
                         'content_shoulder' => "",
                         'brief'            => "ডান হাতের কব্জির চোটের কারণে এবারের ফ্রেঞ্চ ওপেনে খেলবেন না বর্তমান চ্যাম্পিয়ন কার্লোস আলকারেজ।",
@@ -6086,7 +6086,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেনিস",
-                        'name'             => "লরিয়াস বর্ষসেরা আলকারেজ ও সাবালেঙ্কা",
+                        'headline'             => "লরিয়াস বর্ষসেরা আলকারেজ ও সাবালেঙ্কা",
                         'sub_heading'      => "",
                         'content_shoulder' => "টেনিসের বড় স্বীকৃতি",
                         'brief'            => "লরিয়াস অ্যাওয়ার্ডসে বর্ষসেরা পুরুষ ও নারী ক্রীড়াবিদের পুরস্কার জিতেছেন কার্লোস আলকারেজ ও আরিনা সাবালেঙ্কা।",
@@ -6097,7 +6097,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেনিস",
-                        'name'             => "টেবিল টেনিসে খই খইদের জন্য জাপানের কোচ ঢাকায়",
+                        'headline'             => "টেবিল টেনিসে খই খইদের জন্য জাপানের কোচ ঢাকায়",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশের টেবিল টেনিস খেলোয়াড়দের মানোন্নয়নে জাপানের অভিজ্ঞ কোচ ইউতাকা নাকানো দুই বছরের জন্য ঢাকায় এসেছেন।",
@@ -6108,7 +6108,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেনিস",
-                        'name'             => "আইটিএফ এশিয়া অনূর্ধ্ব-১৪ টেনিসে সেমিফাইনালে থামল বাংলাদেশ",
+                        'headline'             => "আইটিএফ এশিয়া অনূর্ধ্ব-১৪ টেনিসে সেমিফাইনালে থামল বাংলাদেশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কম্বোডিয়ায় আইটিএফ এশিয়া অনূর্ধ্ব-১৪ ডেভেলপমেন্ট টেনিসে বাংলাদেশের বালিকা দ্বৈত জুটি সেমিফাইনালে হেরে বিদায় নিয়েছে।",
@@ -6119,7 +6119,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেনিস",
-                        'name'             => "অস্ট্রেলিয়ান ওপেনে ইতিহাস গড়েছিলেন আলকারেজ",
+                        'headline'             => "অস্ট্রেলিয়ান ওপেনে ইতিহাস গড়েছিলেন আলকারেজ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নোভাক জোকোভিচকে হারিয়ে অস্ট্রেলিয়ান ওপেন জিতে সবচেয়ে কম বয়সে ক্যারিয়ার গ্র্যান্ড স্লাম পূর্ণ করেছিলেন আলকারেজ।",
@@ -6130,7 +6130,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্থানীয় খেলা",
-                        'name'             => "মিডিয়া কাপ ফুটবলে সংবাদমাধ্যমগুলোর উৎসব শুরু",
+                        'headline'             => "মিডিয়া কাপ ফুটবলে সংবাদমাধ্যমগুলোর উৎসব শুরু",
                         'sub_heading'      => "বাফুফে টার্ফে ৩২ দলের অংশগ্রহণে সাংবাদিকদের ফুটবল আয়োজন",
                         'content_shoulder' => "",
                         'brief'            => "বিএসজেএ মিডিয়া কাপ ফুটবল টুর্নামেন্টে দেশের ৩২ সংবাদমাধ্যম অংশ নিচ্ছে, স্থানীয় ক্রীড়া আয়োজনে তৈরি হয়েছে উৎসবের আমেজ।",
@@ -6141,7 +6141,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্থানীয় খেলা",
-                        'name'             => "মামুনুলের বিদায়ে আবেগঘন ঘরোয়া ফুটবল",
+                        'headline'             => "মামুনুলের বিদায়ে আবেগঘন ঘরোয়া ফুটবল",
                         'sub_heading'      => "",
                         'content_shoulder' => "দেশীয় ফুটবলের বিদায়",
                         'brief'            => "দীর্ঘদিনের পরিচিত ফুটবলার মামুনুল ইসলামের বিদায়ী ম্যাচ ঘিরে ঘরোয়া ফুটবলে আবেগঘন পরিবেশ তৈরি হয়েছে।",
@@ -6152,7 +6152,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্থানীয় খেলা",
-                        'name'             => "নারী হকির সাফল্যে স্থানীয় খেলাধুলায় নতুন আলো",
+                        'headline'             => "নারী হকির সাফল্যে স্থানীয় খেলাধুলায় নতুন আলো",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "এশিয়ান গেমস বাছাইয়ে বাংলাদেশ নারী হকি দলের ফাইনালে ওঠা স্থানীয় হকি অবকাঠামো ও মেয়েদের অংশগ্রহণ নিয়ে নতুন আশাবাদ তৈরি করেছে।",
@@ -6163,7 +6163,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্থানীয় খেলা",
-                        'name'             => "দেশীয় আর্চারদের পুরস্কার স্থানীয় প্রতিভাদের অনুপ্রেরণা",
+                        'headline'             => "দেশীয় আর্চারদের পুরস্কার স্থানীয় প্রতিভাদের অনুপ্রেরণা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "আন্তর্জাতিক সাফল্যের পর দেশীয় আর্চারদের নগদ পুরস্কার স্থানীয় পর্যায়ের তরুণ খেলোয়াড়দের অনুপ্রাণিত করবে বলে মনে করছেন কোচরা।",
@@ -6174,7 +6174,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্থানীয় খেলা",
-                        'name'             => "তৃণমূল থেকে খেলোয়াড় বাছাইয়ে গুরুত্ব বাড়ছে",
+                        'headline'             => "তৃণমূল থেকে খেলোয়াড় বাছাইয়ে গুরুত্ব বাড়ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সরকার ও ক্রীড়া সংগঠকেরা তৃণমূল থেকে প্রতিভাবান খেলোয়াড় খুঁজে বের করে জাতীয় পর্যায়ে তুলে আনার পরিকল্পনায় জোর দিচ্ছেন।",
@@ -6185,7 +6185,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক খেলা",
-                        'name'             => "অরল্যান্ডোর বিপক্ষে হার মেনে নিতে পারছেন না মেসি",
+                        'headline'             => "অরল্যান্ডোর বিপক্ষে হার মেনে নিতে পারছেন না মেসি",
                         'sub_heading'      => "৩ গোলে এগিয়েও হারের পর ইন্টার মায়ামির ড্রেসিংরুমে কঠোর বার্তা",
                         'content_shoulder' => "",
                         'brief'            => "অরল্যান্ডো সিটির বিপক্ষে ৪-৩ গোলে হারের পর ইন্টার মায়ামির পারফরম্যান্সকে অগ্রহণযোগ্য বলেছেন লিওনেল মেসি।",
@@ -6196,7 +6196,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক খেলা",
-                        'name'             => "বার্সেলোনার চোখ এখন লা লিগা উৎসবে",
+                        'headline'             => "বার্সেলোনার চোখ এখন লা লিগা উৎসবে",
                         'sub_heading'      => "",
                         'content_shoulder' => "ইউরোপিয়ান ফুটবল",
                         'brief'            => "লা লিগায় শীর্ষে বড় ব্যবধান গড়ার পর বার্সেলোনা শিরোপা উৎসবের অপেক্ষায়, তবে খেলোয়াড়রা এখনও সতর্ক থাকার কথা বলছেন।",
@@ -6207,7 +6207,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক খেলা",
-                        'name'             => "শিরোপার কাছে এসে পয়েন্ট হারাল পিএসজি",
+                        'headline'             => "শিরোপার কাছে এসে পয়েন্ট হারাল পিএসজি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ফরাসি লিগে শিরোপা নিশ্চিতের খুব কাছে এসে ঘরের মাঠে পয়েন্ট হারিয়েছে পিএসজি, লিগের শেষ ভাগে চাপ বেড়েছে।",
@@ -6218,7 +6218,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক খেলা",
-                        'name'             => "পিএসজি ম্যাচের আগে বায়ার্ন মিউনিখের হোঁচট",
+                        'headline'             => "পিএসজি ম্যাচের আগে বায়ার্ন মিউনিখের হোঁচট",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "গুরুত্বপূর্ণ ইউরোপীয় ম্যাচের আগে ঘরোয়া লিগে বায়ার্ন মিউনিখের পয়েন্ট হারানো দলের প্রস্তুতি নিয়ে প্রশ্ন তুলেছে।",
@@ -6229,7 +6229,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "আন্তর্জাতিক খেলা",
-                        'name'             => "ফিফা বলছে যুক্তরাষ্ট্রে বিশ্বকাপ খেলবে ইরান",
+                        'headline'             => "ফিফা বলছে যুক্তরাষ্ট্রে বিশ্বকাপ খেলবে ইরান",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ইরানের বিশ্বকাপে অংশগ্রহণ নিয়ে আলোচনা চললেও ফিফা সভাপতি বলেছেন, নির্ধারিত সূচি অনুযায়ী যুক্তরাষ্ট্রে খেলবে ইরান।",
@@ -6240,7 +6240,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিনোদন",
-                        'name'             => "ইউটিউব চ্যানেল খুললেন জয়া আহসান",
+                        'headline'             => "ইউটিউব চ্যানেল খুললেন জয়া আহসান",
                         'sub_heading'      => "ভক্তদের সঙ্গে সরাসরি যোগাযোগের নতুন প্ল্যাটফর্ম",
                         'content_shoulder' => "",
                         'brief'            => "দুই বাংলার জনপ্রিয় অভিনেত্রী জয়া আহসান এবার নিজের ইউটিউব চ্যানেল চালু করেছেন, যেখানে কাজের পেছনের গল্প ও ব্যক্তিগত সৃজনশীল মুহূর্ত তুলে ধরবেন।",
@@ -6251,7 +6251,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিনোদন",
-                        'name'             => "ছেলেকে ড্রাম শেখাচ্ছেন জেমস, ভিডিও ভাইরাল",
+                        'headline'             => "ছেলেকে ড্রাম শেখাচ্ছেন জেমস, ভিডিও ভাইরাল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নগরবাউল জেমসের পারিবারিক একটি ভিডিও সামাজিক মাধ্যমে ভাইরাল হয়েছে, যেখানে তিনি ছেলে জিবরানকে ড্রাম বাজানো শেখাচ্ছেন।",
@@ -6262,7 +6262,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিনোদন",
-                        'name'             => "‘কন্ট্র্যাক্ট ম্যারেজ’ সিনেমা দিয়ে ফিরছেন মৌসুমী",
+                        'headline'             => "‘কন্ট্র্যাক্ট ম্যারেজ’ সিনেমা দিয়ে ফিরছেন মৌসুমী",
                         'sub_heading'      => "",
                         'content_shoulder' => "প্রবাস জীবনের গল্প",
                         'brief'            => "দীর্ঘদিন যুক্তরাষ্ট্রে থাকা চিত্রনায়িকা মৌসুমী নতুন সিনেমা ‘কন্ট্র্যাক্ট ম্যারেজ’ দিয়ে আবার আলোচনায় এসেছেন; ছবিটি মুক্তির অপেক্ষায়।",
@@ -6273,7 +6273,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিনোদন",
-                        'name'             => "‘এটা আমাদেরই গল্প’ শেষ হচ্ছে ৮ মে",
+                        'headline'             => "‘এটা আমাদেরই গল্প’ শেষ হচ্ছে ৮ মে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জনপ্রিয় পারিবারিক ধারাবাহিক ‘এটা আমাদেরই গল্প’ ৫২তম পর্বে শেষ হচ্ছে; শেষ পর্বটি হবে ৯২ মিনিটের বিশেষ মেগা পর্ব।",
@@ -6284,7 +6284,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিনোদন",
-                        'name'             => "চলচ্চিত্র পরিচালনায় আসছেন জিয়াউল হক পলাশ",
+                        'headline'             => "চলচ্চিত্র পরিচালনায় আসছেন জিয়াউল হক পলাশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "‘ব্যাচেলর পয়েন্ট’-এর কাবিলা চরিত্রে জনপ্রিয় জিয়াউল হক পলাশ এবার নতুন পরিচয়ে চলচ্চিত্র পরিচালনায় আসার প্রস্তুতি নিচ্ছেন।",
@@ -6295,7 +6295,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সিনেমা",
-                        'name'             => "দেশে প্রথমবার ‘মাইগ্রেশন ফিল্ম ফেস্ট’, চলচ্চিত্র জমা নেওয়া শুরু",
+                        'headline'             => "দেশে প্রথমবার ‘মাইগ্রেশন ফিল্ম ফেস্ট’, চলচ্চিত্র জমা নেওয়া শুরু",
                         'sub_heading'      => "অভিবাসনের বাস্তব গল্প নিয়ে নতুন চলচ্চিত্র আয়োজন",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশে প্রথমবারের মতো মাইগ্রেশন ফিল্ম ফেস্ট আয়োজন করা হচ্ছে, যেখানে তরুণ নির্মাতা ও শিক্ষার্থীদের স্বল্পদৈর্ঘ্য চলচ্চিত্র জমা দিতে বলা হয়েছে।",
@@ -6306,7 +6306,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সিনেমা",
-                        'name'             => "জার্মানিতে পুরস্কার জিতল বাংলাদেশের ‘আলী’",
+                        'headline'             => "জার্মানিতে পুরস্কার জিতল বাংলাদেশের ‘আলী’",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "আদনান আল রাজীবের স্বল্পদৈর্ঘ্য চলচ্চিত্র ‘আলী’ জার্মানির ফিল্মফেস্ট ব্রেমেন ২০২৬-এ ডাইভার্সিটি অ্যাওয়ার্ড অর্জন করেছে।",
@@ -6317,7 +6317,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সিনেমা",
-                        'name'             => "‘বনলতা এক্সপ্রেস’ উত্তর আমেরিকায় ৪ লাখ ডলারের ক্লাবে",
+                        'headline'             => "‘বনলতা এক্সপ্রেস’ উত্তর আমেরিকায় ৪ লাখ ডলারের ক্লাবে",
                         'sub_heading'      => "",
                         'content_shoulder' => "বক্স অফিস সাফল্য",
                         'brief'            => "তানিম নূরের ‘বনলতা এক্সপ্রেস’ উত্তর আমেরিকায় চার লাখ ডলারের বেশি আয় করে বাংলাদেশি সিনেমার জন্য নতুন মাইলফলক তৈরি করেছে।",
@@ -6328,7 +6328,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সিনেমা",
-                        'name'             => "ভিয়েনা চলচ্চিত্র উৎসবে বাংলাদেশি চলচ্চিত্র ‘দেলুপি’",
+                        'headline'             => "ভিয়েনা চলচ্চিত্র উৎসবে বাংলাদেশি চলচ্চিত্র ‘দেলুপি’",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নেদারল্যান্ডসের পর এবার অস্ট্রিয়ার ভিয়েনায় রেড লোটাস এশিয়ান ফিল্ম ফেস্টিভ্যালে নির্বাচিত হয়েছে বাংলাদেশি চলচ্চিত্র ‘দেলুপি’।",
@@ -6339,7 +6339,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সিনেমা",
-                        'name'             => "মস্কো চলচ্চিত্র উৎসবে বাংলাদেশের দুই সিনেমা",
+                        'headline'             => "মস্কো চলচ্চিত্র উৎসবে বাংলাদেশের দুই সিনেমা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "৪৮তম মস্কো আন্তর্জাতিক চলচ্চিত্র উৎসবে বাংলাদেশের ‘অতল’ ও ‘কিং ইন দ্য ল্যান্ড অব দ্য প্রিন্সেস’ নির্বাচিত হয়েছে।",
@@ -6350,7 +6350,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংগীত",
-                        'name'             => "প্রকাশিত হলো আলিফ আলাউদ্দীনের চতুর্থ অ্যালবাম",
+                        'headline'             => "প্রকাশিত হলো আলিফ আলাউদ্দীনের চতুর্থ অ্যালবাম",
                         'sub_heading'      => "ছয়টি গান নিয়ে নতুন একক অ্যালবাম",
                         'content_shoulder' => "",
                         'brief'            => "জনপ্রিয় সংগীতশিল্পী আলিফ আলাউদ্দীনের চতুর্থ একক অ্যালবাম প্রকাশ হয়েছে, যেখানে মৌলিক গান ও পারিবারিক ট্রিবিউট রাখা হয়েছে।",
@@ -6361,7 +6361,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংগীত",
-                        'name'             => "রুনা লায়লা ও বাপ্পা মজুমদারের প্রথম বাংলা গজল",
+                        'headline'             => "রুনা লায়লা ও বাপ্পা মজুমদারের প্রথম বাংলা গজল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দেশের দুই সংগীত তারকা রুনা লায়লা ও বাপ্পা মজুমদার প্রথমবারের মতো একসঙ্গে বাংলা গজল নিয়ে আসছেন বলে ঘোষণা এসেছে।",
@@ -6372,7 +6372,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংগীত",
-                        'name'             => "শাকিব খানের পারফর্মে প্রকাশ পেল ‘জয়ধ্বনি’",
+                        'headline'             => "শাকিব খানের পারফর্মে প্রকাশ পেল ‘জয়ধ্বনি’",
                         'sub_heading'      => "",
                         'content_shoulder' => "উদযাপনের গান",
                         'brief'            => "ঢাকাই সিনেমার তারকা শাকিব খানের পারফর্মে এম-রাইজ নিবেদিত ‘জয়ধ্বনি’ গান প্রকাশ হয়েছে, নির্মাণ করেছেন আদনান আল রাজীব।",
@@ -6383,7 +6383,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংগীত",
-                        'name'             => "১৮ বছর পর নতুন রূপে ‘বাজেরে বাজে ঢোল আর ঢাক’",
+                        'headline'             => "১৮ বছর পর নতুন রূপে ‘বাজেরে বাজে ঢোল আর ঢাক’",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জনপ্রিয় গান ‘বাজেরে বাজে ঢোল আর ঢাক’ নতুন সংগীতায়োজন ও নতুন কণ্ঠে আবার প্রকাশের উদ্যোগ নিয়েছে প্রযোজনা প্রতিষ্ঠান গানচিল।",
@@ -6394,7 +6394,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংগীত",
-                        'name'             => "বাদশাহ–নোরা ফাতেহির গানে বাংলাদেশের তাশফী",
+                        'headline'             => "বাদশাহ–নোরা ফাতেহির গানে বাংলাদেশের তাশফী",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশি তরুণ কণ্ঠশিল্পী তাশফী বলিউডের বাদশাহ ও নোরা ফাতেহির সঙ্গে ‘সাজনা রে’ গানে কণ্ঠ দিয়ে আলোচনায় এসেছেন।",
@@ -6405,7 +6405,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টিভি শো",
-                        'name'             => "‘এটা আমাদেরই গল্প’র শুটিং শেষ",
+                        'headline'             => "‘এটা আমাদেরই গল্প’র শুটিং শেষ",
                         'sub_heading'      => "৫২ পর্বে শেষ হচ্ছে আলোচিত ধারাবাহিক",
                         'content_shoulder' => "",
                         'brief'            => "জনপ্রিয় ধারাবাহিক ‘এটা আমাদেরই গল্প’র শেষ পর্বের শুটিং শেষ হয়েছে; ৫২তম পর্বের মাধ্যমে ধারাবাহিকটির সমাপ্তি হবে।",
@@ -6416,7 +6416,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টিভি শো",
-                        'name'             => "বাবার মৃত্যু দৃশ্যে কাঁদছেন ‘এটা আমাদেরই গল্প’র দর্শক",
+                        'headline'             => "বাবার মৃত্যু দৃশ্যে কাঁদছেন ‘এটা আমাদেরই গল্প’র দর্শক",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "‘এটা আমাদেরই গল্প’ ধারাবাহিকের আবেগঘন পর্ব দর্শকদের গভীরভাবে নাড়া দিয়েছে; ৫০তম পর্ব দ্রুত বিপুল ভিউ পেয়েছে।",
@@ -6427,7 +6427,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টিভি শো",
-                        'name'             => "দর্শকের পছন্দে এগিয়ে ‘পরান পাখি’",
+                        'headline'             => "দর্শকের পছন্দে এগিয়ে ‘পরান পাখি’",
                         'sub_heading'      => "",
                         'content_shoulder' => "মানবিক গল্প",
                         'brief'            => "অসুস্থ কন্যাকে বাঁচানোর মানবিক গল্প নিয়ে নির্মিত ‘পরান পাখি’ নাটক দর্শকের পছন্দের শীর্ষে জায়গা করে নিয়েছে।",
@@ -6438,7 +6438,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টিভি শো",
-                        'name'             => "প্রচারে আসছে নতুন ধারাবাহিক ‘কিচেন পলিটিক্স’",
+                        'headline'             => "প্রচারে আসছে নতুন ধারাবাহিক ‘কিচেন পলিটিক্স’",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নতুন ধারাবাহিক ‘কিচেন পলিটিক্স’ প্রচারে আসছে; নাটকটিতে পারিবারিক সম্পর্ক ও ঘরোয়া দ্বন্দ্বের গল্প তুলে ধরা হবে।",
@@ -6449,7 +6449,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টিভি শো",
-                        'name'             => "নয় বছর পর প্রচারে আসছে শখ-নিলয়ের ‘কিডন্যাপ’",
+                        'headline'             => "নয় বছর পর প্রচারে আসছে শখ-নিলয়ের ‘কিডন্যাপ’",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "শখ ও নিলয়ের অভিনীত ‘কিডন্যাপ’ নাটক নয় বছর পর টিভি পর্দায় আসছে, যা পুরোনো জুটির ভক্তদের মধ্যে আগ্রহ তৈরি করেছে।",
@@ -6460,7 +6460,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "তারকা",
-                        'name'             => "মেরিল-প্রথম আলো পুরস্কারে কার হাতে কোন সম্মাননা",
+                        'headline'             => "মেরিল-প্রথম আলো পুরস্কারে কার হাতে কোন সম্মাননা",
                         'sub_heading'      => "টিভি, ওয়েব ও চলচ্চিত্রের সেরা কাজের স্বীকৃতি",
                         'content_shoulder' => "",
                         'brief'            => "মেরিল-প্রথম আলো পুরস্কারের ২৭তম আসরে টিভি, ওয়েব, নাটক ও চলচ্চিত্র অঙ্গনের বিভিন্ন শিল্পী ও নির্মাতাকে সম্মাননা দেওয়া হয়েছে।",
@@ -6471,7 +6471,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "তারকা",
-                        'name'             => "লালগালিচায় তারার মেলা",
+                        'headline'             => "লালগালিচায় তারার মেলা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "মেরিল-প্রথম আলো পুরস্কারের লালগালিচায় হাজির হন দেশের বিনোদনজগতের তারকারা, পোশাক ও উপস্থিতি ঘিরে তৈরি হয় আলাদা আলোচনাও।",
@@ -6482,7 +6482,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "তারকা",
-                        'name'             => "চলচ্চিত্র পরিচালনায় নতুন পরিচয়ে পলাশ",
+                        'headline'             => "চলচ্চিত্র পরিচালনায় নতুন পরিচয়ে পলাশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "অভিনেতা থেকে নির্মাতা",
                         'brief'            => "জিয়াউল হক পলাশ অভিনয়ের জনপ্রিয়তা পেরিয়ে এবার চলচ্চিত্র পরিচালনায় নামার প্রস্তুতি নিচ্ছেন, যা তাঁর ক্যারিয়ারে নতুন বাঁক।",
@@ -6493,7 +6493,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "তারকা",
-                        'name'             => "জয়ার নতুন ডিজিটাল যাত্রা",
+                        'headline'             => "জয়ার নতুন ডিজিটাল যাত্রা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "অভিনেত্রী জয়া আহসান ইউটিউব চ্যানেল চালু করে ভক্তদের সঙ্গে নিজের কাজ ও জীবনের ভেতরের গল্প ভাগ করার পরিকল্পনা করেছেন।",
@@ -6504,7 +6504,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "তারকা",
-                        'name'             => "মৌসুমীর প্রত্যাবর্তনে প্রবাসজীবনের গল্প",
+                        'headline'             => "মৌসুমীর প্রত্যাবর্তনে প্রবাসজীবনের গল্প",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "চিত্রনায়িকা মৌসুমী ‘কন্ট্র্যাক্ট ম্যারেজ’ সিনেমায় কেন্দ্রীয় চরিত্রে ফিরছেন, যেখানে প্রবাসী নারীর জীবনসংগ্রাম উঠে আসবে।",
@@ -6515,7 +6515,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ওটিটি",
-                        'name'             => "মে মাসে দেখতে পারেন নতুন ৭ সিনেমা–সিরিজ",
+                        'headline'             => "মে মাসে দেখতে পারেন নতুন ৭ সিনেমা–সিরিজ",
                         'sub_heading'      => "প্রেক্ষাগৃহ ও ওটিটির নতুন মুক্তির তালিকা",
                         'content_shoulder' => "",
                         'brief'            => "মে মাসে প্রেক্ষাগৃহ ও ওটিটিতে মুক্তি পাওয়া বা মুক্তির অপেক্ষায় থাকা সাতটি আলোচিত বিদেশি সিনেমা ও সিরিজের তালিকা প্রকাশ হয়েছে।",
@@ -6526,7 +6526,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ওটিটি",
-                        'name'             => "ওটিটিতে ফিরছে ‘সিটাডেল’–এর দ্বিতীয় মৌসুম",
+                        'headline'             => "ওটিটিতে ফিরছে ‘সিটাডেল’–এর দ্বিতীয় মৌসুম",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "রুশো ভ্রাতৃদ্বয়ের স্পাই থ্রিলার সিরিজ ‘সিটাডেল’ দ্বিতীয় মৌসুম নিয়ে ফিরছে, যেখানে পুরোনো এজেন্টদের নতুন হুমকির মুখোমুখি দেখা যাবে।",
@@ -6537,7 +6537,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ওটিটি",
-                        'name'             => "নেটফ্লিক্সে আসছে সাইফ আলী খানের ‘কর্তব্য’",
+                        'headline'             => "নেটফ্লিক্সে আসছে সাইফ আলী খানের ‘কর্তব্য’",
                         'sub_heading'      => "",
                         'content_shoulder' => "পুলিশ চরিত্রে সাইফ",
                         'brief'            => "নেটফ্লিক্সের নতুন ওয়েব সিনেমা ‘কর্তব্য’-তে সাইফ আলী খানকে আবার পুলিশের চরিত্রে দেখা যাবে, মুক্তি পাবে ১৫ মে।",
@@ -6548,7 +6548,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ওটিটি",
-                        'name'             => "ওটিটিতে আলোচিত নতুন সিরিজের তালিকা",
+                        'headline'             => "ওটিটিতে আলোচিত নতুন সিরিজের তালিকা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নিয়মিত ওটিটি আয়োজনে সপ্তাহের নতুন ওয়েব সিরিজ, সিনেমা, প্রামাণ্যচিত্র ও রিয়েলিটি শো নিয়ে দর্শকের জন্য বাছাই তালিকা প্রকাশ হয়েছে।",
@@ -6559,7 +6559,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ওটিটি",
-                        'name'             => "ওটিটি দর্শকের জন্য মে মাসের থ্রিলার ও অ্যাকশন কনটেন্ট",
+                        'headline'             => "ওটিটি দর্শকের জন্য মে মাসের থ্রিলার ও অ্যাকশন কনটেন্ট",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "মে মাসে স্ট্রিমিং প্ল্যাটফর্মে অ্যাকশন, স্পাই থ্রিলার ও সুপারহিরো ঘরানার একাধিক কনটেন্ট দর্শকের নজরে থাকবে।",
@@ -6570,7 +6570,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্বাস্থ্য",
-                        'name'             => "ডেঙ্গু প্রতিরোধে পরিচ্ছন্নতায় জোর দিলেন স্বাস্থ্যমন্ত্রী",
+                        'headline'             => "ডেঙ্গু প্রতিরোধে পরিচ্ছন্নতায় জোর দিলেন স্বাস্থ্যমন্ত্রী",
                         'sub_heading'      => "চিকিৎসার চেয়ে প্রতিরোধকে গুরুত্ব দেওয়ার আহ্বান",
                         'content_shoulder' => "",
                         'brief'            => "ডেঙ্গুর সম্ভাব্য ঝুঁকি সামনে রেখে পরিষ্কার-পরিচ্ছন্নতা ও আগাম প্রতিরোধমূলক ব্যবস্থায় জোর দেওয়ার কথা বলেছেন স্বাস্থ্যমন্ত্রী।",
@@ -6581,7 +6581,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্বাস্থ্য",
-                        'name'             => "স্বাস্থ্যকেন্দ্রে ১০ জন করে আনসার মোতায়েনের উদ্যোগ",
+                        'headline'             => "স্বাস্থ্যকেন্দ্রে ১০ জন করে আনসার মোতায়েনের উদ্যোগ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "উপজেলা স্বাস্থ্য কমপ্লেক্সসহ বিভিন্ন স্বাস্থ্যকেন্দ্রে নিরাপত্তা জোরদারে ১০ জন করে আনসার সদস্য মোতায়েনের উদ্যোগ নেওয়া হয়েছে।",
@@ -6592,7 +6592,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্বাস্থ্য",
-                        'name'             => "ভেজাল ওষুধ ও অপচিকিৎসা ঠেকাতে বাড়বে মোবাইল টিম",
+                        'headline'             => "ভেজাল ওষুধ ও অপচিকিৎসা ঠেকাতে বাড়বে মোবাইল টিম",
                         'sub_heading'      => "",
                         'content_shoulder' => "কঠোর নজরদারি",
                         'brief'            => "ভেজাল ওষুধ বিক্রি, অবৈধ ক্লিনিক ও অপচিকিৎসা ঠেকাতে সারাদেশে মোবাইল টিমের কার্যক্রম জোরদার করার কথা জানানো হয়েছে।",
@@ -6603,7 +6603,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্বাস্থ্য",
-                        'name'             => "হামের টিকা পেয়েছে ৮১ শতাংশ শিশু",
+                        'headline'             => "হামের টিকা পেয়েছে ৮১ শতাংশ শিশু",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "হাম প্রতিরোধে চলমান টিকাদান কর্মসূচিতে ৮১ শতাংশের বেশি শিশুকে টিকার আওতায় আনা হয়েছে বলে জানিয়েছেন স্বাস্থ্যমন্ত্রী।",
@@ -6614,7 +6614,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্বাস্থ্য",
-                        'name'             => "হাম ও উপসর্গে আরও ১০ জনের মৃত্যু",
+                        'headline'             => "হাম ও উপসর্গে আরও ১০ জনের মৃত্যু",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "গত ২৪ ঘণ্টায় হামে আক্রান্ত ও হামের উপসর্গ নিয়ে সারাদেশে আরও ১০ জনের মৃত্যু হয়েছে বলে জানিয়েছে স্বাস্থ্য অধিদপ্তর।",
@@ -6625,7 +6625,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "চিকিৎসা সংবাদ",
-                        'name'             => "রাজধানীর টিবি হাসপাতালে ৩ মিলিয়ন ডলারের সরঞ্জাম দিল যুক্তরাষ্ট্র",
+                        'headline'             => "রাজধানীর টিবি হাসপাতালে ৩ মিলিয়ন ডলারের সরঞ্জাম দিল যুক্তরাষ্ট্র",
                         'sub_heading'      => "যক্ষ্মা শনাক্ত ও শিশুচিকিৎসায় নতুন সহায়তা",
                         'content_shoulder' => "",
                         'brief'            => "শ্যামলীর ২৫০ শয্যাবিশিষ্ট টিবি হাসপাতালে যুক্তরাষ্ট্র সরকার যক্ষ্মা প্রতিরোধী ওষুধ ও অত্যাধুনিক চিকিৎসা সরঞ্জাম দিয়েছে।",
@@ -6636,7 +6636,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "চিকিৎসা সংবাদ",
-                        'name'             => "মোবাইল ইউনিটে গ্রামেই হবে হৃদরোগের জটিল চিকিৎসা",
+                        'headline'             => "মোবাইল ইউনিটে গ্রামেই হবে হৃদরোগের জটিল চিকিৎসা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "মোবাইল মেডিকেল ও সার্জিক্যাল ইউনিটের মাধ্যমে হৃদরোগের মতো জটিল চিকিৎসা ঢাকার বাইরে পৌঁছে দেওয়ার পরিকল্পনা নেওয়া হয়েছে।",
@@ -6647,7 +6647,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "চিকিৎসা সংবাদ",
-                        'name'             => "ক্যানসার মানেই মৃত্যু নয়: মেয়র শাহাদাত",
+                        'headline'             => "ক্যানসার মানেই মৃত্যু নয়: মেয়র শাহাদাত",
                         'sub_heading'      => "",
                         'content_shoulder' => "চিকিৎসায় আশা",
                         'brief'            => "চট্টগ্রামের মেয়র ও চিকিৎসক শাহাদাত হোসেন বলেছেন, আধুনিক চিকিৎসায় অনেক ক্যানসার রোগী সুস্থ জীবনে ফিরছেন।",
@@ -6658,7 +6658,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "চিকিৎসা সংবাদ",
-                        'name'             => "চিকিৎসক আছে, রোগী আছে, নেই রোগ নির্ণয়ের যন্ত্র",
+                        'headline'             => "চিকিৎসক আছে, রোগী আছে, নেই রোগ নির্ণয়ের যন্ত্র",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "খুলনার বটিয়াঘাটা উপজেলা স্বাস্থ্য কমপ্লেক্সে প্রয়োজনীয় রোগ নির্ণয়ের যন্ত্রপাতির অভাবে রোগীরা ভোগান্তিতে পড়ছেন।",
@@ -6669,7 +6669,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "চিকিৎসা সংবাদ",
-                        'name'             => "জেলা হাসপাতালকে রেফারেল সেন্টার করতে চায় সরকার",
+                        'headline'             => "জেলা হাসপাতালকে রেফারেল সেন্টার করতে চায় সরকার",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জেলা হাসপাতালগুলোতে হৃদরোগ, ক্যানসার, ডায়ালাইসিস, ট্রমা কেয়ার ও আইসিইউ সেবা যুক্ত করে রেফারেল সেন্টার গড়ার পরিকল্পনা নেওয়া হয়েছে।",
@@ -6680,7 +6680,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জনস্বাস্থ্য",
-                        'name'             => "হামের টিকাদানে ৮১ শতাংশ অগ্রগতি",
+                        'headline'             => "হামের টিকাদানে ৮১ শতাংশ অগ্রগতি",
                         'sub_heading'      => "শতভাগ শিশুকে টিকার আওতায় আনার লক্ষ্য",
                         'content_shoulder' => "",
                         'brief'            => "হাম প্রতিরোধে চলমান টিকাদান কর্মসূচিতে ৮১ শতাংশ অগ্রগতি হয়েছে এবং দ্রুত শতভাগ কভারেজ নিশ্চিতের লক্ষ্য নেওয়া হয়েছে।",
@@ -6691,7 +6691,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জনস্বাস্থ্য",
-                        'name'             => "ডিএনসিসির ৫৯৯ কেন্দ্রে হাম-রুবেলার টিকা",
+                        'headline'             => "ডিএনসিসির ৫৯৯ কেন্দ্রে হাম-রুবেলার টিকা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকা উত্তর সিটি করপোরেশনের ১০টি অঞ্চলে স্থায়ী ও অস্থায়ী মিলিয়ে ৫৯৯ কেন্দ্রে জরুরি হাম-রুবেলা টিকাদান চলছে।",
@@ -6702,7 +6702,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জনস্বাস্থ্য",
-                        'name'             => "কলেরা নিয়ন্ত্রণে পরীক্ষামূলক গবেষণা শুরু করবে আইসিডিডিআরবি",
+                        'headline'             => "কলেরা নিয়ন্ত্রণে পরীক্ষামূলক গবেষণা শুরু করবে আইসিডিডিআরবি",
                         'sub_heading'      => "",
                         'content_shoulder' => "ঝুঁকিপূর্ণ এলাকা",
                         'brief'            => "নারায়ণগঞ্জ ও সীতাকুণ্ডের ঝুঁকিপূর্ণ এলাকায় কলেরা প্রতিরোধ কৌশল নির্ধারণে পরীক্ষামূলক গবেষণা শুরু করতে যাচ্ছে আইসিডিডিআরবি।",
@@ -6713,7 +6713,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জনস্বাস্থ্য",
-                        'name'             => "ই–সিগারেটের নিষেধাজ্ঞামুক্তি নিয়ে জনস্বাস্থ্যবিদদের উদ্বেগ",
+                        'headline'             => "ই–সিগারেটের নিষেধাজ্ঞামুক্তি নিয়ে জনস্বাস্থ্যবিদদের উদ্বেগ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ই–সিগারেটের আমদানি ও বাজারজাতকরণে নিষেধাজ্ঞা তুলে নেওয়ায় তরুণদের স্বাস্থ্যঝুঁকি বাড়তে পারে বলে জনস্বাস্থ্যবিদেরা সতর্ক করেছেন।",
@@ -6724,7 +6724,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জনস্বাস্থ্য",
-                        'name'             => "জলবায়ু পরিবর্তনে সংক্রামক রোগের ঝুঁকি বাড়ছে",
+                        'headline'             => "জলবায়ু পরিবর্তনে সংক্রামক রোগের ঝুঁকি বাড়ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জলবায়ু পরিবর্তন ও নগরায়ণের কারণে সংক্রামক রোগের ঝুঁকি বাড়ছে, তাই নজরদারি ও দ্রুত প্রতিক্রিয়ার ওপর জোর দেওয়া হয়েছে।",
@@ -6735,7 +6735,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রোগ",
-                        'name'             => "হাম ও উপসর্গে মৃতের সংখ্যা বাড়ছে",
+                        'headline'             => "হাম ও উপসর্গে মৃতের সংখ্যা বাড়ছে",
                         'sub_heading'      => "শিশুদের টিকাদান ও দ্রুত চিকিৎসার আহ্বান",
                         'content_shoulder' => "",
                         'brief'            => "হাম ও হামজনিত উপসর্গে মৃত্যু বাড়ায় শিশুদের দ্রুত টিকা, উপসর্গ শনাক্ত এবং হাসপাতালে চিকিৎসা নেওয়ার ওপর জোর দেওয়া হচ্ছে।",
@@ -6746,7 +6746,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রোগ",
-                        'name'             => "হাম ও রুবেলার পার্থক্য জানালেন বিশেষজ্ঞ",
+                        'headline'             => "হাম ও রুবেলার পার্থক্য জানালেন বিশেষজ্ঞ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "হাম ও রুবেলাকে অনেকেই এক মনে করলেও জ্বর, র‍্যাশের সময়কাল ও জটিলতার ক্ষেত্রে দুই রোগের মধ্যে গুরুত্বপূর্ণ পার্থক্য আছে।",
@@ -6757,7 +6757,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রোগ",
-                        'name'             => "হিট স্ট্রোকের আগে শরীর যে সংকেত দেয়",
+                        'headline'             => "হিট স্ট্রোকের আগে শরীর যে সংকেত দেয়",
                         'sub_heading'      => "",
                         'content_shoulder' => "গরমে সতর্কতা",
                         'brief'            => "প্রচণ্ড গরমে হিট স্ট্রোকের আগে মুখ-গলা শুকানো, তীব্র তৃষ্ণা, প্রস্রাব কমে যাওয়া ও অস্বাভাবিক দুর্বলতার মতো সংকেত দেখা দিতে পারে।",
@@ -6768,7 +6768,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রোগ",
-                        'name'             => "পা ফোলা কি গুরুতর রোগের লক্ষণ",
+                        'headline'             => "পা ফোলা কি গুরুতর রোগের লক্ষণ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "হঠাৎ ব্যথার সঙ্গে এক পা ফুলে শক্ত হয়ে গেলে ডিপ ভেইন থ্রম্বোসিসসহ গুরুতর রোগের লক্ষণ হতে পারে বলে সতর্ক করেছেন চিকিৎসকেরা।",
@@ -6779,7 +6779,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "রোগ",
-                        'name'             => "টেস্টোস্টেরন কমে গেলে যেসব সমস্যা হতে পারে",
+                        'headline'             => "টেস্টোস্টেরন কমে গেলে যেসব সমস্যা হতে পারে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পুরুষ হরমোন টেস্টোস্টেরনের মাত্রা কমে গেলে ক্লান্তি, পেশিশক্তি কমা, হাড় দুর্বল হওয়া ও ঘুমের সমস্যার মতো উপসর্গ দেখা দিতে পারে।",
@@ -6790,7 +6790,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পুষ্টি",
-                        'name'             => "জাতীয় পুষ্টি সপ্তাহ শুরু",
+                        'headline'             => "জাতীয় পুষ্টি সপ্তাহ শুরু",
                         'sub_heading'      => "পুষ্টি বৈষম্য দূর করে স্বনির্ভর বাংলাদেশ গড়ার বার্তা",
                         'content_shoulder' => "",
                         'brief'            => "রাজধানীসহ সারাদেশে নানা কর্মসূচির মধ্য দিয়ে জাতীয় পুষ্টি সপ্তাহ শুরু হয়েছে, এবারের প্রতিপাদ্য পুষ্টি বৈষম্য দূর করা।",
@@ -6801,7 +6801,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পুষ্টি",
-                        'name'             => "প্যাকেটজাত খাদ্যে সহজবোধ্য পুষ্টি লেবেলিংয়ের দাবি",
+                        'headline'             => "প্যাকেটজাত খাদ্যে সহজবোধ্য পুষ্টি লেবেলিংয়ের দাবি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "স্বাস্থ্যকর খাদ্যাভ্যাস গড়তে প্যাকেটজাত খাদ্যে সহজবোধ্য পুষ্টি লেবেলিং চালু জরুরি বলে মত দিয়েছেন বিশেষজ্ঞরা।",
@@ -6812,7 +6812,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পুষ্টি",
-                        'name'             => "মাতৃদুগ্ধ পান বাড়াতে ইউনিয়ন পর্যায়ে কাউন্সেলিংয়ের নির্দেশনা",
+                        'headline'             => "মাতৃদুগ্ধ পান বাড়াতে ইউনিয়ন পর্যায়ে কাউন্সেলিংয়ের নির্দেশনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "শিশু পুষ্টি",
                         'brief'            => "মাতৃস্বাস্থ্য ও শিশুর পুষ্টি নিশ্চিত করতে ব্রেস্টফিডিং বিষয়ে ইউনিয়ন পর্যায়ে কাউন্সেলিং জোরদারের ওপর গুরুত্ব দেওয়া হয়েছে।",
@@ -6823,7 +6823,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পুষ্টি",
-                        'name'             => "পান্তাভাতে পুষ্টিগুণ বাড়ে, জানালেন পুষ্টিবিদ",
+                        'headline'             => "পান্তাভাতে পুষ্টিগুণ বাড়ে, জানালেন পুষ্টিবিদ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পান্তাভাতে ফারমেন্টেশনের কারণে আয়রন, ক্যালসিয়াম, ম্যাগনেশিয়াম, পটাশিয়াম ও ভালো ব্যাকটেরিয়ার উপস্থিতি বাড়তে পারে।",
@@ -6834,7 +6834,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পুষ্টি",
-                        'name'             => "সকালের নাশতায় ফাইবার ও উদ্ভিজ্জ প্রোটিনের পরামর্শ",
+                        'headline'             => "সকালের নাশতায় ফাইবার ও উদ্ভিজ্জ প্রোটিনের পরামর্শ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দিনের শুরুতে ফাইবার ও উদ্ভিজ্জ প্রোটিনসমৃদ্ধ নাশতা শরীরের শক্তি, বিপাকক্রিয়া ও দীর্ঘমেয়াদি সুস্থতায় সহায়ক হতে পারে।",
@@ -6845,7 +6845,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মানসিক স্বাস্থ্য",
-                        'name'             => "বাংলাদেশে মানসিক স্বাস্থ্য সংকট গভীর হচ্ছে",
+                        'headline'             => "বাংলাদেশে মানসিক স্বাস্থ্য সংকট গভীর হচ্ছে",
                         'sub_heading'      => "চিকিৎসার বাইরে রয়ে যাচ্ছে বড় অংশ",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশে প্রাপ্তবয়স্ক ও শিশুদের মধ্যে মানসিক স্বাস্থ্য সমস্যা থাকলেও বড় অংশ চিকিৎসা বা কাউন্সেলিংয়ের বাইরে রয়ে যাচ্ছে।",
@@ -6856,7 +6856,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মানসিক স্বাস্থ্য",
-                        'name'             => "স্নায়ু শিথিল রাখতে পাঁচ সহজ অভ্যাস",
+                        'headline'             => "স্নায়ু শিথিল রাখতে পাঁচ সহজ অভ্যাস",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "আধুনিক জীবনের চাপ কমাতে গভীর শ্বাস, সঠিক পুষ্টি, ডিজিটাল ডিটক্স, প্রকৃতির সান্নিধ্য ও ক্যাফেইন নিয়ন্ত্রণের পরামর্শ দেওয়া হয়েছে।",
@@ -6867,7 +6867,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মানসিক স্বাস্থ্য",
-                        'name'             => "ঘুম থেকে উঠেই ফোন দেখা মনোযোগ কমাতে পারে",
+                        'headline'             => "ঘুম থেকে উঠেই ফোন দেখা মনোযোগ কমাতে পারে",
                         'sub_heading'      => "",
                         'content_shoulder' => "সকালের অভ্যাস",
                         'brief'            => "সকালের শুরুতেই ফোন, নোটিফিকেশন ও চাপপূর্ণ কাজ মস্তিষ্কের শান্ত অবস্থা ভেঙে উদ্বেগ ও ক্লান্তি বাড়াতে পারে।",
@@ -6878,7 +6878,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মানসিক স্বাস্থ্য",
-                        'name'             => "বুননের কাজ মানসিক অস্থিরতা কমাতে সহায়ক হতে পারে",
+                        'headline'             => "বুননের কাজ মানসিক অস্থিরতা কমাতে সহায়ক হতে পারে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নিটিং বা ক্রোশেইং শুধু শখ নয়, মানসিক অস্থিরতা কমানো ও মনোযোগ ধরে রাখার সম্ভাব্য সহায়ক পদ্ধতি হিসেবেও আলোচিত হচ্ছে।",
@@ -6889,7 +6889,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মানসিক স্বাস্থ্য",
-                        'name'             => "মস্তিষ্ক সুস্থ রাখতে ঘুম, সামাজিক জীবন ও স্ট্রেস নিয়ন্ত্রণ জরুরি",
+                        'headline'             => "মস্তিষ্ক সুস্থ রাখতে ঘুম, সামাজিক জীবন ও স্ট্রেস নিয়ন্ত্রণ জরুরি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বয়স বাড়ার সঙ্গে মস্তিষ্ক সুস্থ রাখতে ঘুম, ব্যায়াম, নতুন কিছু শেখা, সামাজিক সম্পর্ক ও মানসিক চাপ নিয়ন্ত্রণের পরামর্শ দেওয়া হয়েছে।",
@@ -6900,7 +6900,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষা",
-                        'name'             => "জাতীয় বিশ্ববিদ্যালয়ের ভর্তি পরীক্ষার ফল প্রকাশ",
+                        'headline'             => "জাতীয় বিশ্ববিদ্যালয়ের ভর্তি পরীক্ষার ফল প্রকাশ",
                         'sub_heading'      => "দুইভাবে ফল জানতে পারছেন ভর্তিচ্ছুরা",
                         'content_shoulder' => "",
                         'brief'            => "জাতীয় বিশ্ববিদ্যালয়ের ২০২৫-২৬ শিক্ষাবর্ষের স্নাতক ভর্তি পরীক্ষার ফল প্রকাশ হয়েছে, শিক্ষার্থীরা ওয়েবসাইট ও এসএমএসে ফল জানতে পারছেন।",
@@ -6911,7 +6911,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষা",
-                        'name'             => "জাতীয় বিশ্ববিদ্যালয়ে স্নাতক প্রথম বর্ষের ক্লাস শুরু ২ জুন",
+                        'headline'             => "জাতীয় বিশ্ববিদ্যালয়ে স্নাতক প্রথম বর্ষের ক্লাস শুরু ২ জুন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জাতীয় বিশ্ববিদ্যালয়ের ২০২৫-২৬ শিক্ষাবর্ষে স্নাতক সম্মান প্রথম বর্ষের ক্লাস আগামী ২ জুন থেকে শুরু হবে বলে জানানো হয়েছে।",
@@ -6922,7 +6922,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষা",
-                        'name'             => "২০২৫-২৬ শিক্ষাবর্ষের মেডিকেল শিক্ষার্থীদের ক্লাস শুরু",
+                        'headline'             => "২০২৫-২৬ শিক্ষাবর্ষের মেডিকেল শিক্ষার্থীদের ক্লাস শুরু",
                         'sub_heading'      => "",
                         'content_shoulder' => "নবীন ডাক্তারদের যাত্রা",
                         'brief'            => "সারাদেশের ১১২টি মেডিকেল কলেজে ২০২৫-২৬ শিক্ষাবর্ষের প্রথম বর্ষ এমবিবিএস শিক্ষার্থীদের ক্লাস একযোগে শুরু হয়েছে।",
@@ -6933,7 +6933,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষা",
-                        'name'             => "শাবিপ্রবির ১৮৬ শিক্ষার্থী পেল গবেষণা অনুদান",
+                        'headline'             => "শাবিপ্রবির ১৮৬ শিক্ষার্থী পেল গবেষণা অনুদান",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "শিক্ষকদের পাশাপাশি শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়ের ১৮৬ শিক্ষার্থীকে গবেষণা অনুদান দিয়েছে বিশ্ববিদ্যালয় প্রশাসন।",
@@ -6944,7 +6944,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষা",
-                        'name'             => "ব্রিটিশ কাউন্সিলের পার্টনার স্কুলস নেটওয়ার্কে দক্ষতা উন্নয়ন",
+                        'headline'             => "ব্রিটিশ কাউন্সিলের পার্টনার স্কুলস নেটওয়ার্কে দক্ষতা উন্নয়ন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশে ইংরেজি মাধ্যম শিক্ষায় ব্রিটিশ কাউন্সিলের পার্টনার স্কুলস নেটওয়ার্ক শিক্ষার্থীদের বৈশ্বিক দক্ষতা বাড়াচ্ছে।",
@@ -6955,7 +6955,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্কুল",
-                        'name'             => "এসএসসি পরীক্ষার্থী ১৮ লাখ ৫৭ হাজারের বেশি",
+                        'headline'             => "এসএসসি পরীক্ষার্থী ১৮ লাখ ৫৭ হাজারের বেশি",
                         'sub_heading'      => "সারাদেশে ১১ শিক্ষা বোর্ডের অধীনে পরীক্ষা",
                         'content_shoulder' => "",
                         'brief'            => "২০২৬ সালের এসএসসি ও সমমান পরীক্ষায় ১১টি শিক্ষা বোর্ডের অধীনে ১৮ লাখ ৫৭ হাজারের বেশি শিক্ষার্থী অংশ নিচ্ছে।",
@@ -6966,7 +6966,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্কুল",
-                        'name'             => "নিবন্ধনের পরও এসএসসি দিচ্ছে না সাড়ে ৪ লাখ শিক্ষার্থী",
+                        'headline'             => "নিবন্ধনের পরও এসএসসি দিচ্ছে না সাড়ে ৪ লাখ শিক্ষার্থী",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নিবন্ধন করেও সাধারণ, মাদরাসা ও কারিগরি বোর্ডের বহু শিক্ষার্থী এ বছর এসএসসি ও সমমান পরীক্ষায় অংশ নিচ্ছে না।",
@@ -6977,7 +6977,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্কুল",
-                        'name'             => "স্কুল ফিডিংয়ের খাবারে অসুস্থতার ঘটনায় কঠোর নির্দেশ",
+                        'headline'             => "স্কুল ফিডিংয়ের খাবারে অসুস্থতার ঘটনায় কঠোর নির্দেশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "নিরাপদ খাবার",
                         'brief'            => "স্কুল ফিডিংয়ের খাবার খেয়ে শিক্ষার্থী অসুস্থ হওয়ার ঘটনায় দায়ীদের বিরুদ্ধে কঠোর ব্যবস্থা নিতে নির্দেশ দেওয়া হয়েছে।",
@@ -6988,7 +6988,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্কুল",
-                        'name'             => "দারুননাজাত একাডেমিতে ইংরেজি বিতর্ক প্রতিযোগিতা",
+                        'headline'             => "দারুননাজাত একাডেমিতে ইংরেজি বিতর্ক প্রতিযোগিতা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "শিক্ষার্থীদের ভাষা দক্ষতা, যুক্তি উপস্থাপন ও নেতৃত্বগুণ বিকাশে দারুননাজাত একাডেমিতে ইংরেজি বিতর্ক প্রতিযোগিতা হয়েছে।",
@@ -6999,7 +6999,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "স্কুল",
-                        'name'             => "প্রাথমিক বিদ্যালয়ে বিনা মূল্যে ইউনিফর্ম দেওয়ার উদ্যোগ",
+                        'headline'             => "প্রাথমিক বিদ্যালয়ে বিনা মূল্যে ইউনিফর্ম দেওয়ার উদ্যোগ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দেশের সব প্রাথমিক বিদ্যালয়ের শিক্ষার্থীদের পর্যায়ক্রমে বিনা মূল্যে ইউনিফর্ম দেওয়ার পরিকল্পনার কথা জানানো হয়েছে।",
@@ -7010,7 +7010,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ববিদ্যালয়",
-                        'name'             => "রুয়েটে প্রথম বর্ষের ক্লাস শুরু ১০ মে",
+                        'headline'             => "রুয়েটে প্রথম বর্ষের ক্লাস শুরু ১০ মে",
                         'sub_heading'      => "নবীন শিক্ষার্থীদের ওরিয়েন্টেশন ৯ মে",
                         'content_shoulder' => "",
                         'brief'            => "রাজশাহী প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয়ে ২০২৫-২৬ শিক্ষাবর্ষের স্নাতক প্রথম বর্ষের ক্লাস ১০ মে শুরু হবে।",
@@ -7021,7 +7021,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ববিদ্যালয়",
-                        'name'             => "ঢাকা সেন্ট্রাল ইউনিভার্সিটির ভর্তি আবেদন মে মাসে",
+                        'headline'             => "ঢাকা সেন্ট্রাল ইউনিভার্সিটির ভর্তি আবেদন মে মাসে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকা সেন্ট্রাল ইউনিভার্সিটির ২০২৫-২৬ শিক্ষাবর্ষের ভর্তি আবেদন মে মাসের প্রথম সপ্তাহে শুরু হতে পারে।",
@@ -7032,7 +7032,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ববিদ্যালয়",
-                        'name'             => "উচ্চশিক্ষার হিট প্রকল্প দ্রুত বাস্তবায়নের নির্দেশ",
+                        'headline'             => "উচ্চশিক্ষার হিট প্রকল্প দ্রুত বাস্তবায়নের নির্দেশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "মানোন্নয়ন প্রকল্প",
                         'brief'            => "উচ্চশিক্ষার মানোন্নয়নে চলমান হায়ার এডুকেশন এক্সিলারেশন অ্যান্ড ট্রান্সফরমেশন প্রকল্প দ্রুত বাস্তবায়নের নির্দেশ দেওয়া হয়েছে।",
@@ -7043,7 +7043,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ববিদ্যালয়",
-                        'name'             => "গ্রামীণ বিশ্ববিদ্যালয়ের পরামর্শক হলেন নিয়াজ আহমদ",
+                        'headline'             => "গ্রামীণ বিশ্ববিদ্যালয়ের পরামর্শক হলেন নিয়াজ আহমদ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকা বিশ্ববিদ্যালয়ের সাবেক উপাচার্য অধ্যাপক নিয়াজ আহমদ গ্রামীণ বিশ্ববিদ্যালয়ের পরামর্শক হিসেবে দায়িত্ব পেয়েছেন।",
@@ -7054,7 +7054,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিশ্ববিদ্যালয়",
-                        'name'             => "জাতীয় বিশ্ববিদ্যালয়ে ৮৮০ কলেজে ভর্তি কার্যক্রম শুরু হচ্ছে",
+                        'headline'             => "জাতীয় বিশ্ববিদ্যালয়ে ৮৮০ কলেজে ভর্তি কার্যক্রম শুরু হচ্ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জাতীয় বিশ্ববিদ্যালয়ের অধীন ৮৮০ কলেজে স্নাতক সম্মান প্রথম বর্ষে ভর্তির জন্য মেধাতালিকা প্রকাশের পর কার্যক্রম শুরু হচ্ছে।",
@@ -7065,7 +7065,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরীক্ষা",
-                        'name'             => "এইচএসসি পরীক্ষা শুরু হবে ২ জুলাই",
+                        'headline'             => "এইচএসসি পরীক্ষা শুরু হবে ২ জুলাই",
                         'sub_heading'      => "প্রায় পাঁচ সপ্তাহ ধরে চলবে পরীক্ষা",
                         'content_shoulder' => "",
                         'brief'            => "২০২৬ সালের এইচএসসি ও সমমান পরীক্ষা ২ জুলাই থেকে শুরু হবে এবং প্রায় পাঁচ সপ্তাহ ধরে পরীক্ষা চলবে বলে সিদ্ধান্ত হয়েছে।",
@@ -7076,7 +7076,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরীক্ষা",
-                        'name'             => "এসএসসি পরীক্ষা শুরু, মানতে হবে ১৪ নির্দেশনা",
+                        'headline'             => "এসএসসি পরীক্ষা শুরু, মানতে হবে ১৪ নির্দেশনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "২০২৬ সালের এসএসসি ও সমমান পরীক্ষা ২১ এপ্রিল শুরু হয়েছে, পরীক্ষার্থীদের জন্য ১৪টি বিশেষ নির্দেশনা দেওয়া হয়েছে।",
@@ -7087,7 +7087,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরীক্ষা",
-                        'name'             => "এসএসসির দ্বিতীয় দিনে অনুপস্থিত ২৬ হাজারের বেশি",
+                        'headline'             => "এসএসসির দ্বিতীয় দিনে অনুপস্থিত ২৬ হাজারের বেশি",
                         'sub_heading'      => "",
                         'content_shoulder' => "পরীক্ষা নজরদারি",
                         'brief'            => "এসএসসি ও সমমান পরীক্ষার দ্বিতীয় দিনে ১১টি শিক্ষা বোর্ডে ২৬ হাজার ৮৬৫ জন অনুপস্থিত এবং ১৯ জন বহিষ্কার হয়েছে।",
@@ -7098,7 +7098,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরীক্ষা",
-                        'name'             => "এসএসসির ফল ৬০ দিনের আগেই প্রকাশের লক্ষ্য",
+                        'headline'             => "এসএসসির ফল ৬০ দিনের আগেই প্রকাশের লক্ষ্য",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "২০২৬ সালের এসএসসি ও সমমান পরীক্ষার ফল ৬০ দিনের আগেই প্রকাশের লক্ষ্যে শিক্ষা বোর্ডগুলো প্রস্তুতি নিচ্ছে।",
@@ -7109,7 +7109,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরীক্ষা",
-                        'name'             => "পাবলিক পরীক্ষায় ‘নীরব বহিষ্কার’ প্রথা বাদ দেওয়ার উদ্যোগ",
+                        'headline'             => "পাবলিক পরীক্ষায় ‘নীরব বহিষ্কার’ প্রথা বাদ দেওয়ার উদ্যোগ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পাবলিক পরীক্ষায় ‘নীরব বহিষ্কার’ নামে পরিচিত পুরোনো নীতিমালা পরিবর্তনের নির্দেশ দিয়েছেন শিক্ষামন্ত্রী।",
@@ -7120,7 +7120,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৃত্তি",
-                        'name'             => "এইচএসসি শিক্ষার্থীদের ভর্তি সহায়তার আবেদনের সময় বাড়ল",
+                        'headline'             => "এইচএসসি শিক্ষার্থীদের ভর্তি সহায়তার আবেদনের সময় বাড়ল",
                         'sub_heading'      => "অসচ্ছল মেধাবীরা পাবে ৬ হাজার টাকা",
                         'content_shoulder' => "",
                         'brief'            => "উচ্চমাধ্যমিক ও সমমান পর্যায়ে ভর্তি হওয়া অসচ্ছল মেধাবী শিক্ষার্থীদের ভর্তি সহায়তার অনলাইন আবেদনের সময় বাড়ানো হয়েছে।",
@@ -7131,7 +7131,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৃত্তি",
-                        'name'             => "ব্র্যাকের মেধাবিকাশ বৃত্তির সময় বৃদ্ধি",
+                        'headline'             => "ব্র্যাকের মেধাবিকাশ বৃত্তির সময় বৃদ্ধি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ব্র্যাকের মেধাবিকাশ বৃত্তিতে আবেদনের সময় বাড়ানো হয়েছে, নির্বাচিত শিক্ষার্থীরা এককালীন ও মাসিক সহায়তা পাবেন।",
@@ -7142,7 +7142,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৃত্তি",
-                        'name'             => "কারিগরি ও মাদ্রাসা শিক্ষার্থীদের বিশেষ মঞ্জুরি",
+                        'headline'             => "কারিগরি ও মাদ্রাসা শিক্ষার্থীদের বিশেষ মঞ্জুরি",
                         'sub_heading'      => "",
                         'content_shoulder' => "অনলাইন আবেদন",
                         'brief'            => "কারিগরি ও মাদ্রাসা শিক্ষা বিভাগের অধীন শিক্ষাপ্রতিষ্ঠান, শিক্ষক-কর্মচারী ও শিক্ষার্থীদের বিশেষ মঞ্জুরির আবেদন শেষ হচ্ছে।",
@@ -7153,7 +7153,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৃত্তি",
-                        'name'             => "বাংলাদেশিদের জন্য যুক্তরাজ্যে স্কলারশিপ বাড়ানোর আহ্বান",
+                        'headline'             => "বাংলাদেশিদের জন্য যুক্তরাজ্যে স্কলারশিপ বাড়ানোর আহ্বান",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "যুক্তরাজ্যে বাংলাদেশি শিক্ষার্থীদের জন্য স্কলারশিপ বাড়াতে ব্রিটিশ কূটনীতিকদের প্রতি আহ্বান জানিয়েছেন শিক্ষামন্ত্রী।",
@@ -7164,7 +7164,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৃত্তি",
-                        'name'             => "স্কুল-কলেজ-মাদ্রাসা ও বিশ্ববিদ্যালয়ে শিক্ষাবৃত্তি বাড়ছে",
+                        'headline'             => "স্কুল-কলেজ-মাদ্রাসা ও বিশ্ববিদ্যালয়ে শিক্ষাবৃত্তি বাড়ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "শিক্ষার্থীদের মাসিক বৃত্তি ও এককালীন অনুদানের পরিমাণ বাড়ানোর খসড়া প্রস্তাবনায় বিভিন্ন স্তরের সহায়তা বৃদ্ধির কথা বলা হয়েছে।",
@@ -7175,7 +7175,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষানীতি",
-                        'name'             => "ঢাকার কিছু প্রতিষ্ঠানে অনলাইন-অফলাইন ক্লাসের পরীক্ষামূলক পরিকল্পনা",
+                        'headline'             => "ঢাকার কিছু প্রতিষ্ঠানে অনলাইন-অফলাইন ক্লাসের পরীক্ষামূলক পরিকল্পনা",
                         'sub_heading'      => "সপ্তাহে তিন দিন অনলাইন, তিন দিন সশরীর ক্লাস",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকার সক্ষম কিছু শিক্ষাপ্রতিষ্ঠানে পরীক্ষামূলকভাবে অনলাইন ও সশরীর ক্লাসের সমন্বিত পদ্ধতি চালুর পরিকল্পনা হয়েছে।",
@@ -7186,7 +7186,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষানীতি",
-                        'name'             => "প্রাথমিক শিক্ষা ধাপে ধাপে অষ্টম শ্রেণি পর্যন্ত করার পরিকল্পনা",
+                        'headline'             => "প্রাথমিক শিক্ষা ধাপে ধাপে অষ্টম শ্রেণি পর্যন্ত করার পরিকল্পনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "প্রাথমিক শিক্ষা ধাপে ধাপে অষ্টম শ্রেণি পর্যন্ত বিস্তৃত করার পরিকল্পনার কথা জানিয়েছেন প্রাথমিক ও গণশিক্ষা প্রতিমন্ত্রী।",
@@ -7197,7 +7197,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষানীতি",
-                        'name'             => "ভর্তি পরীক্ষার দীর্ঘসূত্রতায় সময় অপচয় কমাতে সমন্বিত ব্যবস্থার তাগিদ",
+                        'headline'             => "ভর্তি পরীক্ষার দীর্ঘসূত্রতায় সময় অপচয় কমাতে সমন্বিত ব্যবস্থার তাগিদ",
                         'sub_heading'      => "",
                         'content_shoulder' => "ভর্তি সংস্কার",
                         'brief'            => "এইচএসসি ও বিশ্ববিদ্যালয় ভর্তি পরীক্ষার দীর্ঘসূত্রতা কমাতে সমন্বিত ভর্তি ব্যবস্থা চালুর প্রয়োজনীয়তার কথা বলেছেন শিক্ষামন্ত্রী।",
@@ -7208,7 +7208,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষানীতি",
-                        'name'             => "প্রশ্নফাঁস ও কোচিং বাণিজ্য নিয়ন্ত্রণে কঠোর অবস্থান",
+                        'headline'             => "প্রশ্নফাঁস ও কোচিং বাণিজ্য নিয়ন্ত্রণে কঠোর অবস্থান",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "প্রশ্নফাঁস, নকল ও কোচিং বাণিজ্য নিয়ন্ত্রণে শিক্ষা মন্ত্রণালয় কঠোর অবস্থানের কথা জানিয়েছে।",
@@ -7219,7 +7219,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "শিক্ষানীতি",
-                        'name'             => "বুলিং ও ইভটিজিং ঠেকাতে ৫১৭ শিক্ষাপ্রতিষ্ঠানে সিসিটিভি",
+                        'headline'             => "বুলিং ও ইভটিজিং ঠেকাতে ৫১৭ শিক্ষাপ্রতিষ্ঠানে সিসিটিভি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বুলিং ও ইভটিজিং ঠেকাতে ৫১৭টি শিক্ষাপ্রতিষ্ঠানে সিসিটিভি বসানোর উদ্যোগ নিয়েছে শিক্ষা মন্ত্রণালয়।",
@@ -7230,7 +7230,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জীবনধারা",
-                        'name'             => "কান ফোঁড়ানোর আগে-পরে যত্ন না নিলে বাড়তে পারে সংক্রমণ",
+                        'headline'             => "কান ফোঁড়ানোর আগে-পরে যত্ন না নিলে বাড়তে পারে সংক্রমণ",
                         'sub_heading'      => "সৌন্দর্যচর্চায় পরিচ্ছন্নতা ও সঠিক পরবর্তী যত্ন জরুরি",
                         'content_shoulder' => "",
                         'brief'            => "কান ফোঁড়ানো সাধারণ সৌন্দর্যচর্চা হলেও জীবাণুমুক্ত পরিবেশ, পরিচ্ছন্ন যন্ত্র ও পরবর্তী যত্ন না মানলে সংক্রমণ হতে পারে।",
@@ -7241,7 +7241,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জীবনধারা",
-                        'name'             => "ঘরে বানানো টার্মারিক বুস্টারে বাড়তে পারে রোগপ্রতিরোধ ক্ষমতা",
+                        'headline'             => "ঘরে বানানো টার্মারিক বুস্টারে বাড়তে পারে রোগপ্রতিরোধ ক্ষমতা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "হলুদ, লেবু, গোলমরিচ ও আদা দিয়ে তৈরি টার্মারিক বুস্টার শরীরকে সতেজ রাখতে এবং প্রদাহ কমাতে সহায়ক হতে পারে।",
@@ -7252,7 +7252,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জীবনধারা",
-                        'name'             => "ব্যস্ততার ভিড়ে হারিয়ে যাচ্ছে নিজের জন্য সময়",
+                        'headline'             => "ব্যস্ততার ভিড়ে হারিয়ে যাচ্ছে নিজের জন্য সময়",
                         'sub_heading'      => "",
                         'content_shoulder' => "নিজের সময়",
                         'brief'            => "কাজ, পরিবার ও ডিজিটাল ব্যস্ততার চাপে ব্যক্তিগত সময় কমে যাচ্ছে, ফলে মানসিক চাপ ও ক্লান্তি বাড়ছে।",
@@ -7263,7 +7263,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জীবনধারা",
-                        'name'             => "গরমে মেকআপ দীর্ঘস্থায়ী রাখতে হালকা বেসের পরামর্শ",
+                        'headline'             => "গরমে মেকআপ দীর্ঘস্থায়ী রাখতে হালকা বেসের পরামর্শ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "গরমে ঘাম ও আর্দ্রতার কারণে মেকআপ নষ্ট হতে পারে, তাই হালকা বেস, সেটিং পাউডার ও ওয়াটারপ্রুফ পণ্য ব্যবহার করা ভালো।",
@@ -7274,7 +7274,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জীবনধারা",
-                        'name'             => "ত্বক ও চুলের যত্নে আমলকী ব্যবহারে আগ্রহ বাড়ছে",
+                        'headline'             => "ত্বক ও চুলের যত্নে আমলকী ব্যবহারে আগ্রহ বাড়ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "প্রাকৃতিক উপাদান হিসেবে আমলকী ত্বক ও চুলের যত্নে ব্যবহৃত হচ্ছে, এতে ভিটামিন সি ও অ্যান্টিঅক্সিডেন্ট থাকে।",
@@ -7285,7 +7285,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফ্যাশন",
-                        'name'             => "সারা লাইফস্টাইলের ঈদুল আজহা কালেকশনে বৈচিত্র্যময় পোশাক",
+                        'headline'             => "সারা লাইফস্টাইলের ঈদুল আজহা কালেকশনে বৈচিত্র্যময় পোশাক",
                         'sub_heading'      => "সব বয়স ও রুচির ক্রেতার জন্য সাজানো উৎসব সংগ্রহ",
                         'content_shoulder' => "",
                         'brief'            => "ঈদুল আজহা উপলক্ষে সারা লাইফস্টাইল পুরুষ, নারী ও শিশুদের জন্য নতুন পোশাকের বৈচিত্র্যময় সংগ্রহ বাজারে এনেছে।",
@@ -7296,7 +7296,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফ্যাশন",
-                        'name'             => "মেরিল-প্রথম আলো পুরস্কারে তারকাদের ব্লাউজ নকশায় নতুনত্ব",
+                        'headline'             => "মেরিল-প্রথম আলো পুরস্কারে তারকাদের ব্লাউজ নকশায় নতুনত্ব",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "মেরিল-প্রথম আলো পুরস্কারের লালগালিচায় তারকাদের শাড়ি ও ব্লাউজের নকশা বিশেষভাবে নজর কাড়ে।",
@@ -7307,7 +7307,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফ্যাশন",
-                        'name'             => "ছোট চুলে নজর কাড়লেন মডেল ও অভিনেত্রী পিয়া",
+                        'headline'             => "ছোট চুলে নজর কাড়লেন মডেল ও অভিনেত্রী পিয়া",
                         'sub_heading'      => "",
                         'content_shoulder' => "হেয়ারস্টাইল ট্রেন্ড",
                         'brief'            => "তারকাদের সাম্প্রতিক সাজে পোশাকের পাশাপাশি ছোট চুলের স্টাইলও আলোচনায় এসেছে, বিশেষ নজর কেড়েছেন জান্নাতুল পিয়া।",
@@ -7318,7 +7318,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফ্যাশন",
-                        'name'             => "বৈশাখের রঙিন সাজে নতুন তাঁতের পোশাক",
+                        'headline'             => "বৈশাখের রঙিন সাজে নতুন তাঁতের পোশাক",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পহেলা বৈশাখ ঘিরে দেশি ফ্যাশন ব্র্যান্ডগুলো তাঁত, সুতির কাপড় ও ঐতিহ্যনির্ভর ডিজাইনের পোশাক এনেছে।",
@@ -7329,7 +7329,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ফ্যাশন",
-                        'name'             => "প্যান্ট ও ব্যাগের চেইনে YKK লেখা কেন থাকে",
+                        'headline'             => "প্যান্ট ও ব্যাগের চেইনে YKK লেখা কেন থাকে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পোশাক ও ব্যাগের চেইনে দেখা YKK আসলে জাপানি একটি জিপার নির্মাতা প্রতিষ্ঠানের ব্র্যান্ড চিহ্ন।",
@@ -7340,7 +7340,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ভ্রমণ",
-                        'name'             => "ঢাকার কাছেই সবুজে ঘেরা জিন্দা পার্কে পরিবার নিয়ে ঘোরার সুযোগ",
+                        'headline'             => "ঢাকার কাছেই সবুজে ঘেরা জিন্দা পার্কে পরিবার নিয়ে ঘোরার সুযোগ",
                         'sub_heading'      => "শহরের কোলাহল থেকে স্বল্প দূরত্বের প্রকৃতি ভ্রমণ",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকার কাছাকাছি সবুজ পরিবেশ, গ্রামীণ আবহ ও পরিবারবান্ধব সুবিধার কারণে জিন্দা পার্ক জনপ্রিয় গন্তব্য হয়ে উঠছে।",
@@ -7351,7 +7351,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ভ্রমণ",
-                        'name'             => "পদ্মায় হাউসবোট ভ্রমণে বাড়ছে পর্যটকদের আগ্রহ",
+                        'headline'             => "পদ্মায় হাউসবোট ভ্রমণে বাড়ছে পর্যটকদের আগ্রহ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "মুন্সিগঞ্জ ও মাওয়া ঘাট ঘিরে পদ্মা নদীর হাউসবোট ভ্রমণ শহুরে পর্যটকদের জন্য নতুন অভিজ্ঞতা তৈরি করছে।",
@@ -7362,7 +7362,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ভ্রমণ",
-                        'name'             => "ঢাকা ট্রাভেল মার্টে অংশ নেয় ৫০টির বেশি প্রতিষ্ঠান",
+                        'headline'             => "ঢাকা ট্রাভেল মার্টে অংশ নেয় ৫০টির বেশি প্রতিষ্ঠান",
                         'sub_heading'      => "",
                         'content_shoulder' => "পর্যটন মেলা",
                         'brief'            => "রাজধানীতে ঢাকা ট্রাভেল মার্ট ২০২৬ আয়োজনের মাধ্যমে ভ্রমণ, বিমান ও আতিথেয়তা খাতের নানা সেবা তুলে ধরা হয়।",
@@ -7373,7 +7373,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ভ্রমণ",
-                        'name'             => "নববর্ষে হোটেল-রিসোর্টে বৈশাখী আয়োজন",
+                        'headline'             => "নববর্ষে হোটেল-রিসোর্টে বৈশাখী আয়োজন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পহেলা বৈশাখ উপলক্ষে ঢাকাসহ বিভিন্ন শহরের হোটেল ও রিসোর্টে বুফে, মেলা ও লোকজ আয়োজন রাখা হয়।",
@@ -7384,7 +7384,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "ভ্রমণ",
-                        'name'             => "কক্সবাজারকে বিশ্বমানের পর্যটন গন্তব্য করার প্রত্যাশা",
+                        'headline'             => "কক্সবাজারকে বিশ্বমানের পর্যটন গন্তব্য করার প্রত্যাশা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পরিকল্পিত উন্নয়ন, নিরাপদ পরিবেশ ও প্রাকৃতিক সৌন্দর্য রক্ষা করলে কক্সবাজার বিশ্বমানের পর্যটন গন্তব্য হতে পারে।",
@@ -7395,7 +7395,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খাবার",
-                        'name'             => "পান্তা খাওয়ার নানা স্বাদে বৈশাখী খাবারের স্মৃতি",
+                        'headline'             => "পান্তা খাওয়ার নানা স্বাদে বৈশাখী খাবারের স্মৃতি",
                         'sub_heading'      => "ইলিশ, কচুর মুখি ও শুকনা মরিচে পান্তার ভিন্ন স্বাদ",
                         'content_shoulder' => "",
                         'brief'            => "পান্তা ভাতের সঙ্গে ইলিশের ঝোল, কচুর মুখি, শুকনা মরিচ ও ভর্তার মিশ্রণ বৈশাখী খাবারে নতুন স্বাদ যোগ করে।",
@@ -7406,7 +7406,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খাবার",
-                        'name'             => "কাঁচা আমের শরবতে গরমে স্বস্তির স্বাদ",
+                        'headline'             => "কাঁচা আমের শরবতে গরমে স্বস্তির স্বাদ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কাঁচা আম, পুদিনা, বিট লবণ, জিরা ও লেবুর রস দিয়ে তৈরি শরবত গরমে সতেজতা এনে দিতে পারে।",
@@ -7417,7 +7417,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খাবার",
-                        'name'             => "টার্মারিক বুস্টার ঘরেই বানিয়ে পান করতে পারেন",
+                        'headline'             => "টার্মারিক বুস্টার ঘরেই বানিয়ে পান করতে পারেন",
                         'sub_heading'      => "",
                         'content_shoulder' => "স্বাস্থ্যকর পানীয়",
                         'brief'            => "হলুদ, আদা, লেবু ও গোলমরিচের মিশ্রণে তৈরি টার্মারিক বুস্টার খাবার তালিকায় স্বাস্থ্যকর পানীয় হিসেবে যুক্ত হতে পারে।",
@@ -7428,7 +7428,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খাবার",
-                        'name'             => "ঈদ স্পেশাল আয়োজনে কাচ্চি, রেজালা ও বোরহানি",
+                        'headline'             => "ঈদ স্পেশাল আয়োজনে কাচ্চি, রেজালা ও বোরহানি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঈদে অতিথি আপ্যায়নে কাচ্চি বিরিয়ানি, খাসির রেজালা, মোরগ পোলাও ও বোরহানির মতো খাবার জনপ্রিয়।",
@@ -7439,7 +7439,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "খাবার",
-                        'name'             => "মিন্ট লেমন বানিয়ে ঘরে পান করুন সতেজ শরবত",
+                        'headline'             => "মিন্ট লেমন বানিয়ে ঘরে পান করুন সতেজ শরবত",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পুদিনা, লেবু, চিনি, লবণ ও ঠান্ডা পানি দিয়ে তৈরি মিন্ট লেমন গরমের দিনে সহজ ও সতেজ ঘরোয়া পানীয়।",
@@ -7450,7 +7450,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সম্পর্ক",
-                        'name'             => "মানুষ জীবনে গড়ে দুইবার গভীর প্রেমে পড়ে",
+                        'headline'             => "মানুষ জীবনে গড়ে দুইবার গভীর প্রেমে পড়ে",
                         'sub_heading'      => "গবেষণায় প্রেমের অভিজ্ঞতা নিয়ে নতুন আলোচনা",
                         'content_shoulder' => "",
                         'brief'            => "সম্পর্কবিষয়ক গবেষণায় বলা হয়েছে, মানুষ জীবনে গড়ে দুইবার গভীর প্রেমে পড়তে পারে, তবে অভিজ্ঞতা ব্যক্তি ভেদে ভিন্ন।",
@@ -7461,7 +7461,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সম্পর্ক",
-                        'name'             => "সংসারের অশান্তি কমাতে আলোচনায় ৫-৫-৫ ফর্মুলা",
+                        'headline'             => "সংসারের অশান্তি কমাতে আলোচনায় ৫-৫-৫ ফর্মুলা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "দাম্পত্য সম্পর্কে ছোট ছোট ভালোবাসার প্রকাশ, সময় দেওয়া ও যোগাযোগ বাড়ানোর জন্য ৫-৫-৫ ফর্মুলা আলোচিত হচ্ছে।",
@@ -7472,7 +7472,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সম্পর্ক",
-                        'name'             => "যৌথ পরিবারে দাম্পত্য শান্তির জন্য দরকার স্পষ্ট যোগাযোগ",
+                        'headline'             => "যৌথ পরিবারে দাম্পত্য শান্তির জন্য দরকার স্পষ্ট যোগাযোগ",
                         'sub_heading'      => "",
                         'content_shoulder' => "পারিবারিক বোঝাপড়া",
                         'brief'            => "যৌথ পরিবারে স্বামী-স্ত্রীর মধ্যে স্পষ্ট যোগাযোগ, সীমারেখা ও পারস্পরিক সম্মান বজায় রাখলে অশান্তি কমে।",
@@ -7483,7 +7483,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সম্পর্ক",
-                        'name'             => "ঈদের ছুটি হতে পারে পরিবারের যত্ন নেওয়ার সময়",
+                        'headline'             => "ঈদের ছুটি হতে পারে পরিবারের যত্ন নেওয়ার সময়",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "উৎসবের ছুটি শুধু খাবার ও পোশাকের নয়, বরং পরিবারের সঙ্গে সময় কাটিয়ে সম্পর্ক নতুন করে গড়ার সুযোগ।",
@@ -7494,7 +7494,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সম্পর্ক",
-                        'name'             => "শহুরে একাকীত্বে ফ্ল্যাটবাড়ির মানুষও বিচ্ছিন্ন হয়ে পড়ছে",
+                        'headline'             => "শহুরে একাকীত্বে ফ্ল্যাটবাড়ির মানুষও বিচ্ছিন্ন হয়ে পড়ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "শহরের আলো, কাজ ও প্রযুক্তির ভিড়ে অনেক মানুষ সামাজিকভাবে বিচ্ছিন্ন হয়ে পড়ছে, যা সম্পর্কের উষ্ণতা কমায়।",
@@ -7505,7 +7505,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংস্কৃতি",
-                        'name'             => "গানে গানে শুরু হয় প্রথম আলো বৈশাখী উৎসব",
+                        'headline'             => "গানে গানে শুরু হয় প্রথম আলো বৈশাখী উৎসব",
                         'sub_heading'      => "নাগরদোলা, গান ও লোকজ আয়োজনে নববর্ষের আবহ",
                         'content_shoulder' => "",
                         'brief'            => "বাংলা নববর্ষ ১৪৩৩ বরণে রাজধানীতে প্রথম আলো বৈশাখী উৎসব শুরু হয় জাতীয় সংগীত ও বৈশাখের গানের মধ্য দিয়ে।",
@@ -7516,7 +7516,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংস্কৃতি",
-                        'name'             => "রমনার বটমূলে সুরের মূর্ছনায় নতুন বছর বরণ",
+                        'headline'             => "রমনার বটমূলে সুরের মূর্ছনায় নতুন বছর বরণ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ছায়ানটের ঐতিহ্যবাহী প্রভাতি আয়োজনে রমনার বটমূলে গান ও সাংস্কৃতিক পরিবেশনায় বাংলা নববর্ষকে বরণ করা হয়।",
@@ -7527,7 +7527,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংস্কৃতি",
-                        'name'             => "নববর্ষের শোভাযাত্রার নাম হলো বৈশাখী শোভাযাত্রা",
+                        'headline'             => "নববর্ষের শোভাযাত্রার নাম হলো বৈশাখী শোভাযাত্রা",
                         'sub_heading'      => "",
                         'content_shoulder' => "নামের পরিবর্তন",
                         'brief'            => "পহেলা বৈশাখে ঢাকা বিশ্ববিদ্যালয়ের চারুকলা থেকে বের হওয়া শোভাযাত্রার নাম বৈশাখী শোভাযাত্রা করা হয়েছে।",
@@ -7538,7 +7538,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংস্কৃতি",
-                        'name'             => "জাতীয়ভাবে বাংলা নববর্ষ উদ্‌যাপনে বিস্তৃত কর্মসূচি",
+                        'headline'             => "জাতীয়ভাবে বাংলা নববর্ষ উদ্‌যাপনে বিস্তৃত কর্মসূচি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলা নববর্ষ ১৪৩৩ উদ্‌যাপনে জেলা-উপজেলায় র‍্যালি, সাংস্কৃতিক অনুষ্ঠান, লোকজ মেলা ও বিশেষ আয়োজন রাখা হয়।",
@@ -7549,7 +7549,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "সংস্কৃতি",
-                        'name'             => "শিল্পকলা একাডেমির পাঁচ দিনব্যাপী বৈশাখী উৎসব",
+                        'headline'             => "শিল্পকলা একাডেমির পাঁচ দিনব্যাপী বৈশাখী উৎসব",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশ শিল্পকলা একাডেমির পাঁচ দিনব্যাপী বৈশাখী উৎসবকে কেন্দ্র করে সাংস্কৃতিক অঙ্গনে স্বতঃস্ফূর্ততা দেখা যায়।",
@@ -7560,7 +7560,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিজ্ঞান",
-                        'name'             => "ব্যাটারির চার্জ শেষ হলে নিজেই বদলে নেয় রোবট",
+                        'headline'             => "ব্যাটারির চার্জ শেষ হলে নিজেই বদলে নেয় রোবট",
                         'sub_heading'      => "রোবট প্রযুক্তিতে স্বয়ংসম্পূর্ণতার নতুন উদাহরণ",
                         'content_shoulder' => "",
                         'brief'            => "চীনের ইউবিটেক রোবটিক্সের তৈরি ওয়াকার এস২ রোবট ব্যাটারি কমে গেলে নিজেই পুরোনো ব্যাটারি খুলে নতুন ব্যাটারি লাগাতে পারে।",
@@ -7571,7 +7571,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিজ্ঞান",
-                        'name'             => "সিলিং ফ্যানে ক্যাপাসিটরের কাজ কী",
+                        'headline'             => "সিলিং ফ্যানে ক্যাপাসিটরের কাজ কী",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সিলিং ফ্যান চালু করতে ও ঘূর্ণন স্থিতিশীল রাখতে ক্যাপাসিটর গুরুত্বপূর্ণ ভূমিকা রাখে, এটি নষ্ট হলে ফ্যান ধীরে ঘোরে।",
@@ -7582,7 +7582,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিজ্ঞান",
-                        'name'             => "মেগা এল নিনো নিয়ে বিজ্ঞানীদের সতর্কতা",
+                        'headline'             => "মেগা এল নিনো নিয়ে বিজ্ঞানীদের সতর্কতা",
                         'sub_heading'      => "",
                         'content_shoulder' => "জলবায়ু সতর্কতা",
                         'brief'            => "২০২৬ থেকে ২০২৭ সালের মধ্যে শক্তিশালী এল নিনোর প্রভাবে খরা, তাপপ্রবাহ ও বৃষ্টির বৈপরীত্য বাড়তে পারে বলে আশঙ্কা।",
@@ -7593,7 +7593,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিজ্ঞান",
-                        'name'             => "স্যাটেলাইট ছবিতে সবুজ আভায় দেখা গেল বাংলাদেশ",
+                        'headline'             => "স্যাটেলাইট ছবিতে সবুজ আভায় দেখা গেল বাংলাদেশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "রাশিয়ার আবহাওয়া স্যাটেলাইটে ধারণ করা ছবিতে বাংলাদেশসহ দক্ষিণ এশিয়ার অংশ রহস্যময় সবুজ আভায় দেখা গেছে।",
@@ -7604,7 +7604,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বিজ্ঞান",
-                        'name'             => "জাতীয় বিজ্ঞান ও প্রযুক্তি সপ্তাহে উদ্ভাবনের বার্তা",
+                        'headline'             => "জাতীয় বিজ্ঞান ও প্রযুক্তি সপ্তাহে উদ্ভাবনের বার্তা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "উদ্ভাবননির্ভর বাংলাদেশ গঠনের প্রতিপাদ্যে বিভিন্ন জেলায় জাতীয় বিজ্ঞান ও প্রযুক্তি সপ্তাহ আয়োজন করা হচ্ছে।",
@@ -7615,7 +7615,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মহাকাশ",
-                        'name'             => "ঢাকার বিজ্ঞান জাদুঘরে ইউরি গ্যাগারিনের আবক্ষ মূর্তি",
+                        'headline'             => "ঢাকার বিজ্ঞান জাদুঘরে ইউরি গ্যাগারিনের আবক্ষ মূর্তি",
                         'sub_heading'      => "মানব মহাকাশযাত্রার ৬৫ বছর পূর্তিতে বিশেষ আয়োজন",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকার জাতীয় বিজ্ঞান ও প্রযুক্তি জাদুঘরে মহাকাশ অভিযাত্রার পথিকৃৎ ইউরি গ্যাগারিনের আবক্ষ মূর্তি উন্মোচন করা হয়েছে।",
@@ -7626,7 +7626,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মহাকাশ",
-                        'name'             => "মহাকাশ থেকে লিরিড উল্কাবৃষ্টির বিরল ছবি প্রকাশ",
+                        'headline'             => "মহাকাশ থেকে লিরিড উল্কাবৃষ্টির বিরল ছবি প্রকাশ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "আন্তর্জাতিক মহাকাশ স্টেশন থেকে তোলা লিরিড উল্কাবৃষ্টির ছবি প্রকাশের পর মহাকাশপ্রেমীদের মধ্যে আগ্রহ তৈরি হয়েছে।",
@@ -7637,7 +7637,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মহাকাশ",
-                        'name'             => "কালপুরুষ চিনতে আকাশ পর্যবেক্ষণের সহজ উপায়",
+                        'headline'             => "কালপুরুষ চিনতে আকাশ পর্যবেক্ষণের সহজ উপায়",
                         'sub_heading'      => "",
                         'content_shoulder' => "আকাশ দেখা",
                         'brief'            => "দক্ষিণ-পশ্চিম আকাশে তিনটি সরলরেখার নক্ষত্র দেখে কালপুরুষ নক্ষত্রমণ্ডল সহজে শনাক্ত করা যায়।",
@@ -7648,7 +7648,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মহাকাশ",
-                        'name'             => "ধ্রুবতারা চিনে উত্তর দিক নির্ণয়ের পাঠ",
+                        'headline'             => "ধ্রুবতারা চিনে উত্তর দিক নির্ণয়ের পাঠ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "উত্তর গোলার্ধের আকাশে পোলারিস বা ধ্রুবতারা স্থির অবস্থানের কারণে দিক নির্ণয়ে গুরুত্বপূর্ণ নক্ষত্র হিসেবে পরিচিত।",
@@ -7659,7 +7659,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "মহাকাশ",
-                        'name'             => "আর্টেমিস-২ মিশন ঘিরে চাঁদে ফেরার প্রস্তুতি",
+                        'headline'             => "আর্টেমিস-২ মিশন ঘিরে চাঁদে ফেরার প্রস্তুতি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "অর্ধশতাব্দীর বেশি সময় পর চাঁদের কাছাকাছি মানুষ পাঠানোর প্রস্তুতি হিসেবে নাসার আর্টেমিস-২ মিশন আলোচনায়।",
@@ -7670,7 +7670,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গবেষণা",
-                        'name'             => "শাবিপ্রবির ১৮৬ শিক্ষার্থী পেল গবেষণা অনুদান",
+                        'headline'             => "শাবিপ্রবির ১৮৬ শিক্ষার্থী পেল গবেষণা অনুদান",
                         'sub_heading'      => "শিক্ষার্থীদের গবেষণায় উৎসাহ দিতে প্রশাসনের উদ্যোগ",
                         'content_shoulder' => "",
                         'brief'            => "শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়ের বিভিন্ন অনুষদের ১৮৬ শিক্ষার্থীকে গবেষণা অনুদান দিয়েছে কর্তৃপক্ষ।",
@@ -7681,7 +7681,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গবেষণা",
-                        'name'             => "উত্তরা ইউনিভার্সিটিতে ৪০টি গবেষণা প্রস্তাবনা উপস্থাপন",
+                        'headline'             => "উত্তরা ইউনিভার্সিটিতে ৪০টি গবেষণা প্রস্তাবনা উপস্থাপন",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "উত্তরা ইউনিভার্সিটির সিআরটি প্রপোজাল ডিফেন্সে বিজ্ঞান, প্রকৌশল ও সামাজিক বিজ্ঞানের ৪০টি গবেষণা প্রস্তাবনা উপস্থাপন করা হয়েছে।",
@@ -7692,7 +7692,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গবেষণা",
-                        'name'             => "এআই গবেষণা ও স্টার্টআপে ড্যাফোডিলে হ্যাকাথন",
+                        'headline'             => "এআই গবেষণা ও স্টার্টআপে ড্যাফোডিলে হ্যাকাথন",
                         'sub_heading'      => "",
                         'content_shoulder' => "এআই গবেষণা",
                         'brief'            => "ড্যাফোডিল বিশ্ববিদ্যালয়ে এআই হ্যাকাথনের মাধ্যমে তরুণদের গবেষণা, উদ্ভাবন ও স্টার্টআপ ভাবনা উৎসাহিত করা হয়েছে।",
@@ -7703,7 +7703,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গবেষণা",
-                        'name'             => "আইএইএর সঙ্গে বাংলাদেশের পরমাণু সহযোগিতা জোরদার",
+                        'headline'             => "আইএইএর সঙ্গে বাংলাদেশের পরমাণু সহযোগিতা জোরদার",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "আন্তর্জাতিক পরমাণু শক্তি সংস্থার সঙ্গে বাংলাদেশের সহযোগিতা বিজ্ঞান, নিরাপত্তা ও গবেষণায় নতুন সুযোগ তৈরি করতে পারে।",
@@ -7714,7 +7714,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "গবেষণা",
-                        'name'             => "মরুভূমিকে উর্বর মাটিতে রূপান্তরের গবেষণা আলোচনায়",
+                        'headline'             => "মরুভূমিকে উর্বর মাটিতে রূপান্তরের গবেষণা আলোচনায়",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সায়ানোব্যাকটেরিয়া ব্যবহার করে মরুভূমির বালুকে স্থিতিশীল মাটিতে রূপান্তরের গবেষণা জলবায়ু অভিযোজনে সম্ভাবনা দেখাচ্ছে।",
@@ -7725,7 +7725,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "উদ্ভাবন",
-                        'name'             => "পানি দিয়ে চলবে গ্রিন হাইড্রোজেন স্টোভ",
+                        'headline'             => "পানি দিয়ে চলবে গ্রিন হাইড্রোজেন স্টোভ",
                         'sub_heading'      => "গ্যাসের বিকল্প রান্নার প্রযুক্তি নিয়ে নতুন আলোচনা",
                         'content_shoulder' => "",
                         'brief'            => "পানি থেকে গ্রিন হাইড্রোজেন তৈরি করে রান্নার চুলা চালানোর প্রযুক্তি পরিবেশবান্ধব বিকল্প হিসেবে আলোচনায় এসেছে।",
@@ -7736,7 +7736,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "উদ্ভাবন",
-                        'name'             => "বিশ্বের প্রথম কোয়ান্টাম ব্যাটারির নমুনা তৈরি",
+                        'headline'             => "বিশ্বের প্রথম কোয়ান্টাম ব্যাটারির নমুনা তৈরি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কোয়ান্টাম ব্যাটারির প্রাথমিক নমুনা ভবিষ্যতে বৈদ্যুতিক গাড়ি ও স্মার্টফোন চার্জিংয়ে বড় পরিবর্তনের সম্ভাবনা দেখাচ্ছে।",
@@ -7747,7 +7747,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "উদ্ভাবন",
-                        'name'             => "ভাইটাল আইডি পাসওয়ার্ডের বদলে খুলির কম্পন ব্যবহার করবে",
+                        'headline'             => "ভাইটাল আইডি পাসওয়ার্ডের বদলে খুলির কম্পন ব্যবহার করবে",
                         'sub_heading'      => "",
                         'content_shoulder' => "নতুন লগইন",
                         'brief'            => "বিজ্ঞানীদের উদ্ভাবিত ভাইটাল আইডি প্রযুক্তি মাথার খুলির কম্পন ব্যবহার করে নিরাপদ লগইনের নতুন ধারণা দিচ্ছে।",
@@ -7758,7 +7758,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "উদ্ভাবন",
-                        'name'             => "ইনকিউবেশন হাব চালু হলো রাজশাহী বিশ্ববিদ্যালয়ে",
+                        'headline'             => "ইনকিউবেশন হাব চালু হলো রাজশাহী বিশ্ববিদ্যালয়ে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "রাজশাহী বিশ্ববিদ্যালয়ে জেনেটিক ইঞ্জিনিয়ারিং ও বায়োটেকনোলজি বিভাগের উদ্যোগে ইনকিউবেশন হাব চালু হয়েছে।",
@@ -7769,7 +7769,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "উদ্ভাবন",
-                        'name'             => "দৃষ্টিপ্রতিবন্ধীদের জন্য স্মার্ট গ্লাস নিয়ে বিশ্বমঞ্চে শাবিপ্রবি দল",
+                        'headline'             => "দৃষ্টিপ্রতিবন্ধীদের জন্য স্মার্ট গ্লাস নিয়ে বিশ্বমঞ্চে শাবিপ্রবি দল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "এআইভিত্তিক স্মার্ট গ্লাস উদ্ভাবন নিয়ে শাবিপ্রবির শিক্ষার্থী দল আন্তর্জাতিক হ্যাকাথনে অংশ নেওয়ার সুযোগ পেয়েছে।",
@@ -7780,7 +7780,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি গবেষণা",
-                        'name'             => "স্মার্টফোনের দাম ২৫০০ টাকায় আনতে চায় সরকার",
+                        'headline'             => "স্মার্টফোনের দাম ২৫০০ টাকায় আনতে চায় সরকার",
                         'sub_heading'      => "ডিজিটাল অন্তর্ভুক্তি বাড়াতে কমদামি ডিভাইসের পরিকল্পনা",
                         'content_shoulder' => "",
                         'brief'            => "সরকার স্মার্টফোনের দাম আড়াই হাজার থেকে তিন হাজার টাকার মধ্যে আনতে চায় বলে জানিয়েছেন সংশ্লিষ্ট উপদেষ্টা।",
@@ -7791,7 +7791,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি গবেষণা",
-                        'name'             => "ঢাবির ১০ বিভাগ কিউএস র‍্যাঙ্কিংয়ে বিশ্বসেরার তালিকায়",
+                        'headline'             => "ঢাবির ১০ বিভাগ কিউএস র‍্যাঙ্কিংয়ে বিশ্বসেরার তালিকায়",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কিউএস সাবজেক্ট র‍্যাঙ্কিংয়ে ঢাকা বিশ্ববিদ্যালয়ের ১০টি বিভাগ জায়গা পেয়েছে, প্রযুক্তি ও প্রকৌশল ক্ষেত্রও তালিকায় আছে।",
@@ -7802,7 +7802,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি গবেষণা",
-                        'name'             => "রূপপুর পারমাণবিক বিদ্যুৎকেন্দ্রের অগ্রগতি আলোচনায়",
+                        'headline'             => "রূপপুর পারমাণবিক বিদ্যুৎকেন্দ্রের অগ্রগতি আলোচনায়",
                         'sub_heading'      => "",
                         'content_shoulder' => "পারমাণবিক প্রযুক্তি",
                         'brief'            => "রূপপুর পারমাণবিক বিদ্যুৎকেন্দ্র বাংলাদেশের প্রযুক্তি গবেষণা, প্রকৌশল দক্ষতা ও নিরাপত্তা সক্ষমতার বড় প্রকল্প হিসেবে বিবেচিত।",
@@ -7813,7 +7813,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি গবেষণা",
-                        'name'             => "বিজ্ঞান ও প্রযুক্তি মন্ত্রণালয়ে নতুন গবেষণা প্রস্তাবনার প্রস্তুতি",
+                        'headline'             => "বিজ্ঞান ও প্রযুক্তি মন্ত্রণালয়ে নতুন গবেষণা প্রস্তাবনার প্রস্তুতি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "২০২৬-২৭ অর্থবছরের গবেষণা ও উন্নয়ন প্রস্তাবনা নিয়ে বিজ্ঞান ও প্রযুক্তি খাতের প্রতিষ্ঠানগুলো প্রস্তুতি নিচ্ছে।",
@@ -7824,7 +7824,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রযুক্তি গবেষণা",
-                        'name'             => "ন্যানো-ডোওপ অ্যাপে উপকূলের জীববৈচিত্র্যের তথ্য",
+                        'headline'             => "ন্যানো-ডোওপ অ্যাপে উপকূলের জীববৈচিত্র্যের তথ্য",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "উপকূলের জীববৈচিত্র্য ও পরিবেশগত তথ্য সংগ্রহে মোবাইল অ্যাপ ব্যবহারের উদ্যোগ গবেষণা ও পর্যবেক্ষণে সহায়ক হতে পারে।",
@@ -7835,7 +7835,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৈজ্ঞানিক আবিষ্কার",
-                        'name'             => "৬ হাজারের বেশি এক্সোপ্ল্যানেট নিশ্চিত করেছেন বিজ্ঞানীরা",
+                        'headline'             => "৬ হাজারের বেশি এক্সোপ্ল্যানেট নিশ্চিত করেছেন বিজ্ঞানীরা",
                         'sub_heading'      => "সৌরজগতের বাইরে প্রাণের সম্ভাবনা নিয়ে নতুন আগ্রহ",
                         'content_shoulder' => "",
                         'brief'            => "নাসার বিভিন্ন অভিযানে সৌরজগতের বাইরে ৬ হাজারের বেশি এক্সোপ্ল্যানেটের অস্তিত্ব নিশ্চিত হওয়ায় প্রাণের অনুসন্ধান জোরদার হয়েছে।",
@@ -7846,7 +7846,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৈজ্ঞানিক আবিষ্কার",
-                        'name'             => "মাথার খুলির কম্পনে পরিচয় শনাক্তের নতুন পদ্ধতি",
+                        'headline'             => "মাথার খুলির কম্পনে পরিচয় শনাক্তের নতুন পদ্ধতি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ভাইটাল আইডি প্রযুক্তিতে মাথার খুলির অনন্য কম্পন ব্যবহার করে পরিচয় যাচাইয়ের সম্ভাবনা দেখছেন গবেষকেরা।",
@@ -7857,7 +7857,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৈজ্ঞানিক আবিষ্কার",
-                        'name'             => "সায়ানোব্যাকটেরিয়ায় মরুভূমির বালু স্থিতিশীল করার পদ্ধতি",
+                        'headline'             => "সায়ানোব্যাকটেরিয়ায় মরুভূমির বালু স্থিতিশীল করার পদ্ধতি",
                         'sub_heading'      => "",
                         'content_shoulder' => "মাটি তৈরির পথ",
                         'brief'            => "সায়ানোব্যাকটেরিয়া দিয়ে বালুর কণা আটকে জৈব মৃত্তিকা স্তর তৈরির পদ্ধতি মরুকরণ ঠেকাতে সম্ভাবনাময় আবিষ্কার।",
@@ -7868,7 +7868,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৈজ্ঞানিক আবিষ্কার",
-                        'name'             => "নিঃশব্দ সুপারসনিক জেট এক্স-৫৯ পরীক্ষায় সফল",
+                        'headline'             => "নিঃশব্দ সুপারসনিক জেট এক্স-৫৯ পরীক্ষায় সফল",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নাসার এক্স-৫৯ সুপারসনিক জেট প্রথম পরীক্ষামূলক উড্ডয়নে সফল হয়ে শব্দদূষণ কমানোর সম্ভাবনা দেখিয়েছে।",
@@ -7879,7 +7879,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বৈজ্ঞানিক আবিষ্কার",
-                        'name'             => "কোয়ান্টাম ব্যাটারি শক্তি সংরক্ষণে নতুন দিগন্ত দেখাচ্ছে",
+                        'headline'             => "কোয়ান্টাম ব্যাটারি শক্তি সংরক্ষণে নতুন দিগন্ত দেখাচ্ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কোয়ান্টাম নীতিভিত্তিক ব্যাটারি প্রযুক্তি ভবিষ্যতে দ্রুত চার্জিং ও শক্তি সংরক্ষণে বড় পরিবর্তন আনতে পারে।",
@@ -7890,7 +7890,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরিবেশ",
-                        'name'             => "টানা বৃষ্টির পরও ঢাকার বাতাস অস্বাস্থ্যকর",
+                        'headline'             => "টানা বৃষ্টির পরও ঢাকার বাতাস অস্বাস্থ্যকর",
                         'sub_heading'      => "বৃষ্টির পরও কমছে না রাজধানীর বায়ুদূষণ",
                         'content_shoulder' => "",
                         'brief'            => "টানা বৃষ্টির পরও ঢাকার বাতাসের মান অস্বাস্থ্যকর পর্যায়ে থাকায় নগরবাসীর স্বাস্থ্যঝুঁকি নিয়ে নতুন উদ্বেগ তৈরি হয়েছে।",
@@ -7901,7 +7901,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরিবেশ",
-                        'name'             => "সপ্তাহজুড়ে রোদ-বৃষ্টির পূর্বাভাস",
+                        'headline'             => "সপ্তাহজুড়ে রোদ-বৃষ্টির পূর্বাভাস",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "আবহাওয়া অধিদপ্তর জানিয়েছে, চলতি সপ্তাহে দেশের বিভিন্ন স্থানে কখনো রোদ, কখনো বৃষ্টি থাকতে পারে।",
@@ -7912,7 +7912,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরিবেশ",
-                        'name'             => "মে মাসে কালবৈশাখী ও লঘুচাপের সম্ভাবনা",
+                        'headline'             => "মে মাসে কালবৈশাখী ও লঘুচাপের সম্ভাবনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "মৌসুমি সতর্কতা",
                         'brief'            => "মে মাসে এক থেকে দুটি লঘুচাপ, কয়েকটি কালবৈশাখী এবং মৃদু থেকে মাঝারি তাপপ্রবাহের পূর্বাভাস দেওয়া হয়েছে।",
@@ -7923,7 +7923,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরিবেশ",
-                        'name'             => "ভোলায় কালবৈশাখী ঝড়ে অর্ধশতাধিক ঘর ক্ষতিগ্রস্ত",
+                        'headline'             => "ভোলায় কালবৈশাখী ঝড়ে অর্ধশতাধিক ঘর ক্ষতিগ্রস্ত",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ভোলার ওপর দিয়ে বয়ে যাওয়া আকস্মিক কালবৈশাখী ঝড়ে অর্ধশতাধিক ঘর বিধ্বস্ত ও বহু পরিবার দুর্ভোগে পড়েছে।",
@@ -7934,7 +7934,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "পরিবেশ",
-                        'name'             => "জাতীয় বৃক্ষরোপণ অভিযান ও বৃক্ষমেলার প্রস্তুতি",
+                        'headline'             => "জাতীয় বৃক্ষরোপণ অভিযান ও বৃক্ষমেলার প্রস্তুতি",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জাতীয় বৃক্ষরোপণ অভিযান ও বৃক্ষমেলা ২০২৬ সামনে রেখে স্টল বরাদ্দের আবেদন আহ্বান করেছে বন অধিদপ্তর।",
@@ -7945,7 +7945,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জলবায়ু পরিবর্তন",
-                        'name'             => "বাংলাদেশে শীতকাল ছোট হয়ে আসছে",
+                        'headline'             => "বাংলাদেশে শীতকাল ছোট হয়ে আসছে",
                         'sub_heading'      => "গবেষণায় ভবিষ্যৎ জলবায়ুর উদ্বেগজনক চিত্র",
                         'content_shoulder' => "",
                         'brief'            => "বাংলাদেশ আবহাওয়া অধিদপ্তর ও নরওয়ের গবেষকদের প্রতিবেদনে শীতের ব্যাপ্তি কমে যাওয়ার প্রবণতা উঠে এসেছে।",
@@ -7956,7 +7956,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জলবায়ু পরিবর্তন",
-                        'name'             => "রাতের তাপমাত্রা দ্রুত বাড়া স্বাস্থ্যঝুঁকি বাড়াচ্ছে",
+                        'headline'             => "রাতের তাপমাত্রা দ্রুত বাড়া স্বাস্থ্যঝুঁকি বাড়াচ্ছে",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "গবেষণা বলছে, দিনের তুলনায় রাতের তাপমাত্রা দ্রুত বাড়লে ঘুম, হৃদ্‌রোগ ও শ্বাসকষ্টের ঝুঁকি বাড়তে পারে।",
@@ -7967,7 +7967,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জলবায়ু পরিবর্তন",
-                        'name'             => "তাপপ্রবাহের ঝুঁকিতে রংপুর, রাজশাহী ও খুলনা",
+                        'headline'             => "তাপপ্রবাহের ঝুঁকিতে রংপুর, রাজশাহী ও খুলনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "তাপঝুঁকির মানচিত্র",
                         'brief'            => "আবহাওয়া গবেষণায় রংপুর, রাজশাহী ও খুলনাকে ভবিষ্যৎ তাপপ্রবাহের বেশি ঝুঁকিপূর্ণ বিভাগ হিসেবে দেখা হচ্ছে।",
@@ -7978,7 +7978,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জলবায়ু পরিবর্তন",
-                        'name'             => "তাপমাত্রা বৃদ্ধিতে কৃষি ও মৎস্য খাতে ক্ষতির আশঙ্কা",
+                        'headline'             => "তাপমাত্রা বৃদ্ধিতে কৃষি ও মৎস্য খাতে ক্ষতির আশঙ্কা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "অতিরিক্ত গরমে ফসল, মাছ, পানির প্রাপ্যতা ও রোগবালাইয়ের ওপর চাপ বাড়তে পারে বলে গবেষকেরা সতর্ক করেছেন।",
@@ -7989,7 +7989,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "জলবায়ু পরিবর্তন",
-                        'name'             => "ঋতুচক্র অস্বাভাবিক হচ্ছে, বাড়ছে নগর দুর্যোগ",
+                        'headline'             => "ঋতুচক্র অস্বাভাবিক হচ্ছে, বাড়ছে নগর দুর্যোগ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "অপরিকল্পিত নগরায়ণ, জলাশয় ভরাট ও জলবায়ু পরিবর্তনের প্রভাবে নগরে জলাবদ্ধতা ও দুর্যোগ ঝুঁকি বাড়ছে।",
@@ -8000,7 +8000,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "দূষণ",
-                        'name'             => "ঢাকার বায়ুমান ১৫৫, অস্বাস্থ্যকর অবস্থায় রাজধানী",
+                        'headline'             => "ঢাকার বায়ুমান ১৫৫, অস্বাস্থ্যকর অবস্থায় রাজধানী",
                         'sub_heading'      => "আইকিউএয়ারের সূচকে দূষণের উচ্চ ঝুঁকি",
                         'content_shoulder' => "",
                         'brief'            => "রোববার সকালে ঢাকার বায়ুমান ১৫৫ রেকর্ড হওয়ায় বাতাসকে অস্বাস্থ্যকর হিসেবে চিহ্নিত করা হয়েছে।",
@@ -8011,7 +8011,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "দূষণ",
-                        'name'             => "উত্তর বাড্ডায় বায়ুমান খুব অস্বাস্থ্যকর",
+                        'headline'             => "উত্তর বাড্ডায় বায়ুমান খুব অস্বাস্থ্যকর",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকার উত্তর বাড্ডার আবদুল্লাহবাগ এলাকায় বায়ুমান ২০২ রেকর্ড হওয়ায় এলাকাটি খুব অস্বাস্থ্যকর পর্যায়ে ছিল।",
@@ -8022,7 +8022,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "দূষণ",
-                        'name'             => "নির্মাণসামগ্রী দিয়ে বায়ুদূষণে মোবাইল কোর্ট",
+                        'headline'             => "নির্মাণসামগ্রী দিয়ে বায়ুদূষণে মোবাইল কোর্ট",
                         'sub_heading'      => "",
                         'content_shoulder' => "আইনি অভিযান",
                         'brief'            => "পরিবেশ অধিদপ্তর নির্মাণসামগ্রী থেকে বায়ুদূষণের দায়ে শেরপুরে মোবাইল কোর্ট পরিচালনা করে জরিমানা করেছে।",
@@ -8033,7 +8033,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "দূষণ",
-                        'name'             => "ইটিপি ছাড়া কারখানায় নদী দূষণবিরোধী অভিযান",
+                        'headline'             => "ইটিপি ছাড়া কারখানায় নদী দূষণবিরোধী অভিযান",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নরসিংদী ও নারায়ণগঞ্জে ইটিপিবিহীন কারখানার বিরুদ্ধে নদী দূষণ রোধে অভিযান পরিচালনা করেছে পরিবেশ অধিদপ্তর।",
@@ -8044,7 +8044,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "দূষণ",
-                        'name'             => "শব্দদূষণ নিয়ন্ত্রণে প্রশিক্ষণ ও সচেতনতা কার্যক্রম",
+                        'headline'             => "শব্দদূষণ নিয়ন্ত্রণে প্রশিক্ষণ ও সচেতনতা কার্যক্রম",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "শব্দদূষণ নিয়ন্ত্রণে পরিবেশ অধিদপ্তরের কর্মকর্তা ও অংশীজনদের নিয়ে প্রশিক্ষণ ও সচেতনতা কার্যক্রম চলছে।",
@@ -8055,7 +8055,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বন্যপ্রাণী",
-                        'name'             => "বন্যপ্রাণী সুরক্ষায় নতুন অধ্যাদেশ জারি",
+                        'headline'             => "বন্যপ্রাণী সুরক্ষায় নতুন অধ্যাদেশ জারি",
                         'sub_heading'      => "জীববৈচিত্র্য সংরক্ষণে আইনি কাঠামো শক্তিশালী",
                         'content_shoulder' => "",
                         'brief'            => "বন্যপ্রাণী সংরক্ষণ ও নিরাপত্তা অধ্যাদেশ ২০২৬ জারির মাধ্যমে বন্যপ্রাণী সুরক্ষায় নতুন আইনি কাঠামো যুক্ত হয়েছে।",
@@ -8066,7 +8066,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বন্যপ্রাণী",
-                        'name'             => "শেরপুরে হাতির ভয়ে আগাম ধান কাটছেন কৃষকরা",
+                        'headline'             => "শেরপুরে হাতির ভয়ে আগাম ধান কাটছেন কৃষকরা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "শেরপুর সীমান্তে বন্য হাতির পাল ফসল নষ্ট করায় কৃষকেরা কাঁচা ও আধাপাকা ধান আগেভাগেই কাটতে বাধ্য হচ্ছেন।",
@@ -8077,7 +8077,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বন্যপ্রাণী",
-                        'name'             => "রামুতে বন্য হাতির আক্রমণে মা-মেয়ের মৃত্যু",
+                        'headline'             => "রামুতে বন্য হাতির আক্রমণে মা-মেয়ের মৃত্যু",
                         'sub_heading'      => "",
                         'content_shoulder' => "মানুষ-হাতি সংঘাত",
                         'brief'            => "কক্সবাজারের রামুতে বন্য হাতির আক্রমণে এক নারী ও তার শিশু কন্যার মৃত্যুতে এলাকায় শোক ও আতঙ্ক ছড়িয়েছে।",
@@ -8088,7 +8088,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বন্যপ্রাণী",
-                        'name'             => "সুন্দরবনে চোরা শিকারিদের ফাঁদে বিপন্ন প্রাণী",
+                        'headline'             => "সুন্দরবনে চোরা শিকারিদের ফাঁদে বিপন্ন প্রাণী",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "সুন্দরবনে হরিণ শিকারের ফাঁদে বাঘ, বানরসহ নানা প্রাণী আটকা পড়ায় বন্যপ্রাণী সুরক্ষা নিয়ে উদ্বেগ বেড়েছে।",
@@ -8099,7 +8099,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "বন্যপ্রাণী",
-                        'name'             => "কুয়াকাটায় আবারও মৃত ডলফিন ভেসে এলো",
+                        'headline'             => "কুয়াকাটায় আবারও মৃত ডলফিন ভেসে এলো",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "কুয়াকাটা সৈকতে জোয়ারের সঙ্গে মৃত ডলফিন ভেসে আসায় সামুদ্রিক প্রাণী সুরক্ষা নিয়ে উদ্বেগ বেড়েছে।",
@@ -8110,7 +8110,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রাকৃতিক দুর্যোগ",
-                        'name'             => "মে মাসে লঘুচাপ, কালবৈশাখী ও তাপপ্রবাহের পূর্বাভাস",
+                        'headline'             => "মে মাসে লঘুচাপ, কালবৈশাখী ও তাপপ্রবাহের পূর্বাভাস",
                         'sub_heading'      => "আবহাওয়ার অস্থিরতায় প্রস্তুতির পরামর্শ",
                         'content_shoulder' => "",
                         'brief'            => "মে মাসে লঘুচাপ, কালবৈশাখী, তাপপ্রবাহ ও স্বাভাবিক বৃষ্টির সম্ভাবনা থাকায় সতর্ক থাকতে বলছে আবহাওয়া অধিদপ্তর।",
@@ -8121,7 +8121,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রাকৃতিক দুর্যোগ",
-                        'name'             => "সমুদ্রবন্দরে সতর্কসংকেত, চার বিভাগে ভারী বৃষ্টির পূর্বাভাস",
+                        'headline'             => "সমুদ্রবন্দরে সতর্কসংকেত, চার বিভাগে ভারী বৃষ্টির পূর্বাভাস",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ঢাকা, ময়মনসিংহ, চট্টগ্রাম ও সিলেট বিভাগের কোথাও কোথাও ভারী থেকে অতিভারী বৃষ্টির পূর্বাভাস দেওয়া হয়েছে।",
@@ -8132,7 +8132,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রাকৃতিক দুর্যোগ",
-                        'name'             => "কুমিল্লায় দেড় ঘণ্টার বৃষ্টিতে ভয়াবহ জলাবদ্ধতা",
+                        'headline'             => "কুমিল্লায় দেড় ঘণ্টার বৃষ্টিতে ভয়াবহ জলাবদ্ধতা",
                         'sub_heading'      => "",
                         'content_shoulder' => "নগর জলাবদ্ধতা",
                         'brief'            => "কুমিল্লায় অল্প সময়ে ১০২ মিলিমিটার বৃষ্টিতে নগরের বিভিন্ন এলাকায় জলাবদ্ধতা তৈরি হয়ে জনজীবন ব্যাহত হয়েছে।",
@@ -8143,7 +8143,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রাকৃতিক দুর্যোগ",
-                        'name'             => "নোয়াখালীতে ঝড়ে ঘর হারিয়ে খোলা আকাশের নিচে পরিবার",
+                        'headline'             => "নোয়াখালীতে ঝড়ে ঘর হারিয়ে খোলা আকাশের নিচে পরিবার",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "নোয়াখালীর উপকূলীয় এলাকায় ঝড়ে ক্ষতিগ্রস্ত এক পরিবার ঘর হারিয়ে খোলা আকাশের নিচে দিন কাটাচ্ছে।",
@@ -8154,7 +8154,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "প্রাকৃতিক দুর্যোগ",
-                        'name'             => "ভোলায় আকস্মিক ঝড়ে গাছ উপড়ে যান চলাচল ব্যাহত",
+                        'headline'             => "ভোলায় আকস্মিক ঝড়ে গাছ উপড়ে যান চলাচল ব্যাহত",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "ভোলার কালবৈশাখী ঝড়ে ঘরবাড়ির পাশাপাশি সড়কে গাছ উপড়ে পড়ে যান চলাচলও ব্যাহত হয়েছে।",
@@ -8165,7 +8165,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেকসই উন্নয়ন",
-                        'name'             => "নবায়নযোগ্য জ্বালানিতে টেকসই ভবিষ্যতের বার্তা",
+                        'headline'             => "নবায়নযোগ্য জ্বালানিতে টেকসই ভবিষ্যতের বার্তা",
                         'sub_heading'      => "জ্বালানি নিরাপত্তায় সৌর, বায়ু ও বায়োমাসের গুরুত্ব",
                         'content_shoulder' => "",
                         'brief'            => "নবায়নযোগ্য জ্বালানির ব্যবহার বাড়িয়ে জ্বালানি নিরাপত্তা ও পরিবেশবান্ধব উন্নয়ন নিশ্চিত করার তাগিদ দেওয়া হয়েছে।",
@@ -8176,7 +8176,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেকসই উন্নয়ন",
-                        'name'             => "উপকূলে লবণাক্ততা টেকসই উন্নয়নের বড় চ্যালেঞ্জ",
+                        'headline'             => "উপকূলে লবণাক্ততা টেকসই উন্নয়নের বড় চ্যালেঞ্জ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "উপকূলীয় অঞ্চলে লবণাক্ততা বৃদ্ধি ও মাটি-পানির দূষণ টেকসই উন্নয়নের জন্য বড় চ্যালেঞ্জ বলে সতর্ক করা হয়েছে।",
@@ -8187,7 +8187,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেকসই উন্নয়ন",
-                        'name'             => "সেন্টমার্টিন রক্ষায় টেকসই মাস্টারপ্ল্যানের তাগিদ",
+                        'headline'             => "সেন্টমার্টিন রক্ষায় টেকসই মাস্টারপ্ল্যানের তাগিদ",
                         'sub_heading'      => "",
                         'content_shoulder' => "দ্বীপ সংরক্ষণ",
                         'brief'            => "সেন্টমার্টিন দ্বীপ রক্ষায় দীর্ঘমেয়াদি টেকসই ব্যবস্থাপনা পরিকল্পনা ও মাস্টারপ্ল্যান চূড়ান্ত করার ওপর জোর দেওয়া হয়েছে।",
@@ -8198,7 +8198,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেকসই উন্নয়ন",
-                        'name'             => "বিশ্বব্যাংকের সঙ্গে পরিবেশ ও টেকসই উন্নয়ন আলোচনা",
+                        'headline'             => "বিশ্বব্যাংকের সঙ্গে পরিবেশ ও টেকসই উন্নয়ন আলোচনা",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "পরিবেশ সংরক্ষণ, দূষণ নিয়ন্ত্রণ, নবায়নযোগ্য জ্বালানি ও এআইভিত্তিক পর্যবেক্ষণ নিয়ে বিশ্বব্যাংকের সঙ্গে আলোচনা হয়েছে।",
@@ -8209,7 +8209,7 @@ class NewsSeeder extends Seeder
 
                     (object) [
                         "category_name"    => "টেকসই উন্নয়ন",
-                        'name'             => "নিম্ন-কার্বন উন্নয়ন কৌশল প্রণয়নের উদ্যোগ",
+                        'headline'             => "নিম্ন-কার্বন উন্নয়ন কৌশল প্রণয়নের উদ্যোগ",
                         'sub_heading'      => "",
                         'content_shoulder' => "",
                         'brief'            => "জলবায়ু পরিবর্তনের প্রভাব মোকাবিলায় নিম্ন-কার্বন উন্নয়ন কৌশল ও অভিযোজন পরিকল্পনা বাস্তবায়নে উদ্যোগ নেওয়া হয়েছে।",
