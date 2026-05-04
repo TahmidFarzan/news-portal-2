@@ -15,7 +15,7 @@ class LocationController extends Controller
     public function __construct(LocationService $locationService)
     {
         $this->locationService = $locationService;
-        $this->middleware(['auth', 'verified', 'user.role:admin,supervisor']);
+        $this->middleware(['auth', 'verified', 'user.role:admin,news_desk']);
     }
 
     public function index(Request $request)

@@ -15,7 +15,7 @@ class TrendController extends Controller
     public function __construct(TrendService $trendService)
     {
         $this->trendService = $trendService;
-        $this->middleware(['auth', 'verified', 'user.role:admin,supervisor']);
+        $this->middleware(['auth', 'verified', 'user.role:admin,news_desk']);
     }
 
     public function index(Request $request)

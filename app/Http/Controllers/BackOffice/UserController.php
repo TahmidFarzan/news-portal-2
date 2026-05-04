@@ -16,7 +16,7 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        $this->middleware(['auth', 'verified', 'user.role:admin,supervisor']);
+        $this->middleware(['auth', 'verified', 'user.role:admin,news_desk']);
     }
 
     public function index(Request $request)

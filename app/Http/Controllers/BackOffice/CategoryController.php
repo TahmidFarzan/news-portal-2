@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;
-        $this->middleware(['auth', 'verified', 'user.role:admin,supervisor']);
+        $this->middleware(['auth', 'verified', 'user.role:admin,news_desk']);
     }
 
     public function index(Request $request)
