@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
+use App\Helpers\NewsHelper;
 use App\Observers\NewsObserver;
 use App\Policies\NewsPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -30,7 +31,7 @@ use Spatie\Sluggable\SlugOptions;
         'news_type', 'language_id', 'category_id', 'event_id', 'location_id',
         'title', 'sub_title', "content_shoulder", 'brief',
         "body", 'video_url',
-        'writer', 'author_id',
+        'writer',
         "seo_brief", 'seo_title', 'seo_keywords',
         'page_section',
         'created_by_id', 'slug', 'is_published',
@@ -42,9 +43,9 @@ class News extends Model implements HasMedia
     use HasFactory, LogsActivity, HasSlug, InteractsWithMedia;
 
     protected $appends = [
-        'public_url',
-        'is_recent_created', "indentation_name",
-        "has_descendants", "feeds_rss_url", "feeds_atom_url",
+        'public_url','is_story','is_video',
+        'is_recent_created',
+        "feeds_rss_url", "feeds_atom_url",
         'thumbnail', 'feature_image',
     ];
 
@@ -65,7 +66,7 @@ class News extends Model implements HasMedia
                 'news_type', 'language_id', 'category_id', 'event_id', 'location_id',
                 'title', 'sub_title', "content_shoulder", 'brief',
                 "body", 'video_url',
-                'writer', 'author_id',
+                'writer',
 
                 "seo_brief", 'seo_title', 'seo_keywords',
                 'page_section',
@@ -138,24 +139,14 @@ class News extends Model implements HasMedia
     {
         return "";
     }
-
-    public function getHasDescendantsAttribute(): bool
+    public function getIsStoryAttribute(): string
     {
-        return ($this->descendants()->count() > 0) ? true : false;
+        return ($this->news_type == NewsHelper::NEWS_TYPE_STORY);
     }
 
-    public function getIndentationNameAttribute(): ?string
+    public function getIsVideoAttribute(): string
     {
-        if (! $this->name_tree) {
-            return null;
-        }
-
-        $parts = explode(' - ', $this->name_tree);
-
-        $last        = trim(array_pop($parts));
-        $transformed = str_repeat('-- ', count($parts)) . $last;
-
-        return trim($transformed);
+        return ($this->news_type == NewsHelper::NEWS_TYPE_VIDEO);
     }
 
     public function getIsRecentCreatedAttribute(): bool

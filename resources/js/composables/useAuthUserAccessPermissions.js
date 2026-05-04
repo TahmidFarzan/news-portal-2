@@ -241,6 +241,42 @@ export const canDeleteContributor = (authUser, contributor) => {
     return isNewsDesk(role) && authUser.id === contributor.created_by_id
 }
 
+// ================= NEWS =================
+
+export const canCreateNews = (authUser) =>
+    authUser && isAdmin(getUserRole(authUser))
+
+export const canEditNews = (authUser, news) => {
+    if (!authUser || !news) return false
+
+    const role = getUserRole(authUser)
+
+    if (isAdmin(role)) return true
+
+    return isNewsDesk(role)
+}
+
+export const canDeleteNews = (authUser, news) => {
+    if (!authUser || !news) return false
+
+    const role = getUserRole(authUser)
+
+    if (isAdmin(role) && news.is_published) return true
+
+    return isNewsDesk(role) && news.is_published
+}
+
+export const canRestoreNews = (authUser, news) => {
+    if (!authUser || !news) return false
+
+
+    const role = getUserRole(authUser)
+
+    if (isAdmin(role) && (news.is_published == false)) return true
+
+    return isNewsDesk(role) && (news.is_published == false)
+}
+
 // ================= MENU =================
 
 export const canAccessActivityLogMenu = (authUser) =>
@@ -255,6 +291,14 @@ export const canAccessUserManagementMenu = (authUser) => {
 }
 
 export const canAccessNewsAttributesMenu = (authUser) => {
+    if (!authUser) return false
+
+    const role = getUserRole(authUser)
+
+    return isAdmin(role) || isNewsDesk(role)
+}
+
+export const canAccessNewsMenu = (authUser) => {
     if (!authUser) return false
 
     const role = getUserRole(authUser)

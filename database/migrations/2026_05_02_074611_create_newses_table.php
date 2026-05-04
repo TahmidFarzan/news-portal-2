@@ -30,7 +30,6 @@ return new class extends Migration
 
             $table->string('writer', 255)->nullable();
 
-
             $table->string('seo_title', 255)->nullable();
             $table->text('seo_brief')->nullable();
             $table->text('seo_keywords')->nullable();

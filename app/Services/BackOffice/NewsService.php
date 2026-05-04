@@ -42,16 +42,14 @@ class NewsService
             'language',
 
             'category',
-            'category.parent',
 
             'event',
             'location',
 
-            'tags'         => fn($query)         => $query->latest()->limit(10),
-            'contributor'  => fn($query)  => $query->latest()->limit(10),
+            'tags'         => fn($query)  => $query->orderBy('tags.created_at', 'desc')->limit(10),
+            'tags.trend',
 
-            'trends'       => fn($query)       => $query->latest()->limit(10),
-            'trends.tag',
+            'contributors'  => fn($query)  => $query->orderBy('contributors.created_at', 'desc')->limit(10),
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
@@ -67,7 +65,7 @@ class NewsService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = News::query();
+        $query = News::query()->with(["language", "category", "event", "location"]);
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));

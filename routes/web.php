@@ -218,7 +218,7 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
 
         Route::post('save', [NewsController::class, 'save'])->name('save');
         Route::patch('update/{slug}', [NewsController::class, 'update'])->name('update');
-        Route::delete('delete/{slug}', [NewsController::class, 'delete'])->name('delete');
+        Route::patch('delete/{slug}', [NewsController::class, 'delete'])->name('delete');
         Route::patch('restore/{slug}', [NewsController::class, 'restore'])->name('restore');
     });
 
