@@ -46,10 +46,10 @@ class NewsService
             'event',
             'location',
 
-            'tags'         => fn($query)  => $query->orderBy('tags.created_at', 'desc')->limit(10),
+            'tags',
             'tags.trend',
 
-            'contributors'  => fn($query)  => $query->orderBy('contributors.created_at', 'desc')->limit(10),
+            'contributors',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
@@ -338,8 +338,8 @@ class NewsService
 
     private function syncContentMedia(NewsRequest $request, News $news): void
     {
-        if ($request->filled('body_media_ids')) {
-            $contentMediaIds = explode(',', $request->input('body_media_ids'));
+        if ($request->filled('editor_media_ids')) {
+            $contentMediaIds = explode(',', $request->input('editor_media_ids'));
             $contentMediaIds = array_filter($contentMediaIds);
 
             if (count($contentMediaIds)) {
