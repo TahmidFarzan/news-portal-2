@@ -36,6 +36,7 @@ class Category extends Model
     protected $appends = [
         'public_url', 'is_recent_created', "has_parent", "indentation_name",
         "has_descendants", "feeds_rss_url", "feeds_atom_url", "sitemap_url",
+        "has_location",
     ];
 
     protected function casts(): array
@@ -143,6 +144,11 @@ class Category extends Model
         $transformed = str_repeat('-- ', count($parts)) . $last;
 
         return trim($transformed);
+    }
+
+    public function getHasLocationAttribute(): bool
+    {
+        return $this->locations()->exists();
     }
 
     public function activityLogs(): MorphMany
