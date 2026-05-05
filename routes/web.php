@@ -42,6 +42,32 @@ Route::middleware('guest')->group(function () {
     });
 });
 
+Route::middleware('auth')->group(function () {
+    Route::prefix('verification')->group(function () {
+        Route::get('notice', [AuthController::class, 'emailVerificationNotice'])->name('verification.notice');
+        Route::post('resend', [AuthController::class, 'emailVerificationResend'])->name('verification.resend');
+        Route::get('verification/{id}/{hash}', [AuthController::class, 'emailVerification'])->middleware('signed')->name('verification.verify'); // Default route name
+    });
+
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(function () {
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('index', [AuthController::class, 'dashboard'])->name('index');
+    });
+
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('index', [AuthController::class, 'profileIndex'])->name('index');
+        Route::patch('update', [AuthController::class, 'profileUpdate'])->name('update');
+    });
+
+    Route::prefix('account')->name('account.')->group(function () {
+        Route::get('index', [AuthController::class, 'accountIndex'])->name('index');
+        Route::patch('update', [AuthController::class, 'accountUpdate'])->name('update');
+    });
+});
+
 Route::prefix('search')->name('search.')->group(function () {
     // System
     Route::get('per-pages', [SearchController::class, 'perPages'])->name('per-pages');
@@ -81,32 +107,6 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('event/{slugOrId}', [SearchController::class, 'event'])->name('event');
     Route::get('contributor/{slugOrId}', [SearchController::class, 'contributor'])->name('contributor');
 
-});
-
-Route::middleware('auth')->group(function () {
-    Route::prefix('verification')->group(function () {
-        Route::get('notice', [AuthController::class, 'emailVerificationNotice'])->name('verification.notice');
-        Route::post('resend', [AuthController::class, 'emailVerificationResend'])->name('verification.resend');
-        Route::get('verification/{id}/{hash}', [AuthController::class, 'emailVerification'])->middleware('signed')->name('verification.verify'); // Default route name
-    });
-
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-});
-
-Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(function () {
-    Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::get('index', [AuthController::class, 'dashboard'])->name('index');
-    });
-
-    Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('index', [AuthController::class, 'profileIndex'])->name('index');
-        Route::patch('update', [AuthController::class, 'profileUpdate'])->name('update');
-    });
-
-    Route::prefix('account')->name('account.')->group(function () {
-        Route::get('index', [AuthController::class, 'accountIndex'])->name('index');
-        Route::patch('update', [AuthController::class, 'accountUpdate'])->name('update');
-    });
 });
 
 Route::prefix('back-office')->name('back-office.')->group(function () {
