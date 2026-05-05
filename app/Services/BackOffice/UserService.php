@@ -124,6 +124,10 @@ class UserService
 
             DB::commit();
 
+            if (! $request->boolean('set_as_verify_email') && ! $user->hasVerifiedEmail()) {
+                $user->sendEmailVerificationNotification();
+            }
+
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.user.save.success'),
