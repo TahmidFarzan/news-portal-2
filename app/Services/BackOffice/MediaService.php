@@ -85,7 +85,7 @@ class MediaService
                 $extension = $file->getClientOriginalExtension();
                 $fileName  = MediaHelper::generateMediaName("Upload", $extension, 200);
 
-                $mediaUpload->addMedia($file)
+                $media = $mediaUpload->addMedia($file)
                     ->usingFileName($fileName)
                     ->withCustomProperties([
                         'caption' => $request->input('caption'),
@@ -99,7 +99,19 @@ class MediaService
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.media.save.success'),
-                'media'   => $mediaUpload,
+                'media'   => (object) [
+                    'id'              => $media->id,
+                    'name'            => $media->name,
+                    'uuid'            => $media->uuid,
+                    'media_mime_type' => $media->mime_type,
+                    'caption'         => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
+                    'alt'             => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
+                    'media_type'      => $media->getTypeFromMime(),
+                    'url'             => $media->getUrl(),
+                    'original_url'    => $media->original_url,
+                    'media_url'       => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
+                    'media_srcset'    => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
+                ],
             ];
         } catch (Exception $ex) {
             DB::RollBack();
