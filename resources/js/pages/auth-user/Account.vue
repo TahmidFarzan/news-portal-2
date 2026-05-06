@@ -1,6 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
+import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { onMounted, nextTick, inject, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -134,8 +135,11 @@ onMounted(async () => {
                 <div v-if="activeTab === 'info'" class="p-6">
                     <div class="flex flex-col md:flex-row gap-6">
 
-                        <img :src="user?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
-                            class="w-32 h-32 object-cover rounded-xl border border-gray-200" />
+                        <div class="w-32 h-32">
+                            <MediaRenderer v-if="user?.profile_image" :media="user?.profile_image" />
+                            <img v-else :src="'/uploads/icons/auth/user.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                        </div>
 
                         <div class="space-y-2 text-sm">
                             <div><span class="font-medium text-gray-600">Name:</span> {{ user?.name }}</div>

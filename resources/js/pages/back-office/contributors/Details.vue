@@ -1,6 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
+import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -65,7 +66,8 @@ onMounted(async () => {
             <h2 class="text-lg font-semibold">Contributor Details</h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(contributor)" :href="route('back-office.contributors.edit', { slug: contributor?.slug })"
+                <a v-if="canEdit(contributor)"
+                    :href="route('back-office.contributors.edit', { slug: contributor?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     Edit
@@ -99,9 +101,12 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
                         <div class="text-gray-500 mb-1">Profile Image</div>
-                        <div class="text-gray-700">
-                            <img :src="contributor?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
-                                class="w-32 h-32 object-cover rounded-xl border border-gray-200" />
+                        <div class="text-gray-700 p-4">
+                            <div class="w-32 h-32">
+                                <MediaRenderer v-if="contributor?.profile_image" :media="contributor?.profile_image" />
+                                <img v-else :src="'/uploads/icons/auth/user.png'"
+                                    class="object-cover rounded-xl border border-gray-200" />
+                            </div>
                         </div>
                     </div>
                 </div>
