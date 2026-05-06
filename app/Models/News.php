@@ -46,7 +46,7 @@ class News extends Model implements HasMedia
         'public_url','is_story','is_video',
         'is_recent_created',
         "feeds_rss_url", "feeds_atom_url",
-        'thumbnail', 'feature_image',
+        'feature_image', 'feature_image_mobile',
     ];
 
     protected function casts(): array
@@ -157,11 +157,11 @@ class News extends Model implements HasMedia
         return $intervalInHours < 72;
     }
 
-    public function getThumbnailAttribute(): ?Media
+    public function getFeatureImageMobileAttribute(): ?Media
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_NEWS_THUMBNAIL_IMAGE];
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE];
 
         if ($this->hasMedia($collectionName, $roleParameter)) {
             $imageMedia = $this->getMedia($collectionName, $roleParameter)

@@ -1,6 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
+import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -103,18 +104,13 @@ onMounted(async () => {
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Title</span>
-                        <span class="font-medium">{{ news?.title || 'N/A' }}</span>
-                    </div>
-
                     <div class="flex justify-between">
                         <span class="text-gray-500">News type</span>
                         <span class="font-medium">{{ news?.news_type || 'N/A' }}</span>
                     </div>
+
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
@@ -122,6 +118,9 @@ onMounted(async () => {
                         <span class="text-gray-500">Language</span>
                         <span class="font-medium">{{ news?.language?.name || 'N/A' }}</span>
                     </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Category</span>
                         <span class="font-medium">{{ news?.category?.name || 'N/A' }}</span>
@@ -133,9 +132,66 @@ onMounted(async () => {
                         <span class="text-gray-500">Location</span>
                         <span class="font-medium">{{ news?.location?.name || 'N/A' }}</span>
                     </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Event</span>
                         <span class="font-medium">{{ news?.event?.name || 'N/A' }}</span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Page section</span>
+                        <span class="font-medium">{{ news?.page_section || 'N/A' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Title</span>
+                        <span class="font-medium">{{ news?.title || 'N/A' }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Sub title</span>
+                        <span class="font-medium">{{ news?.sub_title || 'N/A' }}</span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Content shoulder</span>
+                        <span class="font-medium">{{ news?.content_shoulder || 'N/A' }}</span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div>
+                        <div class="text-gray-500 mb-1">Brief</div>
+                        <div class="text-gray-700">{{ news?.brief || 'N/A' }}</div>
+                    </div>
+                </div>
+
+                <div v-if="news?.is_story" class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div>
+                        <div class="text-gray-500 mb-1">Body</div>
+                        <div class="text-gray-700">
+                            <div v-html="news?.body || 'N/A'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="news?.is_video" class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div>
+                        <div class="text-gray-500 mb-1">Video url</div>
+                        <div class="text-gray-700">
+                            {{ news?.video_url }}
+                        </div>
                     </div>
                 </div>
 
@@ -157,13 +213,15 @@ onMounted(async () => {
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Contributors</span>
                         <div class="flex flex-wrap gap-2">
                             <template v-if="news?.contributors && news.contributors.length">
-                                <span v-for="contributor in news.contributors"
-                                    :key="contributor.id ?? contributor.name"
+                                <span v-for="contributor in news.contributors" :key="contributor.id ?? contributor.name"
                                     class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 border border-gray-200">
                                     {{ contributor?.name }}
                                     <FontAwesomeIcon icon="fire" v-if="contributor?.trend" />
@@ -174,49 +232,6 @@ onMounted(async () => {
                                 No contributor added
                             </span>
                         </div>
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Sub title</span>
-                        <span class="font-medium">{{ news?.sub_title || 'N/A' }}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Content shoulder</span>
-                        <span class="font-medium">{{ news?.content_shoulder || 'N/A' }}</span>
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div>
-                        <div class="text-gray-500 mb-1">Brief</div>
-                        <div class="text-gray-700">{{ news?.brief || 'N/A' }}</div>
-                    </div>
-                </div>
-
-                <div v-if="news?.is_story" class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div>
-                        <div class="text-gray-500 mb-1">Body</div>
-                        <div class="text-gray-700">
-                            <div v-html="news?.news || 'N/A'"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="news?.is_video" class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div>
-                        <div class="text-gray-500 mb-1">Video url</div>
-                        <div class="text-gray-700">
-                            {{ news?.video_url }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Page section</span>
-                        <span class="font-medium">{{ news?.page_section || 'N/A' }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-500">Writer</span>
@@ -231,8 +246,9 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
                         <div class="text-gray-500 mb-1">Feature Image</div>
-                        <div class="text-gray-700">
-                            <img :src="news?.feature_image?.media_url || '/uploads/images/news/feature-image.png'"
+                        <div class="text-gray-700 w-100">
+                            <MediaRenderer v-if="news?.feature_image" :media="news?.feature_image" />
+                            <img v-else :src="'/uploads/images/news/feature-image.png'"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>
@@ -240,9 +256,10 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
-                        <div class="text-gray-500 mb-1">Thumbnail image</div>
-                        <div class="text-gray-700">
-                            <img :src="news?.thumbnail?.media_url || '/uploads/images/news/thumbnail.png'"
+                        <div class="text-gray-500 mb-1">Feature Image (Mobile)</div>
+                        <div class="text-gray-700 w-100">
+                            <MediaRenderer v-if="news?.feature_image_mobile" :media="news?.feature_image_mobile" />
+                            <img v-else :src="'/uploads/images/news/feature-image-mobile.png'"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>

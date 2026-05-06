@@ -151,6 +151,8 @@ class NewsService
 
             $news->is_published = $request->input('is_published') ? true : false;
 
+            $news->writer = $request->input('writer');
+
             $news->created_by_id = $isNew ? Auth::id() : $news->created_by_id;
 
             $news->save();
@@ -158,7 +160,7 @@ class NewsService
             DB::commit();
 
             self::featureImageSave($request, $news);
-            self::thumbnailImageSave($request, $news);
+            self::featureImageMobileSave($request, $news);
             self::syncContentMedia($request, $news);
 
             self::syncAttributesJob($request, $news);
@@ -263,7 +265,7 @@ class NewsService
                     ->withCustomProperties(
                         [
                             "alt"     => $news->title,
-                            "caption" => $request->input('upload_feature_image_caption'),
+                            "caption" => $request->input('feature_image_caption'),
                             "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
                         ]
                     )
@@ -282,7 +284,7 @@ class NewsService
                 ->usingFileName($mediaFeatureImageFileName)
                 ->withCustomProperties(
                     [
-                        'caption' => $request->input('upload_feature_image_caption'),
+                        'caption' => $request->input('feature_image_caption'),
                         'alt'     => $news->title,
                         "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
                     ]
@@ -291,12 +293,12 @@ class NewsService
         }
     }
 
-    private function thumbnailImageSave(NewsRequest $request, News $news)
+    private function featureImageMobileSave(NewsRequest $request, News $news)
     {
-        if ($request->hasFile('upload_thumbnail')) {
+        if ($request->hasFile('upload_feature_image_mobile')) {
             self::deleteExtingThumbnail($news);
 
-            $thumbnail = $request->file('upload_thumbnail');
+            $thumbnail = $request->file('upload_feature_image_mobile');
 
             if ($thumbnail) {
                 $extension = $thumbnail->getClientOriginalExtension();
@@ -308,17 +310,17 @@ class NewsService
                     ->withCustomProperties(
                         [
                             "alt"     => $news->title,
-                            "caption" => $news->input('upload_thumbnail_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_THUMBNAIL_IMAGE,
+                            "caption" => $news->input('feature_image_caption'),
+                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
                         ]
                     )
                     ->toMediaCollection($news->media_collection_name);
             }
         }
 
-        if ($request->input('selected_thumbnail_url')) {
+        if ($request->input('selected_feature_image_mobile_url')) {
             self::deleteExtingThumbnail($news);
-            $mediaThumbnailUrl       = $request->input('selected_thumbnail_url');
+            $mediaThumbnailUrl       = $request->input('selected_feature_image_mobile_url');
             $mediaThumbnailExtension = pathinfo($mediaThumbnailUrl, PATHINFO_EXTENSION);
             $mediaThumbnailFileName  = MediaHelper::generateMediaName($news->name, $mediaThumbnailExtension, 200);
 
@@ -327,9 +329,9 @@ class NewsService
                 ->usingFileName($mediaThumbnailFileName)
                 ->withCustomProperties(
                     [
-                        'caption' => $news->input('upload_thumbnail_caption'),
+                        'caption' => $news->input('upload_feature_image_mobile_caption'),
                         'alt'     => $news->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_THUMBNAIL_IMAGE,
+                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
                     ]
                 )
                 ->toMediaCollection($news->media_collection_name);

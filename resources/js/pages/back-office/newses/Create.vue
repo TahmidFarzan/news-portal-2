@@ -50,15 +50,17 @@ const saveForm = useForm({
     body: news?.body || null,
     video_url: news?.video_url || null,
 
-    upload_thumbnail: null,
+    upload_feature_image_mobile: null,
     upload_feature_image: null,
-    selected_thumbnail_url: null,
+    selected_feature_image_mobile_url: null,
     selected_feature_image_url: null,
 
-    upload_feature_image_caption: news?.feature_image?.custom_properties?.caption || null,
+    feature_image_caption: news?.feature_image?.custom_properties?.caption || null,
 
     is_published: news?.is_published,
     page_section: news?.page_section,
+
+    writer: news?.writer || null,
 
     seo_brief: news?.seo_brief || null,
     seo_title: news?.seo_title || null,
@@ -99,19 +101,35 @@ const locationApiUrl = computed(() => {
     return `${route('search.locations')}?${params.toString()}`
 })
 
+const tagApiUrl = computed(() => {
+    if (!saveForm.language_id) {
+        return route('search.tags')
+    }
+
+    return route('search.tags') + `?language_id=${saveForm.language_id}`
+})
+
+const contributorApiUrl = computed(() => {
+    if (!saveForm.language_id) {
+        return route('search.contributors')
+    }
+
+    return route('search.contributors') + `?language_id=${saveForm.language_id}`
+})
+
 function handleSelectedFeatureImage(media) {
     saveForm.selected_feature_image_url = media?.media_url || media?.original_url || media?.url || null
     saveForm.upload_feature_image = null
 
-    saveForm.upload_feature_image_caption =
+    saveForm.feature_image_caption =
         media?.custom_properties?.caption
         || media?.caption
-        || saveForm.upload_feature_image_caption
+        || saveForm.feature_image_caption
 }
 
 function handleSelectedThumbnail(media) {
-    saveForm.selected_thumbnail_url = media?.media_url || media?.original_url || media?.url || null
-    saveForm.upload_thumbnail = null
+    saveForm.selected_feature_image_mobile_url = media?.media_url || media?.original_url || media?.url || null
+    saveForm.upload_feature_image_mobile = null
 }
 
 function validateForm() {
@@ -170,16 +188,16 @@ function validateForm() {
         }
     }
 
-    if (saveForm.upload_thumbnail) {
-        if (saveForm.selected_thumbnail_url) {
-            saveForm.setError('upload_thumbnail', 'Please use either selected feature image or uploaded feature image, not both.')
+    if (saveForm.upload_feature_image_mobile) {
+        if (saveForm.selected_feature_image_mobile_url) {
+            saveForm.setError('upload_feature_image_mobile', 'Please use either selected feature image or uploaded feature image, not both.')
             valid = false
         }
     }
 
-    if (saveForm.selected_thumbnail_url) {
-        if (saveForm.upload_thumbnail) {
-            saveForm.setError('upload_thumbnail', 'Please use either selected feature image or uploaded feature image, not both.')
+    if (saveForm.selected_feature_image_mobile_url) {
+        if (saveForm.upload_feature_image_mobile) {
+            saveForm.setError('upload_feature_image_mobile', 'Please use either selected feature image or uploaded feature image, not both.')
             valid = false
         }
     }
@@ -447,24 +465,10 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="tag_ids"
-                                :selectedItem="news?.tags" :apiUrl="route('search.tags')"
+                                :selectedItem="news?.tags" :apiUrl="tagApiUrl"
                                 :error="saveForm.errors.tag_ids" :multiple="true" placeholder="Select tags" />
                             <p v-if="saveForm.errors.tag_ids" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.tag_ids }}
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium mb-1">
-                                Contributors
-                            </label>
-
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="contributor_ids"
-                                :selectedItem="news?.contributors" :apiUrl="route('search.contributors')"
-                                :error="saveForm.errors.contributor_ids" :multiple="true"
-                                placeholder="Select contributors" />
-                            <p v-if="saveForm.errors.contributor_ids" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.contributor_ids }}
                             </p>
                         </div>
 
@@ -496,9 +500,9 @@ onMounted(async () => {
                             }" class="border rounded px-3 py-2 w-full"
                                 :class="saveForm.errors.upload_feature_image ? 'border-red-500' : 'border-gray-300'" />
 
-                            <input v-model="saveForm.upload_feature_image_caption"
+                            <input v-model="saveForm.feature_image_caption"
                                 class="w-full border rounded-md px-3 py-2 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.upload_feature_image_caption ? 'border-red-500' : 'border-gray-300'"
+                                :class="saveForm.errors.feature_image_caption ? 'border-red-500' : 'border-gray-300'"
                                 placeholder="Enter Caption" />
 
                             <p v-if="saveForm.errors.upload_feature_image" class="text-red-500 text-sm mt-1">
@@ -516,34 +520,71 @@ onMounted(async () => {
                         <div>
                             <div class="flex items-center justify-between mb-1">
                                 <label class="block text-sm font-medium">
-                                    Thumbnail
+                                    Feature Image (Mobile)
                                 </label>
 
-                                <MediaSelectFromMediaLibery v-if="pageReady" galleryTitle="Thumbnail"
+                                <MediaSelectFromMediaLibery v-if="pageReady" galleryTitle="Feature Image (Mobile)"
                                     :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
                                     @media-selected="handleSelectedThumbnail" />
                             </div>
 
                             <input type="file" @change="e => {
-                                saveForm.upload_thumbnail = e.target.files[0] || null
+                                saveForm.upload_feature_image_mobile = e.target.files[0] || null
 
-                                if (saveForm.upload_thumbnail) {
-                                    saveForm.selected_thumbnail_url = null
+                                if (saveForm.upload_feature_image_mobile) {
+                                    saveForm.selected_feature_image_mobile_url = null
                                 }
                             }" class="border rounded px-3 py-2 w-full"
-                                :class="saveForm.errors.upload_thumbnail ? 'border-red-500' : 'border-gray-300'" />
+                                :class="saveForm.errors.upload_feature_image_mobile ? 'border-red-500' : 'border-gray-300'" />
 
 
-                            <p v-if="saveForm.errors.upload_thumbnail" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.upload_thumbnail }}
+                            <p v-if="saveForm.errors.upload_feature_image_mobile" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.upload_feature_image_mobile }}
                             </p>
 
-                            <p v-if="saveForm.errors.selected_thumbnail_url" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.selected_thumbnail_url }}
+                            <p v-if="saveForm.errors.selected_feature_image_mobile_url"
+                                class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.selected_feature_image_mobile_url }}
                             </p>
 
-                            <img :src="saveForm.selected_thumbnail_url || news?.thumbnail?.media_url || '/uploads/images/news/feature-image.png'"
+                            <img :src="saveForm.selected_feature_image_mobile_url || news?.feature_image_mobile?.media_url || '/uploads/images/news/feature-image.png'"
                                 class="object-cover rounded-xl border border-gray-200 mt-2" />
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">Contributor Settings</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Contributors
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="contributor_ids"
+                                :selectedItem="news?.contributors" :apiUrl="contributorApiUrl"
+                                :error="saveForm.errors.contributor_ids" :multiple="true"
+                                placeholder="Select contributors" />
+                            <p v-if="saveForm.errors.contributor_ids" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.contributor_ids }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Writer
+                            </label>
+
+                            <input v-model="saveForm.writer"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.writer ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.writer" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.writer }}
+                            </p>
                         </div>
 
                     </div>

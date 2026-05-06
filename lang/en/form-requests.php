@@ -354,6 +354,10 @@ return [
             "url" => 'Must be a url.',
         ],
 
+        'feature_image_caption'          => [
+            'required' => 'Feature image caption is required.',
+        ],
+
         'upload_feature_image'          => [
             'image'      => 'Upload feature image must be image.',
             'mimes'      => 'Upload feature image must have valid mimes[image/*].',
@@ -361,22 +365,22 @@ return [
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
         'selected_feature_image_url'          => [
-            'image'      => 'Selected image must be image.',
-            'mimes'      => 'Selected image must have valid mimes[image/*].',
-            'dimensions' => 'Selected image must width 1280px & Height 720px.',
+            'image'      => 'Selected feature image must be image.',
+            'mimes'      => 'Selected feature image must have valid mimes[image/*].',
+            'dimensions' => 'Selected feature image must width 1280px & Height 720px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
 
-        'upload_thumbnail'          => [
-            'image'      => 'Upload thumbnail must be image.',
-            'mimes'      => 'Upload thumbnail must have valid mimes[image/*].',
-            'dimensions' => 'Upload thumbnail must min-width 400px & Height 225px.',
+        'upload_feature_image_mobile'          => [
+            'image'      => 'Upload feature image mobile must be image.',
+            'mimes'      => 'Upload feature image mobile must have valid mimes[image/*].',
+            'dimensions' => 'Upload feature image mobile must min-width 400px & Height 225px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
-        'selected_thumbnail_url'          => [
-            'image'      => 'Selected thumbnail must be image.',
-            'mimes'      => 'Upload thumbnail must have valid mimes[image/*].',
-            'dimensions' => 'Upload thumbnail must min-width 400px & Height 225px.',
+        'selected_feature_image_mobile_url'          => [
+            'image'      => 'Selected feature image mobile must be image.',
+            'mimes'      => 'Upload feature image mobile must have valid mimes[image/*].',
+            'dimensions' => 'Upload feature image mobile must min-width 400px & Height 225px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
 

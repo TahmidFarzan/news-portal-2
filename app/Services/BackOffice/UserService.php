@@ -226,10 +226,10 @@ class UserService
 
     private static function saveProfileImage(UserRequest $request, User $user)
     {
-        if ($request->hasFile('upload_thumbnail_image')) {
+        if ($request->hasFile('upload_feature_image_mobile_image')) {
             self::deleteExistingProfileImage($user);
 
-            $file      = $request->file('upload_thumbnail_image');
+            $file      = $request->file('upload_feature_image_mobile_image');
             $extension = $file->getUserOriginalExtension();
             $fileName  = MediaHelper::generateMediaName($user->name, $extension, 200);
 
@@ -244,10 +244,10 @@ class UserService
                 ->toMediaCollection($user->media_collection_name);
         }
 
-        if ($request->input('media_selected_thumbnail_image_url')) {
+        if ($request->input('media_selected_feature_image_mobile_image_url')) {
             self::deleteExistingProfileImage($user);
 
-            $url       = $request->input('media_selected_thumbnail_image_url');
+            $url       = $request->input('media_selected_feature_image_mobile_image_url');
             $extension = pathinfo($url, PATHINFO_EXTENSION);
             $fileName  = MediaHelper::generateMediaName($user->name, $extension, 200);
 

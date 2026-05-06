@@ -14,8 +14,8 @@ class MediaHelper
     public const MEDIA_ROLE_APP_FAVICON_IMAGE = 'app_favicon_image';
 
     public const MEDIA_ROLE_NEWS_FEATURE_IMAGE   = 'news_feature_image';
+    public const MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE   = 'news_feature_image_mobile';
     public const MEDIA_ROLE_NEWS_CONTENT_IMAGE   = 'news_content_image';
-    public const MEDIA_ROLE_NEWS_THUMBNAIL_IMAGE = 'news_thumbnail';
 
     public const MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE = 'event_desktop_banner_image';
     public const MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE  = 'event_mobile_banner_image';
@@ -26,7 +26,7 @@ class MediaHelper
             (object) ['id' => self::MEDIA_ROLE_DEFAULT, 'name' => 'Default'],
 
             (object) ['id' => self::MEDIA_ROLE_NEWS_FEATURE_IMAGE, 'name' => 'News feature image'],
-            (object) ['id' => self::MEDIA_ROLE_NEWS_THUMBNAIL_IMAGE, 'name' => 'News thumbnail'],
+            (object) ['id' => self::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE, 'name' => 'News feature image (Mobile)'],
             (object) ['id' => self::MEDIA_ROLE_NEWS_CONTENT_IMAGE, 'name' => 'News content image'],
 
             (object) ['id' => self::MEDIA_ROLE_PROFILE_IMAGE, 'name' => 'Profile Image'],
