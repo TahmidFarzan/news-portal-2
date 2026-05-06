@@ -16,7 +16,7 @@ const { media } = defineProps({
         </figure>
 
         <iframe v-else-if="media?.mime_type.startsWith('video/')"
-            :src="media?.file_type === 'Upload' ? media?.getUrl() : media?.url"
+            :src="media?.media_url || media?.url"
             class="w-full rounded-lg border border-gray-200 min-h-[320px]"></iframe>
 
         <audio v-else-if="media?.mime_type.startsWith('audio/')" controls class="w-full">
@@ -24,14 +24,14 @@ const { media } = defineProps({
             Browser failed to support audio.
         </audio>
 
-        <iframe v-else-if="media?.mime_type === 'application/pdf'" :src="media?.media_url"
+        <iframe v-else-if="media?.mime_type === 'application/pdf'" :src="media?.media_url || media?.url"
             class="w-full rounded-lg border border-gray-200 min-h-[600px]"></iframe>
 
         <iframe v-else-if="['application/json', 'text/plain', 'text/csv'].includes(media?.mime_type)"
-            :src="media?.media_url" class="w-full rounded-lg border border-gray-200 min-h-[500px]"></iframe>
+            :src="media?.media_url || media?.url" class="w-full rounded-lg border border-gray-200 min-h-[500px]"></iframe>
 
         <div v-else-if="['application/zip', 'application/x-rar-compressed'].includes(media?.mime_type)">
-            <a :href="media?.media_url" download
+            <a :href="media?.media_url || media?.url" download
                 class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
                 Download
             </a>
