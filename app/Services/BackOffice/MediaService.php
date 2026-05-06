@@ -23,6 +23,11 @@ class MediaService
         return Media::where('slug', $slug)->orWhere('uuid', $slug)->firstOrFail();
     }
 
+    public function firstById(string $id): Media
+    {
+        return Media::where('id', $id)->first();
+    }
+
     public function loadRelations(Media $media)
     {
         $media->load([
@@ -129,26 +134,24 @@ class MediaService
         }
     }
 
-    public static function transferSingleMediaByMediaIds(array $mediaIds, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): array
+    public static function copyOrUpdateMediaByMediaIds(array $mediaIds, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): array
     {
         $replacementPairs = [];
 
         foreach ($mediaIds as $mediaId) {
-            $replacementPair = self::transferSingleMediaByMediaId(
-                (int) $mediaId,
-                $targetModel,
-                $mediaRole
-            );
+            $replacementPair = self::copyOrUpdateMediaByMediaId((int) $mediaId, $targetModel, $mediaRole);
 
-            if ($replacementPair) {
-                $replacementPairs[] = $replacementPair;
+            if ($replacementPair === null) {
+                continue;
             }
+
+            $replacementPairs[] = $replacementPair;
         }
 
         return $replacementPairs;
     }
 
-    public static function transferSingleMediaByMediaId(int $mediaId, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): ?object
+    public static function copyOrUpdateMediaByMediaId(int $mediaId, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): ?object
     {
         DB::beginTransaction();
         try {
