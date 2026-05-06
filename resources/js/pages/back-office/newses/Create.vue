@@ -3,6 +3,8 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
+import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
+
 import { isStory, isVideo } from '@/composables/useNews'
 
 import axios from 'axios'
@@ -50,6 +52,8 @@ const saveForm = useForm({
 
     upload_thumbnail: null,
     upload_feature_image: null,
+    selected_thumbnail_url: null,
+    selected_feature_image_url: null,
 
     upload_feature_image_caption: news?.feature_image?.custom_properties?.caption || null,
 
@@ -59,6 +63,7 @@ const saveForm = useForm({
     seo_brief: news?.seo_brief || null,
     seo_title: news?.seo_title || null,
     seo_keywords: news?.seo_keywords ? news?.seo_keywords.split(',') : [],
+
 
     editor_media_ids: null
 })
@@ -93,6 +98,21 @@ const locationApiUrl = computed(() => {
 
     return `${route('search.locations')}?${params.toString()}`
 })
+
+function handleSelectedFeatureImage(media) {
+    saveForm.selected_feature_image_url = media?.media_url || media?.original_url || media?.url || null
+    saveForm.upload_feature_image = null
+
+    saveForm.upload_feature_image_caption =
+        media?.custom_properties?.caption
+        || media?.caption
+        || saveForm.upload_feature_image_caption
+}
+
+function handleSelectedThumbnail(media) {
+    saveForm.selected_thumbnail_url = media?.media_url || media?.original_url || media?.url || null
+    saveForm.upload_thumbnail = null
+}
 
 function validateForm() {
     saveForm.clearErrors()
@@ -131,6 +151,37 @@ function validateForm() {
     if (!saveForm.video_url && saveForm.is_video) {
         saveForm.setError('video_url', 'Video url is required.')
         valid = false
+    }
+
+
+    if (!news?.feature_image) {
+        if (saveForm.upload_feature_image) {
+            if (saveForm.selected_feature_image_url) {
+                saveForm.setError('upload_feature_image', 'Please use either selected feature image or uploaded feature image, not both.')
+                valid = false
+            }
+        }
+
+        if (saveForm.selected_feature_image_url) {
+            if (saveForm.upload_feature_image) {
+                saveForm.setError('upload_feature_image', 'Please use either selected feature image or uploaded feature image, not both.')
+                valid = false
+            }
+        }
+    }
+
+    if (saveForm.upload_thumbnail) {
+        if (saveForm.selected_thumbnail_url) {
+            saveForm.setError('upload_thumbnail', 'Please use either selected feature image or uploaded feature image, not both.')
+            valid = false
+        }
+    }
+
+    if (saveForm.selected_thumbnail_url) {
+        if (saveForm.upload_thumbnail) {
+            saveForm.setError('upload_thumbnail', 'Please use either selected feature image or uploaded feature image, not both.')
+            valid = false
+        }
     }
 
     return valid
@@ -426,38 +477,72 @@ onMounted(async () => {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
-                            <label class="block text-sm font-medium mb-1">
-                                Feature Image
-                            </label>
-                            <input type="file" @change="e => saveForm.upload_thumbnail = e.target.files[0]"
-                                class="border rounded px-3 py-2 w-full"
-                                :class="saveForm.errors.upload_thumbnail ? 'border-red-500' : 'border-gray-300'" />
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block text-sm font-medium">
+                                    Feature Image <span class="text-red-500">*</span>
+                                </label>
+
+                                <MediaSelectFromMediaLibery v-if="pageReady" galleryTitle="Feature Image"
+                                    :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
+                                    @media-selected="handleSelectedFeatureImage" />
+                            </div>
+
+                            <input type="file" @change="e => {
+                                saveForm.upload_feature_image = e.target.files[0] || null
+
+                                if (saveForm.upload_feature_image) {
+                                    saveForm.selected_feature_image_url = null
+                                }
+                            }" class="border rounded px-3 py-2 w-full"
+                                :class="saveForm.errors.upload_feature_image ? 'border-red-500' : 'border-gray-300'" />
 
                             <input v-model="saveForm.upload_feature_image_caption"
                                 class="w-full border rounded-md px-3 py-2 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.upload_feature_image_caption ? 'border-red-500' : 'border-gray-300'" placeholder="Enter Caption"/>
+                                :class="saveForm.errors.upload_feature_image_caption ? 'border-red-500' : 'border-gray-300'"
+                                placeholder="Enter Caption" />
 
-                            <p v-if="saveForm.errors.upload_thumbnail" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.upload_thumbnail }}
+                            <p v-if="saveForm.errors.upload_feature_image" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.upload_feature_image }}
                             </p>
 
-                            <img :src="news?.feature_image?.media_url || '/uploads/images/news/feature-image.png'"
+                            <p v-if="saveForm.errors.selected_feature_image_url" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.selected_feature_image_url }}
+                            </p>
+
+                            <img :src="saveForm.selected_feature_image_url || news?.feature_image?.media_url || '/uploads/images/news/feature-image.png'"
                                 class="object-cover rounded-xl border border-gray-200 mt-2" />
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-1">
-                                Thumbnail
-                            </label>
-                            <input type="file" @change="e => saveForm.upload_thumbnail = e.target.files[0]"
-                                class="border rounded px-3 py-2 w-full"
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block text-sm font-medium">
+                                    Thumbnail
+                                </label>
+
+                                <MediaSelectFromMediaLibery v-if="pageReady" galleryTitle="Thumbnail"
+                                    :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
+                                    @media-selected="handleSelectedThumbnail" />
+                            </div>
+
+                            <input type="file" @change="e => {
+                                saveForm.upload_thumbnail = e.target.files[0] || null
+
+                                if (saveForm.upload_thumbnail) {
+                                    saveForm.selected_thumbnail_url = null
+                                }
+                            }" class="border rounded px-3 py-2 w-full"
                                 :class="saveForm.errors.upload_thumbnail ? 'border-red-500' : 'border-gray-300'" />
+
 
                             <p v-if="saveForm.errors.upload_thumbnail" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.upload_thumbnail }}
                             </p>
 
-                            <img :src="news?.thumbnail?.media_url || '/uploads/images/news/thumbnail.png'"
+                            <p v-if="saveForm.errors.selected_thumbnail_url" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.selected_thumbnail_url }}
+                            </p>
+
+                            <img :src="saveForm.selected_thumbnail_url || news?.thumbnail?.media_url || '/uploads/images/news/feature-image.png'"
                                 class="object-cover rounded-xl border border-gray-200 mt-2" />
                         </div>
 

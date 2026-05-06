@@ -27,50 +27,50 @@ class NewsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "news_type"                        => ["required"],
-            "language_id"                      => ["required"],
-            "category_id"                      => ["required"],
+            "news_type"                    => ["required"],
+            "language_id"                  => ["required"],
+            "category_id"                  => ["required"],
 
-            "title"                            => ["required"],
-            "brief"                            => ["required"],
+            "title"                        => ["required"],
+            "brief"                        => ["required"],
 
-            "sub_title"                        => ["nullable"],
-            "content_shoulder"                 => ["nullable"],
+            "sub_title"                    => ["nullable"],
+            "content_shoulder"             => ["nullable"],
 
-            "event_id"                         => ["nullable"],
-            "location_id"                      => ["nullable"],
+            "event_id"                     => ["nullable"],
+            "location_id"                  => ["nullable"],
 
-            "tag_ids"                          => ["nullable"],
-            "contributor_ids"                  => ["nullable"],
+            "tag_ids"                      => ["nullable"],
+            "contributor_ids"              => ["nullable"],
 
-            "seo_title"                        => ["nullable"],
-            "seo_brief"                        => ["nullable"],
-            "seo_keywords"                     => ["nullable"],
+            "seo_title"                    => ["nullable"],
+            "seo_brief"                    => ["nullable"],
+            "seo_keywords"                 => ["nullable"],
 
-            "upload_feature_image"             => [
+            "upload_feature_image"         => [
                 "nullable",
                 "image",
                 "mimes:jpg,jpeg,png,webp",
                 "dimensions:ratio=16/9,width=1280,height=720",
             ],
-            "upload_feature_image_caption"     => ["nullable", "required_with:upload_feature_image"],
-            "selected_feature_image_url" => ["nullable", "url"],
+            "upload_feature_image_caption" => ["nullable", "required_with:upload_feature_image"],
+            "selected_feature_image_url"   => ["nullable", "url"],
 
-            "upload_thumbnail"                 => [
+            "upload_thumbnail"             => [
                 "nullable",
                 "image",
                 "mimes:jpg,jpeg,png,webp",
                 "dimensions:ratio=16/9,width=400,height=225",
             ],
-            "upload_thumbnail_caption"         => ["nullable", "required_with:upload_thumbnail"],
-            "selected_thumbnail_url"     => ["nullable", "url"],
+            "upload_thumbnail_caption"     => ["nullable", "required_with:upload_thumbnail"],
+            "selected_thumbnail_url"       => ["nullable", "url"],
 
-            "body"                             => ["nullable"],
-            "video_url"                        => ["nullable", "url"],
+            "body"                         => ["nullable"],
+            "video_url"                    => ["nullable", "url"],
 
-            "page_section"                     => ["nullable"],
+            "page_section"                 => ["nullable"],
 
-            "content_media_ids"                => ["nullable"],
+            "content_media_ids"            => ["nullable"],
         ];
     }
 
@@ -93,7 +93,7 @@ class NewsRequest extends FormRequest
 
             "upload_feature_image_caption.required_with" => __("form-requests.news.upload_feature_image_caption.required"),
 
-            "selected_feature_image_url.url"       => __("form-requests.news.selected_feature_image_url.url"),
+            "selected_feature_image_url.url"             => __("form-requests.news.selected_feature_image_url.url"),
 
             "upload_thumbnail.image"                     => __("form-requests.news.upload_thumbnail.image"),
             "upload_thumbnail.mimes"                     => __("form-requests.news.upload_thumbnail.image"),
@@ -101,7 +101,7 @@ class NewsRequest extends FormRequest
 
             "upload_thumbnail_caption.required_with"     => __("form-requests.news.upload_thumbnail_caption.required"),
 
-            "selected_thumbnail_url.url"           => __("form-requests.news.selected_thumbnail_url.url"),
+            "selected_thumbnail_url.url"                 => __("form-requests.news.selected_thumbnail_url.url"),
         ];
     }
 
@@ -230,6 +230,18 @@ class NewsRequest extends FormRequest
 
                     break;
                 }
+            }
+
+            if (!$news?->feature_image && !$this->hasFile('upload_feature_image') && !empty($data['selected_feature_image_url'])) {
+                $validator->errors()->add(
+                    'upload_feature_image',
+                    __("form-requests.news.upload_feature_image.select_one")
+                );
+
+                $validator->errors()->add(
+                    'selected_feature_image_url',
+                    __("form-requests.news.selected_feature_image_url.select_one")
+                );
             }
 
             if ($this->hasFile('upload_feature_image') && ! empty($data['selected_feature_image_url'])) {
