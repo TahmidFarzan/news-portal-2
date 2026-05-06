@@ -70,7 +70,6 @@ const saveForm = useForm({
     editor_media_ids: null
 })
 
-
 const categoryApiUrl = computed(() => {
     if (!saveForm.language_id) {
         return route('search.category-tree')
@@ -205,7 +204,6 @@ function validateForm() {
     return valid
 }
 
-
 function handleSave() {
     if (saveForm.processing) return
 
@@ -279,6 +277,27 @@ watch(
     { immediate: true }
 )
 
+watch(
+    () => saveForm.language_id,
+    () => {
+        saveForm.category_id = null
+        saveForm.event_id = null
+        saveForm.location_id = null
+        saveForm.tag_ids = []
+        saveForm.contributor_ids = []
+
+        showLocation.value = false
+
+        saveForm.clearErrors(
+            'category_id',
+            'event_id',
+            'location_id',
+            'tag_ids',
+            'contributor_ids'
+        )
+    }
+)
+
 onMounted(async () => {
     await nextTick()
 
@@ -342,7 +361,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="category_id"
-                                :selectedItem="news?.category" :apiUrl="categoryApiUrl"
+                                :selectedItem="saveForm.category_id ? news?.category : null" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.category_id" :multiple="false" placeholder="Select category" />
                             <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.category_id }}
@@ -355,7 +374,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="event_id"
-                                :selectedItem="news?.event" :apiUrl="eventApiUrl" :error="saveForm.errors.event_id"
+                                :selectedItem="saveForm.event_id ? news?.event : null" :apiUrl="eventApiUrl" :error="saveForm.errors.event_id"
                                 :multiple="false" placeholder="Select event" />
                             <p v-if="saveForm.errors.event_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.event_id }}
@@ -368,7 +387,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="location_id"
-                                :selectedItem="news?.location" :apiUrl="locationApiUrl"
+                                :selectedItem="saveForm.location_id ? news?.location : null" :apiUrl="locationApiUrl"
                                 :error="saveForm.errors.location_id" :multiple="false" placeholder="Select location" />
                             <p v-if="saveForm.errors.location_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.location_id }}
@@ -465,7 +484,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="tag_ids"
-                                :selectedItem="news?.tags" :apiUrl="tagApiUrl"
+                                :selectedItem="saveForm.tag_ids ? news?.tags : null" :apiUrl="tagApiUrl"
                                 :error="saveForm.errors.tag_ids" :multiple="true" placeholder="Select tags" />
                             <p v-if="saveForm.errors.tag_ids" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.tag_ids }}
@@ -565,7 +584,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="contributor_ids"
-                                :selectedItem="news?.contributors" :apiUrl="contributorApiUrl"
+                                :selectedItem="saveForm.contributor_ids ? news?.contributors : null" :apiUrl="contributorApiUrl"
                                 :error="saveForm.errors.contributor_ids" :multiple="true"
                                 placeholder="Select contributors" />
                             <p v-if="saveForm.errors.contributor_ids" class="text-red-500 text-sm mt-1">
