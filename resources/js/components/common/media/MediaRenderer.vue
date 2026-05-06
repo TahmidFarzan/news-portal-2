@@ -9,7 +9,7 @@ const { media } = defineProps({
 
         <figure v-if="media?.mime_type?.startsWith('image/')" class="flex flex-col items-center">
             <img :src="media?.media_url" :alt="media?.custom_properties?.alt" :srcset="media?.media_srcset" loading="lazy"
-                class="w-1/4 max-w-full rounded-lg border border-gray-200 shadow-sm" />
+                class="w-full rounded-lg border border-gray-200 shadow-sm" />
             <figcaption class="mt-2 text-sm text-gray-500 text-center">
                 {{ media?.custom_properties?.caption }}
             </figcaption>

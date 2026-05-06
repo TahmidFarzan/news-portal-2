@@ -539,16 +539,17 @@ class SearchService
             ->paginate($request->input('per_page', 50));
 
         $list = $records->map(fn($media) => [
-            'id'           => $media->id,
-            'name'         => $media->name,
-            'uuid'         => $media->uuid,
-            'mime_type'    => $media->mime_type,
-            'caption'      => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
-            'alt'          => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
-            'media_type'   => $media->getTypeFromMime(),
-            'url'          => $media->getUrl(),
-            'media_url'    => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
-            'media_srcset' => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
+            'id'                => $media->id,
+            'name'              => $media->name,
+            'uuid'              => $media->uuid,
+            'mime_type'         => $media->mime_type,
+            'custom_properties' => $media->custom_properties,
+            'caption'           => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
+            'alt'               => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
+            'media_type'        => $media->getTypeFromMime(),
+            'url'               => $media->getUrl(),
+            'media_url'         => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
+            'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
         ]);
 
         return [
