@@ -271,9 +271,9 @@ class NewsService
             }
         }
 
-        if ($request->input('media_selected_feature_image_url')) {
+        if ($request->input('selected_feature_image_url')) {
             self::deleteExtingFeatureImage($news);
-            $mediaFeatureImageUrl       = $request->input('media_selected_feature_image_url');
+            $mediaFeatureImageUrl       = $request->input('selected_feature_image_url');
             $mediaFeatureImageExtension = pathinfo($mediaFeatureImageUrl, PATHINFO_EXTENSION);
             $mediaFeatureImageFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageExtension, 200);
 
@@ -316,9 +316,9 @@ class NewsService
             }
         }
 
-        if ($request->input('media_selected_thumbnail_url')) {
+        if ($request->input('selected_thumbnail_url')) {
             self::deleteExtingThumbnail($news);
-            $mediaThumbnailUrl       = $request->input('media_selected_thumbnail_url');
+            $mediaThumbnailUrl       = $request->input('selected_thumbnail_url');
             $mediaThumbnailExtension = pathinfo($mediaThumbnailUrl, PATHINFO_EXTENSION);
             $mediaThumbnailFileName  = MediaHelper::generateMediaName($news->name, $mediaThumbnailExtension, 200);
 
@@ -338,13 +338,76 @@ class NewsService
 
     private function syncContentMedia(NewsRequest $request, News $news): void
     {
-        if ($request->filled('editor_media_ids')) {
-            $contentMediaIds = explode(',', $request->input('editor_media_ids'));
-            $contentMediaIds = array_filter($contentMediaIds);
+        if (! $news->is_story || ! $request->filled('editor_media_ids')) {
+            return;
+        }
 
-            if (count($contentMediaIds)) {
-                $this->mediaService->transferSingleMediaByMediaIds($contentMediaIds, $news);
+        $contentMediaIds = explode(',', $request->input('editor_media_ids'));
+        $contentMediaIds = array_filter($contentMediaIds);
+
+        if (! count($contentMediaIds)) {
+            return;
+        }
+
+        $replacementPairs = $this->mediaService->copyOrUpdateMediaByMediaIds(
+            $contentMediaIds,
+            $news,
+            MediaHelper::MEDIA_ROLE_NEWS_CONTENT_IMAGE
+        );
+
+        if (! $replacementPairs) {
+            return;
+        }
+
+        $body = $news->body ?? '';
+
+        foreach ($replacementPairs as $replacementPair) {
+            if ($replacementPair->old_media_id == $replacementPair->new_media_id) {
+                continue;
             }
+
+            $oldMedia = $this->mediaService->firstById($replacementPair->old_media_id);
+            $newMedia = $this->mediaService->firstById($replacementPair->new_media_id);
+
+            if (! $oldMedia || ! $newMedia) {
+                continue;
+            }
+
+            $replaceableUrls = [
+                [
+                    'old' => $oldMedia->url ?? null,
+                    'new' => $newMedia->url ?? null,
+                ],
+                [
+                    'old' => $oldMedia->original_url ?? null,
+                    'new' => $newMedia->original_url ?? null,
+                ],
+                [
+                    'old' => $oldMedia->media_url ?? null,
+                    'new' => $newMedia->media_url ?? null,
+                ],
+                [
+                    'old' => $oldMedia->media_srcset ?? null,
+                    'new' => $newMedia->media_srcset ?? null,
+                ],
+            ];
+
+            foreach ($replaceableUrls as $replaceableUrl) {
+                if (! $replaceableUrl['old'] || ! $replaceableUrl['new']) {
+                    continue;
+                }
+
+                $body = str_replace(
+                    $replaceableUrl['old'],
+                    $replaceableUrl['new'],
+                    $body
+                );
+            }
+        }
+
+        if ($body !== $news->body) {
+            $news->body = $body;
+            $news->save();
         }
     }
 

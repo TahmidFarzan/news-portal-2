@@ -54,7 +54,7 @@ class NewsRequest extends FormRequest
                 "dimensions:ratio=16/9,width=1280,height=720",
             ],
             "upload_feature_image_caption"     => ["nullable", "required_with:upload_feature_image"],
-            "media_selected_feature_image_url" => ["nullable", "url"],
+            "selected_feature_image_url" => ["nullable", "url"],
 
             "upload_thumbnail"                 => [
                 "nullable",
@@ -63,7 +63,7 @@ class NewsRequest extends FormRequest
                 "dimensions:ratio=16/9,width=400,height=225",
             ],
             "upload_thumbnail_caption"         => ["nullable", "required_with:upload_thumbnail"],
-            "media_selected_thumbnail_url"     => ["nullable", "url"],
+            "selected_thumbnail_url"     => ["nullable", "url"],
 
             "body"                             => ["nullable"],
             "video_url"                        => ["nullable", "url"],
@@ -93,7 +93,7 @@ class NewsRequest extends FormRequest
 
             "upload_feature_image_caption.required_with" => __("form-requests.news.upload_feature_image_caption.required"),
 
-            "media_selected_feature_image_url.url"       => __("form-requests.news.media_selected_feature_image_url.url"),
+            "selected_feature_image_url.url"       => __("form-requests.news.selected_feature_image_url.url"),
 
             "upload_thumbnail.image"                     => __("form-requests.news.upload_thumbnail.image"),
             "upload_thumbnail.mimes"                     => __("form-requests.news.upload_thumbnail.image"),
@@ -101,7 +101,7 @@ class NewsRequest extends FormRequest
 
             "upload_thumbnail_caption.required_with"     => __("form-requests.news.upload_thumbnail_caption.required"),
 
-            "media_selected_thumbnail_url.url"           => __("form-requests.news.media_selected_thumbnail_url.url"),
+            "selected_thumbnail_url.url"           => __("form-requests.news.selected_thumbnail_url.url"),
         ];
     }
 
@@ -232,44 +232,44 @@ class NewsRequest extends FormRequest
                 }
             }
 
-            if ($this->hasFile('upload_feature_image') && ! empty($data['media_selected_feature_image_url'])) {
+            if ($this->hasFile('upload_feature_image') && ! empty($data['selected_feature_image_url'])) {
                 $validator->errors()->add(
                     'upload_feature_image',
                     __("form-requests.news.upload_feature_image.select_one")
                 );
 
                 $validator->errors()->add(
-                    'media_selected_feature_image_url',
-                    __("form-requests.news.media_selected_feature_image_url.select_one")
+                    'selected_feature_image_url',
+                    __("form-requests.news.selected_feature_image_url.select_one")
                 );
             }
 
-            if (! empty($data['media_selected_feature_image_url'])) {
-                if ($this->mediaFeatureImageDimensionInvalid($data['media_selected_feature_image_url'])) {
+            if (! empty($data['selected_feature_image_url'])) {
+                if ($this->mediaFeatureImageDimensionInvalid($data['selected_feature_image_url'])) {
                     $validator->errors()->add(
-                        "media_selected_feature_image_url",
-                        __("form-requests.news.media_selected_feature_image_url.dimensions")
+                        "selected_feature_image_url",
+                        __("form-requests.news.selected_feature_image_url.dimensions")
                     );
                 }
             }
 
-            if ($this->hasFile('upload_thumbnail') && ! empty($data['media_selected_thumbnail_url'])) {
+            if ($this->hasFile('upload_thumbnail') && ! empty($data['selected_thumbnail_url'])) {
                 $validator->errors()->add(
                     'upload_thumbnail',
                     __("form-requests.news.upload_thumbnail.select_one")
                 );
 
                 $validator->errors()->add(
-                    'media_selected_thumbnail_url',
+                    'selected_thumbnail_url',
                     __("form-requests.news.upload_thumbnail.select_one")
                 );
             }
 
-            if (! empty($data['media_selected_thumbnail_url'])) {
-                if ($this->mediaThumbnailImageDimensionInvalid($data['media_selected_thumbnail_url'])) {
+            if (! empty($data['selected_thumbnail_url'])) {
+                if ($this->mediaThumbnailImageDimensionInvalid($data['selected_thumbnail_url'])) {
                     $validator->errors()->add(
-                        "media_selected_thumbnail_url",
-                        __("form-requests.news.media_selected_thumbnail_url.dimensions")
+                        "selected_thumbnail_url",
+                        __("form-requests.news.selected_thumbnail_url.dimensions")
                     );
                 }
             }

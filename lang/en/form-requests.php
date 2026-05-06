@@ -360,23 +360,23 @@ return [
             'dimensions' => 'Upload feature image must width 1280px & Height 720px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
-        'media_selected_feature_image_url'          => [
-            'image'      => 'Upload feature image must be image.',
-            'mimes'      => 'Upload feature image must have valid mimes[image/*].',
-            'dimensions' => 'Upload feature image must width 1280px & Height 720px.',
+        'selected_feature_image_url'          => [
+            'image'      => 'Selected image must be image.',
+            'mimes'      => 'Selected image must have valid mimes[image/*].',
+            'dimensions' => 'Selected image must width 1280px & Height 720px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
 
         'upload_thumbnail'          => [
-            'image'      => 'Upload feature image must be image.',
-            'mimes'      => 'Upload feature image must have valid mimes[image/*].',
-            'dimensions' => 'Upload feature image must min-width 400px & Height 225px.',
+            'image'      => 'Upload thumbnail must be image.',
+            'mimes'      => 'Upload thumbnail must have valid mimes[image/*].',
+            'dimensions' => 'Upload thumbnail must min-width 400px & Height 225px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
-        'media_selected_thumbnail_url'          => [
-            'image'      => 'Upload feature image must be image.',
-            'mimes'      => 'Upload feature image must have valid mimes[image/*].',
-            'dimensions' => 'Upload feature image must min-width 400px & Height 225px.',
+        'selected_thumbnail_url'          => [
+            'image'      => 'Selected thumbnail must be image.',
+            'mimes'      => 'Upload thumbnail must have valid mimes[image/*].',
+            'dimensions' => 'Upload thumbnail must min-width 400px & Height 225px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
 
