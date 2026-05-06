@@ -163,12 +163,12 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.events.update', { slug: news?.slug }),
+            route('back-office.newses.update', { slug: news?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
         )
     } else {
-        saveForm.post(route('back-office.events.save'), requestConfig)
+        saveForm.post(route('back-office.newses.save'), requestConfig)
     }
 }
 
@@ -368,7 +368,7 @@ onMounted(async () => {
                             </label>
 
                             <TinyMCEEditor inputField="body" :form="saveForm" erroField="body" :isSimple="false"
-                                :enableMediaUpload="true" :enableSelectFormMediaLibery="false" />
+                                :enableMediaUpload="true" :enableSelectFormMediaLibery="true" />
 
                             <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.body }}

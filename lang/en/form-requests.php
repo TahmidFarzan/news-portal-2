@@ -338,7 +338,7 @@ return [
             "not_found" => 'Event is not exit.',
         ],
 
-         'location_id'          => [
+        'location_id'          => [
             "not_found" => 'Location is not exit.',
         ],
 
