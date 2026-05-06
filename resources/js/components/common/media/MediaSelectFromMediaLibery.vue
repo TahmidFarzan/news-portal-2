@@ -8,10 +8,6 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    inputPrefix: {
-        type: String,
-        required: true,
-    },
     mediaType: {
         type: String,
         default: 'image',

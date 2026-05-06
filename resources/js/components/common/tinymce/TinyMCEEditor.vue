@@ -6,7 +6,7 @@
         <input v-if="pageReady && form" v-model="form['editor_media_ids']" type="hidden" class="hidden" />
 
         <SelectMediaFromMediaLibery ref="mediaLibrary" v-model:showModal="showMediaLibrary"
-            :fetch-url="route('search.medias')" :media-type="'All'" :multiple="true" input-prefix="editor"
+            :fetch-url="route('search.medias')" :media-type="'All'" :multiple="true"
             @media-selected="handleMediaSelected" :hide-default-open-button="true" />
     </div>
 </template>
