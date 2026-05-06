@@ -129,14 +129,26 @@ class MediaService
         }
     }
 
-    public static function transferSingleMediaByMediaIds(array $mediaIds, $targetModel): void
+    public static function transferSingleMediaByMediaIds(array $mediaIds, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): array
     {
+        $replacementPairs = [];
+
         foreach ($mediaIds as $mediaId) {
-            self::transferSingleMediaByMediaIds($mediaId, $targetModel);
+            $replacementPair = self::transferSingleMediaByMediaId(
+                (int) $mediaId,
+                $targetModel,
+                $mediaRole
+            );
+
+            if ($replacementPair) {
+                $replacementPairs[] = $replacementPair;
+            }
         }
+
+        return $replacementPairs;
     }
 
-    public static function transferSingleMediaByMediaId(int $mediaId, $targetModel): void
+    public static function transferSingleMediaByMediaId(int $mediaId, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): ?object
     {
         DB::beginTransaction();
         try {
@@ -144,11 +156,13 @@ class MediaService
 
             $sourceModel = $media->model;
 
+            $oldMediaId = $media->id;
+
             if (! $sourceModel || ! $targetModel || ! $media) {
-                return;
+                return null;
             }
 
-            if ($media && $targetModel) {
+            if ($sourceModel instanceof MediaUpload) {
                 $media->model_id        = $targetModel->id;
                 $media->model_type      = $targetModel->getMorphClass();
                 $media->name            = $targetModel->name ?? $targetModel->title ?? $media->name;
@@ -157,20 +171,49 @@ class MediaService
                 $media->setCustomProperty('alt', $media->getCustomProperty('alt') ?? $product->name ?? null);
                 $media->save();
 
-                if ($sourceModel instanceof MediaUpload && $sourceModel->getMedia($sourceModel->media_collection_name)->isEmpty()) {
+                if ($sourceModel->getMedia($sourceModel->media_collection_name)->isEmpty()) {
                     $sourceModel->delete();
                 }
 
                 DB::commit();
+
+                return (object) [
+                    'old_media_id' => $oldMediaId,
+                    'new_media_id' => $media->id,
+                ];
+            } else {
+                $mediaExtension = pathinfo($media->original_url, PATHINFO_EXTENSION);
+                $mediaFileName  = MediaHelper::generateMediaName(($targetModel->name ?? $targetModel->title ?? $media->name), $mediaExtension, 200);
+
+                $newMedia = $targetModel->addMediaFromUrl($media->original_url)
+                    ->usingName($targetModel->name ?? $targetModel->title ?? $media->name)
+                    ->usingFileName($mediaFileName)
+                    ->withCustomProperties(
+                        [
+                            'caption' => $media->getCustomProperty('caption') ?? $targetModel->name ?? $targetModel->title,
+                            'alt'     => $media->getCustomProperty('alt') ?? $targetModel->name ?? $targetModel->title,
+                            "role"    => $mediaRole,
+                        ]
+                    )
+                    ->toMediaCollection($targetModel->media_collection_name);
+                DB::commit();
+
+                return (object) [
+                    'old_media_id' => $oldMediaId,
+                    'new_media_id' => $newMedia->id,
+                ];
             }
+
         } catch (Exception $exception) {
             DB::rollback();
 
-            $targeModelName = $targetModel->name ?? $targetModel->title ?? "";
+            $targetModelName = $targetModel->name ?? $targetModel->title ?? "";
 
-            Log::error("Failed to transfer media {$targeModelName}.", [
-                'exception' => $exception,
+            Log::error("Failed to transfer media {$targetModelName}.", [
+                'old_media_id' => $mediaId,
+                'exception'    => $exception,
             ]);
+            return null;
         }
     }
 
