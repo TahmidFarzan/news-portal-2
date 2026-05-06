@@ -68,11 +68,16 @@ class AuthController extends Controller
     {
         $result = $this->authService->login($request);
 
-        $redirect = $result['status'] === 'success'
-            ? session()->pull('url.intended', route('auth-user.dashboard.index'))
-            : back();
+        if ($result['status'] === 'success') {
+            $redirect = session()->pull('url.intended', route('auth-user.dashboard.index'));
 
-        return redirect($redirect)->with('flash_message', [
+            return redirect($redirect)->with('flash_message', [
+                'message' => $result['message'],
+                'status'  => $result['status'],
+            ]);
+        }
+
+        return back()->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -171,7 +176,6 @@ class AuthController extends Controller
     {
         $user   = $this->authService->authUser();
         $result = $this->authService->accountUpdate($request, $user);
-
 
         return to_route('auth-user.account.index')->with('flash_message', [
             'message' => $result['message'],
