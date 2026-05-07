@@ -2,6 +2,7 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
+import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -179,8 +180,10 @@ onMounted(async () => {
                                 {{ saveForm.errors.desktop_banner_image }}
                             </p>
 
-                            <img :src="event?.desktop_banner_image?.media_url || '/uploads/images/event/desktop.png'"
-                            class="object-cover rounded-xl border border-gray-200 mt-2"/>
+                            <MediaRenderer v-if="event?.desktop_banner_image" :media="event?.desktop_banner_image" />
+                            <img v-else :src="'/uploads/images/event/desktop.png'"
+                                class="object-cover rounded-xl border border-gray-200 mt-2" />
+
                         </div>
 
                         <div>
@@ -195,8 +198,9 @@ onMounted(async () => {
                                 {{ saveForm.errors.mobile_banner_image }}
                             </p>
 
-                            <img :src="event?.mobile_banner_image?.media_url || '/uploads/images/event/mobile.png'"
-                            class="object-cover rounded-xl border border-gray-200 mt-2"/>
+                            <MediaRenderer v-if="event?.mobile_banner_image" :media="event?.mobile_banner_image" />
+                            <img v-else :src="'/uploads/images/event/mobile.png'"
+                                class="object-cover rounded-xl border border-gray-200 mt-2" />
                         </div>
 
                     </div>

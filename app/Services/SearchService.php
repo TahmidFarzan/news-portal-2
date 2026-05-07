@@ -547,7 +547,7 @@ class SearchService
             'caption'           => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
             'alt'               => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
             'media_type'        => $media->getTypeFromMime(),
-            'url'               => $media->getUrl(),
+            'original_url'      => $media->original_url,
             'media_url'         => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
             'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
         ]);

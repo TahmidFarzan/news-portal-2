@@ -3,6 +3,7 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
+import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -165,8 +166,8 @@ onMounted(async () => {
                                 Profile details
                             </label>
 
-                            <TinyMCEEditor inputField="profile_details" :form="saveForm" erroField="profile_details" :isSimple="true"
-                                :enableMediaUpload="false" :enableSelectFormMediaLibery="false" />
+                            <TinyMCEEditor inputField="profile_details" :form="saveForm" erroField="profile_details"
+                                :isSimple="true" :enableMediaUpload="false" :enableSelectFormMediaLibery="false" />
 
                             <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.profile_details }}
@@ -193,7 +194,8 @@ onMounted(async () => {
                                 {{ saveForm.errors.profile_image }}
                             </p>
 
-                            <img :src="contributor?.profile_image?.media_url || '/public/uploads/icons/auth/user.png'"
+                            <MediaRenderer v-if="contributor?.profile_image" :media="contributor?.profile_image" />
+                            <img v-else :src="'/uploads/icons/auth/user.png'"
                                 class="object-cover rounded-xl border border-gray-200 mt-2 w-32 h-32" />
                         </div>
 
