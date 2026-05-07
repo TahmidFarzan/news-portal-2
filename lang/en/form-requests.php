@@ -314,17 +314,14 @@ return [
 
     ],
 
-    'name'      => [
+    'news'      => [
         'title'          => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
             'max'      => 'Title max chars is 200.',
             'unique'   => 'Title must be unique.',
         ],
-        'news_type' => [
-            'required' => 'News type is required.',
-            "not_found" => 'News type is not exit.',
-        ],
+
         'language_id'          => [
             'required' => 'Language is required.',
             "not_found" => 'Language is not exit.',
@@ -350,8 +347,8 @@ return [
             "not_found" => 'Tags is not exit.',
         ],
 
-        'video_url'          => [
-            "url" => 'Must be a url.',
+        'body'          => [
+            'required' => 'Body is required.',
         ],
 
         'feature_image_caption'          => [

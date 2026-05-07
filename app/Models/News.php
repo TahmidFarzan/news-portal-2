@@ -2,7 +2,6 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
-use App\Helpers\NewsHelper;
 use App\Observers\NewsObserver;
 use App\Policies\NewsPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -28,10 +27,9 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('newses')]
 #[Fillable([
-        'news_type', 'language_id', 'category_id', 'event_id', 'location_id',
+        'language_id', 'category_id', 'event_id', 'location_id',
         'title', 'sub_title', "content_shoulder", 'brief',
-        "body", 'video_url',
-        'writer','source',
+        "body", 'writer', 'source',
         "seo_brief", 'seo_title', 'seo_keywords',
         'page_section',
         'created_by_id', 'slug', 'is_published',
@@ -43,7 +41,7 @@ class News extends Model implements HasMedia
     use HasFactory, LogsActivity, HasSlug, InteractsWithMedia;
 
     protected $appends = [
-        'public_url','is_story','is_video',
+        'public_url',
         'is_recent_created',
         "feeds_rss_url", "feeds_atom_url",
         'feature_image', 'feature_image_mobile',
@@ -63,11 +61,9 @@ class News extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'news_type', 'language_id', 'category_id', 'event_id', 'location_id',
+                'language_id', 'category_id', 'event_id', 'location_id',
                 'title', 'sub_title', "content_shoulder", 'brief',
-                "body", 'video_url',
-                'writer',
-
+                "body", 'writer', 'source',
                 "seo_brief", 'seo_title', 'seo_keywords',
                 'page_section',
                 'slug', 'is_published',
@@ -138,15 +134,6 @@ class News extends Model implements HasMedia
     public function getFeedsRSSUrlAttribute(): string
     {
         return "";
-    }
-    public function getIsStoryAttribute(): string
-    {
-        return ($this->news_type == NewsHelper::NEWS_TYPE_STORY);
-    }
-
-    public function getIsVideoAttribute(): string
-    {
-        return ($this->news_type == NewsHelper::NEWS_TYPE_VIDEO);
     }
 
     public function getIsRecentCreatedAttribute(): bool
@@ -220,7 +207,7 @@ class News extends Model implements HasMedia
 
     public function contributors(): BelongsToMany
     {
-        return $this->belongsToMany(Contributor::class,'contributor_news' )->withTimestamps();
+        return $this->belongsToMany(Contributor::class, 'contributor_news')->withTimestamps();
     }
 
     public function event(): BelongsTo
@@ -283,6 +270,7 @@ class News extends Model implements HasMedia
         }
         return $images;
     }
+
     public function videos(): ?MediaCollection
     {
         $videos         = null;

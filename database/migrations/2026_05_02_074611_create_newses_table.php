@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('newses', function (Blueprint $table) {
             $table->id();
-            $table->string('news_type')->default("Story");
 
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
 
@@ -26,7 +25,7 @@ return new class extends Migration
             $table->text('brief')->nullable();
 
             $table->longText('body')->nullable();
-            $table->string('video_url', 255)->nullable();
+
 
             $table->string('writer', 255)->nullable();
 

@@ -128,7 +128,6 @@ class NewsService
             $isNew       = empty($news->id);
             $statusEvent = $isNew ? "save" : "update";
 
-            $news->news_type   = $request->input('news_type', );
             $news->language_id = $request->input('language_id');
 
             $news->category_id = $request->input('category_id');
@@ -143,8 +142,8 @@ class NewsService
 
             $news->brief = $request->input('brief');
 
-            $news->body      = ($request->input('news_type') == NewsHelper::NEWS_TYPE_STORY) ? $request->input('body') : null;
-            $news->video_url = ($request->input('news_type') == NewsHelper::NEWS_TYPE_VIDEO) ? $request->input('video_url') : null;
+            $news->body      = $request->input('body');
+
 
             $news->page_section = $request->input('page_section');
 
@@ -344,7 +343,7 @@ class NewsService
 
     private function syncContentMedia(NewsRequest $request, News $news): void
     {
-        if (! $news->is_story || ! $request->filled('editor_media_ids')) {
+        if (! $request->filled('editor_media_ids')) {
             return;
         }
 

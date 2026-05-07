@@ -1,7 +1,6 @@
 <?php
 namespace Database\Factories;
 
-use App\Helpers\NewsHelper;
 use App\Helpers\SystemHelper;
 use App\Helpers\UserHelper;
 use App\Models\Category;
@@ -28,20 +27,15 @@ class NewsFactory extends Factory
         $location = $this->getRandomLocation($language, $category);
         $event    = $this->getRandomEvent($language);
 
-        $newsType = NewsHelper::NEWS_TYPE_STORY;
-
         $title           = $this->faker->name();
         $subTitle        = $this->faker->name();
         $contentShoulder = $this->faker->sentence(3);
         $brief           = $this->faker->sentence();
         $body            = $this->faker->sentence(100);
-        $videoUrl        = ($newsType == NewsHelper::NEWS_TYPE_VIDEO) ? "https://www.youtube.com/embed/RfFqXoZuio4" : null;
 
         $isPublished = $this->faker->boolean(50);
 
         return [
-            "news_type"        => $newsType,
-
             "language_id"      => $language?->id ?? "1",
             "category_id"      => $category?->id ?? "1",
 
@@ -54,8 +48,6 @@ class NewsFactory extends Factory
             'brief'            => $brief,
 
             "body"             => $body,
-
-            "video_url"        => $videoUrl,
 
             'seo_title'        => $title,
             'seo_brief'        => $brief,

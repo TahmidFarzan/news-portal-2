@@ -105,13 +105,6 @@ onMounted(async () => {
             <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">News type</span>
-                        <span class="font-medium">{{ news?.news_type || 'N/A' }}</span>
-                    </div>
-
-                </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
@@ -150,7 +143,6 @@ onMounted(async () => {
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Title</span>
@@ -160,9 +152,6 @@ onMounted(async () => {
                         <span class="text-gray-500">Sub title</span>
                         <span class="font-medium">{{ news?.sub_title || 'N/A' }}</span>
                     </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Content shoulder</span>
@@ -176,8 +165,10 @@ onMounted(async () => {
                         <div class="text-gray-700">{{ news?.brief || 'N/A' }}</div>
                     </div>
                 </div>
+            </div>
 
-                <div v-if="news?.is_story" class="border border-gray-200 rounded-lg p-4 space-y-2">
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
                         <div class="text-gray-500 mb-1">Body</div>
                         <div class="text-gray-700">
@@ -185,16 +176,9 @@ onMounted(async () => {
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div v-if="news?.is_video" class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div>
-                        <div class="text-gray-500 mb-1">Video url</div>
-                        <div class="text-gray-700">
-                            {{ news?.video_url }}
-                        </div>
-                    </div>
-                </div>
-
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Tags</span>
@@ -233,24 +217,9 @@ onMounted(async () => {
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Source</span>
-                        <span class="font-medium">{{ news?.source || 'N/A' }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Writer</span>
-                        <span class="font-medium">{{ news?.writer || 'N/A' }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Published</span>
-                        <span class="font-medium">{{ news?.is_published ? "Yes" : "No" }}</span>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
@@ -318,6 +287,33 @@ onMounted(async () => {
                     </div>
                 </div>
 
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Source</span>
+                        <span class="font-medium">{{ news?.source || 'N/A' }}</span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Writer</span>
+                        <span class="font-medium">{{ news?.writer || 'N/A' }}</span>
+                    </div>
+
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Published</span>
+                        <span class="font-medium">{{ news?.is_published ? "Yes" : "No" }}</span>
+                    </div>
+                </div>
             </div>
         </div>
 

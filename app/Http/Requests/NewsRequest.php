@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Requests;
 
-use App\Helpers\NewsHelper;
 use App\Models\Category;
 use App\Models\Contributor;
 use App\Models\Event;
@@ -27,7 +26,6 @@ class NewsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "news_type"                         => ["required"],
             "language_id"                       => ["required"],
             "category_id"                       => ["required"],
 
@@ -48,6 +46,7 @@ class NewsRequest extends FormRequest
             "seo_keywords"                      => ["nullable"],
 
             "writer"                            => ["nullable"],
+            "source"                            => ["nullable"],
 
             "feature_image_caption"             => ["required"],
             "upload_feature_image"              => [
@@ -66,12 +65,11 @@ class NewsRequest extends FormRequest
             ],
             "selected_feature_image_mobile_url" => ["nullable", "url"],
 
-            "body"                              => ["nullable"],
-            "video_url"                         => ["nullable", "url"],
+            "body"                              => ["required"],
 
             "page_section"                      => ["nullable"],
 
-            "content_media_ids"                 => ["nullable"],
+            "editor_media_ids"                  => ["nullable"],
         ];
     }
 
@@ -82,11 +80,10 @@ class NewsRequest extends FormRequest
             "title.string"                           => __("form-requests.news.title.string"),
             "title.max"                              => __("form-requests.news.title.max"),
 
+            "body.required"                          => __("form-requests.news.body.required"),
+
             "language_id.required"                   => __("form-requests.news.language_id.required"),
             "category_id.required"                   => __("form-requests.news.category_id.required"),
-            "news_type.required"                     => __("form-requests.news.news_type.required"),
-
-            "video_url.url"                          => __("form-requests.news.video_url.url"),
 
             "feature_image_caption.required"         => __("form-requests.news.feature_image_caption.required"),
 
@@ -133,39 +130,6 @@ class NewsRequest extends FormRequest
 
                         break;
                     }
-                }
-            }
-
-            if (! empty($data["news_type"])) {
-                $allowedNewsTypes = [
-                    NewsHelper::NEWS_TYPE_STORY,
-                    NewsHelper::NEWS_TYPE_VIDEO,
-                    NewsHelper::NEWS_TYPE_PHOTO_GALLERY,
-                ];
-
-                if (! in_array($data["news_type"], $allowedNewsTypes, true)) {
-                    $validator->errors()->add(
-                        'news_type',
-                        __("form-requests.news.news_type.not_found")
-                    );
-                }
-            }
-
-            if (! empty($data["news_type"]) && $data["news_type"] === NewsHelper::NEWS_TYPE_STORY) {
-                if (empty($data["body"])) {
-                    $validator->errors()->add(
-                        'body',
-                        __("form-requests.news.body.required")
-                    );
-                }
-            }
-
-            if (! empty($data["news_type"]) && $data["news_type"] === NewsHelper::NEWS_TYPE_VIDEO) {
-                if (empty($data["video_url"])) {
-                    $validator->errors()->add(
-                        'video_url',
-                        __("form-requests.news.video_url.required")
-                    );
                 }
             }
 

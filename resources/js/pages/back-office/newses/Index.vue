@@ -53,7 +53,6 @@ const filterForm = useForm({
     event_id: '',
     date: '',
     search: '',
-    news_type: '',
 })
 
 const applyFilter = () => {
@@ -121,7 +120,6 @@ onMounted(async () => {
     filterForm.event_id = urlParams.get('event_id') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
-    filterForm.news_type = urlParams.get('news_type') || ''
 
     if (filterForm.category_id) {
         const rCategory = await fetchFromApi(
@@ -248,7 +246,6 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">News type</th>
                             <th class="px-4 py-3 text-left">Titel</th>
                             <th class="px-4 py-3 text-left">Language</th>
                             <th class="px-4 py-3 text-left">Category</th>
@@ -261,7 +258,6 @@ onMounted(async () => {
                     <tbody class="divide-y">
                         <tr v-for="(item, index) in newses?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
-                            <td class="px-4 py-3">{{ item.news_type }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.title }}</td>
                             <td class="px-4 py-3 text-gray-600">
                                 {{ item.language ? item.language.name : 'N/A' }}

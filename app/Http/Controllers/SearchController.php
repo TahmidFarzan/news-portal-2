@@ -61,11 +61,6 @@ class SearchController extends Controller
         return $this->jsonResponse($this->searchService->pageSections($request), $this->longCacheLimitSecond);
     }
 
-    public function newsTypes(Request $request)
-    {
-        return $this->jsonResponse($this->searchService->newsTypes($request), $this->longCacheLimitSecond);
-    }
-
     public function users(Request $request)
     {
         return $this->jsonResponse($this->searchService->users($request), $this->frequentlyCacheLimitInSecond);
