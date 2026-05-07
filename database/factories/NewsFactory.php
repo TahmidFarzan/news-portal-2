@@ -12,7 +12,6 @@ use App\Models\News;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<News>
@@ -31,8 +30,8 @@ class NewsFactory extends Factory
 
         $newsType = NewsHelper::NEWS_TYPE_STORY;
 
-        $title        = $this->faker->name();
-        $subTitle      = $this->faker->name();
+        $title           = $this->faker->name();
+        $subTitle        = $this->faker->name();
         $contentShoulder = $this->faker->sentence(3);
         $brief           = $this->faker->sentence();
         $body            = $this->faker->sentence(100);
@@ -49,8 +48,8 @@ class NewsFactory extends Factory
             "event_id"         => $event?->id ?? null,
             "location_id"      => $location?->id ?? null,
 
-            'title'          => $title,
-            'sub_title'      => $subTitle,
+            'title'            => $title,
+            'sub_title'        => $subTitle,
             'content_shoulder' => $contentShoulder,
             'brief'            => $brief,
 
@@ -58,12 +57,11 @@ class NewsFactory extends Factory
 
             "video_url"        => $videoUrl,
 
-
-
             'seo_title'        => $title,
             'seo_brief'        => $brief,
             'seo_keywords'     => null,
 
+            'source'           => null,
             "page_section"     => null,
 
             "is_published"     => $isPublished,

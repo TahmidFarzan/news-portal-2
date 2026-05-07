@@ -77,6 +77,7 @@ class NewsSeeder extends Seeder
 
                         "is_published"     => true,
                         'writer'           => "News Desk",
+                        'source'           => null,
                         "created_at"       => $randomNews->published_at,
                         "updated_at"       => $randomNews->published_at,
                     ])->create();

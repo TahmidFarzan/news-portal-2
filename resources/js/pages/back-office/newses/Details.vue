@@ -216,7 +216,6 @@ onMounted(async () => {
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-
                     <div class="flex justify-between">
                         <span class="text-gray-500">Contributors</span>
                         <div class="flex flex-wrap gap-2">
@@ -233,10 +232,20 @@ onMounted(async () => {
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Source</span>
+                        <span class="font-medium">{{ news?.source || 'N/A' }}</span>
+                    </div>
+
                     <div class="flex justify-between">
                         <span class="text-gray-500">Writer</span>
                         <span class="font-medium">{{ news?.writer || 'N/A' }}</span>
                     </div>
+
                     <div class="flex justify-between">
                         <span class="text-gray-500">Published</span>
                         <span class="font-medium">{{ news?.is_published ? "Yes" : "No" }}</span>

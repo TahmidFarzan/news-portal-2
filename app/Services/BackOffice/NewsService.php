@@ -108,7 +108,10 @@ class NewsService
 
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('code', 'like', "%{$search}%");
+                    ->orWhere('brief', 'like', "%{$search}%")
+                    ->orWhere('seo_brief', 'like', '%' . $search . '%')
+                    ->orWhere('seo_title', 'like', '%' . $search . '%')
+                    ->orWhere('source', 'like', "%{$search}%");
             });
         }
 
@@ -152,6 +155,7 @@ class NewsService
             $news->is_published = $request->input('is_published') ? true : false;
 
             $news->writer = $request->input('writer');
+            $news->source = $request->input('source');
 
             $news->created_by_id = $isNew ? Auth::id() : $news->created_by_id;
 

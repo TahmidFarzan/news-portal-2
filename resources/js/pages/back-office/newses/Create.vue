@@ -61,6 +61,7 @@ const saveForm = useForm({
     page_section: news?.page_section,
 
     writer: news?.writer || null,
+    source: news?.source || null,
 
     seo_brief: news?.seo_brief || null,
     seo_title: news?.seo_title || null,
@@ -626,6 +627,20 @@ onMounted(async () => {
 
                             <p v-if="saveForm.errors.page_section" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.page_section }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Source
+                            </label>
+
+                            <input v-model="saveForm.source"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.source ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.source" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.source }}
                             </p>
                         </div>
 

@@ -31,7 +31,7 @@ use Spatie\Sluggable\SlugOptions;
         'news_type', 'language_id', 'category_id', 'event_id', 'location_id',
         'title', 'sub_title', "content_shoulder", 'brief',
         "body", 'video_url',
-        'writer',
+        'writer','source',
         "seo_brief", 'seo_title', 'seo_keywords',
         'page_section',
         'created_by_id', 'slug', 'is_published',

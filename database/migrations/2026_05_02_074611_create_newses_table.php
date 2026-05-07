@@ -35,6 +35,7 @@ return new class extends Migration
             $table->text('seo_keywords')->nullable();
 
             $table->string('page_section', 255)->nullable();
+            $table->string('source', 255)->nullable();
 
             $table->foreignId('created_by_id')->constrained('users')->cascadeOnDelete();
             $table->string('slug')->unique();
