@@ -11,7 +11,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner, faFire } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
-import { canEditNews, canDeleteNews, canRestoreNews } from '@/composables/useAuthUserAccessPermissions'
+import { canEditStory, canDeleteStory, canRestoreStory } from '@/composables/useAuthUserAccessPermissions'
 import { faHotjar } from '@fortawesome/free-brands-svg-icons'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner, faFire)
@@ -27,19 +27,19 @@ const deleteProcessing = ref(false)
 const showRestoreModal = ref(false)
 const restoreProcessing = ref(false)
 
-const { news } = defineProps({
-    news: Object,
+const { story } = defineProps({
+    story: Object,
 })
 
-const canEdit = (news) => canEditNews(authUser?.value, news)
-const canDelete = (news) => canDeleteNews(authUser?.value, news)
-const canRestore = (news) => canRestoreNews(authUser?.value, news)
+const canEdit = (story) => canEditStory(authUser?.value, story)
+const canDelete = (story) => canDeleteStory(authUser?.value, story)
+const canRestore = (story) => canRestoreStory(authUser?.value, story)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.newses.delete', { slug: news?.slug }), {
+    intertiaJsRoute.patch(route('back-office.stories.delete', { slug: story?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -48,7 +48,7 @@ const handleRestore = () => {
     if (restoreProcessing.value) return
     restoreProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.newses.restore', { slug: news?.slug }), {
+    intertiaJsRoute.patch(route('back-office.stories.restore', { slug: story?.slug }), {
         onFinish: () => restoreProcessing.value = false
     })
 }
@@ -61,8 +61,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Newses', href: route('back-office.newses.index') },
-                { text: `${news?.title} details`, active: true }
+                { text: 'Stories', href: route('back-office.stories.index') },
+                { text: `${story?.title} details`, active: true }
             ],
         })
     )
@@ -73,27 +73,27 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${news?.title} details`" />
+    <Head :title="`${story?.title} details`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">News Details</h2>
+            <h2 class="text-lg font-semibold">Story Details</h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(news)" :href="route('back-office.newses.edit', { slug: news?.slug })"
+                <a v-if="canEdit(story)" :href="route('back-office.stories.edit', { slug: story?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     Edit
                 </a>
 
-                <button v-if="canDelete(news)" @click="showDeleteModal = true"
+                <button v-if="canDelete(story)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
                     Delete
                 </button>
 
-                <button v-if="canRestore(news)" @click="showRestoreModal = true"
+                <button v-if="canRestore(story)" @click="showRestoreModal = true"
                     class="bg-red-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="eye" />
                     Restore
@@ -109,35 +109,35 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ news?.language?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.language?.name || 'N/A' }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Category</span>
-                        <span class="font-medium">{{ news?.category?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.category?.name || 'N/A' }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Location</span>
-                        <span class="font-medium">{{ news?.location?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.location?.name || 'N/A' }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Event</span>
-                        <span class="font-medium">{{ news?.event?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.event?.name || 'N/A' }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Page section</span>
-                        <span class="font-medium">{{ news?.page_section || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.page_section || 'N/A' }}</span>
                     </div>
                 </div>
             </div>
@@ -146,23 +146,23 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Title</span>
-                        <span class="font-medium">{{ news?.title || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.title || 'N/A' }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-500">Sub title</span>
-                        <span class="font-medium">{{ news?.sub_title || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.sub_title || 'N/A' }}</span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Content shoulder</span>
-                        <span class="font-medium">{{ news?.content_shoulder || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.content_shoulder || 'N/A' }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
                         <div class="text-gray-500 mb-1">Brief</div>
-                        <div class="text-gray-700">{{ news?.brief || 'N/A' }}</div>
+                        <div class="text-gray-700">{{ story?.brief || 'N/A' }}</div>
                     </div>
                 </div>
             </div>
@@ -172,7 +172,7 @@ onMounted(async () => {
                     <div>
                         <div class="text-gray-500 mb-1">Body</div>
                         <div class="text-gray-700">
-                            <div v-html="news?.body || 'N/A'"></div>
+                            <div v-html="story?.body || 'N/A'"></div>
                         </div>
                     </div>
                 </div>
@@ -183,8 +183,8 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Tags</span>
                         <div class="flex flex-wrap gap-2">
-                            <template v-if="news?.tags && news.tags.length">
-                                <span v-for="tag in news.tags" :key="tag.id ?? tag.name"
+                            <template v-if="story?.tags && story.tags.length">
+                                <span v-for="tag in story.tags" :key="tag.id ?? tag.name"
                                     class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 border border-gray-200">
                                     {{ tag?.name }}
 
@@ -203,8 +203,9 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Contributors</span>
                         <div class="flex flex-wrap gap-2">
-                            <template v-if="news?.contributors && news.contributors.length">
-                                <span v-for="contributor in news.contributors" :key="contributor.id ?? contributor.name"
+                            <template v-if="story?.contributors && story.contributors.length">
+                                <span v-for="contributor in story.contributors"
+                                    :key="contributor.id ?? contributor.name"
                                     class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 border border-gray-200">
                                     {{ contributor?.name }}
                                     <FontAwesomeIcon icon="fire" v-if="contributor?.trend" />
@@ -225,8 +226,8 @@ onMounted(async () => {
                     <div>
                         <div class="text-gray-500 mb-1">Feature Image</div>
                         <div class="text-gray-700 w-100">
-                            <MediaRenderer v-if="news?.feature_image" :media="news?.feature_image" />
-                            <img v-else :src="'/uploads/images/news/feature-image.png'"
+                            <MediaRenderer v-if="story?.feature_image" :media="story?.feature_image" />
+                            <img v-else :src="'/uploads/images/story/feature-image.png'"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>
@@ -236,8 +237,8 @@ onMounted(async () => {
                     <div>
                         <div class="text-gray-500 mb-1">Feature Image (Mobile)</div>
                         <div class="text-gray-700 w-100">
-                            <MediaRenderer v-if="news?.feature_image_mobile" :media="news?.feature_image_mobile" />
-                            <img v-else :src="'/uploads/images/news/feature-image-mobile.png'"
+                            <MediaRenderer v-if="story?.feature_image_mobile" :media="story?.feature_image_mobile" />
+                            <img v-else :src="'/uploads/images/story/feature-image-mobile.png'"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>
@@ -246,21 +247,25 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4">
                     <div class="text-gray-500 mb-2">SEO</div>
 
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Title</span>
-                            <span class="font-medium">{{ news?.seo_title || 'N/A' }}</span>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <div class="text-gray-500 mb-1">Title</div>
+                            <div class="font-medium text-gray-700">
+                                {{ story?.seo_title || 'N/A' }}
+                            </div>
                         </div>
 
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Brief</span>
-                            <span class="font-medium">{{ news?.seo_brief || 'N/A' }}</span>
+                        <div>
+                            <div class="text-gray-500 mb-1">Brief</div>
+                            <div class="font-medium text-gray-700">
+                                {{ story?.seo_brief || 'N/A' }}
+                            </div>
                         </div>
 
                         <div>
                             <div class="text-gray-500 mb-1">Keywords</div>
-                            <div class="text-gray-700">
-                                {{ news?.seo_keywords || 'N/A' }}
+                            <div class="font-medium text-gray-700">
+                                {{ story?.seo_keywords || 'N/A' }}
                             </div>
                         </div>
                     </div>
@@ -272,18 +277,18 @@ onMounted(async () => {
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-500">Sitemap url</span>
-                            <span class="font-medium">{{ news?.sitemap_url || 'N/A' }}</span>
+                            <span class="font-medium">{{ story?.sitemap_url || 'N/A' }}</span>
                         </div>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Feeds (RSS)</span>
-                        <span class="font-medium">{{ news?.feeds_rss_url || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.feeds_rss_url || 'N/A' }}</span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Feeds (ATOM)</span>
-                        <span class="font-medium">{{ news?.feeds_atom_url || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.feeds_atom_url || 'N/A' }}</span>
                     </div>
                 </div>
 
@@ -294,7 +299,7 @@ onMounted(async () => {
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Source</span>
-                        <span class="font-medium">{{ news?.source || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.source || 'N/A' }}</span>
                     </div>
                 </div>
 
@@ -302,7 +307,7 @@ onMounted(async () => {
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Writer</span>
-                        <span class="font-medium">{{ news?.writer || 'N/A' }}</span>
+                        <span class="font-medium">{{ story?.writer || 'N/A' }}</span>
                     </div>
 
                 </div>
@@ -311,7 +316,7 @@ onMounted(async () => {
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Published</span>
-                        <span class="font-medium">{{ news?.is_published ? "Yes" : "No" }}</span>
+                        <span class="font-medium">{{ story?.is_published ? "Yes" : "No" }}</span>
                     </div>
                 </div>
             </div>
@@ -326,14 +331,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created At</span>
                         <span class="font-medium">
-                            {{ news?.created_at ? formatDateTime(news.created_at) : 'N/A' }}
+                            {{ story?.created_at ? formatDateTime(story.created_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created By</span>
                         <span class="font-medium">
-                            {{ news?.created_by?.name || 'N/A' }}
+                            {{ story?.created_by?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -342,14 +347,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated At</span>
                         <span class="font-medium">
-                            {{ news?.updated_at ? formatDateTime(news.updated_at) : 'N/A' }}
+                            {{ story?.updated_at ? formatDateTime(story.updated_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated By</span>
                         <span class="font-medium">
-                            {{ news?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ story?.latest_activity_log?.causer?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -359,7 +364,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
-            <RecentActivities :model-slug="'news'" :model="news" />
+            <RecentActivities :model-slug="'story'" :model="story" />
         </div>
 
         <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
@@ -376,15 +381,15 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete News
+                            Delete Story
                         </h3>
 
                         <p class="text-sm font-medium">
-                            {{ news?.title }}
+                            {{ story?.title }}
                         </p>
 
                         <p class="text-sm text-gray-500">
-                            This action can be undone by restoring news.
+                            This action can be undone by restoring story.
                         </p>
 
                         <div class="flex justify-end gap-2 pt-2">
@@ -419,15 +424,15 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showRestoreModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Restore News
+                            Restore Story
                         </h3>
 
                         <p class="text-sm font-medium">
-                            {{ news?.title }}
+                            {{ story?.title }}
                         </p>
 
                         <p class="text-sm text-gray-500">
-                            This action can be undone by deleting news.
+                            This action can be undone by deleting story.
                         </p>
 
                         <div class="flex justify-end gap-2 pt-2">

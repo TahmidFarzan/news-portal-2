@@ -21,47 +21,47 @@ defineOptions({ layout: Layout })
 
 const pageReady = inject("pageReady")
 
-const { news } = defineProps({
-    news: Object,
+const { story } = defineProps({
+    story: Object,
 })
 
 const showLocation = ref(false)
 
-const isUpdate = computed(() => !!news?.slug)
+const isUpdate = computed(() => !!story?.slug)
 
 const saveForm = useForm({
-    language_id: news?.language_id || null,
-    category_id: news?.category_id || null,
+    language_id: story?.language_id || null,
+    category_id: story?.category_id || null,
 
-    location_id: news?.location_id || null,
-    event_id: news?.event_id || null,
+    location_id: story?.location_id || null,
+    event_id: story?.event_id || null,
     tag_ids: [],
     contributor_ids: [],
 
-    title: news?.title || null,
-    sub_title: news?.sub_title || null,
-    content_shoulder: news?.content_shoulder || null,
+    title: story?.title || null,
+    sub_title: story?.sub_title || null,
+    content_shoulder: story?.content_shoulder || null,
 
-    brief: news?.brief || null,
-    body: news?.body || null,
-    video_url: news?.video_url || null,
+    brief: story?.brief || null,
+    body: story?.body || null,
+    video_url: story?.video_url || null,
 
     upload_feature_image_mobile: null,
     upload_feature_image: null,
     selected_feature_image_mobile_url: null,
     selected_feature_image_url: null,
 
-    feature_image_caption: news?.feature_image?.custom_properties?.caption || null,
+    feature_image_caption: story?.feature_image?.custom_properties?.caption || null,
 
-    is_published: news?.is_published,
-    page_section: news?.page_section,
+    is_published: story?.is_published,
+    page_section: story?.page_section,
 
-    writer: news?.writer || null,
-    source: news?.source || null,
+    writer: story?.writer || null,
+    source: story?.source || null,
 
-    seo_brief: news?.seo_brief || null,
-    seo_title: news?.seo_title || null,
-    seo_keywords: news?.seo_keywords ? news?.seo_keywords.split(',') : [],
+    seo_brief: story?.seo_brief || null,
+    seo_title: story?.seo_title || null,
+    seo_keywords: story?.seo_keywords ? story?.seo_keywords.split(',') : [],
 
 
     editor_media_ids: null
@@ -157,7 +157,7 @@ function validateForm() {
         valid = false
     }
 
-    if (!news?.feature_image) {
+    if (!story?.feature_image) {
         if (saveForm.upload_feature_image) {
             if (saveForm.selected_feature_image_url) {
                 saveForm.setError('upload_feature_image', 'Please use either selected feature image or uploaded feature image, not both.')
@@ -216,12 +216,12 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.newses.update', { slug: news?.slug }),
+            route('back-office.stories.update', { slug: story?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
         )
     } else {
-        saveForm.post(route('back-office.newses.save'), requestConfig)
+        saveForm.post(route('back-office.stories.save'), requestConfig)
     }
 }
 
@@ -274,8 +274,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Newses', href: route('back-office.newses.index') },
-                { text: isUpdate.value ? `${news?.title} edit` : 'News create', active: true }
+                { text: 'Stories', href: route('back-office.stories.index') },
+                { text: isUpdate.value ? `${story?.title} edit` : 'Story create', active: true }
             ],
         })
     )
@@ -286,7 +286,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${news?.title} edit` : 'News create'" />
+    <Head :title="isUpdate ? `${story?.title} edit` : 'Story create'" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -304,7 +304,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="language_id"
-                                :selectedItem="news?.language" :apiUrl="route('search.languages')"
+                                :selectedItem="story?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -317,7 +317,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="category_id"
-                                :selectedItem="saveForm.category_id ? news?.category : null" :apiUrl="categoryApiUrl"
+                                :selectedItem="saveForm.category_id ? story?.category : null" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.category_id" :multiple="false" placeholder="Select category" />
                             <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.category_id }}
@@ -330,7 +330,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="event_id"
-                                :selectedItem="saveForm.event_id ? news?.event : null" :apiUrl="eventApiUrl"
+                                :selectedItem="saveForm.event_id ? story?.event : null" :apiUrl="eventApiUrl"
                                 :error="saveForm.errors.event_id" :multiple="false" placeholder="Select event" />
                             <p v-if="saveForm.errors.event_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.event_id }}
@@ -343,7 +343,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="location_id"
-                                :selectedItem="saveForm.location_id ? news?.location : null" :apiUrl="locationApiUrl"
+                                :selectedItem="saveForm.location_id ? story?.location : null" :apiUrl="locationApiUrl"
                                 :error="saveForm.errors.location_id" :multiple="false" placeholder="Select location" />
                             <p v-if="saveForm.errors.location_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.location_id }}
@@ -425,7 +425,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="tag_ids"
-                                :selectedItem="saveForm.tag_ids ? news?.tags : null" :apiUrl="tagApiUrl"
+                                :selectedItem="saveForm.tag_ids ? story?.tags : null" :apiUrl="tagApiUrl"
                                 :error="saveForm.errors.tag_ids" :multiple="true" placeholder="Select tags" />
                             <p v-if="saveForm.errors.tag_ids" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.tag_ids }}
@@ -473,7 +473,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.selected_feature_image_url }}
                             </p>
 
-                            <img :src="saveForm.selected_feature_image_url || news?.feature_image?.media_url || '/uploads/images/news/feature-image.png'"
+                            <img :src="saveForm.selected_feature_image_url || story?.feature_image?.media_url || '/uploads/images/story/feature-image.png'"
                                 class="w-75 object-contain rounded-xl border border-gray-200 mt-2" />
                         </div>
 
@@ -507,7 +507,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.selected_feature_image_mobile_url }}
                             </p>
 
-                            <img :src="saveForm.selected_feature_image_mobile_url || news?.feature_image_mobile?.media_url || '/uploads/images/news/feature-image.png'"
+                            <img :src="saveForm.selected_feature_image_mobile_url || story?.feature_image_mobile?.media_url || '/uploads/images/story/feature-image.png'"
                                 class="w-75 object-contain rounded-xl border border-gray-200 mt-2" />
                         </div>
 
@@ -525,7 +525,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="contributor_ids"
-                                :selectedItem="saveForm.contributor_ids ? news?.contributors : null"
+                                :selectedItem="saveForm.contributor_ids ? story?.contributors : null"
                                 :apiUrl="contributorApiUrl" :error="saveForm.errors.contributor_ids" :multiple="true"
                                 placeholder="Select contributors" />
                             <p v-if="saveForm.errors.contributor_ids" class="text-red-500 text-sm mt-1">
@@ -561,7 +561,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="page_section"
-                                :selectedItem="news?.page_section" :apiUrl="route('search.page-sections')"
+                                :selectedItem="story?.page_section" :apiUrl="route('search.page-sections')"
                                 :error="saveForm.errors.page_section" :multiple="false"
                                 placeholder="Select page section" />
 

@@ -314,7 +314,7 @@ return [
 
     ],
 
-    'news'      => [
+    'story'      => [
         'title'          => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',

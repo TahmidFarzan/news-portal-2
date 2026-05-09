@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useUtil'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateNews, canEditNews, canDeleteNews, canRestoreNews } from '@/composables/useAuthUserAccessPermissions'
+import { canCreateStory, canEditStory, canDeleteStory, canRestoreStory } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 
@@ -34,13 +34,13 @@ const restoringRow = ref(null)
 const showRestoreModal = ref(false)
 const restoreProcessing = ref(false)
 
-const { newses } = defineProps({
-    newses: Object,
+const { stories } = defineProps({
+    stories: Object,
 })
 
 const paginationOnly = computed(() => {
-    if (!newses) return {}
-    const { data, ...rest } = newses
+    if (!stories) return {}
+    const { data, ...rest } = stories
     return rest
 })
 
@@ -59,7 +59,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.newses.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.stories.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -67,26 +67,26 @@ const applyFilter = () => {
     })
 }
 
-const confirmDelete = (news) => {
-    deletingRow.value = news
+const confirmDelete = (story) => {
+    deletingRow.value = story
     showDeleteModal.value = true
 }
 
-const confirmRestore = (news) => {
-    restoringRow.value = news
+const confirmRestore = (story) => {
+    restoringRow.value = story
     showRestoreModal.value = true
 }
 
-const canCreate = () => canCreateNews(authUser?.value)
-const canEdit = (news) => canEditNews(authUser?.value, news)
-const canDelete = (news) => canDeleteNews(authUser?.value, news)
-const canRestore = (news) => canRestoreNews(authUser?.value, news)
+const canCreate = () => canCreateStory(authUser?.value)
+const canEdit = (story) => canEditStory(authUser?.value, story)
+const canDelete = (story) => canDeleteStory(authUser?.value, story)
+const canRestore = (story) => canRestoreStory(authUser?.value, story)
 
-const handleDelete = (news) => {
-    if (!news || deleteProcessing.value) return
+const handleDelete = (story) => {
+    if (!story || deleteProcessing.value) return
 
     deleteProcessing.value = true
-    intertiaJsRoute.patch(route('back-office.newses.delete', { slug: news?.slug }), {
+    intertiaJsRoute.patch(route('back-office.stories.delete', { slug: story?.slug }), {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -95,11 +95,11 @@ const handleDelete = (news) => {
     })
 }
 
-const handleRestore = (news) => {
-    if (!news || restoreProcessing.value) return
+const handleRestore = (story) => {
+    if (!story || restoreProcessing.value) return
 
     restoreProcessing.value = true
-    intertiaJsRoute.patch(route('back-office.newses.restore', { slug: news?.slug }), {
+    intertiaJsRoute.patch(route('back-office.stories.restore', { slug: story?.slug }), {
         onFinish: () => {
             restoringRow.value = null
             restoreProcessing.value = false
@@ -166,7 +166,7 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Newses', active: true },
+                { text: 'Stories', active: true },
             ],
         })
     )
@@ -177,14 +177,14 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Newses" />
+    <Head title="Stories" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Newses</h2>
+            <h2 class="text-lg font-semibold">Stories</h2>
 
-            <a v-if="canCreate()" :href="route('back-office.newses.create')"
+            <a v-if="canCreate()" :href="route('back-office.stories.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
                 Create
@@ -223,7 +223,7 @@ onMounted(async () => {
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search news..."
+                <input type="search" v-model="filterForm.search" placeholder="Search story..."
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -256,7 +256,7 @@ onMounted(async () => {
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in newses?.data" :key="item.id" class="hover:bg-gray-50 transition">
+                        <tr v-for="(item, index) in stories?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.title }}</td>
                             <td class="px-4 py-3 text-gray-600">
@@ -275,13 +275,13 @@ onMounted(async () => {
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
-                                    <a :href="route('back-office.newses.details', { slug: item.slug })"
+                                    <a :href="route('back-office.stories.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canEdit(item)"
-                                        :href="route('back-office.newses.edit', { slug: item.slug })"
+                                        :href="route('back-office.stories.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
@@ -321,7 +321,7 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete News
+                            Delete Story
                         </h3>
 
                         <p class="text-sm font-medium">
@@ -329,7 +329,7 @@ onMounted(async () => {
                         </p>
 
                         <p class="text-sm text-gray-500">
-                            This action can be undone by restoring news.
+                            This action can be undone by restoring story.
                         </p>
 
                         <div class="flex justify-end gap-2 pt-2">
@@ -364,7 +364,7 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showRestoreModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Restore News
+                            Restore Story
                         </h3>
 
                         <p class="text-sm font-medium">
@@ -372,7 +372,7 @@ onMounted(async () => {
                         </p>
 
                         <p class="text-sm text-gray-500">
-                            This action can be undone by deleting news.
+                            This action can be undone by deleting story.
                         </p>
 
                         <div class="flex justify-end gap-2 pt-2">

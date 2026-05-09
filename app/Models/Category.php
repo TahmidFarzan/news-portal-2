@@ -171,9 +171,9 @@ class Category extends Model
         return $this->hasMany(Location::class);
     }
 
-    public function newses(): HasMany
+    public function stories(): HasMany
     {
-        return $this->hasMany(News::class);
+        return $this->hasMany(Story::class);
     }
 
     public function latestActivityLog(): MorphOne

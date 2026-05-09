@@ -205,9 +205,9 @@ class Event extends Model implements HasMedia
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function newses(): HasMany
+    public function stories(): HasMany
     {
-        return $this->hasMany(News::class);
+        return $this->hasMany(Story::class);
     }
 
     public function navBreadcrumbs(): array

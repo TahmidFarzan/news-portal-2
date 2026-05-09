@@ -6,12 +6,12 @@ use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
-use App\Models\News;
+use App\Models\Story;
 use App\Models\Tag;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class NewsRequest extends FormRequest
+class StoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -76,36 +76,36 @@ class NewsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "title.required"                         => __("form-requests.news.title.required"),
-            "title.string"                           => __("form-requests.news.title.string"),
-            "title.max"                              => __("form-requests.news.title.max"),
+            "title.required"                         => __("form-requests.story.title.required"),
+            "title.string"                           => __("form-requests.story.title.string"),
+            "title.max"                              => __("form-requests.story.title.max"),
 
-            "body.required"                          => __("form-requests.news.body.required"),
+            "body.required"                          => __("form-requests.story.body.required"),
 
-            "language_id.required"                   => __("form-requests.news.language_id.required"),
-            "category_id.required"                   => __("form-requests.news.category_id.required"),
+            "language_id.required"                   => __("form-requests.story.language_id.required"),
+            "category_id.required"                   => __("form-requests.story.category_id.required"),
 
-            "feature_image_caption.required"         => __("form-requests.news.feature_image_caption.required"),
+            "feature_image_caption.required"         => __("form-requests.story.feature_image_caption.required"),
 
-            "upload_feature_image.image"             => __("form-requests.news.upload_feature_image.image"),
-            "upload_feature_image.mimes"             => __("form-requests.news.upload_feature_image.image"),
-            "upload_feature_image.dimensions"        => __("form-requests.news.upload_feature_image.dimensions"),
+            "upload_feature_image.image"             => __("form-requests.story.upload_feature_image.image"),
+            "upload_feature_image.mimes"             => __("form-requests.story.upload_feature_image.image"),
+            "upload_feature_image.dimensions"        => __("form-requests.story.upload_feature_image.dimensions"),
 
-            "selected_feature_image_url.url"         => __("form-requests.news.selected_feature_image_url.url"),
+            "selected_feature_image_url.url"         => __("form-requests.story.selected_feature_image_url.url"),
 
-            "upload_feature_image_mobile.image"      => __("form-requests.news.upload_feature_image_mobile.image"),
-            "upload_feature_image_mobile.mimes"      => __("form-requests.news.upload_feature_image_mobile.image"),
-            "upload_feature_image_mobile.dimensions" => __("form-requests.news.upload_feature_image_mobile.dimensions"),
+            "upload_feature_image_mobile.image"      => __("form-requests.story.upload_feature_image_mobile.image"),
+            "upload_feature_image_mobile.mimes"      => __("form-requests.story.upload_feature_image_mobile.image"),
+            "upload_feature_image_mobile.dimensions" => __("form-requests.story.upload_feature_image_mobile.dimensions"),
 
-            "selected_feature_image_mobile_url.url"  => __("form-requests.news.selected_feature_image_mobile_url.url"),
+            "selected_feature_image_mobile_url.url"  => __("form-requests.story.selected_feature_image_mobile_url.url"),
         ];
     }
 
     public function withValidator($validator): void
     {
-        $news = News::where('slug', $this->route('slug'))->first();
+        $story = Story::where('slug', $this->route('slug'))->first();
 
-        $validator->after(function ($validator) use ($news) {
+        $validator->after(function ($validator) use ($story) {
             $data = $validator->getData();
 
             if (! empty($data['title'])) {
@@ -115,17 +115,17 @@ class NewsRequest extends FormRequest
                 ];
 
                 foreach ($dates as $date) {
-                    $storiesQuery = News::where('title', $data['title'])
+                    $storiesQuery = Story::where('title', $data['title'])
                         ->whereDate('created_at', $date);
 
-                    if ($news) {
-                        $storiesQuery->where('id', '!=', $news->id);
+                    if ($story) {
+                        $storiesQuery->where('id', '!=', $story->id);
                     }
 
                     if ($storiesQuery->exists()) {
                         $validator->errors()->add(
                             'title',
-                            __("form-requests.news.title.unique")
+                            __("form-requests.story.title.unique")
                         );
 
                         break;
@@ -137,7 +137,7 @@ class NewsRequest extends FormRequest
                 if (! Language::where("id", $data["language_id"])->exists()) {
                     $validator->errors()->add(
                         'language_id',
-                        __("form-requests.news.language_id.not_found")
+                        __("form-requests.story.language_id.not_found")
                     );
                 }
             }
@@ -146,7 +146,7 @@ class NewsRequest extends FormRequest
                 if (! Category::where("id", $data["category_id"])->exists()) {
                     $validator->errors()->add(
                         'category_id',
-                        __("form-requests.news.category_id.not_found")
+                        __("form-requests.story.category_id.not_found")
                     );
                 }
             }
@@ -155,7 +155,7 @@ class NewsRequest extends FormRequest
                 if (! Event::where("id", $data["event_id"])->exists()) {
                     $validator->errors()->add(
                         'event_id',
-                        __("form-requests.news.event_id.not_found")
+                        __("form-requests.story.event_id.not_found")
                     );
                 }
             }
@@ -164,7 +164,7 @@ class NewsRequest extends FormRequest
                 if (! Location::where("id", $data["location_id"])->exists()) {
                     $validator->errors()->add(
                         'location_id',
-                        __("form-requests.news.location_id.not_found")
+                        __("form-requests.story.location_id.not_found")
                     );
                 }
             }
@@ -175,7 +175,7 @@ class NewsRequest extends FormRequest
                 if (! Tag::where('id', $tagId)->exists()) {
                     $validator->errors()->add(
                         'tag_ids',
-                        __("form-requests.news.tag_ids.not_found")
+                        __("form-requests.story.tag_ids.not_found")
                     );
 
                     break;
@@ -188,34 +188,34 @@ class NewsRequest extends FormRequest
                 if (! Contributor::where('id', $contributorId)->exists()) {
                     $validator->errors()->add(
                         'contributor_ids',
-                        __("form-requests.news.contributor_ids.not_found")
+                        __("form-requests.story.contributor_ids.not_found")
                     );
 
                     break;
                 }
             }
 
-            if (! $news?->feature_image && ! $this->hasFile('upload_feature_image') && ! empty($data['selected_feature_image_url'])) {
+            if (! $story?->feature_image && ! $this->hasFile('upload_feature_image') && ! empty($data['selected_feature_image_url'])) {
                 $validator->errors()->add(
                     'upload_feature_image',
-                    __("form-requests.news.upload_feature_image.select_one")
+                    __("form-requests.story.upload_feature_image.select_one")
                 );
 
                 $validator->errors()->add(
                     'selected_feature_image_url',
-                    __("form-requests.news.selected_feature_image_url.select_one")
+                    __("form-requests.story.selected_feature_image_url.select_one")
                 );
             }
 
             if ($this->hasFile('upload_feature_image') && ! empty($data['selected_feature_image_url'])) {
                 $validator->errors()->add(
                     'upload_feature_image',
-                    __("form-requests.news.upload_feature_image.select_one")
+                    __("form-requests.story.upload_feature_image.select_one")
                 );
 
                 $validator->errors()->add(
                     'selected_feature_image_url',
-                    __("form-requests.news.selected_feature_image_url.select_one")
+                    __("form-requests.story.selected_feature_image_url.select_one")
                 );
             }
 
@@ -223,7 +223,7 @@ class NewsRequest extends FormRequest
                 if ($this->mediaFeatureImageDimensionInvalid($data['selected_feature_image_url'])) {
                     $validator->errors()->add(
                         "selected_feature_image_url",
-                        __("form-requests.news.selected_feature_image_url.dimensions")
+                        __("form-requests.story.selected_feature_image_url.dimensions")
                     );
                 }
             }
@@ -231,12 +231,12 @@ class NewsRequest extends FormRequest
             if ($this->hasFile('upload_feature_image_mobile') && ! empty($data['selected_feature_image_mobile_url'])) {
                 $validator->errors()->add(
                     'upload_feature_image_mobile',
-                    __("form-requests.news.upload_feature_image_mobile.select_one")
+                    __("form-requests.story.upload_feature_image_mobile.select_one")
                 );
 
                 $validator->errors()->add(
                     'selected_feature_image_mobile_url',
-                    __("form-requests.news.upload_feature_image_mobile.select_one")
+                    __("form-requests.story.upload_feature_image_mobile.select_one")
                 );
             }
 
@@ -244,7 +244,7 @@ class NewsRequest extends FormRequest
                 if ($this->mediaFeatureImageMobileDimensionInvalid($data['selected_feature_image_mobile_url'])) {
                     $validator->errors()->add(
                         "selected_feature_image_mobile_url",
-                        __("form-requests.news.selected_feature_image_mobile_url.dimensions")
+                        __("form-requests.story.selected_feature_image_mobile_url.dimensions")
                     );
                 }
             }

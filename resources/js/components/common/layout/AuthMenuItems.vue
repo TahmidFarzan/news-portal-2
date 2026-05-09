@@ -43,7 +43,7 @@ library.add(
 import {
     canAccessUserManagementMenu,
     canAccessNewsAttributesMenu,
-    canAccessNewsMenu
+    canAccessStoryMenu
 } from '@/composables/useAuthUserAccessPermissions'
 import { faHotjar } from "@fortawesome/free-brands-svg-icons"
 
@@ -81,8 +81,8 @@ const canAccessNewsAttributesMenuComputed = computed(() =>
     canAccessNewsAttributesMenu(authUser)
 )
 
-const canAccessNewsMenuComputed = computed(() =>
-    canAccessNewsMenu(authUser)
+const canAccessStoryMenuComputed = computed(() =>
+    canAccessStoryMenu(authUser)
 )
 
 function toggleShowSubMenu(key) {
@@ -198,10 +198,10 @@ function isSubMenuVisible(key) {
             </div>
         </transition>
 
-        <a v-if="canAccessNewsMenuComputed" :href="route('back-office.newses.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/newses/*') ? 'bg-gray-200 font-medium' : ''">
+        <a v-if="canAccessStoryMenuComputed" :href="route('back-office.stories.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/auth-user/stories/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            Newses
+            Stories
         </a>
 
         <button @click="toggleShowSubMenu('UserManagement')"

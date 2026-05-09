@@ -2,15 +2,13 @@
 namespace App\Services\Cache;
 
 use App\Helpers\CacheServerHelper;
-use App\Models\News;
+use App\Models\Story;
 
-class NewsCacheService
+class StoryCacheService
 {
     private int $cahedTime = 86400;
     private int $perPage   = 5000;
     private $latestRecordLimit   = 1000;
-
-    protected array $baseNewss = ['news'];
 
     public function isConnected()
     {
@@ -23,8 +21,8 @@ class NewsCacheService
 
     public function clearCached()
     {
-        CacheServerHelper::clearCachedByTag(['news', 'public']);
-        CacheServerHelper::clearCachedByTag(['news', 'sitemap']);
+        CacheServerHelper::clearCachedByTag(['story', 'public']);
+        CacheServerHelper::clearCachedByTag(['story', 'sitemap']);
     }
 
     /* -------------------------------------------------
@@ -33,7 +31,7 @@ class NewsCacheService
 
     public function dbRecordsCount()
     {
-        return News::where("is_published", true)->count();
+        return Story::where("is_published", true)->count();
     }
 
     public function dbLastPageNo($perPage = null)
@@ -46,7 +44,7 @@ class NewsCacheService
     {
         $perPage = $perPage ?? $this->perPage;
 
-        return News::where("is_published", true)->orderBy('id', 'desc')->with("language")->paginate($perPage, ['*'], 'page', $page);
+        return Story::where("is_published", true)->orderBy('id', 'desc')->with("language")->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function dbLatest($latestRecordLimit = null)
@@ -55,7 +53,7 @@ class NewsCacheService
         $startDate   = $currentDate->copy()->subDays(3);
         $latestRecordLimit = $latestRecordLimit ?? $this->latestRecordLimit;
 
-        $records = News::where("is_published", true)->orderBy("id", "desc");
+        $records = Story::where("is_published", true)->orderBy("id", "desc");
         $records = $records->take($latestRecordLimit);
         $records = $records->get();
         return $records;
@@ -68,36 +66,36 @@ class NewsCacheService
     public function cachedRecords($key, $perPage = null, $page = 1)
     {
         CacheServerHelper::cachedData(
-            "news {$key} page {$page}",
+            "story {$key} page {$page}",
             $this->dbRecords($perPage, $page),
             $this->cahedTime,
-            ['news', $key]
+            ['story', $key]
         );
     }
 
     public function cachedRecordsCount($key)
     {
         CacheServerHelper::cachedData(
-            "news {$key} count",
+            "story {$key} count",
             $this->dbRecordsCount(),
             $this->cahedTime,
-            ['news', $key]
+            ['story', $key]
         );
     }
 
     public function cachedLastPageNo($key)
     {
         CacheServerHelper::cachedData(
-            "news {$key} last page no",
+            "story {$key} last page no",
             $this->dbLastPageNo(),
             $this->cahedTime,
-            ['news', $key]
+            ['story', $key]
         );
     }
 
     public function cachedLatest($cachedKey)
     {
-        $cachedKey = " news {$cachedKey} latest stories";
+        $cachedKey = " story {$cachedKey} latest stories";
         $records   = self::dbLatest(null);
         CacheServerHelper::cachedData($cachedKey, $records, $this->cahedTime);
     }
@@ -108,11 +106,11 @@ class NewsCacheService
 
     public function recordsCount($key)
     {
-        $cacheKey = "news {$key} count";
+        $cacheKey = "story {$key} count";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['news', $key]
+            ['story', $key]
         );
 
         if ($count === null) {
@@ -121,7 +119,7 @@ class NewsCacheService
                 $cacheKey,
                 $count,
                 $this->cahedTime,
-                ['news', $key]
+                ['story', $key]
             );
         }
 
@@ -130,11 +128,11 @@ class NewsCacheService
 
     public function lastPageNo($key)
     {
-        $cacheKey = "news {$key} last page no";
+        $cacheKey = "story {$key} last page no";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['news', $key]
+            ['story', $key]
         );
 
         if ($lastPage === null) {
@@ -143,7 +141,7 @@ class NewsCacheService
                 $cacheKey,
                 $lastPage,
                 $this->cahedTime,
-                ['news', $key]
+                ['story', $key]
             );
         }
 
@@ -152,11 +150,11 @@ class NewsCacheService
 
     public function records($key, $perPage = null, $page = 1)
     {
-        $cacheKey = "news {$key} page {$page}";
+        $cacheKey = "story {$key} page {$page}";
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['news', $key]
+            ['story', $key]
         );
 
         if ($records === null) {
@@ -165,7 +163,7 @@ class NewsCacheService
                 $cacheKey,
                 $records,
                 $this->cahedTime,
-                ['news', $key]
+                ['story', $key]
             );
         }
 
@@ -175,7 +173,7 @@ class NewsCacheService
     public function getLatest($cachedKey, $latestRecordLimit = null)
     {
         $records        = null;
-        $cachedKey      = " news {$cachedKey} latest news";
+        $cachedKey      = " story {$cachedKey} latest story";
         $redisConnected = CacheServerHelper::isConnected();
 
         if ($redisConnected) {

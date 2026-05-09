@@ -8,27 +8,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('news_tag', function (Blueprint $table) {
+        Schema::create('story_tag', function (Blueprint $table) {
             $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
-            $table->foreignId('news_id')->constrained('newses')->onDelete('cascade');
+            $table->foreignId('story_id')->constrained('stories')->onDelete('cascade');
             $table->timestamps();
 
-            $table->primary(['tag_id', 'news_id'], 'news_tag_pk');
+            $table->primary(['tag_id', 'story_id'], 'story_tag_pk');
         });
 
-        Schema::create('contributor_news', function (Blueprint $table) {
+        Schema::create('contributor_story', function (Blueprint $table) {
             $table->foreignId('contributor_id')->constrained('contributors')->onDelete('cascade');
-            $table->foreignId('news_id')->constrained('newses')->onDelete('cascade');
+            $table->foreignId('story_id')->constrained('stories')->onDelete('cascade');
             $table->timestamps();
 
-            $table->primary(['contributor_id', 'news_id'], 'contributor_news_pk');
+            $table->primary(['contributor_id', 'story_id'], 'contributor_story_pk');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('category_news');
-        Schema::dropIfExists('news_tag');
-        Schema::dropIfExists('contributor_news');
+        Schema::dropIfExists('category_story');
+        Schema::dropIfExists('story_tag');
+        Schema::dropIfExists('contributor_story');
     }
 };

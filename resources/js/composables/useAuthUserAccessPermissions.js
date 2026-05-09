@@ -241,13 +241,13 @@ export const canDeleteContributor = (authUser, contributor) => {
     return isNewsDesk(role) && authUser.id === contributor.created_by_id
 }
 
-// ================= NEWS =================
+// ================= STORY =================
 
-export const canCreateNews = (authUser) =>
+export const canCreateStory = (authUser) =>
     authUser && isAdmin(getUserRole(authUser))
 
-export const canEditNews = (authUser, news) => {
-    if (!authUser || !news) return false
+export const canEditStory = (authUser, story) => {
+    if (!authUser || !story) return false
 
     const role = getUserRole(authUser)
 
@@ -256,25 +256,25 @@ export const canEditNews = (authUser, news) => {
     return isNewsDesk(role)
 }
 
-export const canDeleteNews = (authUser, news) => {
-    if (!authUser || !news) return false
+export const canDeleteStory = (authUser, story) => {
+    if (!authUser || !story) return false
 
     const role = getUserRole(authUser)
 
-    if (isAdmin(role) && news.is_published) return true
+    if (isAdmin(role) && story.is_published) return true
 
-    return isNewsDesk(role) && news.is_published
+    return isNewsDesk(role) && story.is_published
 }
 
-export const canRestoreNews = (authUser, news) => {
-    if (!authUser || !news) return false
+export const canRestoreStory = (authUser, story) => {
+    if (!authUser || !story) return false
 
 
     const role = getUserRole(authUser)
 
-    if (isAdmin(role) && (news.is_published == false)) return true
+    if (isAdmin(role) && (story.is_published == false)) return true
 
-    return isNewsDesk(role) && (news.is_published == false)
+    return isNewsDesk(role) && (story.is_published == false)
 }
 
 // ================= MENU =================
@@ -298,7 +298,7 @@ export const canAccessNewsAttributesMenu = (authUser) => {
     return isAdmin(role) || isNewsDesk(role)
 }
 
-export const canAccessNewsMenu = (authUser) => {
+export const canAccessStoryMenu = (authUser) => {
     if (!authUser) return false
 
     const role = getUserRole(authUser)

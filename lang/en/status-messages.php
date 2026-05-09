@@ -144,23 +144,23 @@ return [
         ],
     ],
 
-    'news'        => [
+    'story'        => [
         'save'   => [
-            'success' => 'News saved successfully.',
-            'failed'  => 'Failed to save news.',
+            'success' => 'Story saved successfully.',
+            'failed'  => 'Failed to save story.',
         ],
         'update' => [
-            'success' => 'News updated successfully.',
-            'failed'  => 'Failed to update news.',
+            'success' => 'Story updated successfully.',
+            'failed'  => 'Failed to update story.',
         ],
         'delete' => [
-            'success' => 'News deleted successfully.',
-            'failed'  => 'Failed to delete news.',
+            'success' => 'Story deleted successfully.',
+            'failed'  => 'Failed to delete story.',
         ],
 
         'restore' => [
-            'success' => 'News restore successfully.',
-            'failed'  => 'Failed to restore news.',
+            'success' => 'Story restore successfully.',
+            'failed'  => 'Failed to restore story.',
         ],
     ],
 

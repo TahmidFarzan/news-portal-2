@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\News;
+use App\Models\Story;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -13,19 +13,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class NewsContributorSyncJob implements ShouldQueue, ShouldBeUnique
+class StoryTagSyncJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $fail_limit = 3;
 
-    public News $news;
-    public $contributorIds;
+    public Story $story;
+    public $tagIds;
 
-    public function __construct(News $news, $contributorIds)
+    public function __construct(Story $story, $tagIds)
     {
-        $this->news     = $news;
-        $this->contributorIds     = $contributorIds;
+        $this->story     = $story;
+        $this->tagIds     = $tagIds;
     }
 
     public function progressCooldown(): int
@@ -35,8 +35,8 @@ class NewsContributorSyncJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId()
     {
-        $newTitleFormat = Str::slug($this->news->title);
-        return "news-{$newTitleFormat}-contributor-sync-jobs" . Str::uuid()->toString() . Str::random(15) . '-' . time();
+        $newTitleFormat = Str::slug($this->story->title);
+        return "story-{$newTitleFormat}-tag-sync-jobs" . Str::uuid()->toString() . Str::random(15) . '-' . time();
     }
 
     public function retryAfter()
@@ -53,11 +53,11 @@ class NewsContributorSyncJob implements ShouldQueue, ShouldBeUnique
     {
         DB::beginTransaction();
         try {
-            $this->news->contributors()->sync($this->contributorIds);
+            $this->story->tags()->sync($this->tagIds);
             DB::commit();
         } catch (Exception $ex) {
             DB::rollback();
-            Log::error('News contributor sync job error: ' . $ex->getMessage());
+            Log::error('Story tag sync job error: ' . $ex->getMessage());
         }
     }
 }

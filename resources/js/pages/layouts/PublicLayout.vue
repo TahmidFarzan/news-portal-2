@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
                     <a href="https://linkedin.com" target="_blank">
                         <FontAwesomeIcon :icon="['fab', 'linkedin']" />
                     </a>
-                    <a href="https://news.google.com" target="_blank">
+                    <a href="https://story.google.com" target="_blank">
                         <FontAwesomeIcon :icon="['fab', 'google']" />
                     </a>
                 </div>

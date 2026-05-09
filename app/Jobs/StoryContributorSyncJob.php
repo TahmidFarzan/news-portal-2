@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Services\Cache\NewsCacheService;
+use App\Models\Story;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -9,18 +9,23 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
+class StoryContributorSyncJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public NewsCacheService $newsCacheService;
+    public $fail_limit = 3;
 
-    public function __construct()
+    public Story $story;
+    public $contributorIds;
+
+    public function __construct(Story $story, $contributorIds)
     {
-        $this->newsCacheService = app(NewsCacheService::class);
+        $this->story     = $story;
+        $this->contributorIds     = $contributorIds;
     }
 
     public function progressCooldown(): int
@@ -30,9 +35,8 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId()
     {
-        $currentTime = time();
-        $uqRandom    = Str::random(15);
-        return "latest-newses-cached-sync-jobs-{$uqRandom}-{$currentTime}";
+        $newTitleFormat = Str::slug($this->story->title);
+        return "story-{$newTitleFormat}-contributor-sync-jobs" . Str::uuid()->toString() . Str::random(15) . '-' . time();
     }
 
     public function retryAfter()
@@ -47,11 +51,13 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
+        DB::beginTransaction();
         try {
-            $this->newsCacheService->cachedLatest("feed");
-            $this->newsCacheService->cachedLatest("public");
+            $this->story->contributors()->sync($this->contributorIds);
+            DB::commit();
         } catch (Exception $ex) {
-            Log::error('Latest newses cached job error: ' . $ex->getMessage());
+            DB::rollback();
+            Log::error('Story contributor sync job error: ' . $ex->getMessage());
         }
     }
 }

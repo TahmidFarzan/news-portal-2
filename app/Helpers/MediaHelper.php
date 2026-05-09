@@ -13,9 +13,9 @@ class MediaHelper
     public const MEDIA_ROLE_APP_LOGO_IMAGE    = 'app_logo_image';
     public const MEDIA_ROLE_APP_FAVICON_IMAGE = 'app_favicon_image';
 
-    public const MEDIA_ROLE_NEWS_FEATURE_IMAGE   = 'news_feature_image';
-    public const MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE   = 'news_feature_image_mobile';
-    public const MEDIA_ROLE_NEWS_CONTENT_IMAGE   = 'news_content_image';
+    public const MEDIA_ROLE_STORY_FEATURE_IMAGE   = 'story_feature_image';
+    public const MEDIA_ROLE_STORY_FEATURE_IMAGE_MOBILE   = 'story_feature_image_mobile';
+    public const MEDIA_ROLE_STORY_CONTENT_IMAGE   = 'story_content_image';
 
     public const MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE = 'event_desktop_banner_image';
     public const MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE  = 'event_mobile_banner_image';
@@ -25,9 +25,9 @@ class MediaHelper
         return collect([
             (object) ['id' => self::MEDIA_ROLE_DEFAULT, 'name' => 'Default'],
 
-            (object) ['id' => self::MEDIA_ROLE_NEWS_FEATURE_IMAGE, 'name' => 'News feature image'],
-            (object) ['id' => self::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE, 'name' => 'News feature image (Mobile)'],
-            (object) ['id' => self::MEDIA_ROLE_NEWS_CONTENT_IMAGE, 'name' => 'News content image'],
+            (object) ['id' => self::MEDIA_ROLE_STORY_FEATURE_IMAGE, 'name' => 'Story feature image'],
+            (object) ['id' => self::MEDIA_ROLE_STORY_FEATURE_IMAGE_MOBILE, 'name' => 'Story feature image (Mobile)'],
+            (object) ['id' => self::MEDIA_ROLE_STORY_CONTENT_IMAGE, 'name' => 'Story content image'],
 
             (object) ['id' => self::MEDIA_ROLE_PROFILE_IMAGE, 'name' => 'Profile Image'],
 

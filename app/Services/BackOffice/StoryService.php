@@ -2,12 +2,11 @@
 namespace App\Services\BackOffice;
 
 use App\Helpers\MediaHelper;
-use App\Helpers\NewsHelper;
 use App\Helpers\TagifyHelper;
-use App\Http\Requests\NewsRequest;
-use App\Jobs\NewsContributorSyncJob;
-use App\Jobs\NewsTagSyncJob;
-use App\Models\News;
+use App\Http\Requests\StoryRequest;
+use App\Jobs\StoryContributorSyncJob;
+use App\Jobs\StoryTagSyncJob;
+use App\Models\Story;
 use App\Services\BackOffice\MediaService;
 use Exception;
 use Illuminate\Http\Request;
@@ -15,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class NewsService
+class StoryService
 {
     protected MediaService $mediaService;
 
@@ -24,19 +23,19 @@ class NewsService
         $this->mediaService = $mediaService;
     }
 
-    public function new (): News
+    public function new (): Story
     {
-        return new News();
+        return new Story();
     }
 
-    public function find(string $slug): News
+    public function find(string $slug): Story
     {
-        return News::where('slug', $slug)->firstOrFail();
+        return Story::where('slug', $slug)->firstOrFail();
     }
 
-    public function loadRelations(News $news): News
+    public function loadRelations(Story $story): Story
     {
-        $news->load([
+        $story->load([
             'createdBy',
 
             'language',
@@ -58,14 +57,14 @@ class NewsService
             'latestActivityLog.causer',
         ]);
 
-        return $news;
+        return $story;
     }
 
     public function search(Request $request)
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = News::query()->with(["language", "category", "event", "location"]);
+        $query = Story::query()->with(["language", "category", "event", "location"]);
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
@@ -120,228 +119,223 @@ class NewsService
             ->appends($request->all());
     }
 
-    public function save(NewsRequest $request, News $news): array
+    public function save(StoryRequest $request, Story $story): array
     {
         DB::beginTransaction();
 
         try {
-            $isNew       = empty($news->id);
+            $isNew       = empty($story->id);
             $statusEvent = $isNew ? "save" : "update";
 
-            $news->language_id = $request->input('language_id');
+            $story->language_id = $request->input('language_id');
+            $story->category_id = $request->input('category_id');
+            $story->event_id    = $request->input('event_id');
+            $story->location_id = $request->input('location_id');
 
-            $news->category_id = $request->input('category_id');
-
-            $news->event_id    = $request->input('event_id');
-            $news->location_id = $request->input('location_id');
-
-            $news->title     = $request->input('title');
-            $news->sub_title = $request->input('sub_title');
-
-            $news->content_shoulder = $request->input('content_shoulder');
-
-            $news->brief = $request->input('brief');
-
-            $news->body      = $request->input('body');
+            $story->title     = $request->input('title');
+            $story->sub_title = $request->input('sub_title');
+            $story->content_shoulder = $request->input('content_shoulder');
+            $story->brief = $request->input('brief');
+            $story->body      = $request->input('body');
 
 
-            $news->page_section = $request->input('page_section');
+            $story->page_section = $request->input('page_section');
 
-            $news->seo_title    = $request->input('seo_title') ?? $request->input('title');
-            $news->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
-            $news->seo_keywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords')) ?? null;
+            $story->seo_title    = $request->input('seo_title') ?? $request->input('title');
+            $story->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
+            $story->seo_keywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords')) ?? null;
 
-            $news->is_published = $request->input('is_published') ? true : false;
+            $story->is_published = $request->input('is_published') ? true : false;
 
-            $news->writer = $request->input('writer');
-            $news->source = $request->input('source');
+            $story->writer = $request->input('writer');
+            $story->source = $request->input('source');
 
-            $news->created_by_id = $isNew ? Auth::id() : $news->created_by_id;
+            $story->created_by_id = $isNew ? Auth::id() : $story->created_by_id;
 
-            $news->save();
+            $story->save();
 
             DB::commit();
 
-            self::featureImageSave($request, $news);
-            self::featureImageMobileSave($request, $news);
-            self::syncContentMedia($request, $news);
+            self::featureImageSave($request, $story);
+            self::featureImageMobileSave($request, $story);
+            self::syncContentMedia($request, $story);
 
-            self::syncAttributesJob($request, $news);
+            self::syncAttributesJob($request, $story);
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.news.{$statusEvent}.success"),
+                'message' => __("status-messages.story.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error("Failed to {$statusEvent} news.", [
+            Log::error("Failed to {$statusEvent} story.", [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.news.save.failed'),
+                'message' => __('status-messages.story.save.failed'),
             ];
         }
     }
 
-    public function delete(News $news): array
+    public function delete(Story $story): array
     {
         DB::beginTransaction();
 
         try {
-            $news->is_published = false;
-            $news->save();
+            $story->is_published = false;
+            $story->save();
             DB::commit();
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.news.delete.success'),
+                'message' => __('status-messages.story.delete.success'),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error('News delete failed.', [
+            Log::error('Story delete failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.news.delete.failed'),
+                'message' => __('status-messages.story.delete.failed'),
             ];
         }
     }
 
-    public function restore(News $news): array
+    public function restore(Story $story): array
     {
         DB::beginTransaction();
 
         try {
-            $news->is_published = true;
-            $news->save();
+            $story->is_published = true;
+            $story->save();
             DB::commit();
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.news.restore.success'),
+                'message' => __('status-messages.story.restore.success'),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error('News restore failed.', [
+            Log::error('Story restore failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.news.restore.failed'),
+                'message' => __('status-messages.story.restore.failed'),
             ];
         }
     }
 
-    private function syncAttributesJob(NewsRequest $request, News $news)
+    private function syncAttributesJob(StoryRequest $request, Story $story)
     {
         if ($request->input('tag_ids')) {
-            NewsTagSyncJob::dispatch($news, $request->input('tag_ids'));
+            StoryTagSyncJob::dispatch($story, $request->input('tag_ids'));
         }
 
         if ($request->input('contributor_ids')) {
-            NewsContributorSyncJob::dispatch($news, $request->input('contributor_ids'));
+            StoryContributorSyncJob::dispatch($story, $request->input('contributor_ids'));
         }
     }
 
-    private function featureImageSave(NewsRequest $request, News $news)
+    private function featureImageSave(StoryRequest $request, Story $story)
     {
         if ($request->hasFile('upload_feature_image')) {
-            self::deleteExtingFeatureImage($news);
+            self::deleteExtingFeatureImage($story);
 
             $featureImage = $request->file('upload_feature_image');
 
             if ($featureImage) {
                 $extension = $featureImage->getClientOriginalExtension();
-                $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
+                $fileName  = MediaHelper::generateMediaName($story->title, $extension, 200);
 
-                $news->addMedia($featureImage)
+                $story->addMedia($featureImage)
                     ->usingFileName($fileName)
-                    ->usingName($news->title)
+                    ->usingName($story->title)
                     ->withCustomProperties(
                         [
-                            "alt"     => $news->title,
+                            "alt"     => $story->title,
                             "caption" => $request->input('feature_image_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
+                            "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE,
                         ]
                     )
-                    ->toMediaCollection($news->media_collection_name);
+                    ->toMediaCollection($story->media_collection_name);
             }
         }
 
         if ($request->input('selected_feature_image_url')) {
-            self::deleteExtingFeatureImage($news);
+            self::deleteExtingFeatureImage($story);
             $mediaFeatureImageUrl       = $request->input('selected_feature_image_url');
             $mediaFeatureImageExtension = pathinfo($mediaFeatureImageUrl, PATHINFO_EXTENSION);
-            $mediaFeatureImageFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageExtension, 200);
+            $mediaFeatureImageFileName  = MediaHelper::generateMediaName($story->name, $mediaFeatureImageExtension, 200);
 
-            $news->addMediaFromUrl($mediaFeatureImageUrl)
-                ->usingName($news->title)
+            $story->addMediaFromUrl($mediaFeatureImageUrl)
+                ->usingName($story->title)
                 ->usingFileName($mediaFeatureImageFileName)
                 ->withCustomProperties(
                     [
                         'caption' => $request->input('feature_image_caption'),
-                        'alt'     => $news->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
+                        'alt'     => $story->title,
+                        "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE,
                     ]
                 )
-                ->toMediaCollection($news->media_collection_name);
+                ->toMediaCollection($story->media_collection_name);
         }
     }
 
-    private function featureImageMobileSave(NewsRequest $request, News $news)
+    private function featureImageMobileSave(StoryRequest $request, Story $story)
     {
         if ($request->hasFile('upload_feature_image_mobile')) {
-            self::deleteExtingThumbnail($news);
+            self::deleteExtingFeatureImageMobile($story);
 
-            $thumbnail = $request->file('upload_feature_image_mobile');
+            $featureImageMobile = $request->file('upload_feature_image_mobile');
 
-            if ($thumbnail) {
-                $extension = $thumbnail->getClientOriginalExtension();
-                $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
+            if ($featureImageMobile) {
+                $extension = $featureImageMobile->getClientOriginalExtension();
+                $fileName  = MediaHelper::generateMediaName($story->title, $extension, 200);
 
-                $news->addMedia($thumbnail)
+                $story->addMedia($featureImageMobile)
                     ->usingFileName($fileName)
-                    ->usingName($news->title)
+                    ->usingName($story->title)
                     ->withCustomProperties(
                         [
-                            "alt"     => $news->title,
-                            "caption" => $news->input('feature_image_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+                            "alt"     => $story->title,
+                            "caption" => $story->input('feature_image_caption'),
+                            "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE_MOBILE,
                         ]
                     )
-                    ->toMediaCollection($news->media_collection_name);
+                    ->toMediaCollection($story->media_collection_name);
             }
         }
 
         if ($request->input('selected_feature_image_mobile_url')) {
-            self::deleteExtingThumbnail($news);
-            $mediaThumbnailUrl       = $request->input('selected_feature_image_mobile_url');
-            $mediaThumbnailExtension = pathinfo($mediaThumbnailUrl, PATHINFO_EXTENSION);
-            $mediaThumbnailFileName  = MediaHelper::generateMediaName($news->name, $mediaThumbnailExtension, 200);
+            self::deleteExtingFeatureImageMobile($story);
+            $mediaFeatureImageMobileUrl       = $request->input('selected_feature_image_mobile_url');
+            $mediaFeatureImageMobileExtension = pathinfo($mediaFeatureImageMobileUrl, PATHINFO_EXTENSION);
+            $mediaFeatureImageMobileFileName  = MediaHelper::generateMediaName($story->name, $mediaFeatureImageMobileExtension, 200);
 
-            $news->addMediaFromUrl($mediaThumbnailUrl)
-                ->usingName($news->title)
-                ->usingFileName($mediaThumbnailFileName)
+            $story->addMediaFromUrl($mediaFeatureImageMobileUrl)
+                ->usingName($story->title)
+                ->usingFileName($mediaFeatureImageMobileFileName)
                 ->withCustomProperties(
                     [
-                        'caption' => $news->input('upload_feature_image_mobile_caption'),
-                        'alt'     => $news->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+                        'caption' => $story->input('upload_feature_image_mobile_caption'),
+                        'alt'     => $story->title,
+                        "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE_MOBILE,
                     ]
                 )
-                ->toMediaCollection($news->media_collection_name);
+                ->toMediaCollection($story->media_collection_name);
         }
     }
 
-    private function syncContentMedia(NewsRequest $request, News $news): void
+    private function syncContentMedia(StoryRequest $request, Story $story): void
     {
         if (! $request->filled('editor_media_ids')) {
             return;
@@ -356,15 +350,15 @@ class NewsService
 
         $replacementPairs = $this->mediaService->copyOrUpdateMediaByMediaIds(
             $contentMediaIds,
-            $news,
-            MediaHelper::MEDIA_ROLE_NEWS_CONTENT_IMAGE
+            $story,
+            MediaHelper::MEDIA_ROLE_STORY_CONTENT_IMAGE
         );
 
         if (! $replacementPairs) {
             return;
         }
 
-        $body = $news->body ?? '';
+        $body = $story->body ?? '';
 
         foreach ($replacementPairs as $replacementPair) {
             if ($replacementPair->old_media_id == $replacementPair->new_media_id) {
@@ -410,25 +404,25 @@ class NewsService
             }
         }
 
-        if ($body !== $news->body) {
-            $news->body = $body;
-            $news->save();
+        if ($body !== $story->body) {
+            $story->body = $body;
+            $story->save();
         }
     }
 
-    private static function deleteExtingFeatureImage(News $news)
+    private static function deleteExtingFeatureImage(Story $story)
     {
-        $extingFeatureImage = $news->feature_image;
+        $extingFeatureImage = $story->feature_image;
         if ($extingFeatureImage) {
             $extingFeatureImage->delete();
         }
     }
 
-    private static function deleteExtingThumbnail(News $news)
+    private static function deleteExtingFeatureImageMobile(Story $story)
     {
-        $extingThumbnail = $news->thumbnail;
-        if ($extingThumbnail) {
-            $extingThumbnail->delete();
+        $extingFeatureImageMobile = $story->feature_image_mobile;
+        if ($extingFeatureImageMobile) {
+            $extingFeatureImageMobile->delete();
         }
     }
 }

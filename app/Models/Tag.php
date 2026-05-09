@@ -135,9 +135,9 @@ class Tag extends Model
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function newses(): HasMany
+    public function stories(): HasMany
     {
-        return $this->hasMany(News::class, 'news_tag');
+        return $this->hasMany(Story::class, 'story_tag');
     }
 
     public function trend(): HasOne
