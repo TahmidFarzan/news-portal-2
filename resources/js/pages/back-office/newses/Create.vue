@@ -317,7 +317,8 @@ onMounted(async () => {
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="category_id"
                                 :selectedItem="saveForm.category_id ? news?.category : null" :apiUrl="categoryApiUrl"
-                                :error="saveForm.errors.category_id" :multiple="false" placeholder="Select category" />
+                                :error="saveForm.errors.category_id" selectedLabelKey="indentation_name"
+                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false" placeholder="Select category" />
                             <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.category_id }}
                             </p>
@@ -343,7 +344,8 @@ onMounted(async () => {
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="location_id"
                                 :selectedItem="saveForm.location_id ? news?.location : null" :apiUrl="locationApiUrl"
-                                :error="saveForm.errors.location_id" :multiple="false" placeholder="Select location" />
+                                :error="saveForm.errors.location_id" :multiple="false" selectedLabelKey="indentation_name"
+                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" placeholder="Select location" />
                             <p v-if="saveForm.errors.location_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.location_id }}
                             </p>
