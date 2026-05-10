@@ -54,7 +54,6 @@ const saveForm = useForm({
     feature_image_caption: story?.feature_image?.custom_properties?.caption || null,
 
     is_published: story?.is_published,
-    page_section: story?.page_section,
 
     writer: story?.writer || null,
     source: story?.source || null,
@@ -554,21 +553,6 @@ onMounted(async () => {
                     <h3 class="text-base font-semibold">Publish Settings</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <div>
-                            <label class="block text-sm font-medium mb-1">
-                                Page section
-                            </label>
-
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="page_section"
-                                :selectedItem="story?.page_section" :apiUrl="route('search.page-sections')"
-                                :error="saveForm.errors.page_section" :multiple="false"
-                                placeholder="Select page section" />
-
-                            <p v-if="saveForm.errors.page_section" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.page_section }}
-                            </p>
-                        </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">

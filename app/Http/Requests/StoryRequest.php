@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Requests;
 
+use App\Helpers\NewsHelper;
 use App\Models\Category;
 use App\Models\Contributor;
 use App\Models\Event;
@@ -66,8 +67,6 @@ class StoryRequest extends FormRequest
             "selected_feature_image_mobile_url" => ["nullable", "url"],
 
             "body"                              => ["required"],
-
-            "page_section"                      => ["nullable"],
 
             "editor_media_ids"                  => ["nullable"],
         ];
@@ -168,6 +167,8 @@ class StoryRequest extends FormRequest
                     );
                 }
             }
+
+
 
             $tagIds = $this->normalizeIds($data['tag_ids'] ?? []);
 

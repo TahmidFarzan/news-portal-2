@@ -138,9 +138,6 @@ class StoryService
             $story->brief = $request->input('brief');
             $story->body      = $request->input('body');
 
-
-            $story->page_section = $request->input('page_section');
-
             $story->seo_title    = $request->input('seo_title') ?? $request->input('title');
             $story->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
             $story->seo_keywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords')) ?? null;

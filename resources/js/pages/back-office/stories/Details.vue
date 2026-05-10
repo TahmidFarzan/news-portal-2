@@ -134,12 +134,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Page section</span>
-                        <span class="font-medium">{{ story?.page_section || 'N/A' }}</span>
-                    </div>
-                </div>
+
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">

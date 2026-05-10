@@ -54,7 +54,7 @@ class StoryFactory extends Factory
             'seo_keywords'     => null,
 
             'source'           => null,
-            "page_section"     => null,
+
 
             "is_published"     => $isPublished,
 

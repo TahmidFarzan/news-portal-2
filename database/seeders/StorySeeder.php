@@ -62,8 +62,6 @@ class StorySeeder extends Seeder
 
                         "body"             => $randomStory->body,
 
-                        "page_section"     => null,
-
                         "seo_title"        => $randomStory->title,
                         "seo_brief"        => $randomStory->brief,
                         "seo_keywords"     => $randomStory->seo_keywords,
