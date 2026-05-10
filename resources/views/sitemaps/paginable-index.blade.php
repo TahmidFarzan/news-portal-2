@@ -24,8 +24,8 @@
                 $url = route('sitemaps.contributors');
                 break;
 
-            case 'Story':
-                $url = route('sitemaps.stories');
+            case 'News':
+                $url = route('sitemaps.newses');
                 break;
 
             default:

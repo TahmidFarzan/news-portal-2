@@ -162,9 +162,9 @@ class Location extends Model
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function stories(): HasMany
+    public function newses(): HasMany
     {
-        return $this->hasMany(Story::class);
+        return $this->hasMany(News::class);
     }
 
     public function parent(): BelongsTo

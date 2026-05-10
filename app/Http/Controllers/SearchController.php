@@ -101,9 +101,9 @@ class SearchController extends Controller
         return $this->jsonResponse($this->searchService->contributors($request), $this->frequentlyCacheLimitInSecond);
     }
 
-    public function stories(Request $request)
+    public function newses(Request $request)
     {
-        return $this->jsonResponse($this->searchService->stories($request), $this->frequentlyCacheLimitInSecond);
+        return $this->jsonResponse($this->searchService->newses($request), $this->frequentlyCacheLimitInSecond);
     }
 
     public function medias(Request $request)

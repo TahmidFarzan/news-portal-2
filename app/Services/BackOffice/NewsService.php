@@ -3,10 +3,10 @@ namespace App\Services\BackOffice;
 
 use App\Helpers\MediaHelper;
 use App\Helpers\TagifyHelper;
-use App\Http\Requests\StoryRequest;
-use App\Jobs\StoryContributorSyncJob;
-use App\Jobs\StoryTagSyncJob;
-use App\Models\Story;
+use App\Http\Requests\NewsRequest;
+use App\Jobs\NewsContributorSyncJob;
+use App\Jobs\NewsTagSyncJob;
+use App\Models\News;
 use App\Services\BackOffice\MediaService;
 use Exception;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class StoryService
+class NewsService
 {
     protected MediaService $mediaService;
 
@@ -23,19 +23,19 @@ class StoryService
         $this->mediaService = $mediaService;
     }
 
-    public function new (): Story
+    public function new (): News
     {
-        return new Story();
+        return new News();
     }
 
-    public function find(string $slug): Story
+    public function find(string $slug): News
     {
-        return Story::where('slug', $slug)->firstOrFail();
+        return News::where('slug', $slug)->firstOrFail();
     }
 
-    public function loadRelations(Story $story): Story
+    public function loadRelations(News $news): News
     {
-        $story->load([
+        $news->load([
             'createdBy',
 
             'language',
@@ -57,14 +57,14 @@ class StoryService
             'latestActivityLog.causer',
         ]);
 
-        return $story;
+        return $news;
     }
 
     public function search(Request $request)
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Story::query()->with(["language", "category", "event", "location"]);
+        $query = News::query()->with(["language", "category", "event", "location"]);
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
@@ -119,220 +119,220 @@ class StoryService
             ->appends($request->all());
     }
 
-    public function save(StoryRequest $request, Story $story): array
+    public function save(NewsRequest $request, News $news): array
     {
         DB::beginTransaction();
 
         try {
-            $isNew       = empty($story->id);
+            $isNew       = empty($news->id);
             $statusEvent = $isNew ? "save" : "update";
 
-            $story->language_id = $request->input('language_id');
-            $story->category_id = $request->input('category_id');
-            $story->event_id    = $request->input('event_id');
-            $story->location_id = $request->input('location_id');
+            $news->language_id = $request->input('language_id');
+            $news->category_id = $request->input('category_id');
+            $news->event_id    = $request->input('event_id');
+            $news->location_id = $request->input('location_id');
 
-            $story->title     = $request->input('title');
-            $story->sub_title = $request->input('sub_title');
-            $story->content_shoulder = $request->input('content_shoulder');
-            $story->brief = $request->input('brief');
-            $story->body      = $request->input('body');
+            $news->title     = $request->input('title');
+            $news->sub_title = $request->input('sub_title');
+            $news->content_shoulder = $request->input('content_shoulder');
+            $news->brief = $request->input('brief');
+            $news->body      = $request->input('body');
 
-            $story->seo_title    = $request->input('seo_title') ?? $request->input('title');
-            $story->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
-            $story->seo_keywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords')) ?? null;
+            $news->seo_title    = $request->input('seo_title') ?? $request->input('title');
+            $news->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
+            $news->seo_keywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords')) ?? null;
 
-            $story->is_published = $request->input('is_published') ? true : false;
+            $news->is_published = $request->input('is_published') ? true : false;
 
-            $story->writer = $request->input('writer');
-            $story->source = $request->input('source');
+            $news->writer = $request->input('writer');
+            $news->source = $request->input('source');
 
-            $story->created_by_id = $isNew ? Auth::id() : $story->created_by_id;
+            $news->created_by_id = $isNew ? Auth::id() : $news->created_by_id;
 
-            $story->save();
+            $news->save();
 
             DB::commit();
 
-            self::featureImageSave($request, $story);
-            self::featureImageMobileSave($request, $story);
-            self::syncContentMedia($request, $story);
+            self::featureImageSave($request, $news);
+            self::featureImageMobileSave($request, $news);
+            self::syncContentMedia($request, $news);
 
-            self::syncAttributesJob($request, $story);
+            self::syncAttributesJob($request, $news);
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.story.{$statusEvent}.success"),
+                'message' => __("status-messages.news.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error("Failed to {$statusEvent} story.", [
+            Log::error("Failed to {$statusEvent} news.", [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.story.save.failed'),
+                'message' => __('status-messages.news.save.failed'),
             ];
         }
     }
 
-    public function delete(Story $story): array
+    public function delete(News $news): array
     {
         DB::beginTransaction();
 
         try {
-            $story->is_published = false;
-            $story->save();
+            $news->is_published = false;
+            $news->save();
             DB::commit();
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.story.delete.success'),
+                'message' => __('status-messages.news.delete.success'),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error('Story delete failed.', [
+            Log::error('News delete failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.story.delete.failed'),
+                'message' => __('status-messages.news.delete.failed'),
             ];
         }
     }
 
-    public function restore(Story $story): array
+    public function restore(News $news): array
     {
         DB::beginTransaction();
 
         try {
-            $story->is_published = true;
-            $story->save();
+            $news->is_published = true;
+            $news->save();
             DB::commit();
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.story.restore.success'),
+                'message' => __('status-messages.news.restore.success'),
             ];
         } catch (Exception $exception) {
             DB::rollback();
 
-            Log::error('Story restore failed.', [
+            Log::error('News restore failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.story.restore.failed'),
+                'message' => __('status-messages.news.restore.failed'),
             ];
         }
     }
 
-    private function syncAttributesJob(StoryRequest $request, Story $story)
+    private function syncAttributesJob(NewsRequest $request, News $news)
     {
         if ($request->input('tag_ids')) {
-            StoryTagSyncJob::dispatch($story, $request->input('tag_ids'));
+            NewsTagSyncJob::dispatch($news, $request->input('tag_ids'));
         }
 
         if ($request->input('contributor_ids')) {
-            StoryContributorSyncJob::dispatch($story, $request->input('contributor_ids'));
+            NewsContributorSyncJob::dispatch($news, $request->input('contributor_ids'));
         }
     }
 
-    private function featureImageSave(StoryRequest $request, Story $story): void
+    private function featureImageSave(NewsRequest $request, News $news): void
     {
         if ($request->hasFile('upload_feature_image')) {
-            self::deleteExtingFeatureImage($story);
+            self::deleteExtingFeatureImage($news);
 
             $featureImage = $request->file('upload_feature_image');
 
             if ($featureImage) {
                 $extension = $featureImage->getClientOriginalExtension();
-                $fileName  = MediaHelper::generateMediaName($story->title, $extension, 200);
+                $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
 
-                $story->addMedia($featureImage)
+                $news->addMedia($featureImage)
                     ->usingFileName($fileName)
-                    ->usingName($story->title)
+                    ->usingName($news->title)
                     ->withCustomProperties(
                         [
-                            "alt"     => $story->title,
+                            "alt"     => $news->title,
                             "caption" => $request->input('feature_image_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE,
+                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
                         ]
                     )
-                    ->toMediaCollection($story->media_collection_name);
+                    ->toMediaCollection($news->media_collection_name);
             }
         }
 
         if ($request->input('selected_feature_image_url')) {
-            self::deleteExtingFeatureImage($story);
+            self::deleteExtingFeatureImage($news);
             $mediaFeatureImageUrl       = $request->input('selected_feature_image_url');
             $mediaFeatureImageExtension = pathinfo($mediaFeatureImageUrl, PATHINFO_EXTENSION);
-            $mediaFeatureImageFileName  = MediaHelper::generateMediaName($story->name, $mediaFeatureImageExtension, 200);
+            $mediaFeatureImageFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageExtension, 200);
 
-            $story->addMediaFromUrl($mediaFeatureImageUrl)
-                ->usingName($story->title)
+            $news->addMediaFromUrl($mediaFeatureImageUrl)
+                ->usingName($news->title)
                 ->usingFileName($mediaFeatureImageFileName)
                 ->withCustomProperties(
                     [
                         'caption' => $request->input('feature_image_caption'),
-                        'alt'     => $story->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE,
+                        'alt'     => $news->title,
+                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
                     ]
                 )
-                ->toMediaCollection($story->media_collection_name);
+                ->toMediaCollection($news->media_collection_name);
         }
     }
 
-    private function featureImageMobileSave(StoryRequest $request, Story $story): void
+    private function featureImageMobileSave(NewsRequest $request, News $news): void
     {
         if ($request->hasFile('upload_feature_image_mobile')) {
-            self::deleteExtingFeatureImageMobile($story);
+            self::deleteExtingFeatureImageMobile($news);
 
             $featureImageMobile = $request->file('upload_feature_image_mobile');
 
             if ($featureImageMobile) {
                 $extension = $featureImageMobile->getClientOriginalExtension();
-                $fileName  = MediaHelper::generateMediaName($story->title, $extension, 200);
+                $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
 
-                $story->addMedia($featureImageMobile)
+                $news->addMedia($featureImageMobile)
                     ->usingFileName($fileName)
-                    ->usingName($story->title)
+                    ->usingName($news->title)
                     ->withCustomProperties(
                         [
-                            "alt"     => $story->title,
-                            "caption" => $story->input('feature_image_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE_MOBILE,
+                            "alt"     => $news->title,
+                            "caption" => $news->input('feature_image_caption'),
+                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
                         ]
                     )
-                    ->toMediaCollection($story->media_collection_name);
+                    ->toMediaCollection($news->media_collection_name);
             }
         }
 
         if ($request->input('selected_feature_image_mobile_url')) {
-            self::deleteExtingFeatureImageMobile($story);
+            self::deleteExtingFeatureImageMobile($news);
             $mediaFeatureImageMobileUrl       = $request->input('selected_feature_image_mobile_url');
             $mediaFeatureImageMobileExtension = pathinfo($mediaFeatureImageMobileUrl, PATHINFO_EXTENSION);
-            $mediaFeatureImageMobileFileName  = MediaHelper::generateMediaName($story->name, $mediaFeatureImageMobileExtension, 200);
+            $mediaFeatureImageMobileFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageMobileExtension, 200);
 
-            $story->addMediaFromUrl($mediaFeatureImageMobileUrl)
-                ->usingName($story->title)
+            $news->addMediaFromUrl($mediaFeatureImageMobileUrl)
+                ->usingName($news->title)
                 ->usingFileName($mediaFeatureImageMobileFileName)
                 ->withCustomProperties(
                     [
-                        'caption' => $story->input('upload_feature_image_mobile_caption'),
-                        'alt'     => $story->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE_MOBILE,
+                        'caption' => $news->input('upload_feature_image_mobile_caption'),
+                        'alt'     => $news->title,
+                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
                     ]
                 )
-                ->toMediaCollection($story->media_collection_name);
+                ->toMediaCollection($news->media_collection_name);
         }
     }
 
-    private function syncContentMedia(StoryRequest $request, Story $story): void
+    private function syncContentMedia(NewsRequest $request, News $news): void
     {
         if (! $request->filled('editor_media_ids')) {
             return;
@@ -347,15 +347,15 @@ class StoryService
 
         $replacementPairs = $this->mediaService->copyOrUpdateMediaByMediaIds(
             $contentMediaIds,
-            $story,
-            MediaHelper::MEDIA_ROLE_STORY_CONTENT_IMAGE
+            $news,
+            MediaHelper::MEDIA_ROLE_NEWS_CONTENT_IMAGE
         );
 
         if (! $replacementPairs) {
             return;
         }
 
-        $body = $story->body ?? '';
+        $body = $news->body ?? '';
 
         foreach ($replacementPairs as $replacementPair) {
             if ($replacementPair->old_media_id == $replacementPair->new_media_id) {
@@ -401,23 +401,23 @@ class StoryService
             }
         }
 
-        if ($body !== $story->body) {
-            $story->body = $body;
-            $story->save();
+        if ($body !== $news->body) {
+            $news->body = $body;
+            $news->save();
         }
     }
 
-    private static function deleteExtingFeatureImage(Story $story): void
+    private static function deleteExtingFeatureImage(News $news): void
     {
-        $extingFeatureImage = $story->feature_image;
+        $extingFeatureImage = $news->feature_image;
         if ($extingFeatureImage) {
             $extingFeatureImage->delete();
         }
     }
 
-    private static function deleteExtingFeatureImageMobile(Story $story): void
+    private static function deleteExtingFeatureImageMobile(News $news): void
     {
-        $extingFeatureImageMobile = $story->feature_image_mobile;
+        $extingFeatureImageMobile = $news->feature_image_mobile;
         if ($extingFeatureImageMobile) {
             $extingFeatureImageMobile->delete();
         }

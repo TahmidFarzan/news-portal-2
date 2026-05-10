@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('stories', function (Blueprint $table) {
+        Schema::create('newses', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();

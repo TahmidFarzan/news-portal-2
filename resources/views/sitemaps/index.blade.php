@@ -23,12 +23,12 @@
     </sitemap>
 
     <sitemap>
-        <loc>{{ route('sitemaps.latest-stories') }}</loc>
+        <loc>{{ route('sitemaps.latest-newses') }}</loc>
         <lastmod>{{ now()->format('Y-m-d\TH:i:sP') }}</lastmod>
     </sitemap>
 
     <sitemap>
-        <loc>{{ route('sitemaps.stories') }}</loc>
+        <loc>{{ route('sitemaps.newses') }}</loc>
         <lastmod>{{ now()->format('Y-m-d\TH:i:sP') }}</lastmod>
     </sitemap>
 </sitemapindex>

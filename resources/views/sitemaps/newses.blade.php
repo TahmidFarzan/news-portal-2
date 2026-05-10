@@ -6,6 +6,6 @@
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     @foreach ($records as $record)
-        <x-sitemaps.story-component :story="$record"/>
+        <x-sitemaps.news-component :news="$record"/>
     @endforeach
 </urlset>

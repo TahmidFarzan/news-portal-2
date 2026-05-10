@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Services\Cache\StoryCacheService;
+use App\Services\Cache\NewsCacheService;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,15 +12,15 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SyncStorySitemapJob implements ShouldQueue, ShouldBeUnique
+class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public StoryCacheService $storyCacheService;
+    public NewsCacheService $newsCacheService;
 
     public function __construct()
     {
-        $this->storyCacheService = app(StoryCacheService::class);
+        $this->newsCacheService = app(NewsCacheService::class);
     }
 
     public function progressCooldown(): int
@@ -32,7 +32,7 @@ class SyncStorySitemapJob implements ShouldQueue, ShouldBeUnique
     {
         $currentTime = time();
         $uqRandom    = Str::random(15);
-        return "story-sitemap-sync-jobs-{$uqRandom}-{$currentTime}";
+        return "news-sitemap-sync-jobs-{$uqRandom}-{$currentTime}";
     }
 
     public function retryAfter()
@@ -48,11 +48,11 @@ class SyncStorySitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $dbRecordCount     = $this->storyCacheService->dbRecordsCount();
-            $cachedRecordTotal = $this->storyCacheService->recordsCount("sitemap");
+            $dbRecordCount     = $this->newsCacheService->dbRecordsCount();
+            $cachedRecordTotal = $this->newsCacheService->recordsCount("sitemap");
 
-            $dbLastPageNo     = $this->storyCacheService->dbLastPageNo(null);
-            $cachedLastPageNo = $this->storyCacheService->lastPageNo("sitemap");
+            $dbLastPageNo     = $this->newsCacheService->dbLastPageNo(null);
+            $cachedLastPageNo = $this->newsCacheService->lastPageNo("sitemap");
 
             if (! ($cachedRecordTotal == $dbRecordCount)) {
                 $pageStart = $cachedLastPageNo;
@@ -67,14 +67,14 @@ class SyncStorySitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->storyCacheService->cachedRecords("sitemap", null, $page);
+                    $this->newsCacheService->cachedRecords("sitemap", null, $page);
                 }
             }
 
-            $this->storyCacheService->cachedRecordsCount("sitemap");
-            $this->storyCacheService->cachedLastPageNo("sitemap");
+            $this->newsCacheService->cachedRecordsCount("sitemap");
+            $this->newsCacheService->cachedLastPageNo("sitemap");
         } catch (Exception $ex) {
-            Log::error('Story sitemap sync job error: ' . $ex->getMessage());
+            Log::error('News sitemap sync job error: ' . $ex->getMessage());
 
             throw $ex;
         }

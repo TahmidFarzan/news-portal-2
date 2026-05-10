@@ -7,15 +7,15 @@ use App\Models\Category;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
-use App\Models\Story;
+use App\Models\News;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Story>
+ * @extends Factory<News>
  */
-class StoryFactory extends Factory
+class NewsFactory extends Factory
 {
     public function definition(): array
     {

@@ -3,18 +3,18 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Story;
+use App\Models\News;
 use Illuminate\Auth\Access\Response;
 use App\Helpers\UserHelper;
 
-class StoryPolicy
+class NewsPolicy
 {
     public function viewAny(User $authUser): Response
     {
         return Response::allow();
     }
 
-    public function view(User $authUser, Story $story): Response
+    public function view(User $authUser, News $news): Response
     {
         return Response::allow();
     }
@@ -24,7 +24,7 @@ class StoryPolicy
         return Response::allow();
     }
 
-    public function update(User $authUser, Story $story): Response
+    public function update(User $authUser, News $news): Response
     {
         if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
@@ -37,7 +37,7 @@ class StoryPolicy
         return Response::deny();
     }
 
-    public function delete(User $authUser, Story $story): Response
+    public function delete(User $authUser, News $news): Response
     {
 
         if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {

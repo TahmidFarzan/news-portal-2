@@ -180,9 +180,9 @@ class Contributor extends Model implements HasMedia
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function stories(): HasMany
+    public function newses(): HasMany
     {
-        return $this->hasMany(Story::class,'contributor_story' );
+        return $this->hasMany(News::class,'contributor_news' );
     }
 
     public function navBreadcrumbs(): array

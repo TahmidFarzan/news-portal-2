@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Services\Cache\StoryCacheService;
+use App\Models\News;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -9,18 +9,23 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SyncLatestStorySitemapJob implements ShouldQueue, ShouldBeUnique
+class NewsTagSyncJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public StoryCacheService $storyCacheService;
+    public $fail_limit = 3;
 
-    public function __construct()
+    public News $news;
+    public $tagIds;
+
+    public function __construct(News $news, $tagIds)
     {
-        $this->storyCacheService = app(StoryCacheService::class);
+        $this->news     = $news;
+        $this->tagIds     = $tagIds;
     }
 
     public function progressCooldown(): int
@@ -30,9 +35,8 @@ class SyncLatestStorySitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId()
     {
-        $currentTime = time();
-        $uqRandom    = Str::random(15);
-        return "latest-stories-cached-sync-jobs-{$uqRandom}-{$currentTime}";
+        $newTitleFormat = Str::slug($this->news->title);
+        return "news-{$newTitleFormat}-tag-sync-jobs" . Str::uuid()->toString() . Str::random(15) . '-' . time();
     }
 
     public function retryAfter()
@@ -47,11 +51,13 @@ class SyncLatestStorySitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
+        DB::beginTransaction();
         try {
-            $this->storyCacheService->cachedLatest("feed");
-            $this->storyCacheService->cachedLatest("public");
+            $this->news->tags()->sync($this->tagIds);
+            DB::commit();
         } catch (Exception $ex) {
-            Log::error('Latest stories cached job error: ' . $ex->getMessage());
+            DB::rollback();
+            Log::error('News tag sync job error: ' . $ex->getMessage());
         }
     }
 }

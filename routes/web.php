@@ -8,7 +8,7 @@ use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
-use App\Http\Controllers\BackOffice\StoryController;
+use App\Http\Controllers\BackOffice\NewsController;
 
 // Backoffice
 use App\Http\Controllers\BackOffice\MediaController;
@@ -96,7 +96,7 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
     Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
 
-    Route::get('stories', [SearchController::class, 'stories'])->name('stories');
+    Route::get('newses', [SearchController::class, 'newses'])->name('newses');
 
     Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
     Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
@@ -210,16 +210,16 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [ContributorController::class, 'delete'])->name('delete');
     });
 
-    Route::prefix('stories')->name('stories.')->group(function () {
-        Route::get('/', [StoryController::class, 'index'])->name('index');
-        Route::get('create', [StoryController::class, 'create'])->name('create');
-        Route::get('edit/{slug}', [StoryController::class, 'edit'])->name('edit');
-        Route::get('details/{slug}', [StoryController::class, 'details'])->name('details');
+    Route::prefix('newses')->name('newses.')->group(function () {
+        Route::get('/', [NewsController::class, 'index'])->name('index');
+        Route::get('create', [NewsController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [NewsController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [NewsController::class, 'details'])->name('details');
 
-        Route::post('save', [StoryController::class, 'save'])->name('save');
-        Route::patch('update/{slug}', [StoryController::class, 'update'])->name('update');
-        Route::patch('delete/{slug}', [StoryController::class, 'delete'])->name('delete');
-        Route::patch('restore/{slug}', [StoryController::class, 'restore'])->name('restore');
+        Route::post('save', [NewsController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [NewsController::class, 'update'])->name('update');
+        Route::patch('delete/{slug}', [NewsController::class, 'delete'])->name('delete');
+        Route::patch('restore/{slug}', [NewsController::class, 'restore'])->name('restore');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
@@ -242,8 +242,8 @@ Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
     Route::get('events.xml', [SitemapController::class, 'events'])->name('events');
     Route::get('contributors.xml', [SitemapController::class, 'contributors'])->name('contributors');
 
-    Route::get('stories.xml', [SitemapController::class, 'stories'])->name('stories');
-    Route::get('latest-stories.xml', [SitemapController::class, 'latestStories'])->name('latest-stories');
+    Route::get('newses.xml', [SitemapController::class, 'newses'])->name('newses');
+    Route::get('latest-newses.xml', [SitemapController::class, 'latestNewses'])->name('latest-newses');
 });
 
 Route::get('/', function () {

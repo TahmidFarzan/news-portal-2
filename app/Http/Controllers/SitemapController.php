@@ -94,24 +94,24 @@ class SitemapController extends Controller
             ->header('Content-Type', 'application/xml');
     }
 
-    public function latestStories()
+    public function latestNewses()
     {
-        $records = $this->sitemapService->latestStoriesGetStories();
+        $records = $this->sitemapService->latestNewsesGetNewses();
 
-        return response()->view('sitemaps.stories', compact('records'))
+        return response()->view('sitemaps.newses', compact('records'))
             ->header('Content-Type', 'application/xml');
     }
 
-    public function stories(Request $request)
+    public function newses(Request $request)
     {
         if ($request->filled("page")) {
-            $records = $this->sitemapService->getStories($request);
-            return response()->view('sitemaps.stories', compact('records'))
+            $records = $this->sitemapService->getNewses($request);
+            return response()->view('sitemaps.newses', compact('records'))
                 ->header('Content-Type', 'application/xml');
         }
 
-        $routeFor = 'Story';
-        $lastPage = $this->sitemapService->getStoriesLastPageNo();
+        $routeFor = 'News';
+        $lastPage = $this->sitemapService->getNewsesLastPageNo();
 
         return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
             ->header('Content-Type', 'application/xml');

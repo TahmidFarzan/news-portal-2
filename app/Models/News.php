@@ -2,8 +2,8 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
-use App\Observers\StoryObserver;
-use App\Policies\StoryPolicy;
+use App\Observers\NewsObserver;
+use App\Policies\NewsPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -25,7 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[Table('stories')]
+#[Table('newses')]
 #[Fillable([
         'language_id', 'category_id', 'event_id', 'location_id',
         'title', 'sub_title', "content_shoulder", 'brief',
@@ -33,9 +33,9 @@ use Spatie\Sluggable\SlugOptions;
         "seo_brief", 'seo_title', 'seo_keywords',
         'created_by_id', 'slug', 'is_published',
     ])]
-#[UsePolicy(StoryPolicy::class)]
-#[ObservedBy([StoryObserver::class])]
-class Story extends Model implements HasMedia
+#[UsePolicy(NewsPolicy::class)]
+#[ObservedBy([NewsObserver::class])]
+class News extends Model implements HasMedia
 {
     use HasFactory, LogsActivity, HasSlug, InteractsWithMedia;
 
@@ -65,7 +65,7 @@ class Story extends Model implements HasMedia
                 "seo_brief", 'seo_title', 'seo_keywords',
                 'slug', 'is_published',
             ])
-            ->useLogName('Story')
+            ->useLogName('News')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
             ->logOnlyDirty()
             ->logExcept([
@@ -113,7 +113,7 @@ class Story extends Model implements HasMedia
 
     public function getMediaCollectionNameAttribute(): string
     {
-        return "Story";
+        return "News";
     }
 
     public function getPublicUrlAttribute(): string
@@ -145,7 +145,7 @@ class Story extends Model implements HasMedia
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE_MOBILE];
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE];
 
         if ($this->hasMedia($collectionName, $roleParameter)) {
             $imageMedia = $this->getMedia($collectionName, $roleParameter)
@@ -168,7 +168,7 @@ class Story extends Model implements HasMedia
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE];
+        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE];
 
         if ($this->hasMedia($collectionName, $roleParameter)) {
             $imageMedia = $this->getMedia($collectionName, $roleParameter)
@@ -204,7 +204,7 @@ class Story extends Model implements HasMedia
 
     public function contributors(): BelongsToMany
     {
-        return $this->belongsToMany(Contributor::class, 'contributor_story')->withTimestamps();
+        return $this->belongsToMany(Contributor::class, 'contributor_news')->withTimestamps();
     }
 
     public function event(): BelongsTo
@@ -229,7 +229,7 @@ class Story extends Model implements HasMedia
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'story_tag')->withTimestamps();
+        return $this->belongsToMany(Tag::class, 'news_tag')->withTimestamps();
     }
 
     public function navBreadcrumbs(): array

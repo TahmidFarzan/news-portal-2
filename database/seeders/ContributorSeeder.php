@@ -114,7 +114,7 @@ class ContributorSeeder extends Seeder
                     (object) [
                         'name'            => 'Imdadul Haq Milon',
                         'brief'           => 'Novelist and journalist',
-                        'profile_details' => '<h3>Imdadul Haq Milon</h3><p>Imdadul Haq Milon is a novelist and journalist recognized for his contribution to Bangla novels and storytelling.</p><ul><li><strong>Birth Date:</strong> Not specified</li><li><strong>Gender:</strong> Not specified</li><li><strong>Profession:</strong> Novelist and journalist</li><li><strong>Field:</strong> Bangla literature</li></ul>',
+                        'profile_details' => '<h3>Imdadul Haq Milon</h3><p>Imdadul Haq Milon is a novelist and journalist recognized for his contribution to Bangla novels and newstelling.</p><ul><li><strong>Birth Date:</strong> Not specified</li><li><strong>Gender:</strong> Not specified</li><li><strong>Profession:</strong> Novelist and journalist</li><li><strong>Field:</strong> Bangla literature</li></ul>',
                         'seo_keywords'    => 'imdadul haq milon, bangla novel',
                     ],
                     (object) [
@@ -163,13 +163,13 @@ class ContributorSeeder extends Seeder
                     (object) [
                         'name'            => 'Afsan Chowdhury',
                         'brief'           => 'Writer and historian',
-                        'profile_details' => '<h3>Afsan Chowdhury</h3><p>Afsan Chowdhury is a writer and historian known for historical writing, research, and analysis.</p><ul><li><strong>Birth Date:</strong> Not specified</li><li><strong>Gender:</strong> Not specified</li><li><strong>Profession:</strong> Writer and historian</li><li><strong>Field:</strong> History and research</li></ul>',
-                        'seo_keywords'    => 'afsan chowdhury, bangladesh history',
+                        'profile_details' => '<h3>Afsan Chowdhury</h3><p>Afsan Chowdhury is a writer and historian known for historical writing, research, and analysis.</p><ul><li><strong>Birth Date:</strong> Not specified</li><li><strong>Gender:</strong> Not specified</li><li><strong>Profession:</strong> Writer and historian</li><li><strong>Field:</strong> Hinews and research</li></ul>',
+                        'seo_keywords'    => 'afsan chowdhury, bangladesh hinews',
                     ],
                     (object) [
                         'name'            => 'Shahidul Alam',
                         'brief'           => 'Photographer and writer',
-                        'profile_details' => '<h3>Shahidul Alam</h3><p>Shahidul Alam is a photographer and writer known for visual storytelling, photography, and social documentation.</p><ul><li><strong>Birth Date:</strong> Not specified</li><li><strong>Gender:</strong> Not specified</li><li><strong>Profession:</strong> Photographer and writer</li><li><strong>Field:</strong> Photography and writing</li></ul>',
+                        'profile_details' => '<h3>Shahidul Alam</h3><p>Shahidul Alam is a photographer and writer known for visual newstelling, photography, and social documentation.</p><ul><li><strong>Birth Date:</strong> Not specified</li><li><strong>Gender:</strong> Not specified</li><li><strong>Profession:</strong> Photographer and writer</li><li><strong>Field:</strong> Photography and writing</li></ul>',
                         'seo_keywords'    => 'shahidul alam, drik gallery',
                     ],
 

@@ -8,30 +8,30 @@ use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
-use App\Models\Story;
+use App\Models\News;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class StorySeeder extends Seeder
+class NewsSeeder extends Seeder
 {
     public function run(): void
     {
         if (env("DB_CONNECTION") === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
-            Story::query()->delete();
-            DB::statement("DELETE FROM sqlite_sequence WHERE name='stories'");
+            News::query()->delete();
+            DB::statement("DELETE FROM sqlite_sequence WHERE name='newses'");
             DB::statement('PRAGMA foreign_keys = ON;');
         }
 
         if (env("DB_CONNECTION") === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            Story::truncate();
+            News::truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
 
         if (in_array(env("DB_CONNECTION"), ['pgsql', 'sqlsrv'])) {
-            Story::truncate();
+            News::truncate();
         }
 
         $languages = Language::get();
@@ -41,48 +41,48 @@ class StorySeeder extends Seeder
             $tagIds         = $this->getRandomTagIds($language) ?? [];
             $event          = $this->getRandomEvent($language) ?? null;
             $contributorIds = $this->getRandomContributorIds($language) ?? [];
-            $randomStories   = $this->randomStories($language, 13);
+            $randomNewses   = $this->randomNewses($language, 13);
 
             foreach ($categories as $category) {
                 $location = $this->getRandomLocation($language, $category) ?? null;
 
-                foreach ($randomStories as $index => $randomStory) {
+                foreach ($randomNewses as $index => $randomNews) {
 
-                    $story = Story::factory()->state([
+                    $news = News::factory()->state([
                         "language_id"      => $language?->id ?? "1",
                         "category_id"      => $category?->id ?? "1",
 
                         "event_id"         => $event?->id ?? null,
                         "location_id"      => $location?->id ?? null,
 
-                        "title"            => $randomStory->title,
-                        "sub_title"        => $randomStory->sub_title,
-                        "content_shoulder" => $randomStory->content_shoulder,
-                        "brief"            => $randomStory->brief,
+                        "title"            => $randomNews->title,
+                        "sub_title"        => $randomNews->sub_title,
+                        "content_shoulder" => $randomNews->content_shoulder,
+                        "brief"            => $randomNews->brief,
 
-                        "body"             => $randomStory->body,
+                        "body"             => $randomNews->body,
 
-                        "seo_title"        => $randomStory->title,
-                        "seo_brief"        => $randomStory->brief,
-                        "seo_keywords"     => $randomStory->seo_keywords,
+                        "seo_title"        => $randomNews->title,
+                        "seo_brief"        => $randomNews->brief,
+                        "seo_keywords"     => $randomNews->seo_keywords,
 
                         "is_published"     => true,
                         'writer'           => "News Desk",
                         'source'           => null,
-                        "created_at"       => $randomStory->published_at,
-                        "updated_at"       => $randomStory->published_at,
+                        "created_at"       => $randomNews->published_at,
+                        "updated_at"       => $randomNews->published_at,
                     ])->create();
 
                     if ($tagIds) {
-                        $story->tags()->sync($tagIds);
+                        $news->tags()->sync($tagIds);
                     }
 
                     if ($contributorIds && $index > 5 && $index < 10) {
-                        $story->contributors()->sync($contributorIds);
+                        $news->contributors()->sync($contributorIds);
                     }
 
-                    $this->storyAddFeatureImage($story);
-                    $this->storyAddFeatureImageMobile($story);
+                    $this->newsAddFeatureImage($news);
+                    $this->newsAddFeatureImageMobile($news);
                 }
             }
 
@@ -147,65 +147,65 @@ class StorySeeder extends Seeder
         Contributor::where("language_id", $language->id)->inRandomOrder()->limit($limit)->pluck('id') ?? [];
     }
 
-    private function storyAddFeatureImage(Story $story)
+    private function newsAddFeatureImage(News $news)
     {
-        $imageUrl = asset("uploads/images/story/feature-image.png");
+        $imageUrl = asset("uploads/images/news/feature-image.png");
 
         $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
-        $imageFileName  = MediaHelper::generateMediaName($story->title, $imageExtension, 200);
-        $story->addMediaFromUrl($imageUrl)
-            ->usingName($story->title)
+        $imageFileName  = MediaHelper::generateMediaName($news->title, $imageExtension, 200);
+        $news->addMediaFromUrl($imageUrl)
+            ->usingName($news->title)
             ->usingFileName($imageFileName)
             ->withCustomProperties(
                 [
-                    'caption' => $story->title,
-                    'alt'     => $story->title,
-                    "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE,
+                    'caption' => $news->title,
+                    'alt'     => $news->title,
+                    "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
                 ]
             )
-            ->toMediaCollection($story->media_collection_name);
+            ->toMediaCollection($news->media_collection_name);
     }
 
-    private function storyAddFeatureImageMobile(Story $story)
+    private function newsAddFeatureImageMobile(News $news)
     {
-        $imageUrl = asset("uploads/images/story/feature-image-mobile.png");
+        $imageUrl = asset("uploads/images/news/feature-image-mobile.png");
 
         $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
-        $imageFileName  = MediaHelper::generateMediaName($story->title, $imageExtension, 200);
-        $story->addMediaFromUrl($imageUrl)
-            ->usingName($story->title)
+        $imageFileName  = MediaHelper::generateMediaName($news->title, $imageExtension, 200);
+        $news->addMediaFromUrl($imageUrl)
+            ->usingName($news->title)
             ->usingFileName($imageFileName)
             ->withCustomProperties(
                 [
-                    'caption' => $story->title,
-                    'alt'     => $story->title,
-                    "role"    => MediaHelper::MEDIA_ROLE_STORY_FEATURE_IMAGE_MOBILE,
+                    'caption' => $news->title,
+                    'alt'     => $news->title,
+                    "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
                 ]
             )
-            ->toMediaCollection($story->media_collection_name);
+            ->toMediaCollection($news->media_collection_name);
     }
 
-    private function randomStories(Language $language, int $limit = 10)
+    private function randomNewses(Language $language, int $limit = 10)
     {
-        $storyGroup = $this->storiesByLanguageGroups()
+        $newsGroup = $this->newsesByLanguageGroups()
             ->firstWhere('language_code', $language->code);
 
-        if (! $storyGroup) {
+        if (! $newsGroup) {
             return collect();
         }
 
-        return $storyGroup->stories
+        return $newsGroup->newses
             ->shuffle()
             ->take($limit)
             ->values();
     }
 
-    private function storiesByLanguageGroups()
+    private function newsesByLanguageGroups()
     {
         return collect([
             (object) [
                 'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
-                'stories'        => collect([
+                'newses'        => collect([
 
                     (object) [
                         'title'            => "Demo City Opens New Public Service Help Desk",
@@ -292,7 +292,7 @@ class StorySeeder extends Seeder
                         'sub_title'        => "New dashboard tested for official workflow",
                         'content_shoulder' => "",
                         'brief'            => "A fictional office launched a file tracking dashboard to test faster administrative workflow.",
-                        'body'             => "Demo Administrative Office introduced a digital file tracking system for internal testing. The dashboard can show sample file status, responsible desk, expected completion time and request history.",
+                        'body'             => "Demo Administrative Office introduced a digital file tracking system for internal testing. The dashboard can show sample file status, responsible desk, expected completion time and request hinews.",
                         'seo_keywords'     => "file tracking, digital office, service dashboard",
                         'published_at'     => "2026-01-19 09:40:00",
                     ],
@@ -679,10 +679,10 @@ class StorySeeder extends Seeder
 
                     (object) [
                         'title'            => "Demo OTT Platform Releases Short Film Collection",
-                        'sub_title'        => "Five fictional stories added for viewers",
+                        'sub_title'        => "Five fictional newses added for viewers",
                         'content_shoulder' => "",
                         'brief'            => "A demo OTT platform released a collection of five fictional short films for testing entertainment content.",
-                        'body'             => "StreamBox Demo released a fictional short film collection covering comedy, family drama, mystery and youth stories. The release is designed for testing OTT pages, thumbnails and content summaries.",
+                        'body'             => "StreamBox Demo released a fictional short film collection covering comedy, family drama, mystery and youth newses. The release is designed for testing OTT pages, thumbnails and content summaries.",
                         'seo_keywords'     => "demo OTT, short films, streaming platform",
                         'published_at'     => "2026-04-08 12:25:00",
                     ],
@@ -882,7 +882,7 @@ class StorySeeder extends Seeder
                         'sub_title'        => "",
                         'content_shoulder' => "Reading Club",
                         'brief'            => "A fictional community library added a weekend reading club for students, parents and young readers.",
-                        'body'             => "Demo Community Library launched a weekend reading club with story sessions, book discussions and reading challenges. The fictional programme supports testing lifestyle, education and local news content.",
+                        'body'             => "Demo Community Library launched a weekend reading club with news sessions, book discussions and reading challenges. The fictional programme supports testing lifestyle, education and local news content.",
                         'seo_keywords'     => "reading club, community library, education activity",
                         'published_at'     => "2026-05-06 13:10:00",
                     ],
@@ -892,7 +892,7 @@ class StorySeeder extends Seeder
 
             (object) [
                 'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
-                'stories'        => collect([
+                'newses'        => collect([
 
                     (object) [
                         'title'            => "ডেমো সিটিতে নতুন জনসেবা সহায়তা ডেস্ক চালু",

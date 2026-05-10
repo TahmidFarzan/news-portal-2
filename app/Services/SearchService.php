@@ -10,7 +10,7 @@ use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
-use App\Models\Story;
+use App\Models\News;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserRole;
@@ -534,9 +534,9 @@ class SearchService
         ];
     }
 
-    public function stories(Request $request): array
+    public function newses(Request $request): array
     {
-        $query = Story::query();
+        $query = News::query();
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
@@ -561,12 +561,12 @@ class SearchService
         $records = $query->orderBy('id', 'desc')
             ->paginate($request->input('per_page', 50));
 
-        $list = $records->map(fn($story) => [
-            'id'               => $story->id,
-            'title'            => $story->title,
-            'sub_title'        => $story->sub_title,
-            'content_shoulder' => $story->content_shoulder,
-            'slug'             => $story->slug,
+        $list = $records->map(fn($news) => [
+            'id'               => $news->id,
+            'title'            => $news->title,
+            'sub_title'        => $news->sub_title,
+            'content_shoulder' => $news->content_shoulder,
+            'slug'             => $news->slug,
         ]);
 
         return [

@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\Story;
+use App\Models\News;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,20 +12,20 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class DeleteStoryRelationsJob implements ShouldQueue, ShouldBeUnique
+class DeleteNewsRelationsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $storyId;
+    public int $newsId;
 
-    public function __construct(int $storyId)
+    public function __construct(int $newsId)
     {
-        $this->storyId = $storyId;
+        $this->newsId = $newsId;
     }
 
     public function uniqueId(): string
     {
-        return "delete-relations-story-{$this->storyId}";
+        return "delete-relations-news-{$this->newsId}";
     }
 
     public function retryAfter()
@@ -40,18 +40,18 @@ class DeleteStoryRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $story = Story::find($this->storyId);
+        $news = News::find($this->newsId);
 
-        if ($story && ($story->activityLogs()->exists()) || ($story->getMedia($story->media_collection_name)->count() > 0)) {
+        if ($news && ($news->activityLogs()->exists()) || ($news->getMedia($news->media_collection_name)->count() > 0)) {
             DB::beginTransaction();
             try {
 
-                if ($story->activityLogs()->exists()) {
-                    $story->activityLogs()->delete();
+                if ($news->activityLogs()->exists()) {
+                    $news->activityLogs()->delete();
                 }
 
-                if ($story->getMedia($story->media_collection_name)->count() > 0) {
-                    $story->clearMediaCollection($story->media_collection_name);
+                if ($news->getMedia($news->media_collection_name)->count() > 0) {
+                    $news->clearMediaCollection($news->media_collection_name);
                 }
 
                 DB::commit();
@@ -59,7 +59,7 @@ class DeleteStoryRelationsJob implements ShouldQueue, ShouldBeUnique
             } catch (Exception $ex) {
                 DB::rollback();
 
-                Log::error("Fail to delete story relations.", [
+                Log::error("Fail to delete news relations.", [
                     'exception' => $ex,
                 ]);
 

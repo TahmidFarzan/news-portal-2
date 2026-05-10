@@ -42,7 +42,7 @@ class DeleteLocationRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $location = Location::find($this->locationId);
 
-        if ($location && ($location->activityLogs()->exists()) || ($location->stories()->exists())) {
+        if ($location && ($location->activityLogs()->exists()) || ($location->newses()->exists())) {
             DB::beginTransaction();
             try {
 
@@ -50,8 +50,8 @@ class DeleteLocationRelationsJob implements ShouldQueue, ShouldBeUnique
                     $location->activityLogs()->delete();
                 }
 
-                if ($location->stories()->exists()) {
-                    $location->stories()->delete();
+                if ($location->newses()->exists()) {
+                    $location->newses()->delete();
                 }
 
                 DB::commit();

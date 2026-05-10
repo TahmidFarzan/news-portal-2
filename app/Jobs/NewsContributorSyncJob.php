@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\Story;
+use App\Models\News;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -13,19 +13,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class StoryTagSyncJob implements ShouldQueue, ShouldBeUnique
+class NewsContributorSyncJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $fail_limit = 3;
 
-    public Story $story;
-    public $tagIds;
+    public News $news;
+    public $contributorIds;
 
-    public function __construct(Story $story, $tagIds)
+    public function __construct(News $news, $contributorIds)
     {
-        $this->story     = $story;
-        $this->tagIds     = $tagIds;
+        $this->news     = $news;
+        $this->contributorIds     = $contributorIds;
     }
 
     public function progressCooldown(): int
@@ -35,8 +35,8 @@ class StoryTagSyncJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId()
     {
-        $newTitleFormat = Str::slug($this->story->title);
-        return "story-{$newTitleFormat}-tag-sync-jobs" . Str::uuid()->toString() . Str::random(15) . '-' . time();
+        $newTitleFormat = Str::slug($this->news->title);
+        return "news-{$newTitleFormat}-contributor-sync-jobs" . Str::uuid()->toString() . Str::random(15) . '-' . time();
     }
 
     public function retryAfter()
@@ -53,11 +53,11 @@ class StoryTagSyncJob implements ShouldQueue, ShouldBeUnique
     {
         DB::beginTransaction();
         try {
-            $this->story->tags()->sync($this->tagIds);
+            $this->news->contributors()->sync($this->contributorIds);
             DB::commit();
         } catch (Exception $ex) {
             DB::rollback();
-            Log::error('Story tag sync job error: ' . $ex->getMessage());
+            Log::error('News contributor sync job error: ' . $ex->getMessage());
         }
     }
 }
