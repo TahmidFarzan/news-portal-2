@@ -11,20 +11,18 @@ return new class extends Migration
         Schema::create('newses', function (Blueprint $table) {
             $table->id();
 
+            $table->string('news_type')->default("Story");
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
-
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-
             $table->foreignId('event_id')->nullable()->constrained('events')->cascadeOnDelete();
             $table->foreignId('location_id')->nullable()->constrained('locations')->cascadeOnDelete();
 
             $table->string('title', 255);
-
             $table->string('sub_title', 255)->nullable();
             $table->string('content_shoulder', 100)->nullable();
             $table->text('brief')->nullable();
-
             $table->longText('body')->nullable();
+            $table->text('video_url')->nullable();
 
 
             $table->string('writer', 255)->nullable();

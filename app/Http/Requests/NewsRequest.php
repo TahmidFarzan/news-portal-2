@@ -27,14 +27,16 @@ class NewsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "news_type"                         => ["required"],
             "language_id"                       => ["required"],
             "category_id"                       => ["required"],
 
             "title"                             => ["required"],
             "brief"                             => ["required"],
-
             "sub_title"                         => ["nullable"],
             "content_shoulder"                  => ["nullable"],
+            "body"                              => ["nullable"],
+            "video_url"                         => ["nullable", "url"],
 
             "event_id"                          => ["nullable"],
             "location_id"                       => ["nullable"],
@@ -66,8 +68,6 @@ class NewsRequest extends FormRequest
             ],
             "selected_feature_image_mobile_url" => ["nullable", "url"],
 
-            "body"                              => ["required"],
-
             "editor_media_ids"                  => ["nullable"],
         ];
     }
@@ -79,10 +79,11 @@ class NewsRequest extends FormRequest
             "title.string"                           => __("form-requests.news.title.string"),
             "title.max"                              => __("form-requests.news.title.max"),
 
-            "body.required"                          => __("form-requests.news.body.required"),
-
+            "news_type.required"                     => __("form-requests.news.news_type.required"),
             "language_id.required"                   => __("form-requests.news.language_id.required"),
             "category_id.required"                   => __("form-requests.news.category_id.required"),
+
+            "video_url.url"                          => __("form-requests.news.video_url.url"),
 
             "feature_image_caption.required"         => __("form-requests.news.feature_image_caption.required"),
 
@@ -168,7 +169,26 @@ class NewsRequest extends FormRequest
                 }
             }
 
+            if (! empty($data["news_type"]) && ! in_array($data["news_type"], [NewsHelper::NEWS_TYPE_STORY, NewsHelper::NEWS_TYPE_VIDEO], true)) {
+                $validator->errors()->add(
+                    'news_type',
+                    __("form-requests.news.news_type.not_found")
+                );
+            }
 
+            if (($data["news_type"] == NewsHelper::NEWS_TYPE_STORY) && empty($data["body"])) {
+                $validator->errors()->add(
+                    'body',
+                    __("form-requests.news.body.required")
+                );
+            }
+
+            if (($data["news_type"] == NewsHelper::NEWS_TYPE_VIDEO) && empty($data["video_url"])) {
+                $validator->errors()->add(
+                    'video_url',
+                    __("form-requests.news.video_url.required")
+                );
+            }
 
             $tagIds = $this->normalizeIds($data['tag_ids'] ?? []);
 

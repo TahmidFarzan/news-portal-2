@@ -4,7 +4,7 @@ import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/Infi
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
 import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
-
+import { isStory as checkIsStory, isVideo as checkIsVideo } from '@/composables/useNews'
 
 
 import axios from 'axios'
@@ -25,14 +25,17 @@ const { news } = defineProps({
     news: Object,
 })
 
+const isStory = ref(false)
+const isVideo = ref(false)
+
 const showLocation = ref(false)
 
 const isUpdate = computed(() => !!news?.slug)
 
 const saveForm = useForm({
+    news_type: news?.news_type ?? "Story",
     language_id: news?.language_id || null,
     category_id: news?.category_id || null,
-
     location_id: news?.location_id || null,
     event_id: news?.event_id || null,
     tag_ids: [],
@@ -131,6 +134,11 @@ function validateForm() {
     saveForm.clearErrors()
     let valid = true
 
+    if (!saveForm.news_type) {
+        saveForm.setError('news_type', 'News type is required.')
+        valid = false
+    }
+
     if (!saveForm.language_id) {
         saveForm.setError('language_id', 'Language is required.')
         valid = false
@@ -151,8 +159,13 @@ function validateForm() {
         valid = false
     }
 
-    if (!saveForm.body) {
+    if (!saveForm.body && isStory.value) {
         saveForm.setError('body', 'Body is required.')
+        valid = false
+    }
+
+    if (!saveForm.video_url && isVideo.value) {
+        saveForm.setError('video_url', 'Video url is required.')
         valid = false
     }
 
@@ -266,6 +279,15 @@ watch(
     }
 )
 
+watch(
+    () => saveForm.news_type,
+    (newsType) => {
+        isStory.value = checkIsStory(newsType)
+        isVideo.value = checkIsVideo(newsType)
+    },
+    { immediate: true }
+)
+
 onMounted(async () => {
     await nextTick()
 
@@ -299,6 +321,20 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
+                                News Type <span class="text-red-500">*</span>
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="news_type"
+                                :selectedItem="saveForm.news_type" :apiUrl="route('search.news-types')"
+                                :error="saveForm.errors.news_type" :multiple="false" placeholder="Select news type" />
+                            <p v-if="saveForm.errors.news_type" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.news_type }}
+                            </p>
+                        </div>
+
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
                                 Language <span class="text-red-500">*</span>
                             </label>
 
@@ -318,7 +354,8 @@ onMounted(async () => {
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="category_id"
                                 :selectedItem="saveForm.category_id ? news?.category : null" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.category_id" selectedLabelKey="indentation_name"
-                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false" placeholder="Select category" />
+                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
+                                placeholder="Select category" />
                             <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.category_id }}
                             </p>
@@ -344,8 +381,9 @@ onMounted(async () => {
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="location_id"
                                 :selectedItem="saveForm.location_id ? news?.location : null" :apiUrl="locationApiUrl"
-                                :error="saveForm.errors.location_id" :multiple="false" selectedLabelKey="indentation_name"
-                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" placeholder="Select location" />
+                                :error="saveForm.errors.location_id" :multiple="false"
+                                selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
+                                apiValueKey="id" placeholder="Select location" />
                             <p v-if="saveForm.errors.location_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.location_id }}
                             </p>
@@ -407,7 +445,7 @@ onMounted(async () => {
                             </p>
                         </div>
 
-                        <div class="md:col-span-2">
+                        <div v-if="isStory" class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
                                 Body <span class="text-red-500">*</span>
                             </label>
@@ -419,6 +457,22 @@ onMounted(async () => {
                                 {{ saveForm.errors.body }}
                             </p>
                         </div>
+
+                        <div v-if="isVideo" class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                Video Url <span class="text-red-500">*</span>
+                            </label>
+
+                            <input v-model="saveForm.video_url"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.video_url ? 'border-red-500' : 'border-gray-300'" />
+
+
+                            <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.video_url }}
+                            </p>
+                        </div>
+
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
@@ -515,7 +569,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                <div v-if="isStory" class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">Contributor Settings</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -556,7 +610,7 @@ onMounted(async () => {
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                        <div>
+                        <div v-if="isStory">
                             <label class="block text-sm font-medium mb-1">
                                 Source
                             </label>

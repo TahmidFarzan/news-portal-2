@@ -1,6 +1,7 @@
 <?php
 namespace Database\Factories;
 
+use App\Helpers\NewsHelper;
 use App\Helpers\SystemHelper;
 use App\Helpers\UserHelper;
 use App\Models\Category;
@@ -36,6 +37,7 @@ class NewsFactory extends Factory
         $isPublished = $this->faker->boolean(50);
 
         return [
+            'news_type'        => NewsHelper::NEWS_TYPE_STORY,
             "language_id"      => $language?->id ?? "1",
             "category_id"      => $category?->id ?? "1",
 
@@ -54,7 +56,6 @@ class NewsFactory extends Factory
             'seo_keywords'     => null,
 
             'source'           => null,
-
 
             "is_published"     => $isPublished,
 

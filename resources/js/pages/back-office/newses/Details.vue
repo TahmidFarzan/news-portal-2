@@ -2,6 +2,7 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
+import { isStory as checkIsStory, isVideo as checkIsVideo } from '@/composables/useNews'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -108,6 +109,14 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
+                        <span class="text-gray-500">News type</span>
+                        <span class="font-medium">{{ news?.news_type || 'N/A' }}</span>
+                    </div>
+
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
                         <span class="text-gray-500">Language</span>
                         <span class="font-medium">{{ news?.language?.name || 'N/A' }}</span>
                     </div>
@@ -162,12 +171,23 @@ onMounted(async () => {
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
+            <div v-if="checkIsStory(news.news_type)" class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
                         <div class="text-gray-500 mb-1">Body</div>
                         <div class="text-gray-700">
                             <div v-html="news?.body || 'N/A'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="checkIsVideo(news.news_type)" class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div>
+                        <div class="text-gray-500 mb-1">Video url</div>
+                        <div class="text-gray-700">
+                            {{ news?.video_url || 'N/A' }}
                         </div>
                     </div>
                 </div>
@@ -194,13 +214,12 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                <div v-if="checkIsStory(news.news_type)" class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Contributors</span>
                         <div class="flex flex-wrap gap-2">
                             <template v-if="news?.contributors && news.contributors.length">
-                                <span v-for="contributor in news.contributors"
-                                    :key="contributor.id ?? contributor.name"
+                                <span v-for="contributor in news.contributors" :key="contributor.id ?? contributor.name"
                                     class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 border border-gray-200">
                                     {{ contributor?.name }}
                                     <FontAwesomeIcon icon="fire" v-if="contributor?.trend" />
@@ -290,7 +309,7 @@ onMounted(async () => {
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                <div v-if="checkIsStory(news.news_type)" class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Source</span>
@@ -298,7 +317,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                <div v-if="checkIsStory(news.news_type)" class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Writer</span>

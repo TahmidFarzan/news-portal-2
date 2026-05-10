@@ -2,6 +2,7 @@
 namespace App\Services\BackOffice;
 
 use App\Helpers\MediaHelper;
+use App\Helpers\NewsHelper;
 use App\Helpers\TagifyHelper;
 use App\Http\Requests\NewsRequest;
 use App\Jobs\NewsContributorSyncJob;
@@ -65,6 +66,10 @@ class NewsService
         $perPage = $request->input('per_page', 10);
 
         $query = News::query()->with(["language", "category", "event", "location"]);
+
+        if ($request->filled('news_type')) {
+            $query->where('news_type', $request->input('news_type'));
+        }
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
@@ -132,11 +137,12 @@ class NewsService
             $news->event_id    = $request->input('event_id');
             $news->location_id = $request->input('location_id');
 
-            $news->title     = $request->input('title');
-            $news->sub_title = $request->input('sub_title');
+            $news->title            = $request->input('title');
+            $news->sub_title        = $request->input('sub_title');
             $news->content_shoulder = $request->input('content_shoulder');
-            $news->brief = $request->input('brief');
-            $news->body      = $request->input('body');
+            $news->brief            = $request->input('brief');
+            $news->body             = (NewsHelper::NEWS_TYPE_STORY == $request->input('news_type')) ? $request->input('body') : null;
+            $news->video_url        = (NewsHelper::NEWS_TYPE_STORY == $request->input('news_type')) ? $request->input('video_url') : null;
 
             $news->seo_title    = $request->input('seo_title') ?? $request->input('title');
             $news->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
@@ -144,8 +150,10 @@ class NewsService
 
             $news->is_published = $request->input('is_published') ? true : false;
 
-            $news->writer = $request->input('writer');
-            $news->source = $request->input('source');
+            if (NewsHelper::NEWS_TYPE_STORY == $request->input('news_type')) {
+                $news->writer = $request->input('writer');
+                $news->source = $request->input('source');
+            }
 
             $news->created_by_id = $isNew ? Auth::id() : $news->created_by_id;
 

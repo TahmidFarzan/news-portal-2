@@ -47,6 +47,7 @@ const paginationOnly = computed(() => {
 const filterForm = useForm({
     per_page: null,
     created_by_id: null,
+    news_type: '',
     category_id: '',
     language_id: '',
     location_id: '',
@@ -113,6 +114,7 @@ onMounted(async () => {
     const urlParams = new URLSearchParams(window.location.search)
 
     filterForm.per_page = urlParams.get('per_page') || ''
+    filterForm.news_type = urlParams.get('news_type') || ''
     filterForm.created_by_id = urlParams.get('created_by_id') || ''
     filterForm.category_id = urlParams.get('category_id') || ''
     filterForm.language_id = urlParams.get('language_id') || ''
@@ -202,6 +204,10 @@ onMounted(async () => {
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     placeholder="Created by" />
 
+                    <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="news_type"
+                    :selectedItem="filterForm.news_type" :apiUrl="route('search.news-types')" :multiple="false"
+                    placeholder="News type" />
+
                 <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
                     placeholder="Language" />
@@ -246,7 +252,8 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">Titel</th>
+                            <th class="px-4 py-3 text-left">News type</th>
+                            <th class="px-4 py-3 text-left">Title</th>
                             <th class="px-4 py-3 text-left">Language</th>
                             <th class="px-4 py-3 text-left">Category</th>
                             <th class="px-4 py-3 text-left">Event</th>
@@ -258,6 +265,7 @@ onMounted(async () => {
                     <tbody class="divide-y">
                         <tr v-for="(item, index) in newses?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
+                            <td class="px-4 py-3">{{ item.news_type }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.title }}</td>
                             <td class="px-4 py-3 text-gray-600">
                                 {{ item.language ? item.language.name : 'N/A' }}

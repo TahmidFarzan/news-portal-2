@@ -127,7 +127,7 @@ return [
         ],
 
         'media'   => [
-            'required'    => 'Media is required.',
+            'required' => 'Media is required.',
         ],
     ],
 
@@ -298,7 +298,7 @@ return [
         ],
     ],
 
-    'contributor'      => [
+    'contributor' => [
         'name'          => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -314,67 +314,72 @@ return [
 
     ],
 
-    'news'      => [
-        'title'          => [
+    'news'        => [
+        'title'                             => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
             'max'      => 'Title max chars is 200.',
             'unique'   => 'Title must be unique.',
         ],
 
-        'language_id'          => [
-            'required' => 'Language is required.',
+        'language_id'                       => [
+            'required'  => 'Language is required.',
             "not_found" => 'Language is not exit.',
         ],
-        'category_id'          => [
-            'required' => 'Category is required.',
+        'category_id'                       => [
+            'required'  => 'Category is required.',
             "not_found" => 'Category is not exit.',
         ],
 
-        'event_id'          => [
+        'event_id'                          => [
             "not_found" => 'Event is not exit.',
         ],
 
-        'location_id'          => [
+        'location_id'                       => [
             "not_found" => 'Location is not exit.',
         ],
 
-        'contributor_ids'          => [
+        'contributor_ids'                   => [
             "not_found" => 'Contributors is not exit.',
         ],
 
-        'tag_ids'          => [
+        'tag_ids'                           => [
             "not_found" => 'Tags is not exit.',
         ],
 
-        'body'          => [
+        'body'                              => [
             'required' => 'Body is required.',
         ],
 
-        'feature_image_caption'          => [
+        'video_url'                         => [
+            'required' => 'Video url is required.',
+            'url'      => 'Video url must be a url.',
+        ],
+
+        'feature_image_caption'             => [
             'required' => 'Feature image caption is required.',
         ],
 
-        'upload_feature_image'          => [
+        'upload_feature_image'              => [
             'image'      => 'Upload feature image must be image.',
             'mimes'      => 'Upload feature image must have valid mimes[image/*].',
             'dimensions' => 'Upload feature image must width 1280px & Height 720px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
-        'selected_feature_image_url'          => [
+        'selected_feature_image_url'        => [
             'image'      => 'Selected feature image must be image.',
             'mimes'      => 'Selected feature image must have valid mimes[image/*].',
             'dimensions' => 'Selected feature image must width 1280px & Height 720px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
 
-        'upload_feature_image_mobile'          => [
+        'upload_feature_image_mobile'       => [
             'image'      => 'Upload feature image mobile must be image.',
             'mimes'      => 'Upload feature image mobile must have valid mimes[image/*].',
             'dimensions' => 'Upload feature image mobile must min-width 400px & Height 225px.',
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
-        'selected_feature_image_mobile_url'          => [
+        'selected_feature_image_mobile_url' => [
             'image'      => 'Selected feature image mobile must be image.',
             'mimes'      => 'Upload feature image mobile must have valid mimes[image/*].',
             'dimensions' => 'Upload feature image mobile must min-width 400px & Height 225px.',

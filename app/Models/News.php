@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
+use App\Helpers\NewsHelper;
 use App\Observers\NewsObserver;
 use App\Policies\NewsPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -27,9 +28,9 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('newses')]
 #[Fillable([
-        'language_id', 'category_id', 'event_id', 'location_id',
+        'news_type','language_id', 'category_id', 'event_id', 'location_id',
         'title', 'sub_title', "content_shoulder", 'brief',
-        "body", 'writer', 'source',
+        "body", "video_url",'writer', 'source',
         "seo_brief", 'seo_title', 'seo_keywords',
         'created_by_id', 'slug', 'is_published',
     ])]
@@ -59,9 +60,9 @@ class News extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'language_id', 'category_id', 'event_id', 'location_id',
+                'news_type','language_id', 'category_id', 'event_id', 'location_id',
                 'title', 'sub_title', "content_shoulder", 'brief',
-                "body", 'writer', 'source',
+                "body", "video_url", 'writer', 'source',
                 "seo_brief", 'seo_title', 'seo_keywords',
                 'slug', 'is_published',
             ])
