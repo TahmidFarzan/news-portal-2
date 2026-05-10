@@ -242,7 +242,7 @@ class StoryService
         }
     }
 
-    private function featureImageSave(StoryRequest $request, Story $story)
+    private function featureImageSave(StoryRequest $request, Story $story): void
     {
         if ($request->hasFile('upload_feature_image')) {
             self::deleteExtingFeatureImage($story);
@@ -287,7 +287,7 @@ class StoryService
         }
     }
 
-    private function featureImageMobileSave(StoryRequest $request, Story $story)
+    private function featureImageMobileSave(StoryRequest $request, Story $story): void
     {
         if ($request->hasFile('upload_feature_image_mobile')) {
             self::deleteExtingFeatureImageMobile($story);
@@ -407,7 +407,7 @@ class StoryService
         }
     }
 
-    private static function deleteExtingFeatureImage(Story $story)
+    private static function deleteExtingFeatureImage(Story $story): void
     {
         $extingFeatureImage = $story->feature_image;
         if ($extingFeatureImage) {
@@ -415,7 +415,7 @@ class StoryService
         }
     }
 
-    private static function deleteExtingFeatureImageMobile(Story $story)
+    private static function deleteExtingFeatureImageMobile(Story $story): void
     {
         $extingFeatureImageMobile = $story->feature_image_mobile;
         if ($extingFeatureImageMobile) {
