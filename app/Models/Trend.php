@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Observers\TrendObserver;
@@ -11,7 +10,6 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
@@ -23,9 +21,9 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('trends')]
 #[Fillable([
-    'tag_id','is_current',
-    'created_by_id',
-])]
+        'tag_id', 'is_current',
+        'created_by_id',
+    ])]
 #[UsePolicy(TrendPolicy::class)]
 #[ObservedBy([TrendObserver::class])]
 class Trend extends Model
@@ -36,12 +34,11 @@ class Trend extends Model
         'public_url',
     ];
 
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -49,8 +46,8 @@ class Trend extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'tag_id','is_current',
-    'position','created_by_id',
+                'tag_id', 'is_current',
+                'position', 'created_by_id',
             ])
             ->useLogName('Trend')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")

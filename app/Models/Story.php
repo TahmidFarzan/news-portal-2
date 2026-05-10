@@ -53,7 +53,6 @@ class Story extends Model implements HasMedia
             'is_published' => 'boolean',
             'created_at'   => 'datetime',
             'updated_at'   => 'datetime',
-            'deleted_at'   => 'datetime',
         ];
     }
 
