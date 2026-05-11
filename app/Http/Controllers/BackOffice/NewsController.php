@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Http\Controllers\BackOffice;
 
-use App\Services\BackOffice\NewsService;
-use App\Http\Requests\NewsRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NewsGalleryImageRequest;
+use App\Http\Requests\NewsRequest;
+use App\Services\BackOffice\NewsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -74,7 +74,7 @@ class NewsController extends Controller
 
         return to_route('back-office.newses.index')->with('flash_message', [
             'message' => $result['message'],
-            'status' => $result['status'],
+            'status'  => $result['status'],
         ]);
     }
 
@@ -88,10 +88,9 @@ class NewsController extends Controller
 
         return to_route('back-office.newses.index')->with('flash_message', [
             'message' => $result['message'],
-            'status' => $result['status'],
+            'status'  => $result['status'],
         ]);
     }
-
 
     public function delete(string $slug)
     {
@@ -103,7 +102,7 @@ class NewsController extends Controller
 
         return to_route('back-office.newses.index')->with('flash_message', [
             'message' => $result['message'],
-            'status' => $result['status'],
+            'status'  => $result['status'],
         ]);
     }
 
@@ -117,7 +116,52 @@ class NewsController extends Controller
 
         return to_route('back-office.newses.index')->with('flash_message', [
             'message' => $result['message'],
-            'status' => $result['status'],
+            'status'  => $result['status'],
         ]);
     }
+
+    public function galleryImageSave(NewsGalleryImageRequest $request, string $slug)
+    {
+        $news = $this->newsService->find($slug);
+
+        Gate::authorize('update', $news);
+
+        $result = $this->newsService->galleryImageSave($request, $news);
+
+        return to_route('back-office.newses.index')->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+
+    public function galleryImageUpdate(NewsGalleryImageRequest $request, string $slug, string $mediaSlug)
+    {
+        $news  = $this->newsService->find($slug);
+        $media = $this->newsService->findMedia($news, $mediaSlug);
+
+        Gate::authorize('update', $news);
+
+        $result = $this->newsService->galleryImageUpdate($request, $news, $media);
+
+        return to_route('back-office.newses.index')->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+
+    public function galleryImageDelete(string $slug, string $mediaSlug)
+    {
+        $news  = $this->newsService->find($slug);
+        $media = $this->newsService->findMedia($news, $mediaSlug);
+
+        Gate::authorize('update', $news);
+
+        $result = $this->newsService->galleryImageDelete($news, $media);
+
+        return to_route('back-office.newses.index')->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+
 }

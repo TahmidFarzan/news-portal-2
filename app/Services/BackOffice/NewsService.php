@@ -4,6 +4,7 @@ namespace App\Services\BackOffice;
 use App\Helpers\MediaHelper;
 use App\Helpers\NewsHelper;
 use App\Helpers\TagifyHelper;
+use App\Http\Requests\NewsGalleryImageRequest;
 use App\Http\Requests\NewsRequest;
 use App\Jobs\NewsContributorSyncJob;
 use App\Jobs\NewsTagSyncJob;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class NewsService
 {
@@ -33,6 +35,11 @@ class NewsService
     public function find(string $slug): News
     {
         return News::where('slug', $slug)->firstOrFail();
+    }
+
+    public function findMedia(News $news, string $mediaSlug): Media
+    {
+        return $news->getMedia($news->media_collection_name)->where("slug", $mediaSlug)->firstOrFail();
     }
 
     public function findNewsTypeById(string $id): NewsType
@@ -72,7 +79,7 @@ class NewsService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = News::query()->with(["news_type","language", "category", "event", "location"]);
+        $query = News::query()->with(["newsType", "language", "category", "event", "location"]);
 
         if ($request->filled('news_type_id')) {
             $query->where('news_type_id', $request->input('news_type_id'));
@@ -243,6 +250,121 @@ class NewsService
             return [
                 'status'  => 'error',
                 'message' => __('status-messages.news.restore.failed'),
+            ];
+        }
+    }
+
+    public function galleryImageSave(NewsGalleryImageRequest $request, News $news): array
+    {
+        DB::beginTransaction();
+
+        try {
+            if ($request->hasFile('image')) {
+
+                $image = $request->file('image');
+
+                if ($image) {
+                    $extension = $image->getClientOriginalExtension();
+                    $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
+
+                    $media = $news->addMedia($image)
+                        ->usingFileName($fileName)
+                        ->usingName($news->title)
+                        ->withCustomProperties(
+                            [
+                                "alt"     => $request->input('alt', $news->title),
+                                "caption" => $request->input('caption'),
+                                "role"    => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+                            ]
+                        )
+                        ->toMediaCollection($news->media_collection_name);
+
+                    $media->order_column = $this->calculateGalleryImageOrderColumn($request, $news, $media);
+                    $media->save();
+                }
+            }
+
+            DB::commit();
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.news.gallery_image_update.success'),
+            ];
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            Log::error('News image gallery update failed.', [
+                'exception' => $exception,
+            ]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.news.gallery_image_update.failed'),
+            ];
+        }
+    }
+
+    public function galleryImageUpdate(NewsGalleryImageRequest $request, News $news, Media $media): array
+    {
+        DB::beginTransaction();
+
+        try {
+            $media->order_column = $this->calculateGalleryImageOrderColumn($request, $news, $media);
+
+            $media->setCustomProperty(
+                'caption',
+                $request->input('caption', $media->getCustomProperty('caption'))
+            );
+
+            $media->setCustomProperty(
+                'alt',
+                $request->input('alt', $media->getCustomProperty('alt'))
+            );
+
+            $media->save();
+
+            DB::commit();
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.news.gallery_image_update.success'),
+            ];
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            Log::error('News image gallery update failed.', [
+                'exception' => $exception,
+            ]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.news.gallery_image_update.failed'),
+            ];
+        }
+    }
+
+    public function galleryImageDelete(News $news, Media $media): array
+    {
+        DB::beginTransaction();
+
+        try {
+            $media->delete();
+            DB::commit();
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.news.gallery_image_delete.success'),
+            ];
+        } catch (Exception $exception) {
+            DB::rollback();
+
+            Log::error('News image gallery delete failed.', [
+                'exception' => $exception,
+            ]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.news.gallery_image_delete.failed'),
             ];
         }
     }
@@ -421,6 +543,41 @@ class NewsService
             $news->body = $body;
             $news->save();
         }
+    }
+
+    private function calculateGalleryImageOrderColumn(NewsGalleryImageRequest $request, News $news, $media): int
+    {
+        $mediaRoleParameters = [
+            'role' => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+        ];
+
+        $collectionName = $news->media_collection_name;
+
+        $orderColumn = $request->input('order_column');
+
+        if (! $orderColumn) {
+            return $media->order_column ?: (((int) $news->getMedia($collectionName, $mediaRoleParameters)->max('order_column')) + 1);
+        }
+
+        if ($orderColumn == $media->order_column) {
+            return $orderColumn;
+        }
+
+        $galleryImages = $news->getMedia($collectionName, $mediaRoleParameters)
+            ->sortBy('order_column')
+            ->reject(fn($galleryImage) => $galleryImage->id === $media->id)
+            ->values();
+
+        $orderColumn = max(1, min($orderColumn, $galleryImages->count() + 1));
+
+        $galleryImages->splice($orderColumn - 1, 0, [$media]);
+
+        $galleryImages->values()->each(function ($galleryImage, $index) {
+            $galleryImage->order_column = $index + 1;
+            $galleryImage->save();
+        });
+
+        return $orderColumn;
     }
 
     private static function deleteExtingFeatureImage(News $news): void

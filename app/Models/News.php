@@ -43,7 +43,7 @@ class News extends Model implements HasMedia
         'public_url',
         'is_recent_created',
         "feeds_rss_url", "feeds_atom_url",
-        'feature_image', 'feature_image_mobile',
+        'feature_image', 'feature_image_mobile', 'gallery_images',
     ];
 
     protected function casts(): array
@@ -143,12 +143,12 @@ class News extends Model implements HasMedia
 
     public function getFeatureImageMobileAttribute(): ?Media
     {
-        $image          = null;
-        $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE];
+        $image               = null;
+        $collectionName      = $this->media_collection_name;
+        $mediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE];
 
-        if ($this->hasMedia($collectionName, $roleParameter)) {
-            $imageMedia = $this->getMedia($collectionName, $roleParameter)
+        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
+            $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
                 ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
                 ->first();
 
@@ -166,12 +166,12 @@ class News extends Model implements HasMedia
 
     public function getFeatureImageAttribute(): ?Media
     {
-        $image          = null;
-        $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE];
+        $image               = null;
+        $collectionName      = $this->media_collection_name;
+        $mediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE];
 
-        if ($this->hasMedia($collectionName, $roleParameter)) {
-            $imageMedia = $this->getMedia($collectionName, $roleParameter)
+        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
+            $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
                 ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
                 ->first();
 
@@ -185,6 +185,38 @@ class News extends Model implements HasMedia
         }
 
         return $image;
+    }
+
+    public function getGalleryImagesAttribute(): ?MediaCollection
+    {
+        $images              = null;
+        $mediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE];
+        $collectionName      = $this->media_collection_name;
+
+        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
+            $images = $this->getMedia($collectionName, $mediaRoleParameters)
+                ->filter(function ($mediaItem) {
+                    return stripos($mediaItem->mime_type, 'image/') === 0;
+                })
+                ->sortBy([
+                    ['order_column', 'asc'],
+                    ['id', 'asc'],
+                ])
+                ->map(function ($mediaItem) {
+                    $mediaItem->media_url = $mediaItem->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                        ? $mediaItem->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                        : $mediaItem->getUrl();
+
+                    $mediaItem->media_srcset = $mediaItem->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                        ? $mediaItem->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                        : $mediaItem->getSrcset();
+
+                    return $mediaItem;
+                });
+
+        }
+
+        return $images;
     }
 
     public function activityLogs(): MorphMany

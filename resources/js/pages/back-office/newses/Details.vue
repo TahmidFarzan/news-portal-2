@@ -2,10 +2,10 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
-import { isStory as checkIsStory, isVideo as checkIsVideo } from '@/composables/useNews'
+import NewsGalleryImageCard from '@/components/back-office/news/NewsGalleryImageCard.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
-import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -13,7 +13,7 @@ import { faTrash, faPen, faEye, faEyeSlash, faSpinner, faFire } from '@fortaweso
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
 import { canEditNews, canDeleteNews, canRestoreNews } from '@/composables/useAuthUserAccessPermissions'
-import { faHotjar } from '@fortawesome/free-brands-svg-icons'
+import { isStory as checkIsStory, isVideo as checkIsVideo, isImageGallery as checkIsImageGallery } from '@/composables/useNews'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner, faFire)
 
@@ -36,6 +36,7 @@ const canEdit = (news) => canEditNews(authUser?.value, news)
 const canDelete = (news) => canDeleteNews(authUser?.value, news)
 const canRestore = (news) => canRestoreNews(authUser?.value, news)
 
+
 const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
@@ -53,7 +54,6 @@ const handleRestore = () => {
         onFinish: () => restoreProcessing.value = false
     })
 }
-
 
 onMounted(async () => {
     await nextTick()
@@ -143,7 +143,6 @@ onMounted(async () => {
                     </div>
                 </div>
 
-
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -189,6 +188,19 @@ onMounted(async () => {
                         <div class="text-gray-700">
                             {{ news?.video_url || 'N/A' }}
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="checkIsImageGallery(news.news_type)" class="grid grid-cols-1 gap-4 text-sm">
+                <div class="border border-gray-200 rounded-lg p-4 space-y-3">
+                    <div class="text-gray-500 mb-1">
+                        Gallery Images
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <NewsGalleryImageCard v-for="galleryImage in news.gallery_images" :key="galleryImage.id"
+                            :news="news" :gallery-image="galleryImage" />
                     </div>
                 </div>
             </div>

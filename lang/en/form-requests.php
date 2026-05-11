@@ -386,5 +386,28 @@ return [
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
 
+        'gallery_image'                     => [
+            'order_column' => [
+                'integer' => 'Gallery image order column must be a valid number.',
+                'min'     => 'Gallery image order column must be at least 1.',
+            ],
+
+            'caption'      => [
+                'string' => 'Gallery image caption must be valid text.',
+                'max'    => 'Gallery image caption must not be greater than 255 characters.',
+            ],
+
+            'alt'          => [
+                'string' => 'Gallery image alt text must be valid text.',
+                'max'    => 'Gallery image alt text must not be greater than 255 characters.',
+            ],
+
+            'image'        => [
+                'required' => 'Image is required.',
+                'image' => 'Image must be image.',
+                'mimes' => 'Image must have valid mimes[image/*].',
+            ],
+        ],
+
     ],
 ];

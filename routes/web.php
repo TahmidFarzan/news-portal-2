@@ -8,10 +8,10 @@ use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
-use App\Http\Controllers\BackOffice\NewsController;
+use App\Http\Controllers\BackOffice\MediaController;
 
 // Backoffice
-use App\Http\Controllers\BackOffice\MediaController;
+use App\Http\Controllers\BackOffice\NewsController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
@@ -80,7 +80,6 @@ Route::prefix('search')->name('search.')->group(function () {
 
     Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
     Route::get('page-sections', [SearchController::class, 'pageSections'])->name('page-sections');
-
 
     // Model || DB
     Route::get('users', [SearchController::class, 'users'])->name('users');
@@ -222,6 +221,12 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::patch('update/{slug}', [NewsController::class, 'update'])->name('update');
         Route::patch('delete/{slug}', [NewsController::class, 'delete'])->name('delete');
         Route::patch('restore/{slug}', [NewsController::class, 'restore'])->name('restore');
+
+        Route::prefix('{slug}/gallery-images')->name('gallery-images.')->group(function () {
+            Route::post('save', [NewsController::class, 'galleryImageSave'])->name('save');
+            Route::patch('update/{mediaSlug}', [NewsController::class, 'galleryImageUpdate'])->name('update');
+            Route::delete('delete/{mediaSlug}', [NewsController::class, 'galleryImageDelete'])->name('delete');
+        });
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {

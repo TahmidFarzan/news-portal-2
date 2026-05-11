@@ -39,7 +39,15 @@ class NewsSeeder extends Seeder
         $languages = Language::get();
 
         foreach ($languages as $language) {
-            $categories     = Category::where("language_id", $language->id)->get();
+            $parentCategoryIds          = Category::where("language_id", $language->id)->inRandomOrder()->whereNull("parent_id")->pluck("id");
+            $randomNonParentCategoryIds = Category::where("language_id", $language->id)->inRandomOrder()->whereNotNull("parent_id")->limit(7)->pluck("id");
+
+            $categoryIds = $parentCategoryIds
+                ->merge($randomNonParentCategoryIds)
+                ->unique()
+                ->values();
+
+            $categories     = Category::where("language_id", $language->id)->inRandomOrder()->whereIn("id", $categoryIds)->get();
             $tagIds         = $this->getRandomTagIds($language) ?? [];
             $event          = $this->getRandomEvent($language) ?? null;
             $contributorIds = $this->getRandomContributorIds($language) ?? [];
@@ -89,6 +97,12 @@ class NewsSeeder extends Seeder
 
                     $this->newsAddFeatureImage($news);
                     $this->newsAddFeatureImageMobile($news);
+
+                    if ($newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
+                        for ($i = 0; $i < 13; $i++) {
+                            $this->newsAddGalleryImage($news, $i);
+                        }
+                    }
                 }
             }
 
@@ -186,6 +200,29 @@ class NewsSeeder extends Seeder
                     'caption' => $news->title,
                     'alt'     => $news->title,
                     "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+                ]
+            )
+            ->toMediaCollection($news->media_collection_name);
+    }
+
+    private function newsAddGalleryImage(News $news, int|string $imageSequence)
+    {
+        $imageUrl = asset("uploads/images/news/news-gallery-image-3_2.png");
+
+        if (! (($imageSequence % 2) == 0)) {
+            $imageUrl = asset("uploads/images/news/news-gallery-image-2_3.png");
+        }
+
+        $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
+        $imageFileName  = MediaHelper::generateMediaName($news->title, $imageExtension, 200);
+        $news->addMediaFromUrl($imageUrl)
+            ->usingName($news->title)
+            ->usingFileName($imageFileName)
+            ->withCustomProperties(
+                [
+                    'caption' => $news->title,
+                    'alt'     => $news->title,
+                    "role"    => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
                 ]
             )
             ->toMediaCollection($news->media_collection_name);

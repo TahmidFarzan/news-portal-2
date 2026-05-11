@@ -129,7 +129,7 @@ return [
         ],
     ],
 
-    'contributor'        => [
+    'contributor'  => [
         'save'   => [
             'success' => 'Contributor saved successfully.',
             'failed'  => 'Failed to save contributor.',
@@ -144,23 +144,35 @@ return [
         ],
     ],
 
-    'news'        => [
-        'save'   => [
+    'news'         => [
+        'save'                 => [
             'success' => 'News saved successfully.',
             'failed'  => 'Failed to save news.',
         ],
-        'update' => [
+        'update'               => [
             'success' => 'News updated successfully.',
             'failed'  => 'Failed to update news.',
         ],
-        'delete' => [
+        'delete'               => [
             'success' => 'News deleted successfully.',
             'failed'  => 'Failed to delete news.',
         ],
 
-        'restore' => [
+        'restore'              => [
             'success' => 'News restore successfully.',
             'failed'  => 'Failed to restore news.',
+        ],
+
+        'gallery_image_delete' => [
+            'success' => 'News gallery image delete successfully.',
+            'failed'  => 'Failed to delete news gallery image.',
+
+        ],
+
+        'gallery_image_update' => [
+            'success' => 'News gallery image update successfully.',
+            'failed'  => 'Failed to update news gallery image.',
+
         ],
     ],
 

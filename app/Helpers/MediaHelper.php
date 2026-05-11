@@ -17,6 +17,8 @@ class MediaHelper
     public const MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE   = 'news_feature_image_mobile';
     public const MEDIA_ROLE_NEWS_CONTENT_IMAGE   = 'news_content_image';
 
+    public const MEDIA_ROLE_NEWS_GALLERY_IMAGE   = 'news_gallery_image';
+
     public const MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE = 'event_desktop_banner_image';
     public const MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE  = 'event_mobile_banner_image';
 

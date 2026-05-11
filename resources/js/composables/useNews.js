@@ -1,6 +1,7 @@
 export const newsTypes = {
     STORY: 'Story',
     VIDEO: 'Video',
+    IMAGEGALLERY: "Image Gallery",
 }
 
 export const getNewsTypeName = (newsType) => {
@@ -13,4 +14,8 @@ export const isStory = (newsType) => {
 
 export const isVideo = (newsType) => {
     return getNewsTypeName(newsType) === newsTypes.VIDEO.toLowerCase()
+}
+
+export const isImageGallery = (newsType) => {
+    return getNewsTypeName(newsType) === newsTypes.IMAGEGALLERY.toLowerCase()
 }
