@@ -52,7 +52,7 @@ class LocationSeeder extends Seeder
     {
         $saveLocation = Location::factory()->state([
             'name'         => $location->name,
-            'brief'      => $location->brief ?? null,
+            'brief'        => $location->brief ?? null,
             'parent_id'    => $parent?->id,
             'language_id'  => $language?->id,
             'category_id'  => $category?->id ?? null,
@@ -67,8 +67,8 @@ class LocationSeeder extends Seeder
             'longitude'    => $location->longitude ?? null,
         ])->create();
 
-        if (! empty($location->sub_locations)) {
-            foreach ($location->sub_locations as $subLocation) {
+        if (! empty($location->districts)) {
+            foreach ($location->districts as $subLocation) {
                 $this->createLocation($saveLocation, $subLocation, $language, $category);
             }
         }
@@ -84,7 +84,7 @@ class LocationSeeder extends Seeder
                 'locations'     => collect([
                     (object) [
                         'name'      => 'Dhaka',
-                        'brief'   => 'Central division of Bangladesh',
+                        'brief'     => 'Central division of Bangladesh',
                         'latitude'  => 23.8103,
                         'longitude' => 90.4125,
                         'districts' => collect([
@@ -106,7 +106,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'Chattogram',
-                        'brief'   => 'Port division of Bangladesh',
+                        'brief'     => 'Port division of Bangladesh',
                         'latitude'  => 22.3569,
                         'longitude' => 91.7832,
                         'districts' => collect([
@@ -125,7 +125,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'Rajshahi',
-                        'brief'   => 'North-west division',
+                        'brief'     => 'North-west division',
                         'latitude'  => 24.3745,
                         'longitude' => 88.6042,
                         'districts' => collect([
@@ -142,7 +142,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'Khulna',
-                        'brief'   => 'South-west division',
+                        'brief'     => 'South-west division',
                         'latitude'  => 22.8456,
                         'longitude' => 89.5403,
                         'districts' => collect([
@@ -161,7 +161,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'Barishal',
-                        'brief'   => 'Southern river division',
+                        'brief'     => 'Southern river division',
                         'latitude'  => 22.7010,
                         'longitude' => 90.3535,
                         'districts' => collect([
@@ -176,7 +176,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'Sylhet',
-                        'brief'   => 'Tea garden division',
+                        'brief'     => 'Tea garden division',
                         'latitude'  => 24.8949,
                         'longitude' => 91.8687,
                         'districts' => collect([
@@ -189,7 +189,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'Rangpur',
-                        'brief'   => 'Northern division',
+                        'brief'     => 'Northern division',
                         'latitude'  => 25.7439,
                         'longitude' => 89.2752,
                         'districts' => collect([
@@ -206,7 +206,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'Mymensingh',
-                        'brief'   => 'North-central division',
+                        'brief'     => 'North-central division',
                         'latitude'  => 24.7471,
                         'longitude' => 90.4203,
                         'districts' => collect([
@@ -226,7 +226,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'ঢাকা',
-                        'brief'   => 'বাংলাদেশের কেন্দ্রীয় বিভাগ',
+                        'brief'     => 'বাংলাদেশের কেন্দ্রীয় বিভাগ',
                         'latitude'  => 23.8103,
                         'longitude' => 90.4125,
                         'districts' => collect([
@@ -248,7 +248,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'চট্টগ্রাম',
-                        'brief'   => 'বাংলাদেশের বন্দর বিভাগ',
+                        'brief'     => 'বাংলাদেশের বন্দর বিভাগ',
                         'latitude'  => 22.3569,
                         'longitude' => 91.7832,
                         'districts' => collect([
@@ -267,7 +267,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'রাজশাহী',
-                        'brief'   => 'উত্তর-পশ্চিম বিভাগ',
+                        'brief'     => 'উত্তর-পশ্চিম বিভাগ',
                         'latitude'  => 24.3745,
                         'longitude' => 88.6042,
                         'districts' => collect([
@@ -284,7 +284,7 @@ class LocationSeeder extends Seeder
 
                     (object) [
                         'name'      => 'খুলনা',
-                        'brief'   => 'দক্ষিণ-পশ্চিম বিভাগ',
+                        'brief'     => 'দক্ষিণ-পশ্চিম বিভাগ',
                         'latitude'  => 22.8456,
                         'longitude' => 89.5403,
                         'districts' => collect([
@@ -304,7 +304,7 @@ class LocationSeeder extends Seeder
                     (object) [
                         'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
                         'name'          => 'বরিশাল',
-                        'brief'       => 'দক্ষিণাঞ্চলের নদীমাতৃক বিভাগ',
+                        'brief'         => 'দক্ষিণাঞ্চলের নদীমাতৃক বিভাগ',
                         'latitude'      => 22.7010,
                         'longitude'     => 90.3535,
                         'districts'     => collect([
@@ -320,7 +320,7 @@ class LocationSeeder extends Seeder
                     (object) [
                         'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
                         'name'          => 'সিলেট',
-                        'brief'       => 'চা বাগান ও হাওর অঞ্চল',
+                        'brief'         => 'চা বাগান ও হাওর অঞ্চল',
                         'latitude'      => 24.8949,
                         'longitude'     => 91.8687,
                         'districts'     => collect([
@@ -334,7 +334,7 @@ class LocationSeeder extends Seeder
                     (object) [
                         'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
                         'name'          => 'রংপুর',
-                        'brief'       => 'উত্তরাঞ্চলের কৃষি বিভাগ',
+                        'brief'         => 'উত্তরাঞ্চলের কৃষি বিভাগ',
                         'latitude'      => 25.7439,
                         'longitude'     => 89.2752,
                         'districts'     => collect([
@@ -352,7 +352,7 @@ class LocationSeeder extends Seeder
                     (object) [
                         'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
                         'name'          => 'ময়মনসিংহ',
-                        'brief'       => 'উত্তর-মধ্যাঞ্চলের বিভাগ',
+                        'brief'         => 'উত্তর-মধ্যাঞ্চলের বিভাগ',
                         'latitude'      => 24.7471,
                         'longitude'     => 90.4203,
                         'districts'     => collect([
