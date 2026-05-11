@@ -143,10 +143,10 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE];
+        $mediaRoleParameters  = ["role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE];
 
-        if ($this->hasMedia($collectionName, $roleParameter)) {
-            $imageMedia = $this->getMedia($collectionName, $roleParameter)
+        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
+            $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
                 ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
                 ->first();
 
