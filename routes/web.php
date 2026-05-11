@@ -101,6 +101,7 @@ Route::prefix('search')->name('search.')->group(function () {
 
     Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
     Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
+    Route::get('news-type/{slugOrId}', [SearchController::class, 'newsType'])->name('news-type');
     Route::get('language/{slugOrId}', [SearchController::class, 'language'])->name('language');
     Route::get('category/{slugOrId}', [SearchController::class, 'category'])->name('category');
     Route::get('tag/{slugOrId}', [SearchController::class, 'tag'])->name('tag');

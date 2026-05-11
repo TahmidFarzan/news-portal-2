@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use App\Services\SearchService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
     protected SearchService $searchService;
 
-    private int $longCacheLimitSecond = 3600;
+    private int $longCacheLimitSecond         = 3600;
     private int $frequentlyCacheLimitInSecond = 60;
 
     public function __construct(SearchService $searchService)
@@ -18,7 +18,6 @@ class SearchController extends Controller
         $this->middleware(['auth', 'verified'])->only(['user']);
     }
 
-
     private function jsonResponse(mixed $data, int $seconds): JsonResponse
     {
         return response()
@@ -26,14 +25,14 @@ class SearchController extends Controller
             ->header('Cache-Control', 'public, max-age=' . $seconds);
     }
 
-    public function genders(Request $request): JsonResponse
-    {
-        return $this->jsonResponse($this->searchService->genders($request), $this->longCacheLimitSecond);
-    }
-
     public function perPages(Request $request): JsonResponse
     {
         return $this->jsonResponse($this->searchService->perPages($request), $this->longCacheLimitSecond);
+    }
+
+    public function genders(Request $request): JsonResponse
+    {
+        return $this->jsonResponse($this->searchService->genders($request), $this->longCacheLimitSecond);
     }
 
     public function religions(Request $request): JsonResponse
@@ -56,11 +55,6 @@ class SearchController extends Controller
         return $this->jsonResponse($this->searchService->activityLogSubjectTypes($request), $this->longCacheLimitSecond);
     }
 
-    public function newsTypes(Request $request)
-    {
-        return $this->jsonResponse($this->searchService->newsTypes($request), $this->longCacheLimitSecond);
-    }
-
     public function pageSections(Request $request)
     {
         return $this->jsonResponse($this->searchService->pageSections($request), $this->longCacheLimitSecond);
@@ -74,6 +68,11 @@ class SearchController extends Controller
     public function userRoles(Request $request)
     {
         return $this->jsonResponse($this->searchService->userRoles($request), $this->longCacheLimitSecond);
+    }
+
+    public function newsTypes(Request $request)
+    {
+        return $this->jsonResponse($this->searchService->newsTypes($request), $this->longCacheLimitSecond);
     }
 
     public function languages(Request $request)
@@ -134,6 +133,11 @@ class SearchController extends Controller
     public function userRole(string | int $slugOrId)
     {
         return $this->jsonResponse($this->searchService->userRole($slugOrId), $this->frequentlyCacheLimitInSecond);
+    }
+
+    public function newsType(string | int $slugOrId)
+    {
+        return $this->jsonResponse($this->searchService->newsType($slugOrId), $this->frequentlyCacheLimitInSecond);
     }
 
     public function language(string | int $slugOrId)

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('newses', function (Blueprint $table) {
             $table->id();
 
-            $table->string('news_type')->default("Story");
+            $table->foreignId('news_type_id')->constrained('news_types')->cascadeOnDelete();
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('event_id')->nullable()->constrained('events')->cascadeOnDelete();

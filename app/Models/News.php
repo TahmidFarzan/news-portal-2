@@ -2,7 +2,6 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
-use App\Helpers\NewsHelper;
 use App\Observers\NewsObserver;
 use App\Policies\NewsPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -28,9 +27,9 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('newses')]
 #[Fillable([
-        'news_type','language_id', 'category_id', 'event_id', 'location_id',
+        'news_type_id', 'language_id', 'category_id', 'event_id', 'location_id',
         'title', 'sub_title', "content_shoulder", 'brief',
-        "body", "video_url",'writer', 'source',
+        "body", "video_url", 'writer', 'source',
         "seo_brief", 'seo_title', 'seo_keywords',
         'created_by_id', 'slug', 'is_published',
     ])]
@@ -60,7 +59,7 @@ class News extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'news_type','language_id', 'category_id', 'event_id', 'location_id',
+                'news_type_id', 'language_id', 'category_id', 'event_id', 'location_id',
                 'title', 'sub_title', "content_shoulder", 'brief',
                 "body", "video_url", 'writer', 'source',
                 "seo_brief", 'seo_title', 'seo_keywords',
@@ -226,6 +225,11 @@ class News extends Model implements HasMedia
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
+    }
+
+    public function newsType(): BelongsTo
+    {
+        return $this->belongsTo(NewsType::class);
     }
 
     public function tags(): BelongsToMany

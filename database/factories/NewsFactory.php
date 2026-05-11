@@ -23,6 +23,7 @@ class NewsFactory extends Factory
         $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
         $language      = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
+        $newsType      = Language::where("name", NewsHelper::NEWS_TYPE_STORY)->first() ?? null;
 
         $category = $this->getRandomCategory($language);
         $location = $this->getRandomLocation($language, $category);
@@ -37,9 +38,9 @@ class NewsFactory extends Factory
         $isPublished = $this->faker->boolean(50);
 
         return [
-            'news_type'        => NewsHelper::NEWS_TYPE_STORY,
-            "language_id"      => $language?->id ?? "1",
-            "category_id"      => $category?->id ?? "1",
+            'news_type_id'     => $newsType?->id ?? 1,
+            "language_id"      => $language?->id ?? 1,
+            "category_id"      => $category?->id ?? 1,
 
             "event_id"         => $event?->id ?? null,
             "location_id"      => $location?->id ?? null,
@@ -59,7 +60,7 @@ class NewsFactory extends Factory
 
             "is_published"     => $isPublished,
 
-            "created_by_id"    => $user?->id ?? "1",
+            "created_by_id"    => $user?->id ?? 1,
         ];
     }
 

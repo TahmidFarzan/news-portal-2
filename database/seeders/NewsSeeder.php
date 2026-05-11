@@ -10,9 +10,9 @@ use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
 use App\Models\News;
+use App\Models\NewsType;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class NewsSeeder extends Seeder
@@ -48,14 +48,12 @@ class NewsSeeder extends Seeder
             foreach ($categories as $category) {
                 $location = $this->getRandomLocation($language, $category) ?? null;
 
-                $newsTypes = [NewsHelper::NEWS_TYPE_STORY, NewsHelper::NEWS_TYPE_VIDEO];
-
-                $newsType = Arr::random($newsTypes);
+                $newsType = NewsType::inRandomOrder()->first();
 
                 foreach ($randomNewses as $index => $randomNews) {
 
                     $news = News::factory()->state([
-                        "news_type"        => $newsType,
+                        "news_type_id"     => $newsType->id,
                         "language_id"      => $language?->id ?? "1",
                         "category_id"      => $category?->id ?? "1",
 
@@ -67,16 +65,16 @@ class NewsSeeder extends Seeder
                         "content_shoulder" => $randomNews->content_shoulder,
                         "brief"            => $randomNews->brief,
 
-                        "body"             => ($newsType == NewsHelper::NEWS_TYPE_STORY) ? $randomNews->body : null,
-                        "video_url"        => ($newsType == NewsHelper::NEWS_TYPE_VIDEO) ? $randomNews->video_url : null,
+                        "body"             => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? $randomNews->body : null,
+                        "video_url"        => ($newsType->name == NewsHelper::NEWS_TYPE_VIDEO) ? $randomNews->video_url : null,
 
                         "seo_title"        => $randomNews->title,
                         "seo_brief"        => $randomNews->brief,
                         "seo_keywords"     => $randomNews->seo_keywords,
 
                         "is_published"     => true,
-                        'writer'           => ($newsType == NewsHelper::NEWS_TYPE_STORY) ? "News Desk" : null,
-                        'source'           => null,
+                        'writer'           => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? "News Desk" : null,
+                        'source'           => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? null : null,
                         "created_at"       => $randomNews->published_at,
                         "updated_at"       => $randomNews->published_at,
                     ])->create();

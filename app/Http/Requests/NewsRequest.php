@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
 use App\Models\News;
+use App\Models\NewsType;
 use App\Models\Tag;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,7 +28,7 @@ class NewsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "news_type"                         => ["required"],
+            "news_type_id"                      => ["required"],
             "language_id"                       => ["required"],
             "category_id"                       => ["required"],
 
@@ -79,7 +80,7 @@ class NewsRequest extends FormRequest
             "title.string"                           => __("form-requests.news.title.string"),
             "title.max"                              => __("form-requests.news.title.max"),
 
-            "news_type.required"                     => __("form-requests.news.news_type.required"),
+            "news_type_id.required"                  => __("form-requests.news.news_type_id.required"),
             "language_id.required"                   => __("form-requests.news.language_id.required"),
             "category_id.required"                   => __("form-requests.news.category_id.required"),
 
@@ -169,25 +170,26 @@ class NewsRequest extends FormRequest
                 }
             }
 
-            if (! empty($data["news_type"]) && ! in_array($data["news_type"], [NewsHelper::NEWS_TYPE_STORY, NewsHelper::NEWS_TYPE_VIDEO], true)) {
+            if (! empty($data["news_type_id"]) && ! (NewsType::where("id", $data["news_type_id"])->exists())) {
                 $validator->errors()->add(
                     'news_type',
                     __("form-requests.news.news_type.not_found")
                 );
-            }
+            } else {
+                $newsType = NewsType::where("id", $data["news_type_id"])->first();
+                if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_STORY) && empty($data["body"])) {
+                    $validator->errors()->add(
+                        'body',
+                        __("form-requests.news.body.required")
+                    );
+                }
 
-            if (($data["news_type"] == NewsHelper::NEWS_TYPE_STORY) && empty($data["body"])) {
-                $validator->errors()->add(
-                    'body',
-                    __("form-requests.news.body.required")
-                );
-            }
-
-            if (($data["news_type"] == NewsHelper::NEWS_TYPE_VIDEO) && empty($data["video_url"])) {
-                $validator->errors()->add(
-                    'video_url',
-                    __("form-requests.news.video_url.required")
-                );
+                if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_VIDEO) && empty($data["video_url"])) {
+                    $validator->errors()->add(
+                        'video_url',
+                        __("form-requests.news.video_url.required")
+                    );
+                }
             }
 
             $tagIds = $this->normalizeIds($data['tag_ids'] ?? []);

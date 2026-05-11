@@ -21,6 +21,14 @@ class UserHelper
     private const USER_MARITAL_SEPARATED = 'Separated';
     private const USER_MARITAL_OTHER     = 'Other';
 
+    public static function userRoles()
+    {
+        return collect([
+            (object) ['id' => self::USER_ROLE_ADMIN, 'name' => 'Admin'],
+            (object) ['id' => self::USER_ROLE_NEWS_DESK, 'name' => 'News Desk'],
+        ]);
+    }
+
     public static function genders()
     {
         return collect([

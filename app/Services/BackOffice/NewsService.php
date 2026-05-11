@@ -8,6 +8,7 @@ use App\Http\Requests\NewsRequest;
 use App\Jobs\NewsContributorSyncJob;
 use App\Jobs\NewsTagSyncJob;
 use App\Models\News;
+use App\Models\NewsType;
 use App\Services\BackOffice\MediaService;
 use Exception;
 use Illuminate\Http\Request;
@@ -34,12 +35,18 @@ class NewsService
         return News::where('slug', $slug)->firstOrFail();
     }
 
+    public function findNewsTypeById(string $id): NewsType
+    {
+        return NewsType::where('id', $id)->firstOrFail();
+    }
+
     public function loadRelations(News $news): News
     {
         $news->load([
             'createdBy',
 
             'language',
+            'newsType',
 
             'category',
 
@@ -65,10 +72,10 @@ class NewsService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = News::query()->with(["language", "category", "event", "location"]);
+        $query = News::query()->with(["news_type","language", "category", "event", "location"]);
 
-        if ($request->filled('news_type')) {
-            $query->where('news_type', $request->input('news_type'));
+        if ($request->filled('news_type_id')) {
+            $query->where('news_type_id', $request->input('news_type_id'));
         }
 
         if ($request->filled('created_by_id')) {
@@ -132,28 +139,29 @@ class NewsService
             $isNew       = empty($news->id);
             $statusEvent = $isNew ? "save" : "update";
 
-            $news->language_id = $request->input('language_id');
-            $news->category_id = $request->input('category_id');
-            $news->event_id    = $request->input('event_id');
-            $news->location_id = $request->input('location_id');
+            $newsType = $this->findNewsTypeById($request->input('news_type_id'));
+
+            $news->news_type_id = $request->input('news_type_id');
+            $news->language_id  = $request->input('language_id');
+            $news->category_id  = $request->input('category_id');
+            $news->event_id     = $request->input('event_id');
+            $news->location_id  = $request->input('location_id');
 
             $news->title            = $request->input('title');
             $news->sub_title        = $request->input('sub_title');
             $news->content_shoulder = $request->input('content_shoulder');
             $news->brief            = $request->input('brief');
-            $news->body             = (NewsHelper::NEWS_TYPE_STORY == $request->input('news_type')) ? $request->input('body') : null;
-            $news->video_url        = (NewsHelper::NEWS_TYPE_STORY == $request->input('news_type')) ? $request->input('video_url') : null;
+            $news->body             = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('body') : null;
+            $news->video_url        = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('video_url') : null;
+
+            $news->writer = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('writer') : null;
+            $news->source = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('source') : null;
 
             $news->seo_title    = $request->input('seo_title') ?? $request->input('title');
             $news->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
             $news->seo_keywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords')) ?? null;
 
             $news->is_published = $request->input('is_published') ? true : false;
-
-            if (NewsHelper::NEWS_TYPE_STORY == $request->input('news_type')) {
-                $news->writer = $request->input('writer');
-                $news->source = $request->input('source');
-            }
 
             $news->created_by_id = $isNew ? Auth::id() : $news->created_by_id;
 

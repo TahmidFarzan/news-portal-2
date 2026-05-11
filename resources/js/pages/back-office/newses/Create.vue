@@ -5,9 +5,8 @@ import MultiSelectTaggableSelect from '@/components/common/multi-select/Taggable
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
 import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
 import { isStory as checkIsStory, isVideo as checkIsVideo } from '@/composables/useNews'
+import { fetchFromApi } from '@/composables/useSystemApi'
 
-
-import axios from 'axios'
 import { computed, onMounted, nextTick, inject, watch, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
@@ -33,7 +32,7 @@ const showLocation = ref(false)
 const isUpdate = computed(() => !!news?.slug)
 
 const saveForm = useForm({
-    news_type: news?.news_type ?? "Story",
+    news_type_id: news?.news_type_id ?? null,
     language_id: news?.language_id || null,
     category_id: news?.category_id || null,
     location_id: news?.location_id || null,
@@ -96,7 +95,7 @@ const locationApiUrl = computed(() => {
         params.append('category_id', saveForm.category_id)
     }
 
-    return `${route('search.locations')}?${params.toString()}`
+    return `${route('search.location-tree')}?${params.toString()}`
 })
 
 const tagApiUrl = computed(() => {
@@ -134,8 +133,8 @@ function validateForm() {
     saveForm.clearErrors()
     let valid = true
 
-    if (!saveForm.news_type) {
-        saveForm.setError('news_type', 'News type is required.')
+    if (!saveForm.news_type_id) {
+        saveForm.setError('news_type_id', 'News type is required.')
         valid = false
     }
 
@@ -246,11 +245,12 @@ watch(
         if (!categoryId) return
 
         try {
-            const { data } = await axios.get(
+
+            const category = await fetchFromApi(
                 route('search.category', { slugOrId: categoryId })
             )
 
-            showLocation.value = data?.has_location === true
+            showLocation.value = category?.has_location === true
         } catch (error) {
             showLocation.value = false
         }
@@ -280,10 +280,23 @@ watch(
 )
 
 watch(
-    () => saveForm.news_type,
-    (newsType) => {
-        isStory.value = checkIsStory(newsType)
-        isVideo.value = checkIsVideo(newsType)
+    () => saveForm.news_type_id,
+    async (news_type_id) => {
+        isStory.value = false
+        isVideo.value = false
+
+        if (!news_type_id) return
+
+        try {
+            const newsType = await fetchFromApi(
+                route('search.news-type', { slugOrId: news_type_id })
+            )
+
+            isStory.value = checkIsStory(newsType)
+            isVideo.value = checkIsVideo(newsType)
+        } catch (error) {
+            console.error(error)
+        }
     },
     { immediate: true }
 )
@@ -324,11 +337,11 @@ onMounted(async () => {
                                 News Type <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="news_type"
-                                :selectedItem="saveForm.news_type" :apiUrl="route('search.news-types')"
-                                :error="saveForm.errors.news_type" :multiple="false" placeholder="Select news type" />
-                            <p v-if="saveForm.errors.news_type" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.news_type }}
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="news_type_id"
+                                :selectedItem="news.news_type" :apiUrl="route('search.news-types')"
+                                :error="saveForm.errors.news_type_id" :multiple="false" placeholder="Select news type" />
+                            <p v-if="saveForm.errors.news_type_id" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.news_type_id }}
                             </p>
                         </div>
 

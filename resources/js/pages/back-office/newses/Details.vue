@@ -110,7 +110,7 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">News type</span>
-                        <span class="font-medium">{{ news?.news_type || 'N/A' }}</span>
+                        <span class="font-medium">{{ news?.news_type?.name || 'N/A' }}</span>
                     </div>
 
                 </div>

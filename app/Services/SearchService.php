@@ -11,20 +11,20 @@ use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
 use App\Models\News;
+use App\Models\NewsType;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class SearchService
 {
-    public function genders(Request $request): array
+    public function perPages(Request $request): array
     {
-        $options = UserHelper::genders();
+        $options = SystemHelper::perPages();
 
         if ($request->filled('search')) {
             $search  = strtolower($request->input('search'));
@@ -48,9 +48,9 @@ class SearchService
         ];
     }
 
-    public function perPages(Request $request): array
+    public function genders(Request $request): array
     {
-        $options = SystemHelper::perPages();
+        $options = UserHelper::genders();
 
         if ($request->filled('search')) {
             $search  = strtolower($request->input('search'));
@@ -178,32 +178,6 @@ class SearchService
         ];
     }
 
-    public function newsTypes(Request $request): array
-    {
-        $options = NewsHelper::newsTypes();
-
-        if ($request->filled('search')) {
-            $search  = $request->input('search');
-            $options = $options->filter(
-                fn($row) =>
-                stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
-            );
-        }
-
-        $items = $options->map(fn($row) => [
-            'id'   => $row->id,
-            'name' => $row->name,
-        ]);
-
-        return [
-            'items'        => $items,
-            'total'        => 1,
-            'current_page' => 1,
-            'last_page'    => 1,
-        ];
-    }
-
     public function pageSections(Request $request): array
     {
         $options = NewsHelper::pageSections();
@@ -268,9 +242,6 @@ class SearchService
 
     public function userRoles(Request $request): array
     {
-        /** @var \App\Models\User $authUser */
-        $authUser = Auth::user();
-
         $query = UserRole::query();
 
         if ($request->filled('search')) {
@@ -284,12 +255,36 @@ class SearchService
             $query->whereNot("id", $request->input('except_id'));
         }
 
-        if ($authUser->hasUserRole("Supervisor")) {
-            $query->where('name', "Member");
+        $records = $query
+            ->orderByDesc('id')
+            ->paginate($request->input('per_page', 25));
+
+        $items = $records->map(fn($user) => [
+            'id'   => $user->id,
+            'name' => $user->name,
+        ]);
+
+        return [
+            'items'        => $items,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function newsTypes(Request $request): array
+    {
+        $query = NewsType::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
         }
 
-        if ($authUser->hasUserRole("Member")) {
-            $query->where('name', "Member");
+        if ($request->filled('except_id')) {
+            $query->whereNot("id", $request->input('except_id'));
         }
 
         $records = $query
@@ -651,7 +646,7 @@ class SearchService
             $query->where('id', $root->id);
         }
 
-        if ($request->filled('category_id')) {
+        if ($request->filled('category_id')){
             $query->where('category_id', $request->input('category_id'));
         }
 
@@ -685,6 +680,11 @@ class SearchService
     public function userRole(int | string $slugOrId): UserRole
     {
         return UserRole::where('id', $slugOrId)->firstOrFail();
+    }
+
+    public function newsType(int | string $slugOrId): NewsType
+    {
+        return NewsType::where('id', $slugOrId)->firstOrFail();
     }
 
     public function language(int | string $slugOrId): Language

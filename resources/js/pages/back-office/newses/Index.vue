@@ -47,7 +47,7 @@ const paginationOnly = computed(() => {
 const filterForm = useForm({
     per_page: null,
     created_by_id: null,
-    news_type: '',
+    news_type_id: '',
     category_id: '',
     language_id: '',
     location_id: '',
@@ -114,7 +114,7 @@ onMounted(async () => {
     const urlParams = new URLSearchParams(window.location.search)
 
     filterForm.per_page = urlParams.get('per_page') || ''
-    filterForm.news_type = urlParams.get('news_type') || ''
+    filterForm.news_type_id = urlParams.get('news_type_id') || ''
     filterForm.created_by_id = urlParams.get('created_by_id') || ''
     filterForm.category_id = urlParams.get('category_id') || ''
     filterForm.language_id = urlParams.get('language_id') || ''
@@ -122,6 +122,15 @@ onMounted(async () => {
     filterForm.event_id = urlParams.get('event_id') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
+
+
+    if (filterForm.news_type_id) {
+        const rNewsType = await fetchFromApi(
+            route('search.news-type', { slugOrId: filterForm.news_type_id })
+        )
+
+        filterForm.news_type_id = rNewsType || null
+    }
 
     if (filterForm.category_id) {
         const rCategory = await fetchFromApi(
@@ -204,8 +213,8 @@ onMounted(async () => {
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     placeholder="Created by" />
 
-                    <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="news_type"
-                    :selectedItem="filterForm.news_type" :apiUrl="route('search.news-types')" :multiple="false"
+                    <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="news_type_id"
+                    :selectedItem="filterForm.news_type_id" :apiUrl="route('search.news-types')" :multiple="false"
                     placeholder="News type" />
 
                 <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="language_id"
@@ -257,6 +266,7 @@ onMounted(async () => {
                             <th class="px-4 py-3 text-left">Language</th>
                             <th class="px-4 py-3 text-left">Category</th>
                             <th class="px-4 py-3 text-left">Event</th>
+                            <th class="px-4 py-3 text-left">Location</th>
                             <th class="px-4 py-3 text-left">Created</th>
                             <th class="px-4 py-3 text-right">Actions</th>
                         </tr>
@@ -265,7 +275,7 @@ onMounted(async () => {
                     <tbody class="divide-y">
                         <tr v-for="(item, index) in newses?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
-                            <td class="px-4 py-3">{{ item.news_type }}</td>
+                            <td class="px-4 py-3">{{ item?.news_type?.name }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.title }}</td>
                             <td class="px-4 py-3 text-gray-600">
                                 {{ item.language ? item.language.name : 'N/A' }}
@@ -275,6 +285,9 @@ onMounted(async () => {
                             </td>
                             <td class="px-4 py-3 text-gray-600">
                                 {{ item.event ? item.event.name : 'N/A' }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ item.location ? item.location.name : 'N/A' }}
                             </td>
                             <td class="px-4 py-3 text-gray-500">
                                 {{ formatDateTime(item.created_at) }}

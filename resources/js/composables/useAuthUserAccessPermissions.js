@@ -4,7 +4,7 @@ const userRoles = {
 }
 
 // Normalize user role once
-export const getUserRole = (user) =>
+export const getUserRoleName = (user) =>
     user?.user_role?.name?.toLowerCase()
 
 // Helper
@@ -19,14 +19,14 @@ const isNewsDesk = (role) =>
 export const canCreateUser = (authUser) => {
     if (!authUser) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
     return isAdmin(role)
 }
 
 export const canEditUser = (authUser, targetUser) => {
     if (!authUser || !targetUser) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -37,7 +37,7 @@ export const canDeleteUser = (authUser, targetUser) => {
     if (!authUser || !targetUser) return false
     if (targetUser?.is_default) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -48,7 +48,7 @@ export const canActiveInactiveUser = (authUser, targetUser) => {
     if (!authUser || !targetUser) return false
     if (targetUser?.is_default) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -58,7 +58,7 @@ export const canActiveInactiveUser = (authUser, targetUser) => {
 export const canDeleteMedia = (authUser, media) => {
     if (!authUser || !media) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     return isAdmin(role) || isNewsDesk(role)
 }
@@ -67,13 +67,13 @@ export const canDeleteMedia = (authUser, media) => {
 
 export const canCreateLanguage = (authUser) => {
     if (!authUser) return false
-    return isAdmin(getUserRole(authUser))
+    return isAdmin(getUserRoleName(authUser))
 }
 
 export const canEditLanguage = (authUser, language) => {
     if (!authUser || !language) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -83,7 +83,7 @@ export const canEditLanguage = (authUser, language) => {
 export const canDeleteLanguage = (authUser, language) => {
     if (!authUser || !language) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -93,12 +93,12 @@ export const canDeleteLanguage = (authUser, language) => {
 // ================= CATEGORY =================
 
 export const canCreateCategory = (authUser) =>
-    authUser && isAdmin(getUserRole(authUser))
+    authUser && isAdmin(getUserRoleName(authUser))
 
 export const canEditCategory = (authUser, category) => {
     if (!authUser || !category) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -108,7 +108,7 @@ export const canEditCategory = (authUser, category) => {
 export const canDeleteCategory = (authUser, category) => {
     if (!authUser || !category) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -119,12 +119,12 @@ export const canDeleteCategory = (authUser, category) => {
 // ================= TAG =================
 
 export const canCreateTag = (authUser) =>
-    authUser && isAdmin(getUserRole(authUser))
+    authUser && isAdmin(getUserRoleName(authUser))
 
 export const canEditTag = (authUser, tag) => {
     if (!authUser || !tag) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -134,7 +134,7 @@ export const canEditTag = (authUser, tag) => {
 export const canDeleteTag = (authUser, tag) => {
     if (!authUser || !tag) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -144,12 +144,12 @@ export const canDeleteTag = (authUser, tag) => {
 // ================= TREND =================
 
 export const canCreateTrend = (authUser) =>
-    authUser && isAdmin(getUserRole(authUser))
+    authUser && isAdmin(getUserRoleName(authUser))
 
 export const canEditTrend = (authUser, trend) => {
     if (!authUser || !trend) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -159,7 +159,7 @@ export const canEditTrend = (authUser, trend) => {
 export const canDeleteTrend = (authUser, trend) => {
     if (!authUser || !trend) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -169,12 +169,12 @@ export const canDeleteTrend = (authUser, trend) => {
 // ================= LOCATION =================
 
 export const canCreateLocation = (authUser) =>
-    authUser && isAdmin(getUserRole(authUser))
+    authUser && isAdmin(getUserRoleName(authUser))
 
 export const canEditLocation = (authUser, location) => {
     if (!authUser || !location) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -184,7 +184,7 @@ export const canEditLocation = (authUser, location) => {
 export const canDeleteLocation = (authUser, location) => {
     if (!authUser || !location) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -194,12 +194,12 @@ export const canDeleteLocation = (authUser, location) => {
 // ================= EVENT =================
 
 export const canCreateEvent = (authUser) =>
-    authUser && isAdmin(getUserRole(authUser))
+    authUser && isAdmin(getUserRoleName(authUser))
 
 export const canEditEvent = (authUser, event) => {
     if (!authUser || !event) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -209,7 +209,7 @@ export const canEditEvent = (authUser, event) => {
 export const canDeleteEvent = (authUser, event) => {
     if (!authUser || !event) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -219,12 +219,12 @@ export const canDeleteEvent = (authUser, event) => {
 // ================= CONTRIBUTOR =================
 
 export const canCreateContributor = (authUser) =>
-    authUser && isAdmin(getUserRole(authUser))
+    authUser && isAdmin(getUserRoleName(authUser))
 
 export const canEditContributor = (authUser, contributor) => {
     if (!authUser || !contributor) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -234,7 +234,7 @@ export const canEditContributor = (authUser, contributor) => {
 export const canDeleteContributor = (authUser, contributor) => {
     if (!authUser || !contributor) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -244,12 +244,12 @@ export const canDeleteContributor = (authUser, contributor) => {
 // ================= NEWS =================
 
 export const canCreateNews = (authUser) =>
-    authUser && isAdmin(getUserRole(authUser))
+    authUser && isAdmin(getUserRoleName(authUser))
 
 export const canEditNews = (authUser, news) => {
     if (!authUser || !news) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role)) return true
 
@@ -259,7 +259,7 @@ export const canEditNews = (authUser, news) => {
 export const canDeleteNews = (authUser, news) => {
     if (!authUser || !news) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role) && news.is_published) return true
 
@@ -270,7 +270,7 @@ export const canRestoreNews = (authUser, news) => {
     if (!authUser || !news) return false
 
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     if (isAdmin(role) && (news.is_published == false)) return true
 
@@ -280,12 +280,12 @@ export const canRestoreNews = (authUser, news) => {
 // ================= MENU =================
 
 export const canAccessActivityLogMenu = (authUser) =>
-    authUser && isAdmin(getUserRole(authUser))
+    authUser && isAdmin(getUserRoleName(authUser))
 
 export const canAccessUserManagementMenu = (authUser) => {
     if (!authUser) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     return isAdmin(role) || isNewsDesk(role)
 }
@@ -293,7 +293,7 @@ export const canAccessUserManagementMenu = (authUser) => {
 export const canAccessNewsAttributesMenu = (authUser) => {
     if (!authUser) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     return isAdmin(role) || isNewsDesk(role)
 }
@@ -301,7 +301,7 @@ export const canAccessNewsAttributesMenu = (authUser) => {
 export const canAccessNewsMenu = (authUser) => {
     if (!authUser) return false
 
-    const role = getUserRole(authUser)
+    const role = getUserRoleName(authUser)
 
     return isAdmin(role) || isNewsDesk(role)
 }
