@@ -40,6 +40,12 @@ class MediaController extends Controller
         return $this->mediaService->quickSave($request);
     }
 
+    public function quickUpdate(MediaQuickRequest $request, string $slug)
+    {
+        $media = $this->mediaService->find($slug);
+        return $this->mediaService->quickUpdate($request, $media);
+    }
+
     public function delete(string $slug)
     {
         $media = $this->mediaService->find($slug);

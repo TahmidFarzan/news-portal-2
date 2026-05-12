@@ -118,6 +118,7 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [MediaController::class, 'delete'])->name('delete');
 
         Route::post('quick-save', [MediaController::class, 'quickSave'])->name('quick-save');
+        Route::patch('quick-update/{slug}', [MediaController::class, 'quickUpdate'])->name('quick-update');
 
     });
 

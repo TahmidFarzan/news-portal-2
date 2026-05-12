@@ -133,6 +133,56 @@ class MediaService
         }
     }
 
+    public function quickUpdate(MediaQuickRequest $request, Media $media)
+    {
+        DB::beginTransaction();
+
+        try {
+            $media->setCustomProperty(
+                'caption',
+                $request->input('caption', $media->getCustomProperty('caption'))
+            );
+
+            $media->setCustomProperty(
+                'alt',
+                $request->input('alt', $media->getCustomProperty('alt'))
+            );
+            $media->save();
+            
+            DB::commit();
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.media.update.success'),
+                'media'   => (object) [
+                    'id'                => $media->id,
+                    'name'              => $media->name,
+                    'uuid'              => $media->uuid,
+                    'mime_type'         => $media->mime_type,
+                    'custom_properties' => $media->custom_properties,
+                    'caption'           => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
+                    'alt'               => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
+                    'media_type'        => $media->getTypeFromMime(),
+                    'original_url'      => $media->original_url,
+                    'media_url'         => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
+                    'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
+                ],
+            ];
+        } catch (Exception $ex) {
+            DB::RollBack();
+
+            Log::error('Media update failed.', [
+                'exception'    => $ex,
+                'request_data' => $request->input(),
+            ]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.media.update.failed'),
+            ];
+        }
+    }
+
     public static function copyOrUpdateMediaByMediaIds(array $mediaIds, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): array
     {
         $replacementPairs = [];

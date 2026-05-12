@@ -18,6 +18,11 @@ return [
             'success' => 'Media saved successfully.',
             'failed'  => 'Failed to save media.',
         ],
+
+        'update'   => [
+            'success' => 'Media update successfully.',
+            'failed'  => 'Failed to update media.',
+        ],
     ],
 
     'user'         => [

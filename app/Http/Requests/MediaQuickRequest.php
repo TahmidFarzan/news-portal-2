@@ -15,7 +15,7 @@ class MediaQuickRequest extends FormRequest
         return [
             "alt"     => ["nullable", "string"],
             "caption" => ["nullable", "string"],
-            "media"   => ["required"],
+            "media"   => ["nullable", "string"],
         ];
     }
 
@@ -24,7 +24,19 @@ class MediaQuickRequest extends FormRequest
         return [
             'alt.string'     => __('form-requests.media_quick.alt.string'),
             'caption.string' => __('form-requests.media_quick.caption.string'),
-            'media.required' => __('form-requests.media_quick.media.required'),
         ];
+    }
+
+    public function withValidator($validator): void
+    {
+        $isUpdate = $this->route('slug') ? true : false;
+
+        $validator->after(function ($validator) use ($isUpdate) {
+            $data = $validator->getData();
+
+            if (! $isUpdate && ! $this->hasFile('media')) {
+                $validator->errors()->add('media', __("form-requests.media_quick.media.required"));
+            }
+        });
     }
 }
