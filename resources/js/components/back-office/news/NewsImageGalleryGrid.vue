@@ -1,5 +1,5 @@
 <script setup>
-import NewsGalleryImageCard from './NewsGalleryImageCard.vue'
+import NewsImageGalleryImageCard from './NewsImageGalleryImageCard.vue'
 
 import { ref, computed, onBeforeUnmount } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
@@ -315,7 +315,7 @@ onBeforeUnmount(() => {
                     {{ index + 1 }}
                 </div>
 
-                <NewsGalleryImageCard :news="news" :gallery-image="galleryImage" :sequence-mode="isSequenceMode"
+                <NewsImageGalleryImageCard :news="news" :gallery-image="galleryImage" :sequence-mode="isSequenceMode"
                     @refresh-gallery-images="refreshGalleryImages" />
             </div>
         </div>

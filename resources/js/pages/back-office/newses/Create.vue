@@ -4,7 +4,7 @@ import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/Infi
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
 import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
-import NewsGalleryGrid from '@/components/back-office/news/NewsGalleryGrid.vue'
+import NewsImageGalleryGrid from '@/components/back-office/news/NewsImageGalleryGrid.vue'
 import NewsImageGalleryDraftGrid from '@/components/back-office/news/NewsImageGalleryDraftGrid.vue'
 
 import { computed, onMounted, nextTick, inject, watch, ref } from 'vue'
@@ -515,7 +515,7 @@ onMounted(async () => {
                         <div v-if="isImageGallery" class="md:col-span-2">
                             <div v-if="isUpdate">
                                 <div class="border border-gray-200 rounded-lg p-4 space-y-3">
-                                    <NewsGalleryGrid :news="news" />
+                                    <NewsImageGalleryGrid :news="news" />
                                 </div>
                             </div>
 
