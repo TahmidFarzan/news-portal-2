@@ -108,6 +108,7 @@ class MediaService
                     'id'                => $media->id,
                     'name'              => $media->name,
                     'uuid'              => $media->uuid,
+                    'slug'              => $media->slug,
                     'mime_type'         => $media->mime_type,
                     'custom_properties' => $media->custom_properties,
                     'caption'           => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
@@ -148,7 +149,7 @@ class MediaService
                 $request->input('alt', $media->getCustomProperty('alt'))
             );
             $media->save();
-            
+
             DB::commit();
 
             return [
@@ -158,6 +159,7 @@ class MediaService
                     'id'                => $media->id,
                     'name'              => $media->name,
                     'uuid'              => $media->uuid,
+                    'slug'              => $media->slug,
                     'mime_type'         => $media->mime_type,
                     'custom_properties' => $media->custom_properties,
                     'caption'           => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
