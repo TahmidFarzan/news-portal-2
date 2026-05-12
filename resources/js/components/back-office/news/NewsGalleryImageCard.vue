@@ -1,9 +1,13 @@
 <script setup>
+import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
+
 import { ref } from 'vue'
 import { router as inertiaJsRoute, useForm } from '@inertiajs/vue3'
-import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faTrash, faPen, faEye, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
+import { faTrash, faPen, faEye, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons'
+
+FontAwesomeLibrary.add(faTrash, faPen, faEye, faSpinner, faXmark)
 
 const { news, galleryImage } = defineProps({
     news: {
@@ -15,6 +19,8 @@ const { news, galleryImage } = defineProps({
         required: true,
     },
 })
+
+const emit = defineEmits(['refresh-gallery-images'])
 
 const selectedGalleryImage = ref(null)
 
@@ -37,21 +43,27 @@ const openUpdateModal = () => {
     showUpdateModal.value = true
 }
 
-const closeUpdateModal = () => {
-    if (updateForm.processing) return
+const closeUpdateModal = (force = false) => {
+    if (updateForm.processing && !force) return
 
     showUpdateModal.value = false
 }
 
 const updateGalleryImage = () => {
+    if (updateForm.processing) return
+
     updateForm.patch(
         route('back-office.newses.gallery-images.update', {
             slug: news?.slug,
             mediaSlug: galleryImage?.slug,
         }),
         {
+            preserveScroll: true,
+            preserveState: true,
+
             onSuccess: () => {
-                showUpdateModal.value = false
+                closeUpdateModal(true)
+                emit('refresh-gallery-images')
             },
         }
     )
@@ -61,13 +73,15 @@ const openDeleteModal = () => {
     showDeleteModal.value = true
 }
 
-const closeDeleteModal = () => {
-    if (deleteProcessing.value) return
+const closeDeleteModal = (force = false) => {
+    if (deleteProcessing.value && !force) return
 
     showDeleteModal.value = false
 }
 
 const deleteGalleryImage = () => {
+    if (deleteProcessing.value) return
+
     deleteProcessing.value = true
 
     inertiaJsRoute.patch(
@@ -77,9 +91,16 @@ const deleteGalleryImage = () => {
         }),
         {},
         {
+            preserveScroll: true,
+            preserveState: true,
+
+            onSuccess: () => {
+                closeDeleteModal(true)
+                emit('refresh-gallery-images')
+            },
+
             onFinish: () => {
                 deleteProcessing.value = false
-                showDeleteModal.value = false
             },
         }
     )
@@ -87,12 +108,12 @@ const deleteGalleryImage = () => {
 </script>
 
 <template>
-    <div class="relative border border-gray-100 rounded-lg overflow-hidden">
+    <div class="relative overflow-hidden rounded-lg border border-gray-100">
         <button type="button" class="block w-full cursor-pointer" @click="selectedGalleryImage = galleryImage">
             <MediaRenderer v-if="galleryImage" :media="galleryImage" :mediaClass="'w-full h-40 object-cover'" />
         </button>
 
-        <div class="absolute top-2 right-2 flex items-center gap-2">
+        <div class="absolute right-2 top-2 flex items-center gap-2">
             <button type="button"
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow hover:bg-gray-100"
                 @click.stop="selectedGalleryImage = galleryImage">
@@ -118,17 +139,18 @@ const deleteGalleryImage = () => {
         leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
         <div v-if="selectedGalleryImage" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
             @click.self="selectedGalleryImage = null">
-            <div class="relative max-w-5xl w-full">
-                <button type="button" class="absolute -top-10 right-0 text-white text-3xl"
+            <div class="relative w-full max-w-5xl">
+                <button type="button"
+                    class="absolute -top-10 right-0 flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/10"
                     @click="selectedGalleryImage = null">
-                    &times;
+                    <FontAwesomeIcon :icon="faXmark" class="text-2xl" />
                 </button>
 
                 <img :src="selectedGalleryImage.original_url || selectedGalleryImage.media_url"
                     :alt="selectedGalleryImage.custom_properties?.alt || selectedGalleryImage.name"
-                    class="w-full max-h-[85vh] object-contain rounded-lg" />
+                    class="max-h-[85vh] w-full rounded-lg object-contain">
 
-                <div v-if="selectedGalleryImage.custom_properties?.caption" class="mt-3 text-center text-white text-sm">
+                <div v-if="selectedGalleryImage.custom_properties?.caption" class="mt-3 text-center text-sm text-white">
                     {{ selectedGalleryImage.custom_properties.caption }}
                 </div>
             </div>
@@ -141,9 +163,17 @@ const deleteGalleryImage = () => {
         <div v-if="showUpdateModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
             @click.self="closeUpdateModal">
             <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    Update Gallery Image
-                </h3>
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">
+                        Update Gallery Image
+                    </h3>
+
+                    <button type="button"
+                        class="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                        @click="closeUpdateModal">
+                        <FontAwesomeIcon :icon="faXmark" />
+                    </button>
+                </div>
 
                 <div class="mt-4 space-y-4">
                     <div>
@@ -152,7 +182,7 @@ const deleteGalleryImage = () => {
                         </label>
 
                         <input v-model="updateForm.caption" type="text"
-                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
 
                         <p v-if="updateForm.errors.caption" class="mt-1 text-xs text-red-600">
                             {{ updateForm.errors.caption }}
@@ -165,7 +195,7 @@ const deleteGalleryImage = () => {
                         </label>
 
                         <input v-model="updateForm.alt" type="text"
-                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
 
                         <p v-if="updateForm.errors.alt" class="mt-1 text-xs text-red-600">
                             {{ updateForm.errors.alt }}
@@ -178,7 +208,7 @@ const deleteGalleryImage = () => {
                         </label>
 
                         <input v-model="updateForm.order_column" type="number" min="1"
-                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
 
                         <p v-if="updateForm.errors.order_column" class="mt-1 text-xs text-red-600">
                             {{ updateForm.errors.order_column }}
@@ -210,9 +240,17 @@ const deleteGalleryImage = () => {
         <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
             @click.self="closeDeleteModal">
             <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    Delete Gallery Image?
-                </h3>
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">
+                        Delete Gallery Image?
+                    </h3>
+
+                    <button type="button"
+                        class="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                        @click="closeDeleteModal">
+                        <FontAwesomeIcon :icon="faXmark" />
+                    </button>
+                </div>
 
                 <p class="mt-2 text-sm text-gray-600">
                     Are you sure you want to delete this gallery image?

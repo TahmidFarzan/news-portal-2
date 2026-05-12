@@ -128,7 +128,7 @@ class NewsController extends Controller
 
         $result = $this->newsService->galleryImageSave($request, $news);
 
-        return to_route('back-office.newses.index')->with('flash_message', [
+        return back()->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -143,7 +143,7 @@ class NewsController extends Controller
 
         $result = $this->newsService->galleryImageUpdate($request, $news, $media);
 
-        return to_route('back-office.newses.index')->with('flash_message', [
+        return back()->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -158,7 +158,7 @@ class NewsController extends Controller
 
         $result = $this->newsService->galleryImageDelete($news, $media);
 
-        return to_route('back-office.newses.index')->with('flash_message', [
+        return back()->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);

@@ -2,7 +2,7 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
-import NewsGalleryImageCard from '@/components/back-office/news/NewsGalleryImageCard.vue'
+import NewsGalleryGrid from '@/components/back-office/news/NewsGalleryGrid.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -194,14 +194,7 @@ onMounted(async () => {
 
             <div v-if="checkIsImageGallery(news.news_type)" class="grid grid-cols-1 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-3">
-                    <div class="text-gray-500 mb-1">
-                        Gallery Images
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        <NewsGalleryImageCard v-for="galleryImage in news.gallery_images" :key="galleryImage.id"
-                            :news="news" :gallery-image="galleryImage" />
-                    </div>
+                    <NewsGalleryGrid :news="news" />
                 </div>
             </div>
 
