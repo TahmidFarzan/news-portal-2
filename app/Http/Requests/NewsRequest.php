@@ -40,6 +40,7 @@ class NewsRequest extends FormRequest
             "content_shoulder"                  => ["nullable"],
             "body"                              => ["nullable"],
             "video_url"                         => ["nullable", "url"],
+                        "gallery_image_ids"                            => ["nullable"],
 
             "tag_ids"                           => ["nullable"],
             "contributor_ids"                   => ["nullable"],
@@ -105,7 +106,9 @@ class NewsRequest extends FormRequest
     {
         $news = News::where('slug', $this->route('slug'))->first();
 
-        $validator->after(function ($validator) use ($news) {
+        $isUpdate = $this->route('slug') ? true : false;
+
+        $validator->after(function ($validator) use ($news, $isUpdate) {
             $data = $validator->getData();
 
             if (! empty($data['title'])) {
@@ -187,6 +190,14 @@ class NewsRequest extends FormRequest
                     $validator->errors()->add(
                         'video_url',
                         __("form-requests.news.video_url.required")
+                    );
+                }
+
+
+                if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) && empty($data["gallery_image_ids"]) && !$isUpdate) {
+                    $validator->errors()->add(
+                        'gallery_image_ids',
+                        __("form-requests.news.gallery_image_ids.required")
                     );
                 }
             }

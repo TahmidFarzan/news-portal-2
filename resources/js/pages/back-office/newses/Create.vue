@@ -5,6 +5,7 @@ import MultiSelectTaggableSelect from '@/components/common/multi-select/Taggable
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
 import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
 import NewsGalleryGrid from '@/components/back-office/news/NewsGalleryGrid.vue'
+import NewsImageGalleryDraftGrid from '@/components/back-office/news/NewsImageGalleryDraftGrid.vue'
 
 import { computed, onMounted, nextTick, inject, watch, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -50,6 +51,8 @@ const saveForm = useForm({
     brief: news?.brief || null,
     body: news?.body || null,
     video_url: news?.video_url || null,
+
+    gallery_image_ids: null,
 
     upload_feature_image_mobile: null,
     upload_feature_image: null,
@@ -170,6 +173,15 @@ function validateForm() {
         valid = false
     }
 
+    if (
+        (!saveForm.gallery_image_ids || saveForm.gallery_image_ids.length === 0)
+        && !isUpdate.value
+        && isImageGallery.value
+    ) {
+        saveForm.setError('gallery_image_ids', 'Gallery image is required.')
+        valid = false
+    }
+
     if (!news?.feature_image) {
         if (saveForm.upload_feature_image) {
             if (saveForm.selected_feature_image_url) {
@@ -198,6 +210,11 @@ function validateForm() {
             saveForm.setError('upload_feature_image_mobile', 'Please use either selected feature image or uploaded feature image, not both.')
             valid = false
         }
+    }
+
+    if (!saveForm.feature_image_caption) {
+        saveForm.setError('feature_image_caption', 'Feature image caption is required.')
+        valid = false
     }
 
 
@@ -288,6 +305,7 @@ watch(
     async (news_type_id) => {
         isStory.value = false
         isVideo.value = false
+        isImageGallery.value = false
 
         if (!news_type_id) return
 
@@ -429,7 +447,7 @@ onMounted(async () => {
                                 Sub Title
                             </label>
 
-                            <input v-model="saveForm.title"
+                            <input v-model="saveForm.sub_title"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.sub_title ? 'border-red-500' : 'border-gray-300'" />
 
@@ -504,11 +522,11 @@ onMounted(async () => {
                             <div v-else class="border border-gray-200 rounded-lg p-4 space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium mb-1">
-                                        Gallery Images
+                                        Gallery Images <span class="text-red-500">*</span>
                                     </label>
 
-                                    <p class="text-red-500 text-sm mt-1">
-                                        Please create photo gallery first then add image. After that publish it.
+                                    <p class="text-sm mt-1">
+                                        <NewsImageGalleryDraftGrid :form="saveForm" fieldName="gallery_image_ids" />
                                     </p>
                                 </div>
                             </div>

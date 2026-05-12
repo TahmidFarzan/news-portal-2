@@ -181,6 +181,10 @@ class NewsService
             self::featureImageMobileSave($request, $news);
             self::syncContentMedia($request, $news);
 
+            if($isNew){
+                self::syncGalleryImagesMedia($request, $news);
+            }
+
             self::syncAttributesJob($request, $news);
 
             return [
@@ -616,6 +620,31 @@ class NewsService
             $news->save();
         }
     }
+
+    private function syncGalleryImagesMedia(NewsRequest $request, News $news): void
+    {
+        if (! $request->filled('gallery_image_ids')) {
+            return;
+        }
+
+        $galleryImageIds = explode(',', $request->input('gallery_image_ids'));
+        $galleryImageIds = array_filter($galleryImageIds);
+
+        if (! count($galleryImageIds)) {
+            return;
+        }
+
+        $replacementPairs = $this->mediaService->copyOrUpdateMediaByMediaIds(
+            $galleryImageIds,
+            $news,
+            MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE
+        );
+
+        if (! $replacementPairs) {
+            return;
+        }
+    }
+
 
     private function calculateGalleryImageOrderColumn(NewsGalleryImageRequest $request, News $news, $media): int
     {

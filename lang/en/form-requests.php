@@ -386,6 +386,10 @@ return [
             "select_one" => 'Select one out of [Upload or select from media]',
         ],
 
+        'gallery_image_ids'                 => [
+            'required' => 'Gallery Image is required.',
+        ],
+
         'gallery_image'                     => [
             'order_column' => [
                 'integer' => 'Gallery image order column must be a valid number.',
