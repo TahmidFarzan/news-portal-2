@@ -15,7 +15,7 @@ class MediaQuickRequest extends FormRequest
         return [
             "alt"     => ["nullable", "string"],
             "caption" => ["nullable", "string"],
-            "media"   => ["nullable", "string"],
+            "media"   => ["nullable"],
         ];
     }
 
