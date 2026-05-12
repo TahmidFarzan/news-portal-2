@@ -174,6 +174,12 @@ return [
             'failed'  => 'Failed to update news gallery image.',
 
         ],
+
+        'gallery_image_sequence_update' => [
+            'success' => 'News gallery image sequence update successfully.',
+            'failed'  => 'Failed to update news gallery image sequence.',
+
+        ],
     ],
 
     // Auth

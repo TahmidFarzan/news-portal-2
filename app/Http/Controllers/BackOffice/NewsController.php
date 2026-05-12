@@ -3,6 +3,7 @@ namespace App\Http\Controllers\BackOffice;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NewsGalleryImageRequest;
+use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
 use App\Http\Requests\NewsRequest;
 use App\Services\BackOffice\NewsService;
 use Illuminate\Http\Request;
@@ -142,6 +143,19 @@ class NewsController extends Controller
         Gate::authorize('update', $news);
 
         $result = $this->newsService->galleryImageUpdate($request, $news, $media);
+
+        return back()->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+    public function galleryImageUpdateSequence(NewsGalleryImageSequenceUpdateRequest $request, string $slug)
+    {
+        $news = $this->newsService->find($slug);
+
+        Gate::authorize('update', $news);
+
+        $result = $this->newsService->galleryImageUpdateSequence($news, $request);
 
         return back()->with('flash_message', [
             'message' => $result['message'],

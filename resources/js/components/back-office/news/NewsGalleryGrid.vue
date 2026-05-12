@@ -5,9 +5,15 @@ import { ref, computed, onBeforeUnmount } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons'
+import {
+    faPlus,
+    faSpinner,
+    faXmark,
+    faGripVertical,
+    faFloppyDisk,
+} from '@fortawesome/free-solid-svg-icons'
 
-FontAwesomeLibrary.add(faPlus, faSpinner, faXmark)
+FontAwesomeLibrary.add(faPlus, faSpinner, faXmark, faGripVertical, faFloppyDisk)
 
 const { news } = defineProps({
     news: {
@@ -20,12 +26,40 @@ const showCreateModal = ref(false)
 const imagePreviewUrl = ref(null)
 const imageInputRef = ref(null)
 
-const galleryImages = computed(() => news?.gallery_images || [])
+const isSequenceMode = ref(false)
+const sequenceImages = ref([])
+const draggedIndex = ref(null)
+const dragOverIndex = ref(null)
+
+const galleryImages = computed(() => {
+    if (!news?.gallery_images) {
+        return []
+    }
+
+    const images = Array.isArray(news.gallery_images)
+        ? news.gallery_images
+        : Object.values(news.gallery_images)
+
+    return images
+        .filter(Boolean)
+        .sort((firstImage, secondImage) => {
+            return Number(firstImage?.order_column || 0) - Number(secondImage?.order_column || 0)
+        })
+})
+
+const displayGalleryImages = computed(() => {
+    return isSequenceMode.value ? sequenceImages.value : galleryImages.value
+})
 
 const saveForm = useForm({
     image: null,
     caption: '',
     alt: '',
+    order_column: '',
+})
+
+const sequenceForm = useForm({
+    sequence: [],
 })
 
 function openModal() {
@@ -117,6 +151,98 @@ function handleSave() {
     )
 }
 
+function enableSequenceMode() {
+    if (saveForm.processing || sequenceForm.processing) return
+
+    sequenceImages.value = galleryImages.value.map((galleryImage) => ({ ...galleryImage }))
+    sequenceForm.sequence = []
+    sequenceForm.clearErrors()
+    draggedIndex.value = null
+    dragOverIndex.value = null
+    isSequenceMode.value = true
+}
+
+function cancelSequenceMode() {
+    if (sequenceForm.processing) return
+
+    sequenceImages.value = []
+    sequenceForm.sequence = []
+    sequenceForm.clearErrors()
+    draggedIndex.value = null
+    dragOverIndex.value = null
+    isSequenceMode.value = false
+}
+
+function handleDragStart(index) {
+    if (!isSequenceMode.value) return
+
+    draggedIndex.value = index
+}
+
+function handleDragEnter(index) {
+    if (!isSequenceMode.value) return
+
+    dragOverIndex.value = index
+}
+
+function handleDrop(dropIndex) {
+    if (!isSequenceMode.value) return
+
+    if (draggedIndex.value === null || draggedIndex.value === dropIndex) {
+        draggedIndex.value = null
+        dragOverIndex.value = null
+        return
+    }
+
+    const images = [...sequenceImages.value]
+    const draggedImage = images.splice(draggedIndex.value, 1)[0]
+
+    images.splice(dropIndex, 0, draggedImage)
+
+    sequenceImages.value = images
+    draggedIndex.value = null
+    dragOverIndex.value = null
+}
+
+function handleDragEnd() {
+    draggedIndex.value = null
+    dragOverIndex.value = null
+}
+
+function saveSequence() {
+    if (sequenceForm.processing) return
+
+    sequenceForm.clearErrors()
+    sequenceForm.sequence = sequenceImages.value.map((galleryImage) => galleryImage.id)
+
+    if (!sequenceForm.sequence.length) {
+        sequenceForm.setError('sequence', 'Sequence is required.')
+        return
+    }
+
+    sequenceForm.patch(
+        route('back-office.newses.gallery-images.update-sequence', {
+            slug: news?.slug,
+        }),
+        {
+            preserveScroll: true,
+            preserveState: true,
+
+            onSuccess: () => {
+                isSequenceMode.value = false
+                sequenceImages.value = []
+                sequenceForm.sequence = []
+                refreshGalleryImages()
+            },
+
+            onError: (errors) => {
+                sequenceForm.clearErrors()
+                sequenceForm.setError(errors)
+            },
+        }
+    )
+}
+
 onBeforeUnmount(() => {
     clearImagePreview()
 })
@@ -129,17 +255,69 @@ onBeforeUnmount(() => {
                 Gallery Images
             </div>
 
-            <button type="button"
-                class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
-                @click="openModal">
-                <FontAwesomeIcon icon="plus" />
-                Add Image
-            </button>
+            <div class="flex items-center gap-2">
+                <template v-if="!isSequenceMode">
+                    <button type="button"
+                        class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                        @click="openModal">
+                        <FontAwesomeIcon icon="plus" />
+                        Add Image
+                    </button>
+
+                    <button type="button"
+                        class="inline-flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        :disabled="saveForm.processing || sequenceForm.processing" @click="enableSequenceMode">
+                        <FontAwesomeIcon icon="grip-vertical" />
+                        Drag & Sequence
+                    </button>
+                </template>
+
+                <template v-else>
+                    <button type="button"
+                        class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
+                        :disabled="sequenceForm.processing" @click="cancelSequenceMode">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                        class="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+                        :disabled="sequenceForm.processing" @click="saveSequence">
+                        <FontAwesomeIcon v-if="sequenceForm.processing" icon="spinner" class="animate-spin" />
+
+                        <FontAwesomeIcon v-else icon="floppy-disk" />
+
+                        <span>
+                            {{ sequenceForm.processing ? 'Saving...' : 'Save Sequence' }}
+                        </span>
+                    </button>
+                </template>
+            </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            <NewsGalleryImageCard v-for="galleryImage in galleryImages" :key="galleryImage.id" :news="news"
-                :gallery-image="galleryImage" @refresh-gallery-images="refreshGalleryImages" />
+        <div v-if="sequenceForm.errors.sequence" class="mb-3 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            {{ sequenceForm.errors.sequence }}
+        </div>
+
+        <div v-if="!displayGalleryImages.length"
+            class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
+            No gallery images found.
+        </div>
+
+        <div v-else class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            <div v-for="(galleryImage, index) in displayGalleryImages" :key="galleryImage.id" class="relative" :class="[
+                isSequenceMode ? 'cursor-move' : '',
+                dragOverIndex === index ? 'rounded-lg ring-2 ring-blue-500' : '',
+            ]" :draggable="isSequenceMode" @dragstart="handleDragStart(index)"
+                @dragenter.prevent="handleDragEnter(index)" @dragover.prevent @drop.prevent="handleDrop(index)"
+                @dragend="handleDragEnd">
+                <div v-if="isSequenceMode"
+                    class="absolute left-2 top-2 z-10 flex h-8 min-w-8 items-center justify-center rounded-full bg-black/70 px-2 text-xs font-semibold text-white">
+                    {{ index + 1 }}
+                </div>
+
+                <NewsGalleryImageCard :news="news" :gallery-image="galleryImage" :sequence-mode="isSequenceMode"
+                    @refresh-gallery-images="refreshGalleryImages" />
+            </div>
         </div>
 
         <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0"
@@ -186,6 +364,20 @@ onBeforeUnmount(() => {
 
                                         <img :src="imagePreviewUrl" alt="Selected image preview"
                                             class="h-28 w-28 rounded-lg border object-cover">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="mb-1 block text-sm font-medium text-gray-700">
+                                        Order column
+                                    </label>
+
+                                    <input v-model="saveForm.order_column" type="number"
+                                        class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                        placeholder="Enter order column" min="0" step="1">
+
+                                    <div v-if="saveForm.errors.order_column" class="mt-1 text-sm text-red-600">
+                                        {{ saveForm.errors.order_column }}
                                     </div>
                                 </div>
 

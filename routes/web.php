@@ -224,8 +224,10 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
 
         Route::prefix('{slug}/gallery-images')->name('gallery-images.')->group(function () {
             Route::post('save', [NewsController::class, 'galleryImageSave'])->name('save');
+            Route::patch('update-sequence', [NewsController::class, 'galleryImageUpdateSequence'])->name('update-sequence');
             Route::patch('update/{mediaSlug}', [NewsController::class, 'galleryImageUpdate'])->name('update');
             Route::delete('delete/{mediaSlug}', [NewsController::class, 'galleryImageDelete'])->name('delete');
+
         });
     });
 

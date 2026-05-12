@@ -5,6 +5,7 @@ use App\Helpers\MediaHelper;
 use App\Helpers\NewsHelper;
 use App\Helpers\TagifyHelper;
 use App\Http\Requests\NewsGalleryImageRequest;
+use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
 use App\Http\Requests\NewsRequest;
 use App\Jobs\NewsContributorSyncJob;
 use App\Jobs\NewsTagSyncJob;
@@ -288,18 +289,18 @@ class NewsService
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.news.gallery_image_update.success'),
+                'message' => __('status-messages.news.gallery_image_save.success'),
             ];
         } catch (Exception $exception) {
             DB::rollBack();
 
-            Log::error('News image gallery update failed.', [
+            Log::error('News image gallery save failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.news.gallery_image_update.failed'),
+                'message' => __('status-messages.news.gallery_image_save.failed'),
             ];
         }
     }
@@ -339,6 +340,77 @@ class NewsService
             return [
                 'status'  => 'error',
                 'message' => __('status-messages.news.gallery_image_update.failed'),
+            ];
+        }
+    }
+
+    public function galleryImageUpdateSequence(News $news, NewsGalleryImageSequenceUpdateRequest $request): array
+    {
+        DB::beginTransaction();
+
+        try {
+            $sequence = $request->input("sequence");
+
+            $mediaRoleParameters = [
+                'role' => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+            ];
+
+            $collectionName = $news->media_collection_name;
+
+            $galleryImages = $news->getMedia($collectionName, $mediaRoleParameters)
+                ->values();
+
+            $galleryImagesById = $galleryImages->keyBy('id');
+
+            $currentIds = $galleryImages
+                ->pluck('id')
+                ->map(fn($id) => (int) $id)
+                ->sort()
+                ->values();
+
+            $sequenceIds = collect($sequence)
+                ->map(fn($id) => (int) $id)
+                ->values();
+
+            $sortedSequenceIds = $sequenceIds
+                ->sort()
+                ->values();
+
+            if ($currentIds->count() !== $sequenceIds->count() || $currentIds->toArray() !== $sortedSequenceIds->toArray()) {
+                throw new Exception('Invalid gallery image sequence.');
+            }
+
+            $sequenceIds->each(function (int $mediaId, int $index) use ($galleryImagesById) {
+                $galleryImage = $galleryImagesById->get($mediaId);
+
+                if (! $galleryImage instanceof Media) {
+                    throw new Exception('Invalid gallery image id.');
+                }
+
+                $orderColumn = $index + 1;
+
+                if ((int) $galleryImage->order_column !== $orderColumn) {
+                    $galleryImage->order_column = $orderColumn;
+                    $galleryImage->save();
+                }
+            });
+
+            DB::commit();
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.news.gallery_image_sequence_update.success'),
+            ];
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            Log::error('News gallery image sequence update failed.', [
+                'exception' => $exception,
+            ]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.news.gallery_image_sequence_update.failed'),
             ];
         }
     }

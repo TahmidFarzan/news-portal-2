@@ -404,8 +404,17 @@ return [
 
             'image'        => [
                 'required' => 'Image is required.',
-                'image' => 'Image must be image.',
-                'mimes' => 'Image must have valid mimes[image/*].',
+                'image'    => 'Image must be image.',
+                'mimes'    => 'Image must have valid mimes[image/*].',
+            ],
+        ],
+
+        'gallery_image_sequence'            => [
+            'sequence' => [
+                'required' => 'Sequence is required.',
+                'min'      => 'Sequence must be at lease 1.',
+                'integer'  => 'Sequence must be integer.',
+                'distinct' => 'Sequence must be distinct. No duplicate allow.',
             ],
         ],
 

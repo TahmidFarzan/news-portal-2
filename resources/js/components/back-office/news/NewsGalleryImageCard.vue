@@ -9,7 +9,7 @@ import { faTrash, faPen, faEye, faSpinner, faXmark } from '@fortawesome/free-sol
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faSpinner, faXmark)
 
-const { news, galleryImage } = defineProps({
+const { news, galleryImage, sequenceMode } = defineProps({
     news: {
         type: Object,
         required: true,
@@ -17,6 +17,10 @@ const { news, galleryImage } = defineProps({
     galleryImage: {
         type: Object,
         required: true,
+    },
+    sequenceMode: {
+        type: Boolean,
+        default: false,
     },
 })
 
@@ -109,24 +113,25 @@ const deleteGalleryImage = () => {
 
 <template>
     <div class="relative overflow-hidden rounded-lg border border-gray-100">
-        <button type="button" class="block w-full cursor-pointer" @click="selectedGalleryImage = galleryImage">
+        <button type="button" class="block w-full" :class="sequenceMode ? 'cursor-move' : 'cursor-pointer'"
+            @click="!sequenceMode && (selectedGalleryImage = galleryImage)">
             <MediaRenderer v-if="galleryImage" :media="galleryImage" :mediaClass="'w-full h-40 object-cover'" />
         </button>
 
         <div class="absolute right-2 top-2 flex items-center gap-2">
-            <button type="button"
+            <button v-if="!sequenceMode" type="button"
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow hover:bg-gray-100"
                 @click.stop="selectedGalleryImage = galleryImage">
                 <FontAwesomeIcon :icon="faEye" />
             </button>
 
-            <button type="button"
+            <button v-if="!sequenceMode" type="button"
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white shadow hover:bg-yellow-600 disabled:opacity-60"
                 :disabled="updateForm.processing" @click.stop="openUpdateModal">
                 <FontAwesomeIcon :icon="faPen" />
             </button>
 
-            <button type="button"
+            <button v-if="!sequenceMode" type="button"
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-red-600 text-white shadow hover:bg-red-700 disabled:opacity-60"
                 :disabled="deleteProcessing" @click.stop="openDeleteModal">
                 <FontAwesomeIcon :icon="faTrash" />
