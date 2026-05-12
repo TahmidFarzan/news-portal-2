@@ -31,6 +31,8 @@ class NewsRequest extends FormRequest
             "news_type_id"                      => ["required"],
             "language_id"                       => ["required"],
             "category_id"                       => ["required"],
+            "event_id"                          => ["nullable"],
+            "location_id"                       => ["nullable"],
 
             "title"                             => ["required"],
             "brief"                             => ["required"],
@@ -38,9 +40,6 @@ class NewsRequest extends FormRequest
             "content_shoulder"                  => ["nullable"],
             "body"                              => ["nullable"],
             "video_url"                         => ["nullable", "url"],
-
-            "event_id"                          => ["nullable"],
-            "location_id"                       => ["nullable"],
 
             "tag_ids"                           => ["nullable"],
             "contributor_ids"                   => ["nullable"],

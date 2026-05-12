@@ -4,8 +4,7 @@ import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/Infi
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
 import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
-import { isStory as checkIsStory, isVideo as checkIsVideo } from '@/composables/useNews'
-import { fetchFromApi } from '@/composables/useSystemApi'
+import NewsGalleryGrid from '@/components/back-office/news/NewsGalleryGrid.vue'
 
 import { computed, onMounted, nextTick, inject, watch, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -13,6 +12,9 @@ import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
+
+import { isStory as checkIsStory, isVideo as checkIsVideo, isImageGallery as checkIsImageGallery } from '@/composables/useNews'
+import { fetchFromApi } from '@/composables/useSystemApi'
 
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
@@ -26,6 +28,7 @@ const { news } = defineProps({
 
 const isStory = ref(false)
 const isVideo = ref(false)
+const isImageGallery = ref(false)
 
 const showLocation = ref(false)
 
@@ -63,7 +66,6 @@ const saveForm = useForm({
     seo_brief: news?.seo_brief || null,
     seo_title: news?.seo_title || null,
     seo_keywords: news?.seo_keywords ? news?.seo_keywords.split(',') : [],
-
 
     editor_media_ids: null
 })
@@ -198,6 +200,7 @@ function validateForm() {
         }
     }
 
+
     return valid
 }
 
@@ -235,6 +238,7 @@ function handleSave() {
         saveForm.post(route('back-office.newses.save'), requestConfig)
     }
 }
+
 
 watch(
     () => saveForm.category_id,
@@ -294,6 +298,7 @@ watch(
 
             isStory.value = checkIsStory(newsType)
             isVideo.value = checkIsVideo(newsType)
+            isImageGallery.value = checkIsImageGallery(newsType)
         } catch (error) {
             console.error(error)
         }
@@ -316,6 +321,8 @@ onMounted(async () => {
 
     pageReady.value = true
 })
+
+
 </script>
 
 <template>
@@ -339,7 +346,8 @@ onMounted(async () => {
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="news_type_id"
                                 :selectedItem="news.news_type" :apiUrl="route('search.news-types')"
-                                :error="saveForm.errors.news_type_id" :multiple="false" placeholder="Select news type" />
+                                :error="saveForm.errors.news_type_id" :multiple="false"
+                                placeholder="Select news type" />
                             <p v-if="saveForm.errors.news_type_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.news_type_id }}
                             </p>
@@ -486,6 +494,25 @@ onMounted(async () => {
                             </p>
                         </div>
 
+                        <div v-if="isImageGallery" class="md:col-span-2">
+                            <div v-if="isUpdate">
+                                <div class="border border-gray-200 rounded-lg p-4 space-y-3">
+                                    <NewsGalleryGrid :news="news" />
+                                </div>
+                            </div>
+
+                            <div v-else class="border border-gray-200 rounded-lg p-4 space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">
+                                        Gallery Images
+                                    </label>
+
+                                    <p class="text-red-500 text-sm mt-1">
+                                        Please create photo gallery first then add image. After that publish it.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
