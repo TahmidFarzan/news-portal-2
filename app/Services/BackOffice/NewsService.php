@@ -180,7 +180,7 @@ class NewsService
             self::featureImageSave($request, $news);
             self::featureImageMobileSave($request, $news);
 
-            if(NewsHelper::NEWS_TYPE_STORY == $news->newsType->name){
+            if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
                 self::syncContentMedia($request, $news);
             }
 
@@ -190,7 +190,9 @@ class NewsService
 
             self::syncAttributesJob($request, $news);
 
-            self::newsTypeMediaSync($news);
+            if(!$isNew){
+                self::syncMediaAccrodingNewsTypeChangeOnNewsUpdate($news);
+            }
 
             return [
                 'status'  => 'success',
@@ -461,96 +463,6 @@ class NewsService
         }
     }
 
-    private function featureImageSave(NewsRequest $request, News $news): void
-    {
-        if ($request->hasFile('upload_feature_image')) {
-            self::deleteExtingFeatureImage($news);
-
-            $featureImage = $request->file('upload_feature_image');
-
-            if ($featureImage) {
-                $extension = $featureImage->getClientOriginalExtension();
-                $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
-
-                $news->addMedia($featureImage)
-                    ->usingFileName($fileName)
-                    ->usingName($news->title)
-                    ->withCustomProperties(
-                        [
-                            "alt"     => $news->title,
-                            "caption" => $request->input('feature_image_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
-                        ]
-                    )
-                    ->toMediaCollection($news->media_collection_name);
-            }
-        }
-
-        if ($request->input('selected_feature_image_url')) {
-            self::deleteExtingFeatureImage($news);
-            $mediaFeatureImageUrl       = $request->input('selected_feature_image_url');
-            $mediaFeatureImageExtension = pathinfo($mediaFeatureImageUrl, PATHINFO_EXTENSION);
-            $mediaFeatureImageFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageExtension, 200);
-
-            $news->addMediaFromUrl($mediaFeatureImageUrl)
-                ->usingName($news->title)
-                ->usingFileName($mediaFeatureImageFileName)
-                ->withCustomProperties(
-                    [
-                        'caption' => $request->input('feature_image_caption'),
-                        'alt'     => $news->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
-                    ]
-                )
-                ->toMediaCollection($news->media_collection_name);
-        }
-    }
-
-    private function featureImageMobileSave(NewsRequest $request, News $news): void
-    {
-        if ($request->hasFile('upload_feature_image_mobile')) {
-            self::deleteExtingFeatureImageMobile($news);
-
-            $featureImageMobile = $request->file('upload_feature_image_mobile');
-
-            if ($featureImageMobile) {
-                $extension = $featureImageMobile->getClientOriginalExtension();
-                $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
-
-                $news->addMedia($featureImageMobile)
-                    ->usingFileName($fileName)
-                    ->usingName($news->title)
-                    ->withCustomProperties(
-                        [
-                            "alt"     => $news->title,
-                            "caption" => $news->input('feature_image_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
-                        ]
-                    )
-                    ->toMediaCollection($news->media_collection_name);
-            }
-        }
-
-        if ($request->input('selected_feature_image_mobile_url')) {
-            self::deleteExtingFeatureImageMobile($news);
-            $mediaFeatureImageMobileUrl       = $request->input('selected_feature_image_mobile_url');
-            $mediaFeatureImageMobileExtension = pathinfo($mediaFeatureImageMobileUrl, PATHINFO_EXTENSION);
-            $mediaFeatureImageMobileFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageMobileExtension, 200);
-
-            $news->addMediaFromUrl($mediaFeatureImageMobileUrl)
-                ->usingName($news->title)
-                ->usingFileName($mediaFeatureImageMobileFileName)
-                ->withCustomProperties(
-                    [
-                        'caption' => $news->input('upload_feature_image_mobile_caption'),
-                        'alt'     => $news->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
-                    ]
-                )
-                ->toMediaCollection($news->media_collection_name);
-        }
-    }
-
     private function syncContentMedia(NewsRequest $request, News $news): void
     {
         if (! $request->filled('editor_media_ids')) {
@@ -650,7 +562,7 @@ class NewsService
         }
     }
 
-    private function newsTypeMediaSync(News $news): void
+    private function syncMediaAccrodingNewsTypeChangeOnNewsUpdate(News $news): void
     {
         $collectionName = $news->media_collection_name;
 
@@ -677,6 +589,96 @@ class NewsService
             if ($news->hasMedia($collectionName, $newsContentMediaRoleParameters)) {
                 $news->getMedia($collectionName, $newsContentMediaRoleParameters)->delete();
             }
+        }
+    }
+
+    private function featureImageSave(NewsRequest $request, News $news): void
+    {
+        if ($request->hasFile('upload_feature_image')) {
+            self::deleteExtingFeatureImage($news);
+
+            $featureImage = $request->file('upload_feature_image');
+
+            if ($featureImage) {
+                $extension = $featureImage->getClientOriginalExtension();
+                $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
+
+                $news->addMedia($featureImage)
+                    ->usingFileName($fileName)
+                    ->usingName($news->title)
+                    ->withCustomProperties(
+                        [
+                            "alt"     => $news->title,
+                            "caption" => $request->input('feature_image_caption'),
+                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
+                        ]
+                    )
+                    ->toMediaCollection($news->media_collection_name);
+            }
+        }
+
+        if ($request->input('selected_feature_image_url')) {
+            self::deleteExtingFeatureImage($news);
+            $mediaFeatureImageUrl       = $request->input('selected_feature_image_url');
+            $mediaFeatureImageExtension = pathinfo($mediaFeatureImageUrl, PATHINFO_EXTENSION);
+            $mediaFeatureImageFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageExtension, 200);
+
+            $news->addMediaFromUrl($mediaFeatureImageUrl)
+                ->usingName($news->title)
+                ->usingFileName($mediaFeatureImageFileName)
+                ->withCustomProperties(
+                    [
+                        'caption' => $request->input('feature_image_caption'),
+                        'alt'     => $news->title,
+                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
+                    ]
+                )
+                ->toMediaCollection($news->media_collection_name);
+        }
+    }
+
+    private function featureImageMobileSave(NewsRequest $request, News $news): void
+    {
+        if ($request->hasFile('upload_feature_image_mobile')) {
+            self::deleteExtingFeatureImageMobile($news);
+
+            $featureImageMobile = $request->file('upload_feature_image_mobile');
+
+            if ($featureImageMobile) {
+                $extension = $featureImageMobile->getClientOriginalExtension();
+                $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
+
+                $news->addMedia($featureImageMobile)
+                    ->usingFileName($fileName)
+                    ->usingName($news->title)
+                    ->withCustomProperties(
+                        [
+                            "alt"     => $news->title,
+                            "caption" => $news->input('feature_image_caption'),
+                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+                        ]
+                    )
+                    ->toMediaCollection($news->media_collection_name);
+            }
+        }
+
+        if ($request->input('selected_feature_image_mobile_url')) {
+            self::deleteExtingFeatureImageMobile($news);
+            $mediaFeatureImageMobileUrl       = $request->input('selected_feature_image_mobile_url');
+            $mediaFeatureImageMobileExtension = pathinfo($mediaFeatureImageMobileUrl, PATHINFO_EXTENSION);
+            $mediaFeatureImageMobileFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageMobileExtension, 200);
+
+            $news->addMediaFromUrl($mediaFeatureImageMobileUrl)
+                ->usingName($news->title)
+                ->usingFileName($mediaFeatureImageMobileFileName)
+                ->withCustomProperties(
+                    [
+                        'caption' => $news->input('upload_feature_image_mobile_caption'),
+                        'alt'     => $news->title,
+                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+                    ]
+                )
+                ->toMediaCollection($news->media_collection_name);
         }
     }
 
