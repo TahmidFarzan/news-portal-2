@@ -160,7 +160,7 @@ class NewsService
             $news->content_shoulder = $request->input('content_shoulder');
             $news->brief            = $request->input('brief');
             $news->body             = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('body') : null;
-            $news->video_url        = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('video_url') : null;
+            $news->video_url        = (NewsHelper::NEWS_TYPE_VIDEO == $newsType->name) ? $request->input('video_url') : null;
 
             $news->writer = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('writer') : null;
             $news->source = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('source') : null;
@@ -179,13 +179,18 @@ class NewsService
 
             self::featureImageSave($request, $news);
             self::featureImageMobileSave($request, $news);
-            self::syncContentMedia($request, $news);
 
-            if($isNew){
+            if(NewsHelper::NEWS_TYPE_STORY == $news->newsType->name){
+                self::syncContentMedia($request, $news);
+            }
+
+            if ($isNew && (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name)) {
                 self::syncGalleryImagesMedia($request, $news);
             }
 
             self::syncAttributesJob($request, $news);
+
+            self::newsTypeMediaSync($news);
 
             return [
                 'status'  => 'success',
@@ -645,6 +650,35 @@ class NewsService
         }
     }
 
+    private function newsTypeMediaSync(News $news): void
+    {
+        $collectionName = $news->media_collection_name;
+
+        $newsGalleryImageMediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE];
+        $newsContentMediaRoleParameters      = ["role" => MediaHelper::MEDIA_ROLE_NEWS_CONTENT_IMAGE];
+
+        if ($news->newsType->name == NewsHelper::NEWS_TYPE_STORY) {
+            if ($news->hasMedia($collectionName, $newsGalleryImageMediaRoleParameters)) {
+                $news->getMedia($collectionName, $newsGalleryImageMediaRoleParameters)->delete();
+            }
+        }
+
+        if ($news->newsType->name == NewsHelper::NEWS_TYPE_VIDEO) {
+            if ($news->hasMedia($collectionName, $newsGalleryImageMediaRoleParameters)) {
+                $news->getMedia($collectionName, $newsGalleryImageMediaRoleParameters)->delete();
+            }
+
+            if ($news->hasMedia($collectionName, $newsContentMediaRoleParameters)) {
+                $news->getMedia($collectionName, $newsContentMediaRoleParameters)->delete();
+            }
+        }
+
+        if ($news->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
+            if ($news->hasMedia($collectionName, $newsContentMediaRoleParameters)) {
+                $news->getMedia($collectionName, $newsContentMediaRoleParameters)->delete();
+            }
+        }
+    }
 
     private function calculateGalleryImageOrderColumn(NewsGalleryImageRequest $request, News $news, $media): int
     {
