@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Language;
-use App\Models\Location;
 use App\Models\News;
 use App\Models\NewsType;
 use App\Models\Tag;
@@ -23,6 +22,7 @@ class NewsSeeder extends Seeder
             DB::statement('PRAGMA foreign_keys = OFF;');
             News::query()->delete();
             DB::statement("DELETE FROM sqlite_sequence WHERE name='newses'");
+            DB::statement("DELETE FROM sqlite_sequence WHERE name='news_placements'");
             DB::statement('PRAGMA foreign_keys = ON;');
         }
 
@@ -39,22 +39,17 @@ class NewsSeeder extends Seeder
         $languages = Language::get();
 
         foreach ($languages as $language) {
-            $parentCategoryIds          = Category::where("language_id", $language->id)->inRandomOrder()->whereNull("parent_id")->pluck("id");
-            $randomNonParentCategoryIds = Category::where("language_id", $language->id)->inRandomOrder()->whereNotNull("parent_id")->limit(7)->pluck("id");
+            $categories = Category::with("locations")->where("language_id", $language->id)->get();
+            $event      = Event::where("language_id", $language->id)->where("is_current", true)->inRandomOrder()->first() ?? null;
 
-            $categoryIds = $parentCategoryIds
-                ->merge($randomNonParentCategoryIds)
-                ->unique()
-                ->values();
-
-            $categories     = Category::where("language_id", $language->id)->inRandomOrder()->whereIn("id", $categoryIds)->get();
-            $tagIds         = $this->getRandomTagIds($language) ?? [];
-            $event          = $this->getRandomEvent($language) ?? null;
-            $contributorIds = $this->getRandomContributorIds($language) ?? [];
-            $randomNewses   = $this->randomNewses($language, 13);
+            $randomNewses = $this->randomNewses($language, 13);
 
             foreach ($categories as $category) {
-                $location = $this->getRandomLocation($language, $category) ?? null;
+                $location = null;
+
+                if ($category->locations()->exists()) {
+                    $location = $category->locations()->where('language_id', $language->id)->inRandomOrder()->first() ?? null;
+                }
 
                 $newsType = NewsType::inRandomOrder()->first();
 
@@ -76,98 +71,50 @@ class NewsSeeder extends Seeder
                         "body"             => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? $randomNews->body : null,
                         "video_url"        => ($newsType->name == NewsHelper::NEWS_TYPE_VIDEO) ? $randomNews->video_url : null,
 
+                        'writer'           => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? "News Desk" : null,
+                        'source'           => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? null : null,
+
                         "seo_title"        => $randomNews->title,
                         "seo_brief"        => $randomNews->brief,
                         "seo_keywords"     => $randomNews->seo_keywords,
 
                         "is_published"     => true,
-                        'writer'           => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? "News Desk" : null,
-                        'source'           => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? null : null,
+
                         "created_at"       => $randomNews->published_at,
                         "updated_at"       => $randomNews->published_at,
                     ])->create();
+                }
+            }
+        }
 
-                    if ($tagIds) {
-                        $news->tags()->sync($tagIds);
-                    }
+        $newses = News::orderBy("id", "desc")->get();
+        foreach ($newses as $index => $news) {
+            $language = $news->language;
 
-                    if ($contributorIds && $index > 5 && $index < 10) {
-                        $news->contributors()->sync($contributorIds);
-                    }
+            $tagIds         = Tag::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
+            $contributorIds = Contributor::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
 
-                    $this->newsAddFeatureImage($news);
-                    $this->newsAddFeatureImageMobile($news);
+            if ($tagIds) {
+                $news->tags()->sync($tagIds);
+            }
 
-                    if ($newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
-                        for ($i = 0; $i < 13; $i++) {
-                            $this->newsAddGalleryImage($news, $i);
-                        }
-                    }
+            if ( ($news->newsType->name == NewsHelper::NEWS_TYPE_STORY) && $contributorIds && $index < 10) {
+                $news->contributors()->sync($contributorIds);
+            }
+
+            $this->newsAddFeatureImage($news);
+            $this->newsAddFeatureImageMobile($news);
+
+            if ($news->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
+                for ($i = 0; $i < 5; $i++) {
+                    $this->newsAddGalleryImage($news, $i);
                 }
             }
 
         }
     }
 
-    private function getRandomLocation(Language $language, ?Category $category): ?Location
-    {
-        if (! $category) {
-            return null;
-        }
-
-        $allowed = match ($language->code) {
-            SystemHelper::DEFAULT_LANGUAGE_CODE     => "National",
-            SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE => "জাতীয়",
-            default                                 => null,
-        };
-
-        if ($category->name !== $allowed) {
-            return null;
-        }
-
-        return Location::where("language_id", $language->id)->where("category_id", $category->id)->inRandomOrder()->first() ?? null;
-    }
-
-    private function getRandomTagIds(Language $language, $rangeStart = 3)
-    {
-        $rangeEnd = $rangeStart + 2;
-
-        if ($rangeEnd % 2 === 0) {
-            $rangeEnd++;
-        }
-
-        $limit = rand($rangeStart, $rangeEnd);
-
-        if ($limit % 2 === 0) {
-            $limit++;
-        }
-
-        return Tag::where("language_id", $language->id)->inRandomOrder()->limit($limit)->pluck('id') ?? [];
-    }
-
-    private function getRandomEvent(Language $language): ?Event
-    {
-        return Event::where("language_id", $language->id)->where("is_current", true)->inRandomOrder()->first() ?? null;
-    }
-
-    private function getRandomContributorIds(Language $language, int $rangeStart = 3)
-    {
-        $rangeEnd = $rangeStart + 2;
-
-        if ($rangeEnd % 2 === 0) {
-            $rangeEnd++;
-        }
-
-        $limit = rand($rangeStart, $rangeEnd);
-
-        if ($limit % 2 === 0) {
-            $limit++;
-        }
-
-        Contributor::where("language_id", $language->id)->inRandomOrder()->limit($limit)->pluck('id') ?? [];
-    }
-
-    private function newsAddFeatureImage(News $news)
+    private function newsAddFeatureImage(News $news): void
     {
         $imageUrl = asset("uploads/images/news/feature-image.png");
 
@@ -186,7 +133,7 @@ class NewsSeeder extends Seeder
             ->toMediaCollection($news->media_collection_name);
     }
 
-    private function newsAddFeatureImageMobile(News $news)
+    private function newsAddFeatureImageMobile(News $news): void
     {
         $imageUrl = asset("uploads/images/news/feature-image-mobile.png");
 
@@ -205,7 +152,7 @@ class NewsSeeder extends Seeder
             ->toMediaCollection($news->media_collection_name);
     }
 
-    private function newsAddGalleryImage(News $news, int|string $imageSequence)
+    private function newsAddGalleryImage(News $news, int | string $imageSequence): void
     {
         $imageUrl = asset("uploads/images/news/news-gallery-image-3_2.png");
 
