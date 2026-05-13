@@ -180,17 +180,24 @@ class NewsService
             self::featureImageSave($request, $news);
             self::featureImageMobileSave($request, $news);
 
+            self::syncAttributesJob($request, $news);
+
             if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
                 self::syncContentMedia($request, $news);
             }
 
-            if ($isNew && (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name)) {
-                self::syncGalleryImagesMedia($request, $news);
+            if ($isNew) {
+
+                if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
+                    self::syncGalleryImagesMedia($request, $news);
+                }
+
+                if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
+                    self::syncGalleryImagesMedia($request, $news);
+                }
             }
 
-            self::syncAttributesJob($request, $news);
-
-            if(!$isNew){
+            if (! $isNew) {
                 self::syncMediaAccrodingNewsTypeChangeOnNewsUpdate($news);
             }
 
