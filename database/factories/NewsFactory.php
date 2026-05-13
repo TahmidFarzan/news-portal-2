@@ -18,6 +18,11 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class NewsFactory extends Factory
 {
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();

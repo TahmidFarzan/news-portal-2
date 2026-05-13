@@ -4,11 +4,15 @@ namespace Database\Factories;
 use App\Helpers\SystemHelper;
 use App\Helpers\UserHelper;
 use App\Models\Language;
+use App\Models\Location;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+/**
+ * @extends Factory<Location>
+ */
 class LocationFactory extends Factory
 {
     /**

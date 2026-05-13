@@ -2,11 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Models\Trend;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Helpers\UserHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Trend>
+ */
 class TrendFactory extends Factory
 {
     /**

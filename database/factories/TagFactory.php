@@ -4,12 +4,21 @@ namespace Database\Factories;
 use App\Helpers\SystemHelper;
 use App\Helpers\UserHelper;
 use App\Models\Language;
+use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Tag>
+ */
 class TagFactory extends Factory
 {
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
