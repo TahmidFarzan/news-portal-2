@@ -7,8 +7,11 @@ class NewsHelper
     public const NEWS_TYPE_VIDEO         = 'Video';
     public const NEWS_TYPE_IMAGE_GALLERY = 'Image Gallery';
 
+    public const PAGE_HOME = 'Home';
+    public const PAGE_CATEGORY = 'Category';
+
     public const PAGE_SECTION_LEAD_NEWS    = 'Lead News';
-    public const PAGE_SECTION_SPACIAL_NEWS = 'Spacial News';
+    public const PAGE_SECTION_CATEGORY_NEWS = 'Category News';
 
     public static function newsTypes()
     {
@@ -23,7 +26,15 @@ class NewsHelper
     {
         return collect([
             (object) ['id' => self::PAGE_SECTION_LEAD_NEWS, 'name' => 'Lead News'],
-            (object) ['id' => self::PAGE_SECTION_SPACIAL_NEWS, 'name' => 'Spacial News'],
+            (object) ['id' => self::PAGE_SECTION_CATEGORY_NEWS, 'name' => 'Category News'],
+        ]);
+    }
+
+    public static function pages()
+    {
+        return collect([
+            (object) ['id' => self::PAGE_HOME, 'name' => 'Home'],
+            (object) ['id' => self::PAGE_CATEGORY, 'name' => 'Category'],
         ]);
     }
 }

@@ -9,8 +9,10 @@ use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\News;
+use App\Models\NewsPlacement;
 use App\Models\NewsType;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -21,6 +23,7 @@ class NewsSeeder extends Seeder
         if (config('database.default') === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
             News::query()->delete();
+            NewsPlacement::query()->delete();
             DB::statement("DELETE FROM sqlite_sequence WHERE name='newses'");
             DB::statement("DELETE FROM sqlite_sequence WHERE name='news_placements'");
             DB::statement('PRAGMA foreign_keys = ON;');
@@ -29,88 +32,83 @@ class NewsSeeder extends Seeder
         if (config('database.default') === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             News::truncate();
+            NewsPlacement::truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
 
         if (in_array(config('database.default'), ['pgsql', 'sqlsrv'])) {
             News::truncate();
+            NewsPlacement::truncate();
         }
 
         $languages = Language::get();
+        $newsTypes = NewsType::query()->get();
 
         foreach ($languages as $language) {
-            $categories = Category::with("locations")->where("language_id", $language->id)->get();
-            $event      = Event::where("language_id", $language->id)->where("is_current", true)->inRandomOrder()->first() ?? null;
+            $event = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
             $randomNewses = $this->randomNewses($language, 13);
 
-            foreach ($categories as $category) {
-                $location = null;
-
-                if ($category->locations()->exists()) {
-                    $location = $category->locations()->where('language_id', $language->id)->inRandomOrder()->first() ?? null;
-                }
-
-                $newsType = NewsType::inRandomOrder()->first();
-
-                foreach ($randomNewses as $index => $randomNews) {
-
-                    $news = News::factory()->state([
-                        "news_type_id"     => $newsType->id,
-                        "language_id"      => $language?->id ?? "1",
-                        "category_id"      => $category?->id ?? "1",
-
-                        "event_id"         => $event?->id ?? null,
-                        "location_id"      => $location?->id ?? null,
-
-                        "title"            => $randomNews->title,
-                        "sub_title"        => $randomNews->sub_title,
-                        "content_shoulder" => $randomNews->content_shoulder,
-                        "brief"            => $randomNews->brief,
-
-                        "body"             => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? $randomNews->body : null,
-                        "video_url"        => ($newsType->name == NewsHelper::NEWS_TYPE_VIDEO) ? $randomNews->video_url : null,
-
-                        'writer'           => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? "News Desk" : null,
-                        'source'           => ($newsType->name == NewsHelper::NEWS_TYPE_STORY) ? null : null,
-
-                        "seo_title"        => $randomNews->title,
-                        "seo_brief"        => $randomNews->brief,
-                        "seo_keywords"     => $randomNews->seo_keywords,
-
-                        "is_published"     => true,
-
-                        "created_at"       => $randomNews->published_at,
-                        "updated_at"       => $randomNews->published_at,
-                    ])->create();
-                }
-            }
-        }
-
-        $newses = News::orderBy("id", "desc")->get();
-        foreach ($newses as $index => $news) {
-            $language = $news->language;
-
-            $tagIds         = Tag::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
-            $contributorIds = Contributor::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
-
-            if ($tagIds) {
-                $news->tags()->sync($tagIds);
+            if ($randomNewses->isEmpty() || $newsTypes->isEmpty()) {
+                continue;
             }
 
-            if ( ($news->newsType->name == NewsHelper::NEWS_TYPE_STORY) && $contributorIds && $index < 10) {
-                $news->contributors()->sync($contributorIds);
-            }
+            Category::query()->where('language_id', $language->id)
+                ->with([
+                    'locations' => function ($locationQuery) use ($language) {
+                        $locationQuery->where('language_id', $language->id);
+                    },
+                ])
+                ->chunkById(50, function ($categories) use ($language, $event, $randomNewses, $newsTypes) {
+                    foreach ($categories as $category) {
+                        $location = $category->locations->isNotEmpty()
+                            ? $category->locations->random()
+                            : null;
 
-            $this->newsAddFeatureImage($news);
-            $this->newsAddFeatureImageMobile($news);
+                        $newsType = $newsTypes->random();
 
-            if ($news->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
-                for ($i = 0; $i < 5; $i++) {
-                    $this->newsAddGalleryImage($news, $i);
-                }
-            }
+                        $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
+                        $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
 
+                        $states = $randomNewses->map(function ($randomNews) use ($language, $category, $event, $location, $newsType, $isStory, $isVideo) {
+                            return [
+                                'news_type_id'     => $newsType->id,
+                                'language_id'      => $language->id,
+                                'category_id'      => $category->id,
+
+                                'event_id'         => $event?->id,
+                                'location_id'      => $location?->id,
+
+                                'title'            => $randomNews->title,
+                                'sub_title'        => $randomNews->sub_title,
+                                'content_shoulder' => $randomNews->content_shoulder,
+                                'brief'            => $randomNews->brief,
+
+                                'body'             => $isStory ? $randomNews->body : null,
+                                'video_url'        => $isVideo ? $randomNews->video_url : null,
+
+                                'writer'           => $isStory ? 'News Desk' : null,
+                                'source'           => null,
+
+                                'seo_title'        => $randomNews->title,
+                                'seo_brief'        => $randomNews->brief,
+                                'seo_keywords'     => $randomNews->seo_keywords,
+
+                                'is_published'     => true,
+
+                                'created_at'       => $randomNews->published_at,
+                                'updated_at'       => $randomNews->published_at,
+                            ];
+                        })->all();
+
+                        $createdNewses = News::factory()
+                            ->count(count($states))
+                            ->state(new Sequence(...$states))
+                            ->create();
+
+                        $this->processCreatedNewses($createdNewses);
+                    }
+                });
         }
     }
 
@@ -173,6 +171,81 @@ class NewsSeeder extends Seeder
                 ]
             )
             ->toMediaCollection($news->media_collection_name);
+    }
+
+    private function setNewsPlacements(News $news): void
+    {
+        $pages        = NewsHelper::pages();
+        $pageSections = NewsHelper::pageSections();
+        foreach ($pages as $page) {
+            foreach ($pageSections as $pageSection) {
+                $position   = null;
+                $categoryId = null;
+
+                $pageId        = $page->id;
+                $pageSectionId = $pageSection->id;
+
+                $skipPageSection = ($pageId == NewsHelper::PAGE_CATEGORY) && ($pageSectionId == NewsHelper::PAGE_SECTION_CATEGORY_NEWS);
+                $skipCategory    = ($pageId == NewsHelper::PAGE_HOME) && ($pageSectionId == NewsHelper::PAGE_SECTION_LEAD_NEWS);
+
+                $lastPosition = NewsPlacement::query()
+                    ->where('page', $pageId)
+                    ->when(! $skipPageSection, function ($query) use ($pageSectionId) {
+                        $query->where('page_section', $pageSectionId);
+                    })
+                    ->when(! $skipCategory, function ($query) use ($news) {
+                        $query->where('category_id', $news->category_id);
+                    })
+                    ->max('position');
+
+                $position = $lastPosition ? $lastPosition + 1 : 1;
+
+                if (! $skipCategory) {
+                    $categoryId = $news->category_id;
+                }
+
+                NewsPlacement::factory()->state([
+                    "news_id"      => $news?->id,
+                    "page"         => $pageId,
+                    "page_section" => $pageSectionId,
+                    "category_id"  => $categoryId,
+                    "position"     => $position,
+
+                    "created_at"   => now(),
+                    "updated_at"   => now(),
+                ])->create();
+
+            }
+        }
+    }
+
+    private function processCreatedNewses($newses): void
+    {
+        foreach ($newses as $index => $news) {
+            $language = $news->language;
+
+            $tagIds         = Tag::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
+            $contributorIds = Contributor::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
+
+            if ($tagIds) {
+                $news->tags()->sync($tagIds);
+            }
+
+            if (($news->newsType->name == NewsHelper::NEWS_TYPE_STORY) && $contributorIds && $index < 10) {
+                $news->contributors()->sync($contributorIds);
+            }
+
+            $this->newsAddFeatureImage($news);
+            $this->newsAddFeatureImageMobile($news);
+
+            if ($news->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
+                for ($i = 0; $i < 5; $i++) {
+                    $this->newsAddGalleryImage($news, $i);
+                }
+            }
+
+            $this->setNewsPlacements($news);
+        }
     }
 
     private function randomNewses(Language $language, int $limit = 10)
