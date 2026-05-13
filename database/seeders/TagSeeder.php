@@ -11,20 +11,20 @@ class TagSeeder extends Seeder
 {
     public function run(): void
     {
-        if (env("DB_CONNECTION") === 'sqlite') {
+        if (config('database.default') === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
             Tag::query()->delete();
             DB::statement("DELETE FROM sqlite_sequence WHERE name='tags'");
             DB::statement('PRAGMA foreign_keys = ON;');
         }
 
-        if (env("DB_CONNECTION") === 'mysql') {
+        if (config('database.default') === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             Tag::truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
 
-        if (in_array(env("DB_CONNECTION"), ['pgsql', 'sqlsrv'])) {
+        if (in_array(config('database.default'), ['pgsql', 'sqlsrv'])) {
             Tag::truncate();
         }
 
