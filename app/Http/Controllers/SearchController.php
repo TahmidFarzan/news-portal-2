@@ -9,164 +9,212 @@ class SearchController extends Controller
 {
     protected SearchService $searchService;
 
-    private int $longCacheLimitSecond         = 3600;
-    private int $frequentlyCacheLimitInSecond = 60;
-
     public function __construct(SearchService $searchService)
     {
         $this->searchService = $searchService;
         $this->middleware(['auth', 'verified'])->only(['user']);
     }
 
-    private function jsonResponse(mixed $data, int $seconds): JsonResponse
-    {
-        return response()
-            ->json($data)
-            ->header('Cache-Control', 'public, max-age=' . $seconds);
-    }
-
     public function perPages(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->perPages($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->perPages($request)
+        );
     }
 
     public function genders(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->genders($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->genders($request)
+        );
     }
 
     public function religions(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->religions($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->religions($request)
+        );
     }
 
     public function maritalStatuses(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->maritalStatuses($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->maritalStatuses($request)
+        );
     }
 
     public function activityLogEvents(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->activityLogEvents($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->activityLogEvents($request)
+        );
     }
 
     public function activityLogSubjectTypes(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->activityLogSubjectTypes($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->activityLogSubjectTypes($request)
+        );
     }
 
-    public function pageSections(Request $request)
+    public function pageSections(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->pageSections($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->pageSections($request)
+        );
     }
 
-    public function users(Request $request)
+    public function users(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->users($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->users($request)
+        );
     }
 
-    public function userRoles(Request $request)
+    public function userRoles(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->userRoles($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->userRoles($request)
+        );
     }
 
-    public function newsTypes(Request $request)
+    public function newsTypes(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->newsTypes($request), $this->longCacheLimitSecond);
+        return response()->json(
+            $this->searchService->newsTypes($request)
+        );
     }
 
-    public function languages(Request $request)
+    public function languages(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->languages($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->languages($request)
+        );
     }
 
-    public function categories(Request $request)
+    public function categories(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->categories($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->categories($request)
+        );
     }
 
-    public function tags(Request $request)
+    public function tags(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->tags($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->tags($request)
+        );
     }
 
-    public function locations(Request $request)
+    public function locations(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->locations($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->locations($request)
+        );
     }
 
-    public function events(Request $request)
+    public function events(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->events($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->events($request)
+        );
     }
 
-    public function contributors(Request $request)
+    public function contributors(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->contributors($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->contributors($request)
+        );
     }
 
-    public function newses(Request $request)
+    public function newses(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->newses($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->newses($request)
+        );
     }
 
-    public function medias(Request $request)
+    public function medias(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->medias($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->medias($request)
+        );
     }
 
-    public function categoryTree(Request $request)
+    public function categoryTree(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->categoryTree($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->categoryTree($request)
+        );
     }
 
-    public function locationTree(Request $request)
+    public function locationTree(Request $request): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->locationTree($request), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->locationTree($request)
+        );
     }
 
-    public function user(string | int $slugOrId)
+    public function user(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->user($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->user($slugOrId)
+        );
     }
 
-    public function userRole(string | int $slugOrId)
+    public function userRole(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->userRole($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->userRole($slugOrId)
+        );
     }
 
-    public function newsType(string | int $slugOrId)
+    public function newsType(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->newsType($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->newsType($slugOrId)
+        );
     }
 
-    public function language(string | int $slugOrId)
+    public function language(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->language($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->language($slugOrId)
+        );
     }
 
-    public function category(string | int $slugOrId)
+    public function category(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->category($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->category($slugOrId)
+        );
     }
 
-    public function tag(string | int $slugOrId)
+    public function tag(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->tag($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->tag($slugOrId)
+        );
     }
 
-    public function location(string | int $slugOrId)
+    public function location(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->location($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->location($slugOrId)
+        );
     }
 
-    public function event(string | int $slugOrId)
+    public function event(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->event($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->event($slugOrId)
+        );
     }
 
-    public function contributor(string | int $slugOrId)
+    public function contributor(string|int $slugOrId): JsonResponse
     {
-        return $this->jsonResponse($this->searchService->contributor($slugOrId), $this->frequentlyCacheLimitInSecond);
+        return response()->json(
+            $this->searchService->contributor($slugOrId)
+        );
     }
 }

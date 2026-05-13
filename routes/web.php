@@ -69,45 +69,49 @@ Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(functi
 });
 
 Route::prefix('search')->name('search.')->group(function () {
-    // System
-    Route::get('per-pages', [SearchController::class, 'perPages'])->name('per-pages');
-    Route::get('genders', [SearchController::class, 'genders'])->name('genders');
-    Route::get('religions', [SearchController::class, 'religions'])->name('religions');
-    Route::get('marital-statuses', [SearchController::class, 'maritalStatuses'])->name('marital-statuses');
 
-    Route::get('activity-log-events', [SearchController::class, 'activityLogEvents'])->name('activity-log-events');
-    Route::get('activity-log-subject-types', [SearchController::class, 'activityLogSubjectTypes'])->name('activity-log-subject-types');
+    Route::middleware('cache.headers:public;max_age=3600')->group(function () {
+        Route::get('per-pages', [SearchController::class, 'perPages'])->name('per-pages');
+        Route::get('genders', [SearchController::class, 'genders'])->name('genders');
+        Route::get('religions', [SearchController::class, 'religions'])->name('religions');
+        Route::get('marital-statuses', [SearchController::class, 'maritalStatuses'])->name('marital-statuses');
 
-    Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
-    Route::get('page-sections', [SearchController::class, 'pageSections'])->name('page-sections');
+        Route::get('activity-log-events', [SearchController::class, 'activityLogEvents'])->name('activity-log-events');
+        Route::get('activity-log-subject-types', [SearchController::class, 'activityLogSubjectTypes'])->name('activity-log-subject-types');
 
-    // Model || DB
-    Route::get('users', [SearchController::class, 'users'])->name('users');
-    Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
-    Route::get('languages', [SearchController::class, 'languages'])->name('languages');
-    Route::get('categories', [SearchController::class, 'categories'])->name('categories');
-    Route::get('tags', [SearchController::class, 'tags'])->name('tags');
-    Route::get('locations', [SearchController::class, 'locations'])->name('locations');
-    Route::get('events', [SearchController::class, 'events'])->name('events');
-    Route::get('contributors', [SearchController::class, 'contributors'])->name('contributors');
+        Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
+        Route::get('page-sections', [SearchController::class, 'pageSections'])->name('page-sections');
 
-    Route::get('medias', [SearchController::class, 'medias'])->name('medias');
+        Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
+    });
 
-    Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
-    Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
+    Route::middleware('cache.headers:public;max_age=60')->group(function () {
+        Route::get('users', [SearchController::class, 'users'])->name('users');
+        Route::get('languages', [SearchController::class, 'languages'])->name('languages');
+        Route::get('categories', [SearchController::class, 'categories'])->name('categories');
+        Route::get('tags', [SearchController::class, 'tags'])->name('tags');
+        Route::get('locations', [SearchController::class, 'locations'])->name('locations');
+        Route::get('events', [SearchController::class, 'events'])->name('events');
+        Route::get('contributors', [SearchController::class, 'contributors'])->name('contributors');
 
-    Route::get('newses', [SearchController::class, 'newses'])->name('newses');
+        Route::get('medias', [SearchController::class, 'medias'])->name('medias');
 
-    Route::get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
-    Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
-    Route::get('news-type/{slugOrId}', [SearchController::class, 'newsType'])->name('news-type');
-    Route::get('language/{slugOrId}', [SearchController::class, 'language'])->name('language');
-    Route::get('category/{slugOrId}', [SearchController::class, 'category'])->name('category');
-    Route::get('tag/{slugOrId}', [SearchController::class, 'tag'])->name('tag');
-    Route::get('location/{slugOrId}', [SearchController::class, 'location'])->name('location');
-    Route::get('event/{slugOrId}', [SearchController::class, 'event'])->name('event');
-    Route::get('contributor/{slugOrId}', [SearchController::class, 'contributor'])->name('contributor');
+        Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
+        Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
 
+        Route::get('newses', [SearchController::class, 'newses'])->name('newses');
+
+        Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
+        Route::get('news-type/{slugOrId}', [SearchController::class, 'newsType'])->name('news-type');
+        Route::get('language/{slugOrId}', [SearchController::class, 'language'])->name('language');
+        Route::get('category/{slugOrId}', [SearchController::class, 'category'])->name('category');
+        Route::get('tag/{slugOrId}', [SearchController::class, 'tag'])->name('tag');
+        Route::get('location/{slugOrId}', [SearchController::class, 'location'])->name('location');
+        Route::get('event/{slugOrId}', [SearchController::class, 'event'])->name('event');
+        Route::get('contributor/{slugOrId}', [SearchController::class, 'contributor'])->name('contributor');
+    });
+
+    Route::middleware(['cache.headers:private;max_age=60'])->get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
 });
 
 Route::prefix('back-office')->name('back-office.')->group(function () {
