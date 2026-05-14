@@ -47,9 +47,9 @@ class NewsSeeder extends Seeder
         foreach ($languages as $language) {
             $event = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
-            $getRandomDemoNewses = $this->getRandomDemoNewses($language, 13);
+            $randomDemoNewses = $this->getNewsesByLanguageFromStaticData($language, 13);
 
-            if ($getRandomDemoNewses->isEmpty() || $newsTypes->isEmpty()) {
+            if ($randomDemoNewses->isEmpty() || $newsTypes->isEmpty()) {
                 continue;
             }
 
@@ -59,7 +59,7 @@ class NewsSeeder extends Seeder
                         $locationQuery->where('language_id', $language->id);
                     },
                 ])
-                ->chunkById(50, function ($categories) use ($language, $event, $getRandomDemoNewses, $newsTypes) {
+                ->chunkById(50, function ($categories) use ($language, $event, $randomDemoNewses, $newsTypes) {
                     foreach ($categories as $category) {
                         $location = $category->locations->isNotEmpty()
                             ? $category->locations->random()
@@ -70,7 +70,7 @@ class NewsSeeder extends Seeder
                         $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
                         $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
 
-                        $states = $getRandomDemoNewses->map(function ($randomNews) use ($language, $category, $event, $location, $newsType, $isStory, $isVideo) {
+                        $states = $randomDemoNewses->map(function ($randomNews) use ($language, $category, $event, $location, $newsType, $isStory, $isVideo) {
                             return [
                                 'news_type_id'     => $newsType->id,
                                 'language_id'      => $language->id,
@@ -234,14 +234,14 @@ class NewsSeeder extends Seeder
 
         foreach ($newsPlacements as $newsPlacement) {
             NewsPlacement::factory()->state([
-                 ...$newsPlacement,
+                ...$newsPlacement,
             ]);
         }
     }
 
-    private function getRandomDemoNewses(Language $language, int $limit = 10)
+    private function getNewsesByLanguageFromStaticData(Language $language, int $limit = 10)
     {
-        $newsGroup = $this->getDemoNewsesByLanguageGroups()
+        $newsGroup = $this->getNewsesByLanguageGroupsFromStaticData()
             ->firstWhere('language_code', $language->code);
 
         if (! $newsGroup) {
@@ -254,7 +254,7 @@ class NewsSeeder extends Seeder
             ->values();
     }
 
-    private function getDemoNewsesByLanguageGroups()
+    private function getNewsesByLanguageGroupsFromStaticData()
     {
         return collect([
             (object) [
