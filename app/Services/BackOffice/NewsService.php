@@ -9,6 +9,7 @@ use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
 use App\Http\Requests\NewsRequest;
 use App\Jobs\NewsContributorSyncJob;
 use App\Jobs\NewsTagSyncJob;
+use App\Models\Category;
 use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\NewsType;
@@ -47,6 +48,76 @@ class NewsService
     public function findNewsTypeById(string $id): NewsType
     {
         return NewsType::where('id', $id)->firstOrFail();
+    }
+
+    public function searchLast10HomeLeadNewses()
+    {
+        $page        = NewsHelper::PAGE_HOME;
+        $pageSection = NewsHelper::PAGE_SECTION_LEAD_NEWS;
+
+        $newses = News::query()
+            ->whereHas('newsPlacements', function ($query) use ($page, $pageSection) {
+                $query->where('page', $page)
+                    ->where('page_section', $pageSection);
+            })
+            ->withMin(['newsPlacements as placement_position' => function ($query) use ($page, $pageSection) {
+                $query->where('page', $page)
+                    ->where('page_section', $pageSection);
+            }], 'position')
+            ->orderBy('placement_position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $newses;
+    }
+
+    public function searchLast10HomeCategoryNewses(Category $category)
+    {
+        $page        = NewsHelper::PAGE_HOME;
+        $pageSection = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+
+        $newses = News::query()
+            ->whereHas('newsPlacements', function ($query) use ($page, $pageSection, $category) {
+                $query->where('page', $page)
+                    ->where('page_section', $pageSection)
+                    ->where("category_id", $category->id);
+            })
+            ->withMin(['newsPlacements as placement_position' => function ($query) use ($page, $pageSection, $category) {
+                $query->where('page', $page)
+                    ->where('page_section', $pageSection)
+                    ->where("category_id", $category->id);
+            }], 'position')
+            ->orderBy('placement_position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $newses;
+    }
+
+    public function searchLast10CategoryLeadNewses(Category $category)
+    {
+        $page        = NewsHelper::PAGE_CATEGORY;
+        $pageSection = NewsHelper::PAGE_SECTION_LEAD_NEWS;
+
+        $newses = News::query()
+            ->whereHas('newsPlacements', function ($query) use ($page, $pageSection, $category) {
+                $query->where('page', $page)
+                    ->where('page_section', $pageSection)
+                    ->where("category_id", $category->id);
+            })
+            ->withMin(['newsPlacements as placement_position' => function ($query) use ($page, $pageSection, $category) {
+                $query->where('page', $page)
+                    ->where('page_section', $pageSection)
+                    ->where("category_id", $category->id);
+            }], 'position')
+            ->orderBy('placement_position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $newses;
     }
 
     public function loadRelations(News $news): News
@@ -188,15 +259,11 @@ class NewsService
             }
 
             if ($isNew) {
+                if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
+                    self::syncGalleryImagesMedia($request, $news);
+                }
+
                 self::setNewsPlacementOnNewsCreate($news);
-
-                if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
-                    self::syncGalleryImagesMedia($request, $news);
-                }
-
-                if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
-                    self::syncGalleryImagesMedia($request, $news);
-                }
             }
 
             if (! $isNew) {
@@ -603,47 +670,37 @@ class NewsService
 
     private function setNewsPlacementOnNewsCreate(News $news): void
     {
-        $pages        = NewsHelper::pages();
-        $pageSections = NewsHelper::pageSections();
-        foreach ($pages as $page) {
-            foreach ($pageSections as $pageSection) {
-                $position   = null;
-                $categoryId = null;
+        $newsPlacements = [
+            [
+                'news_id'       => $news->id,
+                'page'          => NewsHelper::PAGE_HOME,
+                'page_section'  => NewsHelper::PAGE_SECTION_LEAD_NEWS,
+                'category_id'   => null,
+                'position'      => 10,
+                'created_by_id' => Auth::id(),
+            ],
+            [
+                'news_id'       => $news->id,
+                'page'          => NewsHelper::PAGE_HOME,
+                'page_section'  => NewsHelper::PAGE_SECTION_CATEGORY_NEWS,
+                'category_id'   => $news->category_id,
+                'position'      => 10,
+                'created_by_id' => Auth::id(),
+            ],
+            [
+                'news_id'       => $news->id,
+                'page'          => NewsHelper::PAGE_CATEGORY,
+                'page_section'  => NewsHelper::PAGE_SECTION_LEAD_NEWS,
+                'category_id'   => $news->category_id,
+                'position'      => 10,
+                'created_by_id' => Auth::id(),
+            ],
+        ];
 
-                $pageId        = $page->id;
-                $pageSectionId = $pageSection->id;
-
-                $skipPageSection = ($pageId == NewsHelper::PAGE_CATEGORY) && ($pageSectionId == NewsHelper::PAGE_SECTION_CATEGORY_NEWS);
-                $skipCategory    = ($pageId == NewsHelper::PAGE_HOME) && ($pageSectionId == NewsHelper::PAGE_SECTION_LEAD_NEWS);
-
-                $lastPosition = NewsPlacement::query()
-                    ->where('page', $pageId)
-                    ->when(! $skipPageSection, function ($query) use ($pageSectionId) {
-                        $query->where('page_section', $pageSectionId);
-                    })
-                    ->when(! $skipCategory, function ($query) use ($news) {
-                        $query->where('category_id', $news->category_id);
-                    })
-                    ->max('position');
-
-                $position = $lastPosition ? $lastPosition + 1 : 1;
-
-                if (! $skipCategory) {
-                    $categoryId = $news->category_id;
-                }
-
-                NewsPlacement::factory()->state([
-                    "news_id"      => $news?->id,
-                    "page"         => $pageId,
-                    "page_section" => $pageSectionId,
-                    "category_id"  => $categoryId,
-                    "position"     => $position,
-
-                    "created_at"   => now(),
-                    "updated_at"   => now(),
-                ])->create();
-
-            }
+        foreach ($newsPlacements as $newsPlacement) {
+            NewsPlacement::create([
+                ...$newsPlacement,
+            ]);
         }
     }
 

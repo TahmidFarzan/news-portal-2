@@ -34,8 +34,6 @@ class NewsPlacementFactory extends Factory
         $skipPageSection = ($page == NewsHelper::PAGE_CATEGORY) && ($pageSection == NewsHelper::PAGE_SECTION_CATEGORY_NEWS);
         $skipCategory    = ($page == NewsHelper::PAGE_HOME) && ($pageSection == NewsHelper::PAGE_SECTION_LEAD_NEWS);
 
-        $categoryId = null;
-        $position   = null;
 
         $news = News::query()
             ->whereDoesntHave('newsPlacements', function ($newsPlacementQuery) use (
@@ -71,17 +69,13 @@ class NewsPlacementFactory extends Factory
             })
             ->max('position');
 
-        $position = $lastPosition ? $lastPosition + 1 : 1;
 
-        if (! $skipCategory) {
-            $categoryId = $news?->category_id ?? null;
-        }
         return [
             "news_id"       => $news?->id,
             "page"          => $page,
-            "page_section"  => $pageSection,
-            "position"      => $position ?? null,
-            "category_id"   => $categoryId,
+            "page_section"  => $skipPageSection ? null : $pageSection,
+            "category_id"   => $skipCategory ? null : ($news?->category_id ?? null),
+            "position"      => $lastPosition ? $lastPosition + 1 : 1,
             "created_by_id" => $user?->id ?? 1,
         ];
     }

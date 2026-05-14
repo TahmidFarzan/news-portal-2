@@ -47,9 +47,9 @@ class NewsSeeder extends Seeder
         foreach ($languages as $language) {
             $event = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
-            $randomNewses = $this->randomNewses($language, 13);
+            $getRandomDemoNewses = $this->getRandomDemoNewses($language, 13);
 
-            if ($randomNewses->isEmpty() || $newsTypes->isEmpty()) {
+            if ($getRandomDemoNewses->isEmpty() || $newsTypes->isEmpty()) {
                 continue;
             }
 
@@ -59,7 +59,7 @@ class NewsSeeder extends Seeder
                         $locationQuery->where('language_id', $language->id);
                     },
                 ])
-                ->chunkById(50, function ($categories) use ($language, $event, $randomNewses, $newsTypes) {
+                ->chunkById(50, function ($categories) use ($language, $event, $getRandomDemoNewses, $newsTypes) {
                     foreach ($categories as $category) {
                         $location = $category->locations->isNotEmpty()
                             ? $category->locations->random()
@@ -70,7 +70,7 @@ class NewsSeeder extends Seeder
                         $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
                         $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
 
-                        $states = $randomNewses->map(function ($randomNews) use ($language, $category, $event, $location, $newsType, $isStory, $isVideo) {
+                        $states = $getRandomDemoNewses->map(function ($randomNews) use ($language, $category, $event, $location, $newsType, $isStory, $isVideo) {
                             return [
                                 'news_type_id'     => $newsType->id,
                                 'language_id'      => $language->id,
@@ -112,7 +112,7 @@ class NewsSeeder extends Seeder
         }
     }
 
-    private function newsAddFeatureImage(News $news): void
+    private function addFeatureImage(News $news): void
     {
         $imageUrl = asset("uploads/images/news/feature-image.png");
 
@@ -131,7 +131,7 @@ class NewsSeeder extends Seeder
             ->toMediaCollection($news->media_collection_name);
     }
 
-    private function newsAddFeatureImageMobile(News $news): void
+    private function addFeatureImageMobile(News $news): void
     {
         $imageUrl = asset("uploads/images/news/feature-image-mobile.png");
 
@@ -150,7 +150,7 @@ class NewsSeeder extends Seeder
             ->toMediaCollection($news->media_collection_name);
     }
 
-    private function newsAddGalleryImage(News $news, int | string $imageSequence): void
+    private function addGalleryImage(News $news, int | string $imageSequence): void
     {
         $imageUrl = asset("uploads/images/news/news-gallery-image-3_2.png");
 
@@ -173,52 +173,6 @@ class NewsSeeder extends Seeder
             ->toMediaCollection($news->media_collection_name);
     }
 
-    private function setNewsPlacements(News $news): void
-    {
-        $pages        = NewsHelper::pages();
-        $pageSections = NewsHelper::pageSections();
-        foreach ($pages as $page) {
-            foreach ($pageSections as $pageSection) {
-                $position   = null;
-                $categoryId = null;
-
-                $pageId        = $page->id;
-                $pageSectionId = $pageSection->id;
-
-                $skipPageSection = ($pageId == NewsHelper::PAGE_CATEGORY) && ($pageSectionId == NewsHelper::PAGE_SECTION_CATEGORY_NEWS);
-                $skipCategory    = ($pageId == NewsHelper::PAGE_HOME) && ($pageSectionId == NewsHelper::PAGE_SECTION_LEAD_NEWS);
-
-                $lastPosition = NewsPlacement::query()
-                    ->where('page', $pageId)
-                    ->when(! $skipPageSection, function ($query) use ($pageSectionId) {
-                        $query->where('page_section', $pageSectionId);
-                    })
-                    ->when(! $skipCategory, function ($query) use ($news) {
-                        $query->where('category_id', $news->category_id);
-                    })
-                    ->max('position');
-
-                $position = $lastPosition ? $lastPosition + 1 : 1;
-
-                if (! $skipCategory) {
-                    $categoryId = $news->category_id;
-                }
-
-                NewsPlacement::factory()->state([
-                    "news_id"      => $news?->id,
-                    "page"         => $pageId,
-                    "page_section" => $pageSectionId,
-                    "category_id"  => $categoryId,
-                    "position"     => $position,
-
-                    "created_at"   => now(),
-                    "updated_at"   => now(),
-                ])->create();
-
-            }
-        }
-    }
-
     private function processCreatedNewses($newses): void
     {
         foreach ($newses as $index => $news) {
@@ -235,12 +189,12 @@ class NewsSeeder extends Seeder
                 $news->contributors()->sync($contributorIds);
             }
 
-            $this->newsAddFeatureImage($news);
-            $this->newsAddFeatureImageMobile($news);
+            $this->addFeatureImage($news);
+            $this->addFeatureImageMobile($news);
 
             if ($news->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
                 for ($i = 0; $i < 5; $i++) {
-                    $this->newsAddGalleryImage($news, $i);
+                    $this->addGalleryImage($news, $i);
                 }
             }
 
@@ -248,9 +202,46 @@ class NewsSeeder extends Seeder
         }
     }
 
-    private function randomNewses(Language $language, int $limit = 10)
+    private function setNewsPlacements(News $news): void
     {
-        $newsGroup = $this->newsesByLanguageGroups()
+        $lastHomeLastLeadNewsPosition     = NewsPlacement::query()->where('page', NewsHelper::PAGE_HOME)->where('page_section', NewsHelper::PAGE_SECTION_LEAD_NEWS)->max('position');
+        $lastHomeLastCategoryNewsPosition = NewsPlacement::query()->where('page', NewsHelper::PAGE_HOME)->where('page_section', NewsHelper::PAGE_SECTION_CATEGORY_NEWS)->where("category_id", $news->category_id)->max('position');
+        $lastCategoryLastLeadNewsPosition = NewsPlacement::query()->where('page', NewsHelper::PAGE_CATEGORY)->where('page_section', NewsHelper::PAGE_SECTION_LEAD_NEWS)->where("category_id", $news->category_id)->max('position');
+
+        $newsPlacements = [
+            [
+                'news_id'      => $news->id,
+                'page'         => NewsHelper::PAGE_HOME,
+                'page_section' => NewsHelper::PAGE_SECTION_LEAD_NEWS,
+                'category_id'  => null,
+                'position'     => $lastHomeLastLeadNewsPosition + 1,
+            ],
+            [
+                'news_id'      => $news->id,
+                'page'         => NewsHelper::PAGE_HOME,
+                'page_section' => NewsHelper::PAGE_SECTION_CATEGORY_NEWS,
+                'category_id'  => $news->category_id,
+                'position'     => $lastHomeLastCategoryNewsPosition + 1,
+            ],
+            [
+                'news_id'      => $news->id,
+                'page'         => NewsHelper::PAGE_CATEGORY,
+                'page_section' => NewsHelper::PAGE_SECTION_LEAD_NEWS,
+                'category_id'  => $news->category_id,
+                'position'     => $lastCategoryLastLeadNewsPosition + 1,
+            ],
+        ];
+
+        foreach ($newsPlacements as $newsPlacement) {
+            NewsPlacement::factory()->state([
+                 ...$newsPlacement,
+            ]);
+        }
+    }
+
+    private function getRandomDemoNewses(Language $language, int $limit = 10)
+    {
+        $newsGroup = $this->getDemoNewsesByLanguageGroups()
             ->firstWhere('language_code', $language->code);
 
         if (! $newsGroup) {
@@ -263,7 +254,7 @@ class NewsSeeder extends Seeder
             ->values();
     }
 
-    private function newsesByLanguageGroups()
+    private function getDemoNewsesByLanguageGroups()
     {
         return collect([
             (object) [
