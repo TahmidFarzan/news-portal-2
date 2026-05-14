@@ -629,7 +629,7 @@ class NewsService
 
             $newsPlacement->delete();
 
-            $this->newsPlacementPositionAutoUpdate($page, $pageSection, $categoryId);
+            $this->newsPlacementPositionSyncUpdate($page, $pageSection, $categoryId);
 
             DB::commit();
 
@@ -793,38 +793,66 @@ class NewsService
 
     private function syncNewPlacementAfterNewsCreate(News $news): void
     {
-        $newsPlacements = [
-            [
+        $homePage     = NewsHelper::PAGE_HOME;
+        $categoryPage = NewsHelper::PAGE_CATEGORY;
+
+        $leadNewsSection     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
+        $categoryNewsSection = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+
+        $homeLeadNewsPositionExit = NewsPlacement::query()
+            ->where('news_id', $news->id)
+            ->where('page', $homePage)
+            ->where('page_section', $leadNewsSection)->exists();
+
+        $homeCategoryNewsPositionExit = NewsPlacement::query()
+            ->where('news_id', $news->id)
+            ->where('page', $homePage)
+            ->where('page_section', $categoryNewsSection)
+            ->when($news->category_id !== null, function ($query) use ($news) {
+                $query->where('category_id', $news->category_id);
+            })->exists();
+
+        $categoryLeadNewsPositionExit = NewsPlacement::query()
+            ->where('news_id', $news->id)
+            ->where('page', $categoryPage)
+            ->where('page_section', $leadNewsSection)
+            ->when($news->category_id !== null, function ($query) use ($news) {
+                $query->where('category_id', $news->category_id);
+            })->exists();
+
+        if (! $homeLeadNewsPositionExit) {
+            NewsPlacement::create([
                 'news_id'       => $news->id,
-                'page'          => NewsHelper::PAGE_HOME,
-                'page_section'  => NewsHelper::PAGE_SECTION_LEAD_NEWS,
+                'page'          => $homePage,
+                'page_section'  => $leadNewsSection,
                 'category_id'   => null,
                 'position'      => 10,
                 'created_by_id' => Auth::id(),
-            ],
-            [
-                'news_id'       => $news->id,
-                'page'          => NewsHelper::PAGE_HOME,
-                'page_section'  => NewsHelper::PAGE_SECTION_CATEGORY_NEWS,
-                'category_id'   => $news->category_id,
-                'position'      => 10,
-                'created_by_id' => Auth::id(),
-            ],
-            [
-                'news_id'       => $news->id,
-                'page'          => NewsHelper::PAGE_CATEGORY,
-                'page_section'  => NewsHelper::PAGE_SECTION_LEAD_NEWS,
-                'category_id'   => $news->category_id,
-                'position'      => 10,
-                'created_by_id' => Auth::id(),
-            ],
-        ];
-
-        foreach ($newsPlacements as $newsPlacement) {
-            NewsPlacement::create([
-                 ...$newsPlacement,
             ]);
         }
+
+        if (! $homeCategoryNewsPositionExit) {
+            NewsPlacement::create([
+                'news_id'       => $news->id,
+                'page'          => $homePage,
+                'page_section'  => $categoryNewsSection,
+                'category_id'   => $news->category_id,
+                'position'      => 10,
+                'created_by_id' => Auth::id(),
+            ]);
+        }
+
+        if (! $categoryLeadNewsPositionExit) {
+            NewsPlacement::create([
+                'news_id'       => $news->id,
+                'page'          => $categoryPage,
+                'page_section'  => $leadNewsSection,
+                'category_id'   => $news->category_id,
+                'position'      => 10,
+                'created_by_id' => Auth::id(),
+            ]);
+        }
+
     }
 
     private function featureImageSave(NewsRequest $request, News $news): void
@@ -970,10 +998,7 @@ class NewsService
 
     private function newsPlacementUpdate(array $idsBySequence, string $page, string $pageSection, ?int $categoryId = null): void
     {
-        $idsBySequence = collect($idsBySequence)
-            ->filter()
-            ->unique()
-            ->values();
+        $idsBySequence = collect($idsBySequence)->filter()->unique()->values();
 
         if ($idsBySequence->isEmpty()) {
             return;
@@ -1011,7 +1036,7 @@ class NewsService
             ->delete();
     }
 
-    private function newsPlacementPositionAutoUpdate(string $page, string $pageSection, ?int $categoryId = null): void
+    private function newsPlacementPositionSyncUpdate(string $page, string $pageSection, ?int $categoryId = null): void
     {
         $baseQuery = NewsPlacement::query()
             ->where('page', $page)
@@ -1062,21 +1087,31 @@ class NewsService
                 ->get();
 
             foreach ($newses as $news) {
-                $nextPosition = NewsPlacement::query()
+                $newsPositionExit = NewsPlacement::query()
+                    ->where('news_id', $news->id)
                     ->where('page', $page)
                     ->where('page_section', $pageSection)
                     ->when($categoryId !== null, function ($query) use ($categoryId) {
                         $query->where('category_id', $categoryId);
-                    })->max("position");
+                    })->exists();
+                if (! $newsPositionExit) {
+                    $nextPosition = NewsPlacement::query()
+                        ->where('page', $page)
+                        ->where('page_section', $pageSection)
+                        ->when($categoryId !== null, function ($query) use ($categoryId) {
+                            $query->where('category_id', $categoryId);
+                        })->max("position");
 
-                NewsPlacement::create([
-                    'news_id'       => $news->id,
-                    'page'          => $page,
-                    'page_section'  => $pageSection,
-                    'category_id'   => ($categoryId !== null) ? $categoryId : null,
-                    'position'      => $nextPosition + 1,
-                    'created_by_id' => Auth::id(),
-                ]);
+                    NewsPlacement::create([
+                        'news_id'       => $news->id,
+                        'page'          => $page,
+                        'page_section'  => $pageSection,
+                        'category_id'   => ($categoryId !== null) ? $categoryId : null,
+                        'position'      => $nextPosition + 1,
+                        'created_by_id' => Auth::id(),
+                    ]);
+                }
+
             }
 
         }
