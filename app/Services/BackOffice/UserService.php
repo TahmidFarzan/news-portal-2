@@ -226,49 +226,32 @@ class UserService
 
     private static function saveProfileImage(UserRequest $request, User $user)
     {
-        if ($request->hasFile('upload_feature_image_mobile_image')) {
-            self::deleteExistingProfileImage($user);
-
-            $file      = $request->file('upload_feature_image_mobile_image');
-            $extension = $file->getUserOriginalExtension();
-            $fileName  = MediaHelper::generateMediaName($user->name, $extension, 200);
-
-            $user->addMedia($file)
-                ->usingFileName($fileName)
-                ->usingName($user->name)
-                ->withCustomProperties([
-                    'alt'     => $user->name,
-                    'caption' => $user->name,
-                    'role'    => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE,
-                ])
-                ->toMediaCollection($user->media_collection_name);
+        if (! $request->hasFile('profile_image')) {
+            return;
         }
 
-        if ($request->input('media_selected_feature_image_mobile_image_url')) {
-            self::deleteExistingProfileImage($user);
-
-            $url       = $request->input('media_selected_feature_image_mobile_image_url');
-            $extension = pathinfo($url, PATHINFO_EXTENSION);
-            $fileName  = MediaHelper::generateMediaName($user->name, $extension, 200);
-
-            $user->addMediaFromUrl($url)
-                ->usingName($user->name)
-                ->usingFileName($fileName)
-                ->withCustomProperties([
-                    'caption' => $user->name,
-                    'alt'     => $user->name,
-                    'role'    => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE,
-                ])
-                ->toMediaCollection($user->media_collection_name);
-        }
-    }
-
-    private static function deleteExistingProfileImage(User $user)
-    {
         $existing = $user->profileImage();
-
         if ($existing) {
             $existing->delete();
+        }
+
+        $uploaded = $request->file('profile_image');
+
+        if ($uploaded) {
+            $name = MediaHelper::generateMediaName(
+                $user->name,
+                $uploaded->getClientOriginalExtension(),
+                200
+            );
+
+            $user->addMedia($uploaded)
+                ->usingFileName($name)
+                ->withCustomProperties([
+                    'alt'     => $user->name ?? null,
+                    'caption' => $user->name ?? null,
+                    'role'    => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE,
+                ])
+                ->toMediaCollection($user->media_collection_name);
         }
     }
 }
