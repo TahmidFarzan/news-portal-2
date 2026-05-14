@@ -30,8 +30,8 @@ class CategorySeeder extends Seeder
         }
         $languages = Language::all()->keyBy('code');
 
-        $categoriesByLanguageGroups = $this->categoriesByLanguageGroups();
-        foreach ($categoriesByLanguageGroups as $categoriesByLanguageGroup) {
+        $categoriesByLanguageGroupsFromStaticData = $this->getCategoriesByLanguageGroupsFromStaticData();
+        foreach ($categoriesByLanguageGroupsFromStaticData as $categoriesByLanguageGroup) {
             $language = $languages[$categoriesByLanguageGroup->language_code] ?? null;
             foreach ($categoriesByLanguageGroup->categories as $category) {
                 $this->createCategory(null, $category, $language);
@@ -62,7 +62,7 @@ class CategorySeeder extends Seeder
         return $saveCategory;
     }
 
-    private function categoriesByLanguageGroups()
+    private function getCategoriesByLanguageGroupsFromStaticData()
     {
         return collect([
             (object) [

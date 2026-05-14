@@ -33,8 +33,8 @@ class ContributorSeeder extends Seeder
 
         $languages = Language::all()->keyBy('code');
 
-        $contributorsByLanguageGroups = $this->contributorsByLanguageGroups();
-        foreach ($contributorsByLanguageGroups as $contributorsByLanguageGroup) {
+        $contributorsByLanguageGroupsFromStaticData = $this->getContributorsByLanguageGroupsFromStaticData();
+        foreach ($contributorsByLanguageGroupsFromStaticData as $contributorsByLanguageGroup) {
             $language = $languages[$contributorsByLanguageGroup->language_code] ?? null;
             foreach ($contributorsByLanguageGroup->contributors as $contributor) {
                 Contributor::factory()->state([
@@ -74,7 +74,7 @@ class ContributorSeeder extends Seeder
             }
         }
     }
-    private function contributorsByLanguageGroups()
+    private function getContributorsByLanguageGroupsFromStaticData()
     {
         return collect([
             (object) [
