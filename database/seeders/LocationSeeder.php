@@ -31,9 +31,9 @@ class LocationSeeder extends Seeder
         }
 
         $languages                 = Language::all()->keyBy('code');
-        $locationsByLanguageGroups = $this->locationsByLanguageGroups();
+        $bangladeshLocationGroupsFromStaticData = $this->getBangladeshLocationGroupsFromStaticData();
 
-        foreach ($locationsByLanguageGroups as $locationsByLanguageGroup) {
+        foreach ($bangladeshLocationGroupsFromStaticData as $locationsByLanguageGroup) {
             $language = $languages[$locationsByLanguageGroup->language_code] ?? null;
 
             foreach ($locationsByLanguageGroup->locations as $location) {
@@ -76,7 +76,7 @@ class LocationSeeder extends Seeder
         return $saveLocation;
     }
 
-    private function locationsByLanguageGroups()
+    private function getBangladeshLocationGroupsFromStaticData()
     {
         return collect([
             (object) [

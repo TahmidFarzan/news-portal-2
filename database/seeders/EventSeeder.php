@@ -33,8 +33,8 @@ class EventSeeder extends Seeder
 
         $languages = Language::all()->keyBy('code');
 
-        $eventsByLanguageGroups = $this->eventsByLanguageGroups();
-        foreach ($eventsByLanguageGroups as $eventsByLanguageGroup) {
+        $eventsByLanguageGroupsFromStaticData = $this->getEventsByLanguageGroupsFromStaticData();
+        foreach ($eventsByLanguageGroupsFromStaticData as $eventsByLanguageGroup) {
             $language = $languages[$eventsByLanguageGroup->language_code] ?? null;
             foreach ($eventsByLanguageGroup->events as $event) {
                 Event::factory()->state([
@@ -98,7 +98,7 @@ class EventSeeder extends Seeder
         }
     }
 
-    private function eventsByLanguageGroups()
+    private function getEventsByLanguageGroupsFromStaticData()
     {
         return collect([
             (object) [

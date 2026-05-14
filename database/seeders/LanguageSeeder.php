@@ -27,12 +27,12 @@ class LanguageSeeder extends Seeder
             Language::truncate();
         }
 
-        $languages = collect([
+        $languagesFromStaticData = collect([
             (object) ['name' => 'Bangla', 'code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE],
             (object) ['name' => 'English', 'code' => SystemHelper::DEFAULT_LANGUAGE_CODE],
         ]);
 
-        foreach ($languages as $language) {
+        foreach ($languagesFromStaticData as $language) {
             Language::factory()->state([
                 'name' => $language->name,
                 'code' => $language->code,

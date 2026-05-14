@@ -30,8 +30,8 @@ class TagSeeder extends Seeder
 
         $languages = Language::all()->keyBy('code');
 
-        $tagsByLanguageGroups = $this->tagsByLanguageGroups();
-        foreach ($tagsByLanguageGroups as $tagsByLanguageGroup) {
+        $tagsByLanguageGroupsFromStaticData = $this->getTagsByLanguageGroupsFromStaticData();
+        foreach ($tagsByLanguageGroupsFromStaticData as $tagsByLanguageGroup) {
             $language = $languages[$tagsByLanguageGroup->language_code] ?? null;
             foreach ($tagsByLanguageGroup->tags as $tag) {
                 Tag::factory()->state([
@@ -48,7 +48,7 @@ class TagSeeder extends Seeder
 
     }
 
-    private function tagsByLanguageGroups()
+    private function getTagsByLanguageGroupsFromStaticData()
     {
         return collect([
             (object) [
