@@ -234,6 +234,13 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
             Route::delete('delete/{mediaSlug}', [NewsController::class, 'galleryImageDelete'])->name('delete');
 
         });
+
+        Route::prefix('{slug}/news-placements')->name('news-placements.')->group(function () {
+            Route::get('/', [NewsController::class, 'newsPlacementByNewsIndex'])->name('index');
+            Route::post('generate', [NewsController::class, 'newsPlacementGenerateForNews'])->name('generate');
+            Route::patch('update', [NewsController::class, 'newsPlacementUpdateForNews'])->name('update');
+            Route::delete('delete/{newsPlacementSlug}', [NewsController::class, 'newsPlacementDelete'])->name('delete');
+        });
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {

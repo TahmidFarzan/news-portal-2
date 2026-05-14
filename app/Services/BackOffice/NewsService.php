@@ -9,7 +9,6 @@ use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
 use App\Http\Requests\NewsRequest;
 use App\Jobs\NewsContributorSyncJob;
 use App\Jobs\NewsTagSyncJob;
-use App\Models\Category;
 use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\NewsType;
@@ -45,79 +44,14 @@ class NewsService
         return $news->getMedia($news->media_collection_name)->where("slug", $mediaSlug)->firstOrFail();
     }
 
+    public function findNewsPlacement(News $news, string $newsPlacementSlug): NewsPlacement
+    {
+        return $news->newsPlacements()->where("slug", $newsPlacementSlug)->firstOrFail();
+    }
+
     public function findNewsTypeById(string $id): NewsType
     {
         return NewsType::where('id', $id)->firstOrFail();
-    }
-
-    public function searchLast10HomeLeadNewses()
-    {
-        $page        = NewsHelper::PAGE_HOME;
-        $pageSection = NewsHelper::PAGE_SECTION_LEAD_NEWS;
-
-        $newses = News::query()
-            ->whereHas('newsPlacements', function ($query) use ($page, $pageSection) {
-                $query->where('page', $page)
-                    ->where('page_section', $pageSection);
-            })
-            ->withMin(['newsPlacements as placement_position' => function ($query) use ($page, $pageSection) {
-                $query->where('page', $page)
-                    ->where('page_section', $pageSection);
-            }], 'position')
-            ->orderBy('placement_position', 'asc')
-            ->orderBy('id', 'desc')
-            ->limit(10)
-            ->get();
-
-        return $newses;
-    }
-
-    public function searchLast10HomeCategoryNewses(Category $category)
-    {
-        $page        = NewsHelper::PAGE_HOME;
-        $pageSection = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
-
-        $newses = News::query()
-            ->whereHas('newsPlacements', function ($query) use ($page, $pageSection, $category) {
-                $query->where('page', $page)
-                    ->where('page_section', $pageSection)
-                    ->where("category_id", $category->id);
-            })
-            ->withMin(['newsPlacements as placement_position' => function ($query) use ($page, $pageSection, $category) {
-                $query->where('page', $page)
-                    ->where('page_section', $pageSection)
-                    ->where("category_id", $category->id);
-            }], 'position')
-            ->orderBy('placement_position', 'asc')
-            ->orderBy('id', 'desc')
-            ->limit(10)
-            ->get();
-
-        return $newses;
-    }
-
-    public function searchLast10CategoryLeadNewses(Category $category)
-    {
-        $page        = NewsHelper::PAGE_CATEGORY;
-        $pageSection = NewsHelper::PAGE_SECTION_LEAD_NEWS;
-
-        $newses = News::query()
-            ->whereHas('newsPlacements', function ($query) use ($page, $pageSection, $category) {
-                $query->where('page', $page)
-                    ->where('page_section', $pageSection)
-                    ->where("category_id", $category->id);
-            })
-            ->withMin(['newsPlacements as placement_position' => function ($query) use ($page, $pageSection, $category) {
-                $query->where('page', $page)
-                    ->where('page_section', $pageSection)
-                    ->where("category_id", $category->id);
-            }], 'position')
-            ->orderBy('placement_position', 'asc')
-            ->orderBy('id', 'desc')
-            ->limit(10)
-            ->get();
-
-        return $newses;
     }
 
     public function loadRelations(News $news): News
@@ -249,30 +183,33 @@ class NewsService
 
             DB::commit();
 
-            self::featureImageSave($request, $news);
-            self::featureImageMobileSave($request, $news);
+            $this->featureImageSave($request, $news);
+            $this->featureImageMobileSave($request, $news);
 
-            self::syncAttributesJob($request, $news);
+            $this->syncAttributesJob($request, $news);
 
             if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
-                self::syncContentMedia($request, $news);
+                $this->syncContentMedia($request, $news);
             }
 
             if ($isNew) {
                 if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
-                    self::syncGalleryImagesMedia($request, $news);
+                    $this->syncGalleryImagesMedia($request, $news);
                 }
 
-                self::setNewsPlacementOnNewsCreate($news);
+                $this->syncNewPlacementAfterNewsCreate($news);
             }
 
             if (! $isNew) {
-                self::syncMediaAccrodingNewsTypeChangeOnNewsUpdate($news);
+                $this->syncMediaAccrodingNewsTypeChangeOnNewsUpdate($news);
             }
 
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.news.{$statusEvent}.success"),
+                'data' => [
+                    'news_slug' => $news->slug,
+                ],
             ];
         } catch (Exception $exception) {
             DB::rollback();
@@ -284,6 +221,9 @@ class NewsService
             return [
                 'status'  => 'error',
                 'message' => __('status-messages.news.save.failed'),
+                'data'    => [
+                    'news_slug' => $news->slug,
+                ],
             ];
         }
     }
@@ -367,7 +307,7 @@ class NewsService
                         )
                         ->toMediaCollection($news->media_collection_name);
 
-                    $media->order_column = $this->calculateGalleryImageOrderColumn($request, $news, $media);
+                    $media->order_column = $this->galleryImageCalculateOrderColumn($request, $news, $media);
                     $media->save();
                 }
             }
@@ -376,7 +316,7 @@ class NewsService
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.news.gallery_image_save.success'),
+                'message' => __('status-messages.news.gallery_image.save.success'),
             ];
         } catch (Exception $exception) {
             DB::rollBack();
@@ -387,7 +327,7 @@ class NewsService
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.news.gallery_image_save.failed'),
+                'message' => __('status-messages.news.gallery_image.save.failed'),
             ];
         }
     }
@@ -397,7 +337,7 @@ class NewsService
         DB::beginTransaction();
 
         try {
-            $media->order_column = $this->calculateGalleryImageOrderColumn($request, $news, $media);
+            $media->order_column = $this->galleryImageCalculateOrderColumn($request, $news, $media);
 
             $media->setCustomProperty(
                 'caption',
@@ -415,7 +355,7 @@ class NewsService
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.news.gallery_image_update.success'),
+                'message' => __('status-messages.news.gallery_image.update.success'),
             ];
         } catch (Exception $exception) {
             DB::rollBack();
@@ -426,7 +366,7 @@ class NewsService
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.news.gallery_image_update.failed'),
+                'message' => __('status-messages.news.gallery_image.update.failed'),
             ];
         }
     }
@@ -486,7 +426,7 @@ class NewsService
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.news.gallery_image_sequence_update.success'),
+                'message' => __('status-messages.news.gallery_image.sequence.update.success'),
             ];
         } catch (Exception $exception) {
             DB::rollBack();
@@ -497,7 +437,7 @@ class NewsService
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.news.gallery_image_sequence_update.failed'),
+                'message' => __('status-messages.news.gallery_image.sequence.update.failed'),
             ];
         }
     }
@@ -512,7 +452,7 @@ class NewsService
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.news.gallery_image_delete.success'),
+                'message' => __('status-messages.news.gallery_image.delete.success'),
             ];
         } catch (Exception $exception) {
             DB::rollback();
@@ -523,7 +463,190 @@ class NewsService
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.news.gallery_image_delete.failed'),
+                'message' => __('status-messages.news.gallery_image.delete.failed'),
+            ];
+        }
+    }
+
+    public function newsPlacementHomeLead()
+    {
+        $newsPlacement = NewsPlacement::query()->with("news")
+            ->where('page', NewsHelper::PAGE_HOME)
+            ->where('page_section', NewsHelper::PAGE_SECTION_LEAD_NEWS)
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $newsPlacement;
+    }
+
+    public function newsPlacementHomeCategory(int | string $categoryId)
+    {
+        // $page        = NewsHelper::PAGE_HOME;
+        // $pageSection = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+        // $newses = News::query()
+        //     ->whereHas('newsPlacements', function ($query) use ($page, $pageSection, $categoryId) {
+        //         $query->where('page', $page)
+        //             ->where('page_section', $pageSection)
+        //             ->where("category_id", $categoryId);
+        //     })
+        //     ->withMin(['newsPlacements as placement_position' => function ($query) use ($page, $pageSection, $categoryId) {
+        //         $query->where('page', $page)
+        //             ->where('page_section', $pageSection)
+        //             ->where("category_id", $categoryId);
+        //     }], 'position')
+        //     ->orderBy('placement_position', 'asc')
+        //     ->orderBy('id', 'desc')
+        //     ->limit(10)
+        //     ->get();
+
+        $newsPlacement = NewsPlacement::query()->with("news")
+            ->where('page', NewsHelper::PAGE_HOME)
+            ->where('page_section', NewsHelper::PAGE_SECTION_CATEGORY_NEWS)
+            ->where("category_id", $categoryId)
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $newsPlacement;
+    }
+
+    public function newsPlacementCategoryLead(int | string $categoryId)
+    {
+        $newsPlacement = NewsPlacement::query()->with("news")
+            ->where('page', NewsHelper::PAGE_CATEGORY)
+            ->where('page_section', NewsHelper::PAGE_SECTION_LEAD_NEWS)
+            ->where("category_id", $categoryId)
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $newsPlacement;
+    }
+
+    public function newsPlacementGenerateForNews(News $news): array
+    {
+        DB::beginTransaction();
+
+        try {
+            $pageHome                = NewsHelper::PAGE_HOME;
+            $pageCategory            = NewsHelper::PAGE_CATEGORY;
+            $pageSectionLeadNews     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
+            $pageSectionCategoryNews = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+
+            $this->newsPlacementGenerate($pageHome, $pageSectionLeadNews);
+
+            $this->newsPlacementGenerate($pageHome, $pageSectionCategoryNews, $news->category_id);
+
+            $this->newsPlacementGenerate($pageCategory, $pageSectionLeadNews, $news->category_id);
+
+            DB::commit();
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.news.news_placement.generate.success'),
+            ];
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            Log::error('News placement generate failed.', [
+                'exception' => $exception,
+            ]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.news.news_placement.generate.failed'),
+            ];
+        }
+    }
+
+    public function newsPlacementUpdateForNews(Request $request, News $news): array
+    {
+        DB::beginTransaction();
+
+        try {
+            $pageHome                = NewsHelper::PAGE_HOME;
+            $pageCategory            = NewsHelper::PAGE_CATEGORY;
+            $pageSectionLeadNews     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
+            $pageSectionCategoryNews = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+
+            if ($request->filled('home_lead_news_ids_sequence')) {
+                $this->newsPlacementUpdate(
+                    $request->input('home_lead_news_ids_sequence'),
+                    $pageHome,
+                    $pageSectionLeadNews
+                );
+            }
+
+            if ($request->filled('home_category_news_ids_sequence')) {
+                $this->newsPlacementUpdate(
+                    $request->input('home_category_news_ids_sequence'),
+                    $pageHome,
+                    $pageSectionCategoryNews,
+                    $news->category_id
+                );
+            }
+
+            if ($request->filled('category_lead_news_ids_sequence')) {
+                $this->newsPlacementUpdate(
+                    $request->input('category_lead_news_ids_sequence'),
+                    $pageCategory,
+                    $pageSectionLeadNews,
+                    $news->category_id
+                );
+            }
+
+            DB::commit();
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.news.news_placement.update.success'),
+            ];
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            Log::error('News placement update failed.', [
+                'exception' => $exception,
+            ]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.news.news_placement.update.failed'),
+            ];
+        }
+    }
+
+    public function newsPlacementDelete(News $news, NewsPlacement $newsPlacement): array
+    {
+        DB::beginTransaction();
+        try {
+            $page        = $newsPlacement->page;
+            $pageSection = $newsPlacement->page_section;
+            $categoryId  = $newsPlacement->category_id;
+
+            $newsPlacement->delete();
+
+            $this->newsPlacementPositionAutoUpdate($page, $pageSection, $categoryId);
+
+            DB::commit();
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.news.news_placement.delete.success'),
+            ];
+        } catch (Exception $exception) {
+            DB::rollback();
+
+            Log::error('News placement delete failed.', [
+                'exception' => $exception,
+            ]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.news.news_placement.delete.failed'),
             ];
         }
     }
@@ -668,7 +791,7 @@ class NewsService
         }
     }
 
-    private function setNewsPlacementOnNewsCreate(News $news): void
+    private function syncNewPlacementAfterNewsCreate(News $news): void
     {
         $newsPlacements = [
             [
@@ -699,7 +822,7 @@ class NewsService
 
         foreach ($newsPlacements as $newsPlacement) {
             NewsPlacement::create([
-                ...$newsPlacement,
+                 ...$newsPlacement,
             ]);
         }
     }
@@ -707,7 +830,7 @@ class NewsService
     private function featureImageSave(NewsRequest $request, News $news): void
     {
         if ($request->hasFile('upload_feature_image')) {
-            self::deleteExtingFeatureImage($news);
+            $this->featureImageDeleteExting($news);
 
             $featureImage = $request->file('upload_feature_image');
 
@@ -730,7 +853,7 @@ class NewsService
         }
 
         if ($request->input('selected_feature_image_url')) {
-            self::deleteExtingFeatureImage($news);
+            $this->featureImageDeleteExting($news);
             $mediaFeatureImageUrl       = $request->input('selected_feature_image_url');
             $mediaFeatureImageExtension = pathinfo($mediaFeatureImageUrl, PATHINFO_EXTENSION);
             $mediaFeatureImageFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageExtension, 200);
@@ -752,7 +875,7 @@ class NewsService
     private function featureImageMobileSave(NewsRequest $request, News $news): void
     {
         if ($request->hasFile('upload_feature_image_mobile')) {
-            self::deleteExtingFeatureImageMobile($news);
+            $this->featureImageDeleteExtingMobile($news);
 
             $featureImageMobile = $request->file('upload_feature_image_mobile');
 
@@ -775,7 +898,7 @@ class NewsService
         }
 
         if ($request->input('selected_feature_image_mobile_url')) {
-            self::deleteExtingFeatureImageMobile($news);
+            $this->featureImageDeleteExtingMobile($news);
             $mediaFeatureImageMobileUrl       = $request->input('selected_feature_image_mobile_url');
             $mediaFeatureImageMobileExtension = pathinfo($mediaFeatureImageMobileUrl, PATHINFO_EXTENSION);
             $mediaFeatureImageMobileFileName  = MediaHelper::generateMediaName($news->name, $mediaFeatureImageMobileExtension, 200);
@@ -794,7 +917,23 @@ class NewsService
         }
     }
 
-    private function calculateGalleryImageOrderColumn(NewsGalleryImageRequest $request, News $news, $media): int
+    private function featureImageDeleteExting(News $news): void
+    {
+        $extingFeatureImage = $news->feature_image;
+        if ($extingFeatureImage) {
+            $extingFeatureImage->delete();
+        }
+    }
+
+    private function featureImageDeleteExtingMobile(News $news): void
+    {
+        $extingFeatureImageMobile = $news->feature_image_mobile;
+        if ($extingFeatureImageMobile) {
+            $extingFeatureImageMobile->delete();
+        }
+    }
+
+    private function galleryImageCalculateOrderColumn(NewsGalleryImageRequest $request, News $news, $media): int
     {
         $mediaRoleParameters = [
             'role' => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
@@ -829,19 +968,118 @@ class NewsService
         return $orderColumn;
     }
 
-    private static function deleteExtingFeatureImage(News $news): void
+    private function newsPlacementUpdate(array $idsBySequence, string $page, string $pageSection, ?int $categoryId = null): void
     {
-        $extingFeatureImage = $news->feature_image;
-        if ($extingFeatureImage) {
-            $extingFeatureImage->delete();
+        $idsBySequence = collect($idsBySequence)
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($idsBySequence->isEmpty()) {
+            return;
+        }
+
+        $baseQuery = NewsPlacement::query()
+            ->where('page', $page)
+            ->where('page_section', $pageSection)
+            ->when($categoryId !== null, fn($query) => $query->where('category_id', $categoryId));
+
+        $remainingLimit = max(25 - $idsBySequence->count(), 0);
+
+        $remainingIds = (clone $baseQuery)
+            ->whereNotIn('id', $idsBySequence)
+            ->orderBy('position')
+            ->orderByDesc('id')
+            ->limit($remainingLimit)
+            ->pluck('id');
+
+        $keepIds = $idsBySequence
+            ->merge($remainingIds)
+            ->take(25)
+            ->values();
+
+        foreach ($keepIds as $index => $id) {
+            NewsPlacement::query()
+                ->where('id', $id)
+                ->update([
+                    'position' => $index + 1,
+                ]);
+        }
+
+        (clone $baseQuery)
+            ->whereNotIn('id', $keepIds)
+            ->delete();
+    }
+
+    private function newsPlacementPositionAutoUpdate(string $page, string $pageSection, ?int $categoryId = null): void
+    {
+        $baseQuery = NewsPlacement::query()
+            ->where('page', $page)
+            ->where('page_section', $pageSection)
+            ->when($categoryId !== null, fn($query) => $query->where('category_id', $categoryId));
+
+        $placements = (clone $baseQuery)
+            ->orderBy('position')
+            ->orderByDesc('id')
+            ->limit(25)
+            ->get(['id']);
+
+        if ($placements->isEmpty()) {
+            return;
+        }
+
+        foreach ($placements as $index => $placement) {
+            $placement->update([
+                'position' => $index + 1,
+            ]);
+        }
+
+        (clone $baseQuery)
+            ->whereNotIn('id', $placements->pluck('id'))
+            ->delete();
+    }
+
+    private function newsPlacementGenerate(string $page, string $pageSection, ?int $categoryId = null): void
+    {
+        $newsPlacementExists = NewsPlacement::query()
+            ->where('page', $page)
+            ->where('page_section', $pageSection)
+            ->when($categoryId !== null, function ($query) use ($categoryId) {
+                $query->where('category_id', $categoryId);
+            })
+            ->exists();
+
+        if ($newsPlacementExists) {
+            return;
+        }
+        if (! $newsPlacementExists) {
+            $newses = News::query()
+                ->when($categoryId !== null, function ($query) use ($categoryId) {
+                    $query->where('category_id', $categoryId);
+                })
+                ->orderByDesc('id')
+                ->limit(25)
+                ->get();
+
+            foreach ($newses as $news) {
+                $nextPosition = NewsPlacement::query()
+                    ->where('page', $page)
+                    ->where('page_section', $pageSection)
+                    ->when($categoryId !== null, function ($query) use ($categoryId) {
+                        $query->where('category_id', $categoryId);
+                    })->max("position");
+
+                NewsPlacement::create([
+                    'news_id'       => $news->id,
+                    'page'          => $page,
+                    'page_section'  => $pageSection,
+                    'category_id'   => ($categoryId !== null) ? $categoryId : null,
+                    'position'      => $nextPosition + 1,
+                    'created_by_id' => Auth::id(),
+                ]);
+            }
+
         }
     }
 
-    private static function deleteExtingFeatureImageMobile(News $news): void
-    {
-        $extingFeatureImageMobile = $news->feature_image_mobile;
-        if ($extingFeatureImageMobile) {
-            $extingFeatureImageMobile->delete();
-        }
-    }
 }

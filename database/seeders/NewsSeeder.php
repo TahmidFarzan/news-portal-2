@@ -235,7 +235,7 @@ class NewsSeeder extends Seeder
         foreach ($newsPlacements as $newsPlacement) {
             NewsPlacement::factory()->state([
                 ...$newsPlacement,
-            ]);
+            ])->create();
         }
     }
 

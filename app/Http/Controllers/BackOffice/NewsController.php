@@ -69,14 +69,12 @@ class NewsController extends Controller
     public function save(NewsRequest $request)
     {
         $news = $this->newsService->new();
+
         Gate::authorize('create', $news);
 
         $result = $this->newsService->save($request, $news);
 
-        return to_route('back-office.newses.index')->with('flash_message', [
-            'message' => $result['message'],
-            'status'  => $result['status'],
-        ]);
+        return $this->redirectAfterNewsSave($result);
     }
 
     public function update(NewsRequest $request, string $slug)
@@ -87,10 +85,7 @@ class NewsController extends Controller
 
         $result = $this->newsService->save($request, $news);
 
-        return to_route('back-office.newses.index')->with('flash_message', [
-            'message' => $result['message'],
-            'status'  => $result['status'],
-        ]);
+        return $this->redirectAfterNewsSave($result);
     }
 
     public function delete(string $slug)
@@ -173,6 +168,86 @@ class NewsController extends Controller
         $result = $this->newsService->galleryImageDelete($news, $media);
 
         return back()->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+
+    public function newsPlacementByNewsIndex(string $slug)
+    {
+        $news = $this->newsService->find($slug);
+
+        Gate::authorize('update', $news);
+
+        $homeLeadNewsPlacements     = $this->newsService->newsPlacementHomeLead();
+        $homeCategoryNewsPlacements = $this->newsService->newsPlacementHomeCategory($news->category_id);
+        $categoryLeadNewsPlacements = $this->newsService->newsPlacementCategoryLead($news->category_id);
+
+        return Inertia::render('back-office/newses/news-placement/Index', [
+            'news'                   => $news,
+            'homeLeadNewsPlacements'     => $homeLeadNewsPlacements,
+            'homeCategoryNewsPlacements' => $homeCategoryNewsPlacements,
+            'categoryLeadNewsPlacements' => $categoryLeadNewsPlacements,
+        ]);
+
+    }
+
+    public function newsPlacementGenerateForNews(string $slug)
+    {
+        $news = $this->newsService->find($slug);
+
+        Gate::authorize('update', $news);
+
+        $result = $this->newsService->newsPlacementGenerateForNews($news);
+
+        return back()->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+
+    public function newsPlacementUpdateForNews(Request $request, string $slug)
+    {
+        $news = $this->newsService->find($slug);
+
+        Gate::authorize('update', $news);
+
+        $result = $this->newsService->newsPlacementUpdateForNews($request, $news);
+
+        return to_route('back-office.newses.index')->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+
+    public function newsPlacementDelete(string $slug, string $newsPlacementSlug)
+    {
+        $news = $this->newsService->find($slug);
+
+        Gate::authorize('update', $news);
+
+        $newsPlacement = $this->newsService->findNewsPlacement($news, $newsPlacementSlug);
+
+        $result = $this->newsService->newsPlacementDelete($news, $newsPlacement);
+
+        return back()->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+
+    private function redirectAfterNewsSave(array $result)
+    {
+        if (empty($result['data']['news_slug'])) {
+            return to_route('back-office.newses.index')->with('flash_message', [
+                'message' => $result['message'],
+                'status'  => $result['status'],
+            ]);
+        }
+
+        return to_route('back-office.newses.news-placements.index', [
+            'slug' => $result['data']['news_slug'],
+        ])->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);

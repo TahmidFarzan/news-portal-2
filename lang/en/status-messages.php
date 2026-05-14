@@ -19,7 +19,7 @@ return [
             'failed'  => 'Failed to save media.',
         ],
 
-        'update'   => [
+        'update' => [
             'success' => 'Media update successfully.',
             'failed'  => 'Failed to update media.',
         ],
@@ -150,39 +150,68 @@ return [
     ],
 
     'news'         => [
-        'save'                 => [
+        'save'           => [
             'success' => 'News saved successfully.',
             'failed'  => 'Failed to save news.',
         ],
-        'update'               => [
+        'update'         => [
             'success' => 'News updated successfully.',
             'failed'  => 'Failed to update news.',
         ],
-        'delete'               => [
+        'delete'         => [
             'success' => 'News deleted successfully.',
             'failed'  => 'Failed to delete news.',
         ],
 
-        'restore'              => [
+        'restore'        => [
             'success' => 'News restore successfully.',
             'failed'  => 'Failed to restore news.',
         ],
 
-        'gallery_image_delete' => [
-            'success' => 'News gallery image delete successfully.',
-            'failed'  => 'Failed to delete news gallery image.',
+        'gallery_image'  => [
+            'save'     => [
+                'success' => 'News gallery image save successfully.',
+                'failed'  => 'Failed to save news gallery image.',
 
+            ],
+            'update'   => [
+                'success' => 'News gallery image update successfully.',
+                'failed'  => 'Failed to update news gallery image.',
+
+            ],
+            'delete'   => [
+                'success' => 'News gallery image delete successfully.',
+                'failed'  => 'Failed to delete news gallery image.',
+            ],
+
+            'sequence' => [
+                'update' => [
+                    'success' => 'News gallery image sequence update successfully.',
+                    'failed'  => 'Failed to update news gallery image sequence.',
+                ],
+            ],
         ],
 
-        'gallery_image_update' => [
-            'success' => 'News gallery image update successfully.',
-            'failed'  => 'Failed to update news gallery image.',
+        'news_placement' => [
+            "save" => [
+                'success' => 'News placement save successfully.',
+                'failed'  => 'Failed to save news placement.',
+            ],
 
-        ],
+            "generate" => [
+                'success' => 'News placement generate successfully.',
+                'failed'  => 'Failed to generate news placement.',
+            ],
 
-        'gallery_image_sequence_update' => [
-            'success' => 'News gallery image sequence update successfully.',
-            'failed'  => 'Failed to update news gallery image sequence.',
+            "update" => [
+                'success' => 'News placement update successfully.',
+                'failed'  => 'Failed to update news placement.',
+            ],
+
+            "delete" => [
+                'success' => 'News placement delete successfully.',
+                'failed'  => 'Failed to delete news placement.',
+            ],
 
         ],
     ],
