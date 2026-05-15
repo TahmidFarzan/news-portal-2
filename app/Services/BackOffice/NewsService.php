@@ -475,6 +475,7 @@ class NewsService
             'createdBy',
 
             'news',
+            'category',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
