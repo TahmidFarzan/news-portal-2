@@ -35,7 +35,7 @@ class TrendController extends Controller
         $trend = $this->trendService->find($slug);
         $trend = $this->trendService->loadRelations($trend);
 
-        Gate::authorize('create', $trend);
+        Gate::authorize('view', $trend);
 
         return Inertia::render('back-office/trends/Details', [
             'trend' => $trend,

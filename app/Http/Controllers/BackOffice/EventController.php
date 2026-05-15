@@ -35,7 +35,7 @@ class EventController extends Controller
         $event = $this->eventService->find($slug);
         $event = $this->eventService->loadRelations($event);
 
-        Gate::authorize('create', $event);
+        Gate::authorize('view', $event);
 
         return Inertia::render('back-office/events/Details', [
             'event' => $event,

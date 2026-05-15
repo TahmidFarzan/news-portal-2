@@ -35,7 +35,7 @@ class CategoryController extends Controller
         $category = $this->categoryService->find($slug);
         $category = $this->categoryService->loadRelations($category);
 
-        Gate::authorize('create', $category);
+        Gate::authorize('view', $category);
 
         return Inertia::render('back-office/categories/Details', [
             'category' => $category,

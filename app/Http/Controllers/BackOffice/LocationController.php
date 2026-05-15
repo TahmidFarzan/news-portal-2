@@ -35,7 +35,7 @@ class LocationController extends Controller
         $location = $this->locationService->find($slug);
         $location = $this->locationService->loadRelations($location);
 
-        Gate::authorize('create', $location);
+        Gate::authorize('view', $location);
 
         return Inertia::render('back-office/locations/Details', [
             'location' => $location,

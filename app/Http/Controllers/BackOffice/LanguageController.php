@@ -36,7 +36,7 @@ class LanguageController extends Controller
         $language = $this->languageService->find($slug);
         $language = $this->languageService->loadRelations($language);
 
-        Gate::authorize('create', $language);
+        Gate::authorize('view', $language);
 
         return Inertia::render('back-office/languages/Details', [
             'language' => $language,

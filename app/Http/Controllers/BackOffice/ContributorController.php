@@ -35,7 +35,7 @@ class ContributorController extends Controller
         $contributor = $this->contributorService->find($slug);
         $contributor = $this->contributorService->loadRelations($contributor);
 
-        Gate::authorize('create', $contributor);
+        Gate::authorize('view', $contributor);
 
         return Inertia::render('back-office/contributors/Details', [
             'contributor' => $contributor,

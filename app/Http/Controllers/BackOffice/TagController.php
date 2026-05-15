@@ -35,7 +35,7 @@ class TagController extends Controller
         $tag = $this->tagService->find($slug);
         $tag = $this->tagService->loadRelations($tag);
 
-        Gate::authorize('create', $tag);
+        Gate::authorize('view', $tag);
 
         return Inertia::render('back-office/tags/Details', [
             'tag' => $tag,

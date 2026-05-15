@@ -46,7 +46,7 @@ class UserController extends Controller
     public function create()
     {
         $user = $this->userService->new();
-        Gate::authorize('create', $user);
+        Gate::authorize('view', $user);
 
         return Inertia::render('back-office/users/Create', [
             'user' => $user,
