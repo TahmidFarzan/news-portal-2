@@ -3,6 +3,7 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 import NewsImageGalleryGrid from '@/components/back-office/news/NewsImageGalleryGrid.vue'
+import NewsPlacementList from '@/components/back-office/news/NewsPlacementList.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -379,6 +380,11 @@ onMounted(async () => {
                 </div>
 
             </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">News placements</h3>
+            <NewsPlacementList :news="news" :news-placements="news.news_placements" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">

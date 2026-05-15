@@ -39,17 +39,7 @@ class NewsService
         return News::where('slug', $slug)->firstOrFail();
     }
 
-    public function findMedia(News $news, string $mediaSlug): Media
-    {
-        return $news->getMedia($news->media_collection_name)->where("slug", $mediaSlug)->firstOrFail();
-    }
-
-    public function findNewsPlacement(News $news, string $newsPlacementSlug): NewsPlacement
-    {
-        return $news->newsPlacements()->where("slug", $newsPlacementSlug)->firstOrFail();
-    }
-
-    public function findNewsTypeById(string $id): NewsType
+    public function newsTypefindById(string $id): NewsType
     {
         return NewsType::where('id', $id)->firstOrFail();
     }
@@ -71,6 +61,7 @@ class NewsService
             'tags.trend',
 
             'contributors',
+            'newsPlacements',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
@@ -153,7 +144,7 @@ class NewsService
             $isNew       = empty($news->id);
             $statusEvent = $isNew ? "save" : "update";
 
-            $newsType = $this->findNewsTypeById($request->input('news_type_id'));
+            $newsType = $this->newsTypefindById($request->input('news_type_id'));
 
             $news->news_type_id = $request->input('news_type_id');
             $news->language_id  = $request->input('language_id');
@@ -280,6 +271,11 @@ class NewsService
                 'message' => __('status-messages.news.restore.failed'),
             ];
         }
+    }
+
+    public function galleryImageFind(News $news, string $mediaSlug): Media
+    {
+        return $news->getMedia($news->media_collection_name)->where("slug", $mediaSlug)->firstOrFail();
     }
 
     public function galleryImageSave(NewsGalleryImageRequest $request, News $news): array
@@ -466,6 +462,28 @@ class NewsService
                 'message' => __('status-messages.news.gallery_image.delete.failed'),
             ];
         }
+    }
+
+    public function newsPlacementFind(News $news, string $newsPlacementSlug): NewsPlacement
+    {
+        return $news->newsPlacements()->where("slug", $newsPlacementSlug)->firstOrFail();
+    }
+
+    public function newsPlacementLoadRelations(NewsPlacement $newsPlacement): NewsPlacement
+    {
+        $newsPlacement->load([
+            'createdBy',
+
+            'news',
+
+            'activityLogs' => fn($query) => $query->latest()->limit(10),
+            'activityLogs.causer',
+
+            'latestActivityLog',
+            'latestActivityLog.causer',
+        ]);
+
+        return $newsPlacement;
     }
 
     public function newsPlacementHomeLead()
