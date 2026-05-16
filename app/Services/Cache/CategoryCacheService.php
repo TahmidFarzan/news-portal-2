@@ -30,7 +30,7 @@ class CategoryCacheService
     | DATABASE
     |-------------------------------------------------*/
 
-    public function dbRecordsCount()
+    public function dbCategoriesCount()
     {
         return Category::count();
     }
@@ -38,10 +38,10 @@ class CategoryCacheService
     public function dbLastPageNo($perPage = null)
     {
         $perPage = $perPage ?? $this->perPage;
-        return (int) ceil($this->dbRecordsCount() / $perPage);
+        return (int) ceil($this->dbCategoriesCount() / $perPage);
     }
 
-    private function dbRecords($perPage = null, $page = 1)
+    private function dbCategories($perPage = null, $page = 1)
     {
         $perPage = $perPage ?? $this->perPage;
 
@@ -52,21 +52,21 @@ class CategoryCacheService
     | CACHE WRITE
     |-------------------------------------------------*/
 
-    public function cachedRecords($key, $perPage = null, $page = 1)
+    public function cachedCategories($key, $perPage = null, $page = 1)
     {
         CacheServerHelper::cachedData(
             "category {$key} page {$page}",
-            $this->dbRecords($perPage, $page),
+            $this->dbCategories($perPage, $page),
             $this->cahedTime,
             ['category', $key]
         );
     }
 
-    public function cachedRecordsCount($key)
+    public function cachedCategoriesCount($key)
     {
         CacheServerHelper::cachedData(
             "category {$key} count",
-            $this->dbRecordsCount(),
+            $this->dbCategoriesCount(),
             $this->cahedTime,
             ['category', $key]
         );
@@ -86,7 +86,7 @@ class CategoryCacheService
     | CACHE READ (WITH FALLBACK)
     |-------------------------------------------------*/
 
-    public function recordsCount($key)
+    public function categoriesCount($key)
     {
         $cacheKey = "category {$key} count";
 
@@ -96,7 +96,7 @@ class CategoryCacheService
         );
 
         if ($count === null) {
-            $count = $this->dbRecordsCount();
+            $count = $this->dbCategoriesCount();
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $count,
@@ -130,25 +130,25 @@ class CategoryCacheService
         return $lastPage;
     }
 
-    public function records($key, $perPage = null, $page = 1)
+    public function categories($key, $perPage = null, $page = 1)
     {
         $cacheKey = "category {$key} page {$page}";
 
-        $records = CacheServerHelper::getCachedData(
+        $categories = CacheServerHelper::getCachedData(
             $cacheKey,
             ['category', $key]
         );
 
-        if ($records === null) {
-            $records = $this->dbRecords($perPage, $page);
+        if ($categories === null) {
+            $categories = $this->dbCategories($perPage, $page);
             CacheServerHelper::cachedData(
                 $cacheKey,
-                $records,
+                $categories,
                 $this->cahedTime,
                 ['category', $key]
             );
         }
 
-        return $records;
+        return $categories;
     }
 }

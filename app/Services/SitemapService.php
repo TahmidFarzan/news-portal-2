@@ -37,7 +37,7 @@ class SitemapService
     public function getCategories(Request $request)
     {
         $page = $request->query('page', 1);
-        return $this->categoryCacheService->records('sitemap', null, $page);
+        return $this->categoryCacheService->categories('sitemap', null, $page);
     }
 
     public function getCategoriesLastPageNo()
