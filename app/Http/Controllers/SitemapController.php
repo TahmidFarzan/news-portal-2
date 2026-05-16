@@ -27,10 +27,10 @@ class SitemapController extends Controller
                 ->header('Content-Type', 'application/xml');
         }
 
-        $routeFor = 'Category';
+        $routeUrl = route('sitemaps.categories');
         $lastPage = $this->sitemapService->getCategoriesLastPageNo();
 
-        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeUrl'))
             ->header('Content-Type', 'application/xml');
     }
 
@@ -42,10 +42,10 @@ class SitemapController extends Controller
                 ->header('Content-Type', 'application/xml');
         }
 
-        $routeFor = 'Tag';
+        $routeUrl = route('sitemaps.tags');
         $lastPage = $this->sitemapService->getTagsLastPageNo();
 
-        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeUrl'))
             ->header('Content-Type', 'application/xml');
     }
 
@@ -57,10 +57,10 @@ class SitemapController extends Controller
                 ->header('Content-Type', 'application/xml');
         }
 
-        $routeFor = 'Location';
+        $routeUrl = route('sitemaps.locations');
         $lastPage = $this->sitemapService->getLocationsLastPageNo();
 
-        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeUrl'))
             ->header('Content-Type', 'application/xml');
     }
 
@@ -72,10 +72,10 @@ class SitemapController extends Controller
                 ->header('Content-Type', 'application/xml');
         }
 
-        $routeFor = 'Event';
+        $routeUrl = route('sitemaps.events');
         $lastPage = $this->sitemapService->getEventsLastPageNo();
 
-        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeUrl'))
             ->header('Content-Type', 'application/xml');
     }
 
@@ -87,10 +87,10 @@ class SitemapController extends Controller
                 ->header('Content-Type', 'application/xml');
         }
 
-        $routeFor = 'Contributor';
+        $routeUrl = route('sitemaps.contributors');
         $lastPage = $this->sitemapService->getContributorsLastPageNo();
 
-        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeUrl'))
             ->header('Content-Type', 'application/xml');
     }
 
@@ -110,11 +110,12 @@ class SitemapController extends Controller
                 ->header('Content-Type', 'application/xml');
         }
 
-        $routeFor = 'News';
+        $routeUrl = route('sitemaps.newses');
         $lastPage = $this->sitemapService->getNewsesLastPageNo();
 
-        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeFor'))
+        return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeUrl'))
             ->header('Content-Type', 'application/xml');
     }
+
 
 }
