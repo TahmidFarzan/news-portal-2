@@ -95,20 +95,20 @@ class SitemapService
         return $this->contributorCacheService->lastPageNo('sitemap');
     }
 
-    public function latestNewsesGetNewses()
+    public function latestNewsesGetNewses(Request $request)
     {
-        return $this->newsCacheService->getLatest("sitemap", null);
+        return $this->newsCacheService->getLatest($request, "sitemap");
     }
 
     public function getNewses(Request $request)
     {
         $page = $request->query('page', 1);
-        return $this->newsCacheService->newses("sitemap", null, $page);
+        return $this->newsCacheService->newses($request, "sitemap");
     }
 
-    public function getNewsesLastPageNo()
+    public function getNewsesLastPageNo(Request $request)
     {
-        return $this->newsCacheService->lastPageNo("sitemap");
+        return $this->newsCacheService->lastPageNo($request, "sitemap");
     }
 
     public function getCategoryNewses(Request $request, Category $category)
@@ -116,7 +116,7 @@ class SitemapService
         $request->merge([
             'category_id' => $category->id,
         ]);
-        return $this->newsCacheService->newsesAccrodingRequest("sitemap", $request);
+        return $this->newsCacheService->newses($request, "sitemap");
     }
 
     public function getCategoryNewsesLastPageNo(Request $request, Category $category)
@@ -124,6 +124,6 @@ class SitemapService
         $request->merge([
             'category_id' => $category->id,
         ]);
-        return $this->newsCacheService->lastPageNoAccrodingRequest("sitemap", $request);
+        return $this->newsCacheService->lastPageNo($request, "sitemap");
     }
 }

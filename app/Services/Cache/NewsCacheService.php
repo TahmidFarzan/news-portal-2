@@ -1,113 +1,106 @@
 <?php
+
 namespace App\Services\Cache;
 
 use App\Helpers\CacheServerHelper;
 use App\Models\News;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection as SupportCollection;
 
 class NewsCacheService
 {
-    private int $cahedTime     = 86400;
-    private int $perPage       = 5000;
-    private $latestRecordLimit = 1000;
+    private int $cahedTime = 86400;
+    private int $perPage = 5000;
+    private int $latestRecordLimit = 1000;
 
-    public function isConnected()
+    public function isConnected(): bool
     {
         return CacheServerHelper::isConnected();
     }
 
-    /* -------------------------------------------------
-    | CLEAR CACHE
-    |-------------------------------------------------*/
-
-    public function clearCached()
+    public function clearCached(): void
     {
         CacheServerHelper::clearCachedByTag(['news', 'public']);
         CacheServerHelper::clearCachedByTag(['news', 'sitemap']);
     }
 
-    /* -------------------------------------------------
-    | DATABASE
-    |-------------------------------------------------*/
-
-    public function dbNewsesCount()
+    public function dbNewsesCount(Request $request): int
     {
-        return News::where("is_published", true)->count();
+        return $this->dbNewsQuery($request)->count();
     }
 
-    public function dbLastPageNo($perPage = null)
+    public function dbLastPageNo(Request $request): int
     {
-        $perPage = $perPage ?? $this->perPage;
-        return (int) ceil($this->dbNewsesCount() / $perPage);
+        $perPage = $this->requestPerPage($request);
+
+        return (int) ceil($this->dbNewsesCount($request) / $perPage);
     }
 
-    private function dbNewses($perPage = null, $page = 1)
+    public function dbNewses(Request $request): LengthAwarePaginator
     {
-        $perPage = $perPage ?? $this->perPage;
+        $perPage = $this->requestPerPage($request);
+        $page = $this->requestPage($request);
 
-        return News::where("is_published", true)->orderBy('id', 'desc')->with("language")->paginate($perPage, ['*'], 'page', $page);
+        return $this->dbNewsQuery($request)
+            ->orderBy('id', 'desc')
+            ->with('language')
+            ->paginate($perPage, ['*'], 'page', $page);
     }
 
-    public function dbLatest($latestRecordLimit = null)
+    public function dbLatest(?int $latestRecordLimit = null): EloquentCollection
     {
-        $currentDate       = now();
-        $startDate         = $currentDate->copy()->subDays(3);
         $latestRecordLimit = $latestRecordLimit ?? $this->latestRecordLimit;
 
-        $newses = News::where("is_published", true)->orderBy("id", "desc");
-        $newses = $newses->take($latestRecordLimit);
-        $newses = $newses->get();
-        return $newses;
+        return News::where('is_published', true)
+            ->orderBy('id', 'desc')
+            ->take($latestRecordLimit)
+            ->get();
     }
 
-    /* -------------------------------------------------
-    | CACHE WRITE
-    |-------------------------------------------------*/
-
-    public function cachedNewses($key, $perPage = null, $page = 1)
+    public function cachedNewses(Request $request, string $key): void
     {
         CacheServerHelper::cachedData(
-            "news {$key} page {$page}",
-            $this->dbNewses($perPage, $page),
+            $this->newsesCacheKey($request, $key),
+            $this->dbNewses($request),
             $this->cahedTime,
             ['news', $key]
         );
     }
 
-    public function cachedNewsesCount($key)
+    public function cachedNewsesCount(Request $request, string $key): void
     {
         CacheServerHelper::cachedData(
-            "news {$key} count",
-            $this->dbNewsesCount(),
+            $this->countCacheKey($request, $key),
+            $this->dbNewsesCount($request),
             $this->cahedTime,
             ['news', $key]
         );
     }
 
-    public function cachedLastPageNo($key)
+    public function cachedLastPageNo(Request $request, string $key): void
     {
         CacheServerHelper::cachedData(
-            "news {$key} last page no",
-            $this->dbLastPageNo(),
+            $this->lastPageCacheKey($request, $key),
+            $this->dbLastPageNo($request),
             $this->cahedTime,
             ['news', $key]
         );
     }
 
-    public function cachedLatest($cachedKey)
+    public function cachedLatest(string $cachedKey): void
     {
         $cachedKey = " news {$cachedKey} latest newses";
-        $newses    = self::dbLatest(null);
+        $newses = $this->dbLatest();
+
         CacheServerHelper::cachedData($cachedKey, $newses, $this->cahedTime);
     }
 
-    /* -------------------------------------------------
-    | CACHE READ (WITH FALLBACK)
-    |-------------------------------------------------*/
-
-    public function newsesCount($key)
+    public function newsesCount(Request $request, string $key): int
     {
-        $cacheKey = "news {$key} count";
+        $cacheKey = $this->countCacheKey($request, $key);
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -115,7 +108,8 @@ class NewsCacheService
         );
 
         if ($count === null) {
-            $count = $this->dbNewsesCount();
+            $count = $this->dbNewsesCount($request);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $count,
@@ -124,12 +118,12 @@ class NewsCacheService
             );
         }
 
-        return $count;
+        return (int) $count;
     }
 
-    public function lastPageNo($key)
+    public function lastPageNo(Request $request, string $key): int
     {
-        $cacheKey = "news {$key} last page no";
+        $cacheKey = $this->lastPageCacheKey($request, $key);
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -137,7 +131,8 @@ class NewsCacheService
         );
 
         if ($lastPage === null) {
-            $lastPage = $this->dbLastPageNo();
+            $lastPage = $this->dbLastPageNo($request);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
@@ -146,12 +141,12 @@ class NewsCacheService
             );
         }
 
-        return $lastPage;
+        return (int) $lastPage;
     }
 
-    public function newses($key, $perPage = null, $page = 1)
+    public function newses(Request $request, string $key): LengthAwarePaginator
     {
-        $cacheKey = "news {$key} page {$page}";
+        $cacheKey = $this->newsesCacheKey($request, $key);
 
         $newses = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -159,7 +154,8 @@ class NewsCacheService
         );
 
         if ($newses === null) {
-            $newses = $this->dbNewses($perPage, $page);
+            $newses = $this->dbNewses($request);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $newses,
@@ -171,178 +167,44 @@ class NewsCacheService
         return $newses;
     }
 
-    public function getLatest($cachedKey, $latestRecordLimit = null)
+    public function getLatest(string $cachedKey, ?int $latestRecordLimit = null): EloquentCollection|SupportCollection
     {
-        $newses         = null;
-        $cachedKey      = " news {$cachedKey} latest news";
+        $newses = null;
+        $cachedKey = " news {$cachedKey} latest news";
         $redisConnected = CacheServerHelper::isConnected();
 
         if ($redisConnected) {
             $newses = CacheServerHelper::getCachedData($cachedKey);
 
             if (empty($newses)) {
-                $newses = self::dbLatest($latestRecordLimit);
-                CacheServerHelper::cachedData($cachedKey, $newses, $this->cahedTime);
+                $newses = $this->dbLatest($latestRecordLimit);
+
+                CacheServerHelper::cachedData(
+                    $cachedKey,
+                    $newses,
+                    $this->cahedTime
+                );
             }
 
             if (! empty($newses)) {
-                $latestRecordLimit = ($latestRecordLimit > $this->latestRecordLimit) ? $latestRecordLimit : $this->latestRecordLimit;
-                $newses            = collect($newses)->take($latestRecordLimit);
+                $latestRecordLimit = ($latestRecordLimit !== null && $latestRecordLimit > $this->latestRecordLimit)
+                    ? $latestRecordLimit
+                    : $this->latestRecordLimit;
+
+                $newses = collect($newses)->take($latestRecordLimit);
             }
         }
-        if (! $redisConnected || (empty($newses) || ($newses == null))) {
-            $newses = self::dbLatest($latestRecordLimit);
-        }
-        return $newses;
-    }
 
-    public function dbNewsesCountAccrodingRequest(Request $request)
-    {
-        return $this->dbNewsQueryAccrodingRequest($request)->count();
-    }
-
-    public function dbLastPageNoAccrodingRequest(Request $request)
-    {
-        $perPage = $this->requestPerPage($request);
-
-        return (int) ceil($this->dbNewsesCountAccrodingRequest($request) / $perPage);
-    }
-
-    public function cachedNewsesCountAccrodingRequest($key, Request $request)
-    {
-        CacheServerHelper::cachedData(
-            $this->requestCountCacheKey($key, $request),
-            $this->dbNewsesCountAccrodingRequest($request),
-            $this->cahedTime,
-            ['news', $key]
-        );
-    }
-
-    public function cachedLastPageNoAccrodingRequest($key, Request $request)
-    {
-        CacheServerHelper::cachedData(
-            $this->requestLastPageCacheKey($key, $request),
-            $this->dbLastPageNoAccrodingRequest($request),
-            $this->cahedTime,
-            ['news', $key]
-        );
-    }
-
-    public function cachedNewsesAccrodingRequest($key, Request $request)
-    {
-        CacheServerHelper::cachedData(
-            $this->requestNewsesCacheKey($key, $request),
-            $this->dbNewsesAccrodingRequest($request),
-            $this->cahedTime,
-            ['news', $key]
-        );
-    }
-
-    public function newsesCountAccrodingRequest($key, Request $request)
-    {
-        $cacheKey = $this->requestCountCacheKey($key, $request);
-
-        $count = CacheServerHelper::getCachedData(
-            $cacheKey,
-            ['news', $key]
-        );
-
-        if ($count === null) {
-            $count = $this->dbNewsesCountAccrodingRequest($request);
-
-            CacheServerHelper::cachedData(
-                $cacheKey,
-                $count,
-                $this->cahedTime,
-                ['news', $key]
-            );
-        }
-
-        return $count;
-    }
-
-    public function lastPageNoAccrodingRequest($key, Request $request)
-    {
-        $cacheKey = $this->requestLastPageCacheKey($key, $request);
-
-        $lastPage = CacheServerHelper::getCachedData(
-            $cacheKey,
-            ['news', $key]
-        );
-
-        if ($lastPage === null) {
-            $lastPage = $this->dbLastPageNoAccrodingRequest($request);
-
-            CacheServerHelper::cachedData(
-                $cacheKey,
-                $lastPage,
-                $this->cahedTime,
-                ['news', $key]
-            );
-        }
-
-        return $lastPage;
-    }
-
-    public function newsesAccrodingRequest($key,Request $request)
-    {
-        $cacheKey = $this->requestNewsesCacheKey($key, $request);
-
-        $newses = CacheServerHelper::getCachedData(
-            $cacheKey,
-            ['news', $key]
-        );
-
-        if ($newses === null) {
-            $newses = $this->dbNewsesAccrodingRequest($request);
-
-            CacheServerHelper::cachedData(
-                $cacheKey,
-                $newses,
-                $this->cahedTime,
-                ['news', $key]
-            );
+        if (! $redisConnected || empty($newses)) {
+            $newses = $this->dbLatest($latestRecordLimit);
         }
 
         return $newses;
     }
 
-    private function requestPerPage(Request $request)
+    private function dbNewsQuery(Request $request): Builder
     {
-        $perPage = (int) $request->input('per_page', $this->perPage);
-
-        return $perPage > 0 ? $perPage : $this->perPage;
-    }
-
-    private function requestPage(Request $request)
-    {
-        $page = (int) $request->input('page', 1);
-
-        return $page > 0 ? $page : 1;
-    }
-
-    private function requestFilterKey(Request $request)
-    {
-        $filters = [
-            'category_id'    => $request->input('category_id'),
-            'event_id'       => $request->input('event_id'),
-            'location_id'    => $request->input('location_id'),
-            'language_id'    => $request->input('language_id'),
-            'news_type_id'   => $request->input('news_type_id'),
-            'tag_id'         => $request->input('tag_id'),
-            'contributor_id' => $request->input('contributor_id'),
-        ];
-
-        $filters = array_filter($filters, function ($value) {
-            return $value !== null && $value !== '';
-        });
-
-        return md5(json_encode($filters));
-    }
-
-    private function dbNewsQueryAccrodingRequest(Request $request)
-    {
-        $newses = News::query();
+        $newses = News::query()->where('is_published', true);
 
         if ($request->filled('category_id')) {
             $newses = $newses->where('category_id', $request->input('category_id'));
@@ -367,7 +229,7 @@ class NewsCacheService
         if ($request->filled('tag_id')) {
             $tagId = $request->input('tag_id');
 
-            $newses = $newses->whereHas('tags', function ($relationQuery) use ($tagId) {
+            $newses = $newses->whereHas('tags', function (Builder $relationQuery) use ($tagId): void {
                 $relationQuery->where('id', $tagId);
             });
         }
@@ -375,47 +237,98 @@ class NewsCacheService
         if ($request->filled('contributor_id')) {
             $contributorId = $request->input('contributor_id');
 
-            $newses = $newses->whereHas('contributors', function ($relationQuery) use ($contributorId) {
+            $newses = $newses->whereHas('contributors', function (Builder $relationQuery) use ($contributorId): void {
                 $relationQuery->where('id', $contributorId);
             });
         }
 
-        return $newses->where("is_published", true);
+        return $newses;
     }
 
-    private function dbNewsesAccrodingRequest(Request $request)
+    private function requestPerPage(Request $request): int
     {
-        $perPage = $this->requestPerPage($request);
-        $page    = $this->requestPage($request);
+        $perPage = (int) $request->input('per_page', $this->perPage);
 
-        return $this->dbNewsQueryAccrodingRequest($request)
-            ->orderBy('id', 'desc')
-            ->with("language")
-            ->paginate($perPage, ['*'], 'page', $page);
+        return $perPage > 0 ? $perPage : $this->perPage;
     }
 
-    private function requestCountCacheKey($key, Request $request)
+    private function requestPage(Request $request): int
     {
+        $page = (int) $request->input('page', 1);
+
+        return $page > 0 ? $page : 1;
+    }
+
+    private function requestFilterKey(Request $request): string
+    {
+        $filters = [
+            'category_id' => $request->input('category_id'),
+            'event_id' => $request->input('event_id'),
+            'location_id' => $request->input('location_id'),
+            'language_id' => $request->input('language_id'),
+            'news_type_id' => $request->input('news_type_id'),
+            'tag_id' => $request->input('tag_id'),
+            'contributor_id' => $request->input('contributor_id'),
+        ];
+
+        $filters = array_filter($filters, function ($value): bool {
+            return $value !== null && $value !== '';
+        });
+
+        if (empty($filters)) {
+            return 'all';
+        }
+
+        ksort($filters);
+
+        return md5(json_encode($filters));
+    }
+
+    private function hasRequestFilters(Request $request): bool
+    {
+        return $request->filled('category_id')
+            || $request->filled('event_id')
+            || $request->filled('location_id')
+            || $request->filled('language_id')
+            || $request->filled('news_type_id')
+            || $request->filled('tag_id')
+            || $request->filled('contributor_id');
+    }
+
+    private function countCacheKey(Request $request, string $key): string
+    {
+        if (! $this->hasRequestFilters($request)) {
+            return "news {$key} count";
+        }
+
         $filterKey = $this->requestFilterKey($request);
 
         return "news {$key} filter {$filterKey} count";
     }
 
-    private function requestLastPageCacheKey($key, Request $request)
+    private function lastPageCacheKey(Request $request, string $key): string
     {
+        if (! $this->hasRequestFilters($request) && ! $request->filled('per_page')) {
+            return "news {$key} last page no";
+        }
+
         $filterKey = $this->requestFilterKey($request);
-        $perPage   = $this->requestPerPage($request);
+        $perPage = $this->requestPerPage($request);
 
         return "news {$key} filter {$filterKey} per_page {$perPage} last page no";
     }
 
-    private function requestNewsesCacheKey($key, Request $request)
+    private function newsesCacheKey(Request $request, string $key): string
     {
+        $page = $this->requestPage($request);
+
+        if (! $this->hasRequestFilters($request) && ! $request->filled('per_page')) {
+            return "news {$key} page {$page}";
+        }
+
         $filterKey = $this->requestFilterKey($request);
-        $perPage   = $this->requestPerPage($request);
-        $page      = $this->requestPage($request);
+        $perPage = $this->requestPerPage($request);
 
         return "news {$key} filter {$filterKey} per_page {$perPage} page {$page}";
     }
-
 }

@@ -94,9 +94,9 @@ class SitemapController extends Controller
             ->header('Content-Type', 'application/xml');
     }
 
-    public function latestNewses()
+    public function latestNewses(Request $request)
     {
-        $records = $this->sitemapService->latestNewsesGetNewses();
+        $records = $this->sitemapService->latestNewsesGetNewses($request);
 
         return response()->view('sitemaps.newses', compact('records'))
             ->header('Content-Type', 'application/xml');
@@ -111,7 +111,7 @@ class SitemapController extends Controller
         }
 
         $routeUrl = route('sitemaps.newses');
-        $lastPage = $this->sitemapService->getNewsesLastPageNo();
+        $lastPage = $this->sitemapService->getNewsesLastPageNo($request);
 
         return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeUrl'))
             ->header('Content-Type', 'application/xml');
@@ -122,14 +122,14 @@ class SitemapController extends Controller
         $category = $this->sitemapService->categoryBySlugTree($slugTree);
 
         if ($request->filled("page")) {
-            $records = $this->sitemapService->getCategoryNewses($request,$category);
+            $records = $this->sitemapService->getCategoryNewses($request, $category);
             return response()->view('sitemaps.newses', compact('records'))
                 ->header('Content-Type', 'application/xml');
         }
 
         $routeUrl = $category->getSitemapUrlAttribute();
 
-        $lastPage = $this->sitemapService->getCategoryNewsesLastPageNo($request,$category);
+        $lastPage = $this->sitemapService->getCategoryNewsesLastPageNo($request, $category);
 
         return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"))
             ->header('Content-Type', 'application/xml');
