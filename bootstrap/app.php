@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Middleware\HandleInertiaRequests;
-use App\Http\Middleware\UserRoleMiddleware;
+use App\Http\Middleware\UserRoleCheck;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'handle.inertia.middleware' => HandleInertiaRequests::class,
-            'user.role'  => UserRoleMiddleware::class,
+            'user.role.check'  => UserRoleCheck::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

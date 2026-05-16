@@ -16,7 +16,7 @@ class LanguageController extends Controller
     public function __construct(LanguageService $languageService)
     {
         $this->languageService = $languageService;
-        $this->middleware(['auth', 'verified', 'user.role:admin,news_desk']);
+        $this->middleware(['auth', 'verified', 'user.role.check:admin,news_desk']);
     }
 
     public function index(Request $request)

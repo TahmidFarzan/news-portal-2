@@ -15,7 +15,7 @@ class TagController extends Controller
     public function __construct(TagService $tagService)
     {
         $this->tagService = $tagService;
-        $this->middleware(['auth', 'verified', 'user.role:admin,news_desk']);
+        $this->middleware(['auth', 'verified', 'user.role.check:admin,news_desk']);
     }
 
     public function index(Request $request)

@@ -15,7 +15,7 @@ class EventController extends Controller
     public function __construct(EventService $eventService)
     {
         $this->eventService = $eventService;
-        $this->middleware(['auth', 'verified', 'user.role:admin,news_desk']);
+        $this->middleware(['auth', 'verified', 'user.role.check:admin,news_desk']);
     }
 
     public function index(Request $request)
