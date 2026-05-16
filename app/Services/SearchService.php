@@ -577,6 +577,10 @@ class SearchService
             $query->where('language_id', $request->input('language_id'));
         }
 
+        if ($request->filled('news_type_id')) {
+            $query->where('news_type_id', $request->input('news_type_id'));
+        }
+
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->input('category_id'));
         }
@@ -598,8 +602,8 @@ class SearchService
             'sub_title'          => $news->sub_title,
             'content_shoulder'   => $news->content_shoulder,
             'slug'               => $news->slug,
-            'published_at'       => $news->published_at,
-            'title_published_at' => "{$news->title} ({$news->published_at})",
+            'published_at'       => $news->title_with_published_at,
+            'title_with_published_at' => $news->title_with_published_at,
         ]);
 
         return [

@@ -42,7 +42,7 @@ class News extends Model implements HasMedia
 
     protected $appends = [
         'public_url',
-        "published_at",
+        "published_at", "title_with_published_at",
         'is_recent_created',
         "feeds_rss_url", "feeds_atom_url",
         'feature_image', 'feature_image_mobile', 'gallery_images',
