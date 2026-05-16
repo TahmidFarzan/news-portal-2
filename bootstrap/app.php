@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\XmlResponse;
 use App\Http\Middleware\UserRoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'handle.inertia.middleware' => HandleInertiaRequests::class,
             'user.role'  => UserRoleMiddleware::class,
+            'xml.response'  => XmlResponse::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -255,7 +255,7 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
 
 });
 
-Route::prefix('sitemaps')->name('sitemaps.')->group(function () {
+Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->group(function () {
     Route::get('index.xml', [SitemapController::class, 'index'])->name('index');
 
     Route::get('categories.xml', [SitemapController::class, 'categories'])->name('categories');
