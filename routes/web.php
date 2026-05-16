@@ -70,7 +70,7 @@ Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(functi
 
 Route::prefix('search')->name('search.')->group(function () {
 
-    Route::middleware('cache.headers:public;max_age=3600')->group(function () {
+    Route::middleware(['response.cache:3600'])->group(function () {
         Route::get('per-pages', [SearchController::class, 'perPages'])->name('per-pages');
         Route::get('genders', [SearchController::class, 'genders'])->name('genders');
         Route::get('religions', [SearchController::class, 'religions'])->name('religions');
@@ -85,7 +85,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
     });
 
-    Route::middleware('cache.headers:public;max_age=60')->group(function () {
+    Route::middleware(['response.cache:60'])->group(function () {
         Route::get('users', [SearchController::class, 'users'])->name('users');
         Route::get('languages', [SearchController::class, 'languages'])->name('languages');
         Route::get('categories', [SearchController::class, 'categories'])->name('categories');
@@ -111,7 +111,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('contributor/{slugOrId}', [SearchController::class, 'contributor'])->name('contributor');
     });
 
-    Route::middleware(['cache.headers:private;max_age=60'])->get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
+    Route::middleware(['response.cache:60,private'])->get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
 });
 
 Route::prefix('back-office')->name('back-office.')->group(function () {
