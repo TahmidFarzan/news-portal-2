@@ -97,7 +97,7 @@ class SitemapService
     public function getNewses(Request $request)
     {
         $page = $request->query('page', 1);
-        return $this->newsCacheService->records("sitemap", null, $page);
+        return $this->newsCacheService->newses("sitemap", null, $page);
     }
 
     public function getNewsesLastPageNo()

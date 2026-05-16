@@ -29,7 +29,7 @@ class NewsCacheService
     | DATABASE
     |-------------------------------------------------*/
 
-    public function dbRecordsCount()
+    public function dbNewsesCount()
     {
         return News::where("is_published", true)->count();
     }
@@ -37,10 +37,10 @@ class NewsCacheService
     public function dbLastPageNo($perPage = null)
     {
         $perPage = $perPage ?? $this->perPage;
-        return (int) ceil($this->dbRecordsCount() / $perPage);
+        return (int) ceil($this->dbNewsesCount() / $perPage);
     }
 
-    private function dbRecords($perPage = null, $page = 1)
+    private function dbNewses($perPage = null, $page = 1)
     {
         $perPage = $perPage ?? $this->perPage;
 
@@ -53,31 +53,31 @@ class NewsCacheService
         $startDate   = $currentDate->copy()->subDays(3);
         $latestRecordLimit = $latestRecordLimit ?? $this->latestRecordLimit;
 
-        $records = News::where("is_published", true)->orderBy("id", "desc");
-        $records = $records->take($latestRecordLimit);
-        $records = $records->get();
-        return $records;
+        $newses = News::where("is_published", true)->orderBy("id", "desc");
+        $newses = $newses->take($latestRecordLimit);
+        $newses = $newses->get();
+        return $newses;
     }
 
     /* -------------------------------------------------
     | CACHE WRITE
     |-------------------------------------------------*/
 
-    public function cachedRecords($key, $perPage = null, $page = 1)
+    public function cachedNewses($key, $perPage = null, $page = 1)
     {
         CacheServerHelper::cachedData(
             "news {$key} page {$page}",
-            $this->dbRecords($perPage, $page),
+            $this->dbNewses($perPage, $page),
             $this->cahedTime,
             ['news', $key]
         );
     }
 
-    public function cachedRecordsCount($key)
+    public function cachedNewsesCount($key)
     {
         CacheServerHelper::cachedData(
             "news {$key} count",
-            $this->dbRecordsCount(),
+            $this->dbNewsesCount(),
             $this->cahedTime,
             ['news', $key]
         );
@@ -96,15 +96,15 @@ class NewsCacheService
     public function cachedLatest($cachedKey)
     {
         $cachedKey = " news {$cachedKey} latest newses";
-        $records   = self::dbLatest(null);
-        CacheServerHelper::cachedData($cachedKey, $records, $this->cahedTime);
+        $newses   = self::dbLatest(null);
+        CacheServerHelper::cachedData($cachedKey, $newses, $this->cahedTime);
     }
 
     /* -------------------------------------------------
     | CACHE READ (WITH FALLBACK)
     |-------------------------------------------------*/
 
-    public function recordsCount($key)
+    public function newsesCount($key)
     {
         $cacheKey = "news {$key} count";
 
@@ -114,7 +114,7 @@ class NewsCacheService
         );
 
         if ($count === null) {
-            $count = $this->dbRecordsCount();
+            $count = $this->dbNewsesCount();
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $count,
@@ -148,50 +148,50 @@ class NewsCacheService
         return $lastPage;
     }
 
-    public function records($key, $perPage = null, $page = 1)
+    public function newses($key, $perPage = null, $page = 1)
     {
         $cacheKey = "news {$key} page {$page}";
 
-        $records = CacheServerHelper::getCachedData(
+        $newses = CacheServerHelper::getCachedData(
             $cacheKey,
             ['news', $key]
         );
 
-        if ($records === null) {
-            $records = $this->dbRecords($perPage, $page);
+        if ($newses === null) {
+            $newses = $this->dbNewses($perPage, $page);
             CacheServerHelper::cachedData(
                 $cacheKey,
-                $records,
+                $newses,
                 $this->cahedTime,
                 ['news', $key]
             );
         }
 
-        return $records;
+        return $newses;
     }
 
     public function getLatest($cachedKey, $latestRecordLimit = null)
     {
-        $records        = null;
+        $newses        = null;
         $cachedKey      = " news {$cachedKey} latest news";
         $redisConnected = CacheServerHelper::isConnected();
 
         if ($redisConnected) {
-            $records = CacheServerHelper::getCachedData($cachedKey);
+            $newses = CacheServerHelper::getCachedData($cachedKey);
 
-            if (empty($records)) {
-                $records = self::dbLatest($latestRecordLimit);
-                CacheServerHelper::cachedData($cachedKey, $records, $this->cahedTime);
+            if (empty($newses)) {
+                $newses = self::dbLatest($latestRecordLimit);
+                CacheServerHelper::cachedData($cachedKey, $newses, $this->cahedTime);
             }
 
-            if (! empty($records)) {
+            if (! empty($newses)) {
                 $latestRecordLimit = ($latestRecordLimit > $this->latestRecordLimit) ? $latestRecordLimit : $this->latestRecordLimit;
-                $records     = collect($records)->take($latestRecordLimit);
+                $newses     = collect($newses)->take($latestRecordLimit);
             }
         }
-        if (! $redisConnected || (empty($records) || ($records == null))) {
-            $records = self::dbLatest($latestRecordLimit);
+        if (! $redisConnected || (empty($newses) || ($newses == null))) {
+            $newses = self::dbLatest($latestRecordLimit);
         }
-        return $records;
+        return $newses;
     }
 }
