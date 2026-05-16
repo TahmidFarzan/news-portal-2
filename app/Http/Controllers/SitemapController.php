@@ -117,5 +117,23 @@ class SitemapController extends Controller
             ->header('Content-Type', 'application/xml');
     }
 
+    public function categoryNewses(Request $request, $slugTree)
+    {
+        $category = $this->sitemapService->categoryBySlugTree($slugTree);
+
+        if ($request->filled("page")) {
+            $records = $this->sitemapService->getCategoryNewses($request,$category);
+            return response()->view('sitemaps.newses', compact('records'))
+                ->header('Content-Type', 'application/xml');
+        }
+
+        $routeUrl = $category->getSitemapUrlAttribute();
+
+        $lastPage = $this->sitemapService->getCategoryNewsesLastPageNo($request,$category);
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"))
+            ->header('Content-Type', 'application/xml');
+
+    }
 
 }

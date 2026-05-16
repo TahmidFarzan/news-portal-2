@@ -110,7 +110,7 @@ class Category extends Model
 
     public function getSitemapUrlAttribute(): string
     {
-        return "";
+        return route("sitemaps.categories.newses",['slugTree' => $this->slug_tree]);
     }
 
     public function getIsRecentCreatedAttribute(): bool

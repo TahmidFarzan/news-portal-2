@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\Category;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\EventCacheService;
@@ -32,6 +33,11 @@ class SitemapService
         $this->eventCacheService       = $eventCacheService;
         $this->contributorCacheService = $contributorCacheService;
         $this->newsCacheService        = $newsCacheService;
+    }
+
+    public function categoryBySlugTree(string $slugTree): Category
+    {
+        return Category::where("slug_tree", $slugTree)->firstOrFail();
     }
 
     public function getCategories(Request $request)
@@ -103,5 +109,21 @@ class SitemapService
     public function getNewsesLastPageNo()
     {
         return $this->newsCacheService->lastPageNo("sitemap");
+    }
+
+    public function getCategoryNewses(Request $request, Category $category)
+    {
+        $request->merge([
+            'category_id' => $category->id,
+        ]);
+        return $this->newsCacheService->newsesAccrodingRequest("sitemap", $request);
+    }
+
+    public function getCategoryNewsesLastPageNo(Request $request, Category $category)
+    {
+        $request->merge([
+            'category_id' => $category->id,
+        ]);
+        return $this->newsCacheService->lastPageNoAccrodingRequest("sitemap", $request);
     }
 }
