@@ -46,7 +46,7 @@
     <news:news>
         <news:publication>
             <news:name>{{ config('app.name') }}</news:name>
-            <news:language>{{ $news->lannguage->code }}</news:language>
+            <news:language>{{ $news->language->code }}</news:language>
         </news:publication>
         <news:title>{{ $news->title }}</news:title>
         <news:publication_date>{{ $news->created_at->format('Y-m-d\TH:i:sP') }}</news:publication_date>
