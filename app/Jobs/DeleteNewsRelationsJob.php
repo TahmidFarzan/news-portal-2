@@ -42,7 +42,7 @@ class DeleteNewsRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $news = News::find($this->newsId);
 
-        if ($news && ($news->activityLogs()->exists()) || ($news->getMedia($news->media_collection_name)->count() > 0)) {
+        if ($news && ($news->activityLogs()->exists()) || ($news->getMedia($news->media_collection_name)->count() > 0) || $news->tags()->exists() || $news->contributors()->exists() || $news->relevantNewses()->exists() || $news->relatedNewses()->exists()) {
             DB::beginTransaction();
             try {
 
@@ -52,6 +52,22 @@ class DeleteNewsRelationsJob implements ShouldQueue, ShouldBeUnique
 
                 if ($news->getMedia($news->media_collection_name)->count() > 0) {
                     $news->clearMediaCollection($news->media_collection_name);
+                }
+
+                if ($news->tags()->exists()) {
+                    $news->tags()->delete();
+                }
+
+                if ($news->contributors()->exists()) {
+                    $news->contributors()->delete();
+                }
+
+                if ($news->relevantNewses()->exists()) {
+                    $news->relevantNewses()->delete();
+                }
+
+                if ($news->relatedNewses()->exists()) {
+                    $news->relatedNewses()->delete();
                 }
 
                 DB::commit();
