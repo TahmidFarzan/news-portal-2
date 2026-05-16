@@ -70,7 +70,9 @@ const saveForm = useForm({
     seo_title: news?.seo_title || null,
     seo_keywords: news?.seo_keywords ? news?.seo_keywords.split(',') : [],
 
-    editor_media_ids: null
+    editor_media_ids: null,
+    relevant_news_ids:[],
+    related_news_ids:[]
 })
 
 const categoryApiUrl = computed(() => {
@@ -117,6 +119,14 @@ const contributorApiUrl = computed(() => {
     }
 
     return route('search.contributors') + `?language_id=${saveForm.language_id}`
+})
+
+const relevantOrRelatedNewsApiUrl = computed(() => {
+    if (!saveForm.language_id) {
+        return route('search.newses')
+    }
+
+    return route('search.newses') + `?language_id=${saveForm.language_id}&news_type_id=${saveForm.news_type_id}`
 })
 
 function handleSelectedFeatureImage(media) {
@@ -287,6 +297,8 @@ watch(
         saveForm.location_id = null
         saveForm.tag_ids = []
         saveForm.contributor_ids = []
+        saveForm.relevant_news_ids = []
+        saveForm.related_news_ids = []
 
         showLocation.value = false
 
@@ -295,7 +307,9 @@ watch(
             'event_id',
             'location_id',
             'tag_ids',
-            'contributor_ids'
+            'contributor_ids',
+            'relevant_news_ids',
+            'related_news_ids',
         )
     }
 )
@@ -657,6 +671,44 @@ onMounted(async () => {
 
                             <p v-if="saveForm.errors.writer" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.writer }}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">Extra Settings</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Relevant Newses
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="relevant_news_ids"
+                                :selectedItem="saveForm.relevant_news_ids ? news?.relevant_news_ids : null"
+                                :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.relevant_news_ids" selectedLabelKey="title_with_published_at"
+                                selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
+                                placeholder="Select relevant newses" />
+                            <p v-if="saveForm.errors.relevant_news_ids" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.relevant_news_ids }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Related Newses
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="related_news_ids"
+                                :selectedItem="saveForm.related_news_ids ? news?.related_news_ids : null"
+                                :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.related_news_ids" selectedLabelKey="title_with_published_at"
+                                selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
+                                placeholder="Select related newses" />
+                            <p v-if="saveForm.errors.related_news_ids" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.related_news_ids }}
                             </p>
                         </div>
 

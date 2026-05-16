@@ -40,7 +40,7 @@ class NewsRequest extends FormRequest
             "content_shoulder"                  => ["nullable"],
             "body"                              => ["nullable"],
             "video_url"                         => ["nullable", "url"],
-                        "gallery_image_ids"                            => ["nullable"],
+            "gallery_image_ids"                 => ["nullable"],
 
             "tag_ids"                           => ["nullable"],
             "contributor_ids"                   => ["nullable"],
@@ -70,6 +70,9 @@ class NewsRequest extends FormRequest
             "selected_feature_image_mobile_url" => ["nullable", "url"],
 
             "editor_media_ids"                  => ["nullable"],
+
+            "relevant_news_ids"                 => ["nullable"],
+            "related_news_ids"                  => ["nullable"],
         ];
     }
 
@@ -174,57 +177,88 @@ class NewsRequest extends FormRequest
 
             if (! empty($data["news_type_id"]) && ! (NewsType::where("id", $data["news_type_id"])->exists())) {
                 $validator->errors()->add(
-                    'news_type',
+                    'news_type_id',
                     __("form-requests.news.news_type.not_found")
                 );
-            } else {
-                $newsType = NewsType::where("id", $data["news_type_id"])->first();
-                if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_STORY) && empty($data["body"])) {
-                    $validator->errors()->add(
-                        'body',
-                        __("form-requests.news.body.required")
-                    );
-                }
+            }
 
-                if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_VIDEO) && empty($data["video_url"])) {
-                    $validator->errors()->add(
-                        'video_url',
-                        __("form-requests.news.video_url.required")
-                    );
-                }
+            $newsType = NewsType::where("id", $data["news_type_id"])->first();
+            if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_STORY) && empty($data["body"])) {
+                $validator->errors()->add(
+                    'body',
+                    __("form-requests.news.body.required")
+                );
+            }
 
+            if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_VIDEO) && empty($data["video_url"])) {
+                $validator->errors()->add(
+                    'video_url',
+                    __("form-requests.news.video_url.required")
+                );
+            }
 
-                if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) && empty($data["gallery_image_ids"]) && !$isUpdate) {
-                    $validator->errors()->add(
-                        'gallery_image_ids',
-                        __("form-requests.news.gallery_image_ids.required")
-                    );
+            if ($newsType && ($newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) && empty($data["gallery_image_ids"]) && ! $isUpdate) {
+                $validator->errors()->add(
+                    'gallery_image_ids',
+                    __("form-requests.news.gallery_image_ids.required")
+                );
+            }
+
+            if (! empty($data["tag_ids"])) {
+                $tagIds = $this->normalizeIds($data['tag_ids'] ?? []);
+
+                foreach ($tagIds as $tagId) {
+                    if (! Tag::where('id', $tagId)->exists()) {
+                        $validator->errors()->add(
+                            'tag_ids',
+                            __("form-requests.news.tag_ids.not_found")
+                        );
+
+                        break;
+                    }
                 }
             }
 
-            $tagIds = $this->normalizeIds($data['tag_ids'] ?? []);
+            if (! empty($data["contributor_ids"])) {
+                $contributorIds = $this->normalizeIds($data['contributor_ids'] ?? []);
 
-            foreach ($tagIds as $tagId) {
-                if (! Tag::where('id', $tagId)->exists()) {
-                    $validator->errors()->add(
-                        'tag_ids',
-                        __("form-requests.news.tag_ids.not_found")
-                    );
+                foreach ($contributorIds as $contributorId) {
+                    if (! Contributor::where('id', $contributorId)->exists()) {
+                        $validator->errors()->add(
+                            'contributor_ids',
+                            __("form-requests.news.contributor_ids.not_found")
+                        );
 
-                    break;
+                        break;
+                    }
                 }
             }
 
-            $contributorIds = $this->normalizeIds($data['contributor_ids'] ?? []);
+            if (! empty($data["relevant_news_ids"])) {
+                $relevantIds = $this->normalizeIds($data['relevant_news_ids'] ?? []);
+                foreach ($relevantIds as $relevantId) {
+                    if (! News::where('id', $relevantId)->where("is_published", true)->exists()) {
+                        $validator->errors()->add(
+                            'relevant_news_ids',
+                            __("form-requests.news.relevant_news_ids.not_found")
+                        );
 
-            foreach ($contributorIds as $contributorId) {
-                if (! Contributor::where('id', $contributorId)->exists()) {
-                    $validator->errors()->add(
-                        'contributor_ids',
-                        __("form-requests.news.contributor_ids.not_found")
-                    );
+                        break;
+                    }
+                }
+            }
 
-                    break;
+            if (! empty($data["related_news_ids"])) {
+                $relatedIds = $this->normalizeIds($data['related_news_ids'] ?? []);
+                foreach ($relatedIds as $relatedId) {
+                    if (! News::where('id', $relatedId)->where("is_published", true)->exists()) {
+                        $validator->errors()->add(
+                            'related_news_ids',
+                            __("form-requests.news.related_news_ids.not_found")
+                        );
+
+                        break;
+                    }
                 }
             }
 

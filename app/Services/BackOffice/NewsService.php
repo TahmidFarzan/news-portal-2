@@ -8,6 +8,8 @@ use App\Http\Requests\NewsGalleryImageRequest;
 use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
 use App\Http\Requests\NewsRequest;
 use App\Jobs\NewsContributorSyncJob;
+use App\Jobs\NewsRelevantNewsSyncJob;
+use App\Jobs\NewsRelatedNewsSyncJob;
 use App\Jobs\NewsTagSyncJob;
 use App\Models\News;
 use App\Models\NewsPlacement;
@@ -62,6 +64,12 @@ class NewsService
 
             'contributors',
             'newsPlacements',
+
+            'relevantNewses',
+            'relevantNewses.category',
+
+            'relatedNewses',
+            'relatedNewses.category',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
@@ -680,6 +688,14 @@ class NewsService
 
         if ($request->input('contributor_ids')) {
             NewsContributorSyncJob::dispatch($news, $request->input('contributor_ids'));
+        }
+
+        if ($request->input('relevant_news_ids')) {
+            NewsRelevantNewsSyncJob::dispatch($news, $request->input('relevant_news_ids'));
+        }
+
+        if ($request->input('related_news_ids')) {
+            NewsRelatedNewsSyncJob::dispatch($news, $request->input('related_news_ids'));
         }
     }
 

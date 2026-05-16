@@ -4,6 +4,7 @@ import RecentActivities from '@/components/back-office/activity-log/RecentModelA
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 import NewsImageGalleryGrid from '@/components/back-office/news/NewsImageGalleryGrid.vue'
 import NewsPlacementList from '@/components/back-office/news/NewsPlacementList.vue'
+import RelatedOrRelevantNewsList from '@/components/back-office/news/RelatedOrRelevantNewsList.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -385,6 +386,16 @@ onMounted(async () => {
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">News placements</h3>
             <NewsPlacementList :news="news" :news-placements="news.news_placements" />
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">Relevant newses</h3>
+            <RelatedOrRelevantNewsList :newses="news?.relevantNewses" />
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">Related newses</h3>
+            <RelatedOrRelevantNewsList :newses="news?.relatedNewses" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">

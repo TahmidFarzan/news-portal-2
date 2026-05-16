@@ -347,6 +347,14 @@ return [
             "not_found" => 'Tags is not exit.',
         ],
 
+        'relevant_news_ids'                           => [
+            "not_found" => 'Relevant newses is not exit.',
+        ],
+
+        'related_news_ids'                           => [
+            "not_found" => 'Related newses is not exit.',
+        ],
+
         'body'                              => [
             'required' => 'Body is required.',
         ],

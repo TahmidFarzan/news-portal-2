@@ -180,6 +180,8 @@ class NewsSeeder extends Seeder
 
             $tagIds         = Tag::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
             $contributorIds = Contributor::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
+            $relevantNewsIds = News::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
+            $relatedNewsIds = News::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
 
             if ($tagIds) {
                 $news->tags()->sync($tagIds);
@@ -187,6 +189,14 @@ class NewsSeeder extends Seeder
 
             if (($news->newsType->name == NewsHelper::NEWS_TYPE_STORY) && $contributorIds && $index < 10) {
                 $news->contributors()->sync($contributorIds);
+            }
+
+            if ($relevantNewsIds) {
+                $news->relevantNewses()->sync($relevantNewsIds);
+            }
+
+            if ($relatedNewsIds) {
+                $news->relatedNewses()->sync($relatedNewsIds);
             }
 
             $this->addFeatureImage($news);

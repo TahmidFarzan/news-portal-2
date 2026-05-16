@@ -162,6 +162,11 @@ class News extends Model implements HasMedia
         return $intervalInHours < 72;
     }
 
+    public function getTitleWithPublishedAtAttribute(): string
+    {
+        return "{$this->title} ({$this->published_at})";
+    }
+
     public function getFeatureImageMobileAttribute(): ?Media
     {
         $image               = null;
@@ -293,6 +298,16 @@ class News extends Model implements HasMedia
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'news_tag')->withTimestamps();
+    }
+
+    public function relevantNewses(): BelongsToMany
+    {
+        return $this->belongsToMany(News::class, 'news_relevant_news', 'news_id', 'relevant_news_id')->withTimestamps();
+    }
+
+    public function relatedNewses(): BelongsToMany
+    {
+        return $this->belongsToMany(News::class, 'news_related_news', 'news_id', 'related_news_id')->withTimestamps();
     }
 
     public function navBreadcrumbs(): array
