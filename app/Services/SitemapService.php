@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Models\Tag;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\EventCacheService;
@@ -38,6 +39,11 @@ class SitemapService
     public function categoryBySlugTree(string $slugTree): Category
     {
         return Category::where("slug_tree", $slugTree)->firstOrFail();
+    }
+
+    public function tag(string $slug): Tag
+    {
+        return Tag::where("slug", $slug)->firstOrFail();
     }
 
     public function getCategories(Request $request)
@@ -102,7 +108,6 @@ class SitemapService
 
     public function getNewses(Request $request)
     {
-        $page = $request->query('page', 1);
         return $this->newsCacheService->newses($request, "sitemap");
     }
 
@@ -123,6 +128,23 @@ class SitemapService
     {
         $request->merge([
             'category_id' => $category->id,
+        ]);
+        return $this->newsCacheService->lastPageNo($request, "sitemap");
+    }
+
+
+    public function getTagNewses(Request $request, Tag $tag)
+    {
+        $request->merge([
+            'tag_id' => $tag->id,
+        ]);
+        return $this->newsCacheService->newses($request, "sitemap");
+    }
+
+    public function getTagNewsesLastPageNo(Request $request, Tag $tag)
+    {
+        $request->merge([
+            'tag_id' => $tag->id,
         ]);
         return $this->newsCacheService->lastPageNo($request, "sitemap");
     }

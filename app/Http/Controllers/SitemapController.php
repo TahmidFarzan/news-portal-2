@@ -121,5 +121,22 @@ class SitemapController extends Controller
 
     }
 
+        public function tagNewses(Request $request, $slug)
+    {
+        $tag = $this->sitemapService->tag($slug);
+
+        if ($request->filled("page")) {
+            $records = $this->sitemapService->getTagNewses($request, $tag);
+            return response()->view('sitemaps.newses', compact('records'));
+        }
+
+        $routeUrl = $tag->getSitemapUrlAttribute();
+
+        $lastPage = $this->sitemapService->getTagNewsesLastPageNo($request, $tag);
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"));
+
+    }
+
 
 }

@@ -103,7 +103,7 @@ class Tag extends Model
 
     public function getSitemapUrlAttribute(): string
     {
-        return "";
+        return route("sitemaps.tags.newses", ['slug' => $this->slug]);
     }
 
     public function getIsRecentCreatedAttribute(): bool
