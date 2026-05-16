@@ -42,6 +42,7 @@ class News extends Model implements HasMedia
 
     protected $appends = [
         'public_url',
+        "published_at",
         'is_recent_created',
         "feeds_rss_url", "feeds_atom_url",
         'feature_image', 'feature_image_mobile', 'gallery_images',
@@ -132,6 +133,25 @@ class News extends Model implements HasMedia
     public function getFeedsRSSUrlAttribute(): string
     {
         return "";
+    }
+
+    public function getPublishedAtAttribute(): string
+    {
+        $publishedTime = null;
+
+        $current     = now();
+        $publishedAt = $this->created_at;
+        $interval    = $current->diff($publishedAt);
+        if ($interval->h > 0) {
+            $publishedTime = $publishedAt->format('h\h i\m \a\g\o');
+        } elseif ($interval->i > 0) {
+            $publishedTime = $publishedAt->format('i\m s\s \a\g\o');
+        } elseif ($interval->s > 0) {
+            $publishedTime = $publishedAt->format('s\s \a\g\o');
+        } else {
+            $publishedTime = $publishedAt->format(config("app.date_time_format"));
+        }
+        return $publishedTime;
     }
 
     public function getIsRecentCreatedAttribute(): bool

@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('TIME_ZONE', "UTC"),
 
     /*
     |--------------------------------------------------------------------------
@@ -126,5 +126,8 @@ return [
     // Custom
     "app_logo" => env("APP_LOGO"),
     "app_favicon" => env("APP_FAVICON"),
+    'date_format' => env('DATE_FORMAT', "d-M-Y"),
+    'time_format' => env('TIME_FORMAT', "g:i:s a"),
+    'date_time_format' => env('DATE_TIME_FORMAT', env('DATE_FORMAT', "d-M-Y")." ". env('TIME_FORMAT', "g:i:s a")),
 
 ];

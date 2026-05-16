@@ -560,7 +560,17 @@ class SearchService
         $query = News::query();
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->input('search') . '%');
+            $search = $request->input('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('sub_title', 'like', "%{$search}%")
+                    ->orWhere('content_shoulder', 'like', "%{$search}%")
+                    ->orWhere('brief', 'like', "%{$search}%")
+                    ->orWhere('seo_brief', 'like', '%' . $search . '%')
+                    ->orWhere('seo_title', 'like', '%' . $search . '%')
+                    ->orWhere('source', 'like', "%{$search}%");
+            });
         }
 
         if ($request->filled('language_id')) {
@@ -579,15 +589,17 @@ class SearchService
             $query->where('location_id', $request->input('location_id'));
         }
 
-        $records = $query->orderBy('id', 'desc')
+        $records = $query->where('is_published', true)->orderBy('id', 'desc')
             ->paginate($request->input('per_page', 50));
 
         $list = $records->map(fn($news) => [
-            'id'               => $news->id,
-            'title'            => $news->title,
-            'sub_title'        => $news->sub_title,
-            'content_shoulder' => $news->content_shoulder,
-            'slug'             => $news->slug,
+            'id'                 => $news->id,
+            'title'              => $news->title,
+            'sub_title'          => $news->sub_title,
+            'content_shoulder'   => $news->content_shoulder,
+            'slug'               => $news->slug,
+            'published_at'       => $news->published_at,
+            'title_published_at' => "{$news->title} ({$news->published_at})",
         ]);
 
         return [
@@ -646,7 +658,7 @@ class SearchService
             $query->where('id', $root->id);
         }
 
-        if ($request->filled('category_id')){
+        if ($request->filled('category_id')) {
             $query->where('category_id', $request->input('category_id'));
         }
 

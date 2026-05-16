@@ -123,7 +123,9 @@ class NewsService
             $search = $request->input('search');
 
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('sub_title', 'like', "%{$search}%")
+                    ->orWhere('content_shoulder', 'like', "%{$search}%")
                     ->orWhere('brief', 'like', "%{$search}%")
                     ->orWhere('seo_brief', 'like', '%' . $search . '%')
                     ->orWhere('seo_title', 'like', '%' . $search . '%')
