@@ -121,7 +121,7 @@ class SitemapController extends Controller
 
     }
 
-        public function tagNewses(Request $request, $slug)
+    public function tagNewses(Request $request, $slug)
     {
         $tag = $this->sitemapService->tag($slug);
 

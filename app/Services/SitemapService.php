@@ -101,19 +101,19 @@ class SitemapService
         return $this->contributorCacheService->lastPageNo('sitemap');
     }
 
-    public function latestNewsesGetNewses(Request $request)
+    public function latestNewsesGetNewses()
     {
-        return $this->newsCacheService->getLatest($request, "sitemap");
+        return $this->newsCacheService->getLatest("sitemap");
     }
 
     public function getNewses(Request $request)
     {
-        return $this->newsCacheService->newses($request, "sitemap");
+        return $this->newsCacheService->newses($request->all(), "sitemap");
     }
 
     public function getNewsesLastPageNo(Request $request)
     {
-        return $this->newsCacheService->lastPageNo($request, "sitemap");
+        return $this->newsCacheService->lastPageNo($request->all(), "sitemap");
     }
 
     public function getCategoryNewses(Request $request, Category $category)
@@ -121,7 +121,7 @@ class SitemapService
         $request->merge([
             'category_id' => $category->id,
         ]);
-        return $this->newsCacheService->newses($request, "sitemap");
+        return $this->newsCacheService->newses($request->all(), "sitemap");
     }
 
     public function getCategoryNewsesLastPageNo(Request $request, Category $category)
@@ -129,7 +129,7 @@ class SitemapService
         $request->merge([
             'category_id' => $category->id,
         ]);
-        return $this->newsCacheService->lastPageNo($request, "sitemap");
+        return $this->newsCacheService->lastPageNo($request->all(), "sitemap");
     }
 
 
@@ -138,7 +138,7 @@ class SitemapService
         $request->merge([
             'tag_id' => $tag->id,
         ]);
-        return $this->newsCacheService->newses($request, "sitemap");
+        return $this->newsCacheService->newses($request->all(), "sitemap");
     }
 
     public function getTagNewsesLastPageNo(Request $request, Tag $tag)
@@ -146,6 +146,6 @@ class SitemapService
         $request->merge([
             'tag_id' => $tag->id,
         ]);
-        return $this->newsCacheService->lastPageNo($request, "sitemap");
+        return $this->newsCacheService->lastPageNo($request->all(), "sitemap");
     }
 }

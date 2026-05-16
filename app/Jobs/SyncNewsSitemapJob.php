@@ -48,35 +48,25 @@ class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $dbRecordCount     = $this->newsCacheService->dbRecordsCount();
-            $cachedRecordTotal = $this->newsCacheService->recordsCount("sitemap");
+            $key = 'sitemap';
+            $filters = [];
 
-            $dbLastPageNo     = $this->newsCacheService->dbLastPageNo(null);
-            $cachedLastPageNo = $this->newsCacheService->lastPageNo("sitemap");
+            $lastPage = $this->newsCacheService->dbLastPageNo($filters);
 
-            if (! ($cachedRecordTotal == $dbRecordCount)) {
-                $pageStart = $cachedLastPageNo;
-                if (! ($pageStart == null) && ($pageStart > 1)) {
-                    $pageStart = $pageStart - 1;
-                }
-                $pageEnd = $cachedLastPageNo;
-
-                if ($cachedLastPageNo < $dbLastPageNo) {
-                    $pageStart = $cachedLastPageNo;
-                    $pageEnd   = $dbLastPageNo;
-                }
-
-                foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->newsCacheService->cachedRecords("sitemap", null, $page);
+            if ($lastPage > 0) {
+                for ($page = 1; $page <= $lastPage; $page++) {
+                    $this->newsCacheService->cachedNewses(['page' => $page,], $key);
                 }
             }
 
-            $this->newsCacheService->cachedRecordsCount("sitemap");
-            $this->newsCacheService->cachedLastPageNo("sitemap");
-        } catch (Exception $ex) {
-            Log::error('News sitemap sync job error: ' . $ex->getMessage());
+            $this->newsCacheService->cachedNewsesCount($filters, $key);
+            $this->newsCacheService->cachedLastPageNo($filters, $key);
+        } catch (Exception $exception) {
+            Log::error('News sitemap sync job error: ' . $exception->getMessage(), [
+                'exception' => $exception,
+            ]);
 
-            throw $ex;
+            throw $exception;
         }
     }
 }
