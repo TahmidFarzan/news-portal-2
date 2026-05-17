@@ -55,12 +55,12 @@ class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
 
             if ($lastPage > 0) {
                 for ($page = 1; $page <= $lastPage; $page++) {
-                    $this->newsCacheService->cachedNewses(['page' => $page,], $key);
+                    $this->newsCacheService->cachedNewses($key, ['page' => $page,]);
                 }
             }
 
-            $this->newsCacheService->cachedNewsesCount($filters, $key);
-            $this->newsCacheService->cachedLastPageNo($filters, $key);
+            $this->newsCacheService->cachedNewsesCount($key, $filters);
+            $this->newsCacheService->cachedLastPageNo($key, $filters);
         } catch (Exception $exception) {
             Log::error('News sitemap sync job error: ' . $exception->getMessage(), [
                 'exception' => $exception,

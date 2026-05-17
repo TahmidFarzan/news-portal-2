@@ -59,30 +59,30 @@ class NewsCacheService
             ->get();
     }
 
-    public function cachedNewses(array $filters, string $key): void
+    public function cachedNewses(string $key, array $filters = []): void
     {
         CacheServerHelper::cachedData(
-            $this->newsesCacheKey($filters, $key),
+            $this->newsesCacheKey($key, $filters),
             $this->dbNewses($filters),
             $this->cachedTime,
             ['news', $key]
         );
     }
 
-    public function cachedNewsesCount(array $filters, string $key): void
+    public function cachedNewsesCount(string $key, array $filters = []): void
     {
         CacheServerHelper::cachedData(
-            $this->countCacheKey($filters, $key),
+            $this->countCacheKey($key, $filters),
             $this->dbNewsesCount($filters),
             $this->cachedTime,
             ['news', $key]
         );
     }
 
-    public function cachedLastPageNo(array $filters, string $key): void
+    public function cachedLastPageNo(string $key, array $filters = []): void
     {
         CacheServerHelper::cachedData(
-            $this->lastPageCacheKey($filters, $key),
+            $this->lastPageCacheKey($key, $filters),
             $this->dbLastPageNo($filters),
             $this->cachedTime,
             ['news', $key]
@@ -101,9 +101,9 @@ class NewsCacheService
         );
     }
 
-    public function newsesCount(array $filters, string $key): int
+    public function newsesCount(string $key, array $filters = []): int
     {
-        $cacheKey = $this->countCacheKey($filters, $key);
+        $cacheKey = $this->countCacheKey($key, $filters);
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -124,9 +124,9 @@ class NewsCacheService
         return (int) $count;
     }
 
-    public function lastPageNo(array $filters, string $key): int
+    public function lastPageNo(string $key, array $filters = []): int
     {
-        $cacheKey = $this->lastPageCacheKey($filters, $key);
+        $cacheKey = $this->lastPageCacheKey($key, $filters);
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -147,9 +147,9 @@ class NewsCacheService
         return (int) $lastPage;
     }
 
-    public function newses(array $filters, string $key): LengthAwarePaginator
+    public function newses(string $key, array $filters = []): LengthAwarePaginator
     {
-        $cacheKey = $this->newsesCacheKey($filters, $key);
+        $cacheKey = $this->newsesCacheKey($key, $filters);
 
         $newses = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -316,7 +316,7 @@ class NewsCacheService
         ];
     }
 
-    private function countCacheKey(array $filters, string $key): string
+    private function countCacheKey(string $key, array $filters): string
     {
         if (! $this->hasFilters($filters)) {
             return "news {$key} count";
@@ -327,7 +327,7 @@ class NewsCacheService
         return "news {$key} filter {$filterKey} count";
     }
 
-    private function lastPageCacheKey(array $filters, string $key): string
+    private function lastPageCacheKey(string $key, array $filters): string
     {
         if (! $this->hasFilters($filters) && ! $this->filled($filters, 'per_page')) {
             return "news {$key} last page no";
@@ -339,7 +339,7 @@ class NewsCacheService
         return "news {$key} filter {$filterKey} per_page {$perPage} last page no";
     }
 
-    private function newsesCacheKey(array $filters, string $key): string
+    private function newsesCacheKey(string $key, array $filters): string
     {
         $page = $this->page($filters);
 
