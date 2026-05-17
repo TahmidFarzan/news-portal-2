@@ -1,9 +1,12 @@
 <?php
 namespace App\Observers;
 
+use App\Jobs\DeleteNewsRelationsJob;
+use App\Jobs\SyncLatestNewsFeedJob;
+use App\Jobs\SyncLatestNewsSitemapJob;
+use App\Jobs\SyncNewsFeedJob;
 use App\Jobs\SyncNewsSitemapJob;
 use App\Models\News;
-use App\Jobs\DeleteNewsRelationsJob;
 
 class NewsObserver
 {
@@ -15,10 +18,22 @@ class NewsObserver
     public function created(News $news): void
     {
         SyncNewsSitemapJob::dispatch();
+        SyncLatestNewsSitemapJob::dispatch();
+
+        SyncNewsFeedJob::dispatch();
+        SyncLatestNewsFeedJob::dispatch();
     }
 
-    public function deleted(News $news): void
+    public function updated(News $news): void
     {
+        if (! $news->wasChanged('is_published')) {
+            return;
+        }
+
         SyncNewsSitemapJob::dispatch();
+        SyncLatestNewsSitemapJob::dispatch();
+
+        SyncNewsFeedJob::dispatch();
+        SyncLatestNewsFeedJob::dispatch();
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
+class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     {
         $currentTime = time();
         $uqRandom    = Str::random(15);
-        return "news-sitemap-sync-jobs-{$uqRandom}-{$currentTime}";
+        return "latest-newses-feed-sync-jobs-{$uqRandom}-{$currentTime}";
     }
 
     public function retryAfter()
@@ -48,24 +48,9 @@ class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $filters = [];
-
-            $lastPage = $this->newsCacheService->dbLastPageNo($filters);
-
-            if ($lastPage > 0) {
-                for ($page = 1; $page <= $lastPage; $page++) {
-                    $this->newsCacheService->cachedNewses('sitemap', ['page' => $page]);
-                }
-            }
-
-            $this->newsCacheService->cachedNewsesCount('sitemap', $filters);
-            $this->newsCacheService->cachedLastPageNo('sitemap', $filters);
-        } catch (Exception $exception) {
-            Log::error('News sitemap sync job error: ' . $exception->getMessage(), [
-                'exception' => $exception,
-            ]);
-
-            throw $exception;
+            $this->newsCacheService->cachedLatest("feed");
+        } catch (Exception $ex) {
+            Log::error('Latest newses feed cached job error: ' . $ex->getMessage());
         }
     }
 }

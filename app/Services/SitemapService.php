@@ -114,7 +114,7 @@ class SitemapService
         return $this->contributorCacheService->lastPageNo('sitemap',[]);
     }
 
-    public function latestNewsesGetNewses()
+    public function latestNewses()
     {
         return $this->newsCacheService->getLatest("sitemap");
     }

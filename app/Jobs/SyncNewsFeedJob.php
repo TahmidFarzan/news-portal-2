@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
+class SyncNewsFeedJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     {
         $currentTime = time();
         $uqRandom    = Str::random(15);
-        return "news-sitemap-sync-jobs-{$uqRandom}-{$currentTime}";
+        return "news-feed-sync-jobs-{$uqRandom}-{$currentTime}";
     }
 
     public function retryAfter()
@@ -54,14 +54,14 @@ class SyncNewsSitemapJob implements ShouldQueue, ShouldBeUnique
 
             if ($lastPage > 0) {
                 for ($page = 1; $page <= $lastPage; $page++) {
-                    $this->newsCacheService->cachedNewses('sitemap', ['page' => $page]);
+                    $this->newsCacheService->cachedNewses('feed', ['page' => $page]);
                 }
             }
 
-            $this->newsCacheService->cachedNewsesCount('sitemap', $filters);
-            $this->newsCacheService->cachedLastPageNo('sitemap', $filters);
+            $this->newsCacheService->cachedNewsesCount('feed', $filters);
+            $this->newsCacheService->cachedLastPageNo('feed', $filters);
         } catch (Exception $exception) {
-            Log::error('News sitemap sync job error: ' . $exception->getMessage(), [
+            Log::error('News feed sync job error: ' . $exception->getMessage(), [
                 'exception' => $exception,
             ]);
 

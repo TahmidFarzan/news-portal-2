@@ -22,6 +22,7 @@ class NewsCacheService
 
     public function clearCached(): void
     {
+        CacheServerHelper::clearCachedByTag(['news', 'feed']);
         CacheServerHelper::clearCachedByTag(['news', 'public']);
         CacheServerHelper::clearCachedByTag(['news', 'sitemap']);
     }
@@ -45,7 +46,7 @@ class NewsCacheService
 
         return $this->dbNewsQuery($filters)
             ->orderBy('id', 'desc')
-            ->with('language')
+            ->with(['language','newsType'])
             ->paginate($perPage, ['*'], 'page', $page);
     }
 

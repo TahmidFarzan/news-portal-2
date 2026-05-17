@@ -15,6 +15,7 @@ use App\Http\Controllers\BackOffice\NewsController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
@@ -285,6 +286,18 @@ Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->grou
 
     Route::prefix('contributors')->name('contributors.')->group(function () {
         Route::get('{slug}/newses.xml', [SitemapController::class, 'contributorNewses'])->name('newses');
+    });
+});
+
+Route::prefix('feeds')->name('feeds.')->group(function () {
+    Route::prefix('rss')->name('rss.')->middleware(['feed.response:rss'])->group(function () {
+        Route::get('newses.xml', [FeedController::class, 'newses'])->name('newses');
+        Route::get('latest-newses.xml', [FeedController::class, 'latestNewses'])->name('latest-newses');
+    });
+
+    Route::prefix('atom')->name('atom.')->middleware(['feed.response:atom'])->group(function () {
+        Route::get('newses.xml', [FeedController::class, 'newses'])->name('newses');
+        Route::get('latest-newses.xml', [FeedController::class, 'latestNewses'])->name('latest-newses');
     });
 });
 

@@ -85,7 +85,7 @@ class SitemapController extends Controller
 
     public function latestNewses(Request $request)
     {
-        $records = $this->sitemapService->latestNewsesGetNewses($request);
+        $records = $this->sitemapService->latestNewses($request);
 
         return response()->view('sitemaps.newses', compact('records'));
     }

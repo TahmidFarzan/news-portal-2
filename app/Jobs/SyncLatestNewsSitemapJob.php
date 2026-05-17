@@ -32,7 +32,7 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     {
         $currentTime = time();
         $uqRandom    = Str::random(15);
-        return "latest-newses-cached-sync-jobs-{$uqRandom}-{$currentTime}";
+        return "latest-newses-sitemap-sync-jobs-{$uqRandom}-{$currentTime}";
     }
 
     public function retryAfter()
@@ -48,10 +48,9 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $this->newsCacheService->cachedLatest("feed");
-            $this->newsCacheService->cachedLatest("public");
+            $this->newsCacheService->cachedLatest("sitemap");
         } catch (Exception $ex) {
-            Log::error('Latest newses cached job error: ' . $ex->getMessage());
+            Log::error('Latest newses sitemap job error: ' . $ex->getMessage());
         }
     }
 }
