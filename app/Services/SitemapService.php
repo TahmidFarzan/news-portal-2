@@ -2,9 +2,10 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Models\Event;
 use App\Models\Location;
 use App\Models\Tag;
-use App\Models\Event;
+use App\Models\Contributor;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\EventCacheService;
@@ -58,6 +59,11 @@ class SitemapService
         return $this->eventCacheService->event($slug);
     }
 
+    public function contributor(string $slug): Contributor
+    {
+        return $this->contributorCacheService->contributor($slug);
+    }
+
     public function getCategories(Request $request)
     {
         return $this->categoryCacheService->categories('sitemap', $request->input());
@@ -95,18 +101,17 @@ class SitemapService
 
     public function getEventsLastPageNo()
     {
-        return $this->eventCacheService->lastPageNo('sitemap',[]);
+        return $this->eventCacheService->lastPageNo('sitemap', []);
     }
 
     public function getContributors(Request $request)
     {
-        $page = $request->query('page', 1);
-        return $this->contributorCacheService->records('sitemap', null, $page);
+        return $this->contributorCacheService->contributors('sitemap', $request->input());
     }
 
     public function getContributorsLastPageNo()
     {
-        return $this->contributorCacheService->lastPageNo('sitemap');
+        return $this->contributorCacheService->lastPageNo('sitemap',[]);
     }
 
     public function latestNewsesGetNewses()
@@ -168,6 +173,22 @@ class SitemapService
     {
         $request->merge([
             'event_id' => $event->id,
+        ]);
+        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+    }
+
+    public function getContributorNewses(Request $request, Contributor $contributor)
+    {
+        $request->merge([
+            'contributor_id' => $contributor->id,
+        ]);
+        return $this->newsCacheService->newses("sitemap", $request->input());
+    }
+
+    public function getContributorNewsesLastPageNo(Request $request, Contributor $contributor)
+    {
+        $request->merge([
+            'contributor_id' => $contributor->id,
         ]);
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
     }

@@ -1,94 +1,131 @@
 <?php
+
 namespace App\Services\Cache;
 
 use App\Helpers\CacheServerHelper;
 use App\Models\Contributor;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ContributorCacheService
 {
-    private int $cahedTime = 86400;
-    private int $perPage   = 5000;
+    private int $cachedTime = 86400;
+    private int $perPage = 5000;
 
-    protected array $baseContributors = ['contributor'];
-
-    public function isConnected()
+    public function isConnected(): bool
     {
         return CacheServerHelper::isConnected();
     }
 
-    /* -------------------------------------------------
-    | CLEAR CACHE
-    |-------------------------------------------------*/
-
-    public function clearCached()
+    public function clearCached(): void
     {
         CacheServerHelper::clearCachedByTag(['contributor', 'public']);
         CacheServerHelper::clearCachedByTag(['contributor', 'sitemap']);
     }
 
-    /* -------------------------------------------------
-    | DATABASE
-    |-------------------------------------------------*/
-
-    public function dbRecordsCount()
+    private function getPerPage(array $filters = []): int
     {
-        return Contributor::count();
+        $perPage = (int) ($filters['per_page'] ?? $filters['perPage'] ?? $this->perPage);
+
+        return $perPage > 0 ? $perPage : $this->perPage;
     }
 
-    public function dbLastPageNo($perPage = null)
+    private function getPage(array $filters = []): int
     {
-        $perPage = $perPage ?? $this->perPage;
-        return (int) ceil($this->dbRecordsCount() / $perPage);
+        $page = (int) ($filters['page'] ?? 1);
+
+        return $page > 0 ? $page : 1;
     }
 
-    private function dbRecords($perPage = null, $page = 1)
+    private function normalizeFilters(array $filters = [], array $except = []): array
     {
-        $perPage = $perPage ?? $this->perPage;
+        foreach ($except as $key) {
+            unset($filters[$key]);
+        }
 
-        return Contributor::orderBy('id', 'asc')->with("language")->paginate($perPage, ['*'], 'page', $page);
+        $filters = array_filter($filters, function ($value) {
+            return $value !== null && $value !== '';
+        });
+
+        ksort($filters);
+
+        return $filters;
     }
 
-    /* -------------------------------------------------
-    | CACHE WRITE
-    |-------------------------------------------------*/
-
-    public function cachedRecords($key, $perPage = null, $page = 1)
+    private function filterHash(array $filters = [], array $except = []): string
     {
+        $filters = $this->normalizeFilters($filters, $except);
+
+        return md5(json_encode($filters));
+    }
+
+    private function queryContributors(array $filters = []): Builder
+    {
+        return Contributor::query()
+            ->with('language')
+            ->orderBy('id', 'asc');
+    }
+
+    public function dbContributorsCount(array $filters = []): int
+    {
+        return $this->queryContributors($filters)->count();
+    }
+
+    public function dbLastPageNo(array $filters = []): int
+    {
+        return (int) ceil($this->dbContributorsCount($filters) / $this->getPerPage($filters));
+    }
+
+    private function dbContributors(array $filters = []): LengthAwarePaginator
+    {
+        return $this->queryContributors($filters)->paginate(
+            $this->getPerPage($filters),
+            ['*'],
+            'page',
+            $this->getPage($filters)
+        );
+    }
+
+    public function cachedContributors(string $key, array $filters = []): void
+    {
+        $page = $this->getPage($filters);
+        $hash = $this->filterHash($filters, ['page']);
+
         CacheServerHelper::cachedData(
-            "contributor {$key} page {$page}",
-            $this->dbRecords($perPage, $page),
-            $this->cahedTime,
+            "contributor {$key} page {$page} {$hash}",
+            $this->dbContributors($filters),
+            $this->cachedTime,
             ['contributor', $key]
         );
     }
 
-    public function cachedRecordsCount($key)
+    public function cachedContributorsCount(string $key, array $filters = []): void
     {
+        $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
         CacheServerHelper::cachedData(
-            "contributor {$key} count",
-            $this->dbRecordsCount(),
-            $this->cahedTime,
+            "contributor {$key} count {$hash}",
+            $this->dbContributorsCount($filters),
+            $this->cachedTime,
             ['contributor', $key]
         );
     }
 
-    public function cachedLastPageNo($key)
+    public function cachedLastPageNo(string $key, array $filters = []): void
     {
+        $hash = $this->filterHash($filters, ['page']);
+
         CacheServerHelper::cachedData(
-            "contributor {$key} last page no",
-            $this->dbLastPageNo(),
-            $this->cahedTime,
+            "contributor {$key} last page no {$hash}",
+            $this->dbLastPageNo($filters),
+            $this->cachedTime,
             ['contributor', $key]
         );
     }
 
-    /* -------------------------------------------------
-    | CACHE READ (WITH FALLBACK)
-    |-------------------------------------------------*/
-
-    public function recordsCount($key)
+    public function contributorsCount(string $key, array $filters = []): int
     {
-        $cacheKey = "contributor {$key} count";
+        $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
+        $cacheKey = "contributor {$key} count {$hash}";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -96,21 +133,23 @@ class ContributorCacheService
         );
 
         if ($count === null) {
-            $count = $this->dbRecordsCount();
+            $count = $this->dbContributorsCount($filters);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $count,
-                $this->cahedTime,
+                $this->cachedTime,
                 ['contributor', $key]
             );
         }
 
-        return $count;
+        return (int) $count;
     }
 
-    public function lastPageNo($key)
+    public function lastPageNo(string $key, array $filters = []): int
     {
-        $cacheKey = "contributor {$key} last page no";
+        $hash = $this->filterHash($filters, ['page']);
+        $cacheKey = "contributor {$key} last page no {$hash}";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -118,37 +157,64 @@ class ContributorCacheService
         );
 
         if ($lastPage === null) {
-            $lastPage = $this->dbLastPageNo();
+            $lastPage = $this->dbLastPageNo($filters);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $this->cahedTime,
+                $this->cachedTime,
                 ['contributor', $key]
             );
         }
 
-        return $lastPage;
+        return (int) $lastPage;
     }
 
-    public function records($key, $perPage = null, $page = 1)
+    public function contributors(string $key, array $filters = []): LengthAwarePaginator
     {
-        $cacheKey = "contributor {$key} page {$page}";
+        $page = $this->getPage($filters);
+        $hash = $this->filterHash($filters, ['page']);
+        $cacheKey = "contributor {$key} page {$page} {$hash}";
 
-        $records = CacheServerHelper::getCachedData(
+        $contributors = CacheServerHelper::getCachedData(
             $cacheKey,
             ['contributor', $key]
         );
 
-        if ($records === null) {
-            $records = $this->dbRecords($perPage, $page);
+        if ($contributors === null) {
+            $contributors = $this->dbContributors($filters);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
-                $records,
-                $this->cahedTime,
+                $contributors,
+                $this->cachedTime,
                 ['contributor', $key]
             );
         }
 
-        return $records;
+        return $contributors;
+    }
+
+    public function contributor(string $slug): Contributor
+    {
+        $cacheKey = "contributor slug tree {$slug}";
+
+        $contributor = CacheServerHelper::getCachedData(
+            $cacheKey,
+            ['contributor', 'public']
+        );
+
+        if (!$contributor instanceof Contributor) {
+            $contributor = Contributor::where('slug', $slug)->firstOrFail();
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $contributor,
+                $this->cachedTime,
+                ['contributor', 'public']
+            );
+        }
+
+        return $contributor;
     }
 }

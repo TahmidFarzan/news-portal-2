@@ -45,7 +45,7 @@ class SyncTagSitemapJob implements ShouldQueue, ShouldBeUnique
         return [61, 123, 185];
     }
 
-        public function handle(): void
+    public function handle(): void
     {
         try {
             $filters = [];

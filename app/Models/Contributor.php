@@ -126,7 +126,7 @@ class Contributor extends Model implements HasMedia
 
     public function getSitemapUrlAttribute(): string
     {
-        return "";
+        return route("sitemaps.contributors.newses",['slug' => $this->slug]);
     }
 
     public function getIsRecentCreatedAttribute(): bool

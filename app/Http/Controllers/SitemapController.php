@@ -3,7 +3,6 @@ namespace App\Http\Controllers;
 
 use App\Services\SitemapService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
@@ -167,6 +166,22 @@ class SitemapController extends Controller
         $routeUrl = $event->getSitemapUrlAttribute();
 
         $lastPage = $this->sitemapService->getEventNewsesLastPageNo($request, $event);
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"));
+    }
+
+    public function contributorNewses(Request $request, $slug)
+    {
+        $contributor = $this->sitemapService->contributor($slug);
+
+        if ($request->filled("page")) {
+            $records = $this->sitemapService->getContributorNewses($request, $contributor);
+            return response()->view('sitemaps.newses', compact('records'));
+        }
+
+        $routeUrl = $contributor->getSitemapUrlAttribute();
+
+        $lastPage = $this->sitemapService->getContributorNewsesLastPageNo($request, $contributor);
 
         return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"));
 

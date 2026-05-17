@@ -48,17 +48,21 @@ class SyncContributorSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $dbRecordCount     = $this->contributorCacheService->dbRecordsCount();
-            $cachedRecordTotal = $this->contributorCacheService->recordsCount("sitemap");
+            $filters = [];
 
-            $dbLastPageNo     = $this->contributorCacheService->dbLastPageNo(null);
-            $cachedLastPageNo = $this->contributorCacheService->lastPageNo("sitemap");
+            $dbRecordCount     = $this->contributorCacheService->dbContributorsCount($filters);
+            $cachedRecordTotal = $this->contributorCacheService->contributorsCount('sitemap', $filters);
 
-            if (! ($cachedRecordTotal == $dbRecordCount)) {
+            $dbLastPageNo     = $this->contributorCacheService->dbLastPageNo($filters);
+            $cachedLastPageNo = $this->contributorCacheService->lastPageNo('sitemap', $filters);
+
+            if ($cachedRecordTotal !== $dbRecordCount) {
                 $pageStart = $cachedLastPageNo;
-                if (! ($pageStart == null) && ($pageStart > 1)) {
-                    $pageStart = $pageStart - 1;
+
+                if ($pageStart > 1) {
+                    $pageStart--;
                 }
+
                 $pageEnd = $cachedLastPageNo;
 
                 if ($cachedLastPageNo < $dbLastPageNo) {
@@ -67,12 +71,17 @@ class SyncContributorSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->contributorCacheService->cachedRecords("sitemap", null, $page);
+                    $this->contributorCacheService->cachedContributors(
+                        'sitemap',
+                        array_merge($filters, [
+                            'page' => $page,
+                        ])
+                    );
                 }
             }
 
-            $this->contributorCacheService->cachedRecordsCount("sitemap");
-            $this->contributorCacheService->cachedLastPageNo("sitemap");
+            $this->contributorCacheService->cachedContributorsCount('sitemap', $filters);
+            $this->contributorCacheService->cachedLastPageNo('sitemap', $filters);
         } catch (Exception $ex) {
             Log::error('Contributor sitemap sync job error: ' . $ex->getMessage());
 

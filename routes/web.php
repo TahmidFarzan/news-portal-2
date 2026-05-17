@@ -282,6 +282,10 @@ Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->grou
     Route::prefix('events')->name('events.')->group(function () {
         Route::get('{slug}/newses.xml', [SitemapController::class, 'eventNewses'])->name('newses');
     });
+
+    Route::prefix('contributors')->name('contributors.')->group(function () {
+        Route::get('{slug}/newses.xml', [SitemapController::class, 'contributorNewses'])->name('newses');
+    });
 });
 
 Route::get('/', function () {
