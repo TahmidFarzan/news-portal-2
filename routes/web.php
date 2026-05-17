@@ -303,3 +303,4 @@ Route::get('/', function () {
 });
 
 Route::get('home', [PageController::class, 'home'])->name('home');
+Route::get('news/{slug}', [NewsController::class, 'show'])->name('news.details');

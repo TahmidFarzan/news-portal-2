@@ -121,7 +121,7 @@ class News extends Model implements HasMedia
     {
         $url = null;
 
-        return $url ?? "";
+        return $url ?? route("news.details",["slug", $this->slug]);
     }
 
     public function getPublishedAtAttribute(): string
