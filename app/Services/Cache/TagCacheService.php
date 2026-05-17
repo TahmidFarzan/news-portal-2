@@ -1,94 +1,131 @@
 <?php
+
 namespace App\Services\Cache;
 
 use App\Helpers\CacheServerHelper;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TagCacheService
 {
-    private int $cahedTime = 86400;
-    private int $perPage   = 5000;
+    private int $cachedTime = 86400;
+    private int $perPage = 5000;
 
-    protected array $baseTags = ['tag'];
-
-    public function isConnected()
+    public function isConnected(): bool
     {
         return CacheServerHelper::isConnected();
     }
 
-    /* -------------------------------------------------
-    | CLEAR CACHE
-    |-------------------------------------------------*/
-
-    public function clearCached()
+    public function clearCached(): void
     {
         CacheServerHelper::clearCachedByTag(['tag', 'public']);
         CacheServerHelper::clearCachedByTag(['tag', 'sitemap']);
     }
 
-    /* -------------------------------------------------
-    | DATABASE
-    |-------------------------------------------------*/
-
-    public function dbRecordsCount()
+    private function getPerPage(array $filters = []): int
     {
-        return Tag::count();
+        $perPage = (int) ($filters['per_page'] ?? $filters['perPage'] ?? $this->perPage);
+
+        return $perPage > 0 ? $perPage : $this->perPage;
     }
 
-    public function dbLastPageNo($perPage = null)
+    private function getPage(array $filters = []): int
     {
-        $perPage = $perPage ?? $this->perPage;
-        return (int) ceil($this->dbRecordsCount() / $perPage);
+        $page = (int) ($filters['page'] ?? 1);
+
+        return $page > 0 ? $page : 1;
     }
 
-    private function dbRecords($perPage = null, $page = 1)
+    private function normalizeFilters(array $filters = [], array $except = []): array
     {
-        $perPage = $perPage ?? $this->perPage;
+        foreach ($except as $key) {
+            unset($filters[$key]);
+        }
 
-        return Tag::orderBy('id', 'asc')->with("language")->paginate($perPage, ['*'], 'page', $page);
+        $filters = array_filter($filters, function ($value) {
+            return $value !== null && $value !== '';
+        });
+
+        ksort($filters);
+
+        return $filters;
     }
 
-    /* -------------------------------------------------
-    | CACHE WRITE
-    |-------------------------------------------------*/
-
-    public function cachedRecords($key, $perPage = null, $page = 1)
+    private function filterHash(array $filters = [], array $except = []): string
     {
+        $filters = $this->normalizeFilters($filters, $except);
+
+        return md5(json_encode($filters));
+    }
+
+    private function queryTags(array $filters = []): Builder
+    {
+        return Tag::query()
+            ->with('language')
+            ->orderBy('id', 'asc');
+    }
+
+    public function dbTagsCount(array $filters = []): int
+    {
+        return $this->queryTags($filters)->count();
+    }
+
+    public function dbLastPageNo(array $filters = []): int
+    {
+        return (int) ceil($this->dbTagsCount($filters) / $this->getPerPage($filters));
+    }
+
+    private function dbTags(array $filters = []): LengthAwarePaginator
+    {
+        return $this->queryTags($filters)->paginate(
+            $this->getPerPage($filters),
+            ['*'],
+            'page',
+            $this->getPage($filters)
+        );
+    }
+
+    public function cachedTags(string $key, array $filters = []): void
+    {
+        $page = $this->getPage($filters);
+        $hash = $this->filterHash($filters, ['page']);
+
         CacheServerHelper::cachedData(
-            "tag {$key} page {$page}",
-            $this->dbRecords($perPage, $page),
-            $this->cahedTime,
+            "tag {$key} page {$page} {$hash}",
+            $this->dbTags($filters),
+            $this->cachedTime,
             ['tag', $key]
         );
     }
 
-    public function cachedRecordsCount($key)
+    public function cachedTagsCount(string $key, array $filters = []): void
     {
+        $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
         CacheServerHelper::cachedData(
-            "tag {$key} count",
-            $this->dbRecordsCount(),
-            $this->cahedTime,
+            "tag {$key} count {$hash}",
+            $this->dbTagsCount($filters),
+            $this->cachedTime,
             ['tag', $key]
         );
     }
 
-    public function cachedLastPageNo($key)
+    public function cachedLastPageNo(string $key, array $filters = []): void
     {
+        $hash = $this->filterHash($filters, ['page']);
+
         CacheServerHelper::cachedData(
-            "tag {$key} last page no",
-            $this->dbLastPageNo(),
-            $this->cahedTime,
+            "tag {$key} last page no {$hash}",
+            $this->dbLastPageNo($filters),
+            $this->cachedTime,
             ['tag', $key]
         );
     }
 
-    /* -------------------------------------------------
-    | CACHE READ (WITH FALLBACK)
-    |-------------------------------------------------*/
-
-    public function recordsCount($key)
+    public function tagsCount(string $key, array $filters = []): int
     {
-        $cacheKey = "tag {$key} count";
+        $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
+        $cacheKey = "tag {$key} count {$hash}";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -96,21 +133,23 @@ class TagCacheService
         );
 
         if ($count === null) {
-            $count = $this->dbRecordsCount();
+            $count = $this->dbTagsCount($filters);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $count,
-                $this->cahedTime,
+                $this->cachedTime,
                 ['tag', $key]
             );
         }
 
-        return $count;
+        return (int) $count;
     }
 
-    public function lastPageNo($key)
+    public function lastPageNo(string $key, array $filters = []): int
     {
-        $cacheKey = "tag {$key} last page no";
+        $hash = $this->filterHash($filters, ['page']);
+        $cacheKey = "tag {$key} last page no {$hash}";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -118,37 +157,64 @@ class TagCacheService
         );
 
         if ($lastPage === null) {
-            $lastPage = $this->dbLastPageNo();
+            $lastPage = $this->dbLastPageNo($filters);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $this->cahedTime,
+                $this->cachedTime,
                 ['tag', $key]
             );
         }
 
-        return $lastPage;
+        return (int) $lastPage;
     }
 
-    public function records($key, $perPage = null, $page = 1)
+    public function tags(string $key, array $filters = []): LengthAwarePaginator
     {
-        $cacheKey = "tag {$key} page {$page}";
+        $page = $this->getPage($filters);
+        $hash = $this->filterHash($filters, ['page']);
+        $cacheKey = "tag {$key} page {$page} {$hash}";
 
-        $records = CacheServerHelper::getCachedData(
+        $tags = CacheServerHelper::getCachedData(
             $cacheKey,
             ['tag', $key]
         );
 
-        if ($records === null) {
-            $records = $this->dbRecords($perPage, $page);
+        if ($tags === null) {
+            $tags = $this->dbTags($filters);
+
             CacheServerHelper::cachedData(
                 $cacheKey,
-                $records,
-                $this->cahedTime,
+                $tags,
+                $this->cachedTime,
                 ['tag', $key]
             );
         }
 
-        return $records;
+        return $tags;
+    }
+
+    public function tag(string $slug): Tag
+    {
+        $cacheKey = "tag slug tree {$slug}";
+
+        $tag = CacheServerHelper::getCachedData(
+            $cacheKey,
+            ['tag', 'public']
+        );
+
+        if (!$tag instanceof Tag) {
+            $tag = Tag::where('slug', $slug)->firstOrFail();
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $tag,
+                $this->cachedTime,
+                ['tag', 'public']
+            );
+        }
+
+        return $tag;
     }
 }

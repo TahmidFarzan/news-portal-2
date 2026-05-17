@@ -48,17 +48,21 @@ class SyncCategorySitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $dbRecordCount     = $this->categoryCacheService->dbRecordsCount();
-            $cachedRecordTotal = $this->categoryCacheService->recordsCount("sitemap");
+            $filters = [];
 
-            $dbLastPageNo     = $this->categoryCacheService->dbLastPageNo(null);
-            $cachedLastPageNo = $this->categoryCacheService->lastPageNo("sitemap");
+            $dbRecordCount     = $this->categoryCacheService->dbCategoriesCount($filters);
+            $cachedRecordTotal = $this->categoryCacheService->categoriesCount('sitemap', $filters);
 
-            if (! ($cachedRecordTotal == $dbRecordCount)) {
+            $dbLastPageNo     = $this->categoryCacheService->dbLastPageNo($filters);
+            $cachedLastPageNo = $this->categoryCacheService->lastPageNo('sitemap', $filters);
+
+            if ($cachedRecordTotal !== $dbRecordCount) {
                 $pageStart = $cachedLastPageNo;
-                if (! ($pageStart == null) && ($pageStart > 1)) {
-                    $pageStart = $pageStart - 1;
+
+                if ($pageStart > 1) {
+                    $pageStart--;
                 }
+
                 $pageEnd = $cachedLastPageNo;
 
                 if ($cachedLastPageNo < $dbLastPageNo) {
@@ -67,12 +71,17 @@ class SyncCategorySitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->categoryCacheService->cachedRecords("sitemap", null, $page);
+                    $this->categoryCacheService->cachedCategories(
+                        'sitemap',
+                        array_merge($filters, [
+                            'page' => $page,
+                        ])
+                    );
                 }
             }
 
-            $this->categoryCacheService->cachedRecordsCount("sitemap");
-            $this->categoryCacheService->cachedLastPageNo("sitemap");
+            $this->categoryCacheService->cachedCategoriesCount('sitemap', $filters);
+            $this->categoryCacheService->cachedLastPageNo('sitemap', $filters);
         } catch (Exception $ex) {
             Log::error('Category sitemap sync job error: ' . $ex->getMessage());
 

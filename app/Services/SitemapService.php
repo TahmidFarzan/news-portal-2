@@ -38,18 +38,17 @@ class SitemapService
 
     public function categoryBySlugTree(string $slugTree): Category
     {
-        return Category::where("slug_tree", $slugTree)->firstOrFail();
+        return $this->categoryCacheService->categoryBySlugTree($slugTree);
     }
 
     public function tag(string $slug): Tag
     {
-        return Tag::where("slug", $slug)->firstOrFail();
+        return $this->tagCacheService->tag($slug);
     }
 
     public function getCategories(Request $request)
     {
-        $page = $request->query('page', 1);
-        return $this->categoryCacheService->categories('sitemap', null, $page);
+        return $this->categoryCacheService->categories('sitemap', $request->input());
     }
 
     public function getCategoriesLastPageNo()
@@ -59,13 +58,12 @@ class SitemapService
 
     public function getTags(Request $request)
     {
-        $page = $request->query('page', 1);
-        return $this->tagCacheService->records('sitemap', null, $page);
+        return $this->tagCacheService->tags('sitemap', $request->input());
     }
 
     public function getTagsLastPageNo()
     {
-        return $this->tagCacheService->lastPageNo('sitemap');
+        return $this->tagCacheService->lastPageNo('sitemap',[]);
     }
 
     public function getLocations(Request $request)
