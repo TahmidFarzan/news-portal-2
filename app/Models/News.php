@@ -44,7 +44,6 @@ class News extends Model implements HasMedia
         'public_url',
         "published_at", "title_with_published_at",
         'is_recent_created',
-        "feeds_rss_url", "feeds_atom_url",
         'feature_image', 'feature_image_mobile', 'gallery_images',
     ];
 
@@ -123,16 +122,6 @@ class News extends Model implements HasMedia
         $url = null;
 
         return $url ?? "";
-    }
-
-    public function getFeedsAtomUrlAttribute(): string
-    {
-        return "";
-    }
-
-    public function getFeedsRSSUrlAttribute(): string
-    {
-        return "";
     }
 
     public function getPublishedAtAttribute(): string
