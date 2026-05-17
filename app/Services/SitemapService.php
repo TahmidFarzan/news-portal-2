@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Models\Location;
 use App\Models\Tag;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\ContributorCacheService;
@@ -46,6 +47,11 @@ class SitemapService
         return $this->tagCacheService->tag($slug);
     }
 
+    public function locationBySlugTree(string $slugTree): Location
+    {
+        return $this->locationCacheService->locationBySlugTree($slugTree);
+    }
+
     public function getCategories(Request $request)
     {
         return $this->categoryCacheService->categories('sitemap', $request->input());
@@ -63,18 +69,17 @@ class SitemapService
 
     public function getTagsLastPageNo()
     {
-        return $this->tagCacheService->lastPageNo('sitemap',[]);
+        return $this->tagCacheService->lastPageNo('sitemap', []);
     }
 
     public function getLocations(Request $request)
     {
-        $page = $request->query('page', 1);
-        return $this->locationCacheService->records('sitemap', null, $page);
+        return $this->locationCacheService->locations('sitemap', $request->input());
     }
 
     public function getLocationsLastPageNo()
     {
-        return $this->locationCacheService->lastPageNo('sitemap');
+        return $this->locationCacheService->lastPageNo('sitemap', []);
     }
 
     public function getEvents(Request $request)
@@ -130,6 +135,21 @@ class SitemapService
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
     }
 
+    public function getLocationNewses(Request $request, Location $location)
+    {
+        $request->merge([
+            'location_id' => $location->id,
+        ]);
+        return $this->newsCacheService->newses("sitemap", $request->input());
+    }
+
+    public function getLocationNewsesLastPageNo(Request $request, Location $location)
+    {
+        $request->merge([
+            'location_id' => $location->id,
+        ]);
+        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+    }
 
     public function getTagNewses(Request $request, Tag $tag)
     {

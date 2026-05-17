@@ -48,17 +48,21 @@ class SyncLocationSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $dbRecordCount     = $this->locationCacheService->dbRecordsCount();
-            $cachedRecordTotal = $this->locationCacheService->recordsCount("sitemap");
+            $filters = [];
 
-            $dbLastPageNo     = $this->locationCacheService->dbLastPageNo(null);
-            $cachedLastPageNo = $this->locationCacheService->lastPageNo("sitemap");
+            $dbRecordCount     = $this->locationCacheService->dbLocationsCount($filters);
+            $cachedRecordTotal = $this->locationCacheService->locationsCount('sitemap', $filters);
 
-            if (! ($cachedRecordTotal == $dbRecordCount)) {
+            $dbLastPageNo     = $this->locationCacheService->dbLastPageNo($filters);
+            $cachedLastPageNo = $this->locationCacheService->lastPageNo('sitemap', $filters);
+
+            if ($cachedRecordTotal !== $dbRecordCount) {
                 $pageStart = $cachedLastPageNo;
-                if (! ($pageStart == null) && ($pageStart > 1)) {
-                    $pageStart = $pageStart - 1;
+
+                if ($pageStart > 1) {
+                    $pageStart--;
                 }
+
                 $pageEnd = $cachedLastPageNo;
 
                 if ($cachedLastPageNo < $dbLastPageNo) {
@@ -67,12 +71,17 @@ class SyncLocationSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->locationCacheService->cachedRecords("sitemap", null, $page);
+                    $this->locationCacheService->cachedLocations(
+                        'sitemap',
+                        array_merge($filters, [
+                            'page' => $page,
+                        ])
+                    );
                 }
             }
 
-            $this->locationCacheService->cachedRecordsCount("sitemap");
-            $this->locationCacheService->cachedLastPageNo("sitemap");
+            $this->locationCacheService->cachedLocationsCount('sitemap', $filters);
+            $this->locationCacheService->cachedLastPageNo('sitemap', $filters);
         } catch (Exception $ex) {
             Log::error('Location sitemap sync job error: ' . $ex->getMessage());
 

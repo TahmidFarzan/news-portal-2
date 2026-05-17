@@ -274,6 +274,10 @@ Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->grou
     Route::prefix('tags')->name('tags.')->group(function () {
         Route::get('{slug}/newses.xml', [SitemapController::class, 'tagNewses'])->name('newses');
     });
+
+    Route::prefix('locations')->name('locations.')->group(function () {
+        Route::get('{slugTree}/newses.xml', [SitemapController::class, 'locationNewses'])->where('slugTree', '.*')->name('newses');
+    });
 });
 
 Route::get('/', function () {

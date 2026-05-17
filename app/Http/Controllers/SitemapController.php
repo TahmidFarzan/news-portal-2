@@ -138,5 +138,20 @@ class SitemapController extends Controller
 
     }
 
+    public function locationNewses(Request $request, $slugTree)
+    {
+        $location = $this->sitemapService->locationBySlugTree($slugTree);
 
+        if ($request->filled("page")) {
+            $records = $this->sitemapService->getLocationNewses($request, $location);
+            return response()->view('sitemaps.newses', compact('records'));
+        }
+
+        $routeUrl = $location->getSitemapUrlAttribute();
+
+        $lastPage = $this->sitemapService->getLocationNewsesLastPageNo($request, $location);
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"));
+
+    }
 }

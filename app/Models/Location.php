@@ -110,7 +110,7 @@ class Location extends Model
 
     public function getSitemapUrlAttribute(): string
     {
-        return "";
+        return route("sitemaps.locations.newses",['slugTree' => $this->slug_tree]);
     }
 
     public function getHasParentAttribute(): bool
