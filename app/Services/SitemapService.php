@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Tag;
+use App\Models\Event;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\EventCacheService;
@@ -52,6 +53,11 @@ class SitemapService
         return $this->locationCacheService->locationBySlugTree($slugTree);
     }
 
+    public function event(string $slug): Event
+    {
+        return $this->eventCacheService->event($slug);
+    }
+
     public function getCategories(Request $request)
     {
         return $this->categoryCacheService->categories('sitemap', $request->input());
@@ -84,13 +90,12 @@ class SitemapService
 
     public function getEvents(Request $request)
     {
-        $page = $request->query('page', 1);
-        return $this->eventCacheService->records('sitemap', null, $page);
+        return $this->eventCacheService->events('sitemap', $request->input());
     }
 
     public function getEventsLastPageNo()
     {
-        return $this->eventCacheService->lastPageNo('sitemap');
+        return $this->eventCacheService->lastPageNo('sitemap',[]);
     }
 
     public function getContributors(Request $request)
@@ -147,6 +152,22 @@ class SitemapService
     {
         $request->merge([
             'location_id' => $location->id,
+        ]);
+        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+    }
+
+    public function getEventNewses(Request $request, Event $event)
+    {
+        $request->merge([
+            'event_id' => $event->id,
+        ]);
+        return $this->newsCacheService->newses("sitemap", $request->input());
+    }
+
+    public function getEventNewsesLastPageNo(Request $request, Event $event)
+    {
+        $request->merge([
+            'event_id' => $event->id,
         ]);
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
     }

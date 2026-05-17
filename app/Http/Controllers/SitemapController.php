@@ -154,4 +154,21 @@ class SitemapController extends Controller
         return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"));
 
     }
+
+    public function eventNewses(Request $request, $slug)
+    {
+        $event = $this->sitemapService->event($slug);
+
+        if ($request->filled("page")) {
+            $records = $this->sitemapService->getEventNewses($request, $event);
+            return response()->view('sitemaps.newses', compact('records'));
+        }
+
+        $routeUrl = $event->getSitemapUrlAttribute();
+
+        $lastPage = $this->sitemapService->getEventNewsesLastPageNo($request, $event);
+
+        return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"));
+
+    }
 }

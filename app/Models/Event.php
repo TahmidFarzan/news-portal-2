@@ -127,7 +127,7 @@ class Event extends Model implements HasMedia
 
     public function getSitemapUrlAttribute(): string
     {
-        return "";
+        return route("sitemaps.events.newses",['slug' => $this->slug]);
     }
 
     public function getIsRecentCreatedAttribute(): bool
