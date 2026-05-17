@@ -268,25 +268,12 @@ Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->grou
     Route::get('newses.xml', [SitemapController::class, 'newses'])->name('newses');
     Route::get('latest-newses.xml', [SitemapController::class, 'latestNewses'])->name('latest-newses');
 
-    Route::prefix('categories')->name('categories.')->group(function () {
-        Route::get('{slugTree}/newses.xml', [SitemapController::class, 'categoryNewses'])->where('slugTree', '.*')->name('newses');
-    });
+    Route::get('categories/{slugTree}/newses.xml', [SitemapController::class, 'categoryNewses'])->where('slugTree', '.*')->name('categories.newses');
+    Route::get('locations/{slugTree}/newses.xml', [SitemapController::class, 'locationNewses'])->where('slugTree', '.*')->name('location.newses');
+    Route::get('events/{slug}/newses.xml', [SitemapController::class, 'eventNewses'])->name('event.newses');
+    Route::get('tags/{slug}/newses.xml', [SitemapController::class, 'tagNewses'])->name('tag.newses');
+    Route::get('contributors/{slug}/newses.xml', [SitemapController::class, 'contributorNewses'])->name('contributor.newses');
 
-    Route::prefix('tags')->name('tags.')->group(function () {
-        Route::get('{slug}/newses.xml', [SitemapController::class, 'tagNewses'])->name('newses');
-    });
-
-    Route::prefix('locations')->name('locations.')->group(function () {
-        Route::get('{slugTree}/newses.xml', [SitemapController::class, 'locationNewses'])->where('slugTree', '.*')->name('newses');
-    });
-
-    Route::prefix('events')->name('events.')->group(function () {
-        Route::get('{slug}/newses.xml', [SitemapController::class, 'eventNewses'])->name('newses');
-    });
-
-    Route::prefix('contributors')->name('contributors.')->group(function () {
-        Route::get('{slug}/newses.xml', [SitemapController::class, 'contributorNewses'])->name('newses');
-    });
 });
 
 Route::prefix('feeds')->name('feeds.')->group(function () {
