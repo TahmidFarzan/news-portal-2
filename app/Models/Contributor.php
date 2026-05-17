@@ -116,12 +116,12 @@ class Contributor extends Model implements HasMedia
 
     public function getFeedsAtomUrlAttribute(): string
     {
-        return "";
+        return route("feeds.atom.contributors.newses",['slug' => $this->slug]);
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return "";
+        return route("feeds.rss.contributors.newses",['slug' => $this->slug]);
     }
 
     public function getSitemapUrlAttribute(): string

@@ -115,14 +115,14 @@ class Event extends Model implements HasMedia
         return $url ?? "";
     }
 
-    public function getFeedsAtomUrlAttribute(): string
+        public function getFeedsAtomUrlAttribute(): string
     {
-        return "";
+        return route("feeds.atom.events.newses",['slug' => $this->slug]);
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return "";
+        return route("feeds.rss.events.newses",['slug' => $this->slug]);
     }
 
     public function getSitemapUrlAttribute(): string

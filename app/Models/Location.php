@@ -100,17 +100,17 @@ class Location extends Model
 
     public function getFeedsAtomUrlAttribute(): string
     {
-        return "";
+        return route("feeds.atom.locations.newses", ['slugTree' => $this->slug_tree]);
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return "";
+        return route("feeds.rss.locations.newses", ['slugTree' => $this->slug_tree]);
     }
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.locations.newses",['slugTree' => $this->slug_tree]);
+        return route("sitemaps.locations.newses", ['slugTree' => $this->slug_tree]);
     }
 
     public function getHasParentAttribute(): bool
