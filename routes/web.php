@@ -80,9 +80,10 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('activity-log-events', [SearchController::class, 'activityLogEvents'])->name('activity-log-events');
         Route::get('activity-log-subject-types', [SearchController::class, 'activityLogSubjectTypes'])->name('activity-log-subject-types');
 
-        Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
         Route::get('page-sections', [SearchController::class, 'pageSections'])->name('page-sections');
+        Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
 
+        Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
         Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
     });
 
