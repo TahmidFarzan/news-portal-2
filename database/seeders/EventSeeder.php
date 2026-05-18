@@ -102,7 +102,7 @@ class EventSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SystemHelper::LANGUAGE_DEFAULT_CODE,
                 'events'        => collect([
                     (object) ['name' => 'May Day', 'start_date' => '2026-05-01', 'end_date' => '2026-05-01', 'brief' => 'International Workers Day', 'seo_keywords' => 'labour day'],
                     (object) ['name' => 'Eid-ul-Adha', 'start_date' => '2026-06-17', 'end_date' => '2026-06-20', 'brief' => 'Festival of sacrifice', 'seo_keywords' => 'eid adha, qurbani'],
@@ -136,7 +136,7 @@ class EventSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
+                'language_code' => SystemHelper::LANGUAGE_EXTRA_BN_CODE,
                 'events'        => collect([
                     (object) ['name' => 'মে দিবস', 'start_date' => '2026-05-01', 'end_date' => '2026-05-01', 'brief' => 'আন্তর্জাতিক শ্রমিক দিবস', 'seo_keywords' => 'শ্রমিক দিবস'],
                     (object) ['name' => 'ঈদুল আজহা', 'start_date' => '2026-06-17', 'end_date' => '2026-06-20', 'brief' => 'কুরবানির উৎসব', 'seo_keywords' => 'ঈদুল আজহা, কুরবানি'],
