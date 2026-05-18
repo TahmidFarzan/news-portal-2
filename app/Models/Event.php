@@ -115,19 +115,19 @@ class Event extends Model implements HasMedia
         return $url ?? "";
     }
 
-        public function getFeedsAtomUrlAttribute(): string
+    public function getFeedsAtomUrlAttribute(): string
     {
-        return route("feeds.atom.events.newses",['slug' => $this->slug]);
+        return route("feeds.atom.events.newses", ['slug' => $this->slug]);
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return route("feeds.rss.events.newses",['slug' => $this->slug]);
+        return route("feeds.rss.events.newses", ['slug' => $this->slug]);
     }
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.events.newses",['slug' => $this->slug]);
+        return route("sitemaps.events.newses", ['slug' => $this->slug]);
     }
 
     public function getIsRecentCreatedAttribute(): bool
@@ -140,9 +140,9 @@ class Event extends Model implements HasMedia
 
     public function getDesktopBannerImageAttribute(): ?Media
     {
-        $image          = null;
-        $collectionName = $this->media_collection_name;
-        $mediaRoleParameters  = ["role" => MediaHelper::MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE];
+        $image               = null;
+        $collectionName      = $this->media_collection_name;
+        $mediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE];
 
         if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
             $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
@@ -163,9 +163,9 @@ class Event extends Model implements HasMedia
 
     public function getMobileBannerImageAttribute(): ?Media
     {
-        $image          = null;
-        $collectionName = $this->media_collection_name;
-        $mediaRoleParameters  = ["role" => MediaHelper::MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE];
+        $image               = null;
+        $collectionName      = $this->media_collection_name;
+        $mediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE];
 
         if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
             $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
