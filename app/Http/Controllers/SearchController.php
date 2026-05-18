@@ -57,6 +57,13 @@ class SearchController extends Controller
         );
     }
 
+    public function menuTypes(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->menuTypes($request)
+        );
+    }
+
     public function pageSections(Request $request): JsonResponse
     {
         return response()->json(

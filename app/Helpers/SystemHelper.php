@@ -21,6 +21,10 @@ class SystemHelper
 
     private const ACTIVITY_LOG_SUBJECT_USER = 'User';
 
+    public const MENU_TYPE_HEADER = 'Header';
+    public const MENU_TYPE_TOPBAR = 'Top bar';
+    public const MENU_TYPE_FOOTER = 'Footer';
+
     public static function perPages(): Collection
     {
         return collect([
@@ -46,6 +50,15 @@ class SystemHelper
     {
         return collect([
             (object) ['id' => self::ACTIVITY_LOG_SUBJECT_USER, 'name' => 'User'],
+        ]);
+    }
+
+    public static function menuTypes(): Collection
+    {
+        return collect([
+            (object) ['id' => self::MENU_TYPE_HEADER, 'name' => 'Header'],
+            (object) ['id' => self::MENU_TYPE_TOPBAR, 'name' => 'Top bar'],
+            (object) ['id' => self::MENU_TYPE_FOOTER, 'name' => 'Footer'],
         ]);
     }
 }
