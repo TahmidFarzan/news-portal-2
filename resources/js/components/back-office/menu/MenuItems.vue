@@ -1,0 +1,89 @@
+<script setup>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
+import { faInfo, faPen } from '@fortawesome/free-solid-svg-icons'
+
+import { formatDateTime } from '@/composables/useDateTime'
+
+FontAwesomeLibrary.add(faInfo,faPen)
+
+const { menu } = defineProps({
+    menu: { type: Object, required: true },
+})
+</script>
+
+<template>
+    <div>
+
+        <div v-if="menu?.menu_items && menu?.menu_items?.length">
+
+            <div class="overflow-x-auto bg-white border border-gray-200 rounded-xl shadow-sm">
+                <table class="min-w-full text-sm text-left">
+
+                    <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+                        <tr>
+                            <th class="px-4 py-2">SL</th>
+                            <th class="px-4 py-2">Name</th>
+                            <th class="px-4 py-2">Language</th>
+                            <th class="px-4 py-2">Date</th>
+                            <th class="px-4 py-2">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="(item, index) in menu?.menu_items" :key="item.id"
+                            class="border-t hover:bg-gray-50">
+
+                            <td class="px-4 py-2">
+                                {{ index + 1 }}
+                            </td>
+
+                            <td class="px-4 py-2">
+                                {{ item?.name }}
+                            </td>
+
+                            <td class="px-4 py-2">
+                                {{ item.language?.name }}
+                            </td>
+
+                            <td class="px-4 py-2">
+                                {{ formatDateTime(item.created_at) }}
+                            </td>
+
+                            <td class="px-4 py-2">
+                                <a :href="route('back-office.menus.menu-items.details', { slug: menu.slug, menuItemSlug: item.slug })"
+                                    class="inline-flex items-center gap-1 px-2 py-1 m-1 text-xs border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
+                                    <FontAwesomeIcon icon="info" />
+                                    Details
+                                </a>
+
+                                <a :href="route('back-office.menus.menu-items.index', { slug: menu.slug, menuItemSlug: item.slug })"
+                                    class="inline-flex items-center gap-1 px-2 py-1 m-1 text-xs border border-yallow-500 text-yallow-500 rounded hover:bg-yallow-50">
+                                    <FontAwesomeIcon icon="pen" />
+                                    Edit
+                                </a>
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="flex justify-center mt-4">
+                <a :href="route('back-office.menus.menu-items.index', { slug: menu?.slug })"
+                    class="inline-flex items-center justify-center px-4 py-2 border border-gray-400 text-gray-600 rounded hover:bg-gray-100">
+                    Show all
+                </a>
+            </div>
+
+        </div>
+
+        <div v-else>
+            <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded">
+                Menu item is empty
+            </div>
+        </div>
+
+    </div>
+</template>

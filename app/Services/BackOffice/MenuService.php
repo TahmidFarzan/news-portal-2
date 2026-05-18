@@ -31,8 +31,12 @@ class MenuService
     {
         $menu->load([
             'language',
+            'menuType',
 
             'createdBy',
+
+            'menuItems'    => fn($query)    => $query->latest()->limit(5),
+            'menuItems.language',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
@@ -87,6 +91,7 @@ class MenuService
 
             $menu->name          = $request->input('name');
             $menu->menu_type_id  = $request->input('menu_type_id');
+            $menu->language_id   = $request->input('language_id');
             $menu->created_by_id = $isNew ? Auth::id() : $menu->created_by_id;
 
             $menu->save();

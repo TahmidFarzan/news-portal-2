@@ -11,11 +11,11 @@ use App\Http\Controllers\BackOffice\LocationController;
 use App\Http\Controllers\BackOffice\MediaController;
 
 // Backoffice
+use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
-use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
@@ -263,6 +263,8 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
 
         Route::prefix('{slug}/menu-items')->name('menu-items.')->group(function () {
             Route::get('/', [MenuController::class, 'menuItemIndex'])->name('index');
+            Route::get('create', [MenuController::class, 'menuItemCreate'])->name('create');
+            Route::get('edit/{menuItemSlug}', [MenuController::class, 'menuItemEdit'])->name('edit');
             Route::get('details/{menuItemSlug}', [MenuController::class, 'menuItemDetails'])->name('details');
 
             Route::post('save', [MenuController::class, 'menuItemUpdate'])->name('save');

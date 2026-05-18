@@ -120,6 +120,33 @@ class MenuController extends Controller
         ]);
     }
 
+    public function menuItemCreate(string $slug)
+    {
+        $menu     = $this->menuService->find($slug);
+        $menuItem = $this->menuService->menuItemNew();
+        Gate::authorize('create', $menu);
+
+        return Inertia::render('back-office/menus/menu-items/Create', [
+            'menu' => $menu,
+        ]);
+    }
+
+    public function menuItemEdit(string $slug, string $menuItemSlug)
+    {
+        $menu = $this->menuService->find($slug);
+        $menu = $this->menuService->loadRelations($menu);
+
+        Gate::authorize('view', $menu);
+
+        $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
+        $menuItem = $this->menuService->menuItemLoadRelations($menuItem);
+
+        return Inertia::render('back-office/menus/menu-items/Create', [
+            'menu' => $menu,
+            'menuItem' => $menuItem,
+        ]);
+    }
+
     public function menuItemDetails(string $slug, string $menuItemSlug)
     {
         $menu = $this->menuService->find($slug);
@@ -128,6 +155,7 @@ class MenuController extends Controller
         Gate::authorize('view', $menu);
 
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
+        $menuItem = $this->menuService->menuItemLoadRelations($menuItem);
 
         return Inertia::render('back-office/menus/menu-items/Details', [
             'menu' => $menu,

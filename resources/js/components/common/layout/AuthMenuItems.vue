@@ -19,7 +19,8 @@ import {
     faTags,
     faStar,
     faFan,
-    faGlobe
+    faGlobe,
+    faEllipsisVertical
 
 } from "@fortawesome/free-solid-svg-icons"
 
@@ -38,12 +39,14 @@ library.add(
     faStar,
     faFan,
     faGlobe,
+    faEllipsisVertical
 )
 
 import {
     canAccessUserManagementMenu,
     canAccessNewsAttributesMenu,
-    canAccessNewsMenu
+    canAccessNewsMenu,
+    canAccessMenuMenu
 } from '@/composables/useAuthUserAccessPermissions'
 import { faHotjar } from "@fortawesome/free-brands-svg-icons"
 
@@ -83,6 +86,10 @@ const canAccessNewsAttributesMenuComputed = computed(() =>
 
 const canAccessNewsMenuComputed = computed(() =>
     canAccessNewsMenu(authUser)
+)
+
+const canAccessMenuMenuComputed = computed(() =>
+    canAccessMenuMenu(authUser)
 )
 
 function toggleShowSubMenu(key) {
@@ -198,10 +205,18 @@ function isSubMenuVisible(key) {
             </div>
         </transition>
 
-        <a v-if="canAccessNewsMenuComputed" :href="route('back-office.newses.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+        <a v-if="canAccessNewsMenuComputed" :href="route('back-office.newses.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/newses/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
             Newses
+        </a>
+
+        <a v-if="canAccessMenuMenuComputed" :href="route('back-office.menus.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/auth-user/menus/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="ellipsis-vertical" />
+            Menus
         </a>
 
         <button @click="toggleShowSubMenu('UserManagement')"
@@ -228,6 +243,7 @@ function isSubMenuVisible(key) {
 
             </div>
         </transition>
+
 
     </div>
 </template>

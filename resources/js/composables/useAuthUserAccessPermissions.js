@@ -279,6 +279,31 @@ export const canRestoreNews = (authUser, news) => {
 
 // ================= MENU =================
 
+export const canCreateMenu = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
+export const canEditMenu = (authUser, menu) => {
+    if (!authUser || !menu) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return isNewsDesk(role) && authUser.id === menu.created_by_id
+}
+
+export const canDeleteMenu = (authUser, menu) => {
+    if (!authUser || !menu) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return isNewsDesk(role) && authUser.id === menu.created_by_id
+}
+
+// ================= MENU =================
+
 export const canAccessActivityLogMenu = (authUser) =>
     authUser && isAdmin(getUserRoleName(authUser))
 
@@ -304,4 +329,12 @@ export const canAccessNewsMenu = (authUser) => {
     const role = getUserRoleName(authUser)
 
     return isAdmin(role) || isNewsDesk(role)
+}
+
+export const canAccessMenuMenu = (authUser) => {
+    if (!authUser) return false
+
+    const role = getUserRoleName(authUser)
+
+    return isAdmin(role)
 }
