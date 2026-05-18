@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    @foreach (range(1, $lastPage) as $page)
+    @for ($i = 0; $i < $lastPage; $i)
         <sitemap>
-            <loc>{{ $routeUrl . '?page=' . $page }}</loc>
-            <lastmod>{{ $page == 1 ? now()->format('Y-m-d\TH:i:sP') : now()->subWeeks(1)->format('Y-m-d\TH:i:sP') }}
+            <loc>{{ $routeUrl . '?page=' . ($i + 1) }}</loc>
+            <lastmod>{{ $i == 1 ? now()->format('Y-m-d\TH:i:sP') : now()->subWeeks(1)->format('Y-m-d\TH:i:sP') }}
             </lastmod>
         </sitemap>
-    @endforeach
+    @endfor
 </sitemapindex>
