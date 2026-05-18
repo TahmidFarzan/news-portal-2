@@ -71,6 +71,13 @@ class SearchController extends Controller
         );
     }
 
+    public function menuItemModels(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->menuItemModels($request)
+        );
+    }
+
     public function users(Request $request): JsonResponse
     {
         return response()->json(
