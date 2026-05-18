@@ -182,6 +182,4 @@ class MenuController extends Controller
             'status'  => $result['status'],
         ]);
     }
-
-
 }
