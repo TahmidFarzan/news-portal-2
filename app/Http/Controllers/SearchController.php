@@ -148,6 +148,13 @@ class SearchController extends Controller
         );
     }
 
+    public function menuItems(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->menuItems($request)
+        );
+    }
+
     public function categoryTree(Request $request): JsonResponse
     {
         return response()->json(
@@ -159,6 +166,13 @@ class SearchController extends Controller
     {
         return response()->json(
             $this->searchService->locationTree($request)
+        );
+    }
+
+    public function menuItemTree(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->menuItemTree($request)
         );
     }
 
@@ -222,6 +236,13 @@ class SearchController extends Controller
     {
         return response()->json(
             $this->searchService->contributor($slugOrId)
+        );
+    }
+
+    public function menuItem(string|int $slugOrId): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->menuItem($slugOrId)
         );
     }
 }

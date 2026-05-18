@@ -1,0 +1,158 @@
+<?php
+namespace App\Models;
+
+use App\Observers\MenuItemObserver;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+#[Table('menu_items')]
+#[Fillable([
+        'name', 'slug',
+        "menu_id", 'language_id', 'created_by_id',
+        "url", "parent_id",
+        "model_type", "model_id",
+    ])]
+#[ObservedBy([MenuItemObserver::class])]
+class MenuItem extends Model
+{
+    use HasFactory, LogsActivity, HasSlug, HasRecursiveRelationships;
+
+    protected $appends = ["public_url", "has_parent", "has_descendants"];
+
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                "menu_id", 'language_id', 'created_by_id',
+                "url", "parent_id",
+                "model_type", "model_id",
+            ])
+            ->useLogName('MenuItem')
+            ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
+            ->logOnlyDirty()
+            ->logExcept([
+                'id',
+                'created_by_id',
+                'created_at',
+            ])
+            ->dontLogEmptyChanges();
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->saveSlugsTo('slug')
+            ->generateSlugsFrom(function ($model) {
+                $mainSlug     = Str::uuid();
+                $randomString = Str::random(11);
+                $createdAt    = $model->created_at ?? now();
+                $createdAt    = $createdAt->format('HisdmY');
+                return "{$createdAt}-{$randomString}-{$mainSlug}";
+            })
+            ->doNotGenerateSlugsOnUpdate()
+            ->slugsShouldBeNoLongerThan(255);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function getParentKeyName()
+    {
+        return 'parent_id';
+    }
+
+    public function getPublicUrlAttribute(): string
+    {
+        $url = $this->url;
+
+        if ($this->model) {
+            $url = $this->model?->public_url;
+        }
+
+        return $url ?? null;
+    }
+
+    public function getHasParentAttribute(): bool
+    {
+        return isset($this->parent_id) ? true : false;
+    }
+
+    public function getHasDescendantsAttribute(): bool
+    {
+        return ($this->descendants()->count() > 0) ? true : false;
+    }
+
+    public function getIndentationNameAttribute(): ?string
+    {
+        if (! $this->name_tree) {
+            return null;
+        }
+
+        $parts = explode(' - ', $this->name_tree);
+
+        $last        = trim(array_pop($parts));
+        $transformed = str_repeat('-- ', count($parts)) . $last;
+
+        return trim($transformed);
+    }
+
+    public function activityLogs(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject');
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by_id');
+    }
+
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class, 'language_id');
+    }
+
+    public function latestActivityLog(): MorphOne
+    {
+        return $this->morphOne(Activity::class, 'subject')->latestOfMany();
+    }
+
+    public function menu(): BelongsTo
+    {
+        return $this->belongsTo(Menu::class);
+    }
+
+    public function model(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(MenuItem::class);
+    }
+}

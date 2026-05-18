@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call(LanguageSeeder::class);
 
+        $this->call(NewsTypeSeeder::class);
+        $this->call(MenuTypeSeeder::class);
+
         $this->call(CategorySeeder::class);
         $this->call(TagSeeder::class);
         $this->call(TrendSeeder::class);
@@ -24,7 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EventSeeder::class);
         $this->call(ContributorSeeder::class);
 
-        $this->call(NewsTypeSeeder::class);
+        $this->call(MenuSeeder::class);
 
         $this->call(NewsSeeder::class);
     }

@@ -81,16 +81,17 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('activity-log-subject-types', [SearchController::class, 'activityLogSubjectTypes'])->name('activity-log-subject-types');
 
         Route::get('page-sections', [SearchController::class, 'pageSections'])->name('page-sections');
-        Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
 
         Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
         Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
+        Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
     });
 
     Route::middleware(['response.cache:60'])->group(function () {
         Route::get('users', [SearchController::class, 'users'])->name('users');
         Route::get('languages', [SearchController::class, 'languages'])->name('languages');
         Route::get('categories', [SearchController::class, 'categories'])->name('categories');
+        Route::get('menu-items', [SearchController::class, 'menuItems'])->name('menu-items');
         Route::get('tags', [SearchController::class, 'tags'])->name('tags');
         Route::get('locations', [SearchController::class, 'locations'])->name('locations');
         Route::get('events', [SearchController::class, 'events'])->name('events');
@@ -100,6 +101,7 @@ Route::prefix('search')->name('search.')->group(function () {
 
         Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
         Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
+        Route::get('menu-item-tree', [SearchController::class, 'menuItemTree'])->name('menu-item-tree');
 
         Route::get('newses', [SearchController::class, 'newses'])->name('newses');
 
@@ -111,6 +113,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('location/{slugOrId}', [SearchController::class, 'location'])->name('location');
         Route::get('event/{slugOrId}', [SearchController::class, 'event'])->name('event');
         Route::get('contributor/{slugOrId}', [SearchController::class, 'contributor'])->name('contributor');
+        Route::get('menu-item/{slugOrId}', [SearchController::class, 'menuItem'])->name('menu-item');
     });
 
     Route::middleware(['response.cache:60,private'])->get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');

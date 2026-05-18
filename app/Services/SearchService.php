@@ -10,6 +10,8 @@ use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
+use App\Models\MenuItem;
+use App\Models\MenuType;
 use App\Models\News;
 use App\Models\NewsType;
 use App\Models\Tag;
@@ -155,32 +157,6 @@ class SearchService
     public function activityLogSubjectTypes(Request $request): array
     {
         $options = SystemHelper::activityLogSubjectTypes();
-
-        if ($request->filled('search')) {
-            $search  = $request->input('search');
-            $options = $options->filter(
-                fn($row) =>
-                stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
-            );
-        }
-
-        $items = $options->map(fn($row) => [
-            'id'   => $row->id,
-            'name' => $row->name,
-        ]);
-
-        return [
-            'items'        => $items,
-            'total'        => 1,
-            'current_page' => 1,
-            'last_page'    => 1,
-        ];
-    }
-
-    public function menuTypes(Request $request): array
-    {
-        $options = SystemHelper::menuTypes();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');
@@ -623,17 +599,91 @@ class SearchService
             ->paginate($request->input('per_page', 50));
 
         $list = $records->map(fn($news) => [
-            'id'                 => $news->id,
-            'title'              => $news->title,
-            'sub_title'          => $news->sub_title,
-            'content_shoulder'   => $news->content_shoulder,
-            'slug'               => $news->slug,
-            'published_at'       => $news->title_with_published_at,
+            'id'                      => $news->id,
+            'title'                   => $news->title,
+            'sub_title'               => $news->sub_title,
+            'content_shoulder'        => $news->content_shoulder,
+            'slug'                    => $news->slug,
+            'published_at'            => $news->title_with_published_at,
             'title_with_published_at' => $news->title_with_published_at,
         ]);
 
         return [
             'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function menuItems(Request $request): array
+    {
+        $query = MenuItem::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('parent_id')) {
+            $query->where('parent_id', $request->input('parent_id'));
+        }
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
+        if ($request->filled('only_main') &&
+            $request->boolean('only_main') &&
+            ! $request->filled('parent_id')
+        ) {
+            $query->whereNull('parent_id');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
+            'has_descendants' => $row->has_descendants,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function menuTypes(Request $request): array
+    {
+        $query = MenuType::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('except_id')) {
+            $query->whereNot("id", $request->input('except_id'));
+        }
+
+        $records = $query
+            ->orderByDesc('id')
+            ->paginate($request->input('per_page', 25));
+
+        $items = $records->map(fn($user) => [
+            'id'   => $user->id,
+            'name' => $user->name,
+        ]);
+
+        return [
+            'items'        => $items,
             'total'        => $records->total(),
             'current_page' => $records->currentPage(),
             'last_page'    => $records->lastPage(),
@@ -712,6 +762,40 @@ class SearchService
         ];
     }
 
+    public function menuItemTree(Request $request): array
+    {
+        $query = MenuItem::whereNull('parent_id');
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
+        if ($request->filled('parent_id')) {
+            $parent = $this->menuItem($request->input('parent_id'));
+            $root   = self::rootMenuItemParent($parent);
+            $query->where('id', $root->id);
+        }
+
+        $records = $query->orderBy('id', 'asc')
+            ->with(['children'])
+            ->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = self::formatMenuItemTree($records->getCollection(), 0, null);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+            'per_page'     => $records->perPage(),
+        ];
+    }
+
     public function user(int | string $slugOrId): User
     {
         return User::where('id', $slugOrId)
@@ -771,6 +855,13 @@ class SearchService
             ->firstOrFail();
     }
 
+    public function menuItem(int | string $slugOrId): MenuItem
+    {
+        return MenuItem::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
+
     private static function rootCategoryParent(Category $record): Category
     {
         $parent = $record;
@@ -795,6 +886,21 @@ class SearchService
 
             if ($parent->parent_id !== null) {
                 $parent = self::rootLocationParent($parent);
+            }
+        }
+
+        return $parent;
+    }
+
+    private static function rootMenuItemParent(MenuItem $record): MenuItem
+    {
+        $parent = $record;
+
+        if ($record->parent_id !== null) {
+            $parent = $record->parent;
+
+            if ($parent->parent_id !== null) {
+                $parent = self::rootMenuItemParent($parent);
             }
         }
 
@@ -858,6 +964,38 @@ class SearchService
                 $list = array_merge(
                     $list,
                     self::formatLocationTree($record->children, $level + 1, $visited)
+                );
+            }
+        }
+
+        return $list;
+    }
+
+    private static function formatMenuItemTree(Collection $records, int $level = 0, ?array $visited = null): array
+    {
+        $visited ??= [];
+
+        $list = [];
+
+        foreach ($records as $record) {
+
+            if (in_array($record->id, $visited, true)) {
+                continue;
+            }
+
+            $visited[] = $record->id;
+
+            $list[] = [
+                'id'               => $record->id,
+                'name'             => $record->name,
+                'name_tree'        => $record->name_tree,
+                'indentation_name' => $record->indentation_name,
+            ];
+
+            if (! empty($record->children) && $record->children->isNotEmpty()) {
+                $list = array_merge(
+                    $list,
+                    self::formatMenuItemTree($record->children, $level + 1, $visited)
                 );
             }
         }
