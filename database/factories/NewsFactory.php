@@ -27,7 +27,7 @@ class NewsFactory extends Factory
     {
         $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
-        $language      = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
+        $language      = Language::where("code", SystemHelper::LANGUAGE_DEFAULT_CODE)->first() ?? null;
         $newsType      = Language::where("name", NewsHelper::NEWS_TYPE_STORY)->first() ?? null;
 
         $category = $this->getRandomCategory($language);
@@ -81,8 +81,8 @@ class NewsFactory extends Factory
         }
 
         $allowed = match ($language->code) {
-            SystemHelper::DEFAULT_LANGUAGE_CODE     => "National",
-            SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE => "জাতীয়",
+            SystemHelper::LANGUAGE_DEFAULT_CODE     => "National",
+            SystemHelper::LANGUAGE_EXTRA_BN_CODE => "জাতীয়",
             default                                 => null,
         };
 

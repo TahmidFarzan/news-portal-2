@@ -268,7 +268,7 @@ class NewsSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SystemHelper::LANGUAGE_DEFAULT_CODE,
                 'newses'        => collect([
 
                     (object) [
@@ -1023,7 +1023,7 @@ class NewsSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
+                'language_code' => SystemHelper::LANGUAGE_EXTRA_BN_CODE,
                 'newses'        => collect([
 
                     (object) [

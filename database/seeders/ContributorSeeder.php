@@ -78,7 +78,7 @@ class ContributorSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SystemHelper::LANGUAGE_DEFAULT_CODE,
                 'contributors'       => collect([
 
                     (object) [
@@ -238,7 +238,7 @@ class ContributorSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE,
+                'language_code' => SystemHelper::LANGUAGE_EXTRA_BN_CODE,
                 'contributors'       => collect([
                     (object) [
                         'name'            => 'তাহমিমা আনাম',
