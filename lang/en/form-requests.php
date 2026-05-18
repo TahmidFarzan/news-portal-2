@@ -431,4 +431,55 @@ return [
         ],
 
     ],
+
+    'menu'         => [
+        'name'        => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be string.',
+            'max'      => 'Name max chars is 200.',
+            'unique'   => 'Name must be unique.',
+        ],
+
+        'language_id' => [
+            'required'  => 'Language is required.',
+            "not_found" => 'Language is not exit.',
+        ],
+
+        'menu_type_id' => [
+            'required'  => 'News type is required.',
+            "not_found" => 'News type is not exit.',
+        ],
+    ],
+
+    'menu_item'         => [
+        'name'        => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be string.',
+            'max'      => 'Name max chars is 200.',
+            'unique'   => 'Name must be unique.',
+        ],
+
+        'language_id' => [
+            'required'  => 'Language is required.',
+            "not_found" => 'Language is not exit.',
+        ],
+
+        'parent_id' => [
+            "not_found" => 'Parent is not exit.',
+        ],
+
+        'model_type' => [
+            'required_if'  => 'Model type is required.',
+        ],
+
+        'model_id' => [
+            'required_if'  => 'Model is required.',
+            "not_found" => 'Model is not exit.',
+        ],
+
+        'url' => [
+            'url'  => 'Url must be url.',
+        ],
+
+    ],
 ];

@@ -24,7 +24,7 @@ use Spatie\Sluggable\SlugOptions;
 #[Fillable([
         'name', 'slug',
         'language_id', 'created_by_id',
-        "menu_type",
+        "menu_type_id",
     ])]
 #[UsePolicy(MenuPolicy::class)]
 #[ObservedBy([MenuObserver::class])]
@@ -47,7 +47,7 @@ class Menu extends Model
         return LogOptions::defaults()
             ->logOnly([
                 'name', 'language_id', 'slug',
-                "menu_type",
+                "menu_type_id",
             ])
             ->useLogName('Menu')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")

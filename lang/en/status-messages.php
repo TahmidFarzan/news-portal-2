@@ -216,6 +216,36 @@ return [
         ],
     ],
 
+    'menu'  => [
+        'save'   => [
+            'success' => 'Menu saved successfully.',
+            'failed'  => 'Failed to save menu.',
+        ],
+        'update' => [
+            'success' => 'Menu updated successfully.',
+            'failed'  => 'Failed to update menu.',
+        ],
+        'delete' => [
+            'success' => 'Menu deleted successfully.',
+            'failed'  => 'Failed to delete menu.',
+        ],
+    ],
+
+    'menu_item'  => [
+        'save'   => [
+            'success' => 'Menu item saved successfully.',
+            'failed'  => 'Failed to save menu item.',
+        ],
+        'update' => [
+            'success' => 'Menu item updated successfully.',
+            'failed'  => 'Failed to update menu item.',
+        ],
+        'delete' => [
+            'success' => 'Menu item deleted successfully.',
+            'failed'  => 'Failed to delete menu item.',
+        ],
+    ],
+
     // Auth
     'auth'         => [
         'login'              => [

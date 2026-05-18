@@ -30,7 +30,7 @@ class MenuItemFactory extends Factory
         $menuTypes      = [SystemHelper::MENU_TYPE_HEADER, SystemHelper::MENU_TYPE_TOPBAR, SystemHelper::MENU_TYPE_FOOTER];
         $randomMenuType = $menuTypes[array_rand($menuTypes)];
 
-        $menu = MenuType::inRandomOrder()->where("menu_type", $randomMenuType)->first() ?? null;
+        $menu = MenuType::inRandomOrder()->where("name", $randomMenuType)->first() ?? null;
         return [
             'name'          => $this->faker->name(),
             "menu_id"       => $menu->id,

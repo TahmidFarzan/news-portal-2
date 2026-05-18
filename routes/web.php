@@ -15,6 +15,7 @@ use App\Http\Controllers\BackOffice\NewsController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
+use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
@@ -81,6 +82,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('activity-log-subject-types', [SearchController::class, 'activityLogSubjectTypes'])->name('activity-log-subject-types');
 
         Route::get('page-sections', [SearchController::class, 'pageSections'])->name('page-sections');
+        Route::get('menu-item-models', [SearchController::class, 'menuItemModels'])->name('menu-item-models');
 
         Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
         Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
@@ -246,6 +248,26 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
             Route::patch('update', [NewsController::class, 'newsPlacementUpdateForNews'])->name('update');
             Route::get('details/{newsPlacementSlug}', [NewsController::class, 'newsPlacementDetails'])->name('details');
             Route::delete('delete/{newsPlacementSlug}', [NewsController::class, 'newsPlacementDelete'])->name('delete');
+        });
+    });
+
+    Route::prefix('menus')->name('menus.')->group(function () {
+        Route::get('/', [MenuController::class, 'index'])->name('index');
+        Route::get('create', [MenuController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [MenuController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [MenuController::class, 'details'])->name('details');
+
+        Route::post('save', [MenuController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [MenuController::class, 'update'])->name('update');
+        Route::patch('delete/{slug}', [MenuController::class, 'delete'])->name('delete');
+
+        Route::prefix('{slug}/menu-items')->name('menu-items.')->group(function () {
+            Route::get('/', [MenuController::class, 'menuItemIndex'])->name('index');
+            Route::get('details/{menuItemSlug}', [MenuController::class, 'menuItemDetails'])->name('details');
+
+            Route::post('save', [MenuController::class, 'menuItemUpdate'])->name('save');
+            Route::patch('update/{menuItemSlug}', [MenuController::class, 'menuItemUpdate'])->name('update');
+            Route::delete('delete/{menuItemSlug}', [MenuController::class, 'menuItemDelete'])->name('delete');
         });
     });
 
