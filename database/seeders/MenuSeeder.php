@@ -44,7 +44,7 @@ class MenuSeeder extends Seeder
 
         foreach ($languages as $language) {
 
-            if ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) {
+            if ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) {
                 Menu::factory()->state([
                     'name'         => "Header",
                     "language_id"  => $language->id,
@@ -64,7 +64,7 @@ class MenuSeeder extends Seeder
                 ])->create();
             }
 
-            if ($language->code == SystemHelper::EXTRA_LANGUAGE_BN_BD_CODE) {
+            if ($language->code == SystemHelper::LANGUAGE_EXTRA_BN_CODE) {
                 Menu::factory()->state([
                     'name'         => "হেডার",
                     "language_id"  => $language->id,

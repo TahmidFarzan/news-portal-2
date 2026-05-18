@@ -25,7 +25,7 @@ class MenuItemFactory extends Factory
     {
         $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
-        $language      = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
+        $language      = Language::where("code", SystemHelper::LANGUAGE_DEFAULT_CODE)->first() ?? null;
 
         $menuTypes      = [SystemHelper::MENU_TYPE_HEADER, SystemHelper::MENU_TYPE_TOPBAR, SystemHelper::MENU_TYPE_FOOTER];
         $randomMenuType = $menuTypes[array_rand($menuTypes)];
