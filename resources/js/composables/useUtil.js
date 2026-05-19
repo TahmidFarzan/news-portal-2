@@ -11,7 +11,7 @@ export const titleFormat = (text) => {
 
 export const extractModelName = (fullClassName) => {
     if (!fullClassName) return '';
-    return fullClassName.split('\\').pop();
+    return fullClassName.split(/\\+/).pop();
 }
 
 export const replaceAllOccurrences = (text, search, replace) => {
