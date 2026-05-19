@@ -347,11 +347,11 @@ return [
             "not_found" => 'Tags is not exit.',
         ],
 
-        'relevant_news_ids'                           => [
+        'relevant_news_ids'                 => [
             "not_found" => 'Relevant newses is not exit.',
         ],
 
-        'related_news_ids'                           => [
+        'related_news_ids'                  => [
             "not_found" => 'Related newses is not exit.',
         ],
 
@@ -432,15 +432,15 @@ return [
 
     ],
 
-    'menu'         => [
-        'name'        => [
+    'menu'        => [
+        'name'         => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
             'max'      => 'Name max chars is 200.',
             'unique'   => 'Name must be unique.',
         ],
 
-        'language_id' => [
+        'language_id'  => [
             'required'  => 'Language is required.',
             "not_found" => 'Language is not exit.',
         ],
@@ -451,7 +451,7 @@ return [
         ],
     ],
 
-    'menu_item'         => [
+    'menu_item'   => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -464,21 +464,22 @@ return [
             "not_found" => 'Language is not exit.',
         ],
 
-        'parent_id' => [
+        'parent_id'   => [
             "not_found" => 'Parent is not exit.',
         ],
 
-        'model_type' => [
-            'required_if'  => 'Model type is required.',
+        'model_type'       => [
+            'required_if' => 'Model is required.',
         ],
 
-        'model_id' => [
-            'required_if'  => 'Model is required.',
-            "not_found" => 'Model is not exit.',
+        'model_id'    => [
+            'required_if' => 'Model is required.',
+            "not_found"   => 'Model is not exit.',
         ],
 
-        'url' => [
-            'url'  => 'Url must be url.',
+        'url'         => [
+            'required_if' => 'Url is required.',
+            'url'         => 'Url must be url.',
         ],
 
     ],

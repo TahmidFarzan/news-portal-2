@@ -1,19 +1,19 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
-import MenuItems from '@/components/back-office/menu/MenuItems.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faTrash, faPen, faEye, faEyeSlash, faSpinner, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
+import { extractModelName } from '@/composables/useUtil'
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
-import { canEditMenu, canDeleteMenu } from '@/composables/useAuthUserAccessPermissions'
+import { canEditMenuItem, canDeleteMenuItem } from '@/composables/useAuthUserAccessPermissions'
 
-FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner, faPlus)
+FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
@@ -23,18 +23,19 @@ const authUser = inject("authUser")
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { menu } = defineProps({
+const { menu, menuItem } = defineProps({
     menu: Object,
+    menuItem: Object,
 })
 
-const canEdit = (menu) => canEditMenu(authUser?.value, menu)
-const canDelete = (menu) => canDeleteMenu(authUser?.value, menu)
+const canEdit = (menuItem) => canEditMenuItem(authUser?.value, menuItem)
+const canDelete = (menuItem) => canDeleteMenuItem(authUser?.value, menuItem)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.menus.delete', { slug: menu?.slug }), {
+    intertiaJsRoute.delete(route('back-office.menus.menu-items.delete', { slug: menu?.slug, menuItemSlug: menuItem?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -47,7 +48,9 @@ onMounted(async () => {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Menus', href: route('back-office.menus.index') },
-                { text: `${menu?.name} details`, active: true }
+                { text: `${menu?.name} details`, href: route('back-office.menus.details', { slug: menu?.slug }) },
+                { text: 'Menu Items', href: route('back-office.menus.menu-items.index', { slug: menu?.slug }) },
+                { text: `${menuItem?.name} details`, active: true }
             ],
         })
     )
@@ -58,31 +61,26 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${menu?.name} details`" />
+    <Head :title="`${menuItem?.name} details`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Menu Details</h2>
+            <h2 class="text-lg font-semibold">Menu item Details</h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(menu)" :href="route('back-office.menus.edit', { slug: menu?.slug })"
+                <a v-if="canEdit(menuItem)"
+                    :href="route('back-office.menus.menu-items.edit', { slug: menu?.slug, menuItemSlug: menuItem?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     Edit
                 </a>
 
-                <button v-if="canDelete(menu)" @click="showDeleteModal = true"
+                <button v-if="canDelete(menuItem)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
                     Delete
                 </button>
-
-                <a :href="route('back-office.menus.edit', { slug: menu?.slug })"
-                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
-                    <FontAwesomeIcon icon="plus" />
-                    Add Menu Add
-                </a>
             </div>
         </div>
 
@@ -94,27 +92,44 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ menu?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ menuItem?.name || 'N/A' }}</span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ menu?.language?.name || 'N/A' }}</span>
+                        <span class="font-medium">{{ menuItem?.language?.name || 'N/A' }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <div class="text-gray-500 mb-1">Parent</div>
+                        <div class="text-gray-700">{{ menuItem?.parent?.name || "N/A" }}</div>
                     </div>
                 </div>
 
-            </div>
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
-            <div class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
-                <h3 class="text-base font-semibold border-b pb-2">Menu Items</h3>
-                <div>
-                    <a :href="route('back-office.menus.menu-items.create', { slug: menu?.slug })"
-                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md items-center gap-2 transition">
-                        <FontAwesomeIcon icon="plus" />
-                        Add Menu Item
-                    </a>
+                    <div class="flex justify-between">
+                        <div class="text-gray-500 mb-1">Model</div>
+
+                        <div class="text-gray-700">
+                            {{ menuItem?.model_type ? extractModelName(menuItem.model_type) : 'N/A' }}
+                            <span v-if="menuItem?.model?.name">
+                                - {{ menuItem.model.name }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <div class="text-gray-500 mb-1">Url</div>
+                        <div class="text-gray-700">{{ menuItem?.url || "N/A" }}</div>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 mb-1">Public url</span>
+                        <span class="font-medium">{{ menuItem?.public_url || 'N/A' }}</span>
+                    </div>
                 </div>
-                <MenuItems :menu="menu" />
+
             </div>
         </div>
 
@@ -127,14 +142,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created At</span>
                         <span class="font-medium">
-                            {{ menu?.created_at ? formatDateTime(menu.created_at) : 'N/A' }}
+                            {{ menuItem?.created_at ? formatDateTime(menuItem.created_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Created By</span>
                         <span class="font-medium">
-                            {{ menu?.created_by?.name || 'N/A' }}
+                            {{ menuItem?.created_by?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -143,14 +158,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated At</span>
                         <span class="font-medium">
-                            {{ menu?.updated_at ? formatDateTime(menu.updated_at) : 'N/A' }}
+                            {{ menuItem?.updated_at ? formatDateTime(menuItem.updated_at) : 'N/A' }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">Updated By</span>
                         <span class="font-medium">
-                            {{ menu?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ menuItem?.latest_activity_log?.causer?.name || 'N/A' }}
                         </span>
                     </div>
                 </div>
@@ -160,7 +175,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
-            <RecentActivities :model-slug="'menu'" :model="menu" />
+            <RecentActivities :model-slug="'menu-item'" :model="menuItem" />
         </div>
 
         <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
@@ -177,11 +192,11 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete Menu
+                            Delete menu item
                         </h3>
 
                         <p class="text-sm font-medium">
-                            {{ menu?.name }}
+                            {{ menuItem?.name }}
                         </p>
 
                         <p class="text-sm text-gray-500">

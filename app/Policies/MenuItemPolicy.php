@@ -3,18 +3,18 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Menu;
+use App\Models\MenuItem;
 use Illuminate\Auth\Access\Response;
 use App\Helpers\UserHelper;
 
-class MenuPolicy
+class MenuItemPolicy
 {
     public function viewAny(User $authUser): Response
     {
         return Response::allow();
     }
 
-    public function view(User $authUser, Menu $menu): Response
+    public function view(User $authUser, MenuItem $menuItem): Response
     {
         return Response::allow();
     }
@@ -24,7 +24,7 @@ class MenuPolicy
         return Response::allow();
     }
 
-    public function update(User $authUser, Menu $menu): Response
+    public function update(User $authUser, MenuItem $menuItem): Response
     {
         if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
             return Response::allow();
@@ -33,7 +33,7 @@ class MenuPolicy
         return Response::deny();
     }
 
-    public function delete(User $authUser, Menu $menu): Response
+    public function delete(User $authUser, MenuItem $menuItem): Response
     {
 
         if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {

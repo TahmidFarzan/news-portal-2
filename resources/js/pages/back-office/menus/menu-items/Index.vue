@@ -10,17 +10,16 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import {
     faTrash, faFilter, faInfo,
-    faPlus, faPen, faEye, faEyeSlash, faSpinner,
-    faList
+    faPlus, faPen, faEye, faEyeSlash, faSpinner
 } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useUtil'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateMenu, canEditMenu, canDeleteMenu, } from '@/composables/useAuthUserAccessPermissions'
+import { canCreateMenuItem, canEditMenuItem, canDeleteMenuItem, } from '@/composables/useAuthUserAccessPermissions'
 
-FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner, faList)
+FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
@@ -31,13 +30,14 @@ const deletingRow = ref(null)
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { menus } = defineProps({
-    menus: Object,
+const { menuItems, menu } = defineProps({
+    menu: Object,
+    menuItems: Object,
 })
 
 const paginationOnly = computed(() => {
-    if (!menus) return {}
-    const { data, ...rest } = menus
+    if (!menuItems) return {}
+    const { data, ...rest } = menuItems
     return rest
 })
 
@@ -46,6 +46,7 @@ const filterForm = useForm({
     created_by_id: null,
     parent_id: '',
     language_id: '',
+    model_type: '',
     date: '',
     search: '',
 })
@@ -54,7 +55,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.menus.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.menu-items.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -62,20 +63,20 @@ const applyFilter = () => {
     })
 }
 
-const confirmDelete = (menu) => {
-    deletingRow.value = menu
+const confirmDelete = (menuItem) => {
+    deletingRow.value = menuItem
     showDeleteModal.value = true
 }
 
-const canCreate = () => canCreateMenu(authUser?.value)
-const canEdit = (menu) => canEditMenu(authUser?.value, menu)
-const canDelete = (menu) => canDeleteMenu(authUser?.value, menu)
+const canCreate = () => canCreateMenuItem(authUser?.value)
+const canEdit = (menuItem) => canEditMenuItem(authUser?.value, menuItem)
+const canDelete = (menuItem) => canDeleteMenuItem(authUser?.value, menuItem)
 
-const handleDelete = (menu) => {
-    if (!menu || deleteProcessing.value) return
+const handleDelete = (menuItem) => {
+    if (!menuItem || deleteProcessing.value) return
 
     deleteProcessing.value = true
-    intertiaJsRoute.delete(route('back-office.menus.delete', { slug: menu?.slug }), {
+    intertiaJsRoute.delete(route('back-office.menus.menu-items.delete', { slug: menu?.slug, menuItemSlug: menuItem?.slug }), {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -92,6 +93,7 @@ onMounted(async () => {
     filterForm.language_id = urlParams.get('language_id') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
+    filterForm.model_type = urlParams.get('model_type') || ''
 
     if (filterForm.language_id) {
         const rLanguage = await fetchFromApi(
@@ -114,7 +116,9 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Dashboard', href: route('auth-user.dashboard.index') },
-                { text: 'Menus', active: true },
+                { text: 'Menus', href: route('back-office.menus.index') },
+                { text: `${menu?.name} details`, href: route('back-office.menus.details', { slug: menu?.slug }) },
+                { text: 'Menu Items', active: true },
             ],
         })
     )
@@ -125,14 +129,14 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Menus" />
+    <Head title="Menu Items" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Menus</h2>
+            <h2 class="text-lg font-semibold">Menu Items</h2>
 
-            <a v-if="canCreate()" :href="route('back-office.menus.create')"
+            <a v-if="canCreate()" :href="route('back-office.menus.menu-items.create',{slug: menu?.slug})"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
                 Create
@@ -154,10 +158,14 @@ onMounted(async () => {
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
                     placeholder="Language" />
 
+                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="model_type"
+                    :selectedItem="filterForm.model_type" :apiUrl="route('search.menu-item-models')" :multiple="false"
+                    placeholder="Model" />
+
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search menu..."
+                <input type="search" v-model="filterForm.search" placeholder="Search menu item..."
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -188,7 +196,7 @@ onMounted(async () => {
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in menus?.data" :key="item.id" class="hover:bg-gray-50 transition">
+                        <tr v-for="(item, index) in menuItems?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.name }}</td>
                             <td class="px-4 py-3 text-gray-600">
@@ -201,12 +209,13 @@ onMounted(async () => {
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
-                                    <a :href="route('back-office.menus.details', { slug: item.slug })"
+                                    <a :href="route('back-office.menus.menu-items.details', { slug: menu?.slug, menuItemSlug: item?.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)" :href="route('back-office.menus.edit', { slug: item.slug })"
+                                    <a v-if="canEdit(item)"
+                                        :href="route('back-office.menus.menu-items.edit', { slug: menu?.slug, menuItemSlug: item?.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
@@ -216,21 +225,11 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
-                                    <a :href="route('back-office.menus.menu-items.index', { slug: item.slug })"
-                                        class="p-2 rounded-md text-gray-600 hover:bg-gray-50 border">
-                                        <FontAwesomeIcon icon="list" />
-                                        Item
-                                    </a>
-
-                                    <a :href="route('back-office.menus.menu-items.create', { slug: item.slug })"
-                                        class="p-2 rounded-md text-green-600 hover:bg-green-50 border">
-                                        <FontAwesomeIcon icon="plus" />
-                                        Item
-                                    </a>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -251,7 +250,7 @@ onMounted(async () => {
                     leave-to-class="opacity-0 scale-95 translate-y-4">
                     <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                         <h3 class="text-lg font-semibold text-red-600">
-                            Delete Menu
+                            Delete Menu Item
                         </h3>
 
                         <p class="text-sm font-medium">

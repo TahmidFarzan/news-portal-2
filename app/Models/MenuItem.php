@@ -2,8 +2,10 @@
 namespace App\Models;
 
 use App\Observers\MenuItemObserver;
+use App\Policies\MenuItemPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,12 +28,13 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
         "url", "parent_id",
         "model_type", "model_id",
     ])]
+#[UsePolicy(MenuItemPolicy::class)]
 #[ObservedBy([MenuItemObserver::class])]
 class MenuItem extends Model
 {
     use HasFactory, LogsActivity, HasSlug, HasRecursiveRelationships;
 
-    protected $appends = ["public_url", "has_parent", "has_descendants"];
+    protected $appends = ["public_url", "has_parent", "has_descendants", "indentation_name","is_custom_url"];
 
     protected function casts(): array
     {
@@ -100,6 +103,11 @@ class MenuItem extends Model
     public function getHasParentAttribute(): bool
     {
         return isset($this->parent_id) ? true : false;
+    }
+
+    public function getIsCustomUrlAttribute(): bool
+    {
+        return (($this->model_type == null) || ($this->model_id == null)) ? true : false;
     }
 
     public function getHasDescendantsAttribute(): bool

@@ -289,7 +289,7 @@ export const canEditMenu = (authUser, menu) => {
 
     if (isAdmin(role)) return true
 
-    return isNewsDesk(role) && authUser.id === menu.created_by_id
+    return false
 }
 
 export const canDeleteMenu = (authUser, menu) => {
@@ -299,7 +299,33 @@ export const canDeleteMenu = (authUser, menu) => {
 
     if (isAdmin(role)) return true
 
-    return isNewsDesk(role) && authUser.id === menu.created_by_id
+    return false
+}
+
+
+// ================= MENU ITEM =================
+
+export const canCreateMenuItem = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
+export const canEditMenuItem = (authUser, menu) => {
+    if (!authUser || !menu) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return false
+}
+
+export const canDeleteMenuItem = (authUser, menu) => {
+    if (!authUser || !menu) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return false
 }
 
 // ================= MENU =================

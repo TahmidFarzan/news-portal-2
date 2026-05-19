@@ -155,6 +155,8 @@ class MenuService
     public function menuItemLoadRelations(MenuItem $menuItem): MenuItem
     {
         $menuItem->load([
+            "parent",
+
             'model',
             'language',
 
@@ -189,10 +191,6 @@ class MenuService
             $query->where('model_type', 'like', "%{$modelType}%");
         }
 
-        if ($request->filled('model_id')) {
-            $query->where('model_id', $request->input('model_id'));
-        }
-
         if ($request->filled('date')) {
             $date = $request->input('date');
             $date = is_string($date) ? new \DateTime($date) : $date;
@@ -219,32 +217,31 @@ class MenuService
         DB::beginTransaction();
 
         try {
-            $model = null;
+            $modelRecord = null;
 
             switch (Str::studly($request->input('model_type'))) {
                 case SystemHelper::MENU_ITEM_MODEL_CATEGORY:
-                    $model = Category::where("id", $request->input('model_id'))->first();
+                    $modelRecord = Category::where("id", $request->input('model_id'))->first();
                     break;
 
                 case SystemHelper::MENU_ITEM_MODEL_TAG:
-                    $model = Tag::where("id", $request->input('model_id'))->first();
+                    $modelRecord = Tag::where("id", $request->input('model_id'))->first();
                     break;
 
                 default:
-                    $model = Category::where("id", $request->input('model_id'))->first();
+                    $modelRecord = Category::where("id", $request->input('model_id'))->first();
                     break;
             }
 
             $isNew       = empty($menuItem->id);
             $statusEvent = $isNew ? "save" : "update";
 
-            $menuItem->name       = $request->input('name');
-            $menuItem->model_type = $model?->getMorphClass();
-            $menuItem->model_id   = $model?->id;
-
-            $menuItem->parent_id   = $request->input('parent_id');
+            $menuItem->name        = $request->input('name');
             $menuItem->language_id = $request->input('language_id');
-            $menuItem->url         = $request->input('url');
+            $menuItem->model_type  = $request->boolean('is_custom_url') ? null : ($modelRecord?->getMorphClass() ?? null);
+            $menuItem->model_id    = $request->boolean('is_custom_url') ? null : ($modelRecord?->id ?? null);
+            $menuItem->parent_id   = $request->boolean('has_parent') ? $request->input('parent_id') : null;
+            $menuItem->url         = $request->boolean('is_custom_url') ? $request->input('url ') : null;
 
             $menuItem->menu_id       = $menu->id;
             $menuItem->created_by_id = $isNew ? Auth::id() : $menu->created_by_id;
@@ -255,7 +252,7 @@ class MenuService
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.menu.menu_item.{$statusEvent}.success"),
+                'message' => __("status-messages.menu_item.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
             DB::rollback();
@@ -266,7 +263,7 @@ class MenuService
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.menu.menu_item.save.failed'),
+                'message' => __('status-messages.menu_item.save.failed'),
             ];
         }
     }
@@ -281,7 +278,7 @@ class MenuService
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.menu.menu_item.delete.success'),
+                'message' => __('status-messages.menu_item.delete.success'),
             ];
         } catch (Exception $exception) {
             DB::rollback();
@@ -292,7 +289,7 @@ class MenuService
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.menu.menu_item.delete.failed'),
+                'message' => __('status-messages.menu_item.delete.failed'),
             ];
         }
     }

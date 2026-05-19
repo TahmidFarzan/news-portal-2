@@ -122,7 +122,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="language_id"
-                                :selectedItem="tag?.language" :apiUrl="route('search.tags')" :error="saveForm.errors.language_id"
+                                :selectedItem="tag?.language" :apiUrl="route('search.languages')" :error="saveForm.errors.language_id"
                                 :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}

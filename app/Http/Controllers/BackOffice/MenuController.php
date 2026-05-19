@@ -110,7 +110,7 @@ class MenuController extends Controller
     {
         $menu     = $this->menuService->find($slug);
         $menuItem = $this->menuService->menuItemNew();
-        Gate::authorize('viewAny', $menu);
+        Gate::authorize('viewAny', $menuItem);
 
         $menuItems = $this->menuService->menuItemSearch($menu, $request);
 
@@ -124,7 +124,7 @@ class MenuController extends Controller
     {
         $menu     = $this->menuService->find($slug);
         $menuItem = $this->menuService->menuItemNew();
-        Gate::authorize('create', $menu);
+        Gate::authorize('create', $menuItem);
 
         return Inertia::render('back-office/menus/menu-items/Create', [
             'menu' => $menu,
@@ -136,10 +136,9 @@ class MenuController extends Controller
         $menu = $this->menuService->find($slug);
         $menu = $this->menuService->loadRelations($menu);
 
-        Gate::authorize('view', $menu);
-
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
         $menuItem = $this->menuService->menuItemLoadRelations($menuItem);
+        Gate::authorize('update', $menuItem);
 
         return Inertia::render('back-office/menus/menu-items/Create', [
             'menu' => $menu,
@@ -152,10 +151,10 @@ class MenuController extends Controller
         $menu = $this->menuService->find($slug);
         $menu = $this->menuService->loadRelations($menu);
 
-        Gate::authorize('view', $menu);
-
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
         $menuItem = $this->menuService->menuItemLoadRelations($menuItem);
+
+        Gate::authorize('view', $menuItem);
 
         return Inertia::render('back-office/menus/menu-items/Details', [
             'menu' => $menu,
@@ -169,11 +168,11 @@ class MenuController extends Controller
         $menu = $this->menuService->loadRelations($menu);
         $menuItem = $this->menuService->menuItemNew();
 
-        Gate::authorize('view', $menu);
+        Gate::authorize('save', $menuItem);
 
         $result = $this->menuService->menuItemSave($request, $menu, $menuItem);
 
-        return to_route('back-office.menus.index')->with('flash_message', [
+        return to_route('back-office.menus.menu-items.index',["slug" => $slug])->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -185,11 +184,11 @@ class MenuController extends Controller
         $menu = $this->menuService->loadRelations($menu);
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
 
-        Gate::authorize('view', $menu);
+        Gate::authorize('update', $menuItem);
 
         $result = $this->menuService->menuItemSave($request, $menu, $menuItem);
 
-        return to_route('back-office.menus.index')->with('flash_message', [
+        return to_route('back-office.menus.menu-items.index',["slug" => $slug])->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -205,7 +204,7 @@ class MenuController extends Controller
 
         $result = $this->menuService->menuItemDelete($menu, $menuItem);
 
-        return to_route('back-office.menus.index')->with('flash_message', [
+        return to_route('back-office.menus.menu-items.index',["slug" => $slug])->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
