@@ -296,7 +296,7 @@ Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->grou
     Route::get('newses.xml', [SitemapController::class, 'newses'])->name('newses');
     Route::get('latest-newses.xml', [SitemapController::class, 'latestNewses'])->name('latest-newses');
 
-    Route::get('categories/{slugTree}/newses.xml', [SitemapController::class, 'categoryNewses'])->where('slugTree', '.*')->name('categories.newses');
+    Route::get('categories/{slugTree}/newses.xml', [SitemapController::class, 'categoryNewses'])->where('slugTree', '.*')->name('category.newses');
     Route::get('locations/{slugTree}/newses.xml', [SitemapController::class, 'locationNewses'])->where('slugTree', '.*')->name('location.newses');
     Route::get('events/{slug}/newses.xml', [SitemapController::class, 'eventNewses'])->name('event.newses');
     Route::get('tags/{slug}/newses.xml', [SitemapController::class, 'tagNewses'])->name('tag.newses');
@@ -308,8 +308,8 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
     Route::prefix('rss')->name('rss.')->middleware(['feed.response:rss'])->group(function () {
         Route::get('newses.xml', [FeedController::class, 'newses'])->name('newses');
         Route::get('latest-newses.xml', [FeedController::class, 'latestNewses'])->name('latest-newses');
-        Route::get('categories/{slugTree}/newses.xml', [FeedController::class, 'categoryNewses'])->where('slugTree', '.*')->name('categories.newses');
-        Route::get('locations/{slugTree}/newses.xml', [FeedController::class, 'locationNewses'])->where('slugTree', '.*')->name('locations.newses');
+        Route::get('categories/{slugTree}/newses.xml', [FeedController::class, 'categoryNewses'])->where('slugTree', '.*')->name('category.newses');
+        Route::get('locations/{slugTree}/newses.xml', [FeedController::class, 'locationNewses'])->where('slugTree', '.*')->name('location.newses');
         Route::get('events/{slug}/newses.xml', [FeedController::class, 'eventNewses'])->name('event.newses');
         Route::get('tags/{slug}/newses.xml', [FeedController::class, 'tagNewses'])->name('tag.newses');
         Route::get('contributors/{slug}/newses.xml', [FeedController::class, 'contributorNewses'])->name('contributor.newses');
@@ -318,8 +318,8 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
     Route::prefix('atom')->name('atom.')->middleware(['feed.response:atom'])->group(function () {
         Route::get('newses.xml', [FeedController::class, 'newses'])->name('newses');
         Route::get('latest-newses.xml', [FeedController::class, 'latestNewses'])->name('latest-newses');
-        Route::get('categories/{slugTree}/newses.xml', [FeedController::class, 'categoryNewses'])->where('slugTree', '.*')->name('categories.newses');
-        Route::get('locations/{slugTree}/newses.xml', [FeedController::class, 'locationNewses'])->where('slugTree', '.*')->name('locations.newses');
+        Route::get('categories/{slugTree}/newses.xml', [FeedController::class, 'categoryNewses'])->where('slugTree', '.*')->name('category.newses');
+        Route::get('locations/{slugTree}/newses.xml', [FeedController::class, 'locationNewses'])->where('slugTree', '.*')->name('location.newses');
         Route::get('events/{slug}/newses.xml', [FeedController::class, 'eventNewses'])->name('event.newses');
         Route::get('tags/{slug}/newses.xml', [FeedController::class, 'tagNewses'])->name('tag.newses');
         Route::get('contributors/{slug}/newses.xml', [FeedController::class, 'contributorNewses'])->name('contributor.newses');

@@ -100,17 +100,17 @@ class Category extends Model
 
     public function getFeedsAtomUrlAttribute(): string
     {
-        return route("feeds.atom.categories.newses",['slugTree' => $this->slug_tree]);
+        return route("feeds.atom.category.newses",['slugTree' => $this->slug_tree]);
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return route("feeds.rss.categories.newses",['slugTree' => $this->slug_tree]);
+        return route("feeds.rss.category.newses",['slugTree' => $this->slug_tree]);
     }
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.categories.newses",['slugTree' => $this->slug_tree]);
+        return route("sitemaps.category.newses",['slugTree' => $this->slug_tree]);
     }
 
     public function getIsRecentCreatedAttribute(): bool
