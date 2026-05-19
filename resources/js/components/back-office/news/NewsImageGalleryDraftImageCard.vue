@@ -264,168 +264,178 @@ async function deleteImage() {
     </div>
 
 
-    <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0"
-        enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100"
-        leave-to-class="opacity-0">
-        <div v-if="showViewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4"
-            @click.self="closeViewModal">
-            <div class="relative w-full max-w-5xl">
-                <button type="button"
-                    class="absolute -right-2 -top-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-gray-700 hover:bg-gray-100"
-                    @click="closeViewModal">
-                    <FontAwesomeIcon icon="xmark" />
-                </button>
+    <Teleport to="body">
+        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showViewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4"
+                @click.self="closeViewModal">
+                <Transition enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0 scale-95 translate-y-4"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-4">
+                    <div class="relative w-full max-w-5xl">
+                        <button type="button"
+                            class="absolute -right-2 -top-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-gray-700 hover:bg-gray-100"
+                            @click="closeViewModal">
+                            <FontAwesomeIcon icon="xmark" />
+                        </button>
 
-                <img :src="fullImageUrl" :alt="altText"
-                    class="mx-auto max-h-[80vh] max-w-full rounded-xl bg-white object-contain">
+                        <img :src="fullImageUrl" :alt="altText"
+                            class="mx-auto max-h-[80vh] max-w-full rounded-xl bg-white object-contain">
 
-                <div class="mt-3 rounded-lg bg-white p-3 text-sm text-gray-700">
-                    <span class="font-medium">Caption:</span>
-                    {{ caption || 'N/A' }}
+                        <div class="mt-3 rounded-lg bg-white p-3 text-sm text-gray-700">
+                            <span class="font-medium">Caption:</span>
+                            {{ caption || 'N/A' }}
+                        </div>
+                    </div>
+                </Transition>
+            </div>
+        </Transition>
+
+        <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+                @click.self="closeEditModal">
+                <div class="w-full max-w-lg rounded-xl bg-white p-5 shadow-xl">
+                    <div class="mb-4 flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            Edit Image
+                        </h2>
+
+                        <button type="button"
+                            class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                            @click="closeEditModal">
+                            <FontAwesomeIcon icon="xmark" />
+                        </button>
+                    </div>
+
+                    <form @submit.prevent="updateImage">
+                        <div v-if="editErrors.general" class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+                            {{ editErrors.general }}
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <div class="mb-1 text-sm text-gray-500">
+                                    Preview
+                                </div>
+
+                                <img :src="imageUrl" :alt="altText"
+                                    class="h-50 rounded-lg border object-cover border border-gray-300">
+                            </div>
+
+                            <div>
+                                <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    Caption
+                                </label>
+
+                                <input v-model="editForm.caption" type="text"
+                                    class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    placeholder="Enter caption">
+
+                                <div v-if="editErrors.caption" class="mt-1 text-sm text-red-600">
+                                    {{ editErrors.caption }}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    Alt Text
+                                </label>
+
+                                <input v-model="editForm.alt" type="text"
+                                    class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    placeholder="Enter alt text">
+
+                                <div v-if="editErrors.alt" class="mt-1 text-sm text-red-600">
+                                    {{ editErrors.alt }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button type="button"
+                                class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                :disabled="editProcessing" @click="closeEditModal">
+                                Cancel
+                            </button>
+
+                            <button type="submit"
+                                class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                                :disabled="editProcessing">
+                                <FontAwesomeIcon v-if="editProcessing" icon="spinner" class="animate-spin" />
+
+                                <span>
+                                    {{ editProcessing ? 'Updating...' : 'Update' }}
+                                </span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
-    </Transition>
+        </Transition>
 
-    <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0"
-        enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100"
-        leave-to-class="opacity-0">
-        <div v-if="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-            @click.self="closeEditModal">
-            <div class="w-full max-w-lg rounded-xl bg-white p-5 shadow-xl">
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-800">
-                        Edit Image
-                    </h2>
+        <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+                @click.self="closeDeleteModal">
+                <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
+                    <div class="mb-4 flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            Delete Image
+                        </h2>
 
-                    <button type="button"
-                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                        @click="closeEditModal">
-                        <FontAwesomeIcon icon="xmark" />
-                    </button>
-                </div>
-
-                <form @submit.prevent="updateImage">
-                    <div v-if="editErrors.general" class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
-                        {{ editErrors.general }}
+                        <button type="button"
+                            class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                            @click="closeDeleteModal">
+                            <FontAwesomeIcon icon="xmark" />
+                        </button>
                     </div>
 
-                    <div class="space-y-4">
-                        <div>
-                            <div class="mb-1 text-sm text-gray-500">
-                                Preview
-                            </div>
+                    <div v-if="deleteErrors.general" class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+                        {{ deleteErrors.general }}
+                    </div>
 
-                            <img :src="imageUrl" :alt="altText" class="h-50 rounded-lg border object-cover border border-gray-300">
-                        </div>
+                    <div class="mb-4 flex gap-3">
+                        <img :src="imageUrl" :alt="altText" class="h-50 rounded-lg border object-cover">
 
                         <div>
-                            <label class="mb-1 block text-sm font-medium text-gray-700">
-                                Caption
-                            </label>
+                            <p class="text-sm font-medium text-gray-800">
+                                Are you sure you want to delete this image?
+                            </p>
 
-                            <input v-model="editForm.caption" type="text"
-                                class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                placeholder="Enter caption">
-
-                            <div v-if="editErrors.caption" class="mt-1 text-sm text-red-600">
-                                {{ editErrors.caption }}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="mb-1 block text-sm font-medium text-gray-700">
-                                Alt Text
-                            </label>
-
-                            <input v-model="editForm.alt" type="text"
-                                class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                placeholder="Enter alt text">
-
-                            <div v-if="editErrors.alt" class="mt-1 text-sm text-red-600">
-                                {{ editErrors.alt }}
-                            </div>
+                            <p class="mt-1 text-sm text-gray-500">
+                                This action will remove it from this draft gallery.
+                            </p>
                         </div>
                     </div>
 
-                    <div class="mt-6 flex justify-end gap-3">
+                    <div class="flex justify-end gap-3">
                         <button type="button"
                             class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
-                            :disabled="editProcessing" @click="closeEditModal">
+                            :disabled="deleteProcessing" @click="closeDeleteModal">
                             Cancel
                         </button>
 
-                        <button type="submit"
-                            class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
-                            :disabled="editProcessing">
-                            <FontAwesomeIcon v-if="editProcessing" icon="spinner" class="animate-spin" />
+                        <button type="button"
+                            class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                            :disabled="deleteProcessing" @click="deleteImage">
+                            <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" class="animate-spin" />
+
+                            <FontAwesomeIcon v-else icon="trash" />
 
                             <span>
-                                {{ editProcessing ? 'Updating...' : 'Update' }}
+                                {{ deleteProcessing ? 'Deleting...' : 'Delete' }}
                             </span>
                         </button>
                     </div>
-                </form>
-            </div>
-        </div>
-    </Transition>
-
-    <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0"
-        enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100"
-        leave-to-class="opacity-0">
-        <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-            @click.self="closeDeleteModal">
-            <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-800">
-                        Delete Image
-                    </h2>
-
-                    <button type="button"
-                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                        @click="closeDeleteModal">
-                        <FontAwesomeIcon icon="xmark" />
-                    </button>
-                </div>
-
-                <div v-if="deleteErrors.general" class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
-                    {{ deleteErrors.general }}
-                </div>
-
-                <div class="mb-4 flex gap-3">
-                    <img :src="imageUrl" :alt="altText" class="h-50 rounded-lg border object-cover">
-
-                    <div>
-                        <p class="text-sm font-medium text-gray-800">
-                            Are you sure you want to delete this image?
-                        </p>
-
-                        <p class="mt-1 text-sm text-gray-500">
-                            This action will remove it from this draft gallery.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-3">
-                    <button type="button"
-                        class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
-                        :disabled="deleteProcessing" @click="closeDeleteModal">
-                        Cancel
-                    </button>
-
-                    <button type="button"
-                        class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
-                        :disabled="deleteProcessing" @click="deleteImage">
-                        <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" class="animate-spin" />
-
-                        <FontAwesomeIcon v-else icon="trash" />
-
-                        <span>
-                            {{ deleteProcessing ? 'Deleting...' : 'Delete' }}
-                        </span>
-                    </button>
                 </div>
             </div>
-        </div>
-    </Transition>
+        </Transition>
+    </Teleport>
 </template>

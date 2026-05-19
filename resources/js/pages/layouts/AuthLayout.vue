@@ -134,7 +134,7 @@ onBeforeUnmount(() => {
                                 class="w-8 h-8 rounded-full" />
                         </button>
 
-                        <transition enter-active-class="transition ease-out duration-150"
+                        <Transition enter-active-class="transition ease-out duration-150"
                             enter-from-class="opacity-0 scale-95 translate-y-1"
                             enter-to-class="opacity-100 scale-100 translate-y-0"
                             leave-active-class="transition ease-in duration-100"
@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
                                 </button>
 
                             </div>
-                        </transition>
+                        </Transition>
 
                     </div>
 
@@ -237,31 +237,31 @@ onBeforeUnmount(() => {
             </div>
         </footer>
 
-        <transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
+        <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="offcanvasSidebarShow" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
                 @click="offcanvasSidebarShow = false"></div>
-        </transition>
+        </Transition>
 
-        <transition enter-active-class="transition transform duration-300 ease-out" enter-from-class="-translate-x-full"
+        <Transition enter-active-class="transition transform duration-300 ease-out" enter-from-class="-translate-x-full"
             enter-to-class="translate-x-0" leave-active-class="transition transform duration-200 ease-in"
             leave-from-class="translate-x-0" leave-to-class="-translate-x-full">
             <div v-if="offcanvasSidebarShow"
                 class="fixed top-0 left-0 h-full w-64 bg-white z-50 p-3 md:hidden shadow-lg">
                 <LayoutAuthMenuItems :authUser="authUser" />
             </div>
-        </transition>
+        </Transition>
 
         <Toaster richColors position="top-right" />
 
-        <transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
+        <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="authUser && logoutShowConfirmationModal"
                 class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-                <transition enter-active-class="transition transform duration-200 ease-out"
+                <Transition enter-active-class="transition transform duration-200 ease-out"
                     enter-from-class="opacity-0 scale-95 translate-y-2"
                     enter-to-class="opacity-100 scale-100 translate-y-0"
                     leave-active-class="transition transform duration-150 ease-in"
@@ -293,10 +293,10 @@ onBeforeUnmount(() => {
                         </div>
 
                     </div>
-                </transition>
+                </Transition>
 
             </div>
-        </transition>
+        </Transition>
 
     </div>
 </template>

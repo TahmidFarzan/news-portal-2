@@ -152,18 +152,14 @@ defineExpose({
             Open Media Library
         </button>
 
-        <!-- Modal -->
         <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto" @click.self="showModal = false">
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
 
-                <!-- Fixed Backdrop -->
                 <div class="fixed inset-0 z-0 transition-opacity bg-gray-500 bg-opacity-75" @click="showModal = false">
                 </div>
 
-                <!-- Modal Content -->
                 <div
                     class="relative z-10 inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
-                    <!-- Modal Header -->
                     <div class="px-6 py-4 border-b border-gray-200">
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-medium text-gray-900">
@@ -180,7 +176,6 @@ defineExpose({
                         </div>
                     </div>
 
-                    <!-- Modal Body -->
                     <div class="px-6 py-4 overflow-y-auto" style="max-height: 70vh;">
                         <div class="mb-4">
                             <input v-model="search" type="text"
@@ -225,7 +220,6 @@ defineExpose({
                         </div>
                     </div>
 
-                    <!-- Modal Footer -->
                     <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-2">
                         <button type="button" @click="showModal = false"
                             class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">

@@ -127,7 +127,7 @@ onBeforeUnmount(() => {
                             <FontAwesomeIcon icon="user" />
                         </button>
 
-                        <transition enter-active-class="transition ease-out duration-150"
+                        <Transition enter-active-class="transition ease-out duration-150"
                             enter-from-class="opacity-0 scale-95 translate-y-1"
                             enter-to-class="opacity-100 scale-100 translate-y-0"
                             leave-active-class="transition ease-in duration-100"
@@ -161,7 +161,7 @@ onBeforeUnmount(() => {
                                 </button>
 
                             </div>
-                        </transition>
+                        </Transition>
 
                     </div>
 
@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
 
         <Toaster richColors position="top-right" />
 
-        <transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
+        <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="authUser && showLogoutModal"
@@ -244,7 +244,7 @@ onBeforeUnmount(() => {
                 </transition>
 
             </div>
-        </transition>
+        </Transition>
 
     </div>
 </template>

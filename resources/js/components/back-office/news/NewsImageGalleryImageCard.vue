@@ -139,143 +139,169 @@ const deleteGalleryImage = () => {
         </div>
     </div>
 
-    <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100" leave-active-class="transition ease-in duration-150"
-        leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-        <div v-if="selectedGalleryImage" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
-            @click.self="selectedGalleryImage = null">
-            <div class="relative w-full max-w-5xl">
-                <button type="button"
-                    class="absolute -top-10 right-0 flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/10"
-                    @click="selectedGalleryImage = null">
-                    <FontAwesomeIcon :icon="faXmark" class="text-2xl" />
-                </button>
+    <Teleport to="body">
+        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="selectedGalleryImage" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+                @click.self="selectedGalleryImage = null">
+                <Transition enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0 scale-95 translate-y-4"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-4">
 
-                <img :src="selectedGalleryImage.original_url || selectedGalleryImage.media_url"
-                    :alt="selectedGalleryImage.custom_properties?.alt || selectedGalleryImage.name"
-                    class="max-h-[85vh] w-full rounded-lg object-contain">
+                    <div class="relative w-full max-w-5xl">
+                        <button type="button"
+                            class="absolute -top-10 right-0 flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/10"
+                            @click="selectedGalleryImage = null">
+                            <FontAwesomeIcon :icon="faXmark" class="text-2xl" />
+                        </button>
 
-                <div v-if="selectedGalleryImage.custom_properties?.caption" class="mt-3 text-center text-sm text-white">
-                    {{ selectedGalleryImage.custom_properties.caption }}
-                </div>
+                        <img :src="selectedGalleryImage.original_url || selectedGalleryImage.media_url"
+                            :alt="selectedGalleryImage.custom_properties?.alt || selectedGalleryImage.name"
+                            class="max-h-[85vh] w-full rounded-lg object-contain">
+
+                        <div v-if="selectedGalleryImage.custom_properties?.caption"
+                            class="mt-3 text-center text-sm text-white">
+                            {{ selectedGalleryImage.custom_properties.caption }}
+                        </div>
+                    </div>
+                </Transition>
             </div>
-        </div>
-    </Transition>
+        </Transition>
 
-    <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100" leave-active-class="transition ease-in duration-150"
-        leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-        <div v-if="showUpdateModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-            @click.self="closeUpdateModal">
-            <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-gray-800">
-                        Update Gallery Image
-                    </h3>
+        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showUpdateModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+                @click.self="closeUpdateModal">
+                <Transition enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0 scale-95 translate-y-4"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-4">
+                    <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                Update Gallery Image
+                            </h3>
 
-                    <button type="button"
-                        class="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                        @click="closeUpdateModal">
-                        <FontAwesomeIcon :icon="faXmark" />
-                    </button>
-                </div>
+                            <button type="button"
+                                class="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                                @click="closeUpdateModal">
+                                <FontAwesomeIcon :icon="faXmark" />
+                            </button>
+                        </div>
 
-                <div class="mt-4 space-y-4">
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-gray-700">
-                            Caption
-                        </label>
+                        <div class="mt-4 space-y-4">
+                            <div>
+                                <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    Caption
+                                </label>
 
-                        <input v-model="updateForm.caption" type="text"
-                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
+                                <input v-model="updateForm.caption" type="text"
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
 
-                        <p v-if="updateForm.errors.caption" class="mt-1 text-xs text-red-600">
-                            {{ updateForm.errors.caption }}
-                        </p>
+                                <p v-if="updateForm.errors.caption" class="mt-1 text-xs text-red-600">
+                                    {{ updateForm.errors.caption }}
+                                </p>
+                            </div>
+
+                            <div>
+                                <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    Alt
+                                </label>
+
+                                <input v-model="updateForm.alt" type="text"
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
+
+                                <p v-if="updateForm.errors.alt" class="mt-1 text-xs text-red-600">
+                                    {{ updateForm.errors.alt }}
+                                </p>
+                            </div>
+
+                            <div>
+                                <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    Order Column
+                                </label>
+
+                                <input v-model="updateForm.order_column" type="number" min="1"
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
+
+                                <p v-if="updateForm.errors.order_column" class="mt-1 text-xs text-red-600">
+                                    {{ updateForm.errors.order_column }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 flex justify-end gap-2">
+                            <button type="button"
+                                class="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+                                :disabled="updateForm.processing" @click="closeUpdateModal">
+                                Cancel
+                            </button>
+
+                            <button type="button"
+                                class="rounded-md bg-yellow-500 px-4 py-2 text-sm text-white hover:bg-yellow-600 disabled:opacity-60"
+                                :disabled="updateForm.processing" @click="updateGalleryImage">
+                                <FontAwesomeIcon v-if="updateForm.processing" :icon="faSpinner"
+                                    class="mr-1 animate-spin" />
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </Transition>
+            </div>
+        </Transition>
+
+        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+                @click.self="closeDeleteModal">
+                <Transition enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0 scale-95 translate-y-4"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-4">
+                <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            Delete Gallery Image?
+                        </h3>
+
+                        <button type="button"
+                            class="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                            @click="closeDeleteModal">
+                            <FontAwesomeIcon :icon="faXmark" />
+                        </button>
                     </div>
 
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-gray-700">
-                            Alt
-                        </label>
+                    <p class="mt-2 text-sm text-gray-600">
+                        Are you sure you want to delete this gallery image?
+                    </p>
 
-                        <input v-model="updateForm.alt" type="text"
-                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
+                    <div class="mt-5 flex justify-end gap-2">
+                        <button type="button"
+                            class="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+                            :disabled="deleteProcessing" @click="closeDeleteModal">
+                            Cancel
+                        </button>
 
-                        <p v-if="updateForm.errors.alt" class="mt-1 text-xs text-red-600">
-                            {{ updateForm.errors.alt }}
-                        </p>
-                    </div>
-
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-gray-700">
-                            Order Column
-                        </label>
-
-                        <input v-model="updateForm.order_column" type="number" min="1"
-                            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
-
-                        <p v-if="updateForm.errors.order_column" class="mt-1 text-xs text-red-600">
-                            {{ updateForm.errors.order_column }}
-                        </p>
+                        <button type="button"
+                            class="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 disabled:opacity-60"
+                            :disabled="deleteProcessing" @click="deleteGalleryImage">
+                            <FontAwesomeIcon v-if="deleteProcessing" :icon="faSpinner" class="mr-1 animate-spin" />
+                            Delete
+                        </button>
                     </div>
                 </div>
-
-                <div class="mt-5 flex justify-end gap-2">
-                    <button type="button"
-                        class="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
-                        :disabled="updateForm.processing" @click="closeUpdateModal">
-                        Cancel
-                    </button>
-
-                    <button type="button"
-                        class="rounded-md bg-yellow-500 px-4 py-2 text-sm text-white hover:bg-yellow-600 disabled:opacity-60"
-                        :disabled="updateForm.processing" @click="updateGalleryImage">
-                        <FontAwesomeIcon v-if="updateForm.processing" :icon="faSpinner" class="mr-1 animate-spin" />
-                        Update
-                    </button>
-                </div>
+                </Transition>
             </div>
-        </div>
-    </Transition>
-
-    <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100" leave-active-class="transition ease-in duration-150"
-        leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-        <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-            @click.self="closeDeleteModal">
-            <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-gray-800">
-                        Delete Gallery Image?
-                    </h3>
-
-                    <button type="button"
-                        class="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                        @click="closeDeleteModal">
-                        <FontAwesomeIcon :icon="faXmark" />
-                    </button>
-                </div>
-
-                <p class="mt-2 text-sm text-gray-600">
-                    Are you sure you want to delete this gallery image?
-                </p>
-
-                <div class="mt-5 flex justify-end gap-2">
-                    <button type="button"
-                        class="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
-                        :disabled="deleteProcessing" @click="closeDeleteModal">
-                        Cancel
-                    </button>
-
-                    <button type="button"
-                        class="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 disabled:opacity-60"
-                        :disabled="deleteProcessing" @click="deleteGalleryImage">
-                        <FontAwesomeIcon v-if="deleteProcessing" :icon="faSpinner" class="mr-1 animate-spin" />
-                        Delete
-                    </button>
-                </div>
-            </div>
-        </div>
-    </Transition>
+        </Transition>
+    </Teleport>
 </template>

@@ -147,7 +147,7 @@ function isSubMenuVisible(key) {
             <FontAwesomeIcon :icon="isSubMenuVisible('NewsAttributes') ? 'chevron-up' : 'chevron-down'" />
         </button>
 
-        <transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0"
+        <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0"
             enter-to-class="opacity-100 max-h-40" leave-active-class="transition-all duration-200 ease-in"
             leave-from-class="opacity-100 max-h-40" leave-to-class="opacity-0 max-h-0">
             <div v-if="isSubMenuVisible('NewsAttributes') && canAccessNewsAttributesMenuComputed"
@@ -203,7 +203,7 @@ function isSubMenuVisible(key) {
                 </a>
 
             </div>
-        </transition>
+        </Transition>
 
         <a v-if="canAccessNewsMenuComputed" :href="route('back-office.newses.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
@@ -228,7 +228,7 @@ function isSubMenuVisible(key) {
             <FontAwesomeIcon :icon="isSubMenuVisible('UserManagement') ? 'chevron-up' : 'chevron-down'" />
         </button>
 
-        <transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0"
+        <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0"
             enter-to-class="opacity-100 max-h-40" leave-active-class="transition-all duration-200 ease-in"
             leave-from-class="opacity-100 max-h-40" leave-to-class="opacity-0 max-h-0">
             <div v-if="isSubMenuVisible('UserManagement') && canAccessUserManagementMenuComputed"
@@ -242,7 +242,7 @@ function isSubMenuVisible(key) {
                 </a>
 
             </div>
-        </transition>
+        </Transition>
 
 
     </div>

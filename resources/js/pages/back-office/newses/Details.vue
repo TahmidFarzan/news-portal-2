@@ -292,27 +292,6 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">Sitemap</div>
-
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Sitemap url</span>
-                            <span class="font-medium">{{ news?.sitemap_url || 'N/A' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Feeds (RSS)</span>
-                        <span class="font-medium">{{ news?.feeds_rss_url || 'N/A' }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Feeds (ATOM)</span>
-                        <span class="font-medium">{{ news?.feeds_atom_url || 'N/A' }}</span>
-                    </div>
-                </div>
-
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -403,91 +382,93 @@ onMounted(async () => {
             <RecentActivities :model-slug="'news'" :model="news" />
         </div>
 
-        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
-            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
-            leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-if="showDeleteModal"
-                class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <Teleport to="body">
+            <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+                enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+                leave-from-class="opacity-100" leave-to-class="opacity-0">
+                <div v-if="showDeleteModal"
+                    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
 
-                <Transition enter-active-class="transition ease-out duration-200"
-                    enter-from-class="opacity-0 scale-95 translate-y-4"
-                    enter-to-class="opacity-100 scale-100 translate-y-0"
-                    leave-active-class="transition ease-in duration-150"
-                    leave-from-class="opacity-100 scale-100 translate-y-0"
-                    leave-to-class="opacity-0 scale-95 translate-y-4">
-                    <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
-                        <h3 class="text-lg font-semibold text-red-600">
-                            Delete News
-                        </h3>
+                    <Transition enter-active-class="transition ease-out duration-200"
+                        enter-from-class="opacity-0 scale-95 translate-y-4"
+                        enter-to-class="opacity-100 scale-100 translate-y-0"
+                        leave-active-class="transition ease-in duration-150"
+                        leave-from-class="opacity-100 scale-100 translate-y-0"
+                        leave-to-class="opacity-0 scale-95 translate-y-4">
+                        <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
+                            <h3 class="text-lg font-semibold text-red-600">
+                                Delete News
+                            </h3>
 
-                        <p class="text-sm font-medium">
-                            {{ news?.title }}
-                        </p>
+                            <p class="text-sm font-medium">
+                                {{ news?.title }}
+                            </p>
 
-                        <p class="text-sm text-gray-500">
-                            This action can be undone by restoring news.
-                        </p>
+                            <p class="text-sm text-gray-500">
+                                This action can be undone by restoring news.
+                            </p>
 
-                        <div class="flex justify-end gap-2 pt-2">
-                            <button @click="showDeleteModal = false"
-                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                Cancel
-                            </button>
+                            <div class="flex justify-end gap-2 pt-2">
+                                <button @click="showDeleteModal = false"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
+                                    Cancel
+                                </button>
 
-                            <button @click="handleDelete" :disabled="deleteProcessing"
-                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
-                                <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                Delete
-                            </button>
+                                <button @click="handleDelete" :disabled="deleteProcessing"
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                    <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
+                                    Delete
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </Transition>
+                    </Transition>
 
-            </div>
-        </Transition>
+                </div>
+            </Transition>
 
-        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
-            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
-            leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-if="showRestoreModal"
-                class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+            <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+                enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+                leave-from-class="opacity-100" leave-to-class="opacity-0">
+                <div v-if="showRestoreModal"
+                    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
 
-                <Transition enter-active-class="transition ease-out duration-200"
-                    enter-from-class="opacity-0 scale-95 translate-y-4"
-                    enter-to-class="opacity-100 scale-100 translate-y-0"
-                    leave-active-class="transition ease-in duration-150"
-                    leave-from-class="opacity-100 scale-100 translate-y-0"
-                    leave-to-class="opacity-0 scale-95 translate-y-4">
-                    <div v-if="showRestoreModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
-                        <h3 class="text-lg font-semibold text-red-600">
-                            Restore News
-                        </h3>
+                    <Transition enter-active-class="transition ease-out duration-200"
+                        enter-from-class="opacity-0 scale-95 translate-y-4"
+                        enter-to-class="opacity-100 scale-100 translate-y-0"
+                        leave-active-class="transition ease-in duration-150"
+                        leave-from-class="opacity-100 scale-100 translate-y-0"
+                        leave-to-class="opacity-0 scale-95 translate-y-4">
+                        <div v-if="showRestoreModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
+                            <h3 class="text-lg font-semibold text-red-600">
+                                Restore News
+                            </h3>
 
-                        <p class="text-sm font-medium">
-                            {{ news?.title }}
-                        </p>
+                            <p class="text-sm font-medium">
+                                {{ news?.title }}
+                            </p>
 
-                        <p class="text-sm text-gray-500">
-                            This action can be undone by deleting news.
-                        </p>
+                            <p class="text-sm text-gray-500">
+                                This action can be undone by deleting news.
+                            </p>
 
-                        <div class="flex justify-end gap-2 pt-2">
-                            <button @click="showRestoreModal = false"
-                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                Cancel
-                            </button>
+                            <div class="flex justify-end gap-2 pt-2">
+                                <button @click="showRestoreModal = false"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
+                                    Cancel
+                                </button>
 
-                            <button @click="handleRestore" :disabled="restoreProcessing"
-                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
-                                <FontAwesomeIcon v-if="restoreProcessing" icon="spinner" spin />
-                                Restore
-                            </button>
+                                <button @click="handleRestore" :disabled="restoreProcessing"
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                    <FontAwesomeIcon v-if="restoreProcessing" icon="spinner" spin />
+                                    Restore
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </Transition>
+                    </Transition>
 
-            </div>
-        </Transition>
+                </div>
+            </Transition>
+        </Teleport>
 
     </div>
 </template>

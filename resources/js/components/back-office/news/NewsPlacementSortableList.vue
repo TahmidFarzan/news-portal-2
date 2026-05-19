@@ -164,46 +164,59 @@ function isCurrentNewsItem(item) {
 
     </div>
 
-    <div v-if="showDeleteModal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
-        <div class="bg-white rounded-2xl w-full max-w-md p-6 space-y-5 shadow-xl">
+    <Teleport to="body">
+        <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showDeleteModal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
+                <Transition enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0 scale-95 translate-y-4"
+                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                    leave-to-class="opacity-0 scale-95 translate-y-4">
+                    <div class="bg-white rounded-2xl w-full max-w-md p-6 space-y-5 shadow-xl">
 
-            <div class="space-y-2">
-                <h3 class="text-lg font-semibold text-gray-900">
-                    Delete Placement
-                </h3>
+                        <div class="space-y-2">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                Delete Placement
+                            </h3>
 
-                <p class="text-sm text-gray-500">
-                    Are you sure you want to delete this placement?
-                </p>
+                            <p class="text-sm text-gray-500">
+                                Are you sure you want to delete this placement?
+                            </p>
 
-                <p class="text-sm font-medium text-gray-700">
-                    {{ selectedItem?.news?.title ?? 'Untitled News' }}
-                </p>
+                            <p class="text-sm font-medium text-gray-700">
+                                {{ selectedItem?.news?.title ?? 'Untitled News' }}
+                            </p>
+                        </div>
+
+                        <div class="flex justify-end gap-3">
+                            <button type="button"
+                                class="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50"
+                                :disabled="deleteProcessing" @click="closeDeleteModal">
+                                Cancel
+                            </button>
+
+                            <button type="button"
+                                class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 disabled:opacity-70"
+                                :disabled="deleteProcessing" @click="handleDelete">
+                                <span v-if="deleteProcessing" class="inline-flex items-center gap-2">
+                                    <FontAwesomeIcon icon="fa-solid fa-spinner" spin />
+                                    Deleting...
+                                </span>
+
+                                <span v-else>
+                                    Delete
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </Transition>
             </div>
-
-            <div class="flex justify-end gap-3">
-                <button type="button"
-                    class="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50"
-                    :disabled="deleteProcessing" @click="closeDeleteModal">
-                    Cancel
-                </button>
-
-                <button type="button"
-                    class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 disabled:opacity-70"
-                    :disabled="deleteProcessing" @click="handleDelete">
-                    <span v-if="deleteProcessing" class="inline-flex items-center gap-2">
-                        <FontAwesomeIcon icon="fa-solid fa-spinner" spin />
-                        Deleting...
-                    </span>
-
-                    <span v-else>
-                        Delete
-                    </span>
-                </button>
-            </div>
-
-        </div>
-    </div>
+        </Transition>
+    </Teleport>
 </template>
 
 <style scoped>

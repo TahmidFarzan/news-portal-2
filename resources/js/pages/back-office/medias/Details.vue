@@ -209,26 +209,38 @@ onMounted(async () => {
 
         </div>
 
-        <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <Teleport to="body">
+            <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+                enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+                leave-from-class="opacity-100" leave-to-class="opacity-0">
+                <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <Transition enter-active-class="transition ease-out duration-200"
+                        enter-from-class="opacity-0 scale-95 translate-y-4"
+                        enter-to-class="opacity-100 scale-100 translate-y-0"
+                        leave-active-class="transition ease-in duration-150"
+                        leave-from-class="opacity-100 scale-100 translate-y-0"
+                        leave-to-class="opacity-0 scale-95 translate-y-4">
+                        <div class="bg-white p-6 rounded-xl shadow-lg w-96">
+                            <div class="font-semibold mb-2">Delete Confirmation</div>
+                            <p class="mb-2">{{ media?.name }}</p>
+                            <p class="text-sm text-gray-600 mb-4">
+                                This action cannot be undone.
+                            </p>
 
-            <div class="bg-white p-6 rounded-xl shadow-lg w-96">
-                <div class="font-semibold mb-2">Delete Confirmation</div>
-                <p class="mb-2">{{ media?.name }}</p>
-                <p class="text-sm text-gray-600 mb-4">
-                    This action cannot be undone.
-                </p>
-
-                <div class="flex justify-end gap-2">
-                    <button @click="showDeleteModal = false" class="px-3 py-1 bg-gray-200 rounded">
-                        Cancel
-                    </button>
-                    <button @click="handleDelete" :disabled="deleteProcessing"
-                        class="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
-                        <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                        Delete
-                    </button>
+                            <div class="flex justify-end gap-2">
+                                <button @click="showDeleteModal = false" class="px-3 py-1 bg-gray-200 rounded">
+                                    Cancel
+                                </button>
+                                <button @click="handleDelete" :disabled="deleteProcessing"
+                                    class="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
+                                    <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </Transition>
                 </div>
-            </div>
-        </div>
+            </Transition>
+        </Teleport>
     </div>
 </template>
