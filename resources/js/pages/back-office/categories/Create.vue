@@ -98,7 +98,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Categories', href: route('back-office.categories.index') },
                 { text: isUpdate.value ? `${category?.name} edit` : 'Category create', active: true }
             ],

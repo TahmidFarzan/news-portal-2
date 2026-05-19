@@ -45,7 +45,6 @@ onMounted(async () => {
     window.dispatchLocation(
         new CustomLocation('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Locations', href: route('back-office.locations.index') },
                 { text: `${location?.name} details`, active: true }
             ],

@@ -121,7 +121,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Categories', active: true },
             ],
         })

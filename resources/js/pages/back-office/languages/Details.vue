@@ -46,7 +46,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Languages', href: route('back-office.languages.index') },
                 { text: `${language?.name} details`, active: true }
             ],

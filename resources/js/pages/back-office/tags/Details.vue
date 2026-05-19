@@ -44,7 +44,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Tags', href: route('back-office.tags.index') },
                 { text: `${tag?.name} details`, active: true }
             ],

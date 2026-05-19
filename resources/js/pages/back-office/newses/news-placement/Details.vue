@@ -57,7 +57,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Newses', href: route('back-office.newses.index') },
                 { text: `${news?.title} details`, href: route('back-office.newses.details', { slug: news?.slug }) },
                 { text: 'News Placement details', active: true },

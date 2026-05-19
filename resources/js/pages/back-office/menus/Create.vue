@@ -93,7 +93,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Menus', href: route('back-office.menus.index') },
                 { text: isUpdate.value ? `${menu?.name} edit` : 'Menu create', active: true }
             ],

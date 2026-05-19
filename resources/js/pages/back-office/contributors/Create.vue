@@ -95,7 +95,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Contributors', href: route('back-office.contributors.index') },
                 { text: isUpdate.value ? `${contributor?.name} edit` : 'Contributor create', active: true }
             ],

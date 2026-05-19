@@ -99,7 +99,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Locations', href: route('back-office.locations.index') },
                 { text: isUpdate.value ? `${location?.name} edit` : 'Location create', active: true }
             ],

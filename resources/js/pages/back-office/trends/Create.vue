@@ -82,7 +82,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Trends', href: route('back-office.trends.index') },
                 { text: isUpdate.value ? `${trend?.tag?.name} edit` : 'Trend create', active: true }
             ],

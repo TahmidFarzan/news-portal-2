@@ -94,7 +94,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Events', href: route('back-office.events.index') },
                 { text: isUpdate.value ? `${event?.name} edit` : 'Event create', active: true }
             ],

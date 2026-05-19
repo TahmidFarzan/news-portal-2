@@ -50,7 +50,6 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Dashboard', href: route('auth-user.dashboard.index') },
                 { text: 'Activity logs', href: route('back-office.activity-logs.index') },
                 { text: 'Activity log details', active: true },
             ],
