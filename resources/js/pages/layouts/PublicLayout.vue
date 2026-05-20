@@ -1,6 +1,6 @@
 <script setup>
 import HeaderMenuItem from '@/components/common/layout/HeaderMenuItem.vue'
-
+import HorizontalScroller from '@/components/common/layout/HorizontalScroller.vue'
 
 import { ref, onMounted, onBeforeUnmount, computed, nextTick, watch, provide } from "vue"
 import { usePage, router as inertia } from '@inertiajs/vue3'
@@ -50,14 +50,9 @@ const headerMenuItems = ref([])
 const headerMenuLoading = ref(false)
 const headerMenuPage = ref(1)
 const headerMenuLastPage = ref(1)
-const headerMenuScrollRef = ref(null)
+
 const showOffCanvas = ref(false)
-const headerMenuTrackRef = ref(null)
-const headerMenuThumbWidth = ref(0)
-const headerMenuThumbLeft = ref(0)
-const headerMenuDragging = ref(false)
-const headerMenuDragStartX = ref(0)
-const headerMenuDragStartLeft = ref(0)
+
 
 provide("pageReady", pageReady)
 
@@ -120,131 +115,13 @@ const getHeaderMenuItems = async (page = 1) => {
     }
 }
 
-const updateHeaderMenuScrollbar = () => {
-    const el = headerMenuScrollRef.value
-
-    if (!el) return
-
-    const clientWidth = el.clientWidth
-    const scrollWidth = el.scrollWidth
-    const scrollLeft = el.scrollLeft
-
-    if (scrollWidth <= clientWidth) {
-        headerMenuThumbWidth.value = 0
-        headerMenuThumbLeft.value = 0
-        return
-    }
-
-    const thumbWidth = Math.max((clientWidth / scrollWidth) * clientWidth, 32)
-    const maxThumbLeft = clientWidth - thumbWidth
-    const maxScrollLeft = scrollWidth - clientWidth
-
-    headerMenuThumbWidth.value = thumbWidth
-    headerMenuThumbLeft.value = (scrollLeft / maxScrollLeft) * maxThumbLeft
-}
-
-const handleHeaderMenuScroll = async () => {
-    const el = headerMenuScrollRef.value
-
-    if (!el || headerMenuLoading.value) return
-
-    updateHeaderMenuScrollbar()
-
-    const almostEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 80
-
-    if (!almostEnd) return
+const handleHeaderMenuReachEnd = async () => {
+    if (headerMenuLoading.value) return
 
     const nextPage = headerMenuPage.value + 1
 
     if (nextPage <= headerMenuLastPage.value) {
         await getHeaderMenuItems(nextPage)
-        await nextTick()
-        updateHeaderMenuScrollbar()
-    }
-}
-
-const handleHeaderMenuWheel = (event) => {
-    const el = headerMenuScrollRef.value
-
-    if (!el) return
-
-    const rawDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
-        ? event.deltaX
-        : event.deltaY
-
-    if (!rawDelta) return
-
-    const delta = event.deltaMode === 1
-        ? rawDelta * 16
-        : rawDelta
-
-    event.preventDefault()
-    event.stopPropagation()
-
-    el.scrollLeft += delta
-
-    updateHeaderMenuScrollbar()
-    handleHeaderMenuScroll()
-}
-
-const scrollHeaderMenuByThumbPosition = (thumbLeft) => {
-    const el = headerMenuScrollRef.value
-
-    if (!el || !headerMenuThumbWidth.value) return
-
-    const maxThumbLeft = el.clientWidth - headerMenuThumbWidth.value
-    const maxScrollLeft = el.scrollWidth - el.clientWidth
-
-    if (maxThumbLeft <= 0 || maxScrollLeft <= 0) return
-
-    const safeLeft = Math.max(0, Math.min(thumbLeft, maxThumbLeft))
-
-    el.scrollLeft = (safeLeft / maxThumbLeft) * maxScrollLeft
-
-    updateHeaderMenuScrollbar()
-    handleHeaderMenuScroll()
-}
-
-const handleHeaderMenuTrackPointerDown = (event) => {
-    const track = headerMenuTrackRef.value
-
-    if (!track || !headerMenuThumbWidth.value) return
-
-    event.preventDefault()
-
-    const rect = track.getBoundingClientRect()
-    const clickX = event.clientX - rect.left
-    const targetLeft = clickX - headerMenuThumbWidth.value / 2
-
-    scrollHeaderMenuByThumbPosition(targetLeft)
-}
-
-const handleHeaderMenuThumbPointerDown = (event) => {
-    event.preventDefault()
-    event.stopPropagation()
-
-    headerMenuDragging.value = true
-    headerMenuDragStartX.value = event.clientX
-    headerMenuDragStartLeft.value = headerMenuThumbLeft.value
-
-    event.currentTarget.setPointerCapture(event.pointerId)
-}
-
-const handleHeaderMenuThumbPointerMove = (event) => {
-    if (!headerMenuDragging.value) return
-
-    event.preventDefault()
-
-    const diff = event.clientX - headerMenuDragStartX.value
-
-    scrollHeaderMenuByThumbPosition(headerMenuDragStartLeft.value + diff)
-}
-
-const handleHeaderMenuThumbPointerUp = (event) => {
-    headerMenuDragging.value = false
-
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-        event.currentTarget.releasePointerCapture(event.pointerId)
     }
 }
 
@@ -268,7 +145,6 @@ watch(pageReady, (ready) => {
 onMounted(async () => {
     await nextTick()
     await getHeaderMenuItems()
-    updateHeaderMenuScrollbar()
     pageReady.value = true
 
     inertia.on('start', () => pageReady.value = false)
@@ -276,13 +152,11 @@ onMounted(async () => {
 
     document.addEventListener('click', handleClickOutside)
     window.addEventListener('scroll', handlePageScroll)
-    window.addEventListener('resize', updateHeaderMenuScrollbar)
 })
 
 onBeforeUnmount(() => {
     document.removeEventListener('click', handleClickOutside)
     window.removeEventListener('scroll', handlePageScroll)
-    window.removeEventListener('resize', updateHeaderMenuScrollbar)
 })
 </script>
 
@@ -365,37 +239,16 @@ onBeforeUnmount(() => {
                     {{ appName }}
                 </a>
 
-                <div v-if="headerMenuItems.length" class="relative flex-1 min-w-0"
-                    @wheel.prevent.stop="handleHeaderMenuWheel">
-                    <nav ref="headerMenuScrollRef" @scroll.passive="handleHeaderMenuScroll"
-                        @wheel.prevent.stop="handleHeaderMenuWheel"
-                        class="overflow-x-auto overflow-y-visible pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                        <ul class="flex items-center gap-1 whitespace-nowrap py-1">
-                            <HeaderMenuItem v-for="item in headerMenuItems" :key="item.id" :item="item" />
+                <HorizontalScroller v-if="headerMenuItems.length" class="flex-1 min-w-0" :loading="headerMenuLoading"
+                    :watch-key="`${headerMenuItems.length}-${headerMenuLoading}`" @reach-end="handleHeaderMenuReachEnd">
+                    <ul class="flex items-center gap-1 whitespace-nowrap py-1">
+                        <HeaderMenuItem v-for="item in headerMenuItems" :key="item.id" :item="item" />
 
-                            <li v-if="headerMenuLoading" class="px-3 py-2 text-sm text-gray-300 flex-shrink-0">
-                                Loading...
-                            </li>
-                        </ul>
-                    </nav>
-
-                    <div v-if="headerMenuThumbWidth" ref="headerMenuTrackRef"
-                        @pointerdown="handleHeaderMenuTrackPointerDown" @wheel.prevent.stop="handleHeaderMenuWheel"
-                        class="absolute left-0 right-0 bottom-0 h-3 cursor-pointer flex items-center">
-                        <div class="relative h-[2px] w-full rounded-full bg-white/10">
-                            <div @pointerdown="handleHeaderMenuThumbPointerDown"
-                                @pointermove="handleHeaderMenuThumbPointerMove"
-                                @pointerup="handleHeaderMenuThumbPointerUp"
-                                @pointercancel="handleHeaderMenuThumbPointerUp"
-                                @wheel.prevent.stop="handleHeaderMenuWheel"
-                                class="absolute top-1/2 -translate-y-1/2 h-[2px] cursor-grab rounded-full bg-white/40 transition-colors hover:bg-white/70 active:cursor-grabbing"
-                                :style="{
-                                    width: `${headerMenuThumbWidth}px`,
-                                    transform: `translateX(${headerMenuThumbLeft}px) translateY(-50%)`
-                                }"></div>
-                        </div>
-                    </div>
-                </div>
+                        <li v-if="headerMenuLoading" class="px-3 py-2 text-sm text-gray-300 flex-shrink-0">
+                            Loading...
+                        </li>
+                    </ul>
+                </HorizontalScroller>
 
                 <div v-else class="flex-1"></div>
 
