@@ -1,7 +1,16 @@
 <script setup>
 import { ref, nextTick, onMounted, onBeforeUnmount, watch } from "vue"
 
-const props = defineProps({
+const {
+    loading = false,
+    threshold = 60,
+    watchKey = '',
+    maxHeightClass = 'max-h-72',
+    contentClass = '',
+    trackClass = 'absolute right-1 top-2 bottom-2 w-3 cursor-pointer flex justify-center',
+    railClass = 'relative h-full w-[2px] rounded-full bg-gray-200/70',
+    thumbClass = 'absolute left-1/2 w-[2px] cursor-grab rounded-full bg-gray-400 transition-colors hover:bg-gray-600 active:cursor-grabbing',
+} = defineProps({
     loading: {
         type: Boolean,
         default: false,
@@ -75,9 +84,9 @@ const updateScrollbar = () => {
 const checkReachEnd = () => {
     const el = scrollRef.value
 
-    if (!el || props.loading) return
+    if (!el || loading) return
 
-    const almostEnd = el.scrollTop + el.clientHeight >= el.scrollHeight - props.threshold
+    const almostEnd = el.scrollTop + el.clientHeight >= el.scrollHeight - threshold
 
     if (almostEnd) {
         emit('reach-end')
@@ -178,7 +187,7 @@ const handleThumbPointerUp = (event) => {
 }
 
 watch(
-    () => props.watchKey,
+    () => watchKey,
     async () => {
         await nextTick()
         updateScrollbar()

@@ -8,7 +8,7 @@ defineOptions({
     name: 'OffCanvasMenuItem'
 })
 
-const props = defineProps({
+const { item, level = 0 } = defineProps({
     item: {
         type: Object,
         required: true,
@@ -34,7 +34,7 @@ const normalizeMenuItems = (items = []) => {
 }
 
 const loadChildren = async (page = 1) => {
-    if (!props.item?.has_descendants) return
+    if (!item?.has_descendants) return
     if (childrenLoading.value) return
     if (childrenLoaded.value && page > childrenLastPage.value) return
 
@@ -43,7 +43,7 @@ const loadChildren = async (page = 1) => {
 
         const response = await fetchFromApi(
             route('site.theme.menu-item.sub-menu-items', {
-                slug: props.item.slug,
+                slug: item.slug,
                 page,
             })
         )
@@ -65,7 +65,7 @@ const loadChildren = async (page = 1) => {
 }
 
 const toggleSubMenu = async () => {
-    if (!props.item.has_descendants) return
+    if (!item.has_descendants) return
 
     isOpen.value = !isOpen.value
 
