@@ -89,17 +89,6 @@ class MenuItem extends Model
         return 'parent_id';
     }
 
-    public function getPublicUrlAttribute(): string
-    {
-        $url = $this->url;
-
-        if ($this->model) {
-            $url = $this->model?->public_url;
-        }
-
-        return $url ?? null;
-    }
-
     public function getHasParentAttribute(): bool
     {
         return isset($this->parent_id) ? true : false;
@@ -127,6 +116,17 @@ class MenuItem extends Model
         $transformed = str_repeat('-- ', count($parts)) . $last;
 
         return trim($transformed);
+    }
+
+    public function getPublicUrlAttribute(): string
+    {
+        $url = $this->url;
+
+        if ($this->model) {
+            $url = $this->model?->public_url;
+        }
+
+        return $url ?? null;
     }
 
     public function activityLogs(): MorphMany

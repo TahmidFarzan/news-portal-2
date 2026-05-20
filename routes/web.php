@@ -19,6 +19,7 @@ use App\Http\Controllers\BackOffice\UserController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
@@ -323,6 +324,22 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
         Route::get('events/{slug}/newses.xml', [FeedController::class, 'eventNewses'])->name('event.newses');
         Route::get('tags/{slug}/newses.xml', [FeedController::class, 'tagNewses'])->name('tag.newses');
         Route::get('contributors/{slug}/newses.xml', [FeedController::class, 'contributorNewses'])->name('contributor.newses');
+    });
+});
+
+Route::prefix('site')->name('site.')->group(function () {
+    Route::middleware(['response.cache:3600'])->group(function () {
+        Route::prefix('theme')->name('theme.')->group(function () {
+            Route::prefix('header')->name('header.')->group(function () {
+                Route::prefix('menu')->name('menu.')->group(function () {
+                    Route::get('menu-items', [SiteController::class, 'themeHeaderMenuMenuItems'])->name('menu-items');
+                });
+            });
+
+            Route::prefix('menu-item/{slug}')->name('menu-item.')->group(function () {
+                Route::get('sub-menu-items', [SiteController::class, 'themeMenuItemSubMenuItems'])->name('sub-menu-items');
+            });
+        });
     });
 });
 

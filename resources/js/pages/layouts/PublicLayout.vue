@@ -1,4 +1,7 @@
 <script setup>
+import HeaderMenuItem from '@/components/common/layout/HeaderMenuItem.vue'
+
+
 import { ref, onMounted, onBeforeUnmount, computed, nextTick, watch, provide } from "vue"
 import { usePage, router as inertia } from '@inertiajs/vue3'
 import { Toaster, toast } from 'vue-sonner'
@@ -11,9 +14,14 @@ import {
     faSpinner,
     faGauge,
     faUserGear,
-    faXmark
+    faXmark,
+    faMagnifyingGlass,
+    faBars,
+    faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faLinkedin, faGoogle } from '@fortawesome/free-brands-svg-icons'
+
+import { fetchFromApi } from '@/composables/useSystemApi'
 
 library.add(
     faUser,
@@ -23,6 +31,9 @@ library.add(
     faGauge,
     faUserGear,
     faXmark,
+    faMagnifyingGlass,
+    faBars,
+    faChevronDown,
     faFacebook,
     faLinkedin,
     faGoogle
@@ -34,6 +45,19 @@ const showDropdown = ref(false)
 const showLogoutModal = ref(false)
 const loggingOut = ref(false)
 const dropdownRef = ref(null)
+
+const headerMenuItems = ref([])
+const headerMenuLoading = ref(false)
+const headerMenuPage = ref(1)
+const headerMenuLastPage = ref(1)
+const headerMenuScrollRef = ref(null)
+const showOffCanvas = ref(false)
+const headerMenuTrackRef = ref(null)
+const headerMenuThumbWidth = ref(0)
+const headerMenuThumbLeft = ref(0)
+const headerMenuDragging = ref(false)
+const headerMenuDragStartX = ref(0)
+const headerMenuDragStartLeft = ref(0)
 
 provide("pageReady", pageReady)
 
@@ -62,6 +86,169 @@ function handleClickOutside(e) {
     }
 }
 
+const normalizeMenuItems = (items = []) => {
+    return items.map((item) => ({
+        ...item,
+        children: item.children ?? [],
+    }))
+}
+
+const getHeaderMenuItems = async (page = 1) => {
+    if (headerMenuLoading.value) return
+    if (page > headerMenuLastPage.value) return
+
+    try {
+        headerMenuLoading.value = true
+
+        const response = await fetchFromApi(
+            route('site.theme.header.menu.menu-items', { page })
+        )
+
+        const items = normalizeMenuItems(response?.items ?? [])
+
+        headerMenuItems.value = page === 1
+            ? items
+            : [...headerMenuItems.value, ...items]
+
+        headerMenuPage.value = Number(response?.current_page ?? page)
+        headerMenuLastPage.value = Number(response?.last_page ?? page)
+
+        console.log('Header Menus:', headerMenuItems.value)
+    } catch (error) {
+        console.error('Failed to fetch header menus:', error)
+    } finally {
+        headerMenuLoading.value = false
+    }
+}
+
+const updateHeaderMenuScrollbar = () => {
+    const el = headerMenuScrollRef.value
+
+    if (!el) return
+
+    const clientWidth = el.clientWidth
+    const scrollWidth = el.scrollWidth
+    const scrollLeft = el.scrollLeft
+
+    if (scrollWidth <= clientWidth) {
+        headerMenuThumbWidth.value = 0
+        headerMenuThumbLeft.value = 0
+        return
+    }
+
+    const thumbWidth = Math.max((clientWidth / scrollWidth) * clientWidth, 32)
+    const maxThumbLeft = clientWidth - thumbWidth
+    const maxScrollLeft = scrollWidth - clientWidth
+
+    headerMenuThumbWidth.value = thumbWidth
+    headerMenuThumbLeft.value = (scrollLeft / maxScrollLeft) * maxThumbLeft
+}
+
+const handleHeaderMenuScroll = async () => {
+    const el = headerMenuScrollRef.value
+
+    if (!el || headerMenuLoading.value) return
+
+    updateHeaderMenuScrollbar()
+
+    const almostEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 80
+
+    if (!almostEnd) return
+
+    const nextPage = headerMenuPage.value + 1
+
+    if (nextPage <= headerMenuLastPage.value) {
+        await getHeaderMenuItems(nextPage)
+        await nextTick()
+        updateHeaderMenuScrollbar()
+    }
+}
+
+const handleHeaderMenuWheel = (event) => {
+    const el = headerMenuScrollRef.value
+
+    if (!el) return
+
+    const rawDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX
+        : event.deltaY
+
+    if (!rawDelta) return
+
+    const delta = event.deltaMode === 1
+        ? rawDelta * 16
+        : rawDelta
+
+    event.preventDefault()
+    event.stopPropagation()
+
+    el.scrollLeft += delta
+
+    updateHeaderMenuScrollbar()
+    handleHeaderMenuScroll()
+}
+
+const scrollHeaderMenuByThumbPosition = (thumbLeft) => {
+    const el = headerMenuScrollRef.value
+
+    if (!el || !headerMenuThumbWidth.value) return
+
+    const maxThumbLeft = el.clientWidth - headerMenuThumbWidth.value
+    const maxScrollLeft = el.scrollWidth - el.clientWidth
+
+    if (maxThumbLeft <= 0 || maxScrollLeft <= 0) return
+
+    const safeLeft = Math.max(0, Math.min(thumbLeft, maxThumbLeft))
+
+    el.scrollLeft = (safeLeft / maxThumbLeft) * maxScrollLeft
+
+    updateHeaderMenuScrollbar()
+    handleHeaderMenuScroll()
+}
+
+const handleHeaderMenuTrackPointerDown = (event) => {
+    const track = headerMenuTrackRef.value
+
+    if (!track || !headerMenuThumbWidth.value) return
+
+    event.preventDefault()
+
+    const rect = track.getBoundingClientRect()
+    const clickX = event.clientX - rect.left
+    const targetLeft = clickX - headerMenuThumbWidth.value / 2
+
+    scrollHeaderMenuByThumbPosition(targetLeft)
+}
+
+const handleHeaderMenuThumbPointerDown = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    headerMenuDragging.value = true
+    headerMenuDragStartX.value = event.clientX
+    headerMenuDragStartLeft.value = headerMenuThumbLeft.value
+
+    event.currentTarget.setPointerCapture(event.pointerId)
+}
+
+const handleHeaderMenuThumbPointerMove = (event) => {
+    if (!headerMenuDragging.value) return
+
+    event.preventDefault()
+
+    const diff = event.clientX - headerMenuDragStartX.value
+
+    scrollHeaderMenuByThumbPosition(headerMenuDragStartLeft.value + diff)
+}
+
+const handleHeaderMenuThumbPointerUp = (event) => {
+    headerMenuDragging.value = false
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+}
+
 watch(flashMessage, (newVal) => {
     if (newVal && newVal.message) {
         switch (newVal.status) {
@@ -81,6 +268,8 @@ watch(pageReady, (ready) => {
 
 onMounted(async () => {
     await nextTick()
+    await getHeaderMenuItems()
+    updateHeaderMenuScrollbar()
     pageReady.value = true
 
     inertia.on('start', () => pageReady.value = false)
@@ -88,11 +277,13 @@ onMounted(async () => {
 
     document.addEventListener('click', handleClickOutside)
     window.addEventListener('scroll', handlePageScroll)
+    window.addEventListener('resize', updateHeaderMenuScrollbar)
 })
 
 onBeforeUnmount(() => {
     document.removeEventListener('click', handleClickOutside)
     window.removeEventListener('scroll', handlePageScroll)
+    window.removeEventListener('resize', updateHeaderMenuScrollbar)
 })
 </script>
 
@@ -170,8 +361,54 @@ onBeforeUnmount(() => {
         </div>
 
         <div ref="headerNavbar" class="bg-gray-900 text-white">
-            <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
-                <a :href="route('home')" class="text-white">{{ appName }}</a>
+            <div class="max-w-7xl mx-auto px-4 py-2 flex items-center gap-3">
+                <a :href="route('home')" class="text-white font-semibold flex-shrink-0">
+                    {{ appName }}
+                </a>
+
+                <div v-if="headerMenuItems.length" class="relative flex-1 min-w-0"
+                    @wheel.prevent.stop="handleHeaderMenuWheel">
+                    <nav ref="headerMenuScrollRef" @scroll.passive="handleHeaderMenuScroll"
+                        @wheel.prevent.stop="handleHeaderMenuWheel"
+                        class="overflow-x-auto overflow-y-visible pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        <ul class="flex items-center gap-1 whitespace-nowrap py-1">
+                            <HeaderMenuItem v-for="item in headerMenuItems" :key="item.id" :item="item" />
+
+                            <li v-if="headerMenuLoading" class="px-3 py-2 text-sm text-gray-300 flex-shrink-0">
+                                Loading...
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div v-if="headerMenuThumbWidth" ref="headerMenuTrackRef"
+                        @pointerdown="handleHeaderMenuTrackPointerDown" @wheel.prevent.stop="handleHeaderMenuWheel"
+                        class="absolute left-0 right-0 bottom-0 h-3 cursor-pointer flex items-center">
+                        <div class="relative h-[2px] w-full rounded-full bg-white/10">
+                            <div @pointerdown="handleHeaderMenuThumbPointerDown"
+                                @pointermove="handleHeaderMenuThumbPointerMove"
+                                @pointerup="handleHeaderMenuThumbPointerUp"
+                                @pointercancel="handleHeaderMenuThumbPointerUp"
+                                @wheel.prevent.stop="handleHeaderMenuWheel"
+                                class="absolute top-1/2 -translate-y-1/2 h-[2px] cursor-grab rounded-full bg-white/40 transition-colors hover:bg-white/70 active:cursor-grabbing"
+                                :style="{
+                                    width: `${headerMenuThumbWidth}px`,
+                                    transform: `translateX(${headerMenuThumbLeft}px) translateY(-50%)`
+                                }"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-else class="flex-1"></div>
+
+                <button type="button"
+                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 flex-shrink-0">
+                    <FontAwesomeIcon icon="magnifying-glass" />
+                </button>
+
+                <button type="button" @click="showOffCanvas = true"
+                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 flex-shrink-0">
+                    <FontAwesomeIcon icon="bars" />
+                </button>
             </div>
         </div>
 
@@ -201,6 +438,33 @@ onBeforeUnmount(() => {
         </footer>
 
         <Toaster richColors position="top-right" />
+
+
+        <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showOffCanvas" class="fixed inset-0 bg-black/50 z-[998]" @click="showOffCanvas = false"></div>
+        </Transition>
+
+        <Transition enter-active-class="transition transform duration-200 ease-out" enter-from-class="translate-x-full"
+            enter-to-class="translate-x-0" leave-active-class="transition transform duration-150 ease-in"
+            leave-from-class="translate-x-0" leave-to-class="translate-x-full">
+            <aside v-if="showOffCanvas"
+                class="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-white shadow-xl z-[999] flex flex-col">
+                <div class="flex items-center justify-between px-4 py-3 border-b">
+                    <span class="font-semibold text-gray-800">{{ appName }}</span>
+
+                    <button type="button" @click="showOffCanvas = false"
+                        class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+                        <FontAwesomeIcon icon="xmark" />
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-4 text-gray-500">
+                    Off canvas menu will be added here
+                </div>
+            </aside>
+        </Transition>
 
         <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
