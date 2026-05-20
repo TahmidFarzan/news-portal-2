@@ -113,7 +113,6 @@ const getHeaderMenuItems = async (page = 1) => {
         headerMenuPage.value = Number(response?.current_page ?? page)
         headerMenuLastPage.value = Number(response?.last_page ?? page)
 
-        console.log('Header Menus:', headerMenuItems.value)
     } catch (error) {
         console.error('Failed to fetch header menus:', error)
     } finally {
