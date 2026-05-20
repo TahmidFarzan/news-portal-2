@@ -2,7 +2,7 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
-import { computed, onMounted, nextTick, inject } from 'vue'
+import { computed, onMounted, nextTick, inject, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
@@ -24,6 +24,8 @@ const { menu, menuItem } = defineProps({
 
 const isUpdate = computed(() => !!menuItem?.slug)
 
+const copiedRoute = ref(null)
+
 const saveForm = useForm({
     name: menuItem?.name || null,
     model_type: extractModelName(menuItem?.model_type) || null,
@@ -34,6 +36,19 @@ const saveForm = useForm({
     has_parent: menuItem?.has_parent || false,
     is_custom_url: menuItem?.is_custom_url || false,
 })
+
+
+const copyUrl = async (routeName) => {
+    const url = route(routeName)
+
+    await navigator.clipboard.writeText(url)
+
+    copiedRoute.value = routeName
+
+    setTimeout(() => {
+        copiedRoute.value = null
+    }, 1500)
+}
 
 function validateForm() {
     saveForm.clearErrors()
@@ -144,6 +159,34 @@ onMounted(async () => {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
+                            Latest URL:
+
+                            <code class="cursor-pointer bg-gray-100 px-2 py-1 rounded" @click="copyUrl('latest')">
+                                {{ route('latest') }}
+                            </code>
+
+                            <span v-if="copiedRoute === 'latest'" class="text-green-600 ml-2">
+                                Copied!
+                            </span>
+                        </div>
+
+                        <div>
+                            Home URL:
+
+                            <code class="cursor-pointer bg-gray-100 px-2 py-1 rounded" @click="copyUrl('home')">
+                                {{ route('home') }}
+                            </code>
+
+                            <span v-if="copiedRoute === 'home'" class="text-green-600 ml-2">
+                                Copied!
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div>
                             <label class="block text-sm font-medium mb-1">
                                 Language <span class="text-red-500">*</span>
                             </label>
@@ -215,15 +258,17 @@ onMounted(async () => {
                                 Model id <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady && saveForm?.model_type == 'Tag'" :form="saveForm" fieldName="model_id"
-                                :selectedItem="saveForm?.model_id" :apiUrl="route('search.search.tags')"
-                                :error="saveForm.errors.model_id" selectedLabelKey="name"
-                                selectedValueKey="id" apiLabelKey="name" apiValueKey="id" :multiple="false" placeholder="Select model record" />
+                            <MultiSelectInfinityLoadingApi v-if="pageReady && saveForm?.model_type == 'Tag'"
+                                :form="saveForm" fieldName="model_id" :selectedItem="saveForm?.model_id"
+                                :apiUrl="route('search.search.tags')" :error="saveForm.errors.model_id"
+                                selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
+                                :multiple="false" placeholder="Select model record" />
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady && saveForm?.model_type== 'Category'" :form="saveForm" fieldName="model_id"
-                                :selectedItem="menuItem?.model" :apiUrl="route('search.category-tree')"
-                                :error="saveForm.errors.model_id" selectedLabelKey="indentation_name"
-                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false" placeholder="Select model record" />
+                            <MultiSelectInfinityLoadingApi v-if="pageReady && saveForm?.model_type == 'Category'"
+                                :form="saveForm" fieldName="model_id" :selectedItem="menuItem?.model"
+                                :apiUrl="route('search.category-tree')" :error="saveForm.errors.model_id"
+                                selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
+                                apiValueKey="id" :multiple="false" placeholder="Select model record" />
                             <p v-if="saveForm.errors.model_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.model_id }}
                             </p>

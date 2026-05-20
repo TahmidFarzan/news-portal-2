@@ -83,13 +83,13 @@ class SiteService
         $page    = max((int) $request->input('page', 1), 1);
 
         $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
-        $headerMenuCode = SystemHelper::MENU_TYPE_HEADER;
+        $offcanvasMenuCode = SystemHelper::MENU_TYPE_OFFCANVAS;
 
-        $cacheKey = "theme header off canvas {$languageCode} {$headerMenuCode} page {$page} per page {$perPage}";
+        $cacheKey = "theme offcanvas {$languageCode} {$offcanvasMenuCode} page {$page} per page {$perPage}";
 
         $cacheTags = [
             'theme',
-            'theme-off-canvas',
+            'theme-offcanvas',
             'menu-items',
         ];
 
@@ -108,7 +108,7 @@ class SiteService
             ])
             ->whereNull("parent_id")
             ->whereRelation('menu.language', 'code', $languageCode)
-            ->whereRelation('menu.menuType', 'name', $headerMenuCode)
+            ->whereRelation('menu.menuType', 'name', $offcanvasMenuCode)
             ->orderBy('id', 'asc')
             ->paginate($perPage);
 

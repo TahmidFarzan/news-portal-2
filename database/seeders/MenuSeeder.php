@@ -41,6 +41,7 @@ class MenuSeeder extends Seeder
         $menuTypeHeader = MenuType::where("name", SystemHelper::MENU_TYPE_HEADER)->first();
         $menuTypeTopBar = MenuType::where("name", SystemHelper::MENU_TYPE_TOPBAR)->first();
         $menuTypeFooter = MenuType::where("name", SystemHelper::MENU_TYPE_FOOTER)->first();
+        $menuTypeOffCanvas = MenuType::where("name", SystemHelper::MENU_TYPE_OFFCANVAS)->first();
 
         foreach ($languages as $language) {
 
@@ -55,6 +56,12 @@ class MenuSeeder extends Seeder
                     'name'         => "Top bar",
                     "language_id"  => $language->id,
                     'menu_type_id' => $menuTypeTopBar?->id,
+                ])->create();
+
+                Menu::factory()->state([
+                    'name'         => "OffCanvas",
+                    "language_id"  => $language->id,
+                    'menu_type_id' => $menuTypeOffCanvas?->id,
                 ])->create();
 
                 Menu::factory()->state([
@@ -78,6 +85,12 @@ class MenuSeeder extends Seeder
                 ])->create();
 
                 Menu::factory()->state([
+                    'name'         => "অফক্যানভাস",
+                    "language_id"  => $language->id,
+                    'menu_type_id' => $menuTypeOffCanvas?->id,
+                ])->create();
+
+                Menu::factory()->state([
                     'name'         => "ফুটার",
                     "language_id"  => $language->id,
                     'menu_type_id' => $menuTypeFooter?->id,
@@ -89,7 +102,48 @@ class MenuSeeder extends Seeder
 
         foreach ($languages as $language) {
             $menu       = Menu::where("language_id", $language->id)->where('menu_type_id', $menuTypeHeader->id)->first();
-            $categories = Category::where("language_id", $language->id)->whereNull("parent_id")->get();
+            $categories = Category::inRandomOrder()->where("language_id", $language->id)->whereNull("parent_id")->limit(6)->get();
+
+            MenuItem::factory()->state([
+                'name'        => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
+                'language_id' => $language->id,
+                "parent_id"   => null,
+
+                "menu_id"     => $menu->id,
+
+                "model_type"  => null,
+                "model_id"    => null,
+
+                "url"         => route("home"),
+
+                'name_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
+                'slug_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
+            ])->create();
+
+            MenuItem::factory()->state([
+                'name'        => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
+                'language_id' => $language->id,
+                "parent_id"   => null,
+
+                "menu_id"     => $menu->id,
+
+                "model_type"  => null,
+                "model_id"    => null,
+
+                "url"         => route("home"),
+
+                'name_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
+                'slug_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
+            ])->create();
+
+            foreach ($categories as $category) {
+                $this->saveMenuItem($menu, null, $category);
+            }
+        }
+
+        foreach ($languages as $language) {
+            $menu       = Menu::where("language_id", $language->id)->where('menu_type_id', $menuTypeOffCanvas->id)->first();
+            $categories = Category::inRandomOrder()->where("language_id", $language->id)->whereNull("parent_id")->get();
 
             foreach ($categories as $category) {
                 $this->saveMenuItem($menu, null, $category);
@@ -115,10 +169,8 @@ class MenuSeeder extends Seeder
             'slug_tree'   => ($parent ? $parent->slug . '/' : '') . Str::slug($category->name),
         ])->create();
 
-        if (! empty($category->descendants))
-        {
-            foreach ($category->descendants as $subCategory)
-            {
+        if (! empty($category->descendants)) {
+            foreach ($category->descendants as $subCategory) {
                 $this->saveMenuItem($menu, $saveMenuItem, $subCategory);
             }
         }
