@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use Throwable;
-use Closure;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -25,9 +24,16 @@ class CacheServerHelper
         return !in_array(self::driver(), ['file', 'array'], true);
     }
 
-    protected static function ttl(int $seconds): DateTimeInterface
+    protected static function resolveLifeTime(?int $lifeTime = null): int
     {
-        return Carbon::now()->addSeconds($seconds);
+        return !empty($lifeTime) && $lifeTime > 0
+            ? $lifeTime
+            : self::oneDayInSecond;
+    }
+
+    protected static function ttl(?int $lifeTime = null): DateTimeInterface
+    {
+        return Carbon::now()->addSeconds(self::resolveLifeTime($lifeTime));
     }
 
     public static function isConnected(): bool
@@ -39,9 +45,11 @@ class CacheServerHelper
         try {
             Cache::put('__cache_test__', true, self::ttl(2));
             Cache::forget('__cache_test__');
+
             return true;
         } catch (Throwable $ex) {
             Log::error('Cache store not available: ' . $ex->getMessage());
+
             return false;
         }
     }
@@ -51,14 +59,10 @@ class CacheServerHelper
         return Str::lower(Str::slug($key));
     }
 
-    /* -----------------------------------------------------------------
-    |  STORE
-    |-----------------------------------------------------------------*/
-
     public static function cachedData(
         string $key,
         mixed $data,
-        int $expireTime = self::oneDayInSecond,
+        ?int $lifeTime = null,
         array $tags = []
     ): void {
         if (!self::isConnected()) {
@@ -72,16 +76,11 @@ class CacheServerHelper
                 ? Cache::tags($tags)
                 : Cache::store();
 
-            $store->put($key, $data, self::ttl($expireTime));
-
+            $store->put($key, $data, self::ttl($lifeTime));
         } catch (Throwable $ex) {
             Log::error("Failed to cache '{$key}': " . $ex->getMessage());
         }
     }
-
-    /* -----------------------------------------------------------------
-    |  READ
-    |-----------------------------------------------------------------*/
 
     public static function getCachedData(
         string $key,
@@ -99,16 +98,12 @@ class CacheServerHelper
                 : Cache::store();
 
             return $store->get($key);
-
         } catch (Throwable $ex) {
             Log::error("Failed to retrieve cached '{$key}': " . $ex->getMessage());
+
             return null;
         }
     }
-
-    /* -----------------------------------------------------------------
-    |  DELETE
-    |-----------------------------------------------------------------*/
 
     public static function clearCached(string $key, array $tags = []): void
     {
@@ -124,15 +119,10 @@ class CacheServerHelper
                 : Cache::store();
 
             $store->forget($key);
-
         } catch (Throwable $ex) {
             Log::error("Failed to clear cached '{$key}': " . $ex->getMessage());
         }
     }
-
-    /* -----------------------------------------------------------------
-    |  CLEAR BY TAG
-    |-----------------------------------------------------------------*/
 
     public static function clearCachedByTag(string|array $tags): void
     {
@@ -146,10 +136,6 @@ class CacheServerHelper
             Log::error('Cache tag flush failed: ' . $ex->getMessage());
         }
     }
-
-    /* -----------------------------------------------------------------
-    |  CLEAR ALL
-    |-----------------------------------------------------------------*/
 
     public static function clearAllCached(): void
     {
