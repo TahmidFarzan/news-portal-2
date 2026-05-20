@@ -4,7 +4,7 @@ import HorizontalScroller from '@/components/common/layout/HorizontalScroller.vu
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 import OffCanvasMenuItem from '@/components/common/layout/OffCanvasMenuItem.vue'
 
-import { ref, onMounted, onBeforeUnmount, computed, nextTick, watch, provide } from "vue"
+import { ref, reactive, computed, watch, provide, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { usePage, router as inertia } from '@inertiajs/vue3'
 import { Toaster, toast } from 'vue-sonner'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -43,25 +43,30 @@ library.add(
 
 const pageReady = ref(false)
 const headerNavbar = ref(null)
+const dropdownRef = ref(null)
+
 const showDropdown = ref(false)
 const showLogoutModal = ref(false)
 const loggingOut = ref(false)
-const dropdownRef = ref(null)
-
-const headerMenuItems = ref([])
-const headerMenuLoading = ref(false)
-const headerMenuPage = ref(1)
-const headerMenuLastPage = ref(1)
-
 const showOffCanvas = ref(false)
+const isHeaderSticky = ref(false)
+const lastFlashKey = ref(null)
 
-const offCanvasMenuItems = ref([])
-const offCanvasMenuLoading = ref(false)
-const offCanvasMenuPage = ref(1)
-const offCanvasMenuLastPage = ref(1)
+const headerMenu = reactive({
+    items: [],
+    loading: false,
+    page: 1,
+    lastPage: 1
+})
 
+const offCanvasMenu = reactive({
+    items: [],
+    loading: false,
+    page: 1,
+    lastPage: 1
+})
 
-provide("pageReady", pageReady)
+provide('pageReady', pageReady)
 
 const page = usePage()
 const year = new Date().getFullYear()
@@ -71,123 +76,114 @@ const appLogo = import.meta.env.VITE_APP_LOGO
 const authUser = computed(() => page.props.auth?.user ?? null)
 const flashMessage = computed(() => page.props.flashMessage)
 
-const logoutHandler = async () => {
-    loggingOut.value = true
-    await inertia.post(route('logout'))
-}
-
-const handlePageScroll = () => {
-    if (!headerNavbar.value) return
-    if (window.scrollY > 0) headerNavbar.value.classList.add('shadow-md', 'sticky', 'top-0', 'z-50')
-    else headerNavbar.value.classList.remove('shadow-md', 'sticky', 'top-0', 'z-50')
-}
-
-function handleClickOutside(e) {
-    if (!dropdownRef.value) return
-    if (!dropdownRef.value.contains(e.target)) {
-        showDropdown.value = false
-    }
-}
+let removeInertiaStartListener = null
+let removeInertiaFinishListener = null
 
 const normalizeMenuItems = (items = []) => {
     return items.map((item) => ({
         ...item,
-        children: item.children ?? [],
+        children: item.children ?? []
     }))
 }
 
-const getHeaderMenuItems = async (page = 1) => {
-    if (headerMenuLoading.value) return
-    if (page > headerMenuLastPage.value) return
+const loadMenuItems = async (state, routeName, pageNumber = 1) => {
+    if (state.loading || pageNumber > state.lastPage) return
 
     try {
-        headerMenuLoading.value = true
+        state.loading = true
 
-        const response = await fetchFromApi(
-            route('site.theme.header.menu.menu-items', { page })
-        )
-
+        const response = await fetchFromApi(route(routeName, { page: pageNumber }))
         const items = normalizeMenuItems(response?.items ?? [])
 
-        headerMenuItems.value = page === 1
-            ? items
-            : [...headerMenuItems.value, ...items]
-
-        headerMenuPage.value = Number(response?.current_page ?? page)
-        headerMenuLastPage.value = Number(response?.last_page ?? page)
-
+        state.items = pageNumber === 1 ? items : [...state.items, ...items]
+        state.page = Number(response?.current_page ?? pageNumber)
+        state.lastPage = Number(response?.last_page ?? pageNumber)
     } catch (error) {
-        console.error('Failed to fetch header menus:', error)
+        console.error(`Failed to fetch ${routeName}:`, error)
     } finally {
-        headerMenuLoading.value = false
+        state.loading = false
     }
 }
 
+const getHeaderMenuItems = (pageNumber = 1) => {
+    return loadMenuItems(headerMenu, 'site.theme.header.menu.menu-items', pageNumber)
+}
+
+const getOffCanvasMenuItems = (pageNumber = 1) => {
+    return loadMenuItems(offCanvasMenu, 'site.theme.off-canvas.menu-items', pageNumber)
+}
+
 const handleHeaderMenuReachEnd = async () => {
-    if (headerMenuLoading.value) return
+    const nextPage = headerMenu.page + 1
 
-    const nextPage = headerMenuPage.value + 1
-
-    if (nextPage <= headerMenuLastPage.value) {
+    if (!headerMenu.loading && nextPage <= headerMenu.lastPage) {
         await getHeaderMenuItems(nextPage)
     }
 }
 
-const getOffCanvasMenuItems = async (page = 1) => {
-    if (offCanvasMenuLoading.value) return
-    if (page > offCanvasMenuLastPage.value) return
-
-    try {
-        offCanvasMenuLoading.value = true
-
-        const response = await fetchFromApi(
-            route('site.theme.off-canvas.menu-items', { page })
-        )
-
-        const items = normalizeMenuItems(response?.items ?? [])
-
-        offCanvasMenuItems.value = page === 1
-            ? items
-            : [...offCanvasMenuItems.value, ...items]
-
-        offCanvasMenuPage.value = Number(response?.current_page ?? page)
-        offCanvasMenuLastPage.value = Number(response?.last_page ?? page)
-    } catch (error) {
-        console.error('Failed to fetch off-canvas menu items:', error)
-    } finally {
-        offCanvasMenuLoading.value = false
-    }
-}
-
 const handleOffCanvasMenuReachEnd = async () => {
-    if (offCanvasMenuLoading.value) return
+    const nextPage = offCanvasMenu.page + 1
 
-    const nextPage = offCanvasMenuPage.value + 1
-
-    if (nextPage <= offCanvasMenuLastPage.value) {
+    if (!offCanvasMenu.loading && nextPage <= offCanvasMenu.lastPage) {
         await getOffCanvasMenuItems(nextPage)
     }
 }
 
-watch(flashMessage, (newVal) => {
-    if (newVal && newVal.message) {
-        switch (newVal.status) {
-            case 'success': toast.success(newVal.message); break
-            case 'error': toast.error(newVal.message); break
-            case 'warning': toast.warning(newVal.message); break
-            case 'info': toast(newVal.message); break
-            default: toast(newVal.message)
+const logoutHandler = () => {
+    if (loggingOut.value) return
+
+    loggingOut.value = true
+
+    inertia.post(route('logout'), {}, {
+        onFinish: () => {
+            loggingOut.value = false
         }
-        page.props.flashMessage = null
+    })
+}
+
+const handlePageScroll = () => {
+    isHeaderSticky.value = window.scrollY > 0
+}
+
+const handleClickOutside = (event) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+        showDropdown.value = false
+    }
+}
+
+watch(flashMessage, (value) => {
+    if (!value?.message) return
+
+    const flashKey = `${value.status ?? 'default'}-${value.message}`
+
+    if (flashKey === lastFlashKey.value) return
+
+    lastFlashKey.value = flashKey
+
+    switch (value.status) {
+        case 'success':
+            toast.success(value.message)
+            break
+        case 'error':
+            toast.error(value.message)
+            break
+        case 'warning':
+            toast.warning(value.message)
+            break
+        case 'info':
+            toast.info(value.message)
+            break
+        default:
+            toast.info(value.message)
     }
 }, { immediate: true })
 
 watch(pageReady, (ready) => {
     document.body.style.overflow = ready ? '' : 'hidden'
-})
+}, { immediate: true })
 
 watch(showOffCanvas, async (open) => {
-    if (open && !offCanvasMenuItems.value.length) {
+    if (open && !offCanvasMenu.items.length) {
         await getOffCanvasMenuItems()
     }
 })
@@ -195,49 +191,63 @@ watch(showOffCanvas, async (open) => {
 onMounted(async () => {
     await nextTick()
     await getHeaderMenuItems()
+
     pageReady.value = true
 
-    inertia.on('start', () => pageReady.value = false)
-    inertia.on('finish', () => pageReady.value = true)
+    removeInertiaStartListener = inertia.on('start', () => {
+        pageReady.value = false
+    })
+
+    removeInertiaFinishListener = inertia.on('finish', () => {
+        pageReady.value = true
+    })
+
+    handlePageScroll()
 
     document.addEventListener('click', handleClickOutside)
-    window.addEventListener('scroll', handlePageScroll)
+    window.addEventListener('scroll', handlePageScroll, { passive: true })
 })
 
 onBeforeUnmount(() => {
+    removeInertiaStartListener?.()
+    removeInertiaFinishListener?.()
+
     document.removeEventListener('click', handleClickOutside)
     window.removeEventListener('scroll', handlePageScroll)
+
+    document.body.style.overflow = ''
 })
 </script>
 
 <template>
     <div class="guest-layout flex flex-col min-h-screen">
-
         <div class="bg-gray-900 text-white">
             <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
-
                 <div class="flex space-x-3">
-                    <a href="https://facebook.com" target="_blank">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                         <FontAwesomeIcon :icon="['fab', 'facebook']" />
                     </a>
-                    <a href="https://linkedin.com" target="_blank">
+
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                         <FontAwesomeIcon :icon="['fab', 'linkedin']" />
                     </a>
-                    <a href="https://news.google.com" target="_blank">
+
+                    <a href="https://news.google.com" target="_blank" rel="noopener noreferrer"
+                        aria-label="Google News">
                         <FontAwesomeIcon :icon="['fab', 'google']" />
                     </a>
                 </div>
 
                 <div class="flex items-center space-x-3 relative">
-
-                    <a v-if="!authUser" :href="route('login')" class="flex items-center gap-1 text-gray-300">
+                    <a v-if="!authUser" :href="route('login')"
+                        class="flex items-center gap-1 text-gray-300 hover:text-white">
                         <FontAwesomeIcon icon="arrow-right-to-bracket" />
                         <span>Login</span>
                     </a>
 
-                    <div v-if="authUser" class="relative" ref="dropdownRef">
-
-                        <button @click.stop="showDropdown = !showDropdown" class="flex items-center gap-1">
+                    <div v-else ref="dropdownRef" class="relative">
+                        <button type="button" @click.stop="showDropdown = !showDropdown"
+                            class="flex items-center gap-1 hover:text-gray-300" aria-label="User menu">
                             <FontAwesomeIcon icon="user" />
                         </button>
 
@@ -248,53 +258,51 @@ onBeforeUnmount(() => {
                             leave-from-class="opacity-100 scale-100 translate-y-0"
                             leave-to-class="opacity-0 scale-95 translate-y-1">
                             <div v-if="showDropdown"
-                                class="absolute right-0 mt-2 bg-white text-black shadow-md border border-gray-200 rounded-xl w-44 z-[999] origin-top-right">
-
+                                class="absolute right-0 mt-2 bg-white text-black shadow-md border border-gray-200 rounded-xl w-44 z-[999] origin-top-right overflow-hidden">
                                 <a @click="showDropdown = false" :href="route('auth-user.dashboard.index')"
                                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                                     <FontAwesomeIcon icon="gauge" class="text-gray-500" />
-                                    Dashboard
+                                    <span>Dashboard</span>
                                 </a>
 
                                 <a @click="showDropdown = false" :href="route('auth-user.profile.index')"
                                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                                     <FontAwesomeIcon icon="user" class="text-gray-500" />
-                                    Profile
+                                    <span>Profile</span>
                                 </a>
 
                                 <a @click="showDropdown = false" :href="route('auth-user.account.index')"
                                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                                     <FontAwesomeIcon icon="user-gear" class="text-gray-500" />
-                                    Account
+                                    <span>Account</span>
                                 </a>
 
-                                <button @click="showLogoutModal = true; showDropdown = false"
+                                <button type="button" @click="showLogoutModal = true; showDropdown = false"
                                     class="flex items-center gap-2 w-full text-left px-3 py-2 text-red-500 hover:bg-gray-100">
                                     <FontAwesomeIcon icon="right-from-bracket" />
-                                    Logout
+                                    <span>Logout</span>
                                 </button>
-
                             </div>
                         </Transition>
-
                     </div>
-
                 </div>
             </div>
         </div>
 
-        <div ref="headerNavbar" class="bg-gray-900 text-white">
+        <div ref="headerNavbar" class="bg-gray-900 text-white transition-shadow"
+            :class="{ 'shadow-md sticky top-0 z-50': isHeaderSticky }">
             <div class="max-w-7xl mx-auto px-4 py-2 flex items-center gap-3">
                 <a :href="route('home')" class="text-white font-semibold flex-shrink-0">
                     {{ appName }}
                 </a>
 
-                <HorizontalScroller v-if="headerMenuItems.length" class="flex-1 min-w-0" :loading="headerMenuLoading"
-                    :watch-key="`${headerMenuItems.length}-${headerMenuLoading}`" @reach-end="handleHeaderMenuReachEnd">
+                <HorizontalScroller v-if="headerMenu.items.length" class="flex-1 min-w-0" :loading="headerMenu.loading"
+                    :watch-key="`${headerMenu.items.length}-${headerMenu.loading}`"
+                    @reach-end="handleHeaderMenuReachEnd">
                     <ul class="flex items-center gap-1 whitespace-nowrap py-1">
-                        <HeaderMenuItem v-for="item in headerMenuItems" :key="item.id" :item="item" />
+                        <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item" />
 
-                        <li v-if="headerMenuLoading" class="px-3 py-2 text-sm text-gray-300 flex-shrink-0">
+                        <li v-if="headerMenu.loading" class="px-3 py-2 text-sm text-gray-300 flex-shrink-0">
                             Loading...
                         </li>
                     </ul>
@@ -303,25 +311,25 @@ onBeforeUnmount(() => {
                 <div v-else class="flex-1"></div>
 
                 <button type="button"
-                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 flex-shrink-0">
+                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 flex-shrink-0"
+                    aria-label="Search">
                     <FontAwesomeIcon icon="magnifying-glass" />
                 </button>
 
                 <button type="button" @click="showOffCanvas = true"
-                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 flex-shrink-0">
+                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 flex-shrink-0"
+                    aria-label="Open menu">
                     <FontAwesomeIcon icon="bars" />
                 </button>
             </div>
         </div>
 
         <main class="flex-1 max-w-7xl mx-auto px-4 py-4 relative">
-
             <div v-if="!pageReady" class="fixed inset-0 bg-white/90 flex items-center justify-center z-50">
                 <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
             </div>
 
             <slot />
-
         </main>
 
         <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
@@ -329,9 +337,10 @@ onBeforeUnmount(() => {
                 <span class="text-center md:text-left w-full md:w-auto">
                     © {{ year }} {{ appName }}
                 </span>
+
                 <span class="text-center md:text-right w-full md:w-auto">
                     Developed by
-                    <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank"
+                    <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank" rel="noopener noreferrer"
                         class="text-blue-600 hover:underline font-medium">
                         Seikh Md Tahmid Farzan
                     </a>
@@ -353,34 +362,33 @@ onBeforeUnmount(() => {
             <aside v-if="showOffCanvas"
                 class="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-white shadow-xl z-[999] flex flex-col">
                 <div class="flex items-center justify-between px-4 py-3 border-b">
-                    <span class="font-semibold text-gray-800">
-                        <a :href="route('home')" class="inline-flex items-center">
-                            <img v-if="appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
+                    <a :href="route('home')" class="inline-flex items-center">
+                        <img v-if="appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
 
-                            <span v-else class="text-lg font-semibold text-gray-800">
-                                {{ appName }}
-                            </span>
-                        </a>
-                    </span>
+                        <span v-else class="text-lg font-semibold text-gray-800">
+                            {{ appName }}
+                        </span>
+                    </a>
 
                     <button type="button" @click="showOffCanvas = false"
-                        class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+                        class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"
+                        aria-label="Close menu">
                         <FontAwesomeIcon icon="xmark" />
                     </button>
                 </div>
 
                 <div class="flex-1 min-h-0 p-4">
-                    <VerticalScroller max-height-class="max-h-[calc(100vh-140px)]" :loading="offCanvasMenuLoading"
-                        :watch-key="`${offCanvasMenuItems.length}-${offCanvasMenuLoading}-${showOffCanvas}`"
+                    <VerticalScroller max-height-class="max-h-[calc(100vh-140px)]" :loading="offCanvasMenu.loading"
+                        :watch-key="`${offCanvasMenu.items.length}-${offCanvasMenu.loading}-${showOffCanvas}`"
                         @reach-end="handleOffCanvasMenuReachEnd">
                         <ul class="space-y-1 pr-1">
-                            <OffCanvasMenuItem v-for="item in offCanvasMenuItems" :key="item.id" :item="item" />
+                            <OffCanvasMenuItem v-for="item in offCanvasMenu.items" :key="item.id" :item="item" />
 
-                            <li v-if="offCanvasMenuLoading" class="px-3 py-2 text-sm text-gray-400">
+                            <li v-if="offCanvasMenu.loading" class="px-3 py-2 text-sm text-gray-400">
                                 Loading...
                             </li>
 
-                            <li v-if="!offCanvasMenuLoading && !offCanvasMenuItems.length"
+                            <li v-if="!offCanvasMenu.loading && !offCanvasMenu.items.length"
                                 class="px-3 py-2 text-sm text-gray-400">
                                 No menu items
                             </li>
@@ -395,15 +403,13 @@ onBeforeUnmount(() => {
             leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="authUser && showLogoutModal"
                 class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-
-                <transition enter-active-class="transition transform duration-200 ease-out"
+                <Transition enter-active-class="transition transform duration-200 ease-out"
                     enter-from-class="opacity-0 scale-95 translate-y-2"
                     enter-to-class="opacity-100 scale-100 translate-y-0"
                     leave-active-class="transition transform duration-150 ease-in"
                     leave-from-class="opacity-100 scale-100 translate-y-0"
                     leave-to-class="opacity-0 scale-95 translate-y-2">
                     <div class="bg-white p-5 rounded-xl shadow-lg w-80">
-
                         <div class="flex items-center gap-2 mb-3 text-red-500">
                             <FontAwesomeIcon icon="right-from-bracket" />
                             <span class="font-semibold text-gray-800">Logout Confirmation</span>
@@ -414,25 +420,22 @@ onBeforeUnmount(() => {
                         </div>
 
                         <div class="flex justify-end gap-2">
-                            <button @click="showLogoutModal = false"
+                            <button type="button" @click="showLogoutModal = false"
                                 class="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
                                 <FontAwesomeIcon icon="xmark" />
-                                Cancel
+                                <span>Cancel</span>
                             </button>
 
-                            <button @click="logoutHandler"
-                                class="flex items-center gap-1 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                            <button type="button" @click="logoutHandler" :disabled="loggingOut"
+                                class="flex items-center gap-1 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-70 disabled:cursor-not-allowed">
                                 <FontAwesomeIcon v-if="!loggingOut" icon="right-from-bracket" />
                                 <FontAwesomeIcon v-else icon="spinner" spin />
-                                Logout
+                                <span>Logout</span>
                             </button>
                         </div>
-
                     </div>
-                </transition>
-
+                </Transition>
             </div>
         </Transition>
-
     </div>
 </template>

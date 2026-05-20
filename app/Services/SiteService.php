@@ -79,7 +79,7 @@ class SiteService
 
     public function themeOffCanvasMenuMenuItems(Request $request): array
     {
-        $perPage = 25;
+        $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
 
         $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
