@@ -29,4 +29,12 @@ class SiteController extends Controller
             $this->siteService->themeMenuItemSubMenuItems($request, $menuItem)
         );
     }
+
+
+    public function themeOffCanvasMenuMenuItems(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->themeOffCanvasMenuMenuItems($request)
+        );
+    }
 }

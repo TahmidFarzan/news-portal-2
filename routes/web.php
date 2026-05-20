@@ -336,6 +336,10 @@ Route::prefix('site')->name('site.')->group(function () {
                 });
             });
 
+            Route::prefix('off-canvas')->name('off-canvas.')->group(function () {
+                    Route::get('menu-items', [SiteController::class, 'themeOffCanvasMenuMenuItems'])->name('menu-items');
+            });
+
             Route::prefix('menu-item/{slug}')->name('menu-item.')->group(function () {
                 Route::get('sub-menu-items', [SiteController::class, 'themeMenuItemSubMenuItems'])->name('sub-menu-items');
             });

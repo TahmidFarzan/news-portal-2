@@ -1,6 +1,8 @@
 <script setup>
 import HeaderMenuItem from '@/components/common/layout/HeaderMenuItem.vue'
 import HorizontalScroller from '@/components/common/layout/HorizontalScroller.vue'
+import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
+import OffCanvasMenuItem from '@/components/common/layout/OffCanvasMenuItem.vue'
 
 import { ref, onMounted, onBeforeUnmount, computed, nextTick, watch, provide } from "vue"
 import { usePage, router as inertia } from '@inertiajs/vue3'
@@ -53,12 +55,18 @@ const headerMenuLastPage = ref(1)
 
 const showOffCanvas = ref(false)
 
+const offCanvasMenuItems = ref([])
+const offCanvasMenuLoading = ref(false)
+const offCanvasMenuPage = ref(1)
+const offCanvasMenuLastPage = ref(1)
+
 
 provide("pageReady", pageReady)
 
 const page = usePage()
 const year = new Date().getFullYear()
 const appName = import.meta.env.VITE_APP_NAME
+const appLogo = import.meta.env.VITE_APP_LOGO
 
 const authUser = computed(() => page.props.auth?.user ?? null)
 const flashMessage = computed(() => page.props.flashMessage)
@@ -125,6 +133,42 @@ const handleHeaderMenuReachEnd = async () => {
     }
 }
 
+const getOffCanvasMenuItems = async (page = 1) => {
+    if (offCanvasMenuLoading.value) return
+    if (page > offCanvasMenuLastPage.value) return
+
+    try {
+        offCanvasMenuLoading.value = true
+
+        const response = await fetchFromApi(
+            route('site.theme.off-canvas.menu-items', { page })
+        )
+
+        const items = normalizeMenuItems(response?.items ?? [])
+
+        offCanvasMenuItems.value = page === 1
+            ? items
+            : [...offCanvasMenuItems.value, ...items]
+
+        offCanvasMenuPage.value = Number(response?.current_page ?? page)
+        offCanvasMenuLastPage.value = Number(response?.last_page ?? page)
+    } catch (error) {
+        console.error('Failed to fetch off-canvas menu items:', error)
+    } finally {
+        offCanvasMenuLoading.value = false
+    }
+}
+
+const handleOffCanvasMenuReachEnd = async () => {
+    if (offCanvasMenuLoading.value) return
+
+    const nextPage = offCanvasMenuPage.value + 1
+
+    if (nextPage <= offCanvasMenuLastPage.value) {
+        await getOffCanvasMenuItems(nextPage)
+    }
+}
+
 watch(flashMessage, (newVal) => {
     if (newVal && newVal.message) {
         switch (newVal.status) {
@@ -140,6 +184,12 @@ watch(flashMessage, (newVal) => {
 
 watch(pageReady, (ready) => {
     document.body.style.overflow = ready ? '' : 'hidden'
+})
+
+watch(showOffCanvas, async (open) => {
+    if (open && !offCanvasMenuItems.value.length) {
+        await getOffCanvasMenuItems()
+    }
 })
 
 onMounted(async () => {
@@ -291,7 +341,6 @@ onBeforeUnmount(() => {
 
         <Toaster richColors position="top-right" />
 
-
         <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
@@ -304,7 +353,15 @@ onBeforeUnmount(() => {
             <aside v-if="showOffCanvas"
                 class="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-white shadow-xl z-[999] flex flex-col">
                 <div class="flex items-center justify-between px-4 py-3 border-b">
-                    <span class="font-semibold text-gray-800">{{ appName }}</span>
+                    <span class="font-semibold text-gray-800">
+                        <a :href="route('home')" class="inline-flex items-center">
+                            <img v-if="appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
+
+                            <span v-else class="text-lg font-semibold text-gray-800">
+                                {{ appName }}
+                            </span>
+                        </a>
+                    </span>
 
                     <button type="button" @click="showOffCanvas = false"
                         class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
@@ -312,8 +369,23 @@ onBeforeUnmount(() => {
                     </button>
                 </div>
 
-                <div class="flex-1 overflow-y-auto p-4 text-gray-500">
-                    Off canvas menu will be added here
+                <div class="flex-1 min-h-0 p-4">
+                    <VerticalScroller max-height-class="max-h-[calc(100vh-140px)]" :loading="offCanvasMenuLoading"
+                        :watch-key="`${offCanvasMenuItems.length}-${offCanvasMenuLoading}-${showOffCanvas}`"
+                        @reach-end="handleOffCanvasMenuReachEnd">
+                        <ul class="space-y-1 pr-1">
+                            <OffCanvasMenuItem v-for="item in offCanvasMenuItems" :key="item.id" :item="item" />
+
+                            <li v-if="offCanvasMenuLoading" class="px-3 py-2 text-sm text-gray-400">
+                                Loading...
+                            </li>
+
+                            <li v-if="!offCanvasMenuLoading && !offCanvasMenuItems.length"
+                                class="px-3 py-2 text-sm text-gray-400">
+                                No menu items
+                            </li>
+                        </ul>
+                    </VerticalScroller>
                 </div>
             </aside>
         </Transition>
