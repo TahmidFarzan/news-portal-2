@@ -83,28 +83,24 @@ class MenuService
 
     public function save(MenuRequest $request, Menu $menu): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($menu->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $isNew       = empty($menu->id);
-            $statusEvent = $isNew ? "save" : "update";
+            DB::transaction(function () use ($request, $menu, $isNew) {
+                $menu->name          = $request->input('name');
+                $menu->menu_type_id  = $request->input('menu_type_id');
+                $menu->language_id   = $request->input('language_id');
+                $menu->created_by_id = $isNew ? Auth::id() : $menu->created_by_id;
 
-            $menu->name          = $request->input('name');
-            $menu->menu_type_id  = $request->input('menu_type_id');
-            $menu->language_id   = $request->input('language_id');
-            $menu->created_by_id = $isNew ? Auth::id() : $menu->created_by_id;
-
-            $menu->save();
-
-            DB::commit();
+                $menu->save();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.menu.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
-
             Log::error("Failed to {$statusEvent} menu.", [
                 'exception' => $exception,
             ]);
@@ -118,18 +114,16 @@ class MenuService
 
     public function delete(Menu $menu): array
     {
-        DB::beginTransaction();
-
         try {
-            $menu->delete();
-            DB::commit();
+            DB::transaction(function () use ($menu) {
+                $menu->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.menu.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Menu delete failed.', [
                 'exception' => $exception,
@@ -214,48 +208,55 @@ class MenuService
 
     public function menuItemSave(MenuItemRequest $request, Menu $menu, MenuItem $menuItem): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($menuItem->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $modelRecord = null;
+            DB::transaction(function () use ($request, $menu, $menuItem, $isNew) {
+                $modelRecord = null;
 
-            switch (Str::studly($request->input('model_type'))) {
-                case SystemHelper::MENU_ITEM_MODEL_CATEGORY:
-                    $modelRecord = Category::where("id", $request->input('model_id'))->first();
-                    break;
+                switch (Str::studly($request->input('model_type'))) {
+                    case SystemHelper::MENU_ITEM_MODEL_CATEGORY:
+                        $modelRecord = Category::where("id", $request->input('model_id'))->first();
+                        break;
 
-                case SystemHelper::MENU_ITEM_MODEL_TAG:
-                    $modelRecord = Tag::where("id", $request->input('model_id'))->first();
-                    break;
+                    case SystemHelper::MENU_ITEM_MODEL_TAG:
+                        $modelRecord = Tag::where("id", $request->input('model_id'))->first();
+                        break;
 
-                default:
-                    $modelRecord = Category::where("id", $request->input('model_id'))->first();
-                    break;
-            }
+                    default:
+                        $modelRecord = Category::where("id", $request->input('model_id'))->first();
+                        break;
+                }
+                $menuItem->name        = $request->input('name');
+                $menuItem->language_id = $request->input('language_id');
+                $menuItem->model_type  = $request->boolean('is_custom_url') ? null : ($modelRecord?->getMorphClass() ?? null);
+                $menuItem->model_id    = $request->boolean('is_custom_url') ? null : ($modelRecord?->id ?? null);
+                $menuItem->parent_id   = $request->boolean('has_parent') ? $request->input('parent_id') : null;
+                $menuItem->url         = $request->boolean('is_custom_url') ? $request->input('url ') : null;
 
-            $isNew       = empty($menuItem->id);
-            $statusEvent = $isNew ? "save" : "update";
+                if ($isNew) {
+                    $menuItem->position = $this->menuItemLastPosition($menu, $request->input('language_id')) + 1;
+                }
 
-            $menuItem->name        = $request->input('name');
-            $menuItem->language_id = $request->input('language_id');
-            $menuItem->model_type  = $request->boolean('is_custom_url') ? null : ($modelRecord?->getMorphClass() ?? null);
-            $menuItem->model_id    = $request->boolean('is_custom_url') ? null : ($modelRecord?->id ?? null);
-            $menuItem->parent_id   = $request->boolean('has_parent') ? $request->input('parent_id') : null;
-            $menuItem->url         = $request->boolean('is_custom_url') ? $request->input('url ') : null;
+                $menuItem->menu_id       = $menu->id;
+                $menuItem->created_by_id = $isNew ? Auth::id() : $menu->created_by_id;
 
-            $menuItem->menu_id       = $menu->id;
-            $menuItem->created_by_id = $isNew ? Auth::id() : $menu->created_by_id;
+                $menuItem->save();
 
-            $menuItem->save();
-
-            DB::commit();
+                if ($request->input('position')) {
+                    $this->menuItemPositionSyncUpdate($menu, $menuItem, $request->input('position'));
+                    $menuItem->update([
+                        'position' => $request->input('position'),
+                    ]);
+                }
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.menu_item.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error("Failed to {$statusEvent} menu item.", [
                 'exception' => $exception,
@@ -270,18 +271,20 @@ class MenuService
 
     public function menuItemDelete(Menu $menu, MenuItem $menuItem): array
     {
-        DB::beginTransaction();
-
         try {
-            $menuItem->delete();
-            DB::commit();
+            DB::transaction(function () use ($menu, $menuItem) {
+                $languageId = $menuItem->language_id;
+
+                $menuItem->delete();
+
+                $this->menuItemPositionSyncAfterDelete($menu, $languageId);
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.menu_item.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Menu item delete failed.', [
                 'exception' => $exception,
@@ -292,5 +295,66 @@ class MenuService
                 'message' => __('status-messages.menu_item.delete.failed'),
             ];
         }
+    }
+
+    private function menuItemPositionSyncUpdate(Menu $menu, MenuItem $givenMenuItem, ?int $updatePosition): void
+    {
+        if (
+            $updatePosition === null ||
+            $givenMenuItem->position === null ||
+            $updatePosition === $givenMenuItem->position
+        ) {
+            return;
+        }
+
+        $baseQuery = MenuItem::query()
+            ->where('menu_id', $menu->id)
+            ->where('language_id', $givenMenuItem->language_id)
+            ->whereKeyNot($givenMenuItem->id)
+            ->whereNotNull('position');
+
+        $currentPosition = $givenMenuItem->position;
+
+        if ($updatePosition < $currentPosition) {
+            (clone $baseQuery)
+                ->whereBetween('position', [$updatePosition, $currentPosition - 1])
+                ->increment('position');
+        } else {
+            (clone $baseQuery)
+                ->whereBetween('position', [$currentPosition + 1, $updatePosition])
+                ->decrement('position');
+        }
+    }
+
+    private function menuItemLastPosition(Menu $menu, int $languageId)
+    {
+        return MenuItem::query()
+            ->where('menu_id', $menu->id)
+            ->where('language_id', $languageId)
+            ->max("position");
+    }
+
+    private function menuItemPositionSyncAfterDelete(Menu $menu, int $languageId): void
+    {
+        $position = 1;
+
+        MenuItem::query()
+            ->where('menu_id', $menu->id)
+            ->where('language_id', $languageId)
+            ->select(['id'])
+            ->orderByRaw('position IS NULL')
+            ->orderBy('position')
+            ->orderBy('id')
+            ->chunk(500, function ($menuItems) use (&$position) {
+                foreach ($menuItems as $menuItem) {
+                    MenuItem::query()
+                        ->whereKey($menuItem->id)
+                        ->update([
+                            'position' => $position,
+                        ]);
+
+                    $position++;
+                }
+            });
     }
 }

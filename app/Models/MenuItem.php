@@ -23,7 +23,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('menu_items')]
 #[Fillable([
-        'name', 'slug',
+        'name', 'slug','position',
         "menu_id", 'language_id', 'created_by_id',
         "url", "parent_id",
         "model_type", "model_id",

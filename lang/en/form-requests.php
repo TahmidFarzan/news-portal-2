@@ -468,7 +468,7 @@ return [
             "not_found" => 'Parent is not exit.',
         ],
 
-        'model_type'       => [
+        'model_type'  => [
             'required_if' => 'Model is required.',
         ],
 
@@ -479,7 +479,11 @@ return [
 
         'url'         => [
             'required_if' => 'Url is required.',
-            'url'         => 'Url must be url.',
+            'url'         => 'Url must be a url.',
+        ],
+
+        'position'    => [
+            'integer' => 'Position must be a integer.',
         ],
 
     ],

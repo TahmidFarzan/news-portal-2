@@ -189,6 +189,7 @@ onMounted(async () => {
                             <th class="px-4 py-3 text-left">#</th>
                             <th class="px-4 py-3 text-left">Name</th>
                             <th class="px-4 py-3 text-left">Language</th>
+                            <th class="px-4 py-3 text-left">Position</th>
                             <th class="px-4 py-3 text-left">Created</th>
                             <th class="px-4 py-3 text-right">Actions</th>
                         </tr>
@@ -200,6 +201,9 @@ onMounted(async () => {
                             <td class="px-4 py-3 font-medium">{{ item.name }}</td>
                             <td class="px-4 py-3 text-gray-600">
                                 {{ item?.language?.name }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ item?.position }}
                             </td>
                             <td class="px-4 py-3 text-gray-500">
                                 {{ formatDateTime(item.created_at) }}

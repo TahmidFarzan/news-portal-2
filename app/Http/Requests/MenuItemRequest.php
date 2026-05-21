@@ -31,17 +31,19 @@ class MenuItemRequest extends FormRequest
             "language_id" => ["required", "integer"],
             "url"         => ["nullable", "url"],
             "parent_id"   => ["nullable", "integer"],
+            "position"    => ["nullable", "integer"],
         ];
     }
 
     public function messages(): array
     {
         return [
-            "name.required" => __("form-requests.menu_item.name.required"),
-            "name.string"   => __("form-requests.menu_item.name.string"),
-            "name.max"      => __("form-requests.menu_item.name.max"),
+            "name.required"    => __("form-requests.menu_item.name.required"),
+            "name.string"      => __("form-requests.menu_item.name.string"),
+            "name.max"         => __("form-requests.menu_item.name.max"),
 
-            "url.url"       => __("form-requests.menu_item.url.url"),
+            "url.url"          => __("form-requests.menu_item.url.url"),
+            "position.integer" => __("form-requests.menu_item.position.integer"),
         ];
     }
 

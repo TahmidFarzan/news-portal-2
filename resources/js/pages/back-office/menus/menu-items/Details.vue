@@ -103,6 +103,11 @@ onMounted(async () => {
                         <div class="text-gray-500 mb-1">Parent</div>
                         <div class="text-gray-700">{{ menuItem?.parent?.name || "N/A" }}</div>
                     </div>
+
+                    <div class="flex justify-between">
+                        <div class="text-gray-500 mb-1">Position</div>
+                        <div class="text-gray-700">{{ menuItem?.position || "N/A" }}</div>
+                    </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">

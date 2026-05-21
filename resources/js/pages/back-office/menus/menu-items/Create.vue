@@ -35,6 +35,7 @@ const saveForm = useForm({
     language_id: menuItem?.language_id || null,
     has_parent: menuItem?.has_parent || false,
     is_custom_url: menuItem?.is_custom_url || false,
+    position: menuItem?.position || null,
 })
 
 
@@ -210,6 +211,20 @@ onMounted(async () => {
 
                             <p v-if="saveForm.errors.name" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.name }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Position
+                            </label>
+
+                            <input v-model="saveForm.position"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.position ? 'border-red-500' : 'border-gray-300'" type="number"/>
+
+                            <p v-if="saveForm.errors.position" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.position }}
                             </p>
                         </div>
 

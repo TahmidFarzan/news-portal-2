@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('parent_id')->nullable()->constrained('menu_items')->cascadeOnDelete();
             $table->nullableMorphs('model', 'model');
             $table->string('url')->nullable();
+            $table->unsignedInteger('position')->nullable();
             $table->foreignId('created_by_id')->constrained('users')->cascadeOnDelete();
             $table->string('slug')->unique();
             $table->text('slug_tree');

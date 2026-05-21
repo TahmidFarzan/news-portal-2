@@ -38,9 +38,9 @@ class MenuSeeder extends Seeder
 
         $languages = Language::orderBy("id", "desc")->get();
 
-        $menuTypeHeader = MenuType::where("name", SystemHelper::MENU_TYPE_HEADER)->first();
-        $menuTypeTopBar = MenuType::where("name", SystemHelper::MENU_TYPE_TOPBAR)->first();
-        $menuTypeFooter = MenuType::where("name", SystemHelper::MENU_TYPE_FOOTER)->first();
+        $menuTypeHeader    = MenuType::where("name", SystemHelper::MENU_TYPE_HEADER)->first();
+        $menuTypeTopBar    = MenuType::where("name", SystemHelper::MENU_TYPE_TOPBAR)->first();
+        $menuTypeFooter    = MenuType::where("name", SystemHelper::MENU_TYPE_FOOTER)->first();
         $menuTypeOffCanvas = MenuType::where("name", SystemHelper::MENU_TYPE_OFFCANVAS)->first();
 
         foreach ($languages as $language) {
@@ -116,6 +116,8 @@ class MenuSeeder extends Seeder
 
                 "url"         => route("home"),
 
+                'position'    => ($this->menuItemLastPosition($menu, $language->id) + 1) ?? null,
+
                 'name_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
                 'slug_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
             ])->create();
@@ -131,6 +133,8 @@ class MenuSeeder extends Seeder
                 "model_id"    => null,
 
                 "url"         => route("home"),
+
+                'position'    => ($this->menuItemLastPosition($menu, $language->id) + 1) ?? null,
 
                 'name_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
                 'slug_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
@@ -164,6 +168,7 @@ class MenuSeeder extends Seeder
             "model_id"    => $category?->id,
 
             "url"         => null,
+            'position'    => ($this->menuItemLastPosition($menu, $category->language_id) + 1) ?? null,
 
             'name_tree'   => ($parent ? $parent->name . ' - ' : '') . $category->name,
             'slug_tree'   => ($parent ? $parent->slug . '/' : '') . Str::slug($category->name),
@@ -174,5 +179,13 @@ class MenuSeeder extends Seeder
                 $this->saveMenuItem($menu, $saveMenuItem, $subCategory);
             }
         }
+    }
+
+    private function menuItemLastPosition(Menu $menu, int $languageId)
+    {
+        return MenuItem::query()
+            ->where('menu_id', $menu->id)
+            ->where('language_id', $languageId)
+            ->max("position");
     }
 }

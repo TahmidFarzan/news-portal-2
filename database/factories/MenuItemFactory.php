@@ -4,8 +4,9 @@ namespace Database\Factories;
 use App\Helpers\SystemHelper;
 use App\Helpers\UserHelper;
 use App\Models\Language;
-use App\Models\MenuType;
+use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\MenuType;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,13 +31,22 @@ class MenuItemFactory extends Factory
         $menuTypes      = [SystemHelper::MENU_TYPE_HEADER, SystemHelper::MENU_TYPE_TOPBAR, SystemHelper::MENU_TYPE_FOOTER];
         $randomMenuType = $menuTypes[array_rand($menuTypes)];
 
-        $menu = MenuType::inRandomOrder()->where("name", $randomMenuType)->first() ?? null;
+        $menu = Menu::inRandomOrder()->where("name", $randomMenuType)->first() ?? null;
         return [
             'name'          => $this->faker->name(),
             "menu_id"       => $menu->id,
             "language_id"   => $language->id,
             'url'           => null,
+            'position'      => ($this->menuItemLastPosition($menu, $language->id) + 1) ?? null,
             "created_by_id" => $user?->id ?? 1,
         ];
+    }
+
+    private function menuItemLastPosition(Menu $menu, int $languageId)
+    {
+        return MenuItem::query()
+            ->where('menu_id', $menu->id)
+            ->where('language_id', $languageId)
+            ->max("position");
     }
 }
