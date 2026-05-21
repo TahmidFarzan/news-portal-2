@@ -42,23 +42,20 @@ class DeleteMenuRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $menu = Menu::find($this->menuId);
 
-        if ($menu && ($menu->activityLogs()->exists()) || ($menu->menuItems()->exists()) ) {
-            DB::beginTransaction();
+        if ($menu && ($menu->activityLogs()->exists()) || ($menu->menuItems()->exists())) {
             try {
 
-                if ($menu->activityLogs()->exists()) {
-                    $menu->activityLogs()->delete();
-                }
+                DB::transaction(function () use ($menu) {
+                    if ($menu->activityLogs()->exists()) {
+                        $menu->activityLogs()->delete();
+                    }
 
-                if ($menu->menuItems()->exists()) {
-                    $menu->menuItems()->delete();
-                }
-
-                DB::commit();
+                    if ($menu->menuItems()->exists()) {
+                        $menu->menuItems()->delete();
+                    }
+                });
 
             } catch (Exception $ex) {
-                DB::rollback();
-
                 Log::error("Fail to delete menu relations.", [
                     'exception' => $ex,
                 ]);

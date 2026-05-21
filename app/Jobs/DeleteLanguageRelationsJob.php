@@ -43,42 +43,40 @@ class DeleteLanguageRelationsJob implements ShouldQueue, ShouldBeUnique
         $language = Language::find($this->languageId);
 
         if ($language && ($language->activityLogs()->exists()) || ($language->categories()->exists()) || ($language->contributors()->exists()) || ($language->tags()->exists()) || ($language->locations()->exists()) || ($language->events()->exists()) || ($language->newses()->exists())) {
-            DB::beginTransaction();
             try {
 
-                if ($language->activityLogs()->exists()) {
-                    $language->activityLogs()->delete();
-                }
+                DB::transaction(function () use ($language) {
 
-                if ($language->categories()->exists()) {
-                    $language->categories()->delete();
-                }
+                    if ($language->activityLogs()->exists()) {
+                        $language->activityLogs()->delete();
+                    }
 
-                if ($language->contributors()->exists()) {
-                    $language->contributors()->delete();
-                }
+                    if ($language->categories()->exists()) {
+                        $language->categories()->delete();
+                    }
 
-                if ($language->tags()->exists()) {
-                    $language->tags()->delete();
-                }
+                    if ($language->contributors()->exists()) {
+                        $language->contributors()->delete();
+                    }
 
-                if ($language->locations()->exists()) {
-                    $language->locations()->delete();
-                }
+                    if ($language->tags()->exists()) {
+                        $language->tags()->delete();
+                    }
 
-                if ($language->events()->exists()) {
-                    $language->events()->delete();
-                }
+                    if ($language->locations()->exists()) {
+                        $language->locations()->delete();
+                    }
 
-                if ($language->newses()->exists()) {
-                    $language->newses()->delete();
-                }
+                    if ($language->events()->exists()) {
+                        $language->events()->delete();
+                    }
 
-                DB::commit();
+                    if ($language->newses()->exists()) {
+                        $language->newses()->delete();
+                    }
+                });
 
             } catch (Exception $ex) {
-                DB::rollback();
-
                 Log::error("Fail to delete language relations.", [
                     'exception' => $ex,
                 ]);

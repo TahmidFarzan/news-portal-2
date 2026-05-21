@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Jobs;
 
 use App\Models\MenuItem;
@@ -43,18 +42,16 @@ class DeleteMenuItemRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $menuItem = MenuItem::find($this->menuItemId);
 
-        if ($menuItem && ($menuItem->activityLogs()->exists())  ) {
-            DB::beginTransaction();
+        if ($menuItem && ($menuItem->activityLogs()->exists())) {
             try {
 
-                if ($menuItem->activityLogs()->exists()) {
-                    $menuItem->activityLogs()->delete();
-                }
-
-                DB::commit();
+                DB::transaction(function () use ($menuItem) {
+                    if ($menuItem->activityLogs()->exists()) {
+                        $menuItem->activityLogs()->delete();
+                    }
+                });
 
             } catch (Exception $ex) {
-                DB::rollback();
 
                 Log::error("Fail to delete menu item relations.", [
                     'exception' => $ex,

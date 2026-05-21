@@ -43,25 +43,22 @@ class DeleteCategoryRelationsJob implements ShouldQueue, ShouldBeUnique
         $category = Category::find($this->categoryId);
 
         if ($category && ($category->activityLogs()->exists()) || ($category->locations()->exists()) || ($category->newses()->exists())) {
-            DB::beginTransaction();
             try {
+                DB::transaction(function () use ($category) {
+                    if ($category->activityLogs()->exists()) {
+                        $category->activityLogs()->delete();
+                    }
 
-                if ($category->activityLogs()->exists()) {
-                    $category->activityLogs()->delete();
-                }
+                    if ($category->locations()->exists()) {
+                        $category->locations()->delete();
+                    }
 
-                if ($category->locations()->exists()) {
-                    $category->locations()->delete();
-                }
-
-                if ($category->newses()->exists()) {
-                    $category->newses()->delete();
-                }
-
-                DB::commit();
+                    if ($category->newses()->exists()) {
+                        $category->newses()->delete();
+                    }
+                });
 
             } catch (Exception $ex) {
-                DB::rollback();
 
                 Log::error("Fail to delete category relations.", [
                     'exception' => $ex,

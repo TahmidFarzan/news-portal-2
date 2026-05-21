@@ -26,7 +26,7 @@ class LanguageService
         $language->load([
             'createdBy',
 
-            'categories' => fn($query) => $query->latest()->limit(10),
+            'categories'   => fn($query)   => $query->latest()->limit(10),
             'categories.parent',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
@@ -71,28 +71,25 @@ class LanguageService
 
     public function save(LanguageRequest $request, Language $language): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($language->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $isNew = empty($language->id);
-            $statusEvent = $isNew ?  "save": "update";
 
-            $language->name          = $request->input('name');
-            $language->code          = $request->input('code');
-            $language->brief       = $request->input('brief');
-            $language->created_by_id = $isNew ? Auth::id() : $language->created_by_id;
+            DB::transaction(function () use ($request, $language, $isNew) {
+                $language->name          = $request->input('name');
+                $language->code          = $request->input('code');
+                $language->brief         = $request->input('brief');
+                $language->created_by_id = $isNew ? Auth::id() : $language->created_by_id;
 
-            $language->save();
-
-            DB::commit();
+                $language->save();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.language.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
-
 
             Log::error("Failed to {$statusEvent} language.", [
                 'exception' => $exception,
@@ -107,18 +104,18 @@ class LanguageService
 
     public function delete(Language $language): array
     {
-        DB::beginTransaction();
-
         try {
-            $language->forceDelete();
-            DB::commit();
+
+            DB::transaction(function () use ($language) {
+                $language->forceDelete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.language.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
+
 
             Log::error('Language delete failed.', [
                 'exception' => $exception,

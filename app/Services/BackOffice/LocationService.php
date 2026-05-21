@@ -98,38 +98,36 @@ class LocationService
 
     public function save(LocationRequest $request, Location $location): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($location->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $isNew       = empty($location->id);
-            $statusEvent = $isNew ? "save" : "update";
 
-            $seoKeywords = null;
+            DB::transaction(function () use ($request, $location, $isNew) {
+                $seoKeywords = null;
 
-            if ($request->input('seo_keywords')) {
-                $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
-            }
+                if ($request->input('seo_keywords')) {
+                    $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
+                }
 
-            $location->name          = $request->input('name');
-            $location->brief       = $request->input('brief');
-            $location->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
-            $location->category_id   = $request->input('category_id');
-            $location->language_id   = $request->input('language_id');
-            $location->seo_title     = $request->input('seo_title', $request->input('name'));
-            $location->seo_brief     = $request->input('seo_brief', $request->input('brief'));
-            $location->seo_keywords  = $seoKeywords;
-            $location->created_by_id = $isNew ? Auth::id() : $location->created_by_id;
+                $location->name          = $request->input('name');
+                $location->brief         = $request->input('brief');
+                $location->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
+                $location->category_id   = $request->input('category_id');
+                $location->language_id   = $request->input('language_id');
+                $location->seo_title     = $request->input('seo_title', $request->input('name'));
+                $location->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+                $location->seo_keywords  = $seoKeywords;
+                $location->created_by_id = $isNew ? Auth::id() : $location->created_by_id;
 
-            $location->save();
-
-            DB::commit();
+                $location->save();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.location.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error("Failed to {$statusEvent} location.", [
                 'exception' => $exception,
@@ -144,18 +142,17 @@ class LocationService
 
     public function delete(Location $location): array
     {
-        DB::beginTransaction();
 
         try {
-            $location->delete();
-            DB::commit();
+            DB::transaction(function () use ($location) {
+                $location->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.location.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Location delete failed.', [
                 'exception' => $exception,

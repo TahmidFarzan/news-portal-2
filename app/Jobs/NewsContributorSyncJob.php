@@ -24,8 +24,8 @@ class NewsContributorSyncJob implements ShouldQueue, ShouldBeUnique
 
     public function __construct(News $news, $contributorIds)
     {
-        $this->news     = $news;
-        $this->contributorIds     = $contributorIds;
+        $this->news           = $news;
+        $this->contributorIds = $contributorIds;
     }
 
     public function progressCooldown(): int
@@ -51,12 +51,12 @@ class NewsContributorSyncJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        DB::beginTransaction();
         try {
-            $this->news->contributors()->sync($this->contributorIds);
-            DB::commit();
+            $news = $this->news;
+            DB::transaction(function () use ($news) {
+                $news->contributors()->sync($this->contributorIds);
+            });
         } catch (Exception $ex) {
-            DB::rollback();
             Log::error('News contributor sync job error: ' . $ex->getMessage());
         }
     }

@@ -24,8 +24,8 @@ class NewsTagSyncJob implements ShouldQueue, ShouldBeUnique
 
     public function __construct(News $news, $tagIds)
     {
-        $this->news     = $news;
-        $this->tagIds     = $tagIds;
+        $this->news   = $news;
+        $this->tagIds = $tagIds;
     }
 
     public function progressCooldown(): int
@@ -51,12 +51,16 @@ class NewsTagSyncJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        DB::beginTransaction();
+
         try {
-            $this->news->tags()->sync($this->tagIds);
-            DB::commit();
+            $news   = $this->news;
+            $tagIds = $this->tagIds;
+
+            DB::transaction(function () use ($news, $tagIds) {
+                $news->tags()->sync($tagIds);
+            });
+
         } catch (Exception $ex) {
-            DB::rollback();
             Log::error('News tag sync job error: ' . $ex->getMessage());
         }
     }

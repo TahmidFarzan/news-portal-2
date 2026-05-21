@@ -72,14 +72,14 @@ class AuthService
     {
         try {
             $user = User::create([
-                'name'                   => $request->name,
-                'email'                  => $request->email,
-                'password'               => Hash::make($request->password),
-                'created_by_id'          => null,
+                'name'          => $request->name,
+                'email'         => $request->email,
+                'password'      => Hash::make($request->password),
+                'created_by_id' => null,
 
-                'is_default'             => false,
-                'created_at'             => now(),
-                'updated_at'             => null,
+                'is_default'    => false,
+                'created_at'    => now(),
+                'updated_at'    => null,
             ]);
 
             event(new Registered($user));
@@ -182,26 +182,23 @@ class AuthService
 
     public function profileUpdate(AuthUserProfileRequest $request, User $user): array
     {
-        DB::beginTransaction();
-
         try {
 
-            $user->name           = $request->input('name');
-            $user->birth_date     = $request->input('birth_date');
-            $user->gender         = $request->input('gender');
-            $user->religion       = $request->input('religion');
-            $user->marital_status = $request->input('marital_status');
-            $user->mobile         = $request->input('mobile');
-            $user->address     = $request->input('address');
-            $user->save();
+            DB::transaction(function () use ($request, $user) {
+                $user->name           = $request->input('name');
+                $user->birth_date     = $request->input('birth_date');
+                $user->gender         = $request->input('gender');
+                $user->religion       = $request->input('religion');
+                $user->marital_status = $request->input('marital_status');
+                $user->mobile         = $request->input('mobile');
+                $user->address        = $request->input('address');
+                $user->save();
 
-            self::saveUserProfileImage($request, $user);
-
-            DB::commit();
+                self::saveUserProfileImage($request, $user);
+            });
 
             return ['status' => 'success', 'message' => __('status-messages.auth.profile.save.success')];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Auth profile update fail.', ['exception' => $exception, 'request_data' => $request->input()]);
             return ['status' => 'error', 'message' => __('status-messages.auth.profile.save.fail')];
@@ -210,30 +207,31 @@ class AuthService
 
     public function accountUpdate(AuthUserAccountRequest $request, User $user): array
     {
-        DB::beginTransaction();
-
         try {
+
             $requiresVerification = $request->input('email') !== Auth::user()->email;
 
-            $user->name              = $request->input('name');
-            $user->email             = $request->input('email');
-            $user->email_verified_at = $requiresVerification ? null : $user->email_verified_at;
+            $user = DB::transaction(function () use ($request, $requiresVerification, $user) {
 
-            if ($request->change_password == 1) {
-                $user->password = Hash::make($request->input('password'));
-            }
+                $user->name              = $request->input('name');
+                $user->email             = $request->input('email');
+                $user->email_verified_at = $requiresVerification ? null : $user->email_verified_at;
 
-            $user->save();
+                if ($request->change_password == 1) {
+                    $user->password = Hash::make($request->input('password'));
+                }
+
+                $user->save();
+
+                return $user;
+            });
 
             if ($requiresVerification) {
                 $user->sendEmailVerificationNotification();
             }
 
-            DB::commit();
-
             return ['status' => 'success', 'message' => __('status-messages.auth.account.save.success')];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Auth account update fail.', ['exception' => $exception, 'request_data' => $request->input()]);
             return ['status' => 'error', 'message' => __('status-messages.auth.account.save.fail')];

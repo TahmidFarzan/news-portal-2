@@ -1,17 +1,16 @@
 <?php
-
 namespace App\Services\BackOffice;
 
-use Spatie\Activitylog\Models\Activity;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogService
 {
-    public function new(): Activity
+    public function new (): Activity
     {
         return new Activity();
     }
@@ -73,20 +72,18 @@ class ActivityLogService
 
     public function delete(Activity $activity): array
     {
-        DB::beginTransaction();
 
         try {
 
-            $activity->delete();
-
-            DB::commit();
+            DB::transaction(function () use ($activity) {
+                $activity->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.activity_log.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollBack();
 
             Log::error('Activity log delete failed.', [
                 'exception'    => $exception,

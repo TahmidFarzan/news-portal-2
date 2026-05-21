@@ -93,37 +93,34 @@ class CategoryService
 
     public function save(CategoryRequest $request, Category $category): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($category->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $isNew = empty($category->id);
-            $statusEvent = $isNew ? "save" : "update";
 
-            $seoKeywords = null;
+            DB::transaction(function () use ($request, $category, $isNew) {
+                $seoKeywords = null;
 
-            if ($request->input('seo_keywords')) {
-                $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
-            }
+                if ($request->input('seo_keywords')) {
+                    $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
+                }
 
-            $category->name          = $request->input('name');
-            $category->brief       = $request->input('brief');
-            $category->language_id   = $request->input('language_id');
-            $category->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
-            $category->seo_title     = $request->input('seo_title', $request->input('name'));
-            $category->seo_brief     = $request->input('seo_brief', $request->input('brief'));
-            $category->seo_keywords  = $seoKeywords;
-            $category->created_by_id = $isNew ? Auth::id() : $category->created_by_id;
+                $category->name          = $request->input('name');
+                $category->brief         = $request->input('brief');
+                $category->language_id   = $request->input('language_id');
+                $category->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
+                $category->seo_title     = $request->input('seo_title', $request->input('name'));
+                $category->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+                $category->seo_keywords  = $seoKeywords;
+                $category->created_by_id = $isNew ? Auth::id() : $category->created_by_id;
 
-            $category->save();
-
-            DB::commit();
-
+                $category->save();
+            });
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.category.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error("Failed to {$statusEvent} category.", [
                 'exception' => $exception,
@@ -138,18 +135,16 @@ class CategoryService
 
     public function delete(Category $category): array
     {
-        DB::beginTransaction();
-
         try {
-            $category->delete();
-            DB::commit();
+            DB::transaction(function () use ($category) {
+                $category->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.category.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Category delete failed.', [
                 'exception' => $exception,

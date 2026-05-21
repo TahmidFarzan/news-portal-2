@@ -78,40 +78,38 @@ class EventService
 
     public function save(EventRequest $request, Event $event): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($event->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $isNew = empty($event->id);
-            $statusEvent = $isNew ? "save" : "update";
 
-            $seoKeywords = null;
+            DB::transaction(function () use ($request, $event, $isNew) {
+                $seoKeywords = null;
 
-            if ($request->input('seo_keywords')) {
-                $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
-            }
+                if ($request->input('seo_keywords')) {
+                    $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
+                }
 
-            $event->name        = $request->input('name');
-            $event->brief     = $request->input('brief');
-            $event->language_id = $request->input('language_id');
+                $event->name        = $request->input('name');
+                $event->brief       = $request->input('brief');
+                $event->language_id = $request->input('language_id');
 
-            $event->seo_title     = $request->input('seo_title', $request->input('name'));
-            $event->seo_brief     = $request->input('seo_brief', $request->input('brief'));
-            $event->seo_keywords  = $seoKeywords;
-            $event->created_by_id = $isNew ? Auth::id() : $event->created_by_id;
+                $event->seo_title     = $request->input('seo_title', $request->input('name'));
+                $event->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+                $event->seo_keywords  = $seoKeywords;
+                $event->created_by_id = $isNew ? Auth::id() : $event->created_by_id;
 
-            $event->save();
+                $event->save();
 
-            self::saveDesktopBannerImage($request, $event);
-            self::saveMobileBannerImage($request, $event);
-
-            DB::commit();
+                self::saveDesktopBannerImage($request, $event);
+                self::saveMobileBannerImage($request, $event);
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.event.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error("Failed to {$statusEvent} event.", [
                 'exception' => $exception,
@@ -126,18 +124,18 @@ class EventService
 
     public function delete(Event $event): array
     {
-        DB::beginTransaction();
 
         try {
-            $event->delete();
-            DB::commit();
+
+            DB::transaction(function () use ($event) {
+                $event->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.event.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Event delete failed.', [
                 'exception' => $exception,

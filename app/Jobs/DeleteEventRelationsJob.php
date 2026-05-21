@@ -43,25 +43,23 @@ class DeleteEventRelationsJob implements ShouldQueue, ShouldBeUnique
         $event = Event::find($this->eventId);
 
         if ($event && ($event->activityLogs()->exists()) || ($event->getMedia($event->media_collection_name)->count() > 0) || ($event->newses()->exists())) {
-            DB::beginTransaction();
             try {
 
-                if ($event->activityLogs()->exists()) {
-                    $event->activityLogs()->delete();
-                }
+                DB::transaction(function () use ($event) {
+                    if ($event->activityLogs()->exists()) {
+                        $event->activityLogs()->delete();
+                    }
 
-                if ($event->getMedia($event->media_collection_name)->count() > 0) {
-                    $event->clearMediaCollection($event->media_collection_name);
-                }
+                    if ($event->getMedia($event->media_collection_name)->count() > 0) {
+                        $event->clearMediaCollection($event->media_collection_name);
+                    }
 
-                if ($event->newses()->exists()) {
-                    $event->newses()->delete();
-                }
-
-                DB::commit();
+                    if ($event->newses()->exists()) {
+                        $event->newses()->delete();
+                    }
+                });
 
             } catch (Exception $ex) {
-                DB::rollback();
 
                 Log::error("Fail to delete event relations.", [
                     'exception' => $ex,

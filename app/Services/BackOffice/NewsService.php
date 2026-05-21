@@ -8,8 +8,8 @@ use App\Http\Requests\NewsGalleryImageRequest;
 use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
 use App\Http\Requests\NewsRequest;
 use App\Jobs\NewsContributorSyncJob;
-use App\Jobs\NewsRelevantNewsSyncJob;
 use App\Jobs\NewsRelatedNewsSyncJob;
+use App\Jobs\NewsRelevantNewsSyncJob;
 use App\Jobs\NewsTagSyncJob;
 use App\Models\News;
 use App\Models\NewsPlacement;
@@ -148,62 +148,62 @@ class NewsService
 
     public function save(NewsRequest $request, News $news): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($news->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $isNew       = empty($news->id);
-            $statusEvent = $isNew ? "save" : "update";
 
-            $newsType = $this->newsTypefindById($request->input('news_type_id'));
+            DB::transaction(function () use ($request, $news, $isNew) {
 
-            $news->news_type_id = $request->input('news_type_id');
-            $news->language_id  = $request->input('language_id');
-            $news->category_id  = $request->input('category_id');
-            $news->event_id     = $request->input('event_id');
-            $news->location_id  = $request->input('location_id');
+                $newsType = $this->newsTypefindById($request->input('news_type_id'));
 
-            $news->title            = $request->input('title');
-            $news->sub_title        = $request->input('sub_title');
-            $news->content_shoulder = $request->input('content_shoulder');
-            $news->brief            = $request->input('brief');
-            $news->body             = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('body') : null;
-            $news->video_url        = (NewsHelper::NEWS_TYPE_VIDEO == $newsType->name) ? $request->input('video_url') : null;
+                $news->news_type_id = $request->input('news_type_id');
+                $news->language_id  = $request->input('language_id');
+                $news->category_id  = $request->input('category_id');
+                $news->event_id     = $request->input('event_id');
+                $news->location_id  = $request->input('location_id');
 
-            $news->writer = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('writer') : null;
-            $news->source = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('source') : null;
+                $news->title            = $request->input('title');
+                $news->sub_title        = $request->input('sub_title');
+                $news->content_shoulder = $request->input('content_shoulder');
+                $news->brief            = $request->input('brief');
+                $news->body             = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('body') : null;
+                $news->video_url        = (NewsHelper::NEWS_TYPE_VIDEO == $newsType->name) ? $request->input('video_url') : null;
 
-            $news->seo_title    = $request->input('seo_title') ?? $request->input('title');
-            $news->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
-            $news->seo_keywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords')) ?? null;
+                $news->writer = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('writer') : null;
+                $news->source = (NewsHelper::NEWS_TYPE_STORY == $newsType->name) ? $request->input('source') : null;
 
-            $news->is_published = $request->input('is_published') ? true : false;
+                $news->seo_title    = $request->input('seo_title') ?? $request->input('title');
+                $news->seo_brief    = $request->input('seo_brief') ?? $request->input('brief');
+                $news->seo_keywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords')) ?? null;
 
-            $news->created_by_id = $isNew ? Auth::id() : $news->created_by_id;
+                $news->is_published = $request->input('is_published') ? true : false;
 
-            $news->save();
+                $news->created_by_id = $isNew ? Auth::id() : $news->created_by_id;
 
-            DB::commit();
+                $news->save();
 
-            $this->featureImageSave($request, $news);
-            $this->featureImageMobileSave($request, $news);
+                $this->featureImageSave($request, $news);
+                $this->featureImageMobileSave($request, $news);
 
-            $this->syncAttributesJob($request, $news);
+                $this->syncAttributesJob($request, $news);
 
-            if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
-                $this->syncContentMedia($request, $news);
-            }
-
-            if ($isNew) {
-                if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
-                    $this->syncGalleryImagesMedia($request, $news);
+                if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
+                    $this->syncContentMedia($request, $news);
                 }
 
-                $this->syncNewPlacementAfterNewsCreate($news);
-            }
+                if ($isNew) {
+                    if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
+                        $this->syncGalleryImagesMedia($request, $news);
+                    }
 
-            if (! $isNew) {
-                $this->syncMediaAccrodingNewsTypeChangeOnNewsUpdate($news);
-            }
+                    $this->syncNewPlacementAfterNewsCreate($news);
+                }
+
+                if (! $isNew) {
+                    $this->syncMediaAccrodingNewsTypeChangeOnNewsUpdate($news);
+                }
+            });
 
             return [
                 'status'  => 'success',
@@ -213,7 +213,6 @@ class NewsService
                 ],
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error("Failed to {$statusEvent} news.", [
                 'exception' => $exception,
@@ -231,19 +230,18 @@ class NewsService
 
     public function delete(News $news): array
     {
-        DB::beginTransaction();
 
         try {
-            $news->is_published = false;
-            $news->save();
-            DB::commit();
+            DB::transaction(function () use ($news) {
+                $news->is_published = false;
+                $news->save();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('News delete failed.', [
                 'exception' => $exception,
@@ -258,19 +256,19 @@ class NewsService
 
     public function restore(News $news): array
     {
-        DB::beginTransaction();
 
         try {
-            $news->is_published = true;
-            $news->save();
-            DB::commit();
+
+            DB::transaction(function () use ($news) {
+                $news->is_published = true;
+                $news->save();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.restore.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('News restore failed.', [
                 'exception' => $exception,
@@ -290,42 +288,41 @@ class NewsService
 
     public function galleryImageSave(NewsGalleryImageRequest $request, News $news): array
     {
-        DB::beginTransaction();
 
         try {
-            if ($request->hasFile('image')) {
 
-                $image = $request->file('image');
+            DB::transaction(function () use ($request, $news) {
+                if ($request->hasFile('image')) {
 
-                if ($image) {
-                    $extension = $image->getClientOriginalExtension();
-                    $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
+                    $image = $request->file('image');
 
-                    $media = $news->addMedia($image)
-                        ->usingFileName($fileName)
-                        ->usingName($news->title)
-                        ->withCustomProperties(
-                            [
-                                "alt"     => $request->input('alt', $news->title),
-                                "caption" => $request->input('caption'),
-                                "role"    => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
-                            ]
-                        )
-                        ->toMediaCollection($news->media_collection_name);
+                    if ($image) {
+                        $extension = $image->getClientOriginalExtension();
+                        $fileName  = MediaHelper::generateMediaName($news->title, $extension, 200);
 
-                    $media->order_column = $this->galleryImageCalculateOrderColumn($request, $news, $media);
-                    $media->save();
+                        $media = $news->addMedia($image)
+                            ->usingFileName($fileName)
+                            ->usingName($news->title)
+                            ->withCustomProperties(
+                                [
+                                    "alt"     => $request->input('alt', $news->title),
+                                    "caption" => $request->input('caption'),
+                                    "role"    => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+                                ]
+                            )
+                            ->toMediaCollection($news->media_collection_name);
+
+                        $media->order_column = $this->galleryImageCalculateOrderColumn($request, $news, $media);
+                        $media->save();
+                    }
                 }
-            }
-
-            DB::commit();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.gallery_image.save.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollBack();
 
             Log::error('News image gallery save failed.', [
                 'exception' => $exception,
@@ -340,31 +337,30 @@ class NewsService
 
     public function galleryImageUpdate(NewsGalleryImageRequest $request, News $news, Media $media): array
     {
-        DB::beginTransaction();
 
         try {
-            $media->order_column = $this->galleryImageCalculateOrderColumn($request, $news, $media);
 
-            $media->setCustomProperty(
-                'caption',
-                $request->input('caption', $media->getCustomProperty('caption'))
-            );
+            DB::transaction(function () use ($request, $news, $media) {
+                $media->order_column = $this->galleryImageCalculateOrderColumn($request, $news, $media);
 
-            $media->setCustomProperty(
-                'alt',
-                $request->input('alt', $media->getCustomProperty('alt'))
-            );
+                $media->setCustomProperty(
+                    'caption',
+                    $request->input('caption', $media->getCustomProperty('caption'))
+                );
 
-            $media->save();
+                $media->setCustomProperty(
+                    'alt',
+                    $request->input('alt', $media->getCustomProperty('alt'))
+                );
 
-            DB::commit();
+                $media->save();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.gallery_image.update.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollBack();
 
             Log::error('News image gallery update failed.', [
                 'exception' => $exception,
@@ -379,63 +375,62 @@ class NewsService
 
     public function galleryImageUpdateSequence(News $news, NewsGalleryImageSequenceUpdateRequest $request): array
     {
-        DB::beginTransaction();
 
         try {
-            $sequence = $request->input("sequence");
 
-            $mediaRoleParameters = [
-                'role' => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
-            ];
+            DB::transaction(function () use ($request, $news) {
+                $sequence = $request->input("sequence");
 
-            $collectionName = $news->media_collection_name;
+                $mediaRoleParameters = [
+                    'role' => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+                ];
 
-            $galleryImages = $news->getMedia($collectionName, $mediaRoleParameters)
-                ->values();
+                $collectionName = $news->media_collection_name;
 
-            $galleryImagesById = $galleryImages->keyBy('id');
+                $galleryImages = $news->getMedia($collectionName, $mediaRoleParameters)
+                    ->values();
 
-            $currentIds = $galleryImages
-                ->pluck('id')
-                ->map(fn($id) => (int) $id)
-                ->sort()
-                ->values();
+                $galleryImagesById = $galleryImages->keyBy('id');
 
-            $sequenceIds = collect($sequence)
-                ->map(fn($id) => (int) $id)
-                ->values();
+                $currentIds = $galleryImages
+                    ->pluck('id')
+                    ->map(fn($id) => (int) $id)
+                    ->sort()
+                    ->values();
 
-            $sortedSequenceIds = $sequenceIds
-                ->sort()
-                ->values();
+                $sequenceIds = collect($sequence)
+                    ->map(fn($id) => (int) $id)
+                    ->values();
 
-            if ($currentIds->count() !== $sequenceIds->count() || $currentIds->toArray() !== $sortedSequenceIds->toArray()) {
-                throw new Exception('Invalid gallery image sequence.');
-            }
+                $sortedSequenceIds = $sequenceIds
+                    ->sort()
+                    ->values();
 
-            $sequenceIds->each(function (int $mediaId, int $index) use ($galleryImagesById) {
-                $galleryImage = $galleryImagesById->get($mediaId);
-
-                if (! $galleryImage instanceof Media) {
-                    throw new Exception('Invalid gallery image id.');
+                if ($currentIds->count() !== $sequenceIds->count() || $currentIds->toArray() !== $sortedSequenceIds->toArray()) {
+                    throw new Exception('Invalid gallery image sequence.');
                 }
 
-                $orderColumn = $index + 1;
+                $sequenceIds->each(function (int $mediaId, int $index) use ($galleryImagesById) {
+                    $galleryImage = $galleryImagesById->get($mediaId);
 
-                if ((int) $galleryImage->order_column !== $orderColumn) {
-                    $galleryImage->order_column = $orderColumn;
-                    $galleryImage->save();
-                }
+                    if (! $galleryImage instanceof Media) {
+                        throw new Exception('Invalid gallery image id.');
+                    }
+
+                    $orderColumn = $index + 1;
+
+                    if ((int) $galleryImage->order_column !== $orderColumn) {
+                        $galleryImage->order_column = $orderColumn;
+                        $galleryImage->save();
+                    }
+                });
             });
-
-            DB::commit();
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.gallery_image.sequence.update.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollBack();
 
             Log::error('News gallery image sequence update failed.', [
                 'exception' => $exception,
@@ -450,18 +445,18 @@ class NewsService
 
     public function galleryImageDelete(News $news, Media $media): array
     {
-        DB::beginTransaction();
 
         try {
-            $media->delete();
-            DB::commit();
+
+            DB::transaction(function () use ($news, $media) {
+                $media->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.gallery_image.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('News image gallery delete failed.', [
                 'exception' => $exception,
@@ -558,28 +553,27 @@ class NewsService
 
     public function newsPlacementGenerateForNews(News $news): array
     {
-        DB::beginTransaction();
 
         try {
-            $pageHome                = NewsHelper::PAGE_HOME;
-            $pageCategory            = NewsHelper::PAGE_CATEGORY;
-            $pageSectionLeadNews     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
-            $pageSectionCategoryNews = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
 
-            $this->newsPlacementGenerate($pageHome, $pageSectionLeadNews);
+            DB::transaction(function () use ($news) {
+                $pageHome                = NewsHelper::PAGE_HOME;
+                $pageCategory            = NewsHelper::PAGE_CATEGORY;
+                $pageSectionLeadNews     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
+                $pageSectionCategoryNews = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
 
-            $this->newsPlacementGenerate($pageHome, $pageSectionCategoryNews, $news->category_id);
+                $this->newsPlacementGenerate($pageHome, $pageSectionLeadNews);
 
-            $this->newsPlacementGenerate($pageCategory, $pageSectionLeadNews, $news->category_id);
+                $this->newsPlacementGenerate($pageHome, $pageSectionCategoryNews, $news->category_id);
 
-            DB::commit();
+                $this->newsPlacementGenerate($pageCategory, $pageSectionLeadNews, $news->category_id);
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.news_placement.generate.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollBack();
 
             Log::error('News placement generate failed.', [
                 'exception' => $exception,
@@ -594,48 +588,46 @@ class NewsService
 
     public function newsPlacementUpdateForNews(Request $request, News $news): array
     {
-        DB::beginTransaction();
-
         try {
-            $pageHome                = NewsHelper::PAGE_HOME;
-            $pageCategory            = NewsHelper::PAGE_CATEGORY;
-            $pageSectionLeadNews     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
-            $pageSectionCategoryNews = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
 
-            if ($request->filled('home_lead_news_ids_sequence')) {
-                $this->newsPlacementUpdate(
-                    $request->input('home_lead_news_ids_sequence'),
-                    $pageHome,
-                    $pageSectionLeadNews
-                );
-            }
+            DB::transaction(function () use ($request, $news) {
+                $pageHome                = NewsHelper::PAGE_HOME;
+                $pageCategory            = NewsHelper::PAGE_CATEGORY;
+                $pageSectionLeadNews     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
+                $pageSectionCategoryNews = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
 
-            if ($request->filled('home_category_news_ids_sequence')) {
-                $this->newsPlacementUpdate(
-                    $request->input('home_category_news_ids_sequence'),
-                    $pageHome,
-                    $pageSectionCategoryNews,
-                    $news->category_id
-                );
-            }
+                if ($request->filled('home_lead_news_ids_sequence')) {
+                    $this->newsPlacementUpdate(
+                        $request->input('home_lead_news_ids_sequence'),
+                        $pageHome,
+                        $pageSectionLeadNews
+                    );
+                }
 
-            if ($request->filled('category_lead_news_ids_sequence')) {
-                $this->newsPlacementUpdate(
-                    $request->input('category_lead_news_ids_sequence'),
-                    $pageCategory,
-                    $pageSectionLeadNews,
-                    $news->category_id
-                );
-            }
+                if ($request->filled('home_category_news_ids_sequence')) {
+                    $this->newsPlacementUpdate(
+                        $request->input('home_category_news_ids_sequence'),
+                        $pageHome,
+                        $pageSectionCategoryNews,
+                        $news->category_id
+                    );
+                }
 
-            DB::commit();
+                if ($request->filled('category_lead_news_ids_sequence')) {
+                    $this->newsPlacementUpdate(
+                        $request->input('category_lead_news_ids_sequence'),
+                        $pageCategory,
+                        $pageSectionLeadNews,
+                        $news->category_id
+                    );
+                }
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.news_placement.update.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollBack();
 
             Log::error('News placement update failed.', [
                 'exception' => $exception,
@@ -650,24 +642,23 @@ class NewsService
 
     public function newsPlacementDelete(News $news, NewsPlacement $newsPlacement): array
     {
-        DB::beginTransaction();
         try {
-            $page        = $newsPlacement->page;
-            $pageSection = $newsPlacement->page_section;
-            $categoryId  = $newsPlacement->category_id;
 
-            $newsPlacement->delete();
+            DB::transaction(function () use ($news, $newsPlacement) {
+                $page        = $newsPlacement->page;
+                $pageSection = $newsPlacement->page_section;
+                $categoryId  = $newsPlacement->category_id;
 
-            $this->newsPlacementPositionSyncUpdate($page, $pageSection, $categoryId);
+                $newsPlacement->delete();
 
-            DB::commit();
+                $this->newsPlacementPositionSyncUpdate($page, $pageSection, $categoryId);
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.news.news_placement.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('News placement delete failed.', [
                 'exception' => $exception,

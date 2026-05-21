@@ -97,26 +97,23 @@ class TrendService
 
     public function save(TrendRequest $request, Trend $trend): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($trend->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $isNew = empty($trend->id);
-            $statusEvent = $isNew ? "save" : "update";
 
-            $trend->tag_id        = $request->input('tag_id');
-            $trend->is_current    = $request->input('is_current') ? true : false;
-            $trend->created_by_id = $isNew ? Auth::id() : $trend->created_by_id;
-
-            $trend->save();
-
-            DB::commit();
+            DB::transaction(function () use ($request, $trend, $isNew) {
+                $trend->tag_id        = $request->input('tag_id');
+                $trend->is_current    = $request->input('is_current') ? true : false;
+                $trend->created_by_id = $isNew ? Auth::id() : $trend->created_by_id;
+                $trend->save();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.trend.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error("Failed to {$statusEvent} trend.", [
                 'exception' => $exception,
@@ -131,18 +128,19 @@ class TrendService
 
     public function delete(Trend $trend): array
     {
-        DB::beginTransaction();
+
 
         try {
-            $trend->delete();
-            DB::commit();
+
+            DB::transaction(function () use ($trend) {
+                $trend->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.trend.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Trend delete failed.', [
                 'exception' => $exception,

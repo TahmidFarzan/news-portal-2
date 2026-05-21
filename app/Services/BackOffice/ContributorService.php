@@ -78,39 +78,35 @@ class ContributorService
 
     public function save(ContributorRequest $request, Contributor $contributor): array
     {
-        DB::beginTransaction();
-
+        $isNew       = empty($contributor->id);
+        $statusEvent = $isNew ? "save" : "update";
         try {
-            $isNew       = empty($contributor->id);
-            $statusEvent = $isNew ? "save" : "update";
 
-            $seoKeywords = null;
+            DB::transaction(function () use ($request, $contributor, $isNew) {
+                $seoKeywords = null;
 
-            if ($request->input('seo_keywords')) {
-                $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
-            }
+                if ($request->input('seo_keywords')) {
+                    $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
+                }
 
-            $contributor->name            = $request->input('name');
-            $contributor->brief           = $request->input('brief');
-            $contributor->profile_details = $request->input('profile_details');
-            $contributor->language_id     = $request->input('language_id');
-            $contributor->seo_title       = $request->input('seo_title', $request->input('name'));
-            $contributor->seo_brief       = $request->input('seo_brief', $request->input('brief'));
-            $contributor->seo_keywords    = $seoKeywords;
-            $contributor->created_by_id   = $isNew ? Auth::id() : $contributor->created_by_id;
+                $contributor->name            = $request->input('name');
+                $contributor->brief           = $request->input('brief');
+                $contributor->profile_details = $request->input('profile_details');
+                $contributor->language_id     = $request->input('language_id');
+                $contributor->seo_title       = $request->input('seo_title', $request->input('name'));
+                $contributor->seo_brief       = $request->input('seo_brief', $request->input('brief'));
+                $contributor->seo_keywords    = $seoKeywords;
+                $contributor->created_by_id   = $isNew ? Auth::id() : $contributor->created_by_id;
 
-            self::saveProfileImage($request, $contributor);
-
-            $contributor->save();
-
-            DB::commit();
+                $contributor->save();
+                self::saveProfileImage($request, $contributor);
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.contributor.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error("Failed to {$statusEvent} contributor.", [
                 'exception' => $exception,
@@ -125,19 +121,17 @@ class ContributorService
 
     public function delete(Contributor $contributor): array
     {
-        DB::beginTransaction();
-
         try {
-            $contributor->delete();
-            DB::commit();
+
+            DB::transaction(function () use ($contributor) {
+                $contributor->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.contributor.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
-
             Log::error('Contributor delete failed.', [
                 'exception' => $exception,
             ]);

@@ -43,18 +43,15 @@ class DeleteTrendRelationsJob implements ShouldQueue, ShouldBeUnique
         $trend = Trend::find($this->trendId);
 
         if ($trend && ($trend->activityLogs()->exists())) {
-            DB::beginTransaction();
             try {
 
-                if ($trend->activityLogs()->exists()) {
-                    $trend->activityLogs()->delete();
-                }
-
-                DB::commit();
+                DB::transaction(function () use ($trend) {
+                    if ($trend->activityLogs()->exists()) {
+                        $trend->activityLogs()->delete();
+                    }
+                });
 
             } catch (Exception $ex) {
-                DB::rollback();
-
                 Log::error("Fail to delete trend relations.", [
                     'exception' => $ex,
                 ]);

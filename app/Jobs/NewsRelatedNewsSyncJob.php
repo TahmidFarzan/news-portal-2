@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Jobs;
 
 use App\Models\News;
@@ -25,8 +24,8 @@ class NewsRelatedNewsSyncJob implements ShouldQueue, ShouldBeUnique
 
     public function __construct(News $news, $relatedIds)
     {
-        $this->news     = $news;
-        $this->relatedIds     = $relatedIds;
+        $this->news       = $news;
+        $this->relatedIds = $relatedIds;
     }
 
     public function progressCooldown(): int
@@ -52,12 +51,14 @@ class NewsRelatedNewsSyncJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        DB::beginTransaction();
         try {
-            $this->news->relatedNewses()->sync($this->relatedIds);
-            DB::commit();
+            $news       = $this->news;
+            $relatedIds = $this->relatedIds;
+            DB::transaction(function () use ($news, $relatedIds) {
+                $news->relatedNewses()->sync($relatedIds);
+            });
+
         } catch (Exception $ex) {
-            DB::rollback();
             Log::error('News related news sync job error: ' . $ex->getMessage());
         }
     }

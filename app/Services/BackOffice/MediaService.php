@@ -78,53 +78,63 @@ class MediaService
 
     public function quickSave(MediaQuickRequest $request): array
     {
-        DB::beginTransaction();
-
         try {
-            $mediaUpload = MediaUpload::create();
+            $media = DB::transaction(function () use ($request) {
+                $file = $request->file('media');
 
-            $file = $request->file('media');
+                if (! $file) {
+                    return null;
+                }
 
-            if ($file) {
+                $mediaUpload = MediaUpload::create();
 
                 $extension = $file->getClientOriginalExtension();
-                $fileName  = MediaHelper::generateMediaName("Upload", $extension, 200);
+                $fileName  = MediaHelper::generateMediaName('Upload', $extension, 200);
 
-                $media = $mediaUpload->addMedia($file)
+                return $mediaUpload->addMedia($file)
                     ->usingFileName($fileName)
                     ->withCustomProperties([
                         'caption' => $request->input('caption'),
                         'alt'     => $request->input('alt'),
                     ])
                     ->toMediaCollection($mediaUpload->media_collection_name);
+            });
 
-                DB::commit();
+            if (! $media) {
+                return [
+                    'status'  => 'error',
+                    'message' => __('status-messages.media.save.failed'),
+                ];
             }
+
+            $media->loadMissing('model');
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.media.save.success'),
                 'media'   => (object) [
-                    'id'                => $media->id,
-                    'name'              => $media->name,
-                    'uuid'              => $media->uuid,
-                    'slug'              => $media->slug,
-                    'mime_type'         => $media->mime_type,
-                    'custom_properties' => $media->custom_properties,
-                    'caption'           => $media->getCustomProperty('caption') ?? $media->model->name ?? "",
-                    'alt'               => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
-                    'media_type'        => $media->getTypeFromMime(),
-                    'original_url'      => $media->original_url,
-                    'media_url'         => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
-                    'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
+                    'id'                => $media?->id,
+                    'name'              => $media?->name,
+                    'uuid'              => $media?->uuid,
+                    'slug'              => $media?->slug,
+                    'mime_type'         => $media?->mime_type,
+                    'custom_properties' => $media?->custom_properties,
+                    'caption'           => $media?->getCustomProperty('caption') ?? $media?->model?->name ?? $media?->model?->title ?? '',
+                    'alt'               => $media?->getCustomProperty('alt') ?? $media?->model?->name ?? $media?->model?->title ?? '',
+                    'media_type'        => $media?->getTypeFromMime(),
+                    'original_url'      => $media?->original_url,
+                    'media_url'         => $media?->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                        ? $media?->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                        : $media?->getUrl(),
+                    'media_srcset'      => $media?->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                        ? $media?->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                        : $media?->getSrcset(),
                 ],
             ];
-        } catch (Exception $ex) {
-            DB::RollBack();
-
+        } catch (Exception $exception) {
             Log::error('Media save failed.', [
-                'exception'    => $ex,
-                'request_data' => $request->input(),
+                'exception'    => $exception,
+                'request_data' => $request->except(['media']),
             ]);
 
             return [
@@ -136,21 +146,20 @@ class MediaService
 
     public function quickUpdate(MediaQuickRequest $request, Media $media)
     {
-        DB::beginTransaction();
-
         try {
-            $media->setCustomProperty(
-                'caption',
-                $request->input('caption', $media->getCustomProperty('caption'))
-            );
 
-            $media->setCustomProperty(
-                'alt',
-                $request->input('alt', $media->getCustomProperty('alt'))
-            );
-            $media->save();
+            DB::transaction(function () use ($request, $media) {
+                $media->setCustomProperty(
+                    'caption',
+                    $request->input('caption', $media->getCustomProperty('caption'))
+                );
 
-            DB::commit();
+                $media->setCustomProperty(
+                    'alt',
+                    $request->input('alt', $media->getCustomProperty('alt'))
+                );
+                $media->save();
+            });
 
             return [
                 'status'  => 'success',
@@ -171,7 +180,6 @@ class MediaService
                 ],
             ];
         } catch (Exception $ex) {
-            DB::RollBack();
 
             Log::error('Media update failed.', [
                 'exception'    => $ex,
@@ -202,101 +210,112 @@ class MediaService
         return $replacementPairs;
     }
 
-    public static function copyOrUpdateMediaByMediaId(int $mediaId, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): ?object
+    public static function copyOrUpdateMediaByMediaId(int $mediaId, object $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): ?object
     {
-        DB::beginTransaction();
         try {
-            $media = Media::with("model")->findOrFail($mediaId);
+            return DB::transaction(function () use ($mediaId, $targetModel, $mediaRole) {
+                $media = Media::query()
+                    ->with('model')
+                    ->lockForUpdate()
+                    ->findOrFail($mediaId);
 
-            $sourceModel = $media->model;
+                $sourceModel = $media->model;
 
-            $oldMediaId = $media->id;
-
-            if (! $sourceModel || ! $targetModel || ! $media) {
-                return null;
-            }
-
-            if ($sourceModel instanceof MediaUpload) {
-                $media->model_id        = $targetModel->id;
-                $media->model_type      = $targetModel->getMorphClass();
-                $media->name            = $targetModel->name ?? $targetModel->title ?? $media->name;
-                $media->collection_name = $targetModel->media_collection_name;
-                $media->setCustomProperty('caption', $media->getCustomProperty('caption') ?? $product->name ?? null);
-                $media->setCustomProperty('alt', $media->getCustomProperty('alt') ?? $product->name ?? null);
-                $media->save();
-
-                if ($sourceModel->getMedia($sourceModel->media_collection_name)->isEmpty()) {
-                    $sourceModel->delete();
+                if (! $sourceModel || ! $targetModel) {
+                    return null;
                 }
 
-                DB::commit();
+                $oldMediaId = $media->id;
 
-                return (object) [
-                    'old_media_id' => $oldMediaId,
-                    'new_media_id' => $media->id,
-                ];
-            } else {
+                $targetName = $targetModel->name ?? $targetModel->title ?? $media->name;
+
+                if ($sourceModel instanceof MediaUpload) {
+                    $media->model_id        = $targetModel->id;
+                    $media->model_type      = $targetModel->getMorphClass();
+                    $media->name            = $targetName;
+                    $media->collection_name = $targetModel->media_collection_name;
+
+                    $media->setCustomProperty(
+                        'caption',
+                        $media->getCustomProperty('caption') ?? $targetName
+                    );
+
+                    $media->setCustomProperty(
+                        'alt',
+                        $media->getCustomProperty('alt') ?? $targetName
+                    );
+
+                    $media->setCustomProperty('role', $mediaRole);
+
+                    $media->save();
+
+                    if ($sourceModel->getMedia($sourceModel->media_collection_name)->isEmpty()) {
+                        $sourceModel->delete();
+                    }
+
+                    return (object) [
+                        'old_media_id' => $oldMediaId,
+                        'new_media_id' => $media->id,
+                    ];
+                }
+
                 $mediaExtension = pathinfo($media->original_url, PATHINFO_EXTENSION);
-                $mediaFileName  = MediaHelper::generateMediaName(($targetModel->name ?? $targetModel->title ?? $media->name), $mediaExtension, 200);
 
-                $newMedia = $targetModel->addMediaFromUrl($media->original_url)
-                    ->usingName($targetModel->name ?? $targetModel->title ?? $media->name)
+                $mediaFileName = MediaHelper::generateMediaName($targetName, $mediaExtension, 200);
+
+                $newMedia = $targetModel
+                    ->addMediaFromUrl($media->original_url)
+                    ->usingName($targetName)
                     ->usingFileName($mediaFileName)
-                    ->withCustomProperties(
-                        [
-                            'caption' => $media->getCustomProperty('caption') ?? $targetModel->name ?? $targetModel->title,
-                            'alt'     => $media->getCustomProperty('alt') ?? $targetModel->name ?? $targetModel->title,
-                            "role"    => $mediaRole,
-                        ]
-                    )
+                    ->withCustomProperties([
+                        'caption' => $media->getCustomProperty('caption') ?? $targetName,
+                        'alt'     => $media->getCustomProperty('alt') ?? $targetName,
+                        'role'    => $mediaRole,
+                    ])
                     ->toMediaCollection($targetModel->media_collection_name);
-                DB::commit();
 
                 return (object) [
                     'old_media_id' => $oldMediaId,
                     'new_media_id' => $newMedia->id,
                 ];
-            }
-
+            });
         } catch (Exception $exception) {
-            DB::rollback();
-
-            $targetModelName = $targetModel->name ?? $targetModel->title ?? "";
+            $targetModelName = $targetModel->name ?? $targetModel->title ?? '';
 
             Log::error("Failed to transfer media {$targetModelName}.", [
                 'old_media_id' => $mediaId,
                 'exception'    => $exception,
             ]);
+
             return null;
         }
     }
 
     public function delete(Media $media): array
     {
-        DB::beginTransaction();
 
         try {
-            // if (Storage::exists($media->getUrl())) {
-            //     Storage::delete($media->getUrl());
-            // }
-            // if ($media->responsive_images) {
-            //     foreach ($media->responsive_images as $responsiveImage) {
-            //         if (Storage::exists($responsiveImage->getUrl())) {
-            //             Storage::delete($responsiveImage->getUrl());
-            //         }
-            //     }
-            // }
 
-            $media->delete();
+            DB::transaction(function () use ($media) {
+                // if (Storage::exists($media->getUrl())) {
+                //     Storage::delete($media->getUrl());
+                // }
+                // if ($media->responsive_images) {
+                //     foreach ($media->responsive_images as $responsiveImage) {
+                //         if (Storage::exists($responsiveImage->getUrl())) {
+                //             Storage::delete($responsiveImage->getUrl());
+                //         }
+                //     }
+                // }
 
-            DB::commit();
+                $media->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.media.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Media delete failed.', [
                 'exception' => $exception,

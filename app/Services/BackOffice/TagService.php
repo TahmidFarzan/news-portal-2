@@ -78,37 +78,33 @@ class TagService
 
     public function save(TagRequest $request, Tag $tag): array
     {
-        DB::beginTransaction();
+        $isNew       = empty($tag->id);
+        $statusEvent = $isNew ? "save" : "update";
 
         try {
-            $isNew = empty($tag->id);
-            $statusEvent = $isNew ? "save" : "update";
 
-            $seoKeywords = null;
+            DB::transaction(function () use ($request, $tag, $isNew) {
+                $seoKeywords = null;
 
-            if ($request->input('seo_keywords')) {
-                $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
-            }
+                if ($request->input('seo_keywords')) {
+                    $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
+                }
 
-            $tag->name          = $request->input('name');
-            $tag->brief       = $request->input('brief');
-            $tag->language_id   = $request->input('language_id');
-            $tag->seo_title     = $request->input('seo_title', $request->input('name'));
-            $tag->seo_brief     = $request->input('seo_brief', $request->input('brief'));
-            $tag->seo_keywords  = $seoKeywords;
-            $tag->created_by_id = $isNew ? Auth::id() : $tag->created_by_id;
+                $tag->name          = $request->input('name');
+                $tag->brief         = $request->input('brief');
+                $tag->language_id   = $request->input('language_id');
+                $tag->seo_title     = $request->input('seo_title', $request->input('name'));
+                $tag->seo_brief     = $request->input('seo_brief', $request->input('brief'));
+                $tag->seo_keywords  = $seoKeywords;
+                $tag->created_by_id = $isNew ? Auth::id() : $tag->created_by_id;
 
-            $tag->save();
-
-            DB::commit();
-
+                $tag->save();
+            });
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.tag.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
-
             Log::error("Failed to {$statusEvent} tag.", [
                 'exception' => $exception,
             ]);
@@ -122,18 +118,18 @@ class TagService
 
     public function delete(Tag $tag): array
     {
-        DB::beginTransaction();
 
         try {
-            $tag->delete();
-            DB::commit();
+
+            DB::transaction(function () use ($tag) {
+                $tag->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.tag.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('Tag delete failed.', [
                 'exception' => $exception,

@@ -43,21 +43,19 @@ class DeleteLocationRelationsJob implements ShouldQueue, ShouldBeUnique
         $location = Location::find($this->locationId);
 
         if ($location && ($location->activityLogs()->exists()) || ($location->newses()->exists())) {
-            DB::beginTransaction();
             try {
 
-                if ($location->activityLogs()->exists()) {
-                    $location->activityLogs()->delete();
-                }
+                DB::transaction(function () use ($location) {
+                    if ($location->activityLogs()->exists()) {
+                        $location->activityLogs()->delete();
+                    }
 
-                if ($location->newses()->exists()) {
-                    $location->newses()->delete();
-                }
-
-                DB::commit();
+                    if ($location->newses()->exists()) {
+                        $location->newses()->delete();
+                    }
+                });
 
             } catch (Exception $ex) {
-                DB::rollback();
 
                 Log::error("Fail to delete location relations.", [
                     'exception' => $ex,

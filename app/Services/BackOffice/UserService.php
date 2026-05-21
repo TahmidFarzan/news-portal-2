@@ -97,32 +97,33 @@ class UserService
 
     public function save(UserRequest $request, User $user): array
     {
-        DB::beginTransaction();
+        $isNew = empty($user->id);
 
         try {
-            $isNew = empty($user->id);
 
-            $user->name           = $request->input('name');
-            $user->email          = $request->input('email');
-            $user->gender         = $request->input('gender');
-            $user->mobile         = $request->input('mobile');
-            $user->address        = $request->input('address');
-            $user->religion       = $request->input('religion');
-            $user->birth_date     = $request->input('birth_date');
-            $user->marital_status = $request->input('marital_status');
+            $user = DB::transaction(function () use ($request, $user, $isNew) {
 
-            $user->is_default   = false;
-            $user->user_role_id = $request->input('user_role_id');
+                $user->name           = $request->input('name');
+                $user->email          = $request->input('email');
+                $user->gender         = $request->input('gender');
+                $user->mobile         = $request->input('mobile');
+                $user->address        = $request->input('address');
+                $user->religion       = $request->input('religion');
+                $user->birth_date     = $request->input('birth_date');
+                $user->marital_status = $request->input('marital_status');
 
-            $user->password          = Hash::make($request->password);
-            $user->created_by_id     = $isNew ? Auth::id() : $user->created_by_id;
-            $user->email_verified_at = $request->boolean('set_as_verify_email') ? now() : null;
+                $user->is_default   = false;
+                $user->user_role_id = $request->input('user_role_id');
 
-            $user->save();
+                $user->password          = Hash::make($request->password);
+                $user->created_by_id     = $isNew ? Auth::id() : $user->created_by_id;
+                $user->email_verified_at = $request->boolean('set_as_verify_email') ? now() : null;
 
-            self::saveProfileImage($request, $user);
+                $user->save();
+                self::saveProfileImage($request, $user);
 
-            DB::commit();
+                return $user;
+            });
 
             if (! $request->boolean('set_as_verify_email') && ! $user->hasVerifiedEmail()) {
                 $user->sendEmailVerificationNotification();
@@ -133,7 +134,6 @@ class UserService
                 'message' => __('status-messages.user.save.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('User save failed.', [
                 'exception' => $exception,
@@ -148,18 +148,16 @@ class UserService
 
     public function activate(User $user): array
     {
-        DB::beginTransaction();
-
         try {
-            $user->restore();
-            DB::commit();
+            DB::transaction(function () use ($user) {
+                $user->restore();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.user.active.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('User activate failed.', [
                 'exception' => $exception,
@@ -174,18 +172,16 @@ class UserService
 
     public function deactivate(User $user): array
     {
-        DB::beginTransaction();
-
         try {
-            $user->delete();
-            DB::commit();
+            DB::transaction(function () use ($user) {
+                $user->delete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.user.inactive.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('User deactivate failed.', [
                 'exception' => $exception,
@@ -200,18 +196,18 @@ class UserService
 
     public function delete(User $user): array
     {
-        DB::beginTransaction();
 
         try {
-            $user->forceDelete();
-            DB::commit();
+
+            DB::transaction(function () use ($user) {
+                $user->forceDelete();
+            });
 
             return [
                 'status'  => 'success',
                 'message' => __('status-messages.user.delete.success'),
             ];
         } catch (Exception $exception) {
-            DB::rollback();
 
             Log::error('User delete failed.', [
                 'exception' => $exception,

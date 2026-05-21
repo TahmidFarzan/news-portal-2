@@ -43,26 +43,24 @@ class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
         $tag = Tag::find($this->tagId);
 
         if ($tag && ($tag->activityLogs()->exists()) || ($tag->trend) || $tag->newses()->exists()) {
-            DB::beginTransaction();
+
             try {
 
-                if ($tag->activityLogs()->exists()) {
-                    $tag->activityLogs()->delete();
-                }
+                DB::transaction(function () use ($tag) {
+                    if ($tag->activityLogs()->exists()) {
+                        $tag->activityLogs()->delete();
+                    }
 
-                if ($tag->trend) {
-                    $tag->trend->delete();
-                }
+                    if ($tag->trend) {
+                        $tag->trend->delete();
+                    }
 
-                if ($tag->newses()->exists()) {
-                    $tag->newses()->delete();
-                }
-
-                DB::commit();
+                    if ($tag->newses()->exists()) {
+                        $tag->newses()->delete();
+                    }
+                });
 
             } catch (Exception $ex) {
-                DB::rollback();
-
                 Log::error("Fail to delete tag relations.", [
                     'exception' => $ex,
                 ]);
