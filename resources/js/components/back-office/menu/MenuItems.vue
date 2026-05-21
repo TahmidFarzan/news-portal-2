@@ -25,6 +25,7 @@ const { menu } = defineProps({
                             <th class="px-4 py-2">SL</th>
                             <th class="px-4 py-2">Name</th>
                             <th class="px-4 py-2">Language</th>
+                            <th class="px-4 py-2">Position</th>
                             <th class="px-4 py-2">Date</th>
                             <th class="px-4 py-2">Action</th>
                         </tr>
@@ -47,6 +48,10 @@ const { menu } = defineProps({
                             </td>
 
                             <td class="px-4 py-2">
+                                {{ item?.position || "N/A" }}
+                            </td>
+
+                            <td class="px-4 py-2">
                                 {{ formatDateTime(item.created_at) }}
                             </td>
 
@@ -57,7 +62,7 @@ const { menu } = defineProps({
                                     Details
                                 </a>
 
-                                <a :href="route('back-office.menus.menu-items.index', { slug: menu.slug, menuItemSlug: item.slug })"
+                                <a :href="route('back-office.menus.menu-items.edit', { slug: menu.slug, menuItemSlug: item.slug })"
                                     class="inline-flex items-center gap-1 px-2 py-1 m-1 text-xs border border-yallow-500 text-yallow-500 rounded hover:bg-yallow-50">
                                     <FontAwesomeIcon icon="pen" />
                                     Edit
