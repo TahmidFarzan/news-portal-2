@@ -47,6 +47,7 @@ class SiteService
             ->whereNull("parent_id")
             ->whereRelation('menu.language', 'code', $languageCode)
             ->whereRelation('menu.menuType', 'name', $headerMenuCode)
+            ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
 
@@ -109,6 +110,7 @@ class SiteService
             ->whereNull("parent_id")
             ->whereRelation('menu.language', 'code', $languageCode)
             ->whereRelation('menu.menuType', 'name', $offcanvasMenuCode)
+            ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
 
@@ -172,6 +174,7 @@ class SiteService
             ->where('parent_id', $menuItem->id)
             ->whereRelation('menu.language', 'code', $languageCode)
             ->whereRelation('menu.menuType', 'name', $headerMenuCode)
+            ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
 
