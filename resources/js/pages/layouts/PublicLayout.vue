@@ -75,6 +75,7 @@ const appLogo = import.meta.env.VITE_APP_LOGO
 
 const authUser = computed(() => page.props.auth?.user ?? null)
 const flashMessage = computed(() => page.props.flashMessage)
+const hasOffCanvasMenu = computed(() => offCanvasMenu.items.length > 0)
 
 let removeInertiaStartListener = null
 let removeInertiaFinishListener = null
@@ -190,7 +191,11 @@ watch(showOffCanvas, async (open) => {
 
 onMounted(async () => {
     await nextTick()
-    await getHeaderMenuItems()
+
+    await Promise.all([
+        getHeaderMenuItems(),
+        getOffCanvasMenuItems()
+    ])
 
     pageReady.value = true
 
@@ -291,39 +296,44 @@ onBeforeUnmount(() => {
 
         <div ref="headerNavbar" class="bg-gray-900 text-white transition-shadow"
             :class="{ 'shadow-md sticky top-0 z-50': isHeaderSticky }">
-            <div class="max-w-7xl mx-auto px-4 py-2 flex items-center gap-3">
-                <a :href="route('home')" class="text-white font-semibold flex-shrink-0">
+
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
+                <a :href="route('home')"
+                    class="h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
                     {{ appName }}
                 </a>
 
-                <HorizontalScroller v-if="headerMenu.items.length" class="flex-1 min-w-0" :loading="headerMenu.loading"
-                    :watch-key="`${headerMenu.items.length}-${headerMenu.loading}`"
-                    @reach-end="handleHeaderMenuReachEnd">
-                    <ul class="flex items-center gap-1 whitespace-nowrap py-1">
-                        <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item" />
+                <div class="flex-1 min-w-0 h-10 flex items-center">
+                    <HorizontalScroller v-if="headerMenu.items.length" class="w-full min-w-0 h-full flex"
+                        :loading="headerMenu.loading" :watch-key="`${headerMenu.items.length}-${headerMenu.loading}`"
+                        @reach-end="handleHeaderMenuReachEnd">
 
-                        <li v-if="headerMenu.loading" class="px-3 py-2 text-sm text-gray-300 flex-shrink-0">
-                            Loading...
-                        </li>
-                    </ul>
-                </HorizontalScroller>
+                        <ul class="h-10 flex items-center gap-2 whitespace-nowrap">
+                            <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item" />
 
-                <div v-else class="flex-1"></div>
+                            <li v-if="headerMenu.loading"
+                                class="h-10 flex items-center px-3 text-sm text-gray-300 flex-shrink-0">
+                                Loading...
+                            </li>
+                        </ul>
+                    </HorizontalScroller>
+                </div>
 
-                <button type="button"
-                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 flex-shrink-0"
-                    aria-label="Search">
-                    <FontAwesomeIcon icon="magnifying-glass" />
-                </button>
+                <div class="h-10 flex items-center gap-2 flex-shrink-0">
+                    <button type="button"
+                        class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
+                        aria-label="Search">
+                        <FontAwesomeIcon icon="magnifying-glass" />
+                    </button>
 
-                <button type="button" @click="showOffCanvas = true"
-                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 flex-shrink-0"
-                    aria-label="Open menu">
-                    <FontAwesomeIcon icon="bars" />
-                </button>
+                    <button v-if="hasOffCanvasMenu" type="button" @click="showOffCanvas = true"
+                        class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
+                        aria-label="Open menu">
+                        <FontAwesomeIcon icon="bars" />
+                    </button>
+                </div>
             </div>
         </div>
-
         <main class="flex-1 max-w-7xl mx-auto px-4 py-4 relative">
             <div v-if="!pageReady" class="fixed inset-0 bg-white/90 flex items-center justify-center z-50">
                 <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
@@ -353,13 +363,14 @@ onBeforeUnmount(() => {
         <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-if="showOffCanvas" class="fixed inset-0 bg-black/50 z-[998]" @click="showOffCanvas = false"></div>
+            <div v-if="showOffCanvas && hasOffCanvasMenu" class="fixed inset-0 bg-black/50 z-[998]"
+                @click="showOffCanvas = false"></div>
         </Transition>
 
         <Transition enter-active-class="transition transform duration-200 ease-out" enter-from-class="translate-x-full"
             enter-to-class="translate-x-0" leave-active-class="transition transform duration-150 ease-in"
             leave-from-class="translate-x-0" leave-to-class="translate-x-full">
-            <aside v-if="showOffCanvas"
+            <aside v-if="showOffCanvas && hasOffCanvasMenu"
                 class="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-white shadow-xl z-[999] flex flex-col">
                 <div class="flex items-center justify-between px-4 py-3 border-b">
                     <a :href="route('home')" class="inline-flex items-center">
