@@ -45,140 +45,102 @@ class MenuSeeder extends Seeder
 
         foreach ($languages as $language) {
 
-            if ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) {
-                Menu::factory()->state([
-                    'name'         => "Header",
-                    "language_id"  => $language->id,
-                    'menu_type_id' => $menuTypeHeader?->id,
-                ])->create();
-
-                Menu::factory()->state([
-                    'name'         => "Top bar",
-                    "language_id"  => $language->id,
-                    'menu_type_id' => $menuTypeTopBar?->id,
-                ])->create();
-
-                Menu::factory()->state([
-                    'name'         => "OffCanvas",
-                    "language_id"  => $language->id,
-                    'menu_type_id' => $menuTypeOffCanvas?->id,
-                ])->create();
-
-                Menu::factory()->state([
-                    'name'         => "Footer",
-                    "language_id"  => $language->id,
-                    'menu_type_id' => $menuTypeFooter?->id,
-                ])->create();
-            }
-
-            if ($language->code == SystemHelper::LANGUAGE_EXTRA_BN_CODE) {
-                Menu::factory()->state([
-                    'name'         => "হেডার",
-                    "language_id"  => $language->id,
-                    'menu_type_id' => $menuTypeHeader?->id,
-                ])->create();
-
-                Menu::factory()->state([
-                    'name'         => "উপরের বার",
-                    "language_id"  => $language->id,
-                    'menu_type_id' => $menuTypeTopBar?->id,
-                ])->create();
-
-                Menu::factory()->state([
-                    'name'         => "অফক্যানভাস",
-                    "language_id"  => $language->id,
-                    'menu_type_id' => $menuTypeOffCanvas?->id,
-                ])->create();
-
-                Menu::factory()->state([
-                    'name'         => "ফুটার",
-                    "language_id"  => $language->id,
-                    'menu_type_id' => $menuTypeFooter?->id,
-                ])->create();
-            }
-        }
-
-        $languages = Language::orderBy('id', "desc")->get();
-
-        foreach ($languages as $language) {
-            $menu       = Menu::where("language_id", $language->id)->where('menu_type_id', $menuTypeHeader->id)->first();
-            $categories = Category::inRandomOrder()->where("language_id", $language->id)->whereNull("parent_id")->limit(6)->get();
-
-            MenuItem::factory()->state([
-                'name'        => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
-                'language_id' => $language->id,
-                "parent_id"   => null,
-
-                "menu_id"     => $menu->id,
-
-                "model_type"  => null,
-                "model_id"    => null,
-
-                "url"         => route("home"),
-
-                'position'    => ($this->menuItemLastPosition($menu, $language->id, null) + 1) ?? null,
-
-                'name_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
-                'slug_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
+            $topbarMenu = Menu::factory()->state([
+                'name'         => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Top bar" : "উপরের বার",
+                "language_id"  => $language->id,
+                'menu_type_id' => $menuTypeTopBar?->id,
             ])->create();
 
-            MenuItem::factory()->state([
-                'name'        => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
-                'language_id' => $language->id,
-                "parent_id"   => null,
-
-                "menu_id"     => $menu->id,
-
-                "model_type"  => null,
-                "model_id"    => null,
-
-                "url"         => route("home"),
-
-                'position'    => ($this->menuItemLastPosition($menu, $language->id, null) + 1) ?? null,
-
-                'name_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
-                'slug_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
+            $headerMenu = Menu::factory()->state([
+                'name'         => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Header" : "হেডার",
+                "language_id"  => $language->id,
+                'menu_type_id' => $menuTypeHeader?->id,
             ])->create();
 
-            foreach ($categories as $category) {
-                $this->saveMenuItem($menu, null, $category);
-            }
+            $offCanvasMenu = Menu::factory()->state([
+                'name'         => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "OffCanvas" : "অফক্যানভাস",
+                "language_id"  => $language->id,
+                'menu_type_id' => $menuTypeOffCanvas?->id,
+            ])->create();
+
+            $footerMenu = Menu::factory()->state([
+                'name'         => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Footer" : "ফুটার",
+                "language_id"  => $language->id,
+                'menu_type_id' => $menuTypeFooter?->id,
+            ])->create();
+
+            $this->topBarMenuItemSave($topbarMenu, $language);
+            $this->headerMenuItemSave($headerMenu, $language);
+            $this->offcanvasMenuItemSave($offCanvasMenu, $language);
+            $this->footerMenuItemSave($footerMenu, $language);
         }
 
-        foreach ($languages as $language) {
-            $menu       = Menu::where("language_id", $language->id)->where('menu_type_id', $menuTypeOffCanvas->id)->first();
-            $categories = Category::inRandomOrder()->where("language_id", $language->id)->whereNull("parent_id")->get();
+    }
 
-            foreach ($categories as $category) {
-                $this->saveMenuItem($menu, null, $category);
-            }
+    private function topBarMenuItemSave(Menu $menu, Language $language): void
+    {
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Contact" : "যোগাযোগ");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "About" : "সম্পর্কে");
+    }
+
+    private function headerMenuItemSave(Menu $menu, Language $language): void
+    {
+        $categories = Category::inRandomOrder()->where("language_id", $language->id)->whereNull("parent_id")->limit(6)->get();
+
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ");
+
+        foreach ($categories as $category) {
+            $this->saveMenuItem($menu, null, $language, $category);
         }
     }
 
-    public function saveMenuItem(Menu $menu, ?MenuItem $parent, Category $category)
+    private function offcanvasMenuItemSave(Menu $menu, Language $language): void
     {
+        $categories = Category::inRandomOrder()->where("language_id", $language->id)->whereNull("parent_id")->get();
+        foreach ($categories as $category) {
+            $this->saveMenuItem($menu, null, $language, $category);
+        }
+    }
+
+    private function footerMenuItemSave(Menu $menu, Language $language): void
+    {
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Contact" : "যোগাযোগ");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "About" : "সম্পর্কে");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Privacy Policy" : "গোপনীয়তা নীতি");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Terms and Conditions" : "শর্তাবলি ও নীতিমালা");
+    }
+
+    private function saveMenuItem(Menu $menu, ?MenuItem $parent, Language $language, Category | string $item): void
+    {
+        $isCategory = $item instanceof Category;
+
+        $name = $isCategory ? $item->name : $item;
+
         $saveMenuItem = MenuItem::factory()->state([
-            'name'        => $category->name,
-            'language_id' => $category->language_id,
-            "parent_id"   => $parent?->id,
+            'name'        => $name,
+            'language_id' => $language->id,
+            'parent_id'   => $parent?->id,
 
-            "menu_id"     => $menu->id,
+            'menu_id'     => $menu->id,
 
-            "model_type"  => $category?->getMorphClass(),
-            "model_id"    => $category?->id,
+            'model_type'  => $isCategory ? $item->getMorphClass() : null,
+            'model_id'    => $isCategory ? $item->id : null,
 
-            "url"         => null,
-            'position'    => ($this->menuItemLastPosition($menu, $category->language_id, $parent?->id ?? null) + 1) ?? null,
+            'url'         => $isCategory ? null : route("home"),
 
-            'name_tree'   => ($parent ? $parent->name . ' - ' : '') . $category->name,
-            'slug_tree'   => ($parent ? $parent->slug . '/' : '') . Str::slug($category->name),
+            'position'    => $this->menuItemLastPosition($menu, $language->id, $parent?->id) + 1,
+
+            'name_tree'   => ($parent ? $parent->name_tree . ' - ' : '') . $name,
+            'slug_tree'   => ($parent ? $parent->slug_tree . '/' : '') . Str::slug($name),
         ])->create();
 
-        if (! empty($category->descendants)) {
-            foreach ($category->descendants as $subCategory) {
-                $this->saveMenuItem($menu, $saveMenuItem, $subCategory);
+        if ($isCategory && ! empty($item->descendants)) {
+            foreach ($item->descendants as $subCategory) {
+                $this->saveMenuItem($menu, $saveMenuItem, $language, $subCategory);
             }
         }
+
     }
 
     private function menuItemLastPosition(Menu $menu, int $languageId, ?int $parentId)
