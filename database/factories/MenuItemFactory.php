@@ -37,16 +37,20 @@ class MenuItemFactory extends Factory
             "menu_id"       => $menu->id,
             "language_id"   => $language->id,
             'url'           => null,
-            'position'      => ($this->menuItemLastPosition($menu, $language->id) + 1) ?? null,
+            'position'      => ($this->menuItemLastPosition($menu, $language->id, null) + 1) ?? null,
             "created_by_id" => $user?->id ?? 1,
         ];
     }
 
-    private function menuItemLastPosition(Menu $menu, int $languageId)
+    private function menuItemLastPosition(Menu $menu, int $languageId, ?int $parentId)
     {
-        return MenuItem::query()
+        $position = MenuItem::query()
             ->where('menu_id', $menu->id)
-            ->where('language_id', $languageId)
-            ->max("position");
+            ->where('language_id', $languageId);
+
+        if ($parentId) {
+            $position->where('parent_id', $parentId);
+        }
+        return $position->max("position");
     }
 }

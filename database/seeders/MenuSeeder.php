@@ -116,7 +116,7 @@ class MenuSeeder extends Seeder
 
                 "url"         => route("home"),
 
-                'position'    => ($this->menuItemLastPosition($menu, $language->id) + 1) ?? null,
+                'position'    => ($this->menuItemLastPosition($menu, $language->id, null) + 1) ?? null,
 
                 'name_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
                 'slug_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম",
@@ -134,7 +134,7 @@ class MenuSeeder extends Seeder
 
                 "url"         => route("home"),
 
-                'position'    => ($this->menuItemLastPosition($menu, $language->id) + 1) ?? null,
+                'position'    => ($this->menuItemLastPosition($menu, $language->id, null) + 1) ?? null,
 
                 'name_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
                 'slug_tree'   => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ",
@@ -168,7 +168,7 @@ class MenuSeeder extends Seeder
             "model_id"    => $category?->id,
 
             "url"         => null,
-            'position'    => ($this->menuItemLastPosition($menu, $category->language_id) + 1) ?? null,
+            'position'    => ($this->menuItemLastPosition($menu, $category->language_id, $parent?->id ?? null) + 1) ?? null,
 
             'name_tree'   => ($parent ? $parent->name . ' - ' : '') . $category->name,
             'slug_tree'   => ($parent ? $parent->slug . '/' : '') . Str::slug($category->name),
@@ -181,11 +181,15 @@ class MenuSeeder extends Seeder
         }
     }
 
-    private function menuItemLastPosition(Menu $menu, int $languageId)
+    private function menuItemLastPosition(Menu $menu, int $languageId, ?int $parentId)
     {
-        return MenuItem::query()
+        $position = MenuItem::query()
             ->where('menu_id', $menu->id)
-            ->where('language_id', $languageId)
-            ->max("position");
+            ->where('language_id', $languageId);
+
+        if ($parentId) {
+            $position->where('parent_id', $parentId);
+        }
+        return $position->max("position");
     }
 }

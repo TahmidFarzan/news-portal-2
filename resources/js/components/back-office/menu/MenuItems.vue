@@ -25,6 +25,7 @@ const { menu } = defineProps({
                             <th class="px-4 py-2">SL</th>
                             <th class="px-4 py-2">Name</th>
                             <th class="px-4 py-2">Language</th>
+                            <th class="px-4 py-2">Parent</th>
                             <th class="px-4 py-2">Position</th>
                             <th class="px-4 py-2">Date</th>
                             <th class="px-4 py-2">Action</th>
@@ -45,6 +46,10 @@ const { menu } = defineProps({
 
                             <td class="px-4 py-2">
                                 {{ item.language?.name }}
+                            </td>
+
+                             <td class="px-4 py-3 text-gray-600">
+                                {{ item?.parent?.name || "N/A" }}
                             </td>
 
                             <td class="px-4 py-2">

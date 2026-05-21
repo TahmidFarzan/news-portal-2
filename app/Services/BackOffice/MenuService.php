@@ -37,6 +37,7 @@ class MenuService
 
             'menuItems'    => fn($query)    => $query->latest()->limit(5),
             'menuItems.language',
+            'menuItems.parent',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
@@ -170,7 +171,7 @@ class MenuService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = MenuItem::query()->with("language");
+        $query = MenuItem::query()->with("parent","language");
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
@@ -236,7 +237,7 @@ class MenuService
                 $menuItem->url         = $request->boolean('is_custom_url') ? $request->input('url ') : null;
 
                 if ($isNew) {
-                    $menuItem->position = $this->menuItemLastPosition($menu, $request->input('language_id')) + 1;
+                    $menuItem->position = $this->menuItemLastPosition($menu, $request->input('language_id'), $request->boolean('has_parent') ? $request->input('parent_id') : null) + 1;
                 }
 
                 $menuItem->menu_id       = $menu->id;
@@ -274,10 +275,11 @@ class MenuService
         try {
             DB::transaction(function () use ($menu, $menuItem) {
                 $languageId = $menuItem->language_id;
+                $parentId   = $menuItem->parent_id ?? null;
 
                 $menuItem->delete();
 
-                $this->menuItemPositionSyncAfterDelete($menu, $languageId);
+                $this->menuItemPositionSyncAfterDelete($menu, $languageId, $parentId);
             });
 
             return [
@@ -313,6 +315,10 @@ class MenuService
             ->whereKeyNot($givenMenuItem->id)
             ->whereNotNull('position');
 
+        if ($givenMenuItem->parent_id) {
+            $baseQuery->where('parent_id', $baseQuery->parent_id);
+        }
+
         $currentPosition = $givenMenuItem->position;
 
         if ($updatePosition < $currentPosition) {
@@ -326,22 +332,31 @@ class MenuService
         }
     }
 
-    private function menuItemLastPosition(Menu $menu, int $languageId)
+    private function menuItemLastPosition(Menu $menu, int $languageId, ?int $parentId)
     {
-        return MenuItem::query()
+        $position = MenuItem::query()
             ->where('menu_id', $menu->id)
-            ->where('language_id', $languageId)
-            ->max("position");
+            ->where('language_id', $languageId);
+
+        if ($parentId) {
+            $position->where('parent_id', $parentId);
+        }
+        return $position->max("position");
     }
 
-    private function menuItemPositionSyncAfterDelete(Menu $menu, int $languageId): void
+    private function menuItemPositionSyncAfterDelete(Menu $menu, int $languageId, ?int $parentId): void
     {
         $position = 1;
 
-        MenuItem::query()
+        $query = MenuItem::query()
             ->where('menu_id', $menu->id)
-            ->where('language_id', $languageId)
-            ->select(['id'])
+            ->where('language_id', $languageId);
+
+        if ($parentId) {
+            $query->where('parent_id', $parentId);
+        }
+
+        $query->select(['id'])
             ->orderByRaw('position IS NULL')
             ->orderBy('position')
             ->orderBy('id')
