@@ -100,17 +100,35 @@ class Location extends Model
 
     public function getFeedsAtomUrlAttribute(): string
     {
-        return route("feeds.atom.location.newses", ['slugTree' => $this->slug_tree]);
+        $url = "";
+
+        if ($this->slug_tree) {
+            $url = route("feeds.atom.location.newses", ['slugTree' => $this->slug_tree]);
+        }
+
+        return $url;
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return route("feeds.rss.location.newses", ['slugTree' => $this->slug_tree]);
+        $url = "";
+
+        if ($this->slug_tree) {
+            $url = route("feeds.rss.location.newses", ['slugTree' => $this->slug_tree]);
+        }
+
+        return $url;
     }
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.location.newses", ['slugTree' => $this->slug_tree]);
+        $url = "";
+
+        if ($this->slug_tree) {
+            $url = route("sitemaps.location.newses", ['slugTree' => $this->slug_tree]);
+        }
+
+        return $url;
     }
 
     public function getHasParentAttribute(): bool

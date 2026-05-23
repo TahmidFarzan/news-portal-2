@@ -116,17 +116,35 @@ class Contributor extends Model implements HasMedia
 
     public function getFeedsAtomUrlAttribute(): string
     {
-        return route("feeds.atom.contributors.newses",['slug' => $this->slug]);
+        $url = "";
+
+        if ($this->slug) {
+            $url = route("feeds.atom.contributors.newses",['slug' => $this->slug]);
+        }
+
+        return $url;
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return route("feeds.rss.contributors.newses",['slug' => $this->slug]);
+        $url = "";
+
+        if ($this->slug) {
+            $url = route("feeds.rss.contributors.newses",['slug' => $this->slug]);
+        }
+
+        return $url;
     }
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.contributors.newses",['slug' => $this->slug]);
+        $url = "";
+
+        if ($this->slug) {
+            $url = route("sitemaps.contributors.newses",['slug' => $this->slug]);
+        }
+
+        return $url;
     }
 
     public function getIsRecentCreatedAttribute(): bool

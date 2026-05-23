@@ -23,10 +23,10 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('categories')]
 #[Fillable([
-    'name', 'brief', 'parent_id', 'slug',
-    'language_id', 'name_tree', "slug_tree", 'created_by_id',
-    "seo_brief", 'seo_title', 'seo_keywords',
-])]
+        'name', 'brief', 'parent_id', 'slug',
+        'language_id', 'name_tree', "slug_tree", 'created_by_id',
+        "seo_brief", 'seo_title', 'seo_keywords',
+    ])]
 #[UsePolicy(CategoryPolicy::class)]
 #[ObservedBy([CategoryObserver::class])]
 class Category extends Model
@@ -93,24 +93,41 @@ class Category extends Model
 
     public function getPublicUrlAttribute(): string
     {
-        $url = null;
-
+        $url = "";
         return $url ?? "";
     }
 
     public function getFeedsAtomUrlAttribute(): string
     {
-        return route("feeds.atom.category.newses",['slugTree' => $this->slug_tree]);
+        $url = "";
+
+        if ($this->slug_tree) {
+            $url = route("feeds.atom.category.newses", ['slugTree' => $this->slug_tree]);
+        }
+
+        return $url;
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return route("feeds.rss.category.newses",['slugTree' => $this->slug_tree]);
+        $url = "";
+
+        if ($this->slug_tree) {
+            $url = route("feeds.rss.category.newses", ['slugTree' => $this->slug_tree]);
+        }
+
+        return $url;
     }
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.category.newses",['slugTree' => $this->slug_tree]);
+        $url = "";
+
+        if ($this->slug_tree) {
+            $url = route("sitemaps.category.newses", ['slugTree' => $this->slug_tree]);
+        }
+
+        return $url;
     }
 
     public function getIsRecentCreatedAttribute(): bool

@@ -93,17 +93,35 @@ class Tag extends Model
 
     public function getFeedsAtomUrlAttribute(): string
     {
-        return route("feeds.atom.tag.newses", ['slug' => $this->slug]);
+        $url = "";
+
+        if ($this->slug) {
+            $url = route("feeds.atom.tag.newses", ['slug' => $this->slug]);
+        }
+
+        return $url;
     }
 
     public function getFeedsRSSUrlAttribute(): string
     {
-        return route("feeds.rss.tag.newses", ['slug' => $this->slug]);
+        $url = "";
+
+        if ($this->slug) {
+            $url = route("feeds.rss.tag.newses", ['slug' => $this->slug]);
+        }
+
+        return $url;
     }
 
     public function getSitemapUrlAttribute(): string
     {
-        return route("sitemaps.tag.newses", ['slug' => $this->slug]);
+        $url = "";
+
+        if ($this->slug) {
+            $url = route("sitemaps.tag.newses", ['slug' => $this->slug]);
+        }
+
+        return $url;
     }
 
     public function getIsRecentCreatedAttribute(): bool
