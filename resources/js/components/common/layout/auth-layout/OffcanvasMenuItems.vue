@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted, nextTick } from "vue"
 import { usePage } from "@inertiajs/vue3"
 
 import { library } from "@fortawesome/fontawesome-svg-core"
@@ -21,7 +21,6 @@ import {
     faFan,
     faGlobe,
     faEllipsisVertical
-
 } from "@fortawesome/free-solid-svg-icons"
 
 library.add(
@@ -48,18 +47,24 @@ import {
     canAccessNewsMenu,
     canAccessMenuMenu
 } from '@/composables/useAuthUserAccessPermissions'
-import { faHotjar } from "@fortawesome/free-brands-svg-icons"
 
-const { authUser } = defineProps({
-    authUser: Object
+const {
+    authUser
+} = defineProps({
+    authUser: {
+        type: Object,
+        default: null
+    }
 })
+
+const emit = defineEmits(['ready'])
 
 const page = usePage()
 
 const subMenus = ref({
     UserManagement: false,
     Reports: false,
-    NewsAttributes: false,
+    NewsAttributes: false
 })
 
 const routeMap = {
@@ -71,32 +76,32 @@ const routeMap = {
         '/back-office/trends/*',
         '/back-office/locations/*',
         '/back-office/events/*',
-        '/back-office/contributor/*',
+        '/back-office/contributor/*'
     ],
-    Reports: ['/back-office/reports/*'],
+    Reports: ['/back-office/reports/*']
 }
 
-const canAccessUserManagementMenuComputed = computed(() =>
-    canAccessUserManagementMenu(authUser)
-)
+const canAccessUserManagementMenuComputed = computed(() => {
+    return canAccessUserManagementMenu(authUser)
+})
 
-const canAccessNewsAttributesMenuComputed = computed(() =>
-    canAccessNewsAttributesMenu(authUser)
-)
+const canAccessNewsAttributesMenuComputed = computed(() => {
+    return canAccessNewsAttributesMenu(authUser)
+})
 
-const canAccessNewsMenuComputed = computed(() =>
-    canAccessNewsMenu(authUser)
-)
+const canAccessNewsMenuComputed = computed(() => {
+    return canAccessNewsMenu(authUser)
+})
 
-const canAccessMenuMenuComputed = computed(() =>
-    canAccessMenuMenu(authUser)
-)
+const canAccessMenuMenuComputed = computed(() => {
+    return canAccessMenuMenu(authUser)
+})
 
-function toggleShowSubMenu(key) {
+const toggleShowSubMenu = (key) => {
     subMenus.value[key] = !subMenus.value[key]
 }
 
-function isCurrentPage(url) {
+const isCurrentPage = (url) => {
     const currentUrl = typeof page.url === 'string'
         ? page.url.split('?')[0].replace(/\/+$/, '')
         : ''
@@ -105,21 +110,29 @@ function isCurrentPage(url) {
 
     if (cleanUrl.endsWith('/*')) {
         const basePattern = cleanUrl.slice(0, -2)
-        return currentUrl === basePattern || currentUrl.startsWith(basePattern + '/')
+
+        return currentUrl === basePattern || currentUrl.startsWith(`${basePattern}/`)
     }
 
     return currentUrl === cleanUrl
 }
 
-function isAnyCurrentPage(urls = []) {
-    return urls.some(url => isCurrentPage(url))
+const isAnyCurrentPage = (urls = []) => {
+    return urls.some((url) => isCurrentPage(url))
 }
 
-function isSubMenuVisible(key) {
+const isSubMenuVisible = (key) => {
     const routes = routeMap[key] || []
     const inRoute = isAnyCurrentPage(routes)
+
     return subMenus.value[key] || inRoute
 }
+
+onMounted(async () => {
+    await nextTick()
+
+    emit('ready')
+})
 </script>
 
 <template>

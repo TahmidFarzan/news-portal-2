@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, Teleport } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, Teleport, nextTick } from 'vue'
 import OffcanvasMenuItems from '@/components/common/layout/auth-layout/OffcanvasMenuItems.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -35,6 +35,10 @@ const isMobile = ref(window.innerWidth < 768)
 const isTriggerMode = computed(() => mode === 'trigger')
 const isSidebarMode = computed(() => mode === 'sidebar')
 
+const emit = defineEmits(['ready'])
+
+const readyEmitted = ref(false)
+
 const toggleOffcanvasSidebarShow = () => {
     offcanvasSidebarShow.value = !offcanvasSidebarShow.value
 }
@@ -51,8 +55,18 @@ const handlePageResize = () => {
     }
 }
 
-onMounted(() => {
+const emitReadyOnce = () => {
+    if (readyEmitted.value) return
+
+    readyEmitted.value = true
+    emit('ready')
+}
+
+onMounted(async () => {
     window.addEventListener('resize', handlePageResize)
+
+    await nextTick()
+    emitReadyOnce()
 })
 
 onBeforeUnmount(() => {
@@ -90,7 +104,7 @@ onBeforeUnmount(() => {
                         </button>
                     </div>
 
-                    <OffcanvasMenuItems :auth-user="authUser" />
+                    <OffcanvasMenuItems :auth-user="authUser" @ready="emitReadyOnce" />
                 </aside>
             </Transition>
         </Teleport>

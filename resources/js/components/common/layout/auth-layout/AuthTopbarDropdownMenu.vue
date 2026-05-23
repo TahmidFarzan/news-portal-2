@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { router as inertiaJsRoute } from '@inertiajs/vue3'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -32,6 +32,8 @@ const {
         default: null
     }
 })
+
+const emit = defineEmits(['ready'])
 
 const showUserDropdown = ref(false)
 const dropdownRef = ref(null)
@@ -80,8 +82,11 @@ const handleClickOutside = (event) => {
     }
 }
 
-onMounted(() => {
+onMounted(async () => {
     document.addEventListener('click', handleClickOutside)
+
+    await nextTick()
+    emit('ready')
 })
 
 onBeforeUnmount(() => {

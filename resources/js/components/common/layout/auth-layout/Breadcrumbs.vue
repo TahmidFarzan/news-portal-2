@@ -1,5 +1,7 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+
+const emit = defineEmits(['ready'])
 
 const breadcrumbItems = ref([])
 
@@ -7,8 +9,11 @@ const setBreadcrumb = (event) => {
     breadcrumbItems.value = Array.isArray(event.detail) ? event.detail : []
 }
 
-onMounted(() => {
+onMounted(async () => {
     window.addEventListener('set-breadcrumb', setBreadcrumb)
+
+    await nextTick()
+    emit('ready')
 })
 
 onBeforeUnmount(() => {
