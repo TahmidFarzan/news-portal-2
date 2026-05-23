@@ -1,8 +1,8 @@
 <script setup>
 import LayoutAuthMenuItems from '@/components/common/layout/AuthMenuItems.vue'
+import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 
 import { usePage, router as intertiaJsRoute } from "@inertiajs/vue3"
-import { Toaster, toast } from "vue-sonner"
 import { library } from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { ref, onMounted, onBeforeUnmount, computed, watch, provide } from "vue"
@@ -83,17 +83,6 @@ function handleClickOutside(e) {
         showUserDropdown.value = false
     }
 }
-
-watch(flashMessage, (newVal) => {
-    if (newVal && newVal.message) {
-        if (newVal.status === 'success') toast.success(newVal.message)
-        else if (newVal.status === 'error') toast.error(newVal.message)
-        else if (newVal.status === 'warning') toast.warning(newVal.message)
-        else toast(newVal.message)
-
-        page.props.flashMessage = null
-    }
-}, { immediate: true })
 
 onMounted(() => {
     window.addEventListener("resize", handlePageResize)
@@ -253,7 +242,7 @@ onBeforeUnmount(() => {
             </div>
         </Transition>
 
-        <Toaster richColors position="top-right" />
+        <ToasterMessage :flash-message="flashMessage" />
 
         <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
