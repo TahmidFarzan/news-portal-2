@@ -1,6 +1,8 @@
 <script setup>
 import OffcanvasMenu from '@/components/common/layout/auth-layout/OffcanvasMenu.vue'
+import Breadcrumbs from '@/components/common/layout/auth-layout/Breadcrumbs.vue'
 import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
+
 
 import { usePage, router as inertiaJsRoute } from '@inertiajs/vue3'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -30,7 +32,7 @@ library.add(
 const pageReady = ref(false)
 const logoutProcessing = ref(false)
 const logoutShowConfirmationModal = ref(false)
-const breadcrumbItems = ref([])
+
 
 const showUserDropdown = ref(false)
 const dropdownRef = ref(null)
@@ -62,9 +64,6 @@ const handleLogout = () => {
     })
 }
 
-const setBreadcrumb = (event) => {
-    breadcrumbItems.value = event.detail
-}
 
 const toggleDropdown = (event) => {
     event.stopPropagation()
@@ -82,7 +81,6 @@ const openLogoutModal = () => {
 
 const closeLogoutModal = () => {
     if (logoutProcessing.value) return
-
     logoutShowConfirmationModal.value = false
 }
 
@@ -93,14 +91,12 @@ const handleClickOutside = (event) => {
 }
 
 onMounted(() => {
-    window.addEventListener('set-breadcrumb', setBreadcrumb)
     document.addEventListener('click', handleClickOutside)
 
     pageReady.value = true
 })
 
 onBeforeUnmount(() => {
-    window.removeEventListener('set-breadcrumb', setBreadcrumb)
     document.removeEventListener('click', handleClickOutside)
 })
 </script>
@@ -181,22 +177,7 @@ onBeforeUnmount(() => {
                     <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
                 </div>
 
-                <div v-if="breadcrumbItems.length"
-                    class="mb-4 border border-gray-200 rounded-lg p-3 bg-white shadow-sm">
-                    <div class="text-sm text-gray-600 flex flex-wrap gap-2">
-                        <template v-for="(item, index) in breadcrumbItems" :key="index">
-                            <a v-if="!item.active" :href="item.href" class="hover:underline">
-                                {{ item.text }}
-                            </a>
-
-                            <span v-else class="font-medium">
-                                {{ item.text }}
-                            </span>
-
-                            <span v-if="index < breadcrumbItems.length - 1">/</span>
-                        </template>
-                    </div>
-                </div>
+                <Breadcrumbs />
 
                 <div v-if="authUser && !authUser.email_verified_at"
                     class="mb-4 p-3 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded">
