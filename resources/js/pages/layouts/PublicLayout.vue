@@ -1,7 +1,7 @@
 <script setup>
 import HeaderMenu from '@/components/common/layout/public-layout/HeaderMenu.vue'
 import OffCanvasMenu from '@/components/common/layout/public-layout/OffCanvasMenu.vue'
-import AuthTopbarMenus from '@/components/common/layout/public-layout/AuthTopbarMenus.vue'
+import AuthTopbarMenu from '@/components/common/layout/public-layout/AuthTopbarMenu.vue'
 import TopbarMenu from '@/components/common/layout/public-layout/TopbarMenu.vue'
 import FooterMenu from '@/components/common/layout/public-layout/FooterMenu.vue'
 import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
@@ -112,7 +112,7 @@ onBeforeUnmount(() => {
                     </a>
 
                     <div v-else class="max-[450px]:flex-shrink-0">
-                        <AuthTopbarMenus :auth-user="authUser" />
+                        <AuthTopbarMenu :auth-user="authUser" />
                     </div>
                 </div>
             </div>
