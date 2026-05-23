@@ -15,7 +15,7 @@ class SiteService
         return MenuItem::where('slug', $slug)->firstOrFail();
     }
 
-    public function themeHeaderMenuMenuItems(Request $request): array
+    public function themeMenuHeaderMenuMenuItems(Request $request): array
     {
         $perPage = 10;
         $page    = max((int) $request->input('page', 1), 1);
@@ -78,12 +78,12 @@ class SiteService
         return $data;
     }
 
-    public function themeOffCanvasMenuMenuItems(Request $request): array
+    public function themeMenuOffCanvasMenuMenuItems(Request $request): array
     {
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        $languageCode      = SystemHelper::LANGUAGE_DEFAULT_CODE;
         $offcanvasMenuCode = SystemHelper::MENU_TYPE_OFFCANVAS;
 
         $cacheKey = "theme offcanvas {$languageCode} {$offcanvasMenuCode} page {$page} per page {$perPage}";

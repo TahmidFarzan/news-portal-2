@@ -15,10 +15,17 @@ class SiteController extends Controller
         $this->siteService = $siteService;
     }
 
-    public function themeHeaderMenuMenuItems(Request $request): JsonResponse
+    public function themeMenuHeaderMenuMenuItems(Request $request): JsonResponse
     {
         return response()->json(
-            $this->siteService->themeHeaderMenuMenuItems($request)
+            $this->siteService->themeMenuHeaderMenuMenuItems($request)
+        );
+    }
+
+    public function themeMenuOffCanvasMenuMenuItems(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->themeMenuOffCanvasMenuMenuItems($request)
         );
     }
 
@@ -27,14 +34,6 @@ class SiteController extends Controller
         $menuItem = $this->siteService->menuItem($slug);
         return response()->json(
             $this->siteService->themeMenuItemSubMenuItems($request, $menuItem)
-        );
-    }
-
-
-    public function themeOffCanvasMenuMenuItems(Request $request): JsonResponse
-    {
-        return response()->json(
-            $this->siteService->themeOffCanvasMenuMenuItems($request)
         );
     }
 }

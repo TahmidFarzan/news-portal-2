@@ -330,19 +330,15 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
 Route::prefix('site')->name('site.')->group(function () {
     Route::middleware(['response.cache:3600'])->group(function () {
         Route::prefix('theme')->name('theme.')->group(function () {
-            Route::prefix('header')->name('header.')->group(function () {
-                Route::prefix('menu')->name('menu.')->group(function () {
-                    Route::get('menu-items', [SiteController::class, 'themeHeaderMenuMenuItems'])->name('menu-items');
-                });
+            Route::prefix('menus')->name('menus.')->group(function () {
+                Route::get('header-menu-items', [SiteController::class, 'themeMenuHeaderMenuMenuItems'])->name('header-menu-items');
+                Route::get('off-canvas-menu-items', [SiteController::class, 'themeMenuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
             });
 
-            Route::prefix('off-canvas')->name('off-canvas.')->group(function () {
-                    Route::get('menu-items', [SiteController::class, 'themeOffCanvasMenuMenuItems'])->name('menu-items');
-            });
-
-            Route::prefix('menu-item/{slug}')->name('menu-item.')->group(function () {
+            Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
                 Route::get('sub-menu-items', [SiteController::class, 'themeMenuItemSubMenuItems'])->name('sub-menu-items');
             });
+
         });
     });
 });
