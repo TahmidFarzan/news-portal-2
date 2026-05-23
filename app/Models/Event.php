@@ -143,7 +143,7 @@ class Event extends Model implements HasMedia
         $url = "";
 
         if ($this->slug) {
-            $url = route("sitemaps.atom.event.newses",['slug' => $this->slug]);
+            $url = route("sitemaps.event.newses",['slug' => $this->slug]);
         }
 
         return $url;

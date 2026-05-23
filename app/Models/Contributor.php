@@ -141,7 +141,7 @@ class Contributor extends Model implements HasMedia
         $url = "";
 
         if ($this->slug) {
-            $url = route("sitemaps.contributors.newses",['slug' => $this->slug]);
+            $url = route("sitemaps.contributor.newses",['slug' => $this->slug]);
         }
 
         return $url;
