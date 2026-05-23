@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onMounted } from 'vue'
 import HorizontalScroller from '@/components/common/layout/HorizontalScroller.vue'
-import HeaderMenuItem from '@/components/common/layout/HeaderMenuItem.vue'
+import HeaderMenuItem from '@/components/common/layout/public-layout/HeaderMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
 const headerMenu = reactive({

@@ -79,7 +79,7 @@ const dropdownClasses = computed(() => {
             leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100 scale-100 translate-y-0"
             leave-to-class="opacity-0 scale-95 translate-y-1">
             <ul v-if="hasChildren && isOpen" :class="dropdownClasses">
-                <TopBarMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
+                <TopbarMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
             </ul>
         </Transition>
     </li>

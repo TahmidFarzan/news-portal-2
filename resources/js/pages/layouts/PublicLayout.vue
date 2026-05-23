@@ -1,9 +1,9 @@
 <script setup>
-import HeaderMenu from '@/components/common/layout/HeaderMenu.vue'
-import OffCanvasMenu from '@/components/common/layout/OffCanvasMenu.vue'
-import AuthTopBarMenus from '@/components/common/layout/AuthTopBarMenus.vue'
-import TopBarMenu from '@/components/common/layout/TopBarMenu.vue'
-import FooterMenu from '@/components/common/layout/FooterMenu.vue'
+import HeaderMenu from '@/components/common/layout/public-layout/HeaderMenu.vue'
+import OffCanvasMenu from '@/components/common/layout/public-layout/OffCanvasMenu.vue'
+import AuthTopbarMenus from '@/components/common/layout/public-layout/AuthTopbarMenus.vue'
+import TopbarMenu from '@/components/common/layout/public-layout/TopbarMenu.vue'
+import FooterMenu from '@/components/common/layout/public-layout/FooterMenu.vue'
 import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 
 import { ref, computed, watch, provide, nextTick, onMounted, onBeforeUnmount } from 'vue'
@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
                 <div
                     class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
                     <div class="max-[450px]:flex-1 max-[450px]:min-w-0">
-                        <TopBarMenu />
+                        <TopbarMenu />
                     </div>
 
                     <a v-if="!authUser" :href="route('login')"
@@ -112,7 +112,7 @@ onBeforeUnmount(() => {
                     </a>
 
                     <div v-else class="max-[450px]:flex-shrink-0">
-                        <AuthTopBarMenus :auth-user="authUser" />
+                        <AuthTopbarMenus :auth-user="authUser" />
                     </div>
                 </div>
             </div>

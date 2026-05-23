@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, onMounted } from 'vue'
-import FooterMenuItem from '@/components/common/layout/FooterMenuItem.vue'
+import FooterMenuItem from '@/components/common/layout/public-layout/FooterMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
 const footerMenu = reactive({

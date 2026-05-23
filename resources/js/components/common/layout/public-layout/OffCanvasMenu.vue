@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
-import OffCanvasMenuItem from '@/components/common/layout/OffCanvasMenuItem.vue'
+import OffCanvasMenuItem from '@/components/common/layout/public-layout/OffCanvasMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
