@@ -1,5 +1,5 @@
 <script setup>
-import LayoutAuthMenuItems from '@/components/common/layout/AuthMenuItems.vue'
+import OffcanvasMenuItems from '@/components/common/layout/auth-layout/OffcanvasMenuItems.vue'
 import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 
 import { usePage, router as intertiaJsRoute } from "@inertiajs/vue3"
@@ -175,7 +175,7 @@ onBeforeUnmount(() => {
 
             <aside v-if="!offcanvasSidebarEnable" class="w-64 border-r border-gray-200 bg-white hidden md:block">
                 <div class="p-3">
-                    <LayoutAuthMenuItems :authUser="authUser" />
+                    <OffcanvasMenuItems :authUser="authUser" />
                 </div>
             </aside>
 
@@ -238,7 +238,7 @@ onBeforeUnmount(() => {
             leave-from-class="translate-x-0" leave-to-class="-translate-x-full">
             <div v-if="offcanvasSidebarShow"
                 class="fixed top-0 left-0 h-full w-64 bg-white z-50 p-3 md:hidden shadow-lg">
-                <LayoutAuthMenuItems :authUser="authUser" />
+                <OffcanvasMenuItems :authUser="authUser" />
             </div>
         </Transition>
 
