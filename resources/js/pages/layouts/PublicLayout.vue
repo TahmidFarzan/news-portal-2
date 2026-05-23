@@ -2,6 +2,7 @@
 import HeaderMenu from '@/components/common/layout/HeaderMenu.vue'
 import OffCanvasMenu from '@/components/common/layout/OffCanvasMenu.vue'
 import AuthTopBarMenus from '@/components/common/layout/AuthTopBarMenus.vue'
+import TopBarMenu from '@/components/common/layout/TopBarMenu.vue'
 
 import { ref, computed, watch, provide, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { usePage, router as inertia } from '@inertiajs/vue3'
@@ -109,8 +110,8 @@ onBeforeUnmount(() => {
 <template>
     <div class="guest-layout flex flex-col min-h-screen">
         <div class="bg-gray-900 text-white">
-            <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
-                <div class="flex space-x-3">
+            <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center max-[450px]:gap-2">
+                <div class="flex space-x-3 max-[450px]:space-x-2 max-[450px]:flex-shrink-0">
                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                         <FontAwesomeIcon :icon="['fab', 'facebook']" />
                     </a>
@@ -125,14 +126,21 @@ onBeforeUnmount(() => {
                     </a>
                 </div>
 
-                <div class="flex items-center space-x-3 relative">
+                <div
+                    class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
+                    <div class="max-[450px]:flex-1 max-[450px]:min-w-0">
+                        <TopBarMenu />
+                    </div>
+
                     <a v-if="!authUser" :href="route('login')"
-                        class="flex items-center gap-1 text-gray-300 hover:text-white">
+                        class="flex items-center gap-1 text-gray-300 hover:text-white max-[450px]:flex-shrink-0">
                         <FontAwesomeIcon icon="arrow-right-to-bracket" />
-                        <span>Login</span>
+                        <span class="max-[450px]:hidden">Login</span>
                     </a>
 
-                    <AuthTopBarMenus v-else :auth-user="authUser" />
+                    <div v-else class="max-[450px]:flex-shrink-0">
+                        <AuthTopBarMenus :auth-user="authUser" />
+                    </div>
                 </div>
             </div>
         </div>
