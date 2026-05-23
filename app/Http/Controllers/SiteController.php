@@ -36,6 +36,13 @@ class SiteController extends Controller
         );
     }
 
+    public function themeMenuFooterMenuMenuItems(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->themeMenuFooterMenuMenuItems($request)
+        );
+    }
+
     public function themeMenuItemSubMenuItems(Request $request, string $slug): JsonResponse
     {
         $menuItem = $this->siteService->menuItem($slug);

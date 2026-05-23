@@ -3,6 +3,7 @@ import HeaderMenu from '@/components/common/layout/HeaderMenu.vue'
 import OffCanvasMenu from '@/components/common/layout/OffCanvasMenu.vue'
 import AuthTopBarMenus from '@/components/common/layout/AuthTopBarMenus.vue'
 import TopBarMenu from '@/components/common/layout/TopBarMenu.vue'
+import FooterMenu from '@/components/common/layout/FooterMenu.vue'
 
 import { ref, computed, watch, provide, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { usePage, router as inertia } from '@inertiajs/vue3'
@@ -179,12 +180,14 @@ onBeforeUnmount(() => {
         </main>
 
         <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
-            <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
-                <span class="text-center md:text-left w-full md:w-auto">
+            <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
+                <span class="text-center md:text-left w-full md:w-auto flex-shrink-0">
                     © {{ year }} {{ appName }}
                 </span>
 
-                <span class="text-center md:text-right w-full md:w-auto">
+                <FooterMenu />
+
+                <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
                     Developed by
                     <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank" rel="noopener noreferrer"
                         class="text-blue-600 hover:underline font-medium">

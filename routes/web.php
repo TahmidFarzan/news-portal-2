@@ -334,6 +334,7 @@ Route::prefix('site')->name('site.')->group(function () {
                 Route::get('header-menu-items', [SiteController::class, 'themeMenuHeaderMenuMenuItems'])->name('header-menu-items');
                 Route::get('off-canvas-menu-items', [SiteController::class, 'themeMenuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
                 Route::get('topbar-menu-items', [SiteController::class, 'themeMenuTopbarMenuMenuItems'])->name('topbar-menu-items');
+                Route::get('footer-menu-items', [SiteController::class, 'themeMenuFooterMenuMenuItems'])->name('footer-menu-items');
             });
 
             Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {

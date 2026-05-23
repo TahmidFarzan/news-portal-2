@@ -204,6 +204,69 @@ class SiteService
         return $data;
     }
 
+    public function themeMenuFooterMenuMenuItems(Request $request): array
+    {
+        $perPage = 20;
+        $page    = max((int) $request->input('page', 1), 1);
+
+        $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        $footerMenuCode = SystemHelper::MENU_TYPE_FOOTER;
+
+        $cacheKey = "theme footer {$languageCode} {$footerMenuCode} page {$page} per page {$perPage}";
+
+        $cacheTags = [
+            'theme',
+            'theme-footer',
+            'menu-items',
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $query = MenuItem::query()
+            ->with([
+                'menu.language',
+                'menu.menuType',
+                'children',
+                'model',
+            ])
+            ->whereNull("parent_id")
+            ->whereRelation('menu.language', 'code', $languageCode)
+            ->whereRelation('menu.menuType', 'name', $footerMenuCode)
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'asc')
+            ->paginate($perPage);
+
+        $list = $query->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
+            'has_descendants' => $row->has_descendants,
+            'public_url'      => $row->public_url,
+        ]);
+
+        $data = [
+            'items'        => $list,
+            'total'        => $query->total(),
+            'current_page' => $query->currentPage(),
+            'last_page'    => $query->lastPage(),
+            'per_page'     => $query->perPage(),
+        ];
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
     public function themeMenuItemSubMenuItems(Request $request, MenuItem $menuItem): array
     {
         $perPage = 10;
