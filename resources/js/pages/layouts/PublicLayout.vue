@@ -4,10 +4,10 @@ import OffCanvasMenu from '@/components/common/layout/OffCanvasMenu.vue'
 import AuthTopBarMenus from '@/components/common/layout/AuthTopBarMenus.vue'
 import TopBarMenu from '@/components/common/layout/TopBarMenu.vue'
 import FooterMenu from '@/components/common/layout/FooterMenu.vue'
+import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 
 import { ref, computed, watch, provide, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { usePage, router as inertia } from '@inertiajs/vue3'
-import { Toaster, toast } from 'vue-sonner'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -31,7 +31,6 @@ const pageReady = ref(false)
 const headerNavbar = ref(null)
 
 const isHeaderSticky = ref(false)
-const lastFlashKey = ref(null)
 
 provide('pageReady', pageReady)
 
@@ -48,33 +47,6 @@ let removeInertiaFinishListener = null
 const handlePageScroll = () => {
     isHeaderSticky.value = window.scrollY > 0
 }
-
-watch(flashMessage, (value) => {
-    if (!value?.message) return
-
-    const flashKey = `${value.status ?? 'default'}-${value.message}`
-
-    if (flashKey === lastFlashKey.value) return
-
-    lastFlashKey.value = flashKey
-
-    switch (value.status) {
-        case 'success':
-            toast.success(value.message)
-            break
-        case 'error':
-            toast.error(value.message)
-            break
-        case 'warning':
-            toast.warning(value.message)
-            break
-        case 'info':
-            toast.info(value.message)
-            break
-        default:
-            toast.info(value.message)
-    }
-}, { immediate: true })
 
 watch(pageReady, (ready) => {
     document.body.style.overflow = ready ? '' : 'hidden'
@@ -197,6 +169,6 @@ onBeforeUnmount(() => {
             </div>
         </footer>
 
-        <Toaster richColors position="top-right" />
+        <ToasterMessage :flash-message="flashMessage" />
     </div>
 </template>
