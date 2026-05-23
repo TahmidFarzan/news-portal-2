@@ -1,14 +1,28 @@
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, computed, onMounted } from 'vue'
 import HorizontalScroller from '@/components/common/layout/HorizontalScroller.vue'
 import HeaderMenuItem from '@/components/common/layout/public-layout/HeaderMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {
+    faSpinner
+} from '@fortawesome/free-solid-svg-icons'
+
+library.add(faSpinner)
+
 const headerMenu = reactive({
     items: [],
     loading: false,
+    loaded: false,
+    error: null,
     page: 1,
     lastPage: 1
+})
+
+const isInitialLoading = computed(() => {
+    return headerMenu.loading && !headerMenu.items.length
 })
 
 const normalizeMenuItems = (items = []) => {
@@ -23,6 +37,7 @@ const getHeaderMenuItems = async (pageNumber = 1) => {
 
     try {
         headerMenu.loading = true
+        headerMenu.error = null
 
         const response = await fetchFromApi(
             route('site.theme.menus.header-menu-items', { page: pageNumber })
@@ -37,9 +52,11 @@ const getHeaderMenuItems = async (pageNumber = 1) => {
         headerMenu.page = Number(response?.current_page ?? pageNumber)
         headerMenu.lastPage = Number(response?.last_page ?? pageNumber)
     } catch (error) {
+        headerMenu.error = error
         console.error('Failed to fetch header menu:', error)
     } finally {
         headerMenu.loading = false
+        headerMenu.loaded = true
     }
 }
 
@@ -57,15 +74,25 @@ onMounted(() => {
 </script>
 
 <template>
-    <HorizontalScroller v-if="headerMenu.items.length || headerMenu.loading" class="w-full min-w-0 h-full flex"
-        :loading="headerMenu.loading" :watch-key="`${headerMenu.items.length}-${headerMenu.loading}`"
-        @reach-end="handleReachEnd">
-        <ul class="h-10 flex items-center gap-2 whitespace-nowrap">
-            <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item" />
+    <nav class="w-full min-w-0 h-full flex" aria-label="Header menu" :aria-busy="headerMenu.loading">
+        <HorizontalScroller class="w-full min-w-0 h-full flex" :loading="headerMenu.loading"
+            :watch-key="`${headerMenu.items.length}-${headerMenu.loading}`" @reach-end="handleReachEnd">
+            <ul class="h-10 flex items-center gap-2 whitespace-nowrap">
+                <template v-if="headerMenu.items.length">
+                    <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item" />
+                </template>
 
-            <li v-if="headerMenu.loading" class="h-10 flex items-center px-3 text-sm text-gray-300 flex-shrink-0">
-                Loading...
-            </li>
-        </ul>
-    </HorizontalScroller>
+                <template v-else-if="isInitialLoading">
+                    <li v-for="index in 4" :key="index"
+                        class="h-8 w-20 rounded-lg bg-white/10 animate-pulse flex-shrink-0" />
+                </template>
+
+                <li v-if="headerMenu.loading && headerMenu.items.length"
+                    class="h-10 flex items-center px-3 text-sm text-gray-300 flex-shrink-0">
+                    <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
+                    Loading...
+                </li>
+            </ul>
+        </HorizontalScroller>
+    </nav>
 </template>

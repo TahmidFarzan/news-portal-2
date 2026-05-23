@@ -4,10 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 
-defineOptions({
-    name: 'HeaderMenuItem'
-})
-
 const { item, level = 0 } = defineProps({
     item: {
         type: Object,
@@ -136,11 +132,7 @@ const handleWindowChange = () => {
     updateDropdownPosition()
 }
 
-onMounted(async () => {
-    if (item.has_descendants) {
-        await loadChildren(1)
-    }
-
+onMounted(() => {
     document.addEventListener('click', handleClickOutside)
     window.addEventListener('resize', handleWindowChange)
     window.addEventListener('scroll', handleWindowChange, true)

@@ -1,13 +1,25 @@
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, computed, onMounted } from 'vue'
 import FooterMenuItem from '@/components/common/layout/public-layout/FooterMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {
+    faSpinner
+} from '@fortawesome/free-solid-svg-icons'
 
 const footerMenu = reactive({
     items: [],
     loading: false,
+    loaded: false,
+    error: null,
     page: 1,
     lastPage: 1
+})
+
+const isInitialLoading = computed(() => {
+    return footerMenu.loading && !footerMenu.items.length
 })
 
 const normalizeMenuItems = (items = []) => {
@@ -22,6 +34,7 @@ const getFooterMenuItems = async (pageNumber = 1) => {
 
     try {
         footerMenu.loading = true
+        footerMenu.error = null
 
         const response = await fetchFromApi(
             route('site.theme.menus.footer-menu-items', { page: pageNumber })
@@ -36,9 +49,11 @@ const getFooterMenuItems = async (pageNumber = 1) => {
         footerMenu.page = Number(response?.current_page ?? pageNumber)
         footerMenu.lastPage = Number(response?.last_page ?? pageNumber)
     } catch (error) {
+        footerMenu.error = error
         console.error('Failed to fetch footer menu:', error)
     } finally {
         footerMenu.loading = false
+        footerMenu.loaded = true
     }
 }
 
@@ -48,12 +63,18 @@ onMounted(() => {
 </script>
 
 <template>
-    <nav v-if="footerMenu.items.length || footerMenu.loading" class="w-full md:w-auto md:flex-1 min-w-0"
-        aria-label="Footer menu">
+    <nav class="w-full md:w-auto md:flex-1 min-w-0 min-h-6" aria-label="Footer menu" :aria-busy="footerMenu.loading">
         <ul class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center">
-            <FooterMenuItem v-for="item in footerMenu.items" :key="item.id" :item="item" />
+            <template v-if="footerMenu.items.length">
+                <FooterMenuItem v-for="item in footerMenu.items" :key="item.id" :item="item" />
+            </template>
 
-            <li v-if="footerMenu.loading" class="text-xs text-gray-400">
+            <template v-else-if="isInitialLoading">
+                <li v-for="index in 4" :key="index" class="h-4 w-16 rounded bg-gray-200 animate-pulse" />
+            </template>
+
+            <li v-if="footerMenu.loading && footerMenu.items.length" class="text-xs text-gray-400">
+                <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
                 Loading...
             </li>
         </ul>

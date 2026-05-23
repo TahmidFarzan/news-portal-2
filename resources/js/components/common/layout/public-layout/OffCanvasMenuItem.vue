@@ -4,10 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 
-defineOptions({
-    name: 'OffCanvasMenuItem'
-})
-
 const { item, level = 0 } = defineProps({
     item: {
         type: Object,
@@ -32,6 +28,7 @@ const normalizeMenuItems = (items = []) => {
         children: item.children ?? [],
     }))
 }
+
 
 const loadChildren = async (page = 1) => {
     if (!item?.has_descendants) return

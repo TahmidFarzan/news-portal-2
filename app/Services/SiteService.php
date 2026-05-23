@@ -7,12 +7,25 @@ use App\Helpers\CacheServerHelper;
 use App\Helpers\SystemHelper;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SiteService
 {
     public function menuItem(string $slug): MenuItem
     {
         return MenuItem::where('slug', $slug)->firstOrFail();
+    }
+
+    public function menuItemRelationLoad(MenuItem $menuItem): MenuItem
+    {
+        $menuItem->load([
+            "parent",
+
+            'model',
+            'language',
+        ]);
+
+        return $menuItem;
     }
 
     public function themeMenuHeaderMenuMenuItems(Request $request): array
@@ -27,8 +40,9 @@ class SiteService
 
         $cacheTags = [
             'theme',
+            'theme-header',
             'theme-header-navbar',
-            'menu-items',
+            'theme-header-navbar-menu-items',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -91,7 +105,8 @@ class SiteService
         $cacheTags = [
             'theme',
             'theme-offcanvas',
-            'menu-items',
+            'theme-offcanvas-menu',
+            'theme-offcanvas-menu-items',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -154,7 +169,8 @@ class SiteService
         $cacheTags = [
             'theme',
             'theme-topbar',
-            'menu-items',
+            'theme-topbar-menu',
+            'theme-topbar-menu-items',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -217,7 +233,8 @@ class SiteService
         $cacheTags = [
             'theme',
             'theme-footer',
-            'menu-items',
+            'theme-footer-menu',
+            'theme-footer-menu-items',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -272,16 +289,17 @@ class SiteService
         $perPage = 10;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
-        $headerMenuCode = SystemHelper::MENU_TYPE_HEADER;
+        $languageCode = $menuItem->language->code;
+        $menuType     = $menuItem->menu->menuType->name;
+        $menuTypeFormatedTag = Str::lower(Str::slug($menuType));
 
-        $cacheKey = "theme submenu items menu item {$menuItem->id} {$languageCode} {$headerMenuCode} page {$page} per page {$perPage}";
+        $cacheKey = "theme {$menuType} menu {$menuItem->id} submenus ({$languageCode}) page {$page} per page {$perPage}";
 
         $cacheTags = [
             'theme',
-            'theme-header-navbar',
-            'menu-items',
-            "menu-item-{$menuItem->id}",
+            "theme-{$menuTypeFormatedTag}",
+            "theme-{$menuTypeFormatedTag}-menu-item-{$menuItem->id}",
+            "theme-{$menuTypeFormatedTag}-menu-item-{$menuItem->id}-menu-items",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -292,14 +310,10 @@ class SiteService
 
         $records = MenuItem::query()
             ->with([
-                'menu.language',
-                'menu.menuType',
                 'children',
-                'model',
             ])
             ->where('parent_id', $menuItem->id)
-            ->whereRelation('menu.language', 'code', $languageCode)
-            ->whereRelation('menu.menuType', 'name', $headerMenuCode)
+            ->where('language_id', $menuItem->language_id)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);

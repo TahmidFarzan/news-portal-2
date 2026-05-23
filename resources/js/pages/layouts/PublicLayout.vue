@@ -27,14 +27,14 @@ library.add(
     faGoogle
 )
 
-const pageReady = ref(false)
-const headerNavbar = ref(null)
+const page = usePage()
 
+const pageReady = ref(true)
+const headerNavbar = ref(null)
 const isHeaderSticky = ref(false)
 
 provide('pageReady', pageReady)
 
-const page = usePage()
 const year = new Date().getFullYear()
 const appName = import.meta.env.VITE_APP_NAME
 

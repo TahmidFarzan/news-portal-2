@@ -46,6 +46,7 @@ class SiteController extends Controller
     public function themeMenuItemSubMenuItems(Request $request, string $slug): JsonResponse
     {
         $menuItem = $this->siteService->menuItem($slug);
+        $menuItem = $this->siteService->menuItemRelationLoad($menuItem);
         return response()->json(
             $this->siteService->themeMenuItemSubMenuItems($request, $menuItem)
         );
