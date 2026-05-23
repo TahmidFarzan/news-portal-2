@@ -24,8 +24,6 @@ FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const { language } = defineProps({
     language: Object,
 })
@@ -102,8 +100,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 

@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 
-import { ref, onMounted, inject } from 'vue'
+import { ref, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
@@ -12,7 +12,6 @@ library.add(faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
 const resending = ref(false)
 
 function handleResendVerification() {
@@ -26,9 +25,6 @@ function handleResendVerification() {
     })
 }
 
-onMounted(() => {
-    pageReady.value = true
-})
 </script>
 
 <template>

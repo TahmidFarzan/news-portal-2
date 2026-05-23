@@ -23,8 +23,6 @@ const { activityLogs, showSubjectType } = defineProps({
     showSubjectType: Boolean,
 })
 
-const pageReady = inject("pageReady")
-
 const deletingRow = ref(null)
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
@@ -103,8 +101,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 
@@ -121,19 +117,19 @@ onMounted(async () => {
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="per_page"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     placeholder="Per page" />
 
-                <MultiSelectInfinityLoadingApi v-if="showSubjectType && pageReady" :form="filterForm"
+                <MultiSelectInfinityLoadingApi v-if="showSubjectType" :form="filterForm"
                     fieldName="subject_type" :selectedItem="filterForm.subject_type"
                     :apiUrl="route('search.activity-log-subject-types')" :multiple="false" selectedLabelKey="name"
                     selectedValueKey="id" apiLabelKey="name" apiValueKey="id" placeholder="Subject" />
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="causer_id"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="causer_id"
                     :selectedItem="filterForm.causer_id" :apiUrl="route('search.users')" :multiple="false"
-                    selectedLabelKey="name_with_user_role" selectedValueKey="id" apiLabelKey="name_with_user_role"
+                    selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
                     apiValueKey="id" placeholder="Causer" />
 
                 <input type="date" v-model="filterForm.date"

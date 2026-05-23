@@ -1,9 +1,9 @@
 <template>
     <div class="w-full">
-        <Editor v-if="pageReady && form" v-model="form[inputField]" :init="editorInit" :license-key="tinymceLicenceKey"
+        <Editor v-if="form" v-model="form[inputField]" :init="editorInit" :license-key="tinymceLicenceKey"
             class="border border-gray-300 rounded-md overflow-hidden" />
 
-        <input v-if="pageReady && form" v-model="form['editor_media_ids']" type="hidden" class="hidden" />
+        <input v-if="form" v-model="form['editor_media_ids']" type="hidden" class="hidden" />
 
         <SelectMediaFromMediaLibery ref="mediaLibrary" v-model:showModal="showMediaLibrary"
             :fetch-url="route('search.medias')" :media-type="'All'" :multiple="true"
@@ -65,7 +65,7 @@ const {
     enableSelectFormMediaLibery: { type: Boolean, default: false },
 })
 
-const pageReady = inject('pageReady')
+
 
 const tinymceLicenceKey = import.meta.env.VITE_TINY_MCE_TEXT_EDITOR_LICENSE_KEY || 'gpl'
 

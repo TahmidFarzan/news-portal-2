@@ -19,8 +19,6 @@ FontAwesomeIconLibrary.add(faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout })
 
-const pageReady = inject("pageReady")
-
 const page = usePage()
 const token = page.props.value.token
 const email = page.props.value.email
@@ -68,9 +66,7 @@ function handleResetPassword() {
     })
 }
 
-onMounted(() => {
-    pageReady.value = true
-})
+
 </script>
 
 <template>

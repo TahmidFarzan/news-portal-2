@@ -7,8 +7,6 @@ import { inject, onMounted, nextTick, ref, computed, watch } from 'vue'
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const {
     news,
     homeLeadNewsPlacements,
@@ -124,8 +122,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 

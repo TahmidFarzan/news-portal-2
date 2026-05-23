@@ -5,14 +5,11 @@ import { Head } from '@inertiajs/vue3'
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 onMounted(async () => {
     await nextTick()
     window.dispatchEvent(new CustomEvent('set-breadcrumb', {
         detail: [{ text: 'Dashboard', active: true }]
     }))
-    pageReady.value = true
 })
 </script>
 

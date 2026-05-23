@@ -14,8 +14,6 @@ FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const { trend } = defineProps({
     trend: Object,
 })
@@ -87,8 +85,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 
@@ -111,7 +107,7 @@ onMounted(async () => {
                                 Tag <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="tag_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="tag_id"
                                 :selectedItem="trend?.tag" :apiUrl="route('search.tags')"
                                 :error="saveForm.errors.tag_id" :multiple="false" placeholder="Select tag" />
                             <p v-if="saveForm.errors.tag_id" class="text-red-500 text-sm mt-1">

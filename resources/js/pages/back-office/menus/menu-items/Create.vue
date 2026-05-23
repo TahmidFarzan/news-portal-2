@@ -15,8 +15,6 @@ FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const { menu, menuItem } = defineProps({
     menu: Object,
     menuItem: Object,
@@ -140,8 +138,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 
@@ -192,7 +188,7 @@ onMounted(async () => {
                                 Language <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="language_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="menuItem?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
@@ -259,7 +255,7 @@ onMounted(async () => {
                                 Model <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="model_type"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="model_type"
                                 :selectedItem="saveForm?.model_type" :apiUrl="route('search.menu-item-models')"
                                 :error="saveForm.errors.model_type" :multiple="false" placeholder="Select model" />
                             <p v-if="saveForm.errors.model_type" class="text-red-500 text-sm mt-1">
@@ -273,13 +269,13 @@ onMounted(async () => {
                                 Model id <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady && saveForm?.model_type == 'Tag'"
+                            <MultiSelectInfinityLoadingApi v-if="saveForm?.model_type == 'Tag'"
                                 :form="saveForm" fieldName="model_id" :selectedItem="saveForm?.model_id"
                                 :apiUrl="route('search.search.tags')" :error="saveForm.errors.model_id"
                                 selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                                 :multiple="false" placeholder="Select model record" />
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady && saveForm?.model_type == 'Category'"
+                            <MultiSelectInfinityLoadingApi v-if="saveForm?.model_type == 'Category'"
                                 :form="saveForm" fieldName="model_id" :selectedItem="menuItem?.model"
                                 :apiUrl="route('search.category-tree')" :error="saveForm.errors.model_id"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
@@ -334,7 +330,7 @@ onMounted(async () => {
                                 Parent <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :selectedItem="menuItem?.parent"
+                            <MultiSelectInfinityLoadingApi :selectedItem="menuItem?.parent"
                                 fieldName="parent_id" :form="saveForm" :apiUrl="route('search.menu-item-tree')"
                                 :error="saveForm.errors.parent_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"

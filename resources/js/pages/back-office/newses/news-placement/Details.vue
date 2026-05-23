@@ -15,8 +15,6 @@ FontAwesomeLibrary.add(faTrash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject('pageReady')
-
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
@@ -63,10 +61,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    if (pageReady) {
-        pageReady.value = true
-    }
 })
 </script>
 

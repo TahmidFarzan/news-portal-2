@@ -23,7 +23,6 @@ FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSla
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
 const authUser = inject("authUser")
 
 const deletingRow = ref(null)
@@ -181,7 +180,6 @@ onMounted(async () => {
         })
     )
 
-    pageReady.value = true
 })
 </script>
 
@@ -204,33 +202,33 @@ onMounted(async () => {
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="per_page"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
                     placeholder="Per page" />
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="created_by_id"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     placeholder="Created by" />
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="news_type_id"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id" :apiUrl="route('search.news-types')" :multiple="false"
                     placeholder="News type" />
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="language_id"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
                     placeholder="Language" />
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="category_id"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.category_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.category-tree')"
                     :multiple="false" placeholder="Category" />
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="location_id"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.location_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.location-tree')"
                     :multiple="false" placeholder="Location" />
 
-                <MultiSelectInfinityLoadingApi v-if="pageReady" :form="filterForm" fieldName="event_id"
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id" :apiUrl="route('search.events')" :multiple="false"
                     placeholder="Event" />
 

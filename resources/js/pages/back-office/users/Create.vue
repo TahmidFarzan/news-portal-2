@@ -25,8 +25,6 @@ FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const { user } = defineProps({
     user: Object,
 })
@@ -146,8 +144,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 
@@ -207,7 +203,7 @@ onMounted(async () => {
                                 Gender <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="gender"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="gender"
                                 :selectedItem="saveForm.gender" :apiUrl="route('search.genders')" :multiple="false"
                                 placeholder="Select" :error="saveForm.errors.gender" />
 
@@ -221,7 +217,7 @@ onMounted(async () => {
                                 Religion <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="religion"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="religion"
                                 :selectedItem="saveForm.religion" :apiUrl="route('search.religions')" :multiple="false"
                                 placeholder="Select" :error="saveForm.errors.religion" />
 
@@ -235,7 +231,7 @@ onMounted(async () => {
                                 Marital Status <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="marital_status"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="marital_status"
                                 :selectedItem="saveForm.marital_status" :apiUrl="route('search.marital-statuses')"
                                 :multiple="false" placeholder="Select" :error="saveForm.errors.marital_status" />
 
@@ -271,7 +267,7 @@ onMounted(async () => {
                                 User Role <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="user_role_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="user_role_id"
                                 :selectedItem="user?.user_role" :apiUrl="route('search.user-roles')" :multiple="false"
                                 placeholder="Select" :error="saveForm.errors.user_role_id" />
 

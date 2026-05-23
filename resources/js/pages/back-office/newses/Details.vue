@@ -21,7 +21,6 @@ FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner, faFire)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
 const authUser = inject("authUser")
 
 const showDeleteModal = ref(false)
@@ -68,8 +67,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 

@@ -29,11 +29,9 @@ library.add(
 
 const page = usePage()
 
-const pageReady = ref(true)
 const headerNavbar = ref(null)
 const isHeaderSticky = ref(false)
 
-provide('pageReady', pageReady)
 
 const year = new Date().getFullYear()
 const appName = import.meta.env.VITE_APP_NAME
@@ -48,22 +46,10 @@ const handlePageScroll = () => {
     isHeaderSticky.value = window.scrollY > 0
 }
 
-watch(pageReady, (ready) => {
-    document.body.style.overflow = ready ? '' : 'hidden'
-}, { immediate: true })
-
 onMounted(async () => {
     await nextTick()
 
-    pageReady.value = true
 
-    removeInertiaStartListener = inertia.on('start', () => {
-        pageReady.value = false
-    })
-
-    removeInertiaFinishListener = inertia.on('finish', () => {
-        pageReady.value = true
-    })
 
     handlePageScroll()
 
@@ -144,9 +130,7 @@ onBeforeUnmount(() => {
         </div>
 
         <main class="flex-1 max-w-7xl mx-auto px-4 py-4 relative">
-            <div v-if="!pageReady" class="fixed inset-0 bg-white/90 flex items-center justify-center z-50">
-                <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
-            </div>
+
 
             <slot />
         </main>

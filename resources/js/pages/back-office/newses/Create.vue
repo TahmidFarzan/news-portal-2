@@ -21,8 +21,6 @@ FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const { news } = defineProps({
     news: Object,
 })
@@ -349,8 +347,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 
 
@@ -375,7 +371,7 @@ onMounted(async () => {
                                 News Type <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="news_type_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="news_type_id"
                                 :selectedItem="news.news_type" :apiUrl="route('search.news-types')"
                                 :error="saveForm.errors.news_type_id" :multiple="false"
                                 placeholder="Select news type" />
@@ -390,7 +386,7 @@ onMounted(async () => {
                                 Language <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="language_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="news?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
@@ -403,7 +399,7 @@ onMounted(async () => {
                                 Category <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="category_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="category_id"
                                 :selectedItem="saveForm.category_id ? news?.category : null" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.category_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
@@ -418,7 +414,7 @@ onMounted(async () => {
                                 Event
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="event_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="event_id"
                                 :selectedItem="saveForm.event_id ? news?.event : null" :apiUrl="eventApiUrl"
                                 :error="saveForm.errors.event_id" :multiple="false" placeholder="Select event" />
                             <p v-if="saveForm.errors.event_id" class="text-red-500 text-sm mt-1">
@@ -431,7 +427,7 @@ onMounted(async () => {
                                 Location
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="location_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="location_id"
                                 :selectedItem="saveForm.location_id ? news?.location : null" :apiUrl="locationApiUrl"
                                 :error="saveForm.errors.location_id" :multiple="false"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
@@ -488,7 +484,7 @@ onMounted(async () => {
                                 Brief <span class="text-red-500">*</span>
                             </label>
 
-                            <textarea v-if="pageReady" v-model="saveForm.brief" rows="4" placeholder="Enter brief"
+                            <textarea v-model="saveForm.brief" rows="4" placeholder="Enter brief"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -550,7 +546,7 @@ onMounted(async () => {
                                 Tags
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="tag_ids"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="tag_ids"
                                 :selectedItem="saveForm.tag_ids ? news?.tags : null" :apiUrl="tagApiUrl"
                                 :error="saveForm.errors.tag_ids" :multiple="true" placeholder="Select tags" />
                             <p v-if="saveForm.errors.tag_ids" class="text-red-500 text-sm mt-1">
@@ -572,7 +568,7 @@ onMounted(async () => {
                                     Feature Image <span class="text-red-500">*</span>
                                 </label>
 
-                                <MediaSelectFromMediaLibery v-if="pageReady" galleryTitle="Feature Image"
+                                <MediaSelectFromMediaLibery galleryTitle="Feature Image"
                                     :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
                                     @media-selected="handleSelectedFeatureImage" />
                             </div>
@@ -609,7 +605,7 @@ onMounted(async () => {
                                     Feature Image (Mobile)
                                 </label>
 
-                                <MediaSelectFromMediaLibery v-if="pageReady" galleryTitle="Feature Image (Mobile)"
+                                <MediaSelectFromMediaLibery galleryTitle="Feature Image (Mobile)"
                                     :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
                                     @media-selected="handleSelectedThumbnail" />
                             </div>
@@ -650,7 +646,7 @@ onMounted(async () => {
                                 Contributors
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="contributor_ids"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="contributor_ids"
                                 :selectedItem="saveForm.contributor_ids ? news?.contributors : null"
                                 :apiUrl="contributorApiUrl" :error="saveForm.errors.contributor_ids" :multiple="true"
                                 placeholder="Select contributors" />
@@ -686,7 +682,7 @@ onMounted(async () => {
                                 Relevant Newses
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="relevant_news_ids"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="relevant_news_ids"
                                 :selectedItem="saveForm.relevant_news_ids ? news?.relevant_news_ids : null"
                                 :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.relevant_news_ids" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
@@ -701,7 +697,7 @@ onMounted(async () => {
                                 Related Newses
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="related_news_ids"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="related_news_ids"
                                 :selectedItem="saveForm.related_news_ids ? news?.related_news_ids : null"
                                 :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.related_news_ids" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
@@ -784,7 +780,7 @@ onMounted(async () => {
                                 SEO Brief
                             </label>
 
-                            <textarea v-if="pageReady" v-model="saveForm.seo_brief" rows="3"
+                            <textarea v-model="saveForm.seo_brief" rows="3"
                                 placeholder="Enter SEO brief"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>

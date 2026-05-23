@@ -20,8 +20,6 @@ FontAwesomeLibrary.add(faPlus, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const { user } = defineProps({
     user: Object,
 })
@@ -99,7 +97,6 @@ onMounted(async () => {
             ],
         })
     )
-    pageReady.value = true
 })
 </script>
 
@@ -212,7 +209,7 @@ onMounted(async () => {
                                     :selectedItem="profileUpdateForm.gender" :apiUrl="route('search.genders')"
                                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
                                     apiValueKey="id" placeholder="Select gender"
-                                    :error="profileUpdateForm.errors.gender" v-if="pageReady" />
+                                    :error="profileUpdateForm.errors.gender"/>
 
                                 <p v-if="profileUpdateForm.errors.gender" class="text-red-500 text-sm mt-1">
                                     {{ profileUpdateForm.errors.gender }}
@@ -228,7 +225,7 @@ onMounted(async () => {
                                     :selectedItem="profileUpdateForm.religion" :apiUrl="route('search.religions')"
                                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
                                     apiValueKey="id" placeholder="Select religion"
-                                    :error="profileUpdateForm.errors.religion" v-if="pageReady" />
+                                    :error="profileUpdateForm.errors.religion" />
 
                                 <p v-if="profileUpdateForm.errors.religion" class="text-red-500 text-sm mt-1">
                                     {{ profileUpdateForm.errors.religion }}
@@ -244,8 +241,7 @@ onMounted(async () => {
                                     :selectedItem="profileUpdateForm.marital_status"
                                     :apiUrl="route('search.marital-statuses')" :multiple="false" selectedLabelKey="name"
                                     selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                                    placeholder="Select marital status" :error="profileUpdateForm.errors.marital_status"
-                                    v-if="pageReady" />
+                                    placeholder="Select marital status" :error="profileUpdateForm.errors.marital_status"/>
 
                                 <p v-if="profileUpdateForm.errors.marital_status" class="text-red-500 text-sm mt-1">
                                     {{ profileUpdateForm.errors.marital_status }}

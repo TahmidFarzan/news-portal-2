@@ -13,8 +13,6 @@ FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const { menu } = defineProps({
     menu: Object,
 })
@@ -98,8 +96,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 
@@ -122,7 +118,7 @@ onMounted(async () => {
                                 Language <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="language_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="menu?.language" :apiUrl="route('search.languages')" :error="saveForm.errors.language_id"
                                 :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
@@ -149,7 +145,7 @@ onMounted(async () => {
                                 Menu type <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="menu_type_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="menu_type_id"
                                 :selectedItem="menu?.menu_type" :apiUrl="route('search.menu-types')" :error="saveForm.errors.menu_type_id"
                                 :multiple="false" placeholder="Select menu type" />
                             <p v-if="saveForm.errors.menu_type_id" class="text-red-500 text-sm mt-1">

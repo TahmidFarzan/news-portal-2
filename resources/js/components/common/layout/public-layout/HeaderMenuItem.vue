@@ -1,8 +1,15 @@
 <script setup>
 import { ref, nextTick, onMounted, onBeforeUnmount } from "vue"
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {
+    faChevronDown
+} from '@fortawesome/free-solid-svg-icons'
+
+library.add(faChevronDown)
 
 const { item, level = 0 } = defineProps({
     item: {

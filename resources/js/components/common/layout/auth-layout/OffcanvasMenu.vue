@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, Teleport, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import OffcanvasMenuItems from '@/components/common/layout/auth-layout/OffcanvasMenuItems.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -35,10 +35,6 @@ const isMobile = ref(window.innerWidth < 768)
 const isTriggerMode = computed(() => mode === 'trigger')
 const isSidebarMode = computed(() => mode === 'sidebar')
 
-const emit = defineEmits(['ready'])
-
-const readyEmitted = ref(false)
-
 const toggleOffcanvasSidebarShow = () => {
     offcanvasSidebarShow.value = !offcanvasSidebarShow.value
 }
@@ -55,18 +51,8 @@ const handlePageResize = () => {
     }
 }
 
-const emitReadyOnce = () => {
-    if (readyEmitted.value) return
-
-    readyEmitted.value = true
-    emit('ready')
-}
-
-onMounted(async () => {
+onMounted(() => {
     window.addEventListener('resize', handlePageResize)
-
-    await nextTick()
-    emitReadyOnce()
 })
 
 onBeforeUnmount(() => {
@@ -77,12 +63,11 @@ onBeforeUnmount(() => {
 <template>
     <template v-if="isTriggerMode">
         <button v-if="isMobile && !offcanvasSidebarShow" type="button" @click="toggleOffcanvasSidebarShow"
-            class="md:hidden border border-gray-200 px-2 py-1 rounded" aria-label="Open sidebar menu">
+            class="md:hidden border border-gray-200 px-2 py-1 rounded hover:bg-gray-100" aria-label="Open sidebar menu">
             <FontAwesomeIcon icon="bars" />
         </button>
 
         <Teleport to="body">
-
             <Transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0"
                 enter-to-class="opacity-100" leave-active-class="transition-opacity duration-150"
                 leave-from-class="opacity-100" leave-to-class="opacity-0">
@@ -95,7 +80,7 @@ onBeforeUnmount(() => {
                 leave-active-class="transition transform duration-200 ease-in" leave-from-class="translate-x-0"
                 leave-to-class="-translate-x-full">
                 <aside v-if="offcanvasSidebarShow"
-                    class="fixed top-0 left-0 h-full w-64 bg-white z-50 p-3 md:hidden shadow-lg">
+                    class="fixed top-0 left-0 h-full w-64 bg-white z-50 p-3 md:hidden shadow-lg flex flex-col">
                     <div class="flex items-center justify-end mb-3">
                         <button type="button" @click="closeOffcanvasSidebar"
                             class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"
@@ -104,14 +89,16 @@ onBeforeUnmount(() => {
                         </button>
                     </div>
 
-                    <OffcanvasMenuItems :auth-user="authUser" @ready="emitReadyOnce" />
+                    <div class="flex-1 min-h-0 overflow-y-auto">
+                        <OffcanvasMenuItems :auth-user="authUser" @navigate="closeOffcanvasSidebar" />
+                    </div>
                 </aside>
             </Transition>
         </Teleport>
     </template>
 
-    <aside v-if="isSidebarMode" class="w-64 border-r border-gray-200 bg-white hidden md:block">
-        <div class="p-3">
+    <aside v-if="isSidebarMode" class="w-64 border-r border-gray-200 bg-white hidden md:block flex-shrink-0">
+        <div class="p-3 sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto">
             <OffcanvasMenuItems :auth-user="authUser" />
         </div>
     </aside>

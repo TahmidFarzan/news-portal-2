@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed, onMounted, nextTick } from "vue"
-import { usePage } from "@inertiajs/vue3"
+import { ref, computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
-import { library } from "@fortawesome/fontawesome-svg-core"
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import {
     faUser,
@@ -21,7 +21,7 @@ import {
     faFan,
     faGlobe,
     faEllipsisVertical
-} from "@fortawesome/free-solid-svg-icons"
+} from '@fortawesome/free-solid-svg-icons'
 
 library.add(
     faUser,
@@ -57,7 +57,7 @@ const {
     }
 })
 
-const emit = defineEmits(['ready'])
+const emit = defineEmits(['navigate'])
 
 const page = usePage()
 
@@ -76,7 +76,7 @@ const routeMap = {
         '/back-office/trends/*',
         '/back-office/locations/*',
         '/back-office/events/*',
-        '/back-office/contributor/*'
+        '/back-office/contributors/*'
     ],
     Reports: ['/back-office/reports/*']
 }
@@ -99,6 +99,10 @@ const canAccessMenuMenuComputed = computed(() => {
 
 const toggleShowSubMenu = (key) => {
     subMenus.value[key] = !subMenus.value[key]
+}
+
+const handleNavigate = () => {
+    emit('navigate')
 }
 
 const isCurrentPage = (url) => {
@@ -127,12 +131,6 @@ const isSubMenuVisible = (key) => {
 
     return subMenus.value[key] || inRoute
 }
-
-onMounted(async () => {
-    await nextTick()
-
-    emit('ready')
-})
 </script>
 
 <template>

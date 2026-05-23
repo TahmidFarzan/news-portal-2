@@ -14,8 +14,6 @@ FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const pageReady = inject("pageReady")
-
 const { tag } = defineProps({
     tag: Object,
 })
@@ -96,8 +94,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 
@@ -120,7 +116,7 @@ onMounted(async () => {
                                 Language <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="pageReady" :form="saveForm" fieldName="language_id"
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="tag?.language" :apiUrl="route('search.languages')" :error="saveForm.errors.language_id"
                                 :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
@@ -147,7 +143,7 @@ onMounted(async () => {
                                 Brief
                             </label>
 
-                            <textarea v-if="pageReady" v-model="saveForm.brief" rows="4" placeholder="Enter brief"
+                            <textarea v-model="saveForm.brief" rows="4" placeholder="Enter brief"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -183,7 +179,7 @@ onMounted(async () => {
                                 SEO Brief
                             </label>
 
-                            <textarea v-if="pageReady" v-model="saveForm.seo_brief" rows="3"
+                            <textarea v-model="saveForm.seo_brief" rows="3"
                                 placeholder="Enter SEO brief"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>

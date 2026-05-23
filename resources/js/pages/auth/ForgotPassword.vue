@@ -1,7 +1,7 @@
 <script setup>
 import layout from '@/pages/layouts/PublicLayout.vue'
 
-import { inject, onMounted } from 'vue'
+import { inject} from 'vue'
 import { Head, useForm } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -11,8 +11,6 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 FontAwesomeLibrary.add(faSpinner)
 
 defineOptions({ layout })
-
-const pageReady = inject("pageReady")
 
 const resetRequestForm = useForm({
     email: '',
@@ -51,10 +49,6 @@ function handleForgotPassword() {
         }
     })
 }
-
-onMounted(() => {
-    pageReady.value = true
-})
 </script>
 
 <template>

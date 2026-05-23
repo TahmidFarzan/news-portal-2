@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { router as inertiaJsRoute } from '@inertiajs/vue3'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -32,8 +32,6 @@ const {
         default: null
     }
 })
-
-const emit = defineEmits(['ready'])
 
 const showUserDropdown = ref(false)
 const dropdownRef = ref(null)
@@ -82,11 +80,8 @@ const handleClickOutside = (event) => {
     }
 }
 
-onMounted(async () => {
+onMounted(() => {
     document.addEventListener('click', handleClickOutside)
-
-    await nextTick()
-    emit('ready')
 })
 
 onBeforeUnmount(() => {
@@ -98,7 +93,7 @@ onBeforeUnmount(() => {
     <div ref="dropdownRef" class="relative">
         <button type="button" @click="toggleDropdown" class="flex items-center gap-2" aria-label="User menu">
             <img :src="authUser?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
-                class="w-8 h-8 rounded-full object-cover" :alt="authUser?.name || 'User'" />
+                class="w-8 h-8 rounded-full object-cover" :alt="authUser?.name || 'User'">
         </button>
 
         <Transition enter-active-class="transition ease-out duration-150"
@@ -181,7 +176,9 @@ onBeforeUnmount(() => {
 
                                 <FontAwesomeIcon v-else icon="spinner" spin />
 
-                                <span>Logout</span>
+                                <span>
+                                    {{ logoutProcessing ? 'Logging out...' : 'Logout' }}
+                                </span>
                             </button>
                         </div>
                     </div>

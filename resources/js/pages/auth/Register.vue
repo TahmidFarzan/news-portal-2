@@ -19,8 +19,6 @@ FontAwesomeLibrary.add(faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout })
 
-const pageReady = inject("pageReady")
-
 const registerForm = useForm({
     name: '',
     email: '',
@@ -74,10 +72,6 @@ function handleRegister() {
         }
     })
 }
-
-onMounted(() => {
-    pageReady.value = true
-})
 </script>
 
 <template>

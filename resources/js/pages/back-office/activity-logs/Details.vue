@@ -22,7 +22,6 @@ const { activityLog } = defineProps({
 
 const deleting = ref(false)
 const showDeleteModal = ref(false)
-const pageReady = inject('pageReady')
 
 const parseJson = (value) => {
     try {
@@ -55,8 +54,6 @@ onMounted(async () => {
             ],
         })
     )
-
-    pageReady.value = true
 })
 </script>
 
