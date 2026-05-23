@@ -1,17 +1,16 @@
 <?php
-
 namespace App\Helpers;
 
-use Throwable;
 use DateTimeInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
+use Throwable;
 
 class CacheServerHelper
 {
-    const oneDayInSecond = 86400;
+    const oneDayInSecond   = 86400;
     const sixHoursInSecond = 21600;
 
     protected static function driver(): string
@@ -21,12 +20,12 @@ class CacheServerHelper
 
     protected static function supportsTags(): bool
     {
-        return !in_array(self::driver(), ['file', 'array'], true);
+        return ! in_array(self::driver(), ['file', 'array'], true);
     }
 
     protected static function resolveLifeTime(?int $lifeTime = null): int
     {
-        return !empty($lifeTime) && $lifeTime > 0
+        return ! empty($lifeTime) && $lifeTime > 0
             ? $lifeTime
             : self::oneDayInSecond;
     }
@@ -38,7 +37,7 @@ class CacheServerHelper
 
     public static function isConnected(): bool
     {
-        if (!config('cache.enable') || !config('cache.default')) {
+        if (! config('cache.enable') || ! config('cache.default')) {
             return false;
         }
 
@@ -59,21 +58,33 @@ class CacheServerHelper
         return Str::lower(Str::slug($key));
     }
 
+    public static function tagsFormat(string | array $key): string | array
+    {
+        if (is_string($key)) {
+            return Str::lower(Str::slug($key));
+        }
+
+        return array_map(function ($item) {
+            return Str::lower(Str::slug($item));
+        }, $key);
+    }
+
     public static function cachedData(
         string $key,
         mixed $data,
         ?int $lifeTime = null,
         array $tags = []
     ): void {
-        if (!self::isConnected()) {
+        if (! self::isConnected()) {
             return;
         }
 
         $key = self::keyGenerate($key);
+        $formatedTags = self::tagsFormat($tags);
 
         try {
-            $store = (!empty($tags) && self::supportsTags())
-                ? Cache::tags($tags)
+            $store = (! empty($formatedTags) && self::supportsTags())
+                ? Cache::tags($formatedTags)
                 : Cache::store();
 
             $store->put($key, $data, self::ttl($lifeTime));
@@ -86,15 +97,16 @@ class CacheServerHelper
         string $key,
         array $tags = []
     ): mixed {
-        if (!self::isConnected()) {
+        if (! self::isConnected()) {
             return null;
         }
 
         $key = self::keyGenerate($key);
+        $formatedTags = self::tagsFormat($tags);
 
         try {
-            $store = (!empty($tags) && self::supportsTags())
-                ? Cache::tags($tags)
+            $store = (! empty($formatedTags) && self::supportsTags())
+                ? Cache::tags($formatedTags)
                 : Cache::store();
 
             return $store->get($key);
@@ -107,14 +119,14 @@ class CacheServerHelper
 
     public static function clearCached(string $key, array $tags = []): void
     {
-        if (!self::isConnected()) {
+        if (! self::isConnected()) {
             return;
         }
 
         $key = self::keyGenerate($key);
 
         try {
-            $store = (!empty($tags) && self::supportsTags())
+            $store = (! empty($tags) && self::supportsTags())
                 ? Cache::tags($tags)
                 : Cache::store();
 
@@ -124,9 +136,9 @@ class CacheServerHelper
         }
     }
 
-    public static function clearCachedByTag(string|array $tags): void
+    public static function clearCachedByTag(string | array $tags): void
     {
-        if (!self::isConnected() || !self::supportsTags()) {
+        if (! self::isConnected() || ! self::supportsTags()) {
             return;
         }
 
@@ -139,7 +151,7 @@ class CacheServerHelper
 
     public static function clearAllCached(): void
     {
-        if (!self::isConnected()) {
+        if (! self::isConnected()) {
             return;
         }
 
