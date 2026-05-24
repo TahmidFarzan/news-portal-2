@@ -46,7 +46,7 @@ const loadChildren = async (page = 1) => {
         childrenLoading.value = true
 
         const response = await fetchFromApi(
-            route('site.theme.menu-items.sub-menu-items', {
+            route('site.menu-items.sub-menu-items', {
                 slug: item.slug,
                 page,
             })

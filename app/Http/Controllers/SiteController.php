@@ -15,40 +15,40 @@ class SiteController extends Controller
         $this->siteService = $siteService;
     }
 
-    public function themeMenuHeaderMenuMenuItems(Request $request): JsonResponse
+    public function menuHeaderMenuMenuItems(Request $request): JsonResponse
     {
         return response()->json(
-            $this->siteService->themeMenuHeaderMenuMenuItems($request)
+            $this->siteService->menuHeaderMenuMenuItems($request)
         );
     }
 
-    public function themeMenuOffCanvasMenuMenuItems(Request $request): JsonResponse
+    public function menuOffCanvasMenuMenuItems(Request $request): JsonResponse
     {
         return response()->json(
-            $this->siteService->themeMenuOffCanvasMenuMenuItems($request)
+            $this->siteService->menuOffCanvasMenuMenuItems($request)
         );
     }
 
-    public function themeMenuTopbarMenuMenuItems(Request $request): JsonResponse
+    public function menuTopbarMenuMenuItems(Request $request): JsonResponse
     {
         return response()->json(
-            $this->siteService->themeMenuTopbarMenuMenuItems($request)
+            $this->siteService->menuTopbarMenuMenuItems($request)
         );
     }
 
-    public function themeMenuFooterMenuMenuItems(Request $request): JsonResponse
+    public function menuFooterMenuMenuItems(Request $request): JsonResponse
     {
         return response()->json(
-            $this->siteService->themeMenuFooterMenuMenuItems($request)
+            $this->siteService->menuFooterMenuMenuItems($request)
         );
     }
 
-    public function themeMenuItemSubMenuItems(Request $request, string $slug): JsonResponse
+    public function menuItemSubMenuItems(Request $request, string $slug): JsonResponse
     {
         $menuItem = $this->siteService->menuItem($slug);
         $menuItem = $this->siteService->menuItemRelationLoad($menuItem);
         return response()->json(
-            $this->siteService->themeMenuItemSubMenuItems($request, $menuItem)
+            $this->siteService->menuItemSubMenuItems($request, $menuItem)
         );
     }
 }

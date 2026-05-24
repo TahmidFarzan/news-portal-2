@@ -37,7 +37,7 @@ const getFooterMenuItems = async (pageNumber = 1) => {
         footerMenu.error = null
 
         const response = await fetchFromApi(
-            route('site.theme.menus.footer-menu-items', { page: pageNumber })
+            route('site.menus.footer-menu-items', { page: pageNumber })
         )
 
         const items = normalizeMenuItems(response?.items ?? [])

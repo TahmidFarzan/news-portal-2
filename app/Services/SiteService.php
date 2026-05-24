@@ -29,7 +29,7 @@ class SiteService
         return $menuItem;
     }
 
-    public function themeMenuHeaderMenuMenuItems(Request $request): array
+    public function menuHeaderMenuMenuItems(Request $request): array
     {
         $perPage = 10;
         $page    = max((int) $request->input('page', 1), 1);
@@ -93,7 +93,7 @@ class SiteService
         return $data;
     }
 
-    public function themeMenuOffCanvasMenuMenuItems(Request $request): array
+    public function menuOffCanvasMenuMenuItems(Request $request): array
     {
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
@@ -157,7 +157,7 @@ class SiteService
         return $data;
     }
 
-    public function themeMenuTopbarMenuMenuItems(Request $request): array
+    public function menuTopbarMenuMenuItems(Request $request): array
     {
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
@@ -221,7 +221,7 @@ class SiteService
         return $data;
     }
 
-    public function themeMenuFooterMenuMenuItems(Request $request): array
+    public function menuFooterMenuMenuItems(Request $request): array
     {
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
@@ -285,7 +285,7 @@ class SiteService
         return $data;
     }
 
-    public function themeMenuItemSubMenuItems(Request $request, MenuItem $menuItem): array
+    public function menuItemSubMenuItems(Request $request, MenuItem $menuItem): array
     {
         $perPage = 10;
         $page    = max((int) $request->input('page', 1), 1);

@@ -38,7 +38,7 @@ const getTopbarMenuItems = async (pageNumber = 1) => {
         topbarMenu.error = null
 
         const response = await fetchFromApi(
-            route('site.theme.menus.topbar-menu-items', { page: pageNumber })
+            route('site.menus.topbar-menu-items', { page: pageNumber })
         )
 
         const items = normalizeMenuItems(response?.items ?? [])

@@ -40,7 +40,7 @@ const getHeaderMenuItems = async (pageNumber = 1) => {
         headerMenu.error = null
 
         const response = await fetchFromApi(
-            route('site.theme.menus.header-menu-items', { page: pageNumber })
+            route('site.menus.header-menu-items', { page: pageNumber })
         )
 
         const items = normalizeMenuItems(response?.items ?? [])

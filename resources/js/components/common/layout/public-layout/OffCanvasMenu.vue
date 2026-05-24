@@ -45,7 +45,7 @@ const getOffCanvasMenuItems = async (pageNumber = 1) => {
         offCanvasMenu.error = null
 
         const response = await fetchFromApi(
-            route('site.theme.menus.off-canvas-menu-items', { page: pageNumber })
+            route('site.menus.off-canvas-menu-items', { page: pageNumber })
         )
 
         const items = normalizeMenuItems(response?.items ?? [])
