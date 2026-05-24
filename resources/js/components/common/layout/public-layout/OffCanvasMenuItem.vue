@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, watch } from "vue"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
@@ -29,6 +29,13 @@ const normalizeMenuItems = (items = []) => {
     }))
 }
 
+const resetChildrenState = () => {
+    children.value = []
+    childrenLoading.value = false
+    childrenLoaded.value = false
+    childrenPage.value = 0
+    childrenLastPage.value = 1
+}
 
 const loadChildren = async (page = 1) => {
     if (!item?.has_descendants) return
@@ -60,6 +67,24 @@ const loadChildren = async (page = 1) => {
         childrenLoading.value = false
     }
 }
+
+const autoLoadChildren = async () => {
+    if (item?.has_descendants && !childrenLoaded.value) {
+        await loadChildren(1)
+    }
+}
+
+onMounted(() => {
+    autoLoadChildren()
+})
+
+watch(
+    () => item?.id,
+    () => {
+        resetChildrenState()
+        autoLoadChildren()
+    }
+)
 
 const toggleSubMenu = async () => {
     if (!item.has_descendants) return
