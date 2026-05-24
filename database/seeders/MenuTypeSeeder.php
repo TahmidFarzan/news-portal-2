@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\SystemHelper;
+use App\Helpers\MenuHelper;
 use App\Models\MenuType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +27,7 @@ class MenuTypeSeeder extends Seeder
             MenuType::truncate();
         }
 
-        foreach (SystemHelper::menuTypes() as $menuType) {
+        foreach (MenuHelper::menuTypes() as $menuType) {
             MenuType::factory()->state([
                 'name' => $menuType->id,
             ])->create();
