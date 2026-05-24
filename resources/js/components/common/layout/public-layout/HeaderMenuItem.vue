@@ -1,5 +1,5 @@
 <script setup>
-import { ref, nextTick, onMounted, onBeforeUnmount } from "vue"
+import { ref, nextTick, onMounted, onBeforeUnmount, watch } from "vue"
 import { fetchFromApi } from '@/composables/useSystemApi'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 
@@ -40,6 +40,14 @@ const normalizeMenuItems = (items = []) => {
         ...item,
         children: item.children ?? [],
     }))
+}
+
+const resetChildrenState = () => {
+    children.value = []
+    childrenLoading.value = false
+    childrenLoaded.value = false
+    childrenPage.value = 0
+    childrenLastPage.value = 1
 }
 
 const updateDropdownPosition = () => {
@@ -86,6 +94,12 @@ const loadChildren = async (page = 1) => {
         console.error('Failed to fetch submenu items:', error)
     } finally {
         childrenLoading.value = false
+    }
+}
+
+const autoLoadChildren = async () => {
+    if (item?.has_descendants && !childrenLoaded.value) {
+        await loadChildren(1)
     }
 }
 
@@ -140,10 +154,20 @@ const handleWindowChange = () => {
 }
 
 onMounted(() => {
+    autoLoadChildren()
+
     document.addEventListener('click', handleClickOutside)
     window.addEventListener('resize', handleWindowChange)
     window.addEventListener('scroll', handleWindowChange, true)
 })
+
+watch(
+    () => item?.id,
+    () => {
+        resetChildrenState()
+        autoLoadChildren()
+    }
+)
 
 onBeforeUnmount(() => {
     clearTimeout(closeTimer.value)
