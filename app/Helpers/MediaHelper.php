@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -23,23 +24,23 @@ class MediaHelper
     public const ROLE_EVENT_BANNER_IMAGE_DESKTOP = 'Event Banner Image (Desktop)';
     public const ROLE_EVENT_BANNER_IMAGE_MOBILE  = 'Event Banner Image (Mobile)';
 
-    public static function mediaRoles()
+    public static function mediaRoles(): Collection
     {
-        return collect([
-            (object) ['id' => self::ROLE_DEFAULT, 'name' => self::ROLE_DEFAULT],
+        return SystemHelper::toOptions([
+            self::ROLE_DEFAULT,
 
-            (object) ['id' => self::ROLE_NEWS_FEATURE_IMAGE, 'name' => self::ROLE_NEWS_FEATURE_IMAGE],
-            (object) ['id' => self::ROLE_NEWS_FEATURE_IMAGE_MOBILE, 'name' => self::ROLE_NEWS_FEATURE_IMAGE_MOBILE],
-            (object) ['id' => self::ROLE_NEWS_CONTENT_IMAGE, 'name' => self::ROLE_NEWS_CONTENT_IMAGE],
+            self::ROLE_PROFILE_IMAGE,
 
-            (object) ['id' => self::ROLE_PROFILE_IMAGE, 'name' => self::ROLE_PROFILE_IMAGE],
+            self::ROLE_APP_LOGO_IMAGE,
+            self::ROLE_APP_FAVICON_IMAGE,
 
-            (object) ['id' => self::ROLE_APP_LOGO_IMAGE, 'name' => self::ROLE_APP_LOGO_IMAGE],
-            (object) ['id' => self::ROLE_APP_FAVICON_IMAGE, 'name' => self::ROLE_APP_FAVICON_IMAGE],
+            self::ROLE_NEWS_FEATURE_IMAGE,
+            self::ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+            self::ROLE_NEWS_CONTENT_IMAGE,
+            self::ROLE_NEWS_GALLERY_IMAGE,
 
-            (object) ['id' => self::ROLE_EVENT_BANNER_IMAGE_DESKTOP, 'name' => self::ROLE_EVENT_BANNER_IMAGE_DESKTOP],
-            (object) ['id' => self::ROLE_EVENT_BANNER_IMAGE_MOBILE, 'name' => self::ROLE_EVENT_BANNER_IMAGE_MOBILE],
-
+            self::ROLE_EVENT_BANNER_IMAGE_DESKTOP,
+            self::ROLE_EVENT_BANNER_IMAGE_MOBILE,
         ]);
     }
 

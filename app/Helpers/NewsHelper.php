@@ -1,5 +1,8 @@
 <?php
+
 namespace App\Helpers;
+
+use Illuminate\Support\Collection;
 
 class NewsHelper
 {
@@ -7,12 +10,12 @@ class NewsHelper
     public const NEWS_TYPE_VIDEO         = 'Video';
     public const NEWS_TYPE_IMAGE_GALLERY = 'Image Gallery';
 
-    public static function newsTypes()
+    public static function newsTypes(): Collection
     {
-        return collect([
-            (object) ['id' => self::NEWS_TYPE_STORY, 'name' => 'Story'],
-            (object) ['id' => self::NEWS_TYPE_VIDEO, 'name' => 'Video'],
-            (object) ['id' => self::NEWS_TYPE_IMAGE_GALLERY, 'name' => 'Image Gallery'],
+        return SystemHelper::toOptions([
+            self::NEWS_TYPE_STORY,
+            self::NEWS_TYPE_VIDEO,
+            self::NEWS_TYPE_IMAGE_GALLERY,
         ]);
     }
 }

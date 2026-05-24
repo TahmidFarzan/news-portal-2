@@ -1,5 +1,8 @@
 <?php
+
 namespace App\Helpers;
+
+use Illuminate\Support\Collection;
 
 class PageHelper
 {
@@ -9,20 +12,19 @@ class PageHelper
     public const PAGE_SECTION_LEAD_NEWS     = 'Lead News';
     public const PAGE_SECTION_CATEGORY_NEWS = 'Category News';
 
-    public static function pages()
+    public static function pages(): Collection
     {
-        return collect([
-            (object) ['id' => self::PAGE_HOME, 'name' => 'Home'],
-            (object) ['id' => self::PAGE_CATEGORY, 'name' => 'Category'],
+        return SystemHelper::toOptions([
+            self::PAGE_HOME,
+            self::PAGE_CATEGORY,
         ]);
     }
 
-    public static function pageSections()
+    public static function pageSections(): Collection
     {
-        return collect([
-            (object) ['id' => self::PAGE_SECTION_LEAD_NEWS, 'name' => 'Lead News'],
-            (object) ['id' => self::PAGE_SECTION_CATEGORY_NEWS, 'name' => 'Category News'],
+        return SystemHelper::toOptions([
+            self::PAGE_SECTION_LEAD_NEWS,
+            self::PAGE_SECTION_CATEGORY_NEWS,
         ]);
     }
-
 }

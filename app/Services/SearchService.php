@@ -1,9 +1,11 @@
 <?php
 namespace App\Services;
 
+use App\Helpers\MenuHelper;
 use App\Helpers\MediaHelper;
-use App\Helpers\NewsHelper;
-use App\Helpers\SystemHelper;
+use App\Helpers\PageHelper;
+use App\Helpers\DatatableHelper;
+use App\Helpers\ActivityLogHelper;
 use App\Helpers\UserHelper;
 use App\Models\Category;
 use App\Models\Contributor;
@@ -26,7 +28,7 @@ class SearchService
 {
     public function perPages(Request $request): array
     {
-        $options = SystemHelper::perPages();
+        $options = DatatableHelper::perPages();
 
         if ($request->filled('search')) {
             $search  = strtolower($request->input('search'));
@@ -130,7 +132,7 @@ class SearchService
 
     public function activityLogEvents(Request $request): array
     {
-        $options = SystemHelper::activityLogEvents();
+        $options = ActivityLogHelper::activityLogEvents();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');
@@ -156,7 +158,7 @@ class SearchService
 
     public function activityLogSubjectTypes(Request $request): array
     {
-        $options = SystemHelper::activityLogSubjectTypes();
+        $options = ActivityLogHelper::activityLogSubjectTypes();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');
@@ -182,7 +184,7 @@ class SearchService
 
     public function pageSections(Request $request): array
     {
-        $options = NewsHelper::pageSections();
+        $options = PageHelper::pageSections();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');
@@ -208,7 +210,7 @@ class SearchService
 
     public function menuItemModels(Request $request): array
     {
-        $options = SystemHelper::menuItemModels();
+        $options = MenuHelper::menuItemModels();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');

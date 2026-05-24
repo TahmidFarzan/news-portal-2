@@ -1,5 +1,8 @@
 <?php
+
 namespace App\Helpers;
+
+use Illuminate\Support\Collection;
 
 class UserHelper
 {
@@ -21,41 +24,41 @@ class UserHelper
     private const USER_MARITAL_SEPARATED = 'Separated';
     private const USER_MARITAL_OTHER     = 'Other';
 
-    public static function userRoles()
+    public static function userRoles(): Collection
     {
-        return collect([
-            (object) ['id' => self::USER_ROLE_ADMIN, 'name' => 'Admin'],
-            (object) ['id' => self::USER_ROLE_NEWS_DESK, 'name' => 'News Desk'],
+        return SystemHelper::toOptions([
+            self::USER_ROLE_ADMIN,
+            self::USER_ROLE_NEWS_DESK,
         ]);
     }
 
-    public static function genders()
+    public static function genders(): Collection
     {
-        return collect([
-            (object) ['id' => self::USER_GENDER_MALE, 'name' => 'Male'],
-            (object) ['id' => self::USER_GENDER_FEMALE, 'name' => 'Female'],
-            (object) ['id' => self::USER_GENDER_OTHER, 'name' => 'Other'],
+        return SystemHelper::toOptions([
+            self::USER_GENDER_MALE,
+            self::USER_GENDER_FEMALE,
+            self::USER_GENDER_OTHER,
         ]);
     }
 
-    public static function religions()
+    public static function religions(): Collection
     {
-        return collect([
-            (object) ['id' => self::USER_RELIGION_ISLAM, 'name' => 'Islam'],
-            (object) ['id' => self::USER_RELIGION_HINDU, 'name' => 'Hindu'],
-            (object) ['id' => self::USER_RELIGION_CHRISTIAN, 'name' => 'Christian'],
-            (object) ['id' => self::USER_RELIGION_OTHER, 'name' => 'Other'],
+        return SystemHelper::toOptions([
+            self::USER_RELIGION_ISLAM,
+            self::USER_RELIGION_HINDU,
+            self::USER_RELIGION_CHRISTIAN,
+            self::USER_RELIGION_OTHER,
         ]);
     }
 
-    public static function maritalStatuses()
+    public static function maritalStatuses(): Collection
     {
-        return collect([
-            (object) ['id' => self::USER_MARITAL_SINGLE, 'name' => 'Single'],
-            (object) ['id' => self::USER_MARITAL_MARRIED, 'name' => 'Married'],
-            (object) ['id' => self::USER_MARITAL_DIVORCED, 'name' => 'Divorced'],
-            (object) ['id' => self::USER_MARITAL_SEPARATED, 'name' => 'Separated'],
-            (object) ['id' => self::USER_MARITAL_OTHER, 'name' => 'Other'],
+        return SystemHelper::toOptions([
+            self::USER_MARITAL_SINGLE,
+            self::USER_MARITAL_MARRIED,
+            self::USER_MARITAL_DIVORCED,
+            self::USER_MARITAL_SEPARATED,
+            self::USER_MARITAL_OTHER,
         ]);
     }
 }
