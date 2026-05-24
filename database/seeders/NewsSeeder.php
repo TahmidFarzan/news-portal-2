@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use App\Helpers\PageHelper;
 use App\Helpers\MediaHelper;
 use App\Helpers\NewsHelper;
 use App\Helpers\SystemHelper;
@@ -214,29 +215,29 @@ class NewsSeeder extends Seeder
 
     private function setNewsPlacements(News $news): void
     {
-        $lastHomeLastLeadNewsPosition     = NewsPlacement::query()->where('page', NewsHelper::PAGE_HOME)->where('page_section', NewsHelper::PAGE_SECTION_LEAD_NEWS)->max('position');
-        $lastHomeLastCategoryNewsPosition = NewsPlacement::query()->where('page', NewsHelper::PAGE_HOME)->where('page_section', NewsHelper::PAGE_SECTION_CATEGORY_NEWS)->where("category_id", $news->category_id)->max('position');
-        $lastCategoryLastLeadNewsPosition = NewsPlacement::query()->where('page', NewsHelper::PAGE_CATEGORY)->where('page_section', NewsHelper::PAGE_SECTION_LEAD_NEWS)->where("category_id", $news->category_id)->max('position');
+        $lastHomeLastLeadNewsPosition     = NewsPlacement::query()->where('page', PageHelper::PAGE_HOME)->where('page_section', PageHelper::PAGE_SECTION_LEAD_NEWS)->max('position');
+        $lastHomeLastCategoryNewsPosition = NewsPlacement::query()->where('page', PageHelper::PAGE_HOME)->where('page_section', PageHelper::PAGE_SECTION_CATEGORY_NEWS)->where("category_id", $news->category_id)->max('position');
+        $lastCategoryLastLeadNewsPosition = NewsPlacement::query()->where('page', PageHelper::PAGE_CATEGORY)->where('page_section', PageHelper::PAGE_SECTION_LEAD_NEWS)->where("category_id", $news->category_id)->max('position');
 
         $newsPlacements = [
             [
                 'news_id'      => $news->id,
-                'page'         => NewsHelper::PAGE_HOME,
-                'page_section' => NewsHelper::PAGE_SECTION_LEAD_NEWS,
+                'page'         => PageHelper::PAGE_HOME,
+                'page_section' => PageHelper::PAGE_SECTION_LEAD_NEWS,
                 'category_id'  => null,
                 'position'     => $lastHomeLastLeadNewsPosition + 1,
             ],
             [
                 'news_id'      => $news->id,
-                'page'         => NewsHelper::PAGE_HOME,
-                'page_section' => NewsHelper::PAGE_SECTION_CATEGORY_NEWS,
+                'page'         => PageHelper::PAGE_HOME,
+                'page_section' => PageHelper::PAGE_SECTION_CATEGORY_NEWS,
                 'category_id'  => $news->category_id,
                 'position'     => $lastHomeLastCategoryNewsPosition + 1,
             ],
             [
                 'news_id'      => $news->id,
-                'page'         => NewsHelper::PAGE_CATEGORY,
-                'page_section' => NewsHelper::PAGE_SECTION_LEAD_NEWS,
+                'page'         => PageHelper::PAGE_CATEGORY,
+                'page_section' => PageHelper::PAGE_SECTION_LEAD_NEWS,
                 'category_id'  => $news->category_id,
                 'position'     => $lastCategoryLastLeadNewsPosition + 1,
             ],

@@ -2,6 +2,7 @@
 namespace Database\Factories;
 
 use App\Helpers\NewsHelper;
+use App\Helpers\PageHelper;
 use App\Helpers\UserHelper;
 use App\Models\News;
 use App\Models\NewsPlacement;
@@ -25,14 +26,14 @@ class NewsPlacementFactory extends Factory
         $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
 
-        $pages        = [NewsHelper::PAGE_HOME, NewsHelper::PAGE_CATEGORY];
-        $pageSections = [NewsHelper::PAGE_SECTION_LEAD_NEWS];
+        $pages        = [PageHelper::PAGE_HOME, PageHelper::PAGE_CATEGORY];
+        $pageSections = [PageHelper::PAGE_SECTION_LEAD_NEWS];
 
         $page        = Arr::random($pages);
         $pageSection = Arr::random($pageSections);
 
-        $skipPageSection = ($page == NewsHelper::PAGE_CATEGORY) && ($pageSection == NewsHelper::PAGE_SECTION_CATEGORY_NEWS);
-        $skipCategory    = ($page == NewsHelper::PAGE_HOME) && ($pageSection == NewsHelper::PAGE_SECTION_LEAD_NEWS);
+        $skipPageSection = ($page == PageHelper::PAGE_CATEGORY) && ($pageSection == PageHelper::PAGE_SECTION_CATEGORY_NEWS);
+        $skipCategory    = ($page == PageHelper::PAGE_HOME) && ($pageSection == PageHelper::PAGE_SECTION_LEAD_NEWS);
 
 
         $news = News::query()

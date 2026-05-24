@@ -3,6 +3,7 @@ namespace App\Services\BackOffice;
 
 use App\Helpers\MediaHelper;
 use App\Helpers\NewsHelper;
+use App\Helpers\PageHelper;
 use App\Helpers\TagifyHelper;
 use App\Http\Requests\NewsGalleryImageRequest;
 use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
@@ -495,8 +496,8 @@ class NewsService
     public function newsPlacementHomeLead()
     {
         $newsPlacement = NewsPlacement::query()->with("news")
-            ->where('page', NewsHelper::PAGE_HOME)
-            ->where('page_section', NewsHelper::PAGE_SECTION_LEAD_NEWS)
+            ->where('page', PageHelper::PAGE_HOME)
+            ->where('page_section', PageHelper::PAGE_SECTION_LEAD_NEWS)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'desc')
             ->limit(10)
@@ -507,8 +508,8 @@ class NewsService
 
     public function newsPlacementHomeCategory(int | string $categoryId)
     {
-        // $page        = NewsHelper::PAGE_HOME;
-        // $pageSection = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+        // $page        = PageHelper::PAGE_HOME;
+        // $pageSection = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
         // $newses = News::query()
         //     ->whereHas('newsPlacements', function ($query) use ($page, $pageSection, $categoryId) {
         //         $query->where('page', $page)
@@ -526,8 +527,8 @@ class NewsService
         //     ->get();
 
         $newsPlacement = NewsPlacement::query()->with("news")
-            ->where('page', NewsHelper::PAGE_HOME)
-            ->where('page_section', NewsHelper::PAGE_SECTION_CATEGORY_NEWS)
+            ->where('page', PageHelper::PAGE_HOME)
+            ->where('page_section', PageHelper::PAGE_SECTION_CATEGORY_NEWS)
             ->where("category_id", $categoryId)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'desc')
@@ -540,8 +541,8 @@ class NewsService
     public function newsPlacementCategoryLead(int | string $categoryId)
     {
         $newsPlacement = NewsPlacement::query()->with("news")
-            ->where('page', NewsHelper::PAGE_CATEGORY)
-            ->where('page_section', NewsHelper::PAGE_SECTION_LEAD_NEWS)
+            ->where('page', PageHelper::PAGE_CATEGORY)
+            ->where('page_section', PageHelper::PAGE_SECTION_LEAD_NEWS)
             ->where("category_id", $categoryId)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'desc')
@@ -557,10 +558,10 @@ class NewsService
         try {
 
             DB::transaction(function () use ($news) {
-                $pageHome                = NewsHelper::PAGE_HOME;
-                $pageCategory            = NewsHelper::PAGE_CATEGORY;
-                $pageSectionLeadNews     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
-                $pageSectionCategoryNews = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+                $pageHome                = PageHelper::PAGE_HOME;
+                $pageCategory            = PageHelper::PAGE_CATEGORY;
+                $pageSectionLeadNews     = PageHelper::PAGE_SECTION_LEAD_NEWS;
+                $pageSectionCategoryNews = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
 
                 $this->newsPlacementGenerate($pageHome, $pageSectionLeadNews);
 
@@ -591,10 +592,10 @@ class NewsService
         try {
 
             DB::transaction(function () use ($request, $news) {
-                $pageHome                = NewsHelper::PAGE_HOME;
-                $pageCategory            = NewsHelper::PAGE_CATEGORY;
-                $pageSectionLeadNews     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
-                $pageSectionCategoryNews = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+                $pageHome                = PageHelper::PAGE_HOME;
+                $pageCategory            = PageHelper::PAGE_CATEGORY;
+                $pageSectionLeadNews     = PageHelper::PAGE_SECTION_LEAD_NEWS;
+                $pageSectionCategoryNews = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
 
                 if ($request->filled('home_lead_news_ids_sequence')) {
                     $this->newsPlacementUpdate(
@@ -821,11 +822,11 @@ class NewsService
 
     private function syncNewPlacementAfterNewsCreate(News $news): void
     {
-        $homePage     = NewsHelper::PAGE_HOME;
-        $categoryPage = NewsHelper::PAGE_CATEGORY;
+        $homePage     = PageHelper::PAGE_HOME;
+        $categoryPage = PageHelper::PAGE_CATEGORY;
 
-        $leadNewsSection     = NewsHelper::PAGE_SECTION_LEAD_NEWS;
-        $categoryNewsSection = NewsHelper::PAGE_SECTION_CATEGORY_NEWS;
+        $leadNewsSection     = PageHelper::PAGE_SECTION_LEAD_NEWS;
+        $categoryNewsSection = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
 
         $homeLeadNewsPositionExit = NewsPlacement::query()
             ->where('news_id', $news->id)
