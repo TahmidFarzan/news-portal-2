@@ -39,10 +39,10 @@ class MenuSeeder extends Seeder
 
         $languages = Language::orderBy("id", "desc")->get();
 
-        $menuTypeHeader    = MenuType::where("name", MenuHelper::TYPE_HEADER)->first();
-        $menuTypeTopBar    = MenuType::where("name", MenuHelper::TYPE_TOPBAR)->first();
-        $menuTypeFooter    = MenuType::where("name", MenuHelper::TYPE_FOOTER)->first();
-        $menuTypeOffCanvas = MenuType::where("name", MenuHelper::TYPE_OFFCANVAS)->first();
+        $menuTypeHeader    = MenuType::where("name", MenuHelper::MENU_TYPE_HEADER)->first();
+        $menuTypeTopBar    = MenuType::where("name", MenuHelper::MENU_TYPE_TOPBAR)->first();
+        $menuTypeFooter    = MenuType::where("name", MenuHelper::MENU_TYPE_FOOTER)->first();
+        $menuTypeOffCanvas = MenuType::where("name", MenuHelper::MENU_TYPE_OFFCANVAS)->first();
 
         foreach ($languages as $language) {
 

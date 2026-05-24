@@ -35,7 +35,7 @@ class SiteService
         $page    = max((int) $request->input('page', 1), 1);
 
         $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
-        $headerMenuCode = MenuHelper::TYPE_HEADER;
+        $headerMenuCode = MenuHelper::MENU_TYPE_HEADER;
 
         $cacheKey = "theme header navbar {$languageCode} {$headerMenuCode} page {$page} per page {$perPage}";
 
@@ -99,7 +99,7 @@ class SiteService
         $page    = max((int) $request->input('page', 1), 1);
 
         $languageCode      = SystemHelper::LANGUAGE_DEFAULT_CODE;
-        $offcanvasMenuCode = MenuHelper::TYPE_OFFCANVAS;
+        $offcanvasMenuCode = MenuHelper::MENU_TYPE_OFFCANVAS;
 
         $cacheKey = "theme offcanvas {$languageCode} {$offcanvasMenuCode} page {$page} per page {$perPage}";
 
@@ -163,7 +163,7 @@ class SiteService
         $page    = max((int) $request->input('page', 1), 1);
 
         $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
-        $topbarMenuCode = MenuHelper::TYPE_TOPBAR;
+        $topbarMenuCode = MenuHelper::MENU_TYPE_TOPBAR;
 
         $cacheKey = "theme topbar {$languageCode} {$topbarMenuCode} page {$page} per page {$perPage}";
 
@@ -227,7 +227,7 @@ class SiteService
         $page    = max((int) $request->input('page', 1), 1);
 
         $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
-        $footerMenuCode = MenuHelper::TYPE_FOOTER;
+        $footerMenuCode = MenuHelper::MENU_TYPE_FOOTER;
 
         $cacheKey = "theme footer {$languageCode} {$footerMenuCode} page {$page} per page {$perPage}";
 

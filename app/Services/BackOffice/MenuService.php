@@ -218,11 +218,11 @@ class MenuService
                 $modelRecord = null;
 
                 switch (Str::studly($request->input('model_type'))) {
-                    case MenuHelper::ITEM_MODEL_CATEGORY:
+                    case MenuHelper::MENU_ITEM_MODEL_CATEGORY:
                         $modelRecord = Category::where("id", $request->input('model_id'))->first();
                         break;
 
-                    case MenuHelper::ITEM_MODEL_TAG:
+                    case MenuHelper::MENU_ITEM_MODEL_TAG:
                         $modelRecord = Tag::where("id", $request->input('model_id'))->first();
                         break;
 
