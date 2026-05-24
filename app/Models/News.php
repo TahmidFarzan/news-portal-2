@@ -105,8 +105,8 @@ class News extends Model implements HasMedia
     public function registerMediaConversions($spatieMedia = null): void
     {
 
-        $this->addMediaConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
-            ->format(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+        $this->addMediaConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+            ->format(MediaHelper::MEDIA_DEFAULT_CONVERSION)
             ->quality(80)
             ->performOnCollections($this->media_collection_name)
             ->queued();
@@ -169,8 +169,8 @@ class News extends Model implements HasMedia
 
             if (isset($imageMedia)) {
 
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $imageMedia->getSrcset();
+                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getUrl();
+                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getSrcset();
 
                 $image = $imageMedia;
             }
@@ -192,8 +192,8 @@ class News extends Model implements HasMedia
 
             if (isset($imageMedia)) {
 
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $imageMedia->getSrcset();
+                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getUrl();
+                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getSrcset();
 
                 $image = $imageMedia;
             }
@@ -218,12 +218,12 @@ class News extends Model implements HasMedia
                     ['id', 'asc'],
                 ])
                 ->map(function ($mediaItem) {
-                    $mediaItem->media_url = $mediaItem->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
-                        ? $mediaItem->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                    $mediaItem->media_url = $mediaItem->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+                        ? $mediaItem->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION)
                         : $mediaItem->getUrl();
 
-                    $mediaItem->media_srcset = $mediaItem->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION)
-                        ? $mediaItem->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION)
+                    $mediaItem->media_srcset = $mediaItem->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+                        ? $mediaItem->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION)
                         : $mediaItem->getSrcset();
 
                     return $mediaItem;

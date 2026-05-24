@@ -571,8 +571,8 @@ class SearchService
             'alt'               => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
             'media_type'        => $media->getTypeFromMime(),
             'original_url'      => $media->original_url,
-            'media_url'         => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getUrl(),
-            'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::DEFAULT_MEDIA_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_MEDIA_CONVERSION) : $media->getSrcset(),
+            'media_url'         => $media->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $media->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $media->getUrl(),
+            'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $media->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $media->getSrcset(),
         ]);
 
         return [
