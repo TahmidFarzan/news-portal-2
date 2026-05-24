@@ -117,8 +117,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     public function registerMediaConversions($spatieMedia = null): void
     {
-        $this->addMediaConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
-            ->format(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+        $this->addMediaConversion(MediaHelper::DEFAULT_CONVERSION)
+            ->format(MediaHelper::DEFAULT_CONVERSION)
             ->quality(80)
             ->performOnCollections($this->media_collection_name)
             ->queued();
@@ -143,7 +143,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     {
         $image          = null;
         $collectionName = $this->media_collection_name;
-        $mediaRoleParameters  = ["role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE];
+        $mediaRoleParameters  = ["role" => MediaHelper::ROLE_PROFILE_IMAGE];
 
         if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
             $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
@@ -152,8 +152,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
             if (isset($imageMedia)) {
 
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getSrcset();
+                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
+                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
 
                 $image = $imageMedia;
             }

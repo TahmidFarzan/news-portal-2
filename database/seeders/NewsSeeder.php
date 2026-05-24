@@ -125,7 +125,7 @@ class NewsSeeder extends Seeder
                 [
                     'caption' => $news->title,
                     'alt'     => $news->title,
-                    "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
+                    "role"    => MediaHelper::ROLE_NEWS_FEATURE_IMAGE,
                 ]
             )
             ->toMediaCollection($news->media_collection_name);
@@ -144,7 +144,7 @@ class NewsSeeder extends Seeder
                 [
                     'caption' => $news->title,
                     'alt'     => $news->title,
-                    "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+                    "role"    => MediaHelper::ROLE_NEWS_FEATURE_IMAGE_MOBILE,
                 ]
             )
             ->toMediaCollection($news->media_collection_name);
@@ -167,7 +167,7 @@ class NewsSeeder extends Seeder
                 [
                     'caption' => $news->title,
                     'alt'     => $news->title,
-                    "role"    => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+                    "role"    => MediaHelper::ROLE_NEWS_GALLERY_IMAGE,
                 ]
             )
             ->toMediaCollection($news->media_collection_name);

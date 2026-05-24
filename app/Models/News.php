@@ -105,8 +105,8 @@ class News extends Model implements HasMedia
     public function registerMediaConversions($spatieMedia = null): void
     {
 
-        $this->addMediaConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
-            ->format(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+        $this->addMediaConversion(MediaHelper::DEFAULT_CONVERSION)
+            ->format(MediaHelper::DEFAULT_CONVERSION)
             ->quality(80)
             ->performOnCollections($this->media_collection_name)
             ->queued();
@@ -160,7 +160,7 @@ class News extends Model implements HasMedia
     {
         $image               = null;
         $collectionName      = $this->media_collection_name;
-        $mediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE];
+        $mediaRoleParameters = ["role" => MediaHelper::ROLE_NEWS_FEATURE_IMAGE_MOBILE];
 
         if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
             $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
@@ -169,8 +169,8 @@ class News extends Model implements HasMedia
 
             if (isset($imageMedia)) {
 
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getSrcset();
+                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
+                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
 
                 $image = $imageMedia;
             }
@@ -183,7 +183,7 @@ class News extends Model implements HasMedia
     {
         $image               = null;
         $collectionName      = $this->media_collection_name;
-        $mediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE];
+        $mediaRoleParameters = ["role" => MediaHelper::ROLE_NEWS_FEATURE_IMAGE];
 
         if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
             $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
@@ -192,8 +192,8 @@ class News extends Model implements HasMedia
 
             if (isset($imageMedia)) {
 
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $imageMedia->getSrcset();
+                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
+                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
 
                 $image = $imageMedia;
             }
@@ -205,7 +205,7 @@ class News extends Model implements HasMedia
     public function getGalleryImagesAttribute(): ?MediaCollection
     {
         $images              = null;
-        $mediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE];
+        $mediaRoleParameters = ["role" => MediaHelper::ROLE_NEWS_GALLERY_IMAGE];
         $collectionName      = $this->media_collection_name;
 
         if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
@@ -218,12 +218,12 @@ class News extends Model implements HasMedia
                     ['id', 'asc'],
                 ])
                 ->map(function ($mediaItem) {
-                    $mediaItem->media_url = $mediaItem->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
-                        ? $mediaItem->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+                    $mediaItem->media_url = $mediaItem->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION)
+                        ? $mediaItem->getUrl(MediaHelper::DEFAULT_CONVERSION)
                         : $mediaItem->getUrl();
 
-                    $mediaItem->media_srcset = $mediaItem->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
-                        ? $mediaItem->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+                    $mediaItem->media_srcset = $mediaItem->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION)
+                        ? $mediaItem->getSrcset(MediaHelper::DEFAULT_CONVERSION)
                         : $mediaItem->getSrcset();
 
                     return $mediaItem;

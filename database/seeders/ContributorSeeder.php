@@ -63,7 +63,7 @@ class ContributorSeeder extends Seeder
                         $contributor->addMediaFromUrl($profileImageUrl)
                             ->usingName($contributor->name)
                             ->usingFileName($profileImageFileName)
-                            ->withCustomProperties(['caption' => $contributor->name, 'alt' => $contributor->name, "role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE])
+                            ->withCustomProperties(['caption' => $contributor->name, 'alt' => $contributor->name, "role" => MediaHelper::ROLE_PROFILE_IMAGE])
                             ->toMediaCollection($contributor->media_collection_name);
                     } else {
                         Log::info("Image not accessable contributor {$contributor->name}");

@@ -263,7 +263,7 @@ class AuthService
                 ->withCustomProperties([
                     'alt'     => $user->name ?? null,
                     'caption' => $user->name ?? null,
-                    'role'    => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE,
+                    'role'    => MediaHelper::ROLE_PROFILE_IMAGE,
                 ])
                 ->toMediaCollection($user->media_collection_name);
         }

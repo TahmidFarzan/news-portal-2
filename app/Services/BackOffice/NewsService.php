@@ -307,7 +307,7 @@ class NewsService
                                 [
                                     "alt"     => $request->input('alt', $news->title),
                                     "caption" => $request->input('caption'),
-                                    "role"    => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+                                    "role"    => MediaHelper::ROLE_NEWS_GALLERY_IMAGE,
                                 ]
                             )
                             ->toMediaCollection($news->media_collection_name);
@@ -382,7 +382,7 @@ class NewsService
                 $sequence = $request->input("sequence");
 
                 $mediaRoleParameters = [
-                    'role' => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+                    'role' => MediaHelper::ROLE_NEWS_GALLERY_IMAGE,
                 ];
 
                 $collectionName = $news->media_collection_name;
@@ -706,7 +706,7 @@ class NewsService
         $replacementPairs = $this->mediaService->copyOrUpdateMediaByMediaIds(
             $contentMediaIds,
             $news,
-            MediaHelper::MEDIA_ROLE_NEWS_CONTENT_IMAGE
+            MediaHelper::ROLE_NEWS_CONTENT_IMAGE
         );
 
         if (! $replacementPairs) {
@@ -781,7 +781,7 @@ class NewsService
         $replacementPairs = $this->mediaService->copyOrUpdateMediaByMediaIds(
             $galleryImageIds,
             $news,
-            MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE
+            MediaHelper::ROLE_NEWS_GALLERY_IMAGE
         );
 
         if (! $replacementPairs) {
@@ -793,8 +793,8 @@ class NewsService
     {
         $collectionName = $news->media_collection_name;
 
-        $newsGalleryImageMediaRoleParameters = ["role" => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE];
-        $newsContentMediaRoleParameters      = ["role" => MediaHelper::MEDIA_ROLE_NEWS_CONTENT_IMAGE];
+        $newsGalleryImageMediaRoleParameters = ["role" => MediaHelper::ROLE_NEWS_GALLERY_IMAGE];
+        $newsContentMediaRoleParameters      = ["role" => MediaHelper::ROLE_NEWS_CONTENT_IMAGE];
 
         if ($news->newsType->name == NewsHelper::NEWS_TYPE_STORY) {
             if ($news->hasMedia($collectionName, $newsGalleryImageMediaRoleParameters)) {
@@ -901,7 +901,7 @@ class NewsService
                         [
                             "alt"     => $news->title,
                             "caption" => $request->input('feature_image_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
+                            "role"    => MediaHelper::ROLE_NEWS_FEATURE_IMAGE,
                         ]
                     )
                     ->toMediaCollection($news->media_collection_name);
@@ -921,7 +921,7 @@ class NewsService
                     [
                         'caption' => $request->input('feature_image_caption'),
                         'alt'     => $news->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE,
+                        "role"    => MediaHelper::ROLE_NEWS_FEATURE_IMAGE,
                     ]
                 )
                 ->toMediaCollection($news->media_collection_name);
@@ -946,7 +946,7 @@ class NewsService
                         [
                             "alt"     => $news->title,
                             "caption" => $news->input('feature_image_caption'),
-                            "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+                            "role"    => MediaHelper::ROLE_NEWS_FEATURE_IMAGE_MOBILE,
                         ]
                     )
                     ->toMediaCollection($news->media_collection_name);
@@ -966,7 +966,7 @@ class NewsService
                     [
                         'caption' => $news->input('upload_feature_image_mobile_caption'),
                         'alt'     => $news->title,
-                        "role"    => MediaHelper::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE,
+                        "role"    => MediaHelper::ROLE_NEWS_FEATURE_IMAGE_MOBILE,
                     ]
                 )
                 ->toMediaCollection($news->media_collection_name);
@@ -992,7 +992,7 @@ class NewsService
     private function galleryImageCalculateOrderColumn(NewsGalleryImageRequest $request, News $news, $media): int
     {
         $mediaRoleParameters = [
-            'role' => MediaHelper::MEDIA_ROLE_NEWS_GALLERY_IMAGE,
+            'role' => MediaHelper::ROLE_NEWS_GALLERY_IMAGE,
         ];
 
         $collectionName = $news->media_collection_name;

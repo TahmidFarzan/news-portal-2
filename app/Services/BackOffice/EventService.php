@@ -173,7 +173,7 @@ class EventService
                 ->withCustomProperties([
                     'alt'     => $user->name ?? null,
                     'caption' => $user->name ?? null,
-                    'role'    => MediaHelper::MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE,
+                    'role'    => MediaHelper::ROLE_EVENT_DESKTOP_BANNER_IMAGE,
                 ])
                 ->toMediaCollection($event->media_collection_name);
         }
@@ -204,7 +204,7 @@ class EventService
                 ->withCustomProperties([
                     'alt'     => $user->name ?? null,
                     'caption' => $user->name ?? null,
-                    'role'    => MediaHelper::MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE,
+                    'role'    => MediaHelper::ROLE_EVENT_MOBILE_BANNER_IMAGE,
                 ])
                 ->toMediaCollection($event->media_collection_name);
         }

@@ -33,8 +33,8 @@ class MediaService
         $media->load([
             'model',
         ]);
-        $media->media_url     = $media->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $media->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $media->getUrl();
-        $media->media_srcset  = $media->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $media->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $media->getSrcset();
+        $media->media_url     = $media->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_CONVERSION) : $media->getUrl();
+        $media->media_srcset  = $media->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $media->getSrcset();
         $media->activity_logs = $this->activityLogs($media);
         $media                = $media->toArray();
         return $media;
@@ -123,11 +123,11 @@ class MediaService
                     'alt'               => $media?->getCustomProperty('alt') ?? $media?->model?->name ?? $media?->model?->title ?? '',
                     'media_type'        => $media?->getTypeFromMime(),
                     'original_url'      => $media?->original_url,
-                    'media_url'         => $media?->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
-                        ? $media?->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+                    'media_url'         => $media?->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION)
+                        ? $media?->getUrl(MediaHelper::DEFAULT_CONVERSION)
                         : $media?->getUrl(),
-                    'media_srcset'      => $media?->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION)
-                        ? $media?->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION)
+                    'media_srcset'      => $media?->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION)
+                        ? $media?->getSrcset(MediaHelper::DEFAULT_CONVERSION)
                         : $media?->getSrcset(),
                 ],
             ];
@@ -175,8 +175,8 @@ class MediaService
                     'alt'               => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
                     'media_type'        => $media->getTypeFromMime(),
                     'original_url'      => $media->original_url,
-                    'media_url'         => $media->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $media->getUrl(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $media->getUrl(),
-                    'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::MEDIA_DEFAULT_CONVERSION) ? $media->getSrcset(MediaHelper::MEDIA_DEFAULT_CONVERSION) : $media->getSrcset(),
+                    'media_url'         => $media->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_CONVERSION) : $media->getUrl(),
+                    'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $media->getSrcset(),
                 ],
             ];
         } catch (Exception $ex) {
@@ -193,7 +193,7 @@ class MediaService
         }
     }
 
-    public static function copyOrUpdateMediaByMediaIds(array $mediaIds, $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): array
+    public static function copyOrUpdateMediaByMediaIds(array $mediaIds, $targetModel, string $mediaRole = MediaHelper::ROLE_DEFAULT): array
     {
         $replacementPairs = [];
 
@@ -210,7 +210,7 @@ class MediaService
         return $replacementPairs;
     }
 
-    public static function copyOrUpdateMediaByMediaId(int $mediaId, object $targetModel, string $mediaRole = MediaHelper::MEDIA_ROLE_DEFAULT): ?object
+    public static function copyOrUpdateMediaByMediaId(int $mediaId, object $targetModel, string $mediaRole = MediaHelper::ROLE_DEFAULT): ?object
     {
         try {
             return DB::transaction(function () use ($mediaId, $targetModel, $mediaRole) {

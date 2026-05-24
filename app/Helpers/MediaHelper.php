@@ -6,38 +6,38 @@ use Illuminate\Support\Str;
 
 class MediaHelper
 {
-    public const MEDIA_DEFAULT_CONVERSION = 'webp';
+    public const DEFAULT_CONVERSION = 'webp';
 
-    public const MEDIA_ROLE_DEFAULT           = 'default';
-    public const MEDIA_ROLE_PROFILE_IMAGE     = 'profile_image';
-    public const MEDIA_ROLE_APP_LOGO_IMAGE    = 'app_logo_image';
-    public const MEDIA_ROLE_APP_FAVICON_IMAGE = 'app_favicon_image';
+    public const ROLE_DEFAULT           = 'default';
+    public const ROLE_PROFILE_IMAGE     = 'profile_image';
+    public const ROLE_APP_LOGO_IMAGE    = 'app_logo_image';
+    public const ROLE_APP_FAVICON_IMAGE = 'app_favicon_image';
 
-    public const MEDIA_ROLE_NEWS_FEATURE_IMAGE   = 'news_feature_image';
-    public const MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE   = 'news_feature_image_mobile';
-    public const MEDIA_ROLE_NEWS_CONTENT_IMAGE   = 'news_content_image';
+    public const ROLE_NEWS_FEATURE_IMAGE        = 'news_feature_image';
+    public const ROLE_NEWS_FEATURE_IMAGE_MOBILE = 'news_feature_image_mobile';
+    public const ROLE_NEWS_CONTENT_IMAGE        = 'news_content_image';
 
-    public const MEDIA_ROLE_NEWS_GALLERY_IMAGE   = 'news_gallery_image';
+    public const ROLE_NEWS_GALLERY_IMAGE = 'news_gallery_image';
 
-    public const MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE = 'event_desktop_banner_image';
-    public const MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE  = 'event_mobile_banner_image';
+    public const ROLE_EVENT_DESKTOP_BANNER_IMAGE = 'event_desktop_banner_image';
+    public const ROLE_EVENT_MOBILE_BANNER_IMAGE  = 'event_mobile_banner_image';
 
     public static function mediaRoles()
     {
         return collect([
-            (object) ['id' => self::MEDIA_ROLE_DEFAULT, 'name' => 'Default'],
+            (object) ['id' => self::ROLE_DEFAULT, 'name' => 'Default'],
 
-            (object) ['id' => self::MEDIA_ROLE_NEWS_FEATURE_IMAGE, 'name' => 'News feature image'],
-            (object) ['id' => self::MEDIA_ROLE_NEWS_FEATURE_IMAGE_MOBILE, 'name' => 'News feature image (Mobile)'],
-            (object) ['id' => self::MEDIA_ROLE_NEWS_CONTENT_IMAGE, 'name' => 'News content image'],
+            (object) ['id' => self::ROLE_NEWS_FEATURE_IMAGE, 'name' => 'News feature image'],
+            (object) ['id' => self::ROLE_NEWS_FEATURE_IMAGE_MOBILE, 'name' => 'News feature image (Mobile)'],
+            (object) ['id' => self::ROLE_NEWS_CONTENT_IMAGE, 'name' => 'News content image'],
 
-            (object) ['id' => self::MEDIA_ROLE_PROFILE_IMAGE, 'name' => 'Profile Image'],
+            (object) ['id' => self::ROLE_PROFILE_IMAGE, 'name' => 'Profile Image'],
 
-            (object) ['id' => self::MEDIA_ROLE_APP_LOGO_IMAGE, 'name' => 'App Logo Image'],
-            (object) ['id' => self::MEDIA_ROLE_APP_FAVICON_IMAGE, 'name' => 'App Favicon Image'],
+            (object) ['id' => self::ROLE_APP_LOGO_IMAGE, 'name' => 'App Logo Image'],
+            (object) ['id' => self::ROLE_APP_FAVICON_IMAGE, 'name' => 'App Favicon Image'],
 
-            (object) ['id' => self::MEDIA_ROLE_EVENT_DESKTOP_BANNER_IMAGE, 'name' => 'Event desktop banner image'],
-            (object) ['id' => self::MEDIA_ROLE_EVENT_MOBILE_BANNER_IMAGE, 'name' => 'Event mobile banner image'],
+            (object) ['id' => self::ROLE_EVENT_DESKTOP_BANNER_IMAGE, 'name' => 'Event desktop banner image'],
+            (object) ['id' => self::ROLE_EVENT_MOBILE_BANNER_IMAGE, 'name' => 'Event mobile banner image'],
 
         ]);
     }

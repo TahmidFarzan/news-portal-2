@@ -62,7 +62,7 @@ class UserSeeder extends Seeder
                         $user->addMediaFromUrl($profileImageUrl)
                             ->usingName($user->name)
                             ->usingFileName($profileImageFileName)
-                            ->withCustomProperties(['caption' => $user->name, 'alt' => $user->name, "role" => MediaHelper::MEDIA_ROLE_PROFILE_IMAGE])
+                            ->withCustomProperties(['caption' => $user->name, 'alt' => $user->name, "role" => MediaHelper::ROLE_PROFILE_IMAGE])
                             ->toMediaCollection($user->media_collection_name);
                     } else {
                         Log::info("Image not accessable user: {$user->name}");
