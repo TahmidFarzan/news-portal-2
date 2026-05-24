@@ -73,7 +73,7 @@ Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(functi
 
 Route::prefix('search')->name('search.')->group(function () {
 
-    Route::middleware(['response.cache:3600'])->group(function () {
+    Route::middleware(['response.cache:3600,public,300,etag'])->group(function () {
         Route::get('per-pages', [SearchController::class, 'perPages'])->name('per-pages');
         Route::get('genders', [SearchController::class, 'genders'])->name('genders');
         Route::get('religions', [SearchController::class, 'religions'])->name('religions');
@@ -90,7 +90,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
     });
 
-    Route::middleware(['response.cache:60'])->group(function () {
+    Route::middleware(['response.cache:60,public,300,etag'])->group(function () {
         Route::get('users', [SearchController::class, 'users'])->name('users');
         Route::get('languages', [SearchController::class, 'languages'])->name('languages');
         Route::get('categories', [SearchController::class, 'categories'])->name('categories');
@@ -119,7 +119,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('menu-item/{slugOrId}', [SearchController::class, 'menuItem'])->name('menu-item');
     });
 
-    Route::middleware(['response.cache:60,private'])->get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
+    Route::middleware(['response.cache:60,private,300,etag'])->get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
 });
 
 Route::prefix('back-office')->name('back-office.')->group(function () {
@@ -328,7 +328,7 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
 });
 
 Route::prefix('site')->name('site.')->group(function () {
-    Route::middleware(['response.cache:3600'])->group(function () {
+    Route::middleware(['response.cache:3600,public,300,etag'])->group(function () {
         Route::prefix('theme')->name('theme.')->group(function () {
             Route::prefix('menus')->name('menus.')->group(function () {
                 Route::get('header-menu-items', [SiteController::class, 'themeMenuHeaderMenuMenuItems'])->name('header-menu-items');
