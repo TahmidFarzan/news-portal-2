@@ -1,7 +1,7 @@
 export const newsTypes = {
-    STORY: 'Story',
-    VIDEO: 'Video',
-    IMAGEGALLERY: "Image Gallery",
+    Story: 'Story',
+    Video: 'Video',
+    ImageGallery: "Image Gallery",
 }
 
 export const getNewsTypeName = (newsType) => {
@@ -9,13 +9,13 @@ export const getNewsTypeName = (newsType) => {
 }
 
 export const isStory = (newsType) => {
-    return getNewsTypeName(newsType) === newsTypes.STORY.toLowerCase()
+    return getNewsTypeName(newsType) === newsTypes.Story.toLowerCase()
 }
 
 export const isVideo = (newsType) => {
-    return getNewsTypeName(newsType) === newsTypes.VIDEO.toLowerCase()
+    return getNewsTypeName(newsType) === newsTypes.Video.toLowerCase()
 }
 
 export const isImageGallery = (newsType) => {
-    return getNewsTypeName(newsType) === newsTypes.IMAGEGALLERY.toLowerCase()
+    return getNewsTypeName(newsType) === newsTypes.ImageGallery.toLowerCase()
 }

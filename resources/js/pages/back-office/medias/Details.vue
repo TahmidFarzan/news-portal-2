@@ -11,7 +11,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
-import { extractModelName, titleFormat } from '@/composables/useUtil'
+import { extractModelName, titleFormat } from '@/composables/useStringFormat'
 import { canDeleteMedia } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faSpinner)

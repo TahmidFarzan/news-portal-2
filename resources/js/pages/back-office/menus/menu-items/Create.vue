@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { extractModelName } from '@/composables/useUtil'
+import { extractModelName } from '@/composables/useStringFormat'
 
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 

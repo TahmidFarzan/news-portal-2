@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { extractModelName } from '@/composables/useUtil'
+import { extractModelName } from '@/composables/useStringFormat'
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
 import { canEditMenuItem, canDeleteMenuItem } from '@/composables/useAuthUserAccessPermissions'
 

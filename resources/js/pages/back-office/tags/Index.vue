@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { itemListFilterParameters } from '@/composables/useUtil'
+import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
 import { canCreateTag, canEditTag, canDeleteTag, } from '@/composables/useAuthUserAccessPermissions'

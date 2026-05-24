@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { faTrash, faFilter, faInfo, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { itemListFilterParameters } from '@/composables/useUtil'
+import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
 library.add(faTrash, faFilter, faInfo, faSpinner)
