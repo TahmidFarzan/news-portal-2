@@ -2,6 +2,7 @@
 namespace App\Http\Requests;
 
 use App\Helpers\SystemHelper;
+use App\Helpers\MenuHelper;
 use App\Models\Category;
 use App\Models\Language;
 use App\Models\MenuItem;
@@ -104,7 +105,7 @@ class MenuItemRequest extends FormRequest
             }
 
             if (! empty($data["model_type"]) && ! empty($data["model_id"])) {
-                if ($data["model_type"] == SystemHelper::MENU_ITEM_MODEL_CATEGORY) {
+                if ($data["model_type"] == MenuHelper::MENU_ITEM_MODEL_CATEGORY) {
                     $categoryCount = Category::where("id", $data["model_id"])->count();
 
                     if ($categoryCount == 0) {
@@ -115,7 +116,7 @@ class MenuItemRequest extends FormRequest
                     }
                 }
 
-                if ($data["model_type"] == SystemHelper::MENU_ITEM_MODEL_TAG) {
+                if ($data["model_type"] == MenuHelper::MENU_ITEM_MODEL_TAG) {
                     $tagCount = Tag::where("id", $data["model_id"])->count();
 
                     if ($tagCount == 0) {

@@ -2,6 +2,7 @@
 namespace Database\Factories;
 
 use App\Helpers\SystemHelper;
+use App\Helpers\MenuHelper;
 use App\Helpers\UserHelper;
 use App\Models\Language;
 use App\Models\Menu;
@@ -28,7 +29,7 @@ class MenuItemFactory extends Factory
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
         $language      = Language::where("code", SystemHelper::LANGUAGE_DEFAULT_CODE)->first() ?? null;
 
-        $menuTypes      = [SystemHelper::MENU_TYPE_HEADER, SystemHelper::MENU_TYPE_TOPBAR, SystemHelper::MENU_TYPE_FOOTER];
+        $menuTypes      = [MenuHelper::MENU_TYPE_HEADER, MenuHelper::MENU_TYPE_TOPBAR, MenuHelper::MENU_TYPE_FOOTER];
         $randomMenuType = $menuTypes[array_rand($menuTypes)];
 
         $menu = Menu::inRandomOrder()->where("name", $randomMenuType)->first() ?? null;

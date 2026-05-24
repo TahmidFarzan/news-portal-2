@@ -2,6 +2,7 @@
 namespace App\Services\BackOffice;
 
 use App\Helpers\SystemHelper;
+use App\Helpers\MenuHelper;
 use App\Http\Requests\MenuItemRequest;
 use App\Http\Requests\MenuRequest;
 use App\Models\Category;
@@ -217,11 +218,11 @@ class MenuService
                 $modelRecord = null;
 
                 switch (Str::studly($request->input('model_type'))) {
-                    case SystemHelper::MENU_ITEM_MODEL_CATEGORY:
+                    case MenuHelper::MENU_ITEM_MODEL_CATEGORY:
                         $modelRecord = Category::where("id", $request->input('model_id'))->first();
                         break;
 
-                    case SystemHelper::MENU_ITEM_MODEL_TAG:
+                    case MenuHelper::MENU_ITEM_MODEL_TAG:
                         $modelRecord = Tag::where("id", $request->input('model_id'))->first();
                         break;
 
