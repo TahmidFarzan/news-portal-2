@@ -328,6 +328,23 @@ export const canDeleteMenuItem = (authUser, menu) => {
     return false
 }
 
+
+// ================= SETTING =================
+
+export const canCreateSetting = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
+export const canEditSetting = (authUser, setting) => {
+    if (!authUser || !setting) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return false
+}
+
+
 // ================= MENU =================
 
 export const canAccessActivityLogMenu = (authUser) =>
@@ -358,6 +375,16 @@ export const canAccessNewsMenu = (authUser) => {
 }
 
 export const canAccessMenuMenu = (authUser) => {
+    if (!authUser) return false
+
+    const role = getUserRoleName(authUser)
+
+    return isAdmin(role)
+}
+
+
+
+export const canAccessSetting = (authUser) => {
     if (!authUser) return false
 
     const role = getUserRoleName(authUser)

@@ -193,7 +193,7 @@ return [
         ],
 
         'news_placement' => [
-            "save" => [
+            "save"     => [
                 'success' => 'News placement save successfully.',
                 'failed'  => 'Failed to save news placement.',
             ],
@@ -203,12 +203,12 @@ return [
                 'failed'  => 'Failed to generate news placement.',
             ],
 
-            "update" => [
+            "update"   => [
                 'success' => 'News placement update successfully.',
                 'failed'  => 'Failed to update news placement.',
             ],
 
-            "delete" => [
+            "delete"   => [
                 'success' => 'News placement delete successfully.',
                 'failed'  => 'Failed to delete news placement.',
             ],
@@ -216,7 +216,7 @@ return [
         ],
     ],
 
-    'menu'  => [
+    'menu'         => [
         'save'   => [
             'success' => 'Menu saved successfully.',
             'failed'  => 'Failed to save menu.',
@@ -231,7 +231,7 @@ return [
         ],
     ],
 
-    'menu_item'  => [
+    'menu_item'    => [
         'save'   => [
             'success' => 'Menu item saved successfully.',
             'failed'  => 'Failed to save menu item.',
@@ -243,6 +243,13 @@ return [
         'delete' => [
             'success' => 'Menu item deleted successfully.',
             'failed'  => 'Failed to delete menu item.',
+        ],
+    ],
+
+    'setting'          => [
+        'update' => [
+            'success' => 'Setting updated successfully.',
+            'failed'  => 'Failed to update setting.',
         ],
     ],
 

@@ -20,7 +20,8 @@ import {
     faStar,
     faFan,
     faGlobe,
-    faEllipsisVertical
+    faEllipsisVertical,
+    faGears
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -38,14 +39,16 @@ library.add(
     faStar,
     faFan,
     faGlobe,
-    faEllipsisVertical
+    faEllipsisVertical,
+    faGears
 )
 
 import {
     canAccessUserManagementMenu,
     canAccessNewsAttributesMenu,
     canAccessNewsMenu,
-    canAccessMenuMenu
+    canAccessMenuMenu,
+    canAccessSetting
 } from '@/composables/useAuthUserAccessPermissions'
 
 const {
@@ -95,6 +98,10 @@ const canAccessNewsMenuComputed = computed(() => {
 
 const canAccessMenuMenuComputed = computed(() => {
     return canAccessMenuMenu(authUser)
+})
+
+const canAccessSettingComputed = computed(() => {
+    return canAccessSetting(authUser)
 })
 
 const toggleShowSubMenu = (key) => {
@@ -255,6 +262,11 @@ const isSubMenuVisible = (key) => {
             </div>
         </Transition>
 
-
+        <a v-if="canAccessSettingComputed" :href="route('back-office.settings.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/auth-user/settings/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="gears" />
+            Settings
+        </a>
     </div>
 </template>

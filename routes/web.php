@@ -13,6 +13,7 @@ use App\Http\Controllers\BackOffice\MediaController;
 // Backoffice
 use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
+use App\Http\Controllers\BackOffice\SettingController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
@@ -272,6 +273,14 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
             Route::patch('update/{menuItemSlug}', [MenuController::class, 'menuItemUpdate'])->name('update');
             Route::delete('delete/{menuItemSlug}', [MenuController::class, 'menuItemDelete'])->name('delete');
         });
+    });
+
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/', [SettingController::class, 'index'])->name('index');
+        Route::get('edit/{slug}', [SettingController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [SettingController::class, 'details'])->name('details');
+
+        Route::patch('update/{slug}', [SettingController::class, 'update'])->name('update');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {

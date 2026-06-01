@@ -487,4 +487,41 @@ return [
         ],
 
     ],
+
+    'setting' => [
+        'group' => [
+            'required' => 'Group is required.',
+            'string'   => 'Group must be a string.',
+            'max'      => 'Group may not be greater than :max characters.',
+            'not_exit' => 'Selected group does not exist.',
+            'unique'   => 'A setting with this group and key already exists.',
+        ],
+
+        'key' => [
+            'required' => 'Key is required.',
+            'string'   => 'Key must be a string.',
+            'max'      => 'Key may not be greater than :max characters.',
+            'unique'   => 'A setting with this key already exists in the selected group.',
+        ],
+
+        'label' => [
+            'required' => 'Label is required.',
+            'string'   => 'Label must be a string.',
+            'max'      => 'Label may not be greater than :max characters.',
+        ],
+
+        'type' => [
+            'required' => 'Type is required.',
+            'string'   => 'Type must be a string.',
+            'max'      => 'Type may not be greater than :max characters.',
+            'not_exit' => 'Selected type does not exist.',
+        ],
+
+        'value' => [
+            'required'     => 'Value is required.',
+            'string'       => 'Value must be a string.',
+            'max'          => 'Value may not be greater than :max characters.',
+            'invalid_type' => 'Value does not match the selected setting type.',
+        ],
+    ],
 ];
