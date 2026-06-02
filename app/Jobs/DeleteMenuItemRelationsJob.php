@@ -25,7 +25,7 @@ class DeleteMenuItemRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-menu-item-{$this->menuItemId}";
+        return "delete-menu-item-{$this->menuItemId}-relations";
     }
 
     public function retryAfter()

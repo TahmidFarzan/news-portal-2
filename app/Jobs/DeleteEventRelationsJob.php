@@ -25,7 +25,7 @@ class DeleteEventRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-event-{$this->eventId}";
+        return "delete-event-{$this->eventId}-relations";
     }
 
     public function retryAfter()

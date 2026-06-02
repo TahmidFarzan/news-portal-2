@@ -25,7 +25,7 @@ class DeleteCategoryRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-category-{$this->categoryId}";
+        return "delete-category-{$this->categoryId}-relations";
     }
 
     public function retryAfter()

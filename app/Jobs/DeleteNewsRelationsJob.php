@@ -25,7 +25,7 @@ class DeleteNewsRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-news-{$this->newsId}";
+        return "delete-news-{$this->newsId}-relations";
     }
 
     public function retryAfter()

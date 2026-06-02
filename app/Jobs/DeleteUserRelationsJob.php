@@ -25,7 +25,7 @@ class DeleteUserRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-user-{$this->userId}";
+        return "delete-user-{$this->userId}-relations";
     }
 
     public function retryAfter()

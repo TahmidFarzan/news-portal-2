@@ -25,7 +25,7 @@ class DeleteSettingRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-setting-{$this->settingId}";
+        return "delete-setting-{$this->settingId}-relations";
     }
 
     public function retryAfter()

@@ -25,7 +25,7 @@ class DeleteTrendRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-trend-{$this->trendId}";
+        return "delete-trend-{$this->trendId}-relations";
     }
 
     public function retryAfter()

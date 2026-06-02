@@ -25,7 +25,7 @@ class DeleteLanguageRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-language-{$this->languageId}";
+        return "delete-language-{$this->languageId}-relations";
     }
 
     public function retryAfter()

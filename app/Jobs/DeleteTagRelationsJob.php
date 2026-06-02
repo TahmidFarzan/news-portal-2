@@ -25,7 +25,7 @@ class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return "delete-relations-tag-{$this->tagId}";
+        return "delete-tag-{$this->tagId}-relations";
     }
 
     public function retryAfter()
