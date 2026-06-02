@@ -42,6 +42,7 @@ const siteSettings = ref([])
 
 const year = new Date().getFullYear()
 const appName = import.meta.env.VITE_APP_NAME
+const appLogo = import.meta.env.VITE_APP_LOGO
 
 const authUser = computed(() => page.props.auth?.user ?? null)
 const flashMessage = computed(() => page.props.flashMessage)
@@ -99,6 +100,9 @@ const showNameOnHeaderMenu = computed(() => {
     return getSetting(settingFields.SHOW_NAME_ON_HEADER_MENU, settingGroups.App)
 })
 
+const showLogoOnHeaderMenu = computed(() => {
+    return getSetting(settingFields.SHOW_LOGO_ON_HEADER_MENU, settingGroups.App)
+})
 
 onMounted(async () => {
     await nextTick()
@@ -161,9 +165,15 @@ onBeforeUnmount(() => {
         <div ref="headerNavbar" class="bg-gray-900 text-white transition-shadow"
             :class="{ 'shadow-md sticky top-0 z-50': isHeaderSticky }">
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
-                <a v-if="isTruthyValue(showNameOnHeaderMenu?.value)" :href="route('home')"
+                <a v-if="isTruthyValue(showNameOnHeaderMenu?.value) && !isTruthyValue(showLogoOnHeaderMenu?.value)"
+                    :href="route('home')"
                     class="h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
                     {{ appName }}
+                </a>
+
+                <a v-if="isTruthyValue(showLogoOnHeaderMenu?.value)" :href="route('home')"
+                    class="h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
+                    <img v-if="appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
                 </a>
 
                 <div class="flex-1 min-w-0 h-10 flex items-center">
