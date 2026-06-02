@@ -1,7 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
-import MultiSelectTrendgableSelect from '@/components/common/multi-select/TrendgableSelect.vue'
 
 import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'

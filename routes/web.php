@@ -91,7 +91,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
     });
 
-    Route::middleware(['response.cache:60,public,300,etag'])->group(function () {
+    Route::middleware(['response.cache:60,public,30,etag'])->group(function () {
         Route::get('users', [SearchController::class, 'users'])->name('users');
         Route::get('languages', [SearchController::class, 'languages'])->name('languages');
         Route::get('categories', [SearchController::class, 'categories'])->name('categories');
