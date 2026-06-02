@@ -1,11 +1,11 @@
 <?php
 
 return [
-    "api"         => [
+    "api"           => [
         'timeout' => 'Api responce timeout.',
     ],
 
-    'auth'        => [
+    'auth'          => [
         'login'           => [
             'email'    => [
                 'required' => 'Please enter your email address.',
@@ -117,7 +117,7 @@ return [
         ],
     ],
 
-    'media_quick' => [
+    'media_quick'   => [
         'alt'     => [
             'string' => 'Alt must be string.',
         ],
@@ -131,7 +131,7 @@ return [
         ],
     ],
 
-    'user'        => [
+    'user'          => [
         'name'                  => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -189,7 +189,7 @@ return [
         ],
     ],
 
-    'language'    => [
+    'language'      => [
         'name' => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -204,7 +204,7 @@ return [
         ],
     ],
 
-    'category'    => [
+    'category'      => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -223,7 +223,7 @@ return [
         ],
     ],
 
-    'tag'         => [
+    'tag'           => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -237,7 +237,7 @@ return [
         ],
     ],
 
-    'trend'       => [
+    'trend'         => [
         'tag_id'   => [
             'required'  => 'Tag is required.',
             "not_found" => 'Tag is not exit.',
@@ -249,7 +249,7 @@ return [
         ],
     ],
 
-    'location'    => [
+    'location'      => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -272,7 +272,7 @@ return [
         ],
     ],
 
-    'event'       => [
+    'event'         => [
         'name'                 => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -298,7 +298,7 @@ return [
         ],
     ],
 
-    'contributor' => [
+    'contributor'   => [
         'name'          => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -314,7 +314,7 @@ return [
 
     ],
 
-    'news'        => [
+    'news'          => [
         'title'                             => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -432,7 +432,26 @@ return [
 
     ],
 
-    'menu'        => [
+    'breaking_news' => [
+        'title'       => [
+            'required' => 'Title is required.',
+            'string'   => 'Title must be string.',
+            'max'      => 'Title max chars is 200.',
+            'unique'   => 'Title must be unique.',
+        ],
+
+        'language_id' => [
+            'required'  => 'Language is required.',
+            "not_found" => 'Language is not exit.',
+        ],
+
+        'news_id'     => [
+            "not_found" => 'News is not exit.',
+            "already_sync" => 'Already sync to news.',
+        ],
+    ],
+
+    'menu'          => [
         'name'         => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -451,7 +470,7 @@ return [
         ],
     ],
 
-    'menu_item'   => [
+    'menu_item'     => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -488,7 +507,7 @@ return [
 
     ],
 
-    'setting' => [
+    'setting'       => [
         'group' => [
             'required' => 'Group is required.',
             'string'   => 'Group must be a string.',
@@ -504,7 +523,7 @@ return [
             'unique'   => 'A setting with this group and label already exists.',
         ],
 
-        'type' => [
+        'type'  => [
             'required' => 'Type is required.',
             'string'   => 'Type must be a string.',
             'max'      => 'Type may not be greater than :max characters.',

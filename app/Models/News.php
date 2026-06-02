@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
@@ -121,7 +122,7 @@ class News extends Model implements HasMedia
     {
         $url = null;
 
-        return $url ?? route("news.details",["slug", $this->slug]);
+        return $url ?? route("news.details", ["slug" => $this->slug]);
     }
 
     public function getPublishedAtAttribute(): string
@@ -237,6 +238,11 @@ class News extends Model implements HasMedia
     public function activityLogs(): MorphMany
     {
         return $this->morphMany(Activity::class, 'subject');
+    }
+
+    public function breakingNews(): HasOne
+    {
+        return $this->hasOne(BreakingNews::class);
     }
 
     public function createdBy(): BelongsTo

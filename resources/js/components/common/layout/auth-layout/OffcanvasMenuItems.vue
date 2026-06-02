@@ -47,6 +47,7 @@ import {
     canAccessUserManagementMenu,
     canAccessNewsAttributesMenu,
     canAccessNewsMenu,
+    canAccessBreakingNewsMenu,
     canAccessMenuMenu,
     canAccessSetting
 } from '@/composables/useAuthUserAccessPermissions'
@@ -95,7 +96,9 @@ const canAccessNewsAttributesMenuComputed = computed(() => {
 const canAccessNewsMenuComputed = computed(() => {
     return canAccessNewsMenu(authUser)
 })
-
+const canAccessBreakingNewsMenuComputed = computed(() => {
+    return canAccessBreakingNewsMenu(authUser)
+})
 const canAccessMenuMenuComputed = computed(() => {
     return canAccessMenuMenu(authUser)
 })
@@ -228,6 +231,13 @@ const isSubMenuVisible = (key) => {
             :class="isCurrentPage('/auth-user/newses/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
             Newses
+        </a>
+
+        <a v-if="canAccessBreakingNewsMenuComputed" :href="route('back-office.breaking-newses.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/auth-user/breaking-newses/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="newspaper" />
+            Breaking newses
         </a>
 
         <a v-if="canAccessMenuMenuComputed" :href="route('back-office.menus.index')"

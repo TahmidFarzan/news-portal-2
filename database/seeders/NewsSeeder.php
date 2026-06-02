@@ -1,10 +1,11 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\PageHelper;
 use App\Helpers\MediaHelper;
 use App\Helpers\NewsHelper;
+use App\Helpers\PageHelper;
 use App\Helpers\SystemHelper;
+use App\Models\BreakingNews;
 use App\Models\Category;
 use App\Models\Contributor;
 use App\Models\Event;
@@ -179,10 +180,10 @@ class NewsSeeder extends Seeder
         foreach ($newses as $index => $news) {
             $language = $news->language;
 
-            $tagIds         = Tag::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
-            $contributorIds = Contributor::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
+            $tagIds          = Tag::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
+            $contributorIds  = Contributor::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
             $relevantNewsIds = News::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
-            $relatedNewsIds = News::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
+            $relatedNewsIds  = News::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
 
             if ($tagIds) {
                 $news->tags()->sync($tagIds);
@@ -210,6 +211,7 @@ class NewsSeeder extends Seeder
             }
 
             $this->setNewsPlacements($news);
+            $this->setAsBreakingNews($news, $index);
         }
     }
 
@@ -245,7 +247,7 @@ class NewsSeeder extends Seeder
 
         foreach ($newsPlacements as $newsPlacement) {
             NewsPlacement::factory()->state([
-                ...$newsPlacement,
+                 ...$newsPlacement,
             ])->create();
         }
     }
@@ -1637,4 +1639,15 @@ class NewsSeeder extends Seeder
         ]);
     }
 
+    private function setAsBreakingNews(News $news, int $index): void
+    {
+        if ($index > 1 && $index < 5) {
+            BreakingNews::factory()->state([
+                'title'       => $news?->title,
+                "language_id" => $news->language_id,
+
+                "news_id"     => $news?->id ?? null,
+            ])->create();
+        }
+    }
 }

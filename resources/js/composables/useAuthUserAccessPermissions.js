@@ -277,6 +277,53 @@ export const canRestoreNews = (authUser, news) => {
     return isNewsDesk(role) && (news.is_published == false)
 }
 
+// ================= Breaking News =================
+
+export const canCreateBreakingNews = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
+export const canEditBreakingNews = (authUser, breakingNews) => {
+    if (!authUser || !breakingNews) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return isNewsDesk(role)
+}
+
+export const canTrashBreakingNews = (authUser, breakingNews) => {
+    if (!authUser || !breakingNews) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role) && breakingNews.is_published) return true
+
+    return isNewsDesk(role) && breakingNews.is_published
+}
+
+export const canRestoreBreakingNews = (authUser, breakingNews) => {
+    if (!authUser || !breakingNews) return false
+
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role) && (breakingNews.is_published == false)) return true
+
+    return isNewsDesk(role) && (breakingNews.is_published == false)
+}
+
+export const canDeleteBreakingNews = (authUser, breakingNews) => {
+    if (!authUser || !breakingNews) return false
+
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role) && (breakingNews.is_published == false)) return true
+
+    return isNewsDesk(role) && (breakingNews.is_published == false)
+}
+
 // ================= MENU =================
 
 export const canCreateMenu = (authUser) =>
@@ -366,6 +413,14 @@ export const canAccessNewsAttributesMenu = (authUser) => {
     return isAdmin(role) || isNewsDesk(role)
 }
 
+export const canAccessBreakingNewsMenu = (authUser) => {
+    if (!authUser) return false
+
+    const role = getUserRoleName(authUser)
+
+    return isAdmin(role) || isNewsDesk(role)
+}
+
 export const canAccessNewsMenu = (authUser) => {
     if (!authUser) return false
 
@@ -381,8 +436,6 @@ export const canAccessMenuMenu = (authUser) => {
 
     return isAdmin(role)
 }
-
-
 
 export const canAccessSetting = (authUser) => {
     if (!authUser) return false

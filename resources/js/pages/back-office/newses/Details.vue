@@ -93,7 +93,7 @@ onMounted(async () => {
                 </button>
 
                 <button v-if="canRestore(news)" @click="showRestoreModal = true"
-                    class="bg-red-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
+                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="eye" />
                     Restore
                 </button>
@@ -358,6 +358,25 @@ onMounted(async () => {
             </div>
         </div>
 
+        <div v-if="news?.breaking_news" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">Breaking News</h3>
+
+            <div class="flex justify-between">
+                <span class="text-gray-500">Title</span>
+                <span class="font-medium">{{ news?.breaking_news?.title || 'N/A' }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-500">Published</span>
+                <span class="font-medium">{{ news?.breaking_news?.is_published ? "Yes" : "No" }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-500">Created at</span>
+                <span class="font-medium">
+                    {{ news?.breaking_news?.created_at ? formatDateTime(news?.breaking_news?.created_at) : 'N/A' }}
+                </span>
+            </div>
+        </div>
+
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">News placements</h3>
             <NewsPlacementList :news="news" :news-placements="news.news_placements" />
@@ -365,12 +384,12 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">Relevant newses</h3>
-            <RelatedOrRelevantNewsList :newses="news?.relevantNewses" />
+            <RelatedOrRelevantNewsList :newses="news?.relevant_newses" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">Related newses</h3>
-            <RelatedOrRelevantNewsList :newses="news?.relatedNewses" />
+            <RelatedOrRelevantNewsList :newses="news?.related_newses" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
@@ -454,7 +473,7 @@ onMounted(async () => {
                                 </button>
 
                                 <button @click="handleRestore" :disabled="restoreProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="restoreProcessing" icon="spinner" spin />
                                     Restore
                                 </button>

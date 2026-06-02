@@ -15,6 +15,7 @@ use App\Models\Location;
 use App\Models\MenuItem;
 use App\Models\MenuType;
 use App\Models\News;
+use App\Models\BreakingNews;
 use App\Models\NewsType;
 use App\Models\Tag;
 use App\Models\User;
@@ -634,6 +635,39 @@ class SearchService
             'slug'                    => $news->slug,
             'published_at'            => $news->title_with_published_at,
             'title_with_published_at' => $news->title_with_published_at,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function breakingNewses(Request $request): array
+    {
+        $query = BreakingNews::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('is_sync_to_news') && !$request->boolean('is_sync_to_news')) {
+            $query->whereNull("news_id");
+        }
+
+        $records = $query->where('is_published', true)->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 50));
+
+        $list = $records->map(fn($news) => [
+            'id'                      => $news->id,
+            'title'                   => $news->title,
+            'slug'                    => $news->slug,
         ]);
 
         return [

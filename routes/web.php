@@ -13,6 +13,7 @@ use App\Http\Controllers\BackOffice\MediaController;
 // Backoffice
 use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
+use App\Http\Controllers\BackOffice\BreakingNewsController;
 use App\Http\Controllers\BackOffice\SettingController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
@@ -108,6 +109,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('menu-item-tree', [SearchController::class, 'menuItemTree'])->name('menu-item-tree');
 
         Route::get('newses', [SearchController::class, 'newses'])->name('newses');
+        Route::get('breaking-newses', [SearchController::class, 'breakingNewses'])->name('breaking-newses');
 
         Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
         Route::get('news-type/{slugOrId}', [SearchController::class, 'newsType'])->name('news-type');
@@ -251,6 +253,19 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
             Route::get('details/{newsPlacementSlug}', [NewsController::class, 'newsPlacementDetails'])->name('details');
             Route::delete('delete/{newsPlacementSlug}', [NewsController::class, 'newsPlacementDelete'])->name('delete');
         });
+    });
+
+    Route::prefix('breaking-newses')->name('breaking-newses.')->group(function () {
+        Route::get('/', [BreakingNewsController::class, 'index'])->name('index');
+        Route::get('create', [BreakingNewsController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [BreakingNewsController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [BreakingNewsController::class, 'details'])->name('details');
+
+        Route::post('save', [BreakingNewsController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [BreakingNewsController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [BreakingNewsController::class, 'delete'])->name('delete');
+        Route::patch('trash/{slug}', [BreakingNewsController::class, 'trash'])->name('trash');
+        Route::patch('restore/{slug}', [BreakingNewsController::class, 'restore'])->name('restore');
     });
 
     Route::prefix('menus')->name('menus.')->group(function () {

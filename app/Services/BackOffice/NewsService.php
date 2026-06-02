@@ -66,6 +66,8 @@ class NewsService
             'contributors',
             'newsPlacements',
 
+            'breakingNews',
+
             'relevantNewses',
             'relevantNewses.category',
 
