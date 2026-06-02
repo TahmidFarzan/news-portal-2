@@ -497,13 +497,6 @@ return [
             'unique'   => 'A setting with this group and key already exists.',
         ],
 
-        'key' => [
-            'required' => 'Key is required.',
-            'string'   => 'Key must be a string.',
-            'max'      => 'Key may not be greater than :max characters.',
-            'unique'   => 'A setting with this key already exists in the selected group.',
-        ],
-
         'label' => [
             'required' => 'Label is required.',
             'string'   => 'Label must be a string.',

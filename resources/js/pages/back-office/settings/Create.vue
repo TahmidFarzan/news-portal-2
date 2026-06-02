@@ -2,42 +2,40 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 
 import { computed, onMounted, nextTick, watch } from 'vue'
-import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { Head, useForm } from '@inertiajs/vue3'
 
 import { useSetting } from '@/composables/useSetting'
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSave, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
+FontAwesomeLibrary.add(faSave, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const props = defineProps({
+const { setting } = defineProps({
     setting: Object,
 })
 
 const {
-    SETTING_TYPES,
     settingTypes,
     isEmpty,
     hasValue,
     getDefaultValueByType,
 } = useSetting()
 
-const isUpdate = computed(() => !!props.setting?.slug)
+const isUpdate = computed(() => !!setting?.slug)
 
 const saveForm = useForm({
-    group: props.setting?.group ?? null,
-    key: props.setting?.key ?? null,
-    label: props.setting?.label ?? null,
-    type: props.setting?.type ?? null,
-    value: props.setting?.value ?? null,
+    group: setting?.group ?? null,
+    label: setting?.label ?? null,
+    type: setting?.type ?? null,
+    value: setting?.value ?? null,
 })
 
 const hasSettingIdentity = computed(() => {
-    return !isEmpty(saveForm.group) && !isEmpty(saveForm.key)
+    return !isEmpty(saveForm.group) && !isEmpty(saveForm.label)
 })
 
 const canSubmit = computed(() => {
@@ -76,11 +74,6 @@ function validateForm() {
         valid = false
     }
 
-    if (isEmpty(saveForm.key)) {
-        saveForm.setError('key', 'Key is required.')
-        valid = false
-    }
-
     if (isEmpty(saveForm.label)) {
         saveForm.setError('label', 'Label is required.')
         valid = false
@@ -96,7 +89,7 @@ function validateForm() {
         valid = false
     }
 
-    if (hasValue(saveForm.value) && saveForm.type === SETTING_TYPES.INTEGER) {
+    if (hasValue(saveForm.value) && saveForm.type === settingTypes.INTEGER) {
         if (!Number.isInteger(Number(saveForm.value))) {
             saveForm.setError('value', 'Value must be an integer.')
             valid = false
@@ -105,7 +98,7 @@ function validateForm() {
 
     if (
         hasValue(saveForm.value) &&
-        [SETTING_TYPES.FLOAT, SETTING_TYPES.DECIMAL].includes(saveForm.type)
+        [settingTypes.FLOAT, settingTypes.DECIMAL].includes(saveForm.type)
     ) {
         if (Number.isNaN(Number(saveForm.value))) {
             saveForm.setError('value', 'Value must be a valid number.')
@@ -115,12 +108,12 @@ function validateForm() {
 
     if (
         hasValue(saveForm.value) &&
-        [SETTING_TYPES.JSON, SETTING_TYPES.ARRAY].includes(saveForm.type)
+        [settingTypes.JSON, settingTypes.ARRAY].includes(saveForm.type)
     ) {
         try {
             const parsedValue = JSON.parse(saveForm.value)
 
-            if (saveForm.type === SETTING_TYPES.ARRAY && !Array.isArray(parsedValue)) {
+            if (saveForm.type === settingTypes.ARRAY && !Array.isArray(parsedValue)) {
                 saveForm.setError('value', 'Value must be a valid JSON array.')
                 valid = false
             }
@@ -130,7 +123,7 @@ function validateForm() {
         }
     }
 
-    if (hasValue(saveForm.value) && saveForm.type === SETTING_TYPES.URL) {
+    if (hasValue(saveForm.value) && saveForm.type === settingTypes.URL) {
         try {
             new URL(saveForm.value)
         } catch {
@@ -139,7 +132,7 @@ function validateForm() {
         }
     }
 
-    if (hasValue(saveForm.value) && saveForm.type === SETTING_TYPES.COLOR) {
+    if (hasValue(saveForm.value) && saveForm.type === settingTypes.COLOR) {
         const colorRegex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/
 
         if (!colorRegex.test(saveForm.value)) {
@@ -161,7 +154,7 @@ function handleSave() {
             ...data,
             _method: 'patch',
         }))
-        .post(route('back-office.settings.update', { slug: props.setting?.slug }), {
+        .post(route('back-office.settings.update', { slug: setting?.slug }), {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
@@ -178,7 +171,7 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Settings', href: route('back-office.settings.index') },
-                { text: isUpdate.value ? `${props.setting?.label} edit` : 'Setting create', active: true }
+                { text: isUpdate.value ? `${setting?.label} edit` : 'Setting create', active: true },
             ],
         })
     )
@@ -187,7 +180,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${props.setting?.label} edit` : 'Setting create'" />
+    <Head :title="isUpdate ? `${setting?.label} edit` : 'Setting create'" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -195,12 +188,12 @@ onMounted(async () => {
             <div v-if="!hasSettingIdentity" class="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4">
                 <h3 class="font-semibold mb-1">Invalid setting data</h3>
                 <p class="text-sm">
-                    Setting group and key are required. Please go back and select a valid setting.
+                    Setting group and label are required. Please go back and select a valid setting.
                 </p>
 
                 <div class="mt-3 space-y-1 text-sm">
                     <p v-if="saveForm.errors.group">{{ saveForm.errors.group }}</p>
-                    <p v-if="saveForm.errors.key">{{ saveForm.errors.key }}</p>
+                    <p v-if="saveForm.errors.label">{{ saveForm.errors.label }}</p>
                 </div>
             </div>
 
@@ -215,53 +208,53 @@ onMounted(async () => {
                                 {{ saveForm.label }} <span class="text-red-500">*</span>
                             </label>
 
-                            <textarea v-if="saveForm.type === SETTING_TYPES.TEXT" v-model="saveForm.value" rows="4"
+                            <textarea v-if="saveForm.type === settingTypes.TEXT" v-model="saveForm.value" rows="4"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'"></textarea>
 
-                            <input v-else-if="saveForm.type === SETTING_TYPES.STRING" v-model="saveForm.value"
+                            <input v-else-if="saveForm.type === settingTypes.STRING" v-model="saveForm.value"
                                 type="text"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
-                            <select v-else-if="saveForm.type === SETTING_TYPES.BOOLEAN" v-model="saveForm.value"
+                            <select v-else-if="saveForm.type === settingTypes.BOOLEAN" v-model="saveForm.value"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'">
                                 <option :value="true">True</option>
                                 <option :value="false">False</option>
                             </select>
 
-                            <input v-else-if="saveForm.type === SETTING_TYPES.INTEGER" v-model="saveForm.value"
+                            <input v-else-if="saveForm.type === settingTypes.INTEGER" v-model="saveForm.value"
                                 type="number" step="1"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
                             <input v-else-if="
-                                saveForm.type === SETTING_TYPES.FLOAT ||
-                                saveForm.type === SETTING_TYPES.DECIMAL
+                                saveForm.type === settingTypes.FLOAT ||
+                                saveForm.type === settingTypes.DECIMAL
                             " v-model="saveForm.value" type="number" step="any"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
                             <textarea v-else-if="
-                                saveForm.type === SETTING_TYPES.JSON ||
-                                saveForm.type === SETTING_TYPES.ARRAY
+                                saveForm.type === settingTypes.JSON ||
+                                saveForm.type === settingTypes.ARRAY
                             " v-model="saveForm.value" rows="6"
                                 placeholder='Example: {"key": "value"} or ["item1", "item2"]'
                                 class="w-full border rounded-md px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'"></textarea>
 
-                            <input v-else-if="saveForm.type === SETTING_TYPES.URL" v-model="saveForm.value" type="url"
+                            <input v-else-if="saveForm.type === settingTypes.URL" v-model="saveForm.value" type="url"
                                 placeholder="https://example.com"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
-                            <input v-else-if="saveForm.type === SETTING_TYPES.IMAGE" type="file" accept="image/*"
+                            <input v-else-if="saveForm.type === settingTypes.IMAGE" type="file" accept="image/*"
                                 @change="handleImageChange"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
-                            <div v-else-if="saveForm.type === SETTING_TYPES.COLOR" class="flex gap-3">
+                            <div v-else-if="saveForm.type === settingTypes.COLOR" class="flex gap-3">
                                 <input v-model="saveForm.value" type="color" class="w-16 h-10 border rounded-md" />
 
                                 <input v-model="saveForm.value" type="text" placeholder="#000000"

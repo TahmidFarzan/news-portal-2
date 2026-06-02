@@ -1,4 +1,4 @@
-export const SETTING_TYPES = Object.freeze({
+export const settingTypes = Object.freeze({
     TEXT: 'Text',
     STRING: 'String',
     BOOLEAN: 'Boolean',
@@ -12,8 +12,24 @@ export const SETTING_TYPES = Object.freeze({
     COLOR: 'Color',
 })
 
+export const settingGroups = Object.freeze({
+    App: 'App',
+    MENU: 'Menu',
+    SOCIAL_LINK: 'Social Link',
+})
+
+export const settingFields = Object.freeze({
+    SHOW_FOOTER_MENU: 'Show Footer Menu',
+    SHOW_TOPBAR_MENU: 'Show Topbar Menu',
+    FB_SOCIAL_LINK: 'Fb Social Link',
+    YOUTUBE_SOCIAL_LINK: 'Youtube Social Link',
+    GOOGLE_NEWS_SOCIAL_LINK: 'Google News Link',
+    SHOW_LOGO_ON_HEADER_MENU: 'Show Logo On Header Menu',
+    SHOW_NAME_ON_HEADER_MENU: 'Show Name On Header Menu',
+})
+
 export function useSetting() {
-    const settingTypes = Object.values(SETTING_TYPES)
+    const settingTypeOptions = Object.values(settingTypes)
 
     const isEmpty = (value) => {
         return value === null ||
@@ -25,20 +41,29 @@ export function useSetting() {
         return value !== null && value !== undefined && value !== ''
     }
 
+    const isTruthyValue = (value) => {
+        return value === true ||
+            value === 1 ||
+            value === '1' ||
+            String(value).toLowerCase() === 'true' ||
+            String(value).toLowerCase() === 'yes' ||
+            String(value).toLowerCase() === 'on'
+    }
+
     const getDefaultValueByType = (type) => {
-        if (type === SETTING_TYPES.BOOLEAN) {
+        if (type === settingTypes.BOOLEAN) {
             return false
         }
 
-        if (type === SETTING_TYPES.ARRAY) {
+        if (type === settingTypes.ARRAY) {
             return '[]'
         }
 
-        if (type === SETTING_TYPES.JSON) {
+        if (type === settingTypes.JSON) {
             return '{}'
         }
 
-        if (type === SETTING_TYPES.COLOR) {
+        if (type === settingTypes.COLOR) {
             return '#000000'
         }
 
@@ -46,10 +71,13 @@ export function useSetting() {
     }
 
     return {
-        SETTING_TYPES,
         settingTypes,
+        settingTypeOptions,
+        settingGroups,
+        settingFields,
         isEmpty,
         hasValue,
+        isTruthyValue,
         getDefaultValueByType,
     }
 }

@@ -24,7 +24,6 @@ class SettingRequest extends FormRequest
     {
         return [
             'group' => ['required', 'string'],
-            'key'   => ['required', 'string'],
             'label' => ['required', 'string'],
             'type'  => ['required', 'string'],
             'value' => ['nullable', 'string'],
@@ -37,10 +36,6 @@ class SettingRequest extends FormRequest
             "group.required" => __("form-requests.setting.group.required"),
             "group.string"   => __("form-requests.setting.group.string"),
             "group.max"      => __("form-requests.setting.group.max"),
-
-            "key.required"   => __("form-requests.setting.key.required"),
-            "key.string"     => __("form-requests.setting.key.string"),
-            "key.max"        => __("form-requests.setting.key.max"),
 
             "label.required" => __("form-requests.setting.label.required"),
             "label.string"   => __("form-requests.setting.label.string"),

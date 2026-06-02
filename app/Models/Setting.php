@@ -25,7 +25,6 @@ use Spatie\Sluggable\SlugOptions;
 #[Table('settings')]
 #[Fillable([
     'group',
-    'key',
     'label',
     'type',
     'value',
@@ -132,7 +131,6 @@ class Setting extends Model
         return LogOptions::defaults()
             ->logOnly([
                 'group',
-                'key',
                 'label',
                 'type',
                 'value',

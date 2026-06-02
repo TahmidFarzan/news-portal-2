@@ -51,4 +51,11 @@ class SiteController extends Controller
             $this->siteService->menuItemSubMenuItems($request, $menuItem)
         );
     }
+
+    public function settings(): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->settings()
+        );
+    }
 }

@@ -30,15 +30,13 @@ class SettingSeeder extends Seeder
 
         Setting::factory()->state([
             'group' => SettingHelper::GROUP_APP,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_YOUTUBE_SOCIAL_LINK)),
-            'label' => SettingHelper::FIELD_YOUTUBE_SOCIAL_LINK,
-            'type'  => SettingHelper::TYPE_URL,
-            'value' => "",
+            'label' => SettingHelper::FIELD_SHOW_NAME_ON_HEADER_MENU,
+            'type'  => SettingHelper::TYPE_BOOLEAN,
+            'value' => true,
         ])->create();
 
         Setting::factory()->state([
             'group' => SettingHelper::GROUP_APP,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_SHOW_LOGO_ON_HEADER_MENU)),
             'label' => SettingHelper::FIELD_SHOW_LOGO_ON_HEADER_MENU,
             'type'  => SettingHelper::TYPE_BOOLEAN,
             'value' => true,
@@ -46,15 +44,6 @@ class SettingSeeder extends Seeder
 
         Setting::factory()->state([
             'group' => SettingHelper::GROUP_MENU,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_SHOW_HEADER_MENU)),
-            'label' => SettingHelper::FIELD_SHOW_HEADER_MENU,
-            'type'  => SettingHelper::TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
-
-        Setting::factory()->state([
-            'group' => SettingHelper::GROUP_MENU,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_SHOW_TOPBAR_MENU)),
             'label' => SettingHelper::FIELD_SHOW_TOPBAR_MENU,
             'type'  => SettingHelper::TYPE_BOOLEAN,
             'value' => true,
@@ -62,42 +51,31 @@ class SettingSeeder extends Seeder
 
         Setting::factory()->state([
             'group' => SettingHelper::GROUP_MENU,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_SHOW_FOOTER_MENU)),
             'label' => SettingHelper::FIELD_SHOW_FOOTER_MENU,
             'type'  => SettingHelper::TYPE_BOOLEAN,
             'value' => true,
         ])->create();
 
         Setting::factory()->state([
-            'group' => SettingHelper::GROUP_MENU,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_SHOW_OFFCANVAS_MENU)),
-            'label' => SettingHelper::FIELD_SHOW_OFFCANVAS_MENU,
-            'type'  => SettingHelper::TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
-
-        Setting::factory()->state([
             'group' => SettingHelper::GROUP_SOCIAL_LINK,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_FB_SOCIAL_LINK)),
             'label' => SettingHelper::FIELD_FB_SOCIAL_LINK,
             'type'  => SettingHelper::TYPE_URL,
-            'value' => "",
+            'value' => "https://facebook.com",
         ])->create();
 
         Setting::factory()->state([
             'group' => SettingHelper::GROUP_SOCIAL_LINK,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_INSTAGRAM_SOCIAL_LINK)),
-            'label' => SettingHelper::FIELD_INSTAGRAM_SOCIAL_LINK,
+            'label' => SettingHelper::FIELD_YOUTUBE_SOCIAL_LINK,
             'type'  => SettingHelper::TYPE_URL,
-            'value' => "",
+            'value' => "https://youtube.com",
         ])->create();
 
         Setting::factory()->state([
             'group' => SettingHelper::GROUP_SOCIAL_LINK,
-            'key'   => Str::lower(Str::snake(SettingHelper::FIELD_SHOW_NAME_ON_HEADER_MENU)),
-            'label' => SettingHelper::FIELD_SHOW_NAME_ON_HEADER_MENU,
-            'type'  => SettingHelper::TYPE_BOOLEAN,
-            'value' => true,
+            'label' => SettingHelper::FIELD_GOOGLE_NEWS_SOCIAL_LINK,
+            'type'  => SettingHelper::TYPE_URL,
+            'value' => "https://news.google.com",
         ])->create();
+
     }
 }

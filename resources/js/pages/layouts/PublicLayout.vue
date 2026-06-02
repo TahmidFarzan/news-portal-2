@@ -6,32 +6,39 @@ import TopbarMenu from '@/components/common/layout/public-layout/TopbarMenu.vue'
 import FooterMenu from '@/components/common/layout/public-layout/FooterMenu.vue'
 import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 
-import { ref, computed, watch, provide, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { usePage, router as inertia } from '@inertiajs/vue3'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
     faArrowRightToBracket,
-    faSpinner,
-    faMagnifyingGlass
+    faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons'
-import { faFacebook, faLinkedin, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons'
+
+import { fetchFromApi } from '@/composables/useSystemApi'
+import { useSetting } from '@/composables/useSetting'
 
 library.add(
     faArrowRightToBracket,
-    faSpinner,
     faMagnifyingGlass,
     faFacebook,
-    faLinkedin,
-    faGoogle
+    faGoogle,
+    faYoutube
 )
 
 const page = usePage()
 
+const {
+    settingGroups,
+    settingFields,
+    isTruthyValue,
+} = useSetting()
+
 const headerNavbar = ref(null)
 const isHeaderSticky = ref(false)
-
+const siteSettings = ref([])
 
 const year = new Date().getFullYear()
 const appName = import.meta.env.VITE_APP_NAME
@@ -39,17 +46,64 @@ const appName = import.meta.env.VITE_APP_NAME
 const authUser = computed(() => page.props.auth?.user ?? null)
 const flashMessage = computed(() => page.props.flashMessage)
 
-let removeInertiaStartListener = null
-let removeInertiaFinishListener = null
-
 const handlePageScroll = () => {
     isHeaderSticky.value = window.scrollY > 0
 }
 
+const normalizeText = (value) => {
+    return String(value ?? '').trim().toLowerCase()
+}
+
+const loadSiteSettings = async () => {
+    const response = await fetchFromApi(route('site.settings'))
+
+    siteSettings.value = Array.isArray(response)
+        ? response
+        : response?.data ?? []
+}
+
+const getSetting = (field, group = null) => {
+    return siteSettings.value.find((setting) => {
+        const matchedField =
+            normalizeText(setting?.key) === normalizeText(field) ||
+            normalizeText(setting?.label) === normalizeText(field)
+
+        const matchedGroup =
+            !group || normalizeText(setting?.group) === normalizeText(group)
+
+        return matchedField && matchedGroup
+    }) ?? null
+}
+
+const facebookSetting = computed(() => {
+    return getSetting(settingFields.FB_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+})
+
+const youtubeSetting = computed(() => {
+    return getSetting(settingFields.YOUTUBE_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+})
+
+const googleNewsSetting = computed(() => {
+    return getSetting(settingFields.GOOGLE_NEWS_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+})
+
+const showTopbarMenu = computed(() => {
+    return getSetting(settingFields.SHOW_TOPBAR_MENU, settingGroups.MENU)
+})
+
+const showFooterMenu = computed(() => {
+    return getSetting(settingFields.SHOW_FOOTER_MENU, settingGroups.MENU)
+})
+
+const showNameOnHeaderMenu = computed(() => {
+    return getSetting(settingFields.SHOW_NAME_ON_HEADER_MENU, settingGroups.App)
+})
+
+
 onMounted(async () => {
     await nextTick()
 
-
+    await loadSiteSettings()
 
     handlePageScroll()
 
@@ -57,13 +111,11 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-    removeInertiaStartListener?.()
-    removeInertiaFinishListener?.()
-
     window.removeEventListener('scroll', handlePageScroll)
 
     document.body.style.overflow = ''
 })
+
 </script>
 
 <template>
@@ -71,23 +123,25 @@ onBeforeUnmount(() => {
         <div class="bg-gray-900 text-white">
             <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center max-[450px]:gap-2">
                 <div class="flex space-x-3 max-[450px]:space-x-2 max-[450px]:flex-shrink-0">
-                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                    <a v-if="facebookSetting?.value" :href="facebookSetting.value" target="_blank"
+                        rel="noopener noreferrer" aria-label="Facebook">
                         <FontAwesomeIcon :icon="['fab', 'facebook']" />
                     </a>
 
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                        <FontAwesomeIcon :icon="['fab', 'linkedin']" />
+                    <a v-if="youtubeSetting?.value" :href="youtubeSetting.value" target="_blank"
+                        rel="noopener noreferrer" aria-label="Youtube">
+                        <FontAwesomeIcon :icon="['fab', 'youtube']" />
                     </a>
 
-                    <a href="https://news.google.com" target="_blank" rel="noopener noreferrer"
-                        aria-label="Google News">
+                    <a v-if="googleNewsSetting?.value" :href="googleNewsSetting.value" target="_blank"
+                        rel="noopener noreferrer" aria-label="Google News">
                         <FontAwesomeIcon :icon="['fab', 'google']" />
                     </a>
                 </div>
 
                 <div
                     class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
-                    <div class="max-[450px]:flex-1 max-[450px]:min-w-0">
+                    <div v-if="isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
                         <TopbarMenu />
                     </div>
 
@@ -106,9 +160,8 @@ onBeforeUnmount(() => {
 
         <div ref="headerNavbar" class="bg-gray-900 text-white transition-shadow"
             :class="{ 'shadow-md sticky top-0 z-50': isHeaderSticky }">
-
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
-                <a :href="route('home')"
+                <a v-if="isTruthyValue(showNameOnHeaderMenu?.value)" :href="route('home')"
                     class="h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
                     {{ appName }}
                 </a>
@@ -130,8 +183,6 @@ onBeforeUnmount(() => {
         </div>
 
         <main class="flex-1 max-w-7xl mx-auto px-4 py-4 relative">
-
-
             <slot />
         </main>
 
@@ -141,7 +192,7 @@ onBeforeUnmount(() => {
                     © {{ year }} {{ appName }}
                 </span>
 
-                <FooterMenu />
+                <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" />
 
                 <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
                     Developed by

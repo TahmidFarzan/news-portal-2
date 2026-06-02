@@ -18,7 +18,6 @@ class SettingFactory extends Factory
     {
         return [
             'group'         => "Demo",
-            'key'           => "name",
             'label'         => "Name",
             'type'          => "String",
             'value'         => $this->faker->name(),

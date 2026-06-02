@@ -348,7 +348,10 @@ Route::prefix('site')->name('site.')->group(function () {
         Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
             Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
         });
+
+
     });
+    Route::get('settings', [SiteController::class, 'settings'])->name('settings');
 });
 
 Route::get('/', function () {

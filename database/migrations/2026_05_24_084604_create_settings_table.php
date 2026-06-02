@@ -11,13 +11,12 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('group', 255);
-            $table->string('key', 255);
             $table->string('label', 255);
             $table->string('type', 255);
             $table->text('value')->nullable();
             $table->string('slug', 255)->unique();
 
-            $table->unique(['group', 'key']);
+            $table->unique(['group', 'label']);
             $table->index('group');
             $table->timestamps();
         });

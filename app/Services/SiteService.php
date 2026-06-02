@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
 //use App\Models\Language;
-//use App\Models\Menu;
+use App\Models\Setting;
 use App\Helpers\SystemHelper;
 use App\Helpers\MenuHelper;
 use App\Models\MenuItem;
@@ -344,6 +344,11 @@ class SiteService
         );
 
         return $data;
+    }
+
+    public function settings()
+    {
+        return Setting::orderBy('id', "asc")->get();
     }
 
 }

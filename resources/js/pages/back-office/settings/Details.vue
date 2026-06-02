@@ -24,7 +24,7 @@ const { setting } = defineProps({
 const authUser = inject('authUser')
 
 const {
-    SETTING_TYPES,
+    settingTypes,
     hasValue,
 } = useSetting()
 
@@ -38,15 +38,15 @@ const formattedValue = computed(() => {
         return 'N/A'
     }
 
-    if (type === SETTING_TYPES.BOOLEAN) {
+    if (type === settingTypes.BOOLEAN) {
         return value === true || value === 'true' || value === 1 || value === '1'
             ? 'True'
             : 'False'
     }
 
     if (
-        type === SETTING_TYPES.JSON ||
-        type === SETTING_TYPES.ARRAY
+        type === settingTypes.JSON ||
+        type === settingTypes.ARRAY
     ) {
         try {
             const parsedValue = typeof value === 'string'
@@ -126,23 +126,23 @@ onMounted(async () => {
                     <div class="flex justify-between gap-4">
                         <span class="text-gray-500">Value</span>
 
-                        <span v-if="setting?.type === SETTING_TYPES.BOOLEAN"
+                        <span v-if="setting?.type === settingTypes.BOOLEAN"
                             class="font-medium px-2 py-1 rounded-md text-xs" :class="formattedValue === 'True'
                                 ? 'bg-green-100 text-green-700'
                                 : 'bg-red-100 text-red-700'">
                             {{ formattedValue }}
                         </span>
 
-                        <a v-else-if="setting?.type === SETTING_TYPES.URL && formattedValue !== 'N/A'"
+                        <a v-else-if="setting?.type === settingTypes.URL && formattedValue !== 'N/A'"
                             :href="formattedValue" target="_blank"
                             class="font-medium text-blue-600 hover:underline break-all text-right">
                             {{ formattedValue }}
                         </a>
 
-                        <img v-else-if="setting?.type === SETTING_TYPES.IMAGE && formattedValue !== 'N/A'"
+                        <img v-else-if="setting?.type === settingTypes.IMAGE && formattedValue !== 'N/A'"
                             :src="formattedValue" alt="Setting image" class="w-20 h-20 object-cover rounded-md border">
 
-                        <span v-else-if="setting?.type === SETTING_TYPES.COLOR && formattedValue !== 'N/A'"
+                        <span v-else-if="setting?.type === settingTypes.COLOR && formattedValue !== 'N/A'"
                             class="font-medium flex items-center gap-2">
                             <span class="w-5 h-5 rounded border" :style="{ backgroundColor: formattedValue }"></span>
 
@@ -150,8 +150,8 @@ onMounted(async () => {
                         </span>
 
                         <pre v-else-if="
-                            setting?.type === SETTING_TYPES.JSON ||
-                            setting?.type === SETTING_TYPES.ARRAY
+                            setting?.type === settingTypes.JSON ||
+                            setting?.type === settingTypes.ARRAY
                         "
                             class="font-medium bg-gray-50 border rounded-md p-2 text-xs overflow-x-auto max-w-full text-right">{{ formattedValue }}</pre>
 
