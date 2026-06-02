@@ -98,8 +98,8 @@ class SettingRequest extends FormRequest
                 }
             }
 
-            if (! empty($data["group"]) && empty($data["key"])) {
-                $sameSettingFound = Setting::where("group", $data["group"])->where("key", $data["key"]);
+            if (! empty($data["group"]) && empty($data["label"])) {
+                $sameSettingFound = Setting::where("group", $data["group"])->where("label", $data["label"]);
                 if ($setting && $isUpdate) {
                     $sameSettingFound = $sameSettingFound->whereNot('id', $sameSettingFound->id);
                 }
@@ -111,8 +111,8 @@ class SettingRequest extends FormRequest
                     );
 
                     $validator->errors()->add(
-                        'key',
-                        __("form-requests.setting.key.unique")
+                        'label',
+                        __("form-requests.setting.label.unique")
                     );
                 }
             }

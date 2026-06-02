@@ -501,6 +501,7 @@ return [
             'required' => 'Label is required.',
             'string'   => 'Label must be a string.',
             'max'      => 'Label may not be greater than :max characters.',
+            'unique'   => 'A setting with this group and label already exists.',
         ],
 
         'type' => [
