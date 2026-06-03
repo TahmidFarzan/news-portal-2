@@ -8,11 +8,14 @@ use App\Helpers\TagifyHelper;
 use App\Http\Requests\NewsGalleryImageRequest;
 use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
 use App\Http\Requests\NewsRequest;
+use App\Jobs\NewsBreakingNewsSyncJob;
+use App\Jobs\NewsContentMediaSyncJob;
 use App\Jobs\NewsContributorSyncJob;
+use App\Jobs\NewsGalleryImagesSyncJob;
+use App\Jobs\NewsNewsPlacementAfterCreateSyncJob;
 use App\Jobs\NewsRelatedNewsSyncJob;
 use App\Jobs\NewsRelevantNewsSyncJob;
 use App\Jobs\NewsTagSyncJob;
-use App\Models\BreakingNews;
 use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\NewsType;
@@ -157,7 +160,7 @@ class NewsService
 
         try {
 
-            DB::transaction(function () use ($request, $news, $isNew) {
+            $news = DB::transaction(function () use ($request, $news, $isNew) {
 
                 $newsType = $this->newsTypefindById($request->input('news_type_id'));
 
@@ -190,27 +193,26 @@ class NewsService
                 $this->featureImageSave($request, $news);
                 $this->featureImageMobileSave($request, $news);
 
-                $this->syncAttributesJob($request, $news);
-
-                $this->syncBreakingNews($request, $news);
-
-                if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
-                    $this->syncContentMedia($request, $news);
-                }
-
-                if ($isNew) {
-                    if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
-                        $this->syncGalleryImagesMedia($request, $news);
-                    }
-
-                    $this->syncNewPlacementAfterNewsCreate($news);
-                }
-
                 if (! $isNew) {
                     $this->syncMediaAccrodingNewsTypeChangeOnNewsUpdate($news);
                 }
+
+                return $news;
             });
 
+            $this->syncAttributesJob($request, $news);
+            $this->syncBreakingNews($request, $news);
+
+            if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
+                $this->syncContentMedia($request, $news);
+            }
+
+            if ($isNew) {
+                if (NewsHelper::NEWS_TYPE_IMAGE_GALLERY == $news->newsType->name) {
+                    $this->syncGalleryImagesMedia($request, $news);
+                }
+                $this->syncNewPlacementAfterNewsCreate($news);
+            }
 
             return [
                 'status'  => 'success',
@@ -560,7 +562,6 @@ class NewsService
 
     public function newsPlacementGenerateForNews(News $news): array
     {
-
         try {
 
             DB::transaction(function () use ($news) {
@@ -700,120 +701,26 @@ class NewsService
     private function syncBreakingNews(NewsRequest $request, News $news)
     {
         if ($request->filled('breaking_news_id')) {
-            $breakingNews = BreakingNews::where("id", $request->input('breaking_news_id'))->first();
-            if ($breakingNews) {
-                try {
-                    DB::transaction(function () use ($news, $breakingNews) {
-                        $breakingNews->news_id = $news->id;
-                        $breakingNews->save();
-                    });
-
-                } catch (Exception $exception) {
-
-                    Log::error("Breaking news sync failed for {$news->title}.", [
-                        'exception' => $exception,
-                    ]);
-                }
+            if (! ($news->breakingNews?->news_id == $news->id)) {
+                NewsBreakingNewsSyncJob::dispatchSync($news, $request->input('breaking_news_id'));
             }
+
+        } else {
+            NewsBreakingNewsSyncJob::dispatchSync($news, null);
         }
     }
 
     private function syncContentMedia(NewsRequest $request, News $news): void
     {
-        if (! $request->filled('editor_media_ids')) {
-            return;
-        }
-
-        $contentMediaIds = explode(',', $request->input('editor_media_ids'));
-        $contentMediaIds = array_filter($contentMediaIds);
-
-        if (! count($contentMediaIds)) {
-            return;
-        }
-
-        $replacementPairs = $this->mediaService->copyOrUpdateMediaByMediaIds(
-            $contentMediaIds,
-            $news,
-            MediaHelper::ROLE_NEWS_CONTENT_IMAGE
-        );
-
-        if (! $replacementPairs) {
-            return;
-        }
-
-        $body = $news->body ?? '';
-
-        foreach ($replacementPairs as $replacementPair) {
-            if ($replacementPair->old_media_id == $replacementPair->new_media_id) {
-                continue;
-            }
-
-            $oldMedia = $this->mediaService->firstById($replacementPair->old_media_id);
-            $newMedia = $this->mediaService->firstById($replacementPair->new_media_id);
-
-            if (! $oldMedia || ! $newMedia) {
-                continue;
-            }
-
-            $replaceableUrls = [
-                [
-                    'old' => $oldMedia->url ?? null,
-                    'new' => $newMedia->url ?? null,
-                ],
-                [
-                    'old' => $oldMedia->original_url ?? null,
-                    'new' => $newMedia->original_url ?? null,
-                ],
-                [
-                    'old' => $oldMedia->media_url ?? null,
-                    'new' => $newMedia->media_url ?? null,
-                ],
-                [
-                    'old' => $oldMedia->media_srcset ?? null,
-                    'new' => $newMedia->media_srcset ?? null,
-                ],
-            ];
-
-            foreach ($replaceableUrls as $replaceableUrl) {
-                if (! $replaceableUrl['old'] || ! $replaceableUrl['new']) {
-                    continue;
-                }
-
-                $body = str_replace(
-                    $replaceableUrl['old'],
-                    $replaceableUrl['new'],
-                    $body
-                );
-            }
-        }
-
-        if ($body !== $news->body) {
-            $news->body = $body;
-            $news->save();
+        if ($request->filled('editor_media_ids')) {
+            NewsContentMediaSyncJob::dispatchSync($news, $request->input('editor_media_ids'));
         }
     }
 
     private function syncGalleryImagesMedia(NewsRequest $request, News $news): void
     {
-        if (! $request->filled('gallery_image_ids')) {
-            return;
-        }
-
-        $galleryImageIds = explode(',', $request->input('gallery_image_ids'));
-        $galleryImageIds = array_filter($galleryImageIds);
-
-        if (! count($galleryImageIds)) {
-            return;
-        }
-
-        $replacementPairs = $this->mediaService->copyOrUpdateMediaByMediaIds(
-            $galleryImageIds,
-            $news,
-            MediaHelper::ROLE_NEWS_GALLERY_IMAGE
-        );
-
-        if (! $replacementPairs) {
-            return;
+        if ($request->filled('gallery_image_ids')) {
+            NewsGalleryImagesSyncJob::dispatchSync($news, $request->input('gallery_image_ids'));
         }
     }
 
@@ -849,66 +756,7 @@ class NewsService
 
     private function syncNewPlacementAfterNewsCreate(News $news): void
     {
-        $homePage     = PageHelper::PAGE_HOME;
-        $categoryPage = PageHelper::PAGE_CATEGORY;
-
-        $leadNewsSection     = PageHelper::PAGE_SECTION_LEAD_NEWS;
-        $categoryNewsSection = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
-
-        $homeLeadNewsPositionExit = NewsPlacement::query()
-            ->where('news_id', $news->id)
-            ->where('page', $homePage)
-            ->where('page_section', $leadNewsSection)->exists();
-
-        $homeCategoryNewsPositionExit = NewsPlacement::query()
-            ->where('news_id', $news->id)
-            ->where('page', $homePage)
-            ->where('page_section', $categoryNewsSection)
-            ->when($news->category_id !== null, function ($query) use ($news) {
-                $query->where('category_id', $news->category_id);
-            })->exists();
-
-        $categoryLeadNewsPositionExit = NewsPlacement::query()
-            ->where('news_id', $news->id)
-            ->where('page', $categoryPage)
-            ->where('page_section', $leadNewsSection)
-            ->when($news->category_id !== null, function ($query) use ($news) {
-                $query->where('category_id', $news->category_id);
-            })->exists();
-
-        if (! $homeLeadNewsPositionExit) {
-            NewsPlacement::create([
-                'news_id'       => $news->id,
-                'page'          => $homePage,
-                'page_section'  => $leadNewsSection,
-                'category_id'   => null,
-                'position'      => 10,
-                'created_by_id' => Auth::id(),
-            ]);
-        }
-
-        if (! $homeCategoryNewsPositionExit) {
-            NewsPlacement::create([
-                'news_id'       => $news->id,
-                'page'          => $homePage,
-                'page_section'  => $categoryNewsSection,
-                'category_id'   => $news->category_id,
-                'position'      => 10,
-                'created_by_id' => Auth::id(),
-            ]);
-        }
-
-        if (! $categoryLeadNewsPositionExit) {
-            NewsPlacement::create([
-                'news_id'       => $news->id,
-                'page'          => $categoryPage,
-                'page_section'  => $leadNewsSection,
-                'category_id'   => $news->category_id,
-                'position'      => 10,
-                'created_by_id' => Auth::id(),
-            ]);
-        }
-
+        NewsNewsPlacementAfterCreateSyncJob::dispatchSync($news);
     }
 
     private function featureImageSave(NewsRequest $request, News $news): void
