@@ -2,6 +2,7 @@
 namespace App\Http\Requests;
 
 use App\Helpers\NewsHelper;
+use App\Models\BreakingNews;
 use App\Models\Category;
 use App\Models\Contributor;
 use App\Models\Event;
@@ -258,6 +259,35 @@ class NewsRequest extends FormRequest
                         );
 
                         break;
+                    }
+                }
+            }
+
+            if (! empty($data["breaking_news_id"])) {
+                if (! BreakingNews::where('id', $data["breaking_news_id"])->where("is_published", true)->exists()) {
+                    $validator->errors()->add(
+                        'breaking_news_id',
+                        __("form-requests.news.breaking_news_id.not_found")
+                    );
+                } else {
+                    $extingBreakingNews = BreakingNews::where('id', $data["breaking_news_id"])->where("is_published", true)->first();
+
+                    if ($news) {
+
+                        if (! ($extingBreakingNews->news_id == null) && ! ($extingBreakingNews->news_id == $news->id)) {
+                            $validator->errors()->add(
+                                'breaking_news_id',
+                                __("form-requests.news.breaking_news_id.already_sync_to_news")
+                            );
+                        }
+
+                    }else{
+                        if (! ($extingBreakingNews->news_id == null)) {
+                            $validator->errors()->add(
+                                'breaking_news_id',
+                                __("form-requests.news.breaking_news_id.already_sync_to_news")
+                            );
+                        }
                     }
                 }
             }

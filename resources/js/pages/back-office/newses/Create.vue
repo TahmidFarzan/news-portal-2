@@ -68,9 +68,10 @@ const saveForm = useForm({
     seo_title: news?.seo_title || null,
     seo_keywords: news?.seo_keywords ? news?.seo_keywords.split(',') : [],
 
+    breaking_news_id: news?.breaking_news?.id || null,
     editor_media_ids: null,
-    relevant_news_ids:[],
-    related_news_ids:[]
+    relevant_news_ids: [],
+    related_news_ids: []
 })
 
 const categoryApiUrl = computed(() => {
@@ -125,6 +126,15 @@ const relevantOrRelatedNewsApiUrl = computed(() => {
     }
 
     return route('search.newses') + `?language_id=${saveForm.language_id}&news_type_id=${saveForm.news_type_id}`
+})
+
+const breakingNewsApiUrl = computed(() => {
+    const isSyncToNews = true;
+    if (!saveForm.language_id) {
+        return route('search.breaking-newses')
+    }
+
+    return route('search.breaking-newses') + `?language_id=${saveForm.language_id}&is_sync_to_news=${isSyncToNews}`
 })
 
 function handleSelectedFeatureImage(media) {
@@ -675,7 +685,7 @@ onMounted(async () => {
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">Extra Settings</h3>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
@@ -684,8 +694,9 @@ onMounted(async () => {
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="relevant_news_ids"
                                 :selectedItem="saveForm.relevant_news_ids ? news?.relevant_news_ids : null"
-                                :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.relevant_news_ids" selectedLabelKey="title_with_published_at"
-                                selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
+                                :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.relevant_news_ids"
+                                selectedLabelKey="title_with_published_at" selectedValueKey="id"
+                                apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
                                 placeholder="Select relevant newses" />
                             <p v-if="saveForm.errors.relevant_news_ids" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.relevant_news_ids }}
@@ -699,11 +710,27 @@ onMounted(async () => {
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="related_news_ids"
                                 :selectedItem="saveForm.related_news_ids ? news?.related_news_ids : null"
-                                :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.related_news_ids" selectedLabelKey="title_with_published_at"
-                                selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
+                                :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.related_news_ids"
+                                selectedLabelKey="title_with_published_at" selectedValueKey="id"
+                                apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
                                 placeholder="Select related newses" />
                             <p v-if="saveForm.errors.related_news_ids" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.related_news_ids }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Breaking News
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="breaking_news_id"
+                                :selectedItem="news?.breaking_news || null" :apiUrl="breakingNewsApiUrl"
+                                :error="saveForm.errors.breaking_news_id" selectedLabelKey="title" selectedValueKey="id"
+                                apiLabelKey="title" apiValueKey="id" :multiple="false"
+                                placeholder="Select breaking news" />
+                            <p v-if="saveForm.errors.breaking_news_id" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.breaking_news_id }}
                             </p>
                         </div>
 
@@ -780,8 +807,7 @@ onMounted(async () => {
                                 SEO Brief
                             </label>
 
-                            <textarea v-model="saveForm.seo_brief" rows="3"
-                                placeholder="Enter SEO brief"
+                            <textarea v-model="saveForm.seo_brief" rows="3" placeholder="Enter SEO brief"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 

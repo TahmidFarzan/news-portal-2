@@ -12,6 +12,7 @@ use App\Jobs\NewsContributorSyncJob;
 use App\Jobs\NewsRelatedNewsSyncJob;
 use App\Jobs\NewsRelevantNewsSyncJob;
 use App\Jobs\NewsTagSyncJob;
+use App\Models\BreakingNews;
 use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\NewsType;
@@ -191,6 +192,8 @@ class NewsService
 
                 $this->syncAttributesJob($request, $news);
 
+                $this->syncBreakingNews($request, $news);
+
                 if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
                     $this->syncContentMedia($request, $news);
                 }
@@ -207,6 +210,7 @@ class NewsService
                     $this->syncMediaAccrodingNewsTypeChangeOnNewsUpdate($news);
                 }
             });
+
 
             return [
                 'status'  => 'success',
@@ -693,6 +697,27 @@ class NewsService
         }
     }
 
+    private function syncBreakingNews(NewsRequest $request, News $news)
+    {
+        if ($request->filled('breaking_news_id')) {
+            $breakingNews = BreakingNews::where("id", $request->input('breaking_news_id'))->first();
+            if ($breakingNews) {
+                try {
+                    DB::transaction(function () use ($news, $breakingNews) {
+                        $breakingNews->news_id = $news->id;
+                        $breakingNews->save();
+                    });
+
+                } catch (Exception $exception) {
+
+                    Log::error("Breaking news sync failed for {$news->title}.", [
+                        'exception' => $exception,
+                    ]);
+                }
+            }
+        }
+    }
+
     private function syncContentMedia(NewsRequest $request, News $news): void
     {
         if (! $request->filled('editor_media_ids')) {
@@ -1147,5 +1172,4 @@ class NewsService
 
         }
     }
-
 }

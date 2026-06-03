@@ -661,6 +661,11 @@ class SearchService
             $query->whereNull("news_id");
         }
 
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
         $records = $query->where('is_published', true)->orderBy('id', 'desc')
             ->paginate($request->input('per_page', 50));
 

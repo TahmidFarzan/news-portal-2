@@ -355,6 +355,12 @@ return [
             "not_found" => 'Related newses is not exit.',
         ],
 
+
+        'breaking_news_id'                  => [
+            "not_found" => 'Breaking news is not exit.',
+            "already_sync_to_news"  => 'Breaking news already sync.',
+        ],
+
         'body'                              => [
             'required' => 'Body is required.',
         ],

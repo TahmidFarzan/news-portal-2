@@ -1643,12 +1643,13 @@ class NewsSeeder extends Seeder
     {
         if ($index > 1 && $index < 5) {
             BreakingNews::factory()->state([
-                'title'       => $news?->title,
-                "language_id" => $news->language_id,
+                'title'        => $news?->title,
+                "language_id"  => $news->language_id,
 
-                "news_id"     => $news?->id ?? null,
-                'created_at'       => $news->created_at,
-                'updated_at'       => $news->updated_at,
+                "news_id"      => $news?->id ?? null,
+                'created_at'   => $news->created_at,
+                'updated_at'   => $news->updated_at,
+                "is_published" => true,
             ])->create();
         }
     }
