@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
                     :style="{ transform: `translateX(${translateX}px)` }">
                     <template v-for="(news, index) in displayNewses" :key="`${news.id}-${index}`">
                         <a v-if="hasPublicUrl(news)" :href="news.public_url"
-                            class="inline-flex items-center text-sm md:text-base font-medium hover:text-red-600 hover:underline">
+                            class="inline-flex items-center text-sm md:text-base font-medium hover:text-blue-600 hover:underline">
                             {{ news.title }}
                         </a>
 
