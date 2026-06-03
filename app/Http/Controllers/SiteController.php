@@ -59,10 +59,10 @@ class SiteController extends Controller
         );
     }
 
-    public function breakingNewses(): JsonResponse
+    public function breakingNewses(Request $request): JsonResponse
     {
         return response()->json(
-            $this->siteService->breakingNewses()
+            $this->siteService->breakingNewses($request)
         );
     }
 }

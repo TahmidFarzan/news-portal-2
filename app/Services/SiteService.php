@@ -10,7 +10,6 @@ use App\Models\MenuItem;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Contracts\Pagination\CursorPaginator;
 
 class SiteService
 {
@@ -39,13 +38,13 @@ class SiteService
         $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
         $headerMenuCode = MenuHelper::MENU_TYPE_HEADER;
 
-        $cacheKey = "theme header navbar {$languageCode} {$headerMenuCode} page {$page} per page {$perPage}";
+        $cacheKey = "site header navbar {$languageCode} {$headerMenuCode} page {$page} per page {$perPage}";
 
         $cacheTags = [
-            'theme',
-            'theme-header',
-            'theme-header-navbar',
-            'theme-header-navbar-menu-items',
+            'site',
+            'site-header',
+            'site-header-navbar',
+            'site-header-navbar-menu-items',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -103,13 +102,13 @@ class SiteService
         $languageCode      = SystemHelper::LANGUAGE_DEFAULT_CODE;
         $offcanvasMenuCode = MenuHelper::MENU_TYPE_OFFCANVAS;
 
-        $cacheKey = "theme offcanvas {$languageCode} {$offcanvasMenuCode} page {$page} per page {$perPage}";
+        $cacheKey = "site offcanvas {$languageCode} {$offcanvasMenuCode} page {$page} per page {$perPage}";
 
         $cacheTags = [
-            'theme',
-            'theme-offcanvas',
-            'theme-offcanvas-menu',
-            'theme-offcanvas-menu-items',
+            'site',
+            'site-offcanvas',
+            'site-offcanvas-menu',
+            'site-offcanvas-menu-items',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -167,13 +166,13 @@ class SiteService
         $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
         $topbarMenuCode = MenuHelper::MENU_TYPE_TOPBAR;
 
-        $cacheKey = "theme topbar {$languageCode} {$topbarMenuCode} page {$page} per page {$perPage}";
+        $cacheKey = "site topbar {$languageCode} {$topbarMenuCode} page {$page} per page {$perPage}";
 
         $cacheTags = [
-            'theme',
-            'theme-topbar',
-            'theme-topbar-menu',
-            'theme-topbar-menu-items',
+            'site',
+            'site-topbar',
+            'site-topbar-menu',
+            'site-topbar-menu-items',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -296,13 +295,13 @@ class SiteService
         $menuType            = $menuItem->menu->menuType->name;
         $menuTypeFormatedTag = Str::lower(Str::slug($menuType));
 
-        $cacheKey = "theme {$menuType} menu {$menuItem->id} submenus ({$languageCode}) page {$page} per page {$perPage}";
+        $cacheKey = "site {$menuType} menu {$menuItem->id} submenus ({$languageCode}) page {$page} per page {$perPage}";
 
         $cacheTags = [
-            'theme',
-            "theme-{$menuTypeFormatedTag}",
-            "theme-{$menuTypeFormatedTag}-menu-item-{$menuItem->id}",
-            "theme-{$menuTypeFormatedTag}-menu-item-{$menuItem->id}-menu-items",
+            'site',
+            "site-{$menuTypeFormatedTag}",
+            "site-{$menuTypeFormatedTag}-menu-item-{$menuItem->id}",
+            "site-{$menuTypeFormatedTag}-menu-item-{$menuItem->id}-menu-items",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -350,21 +349,78 @@ class SiteService
 
     public function settings()
     {
-        return Setting::orderBy('id', "asc")->get();
+        $cacheKey = 'site settings';
+
+        $cacheTags = [
+            'site',
+            'site-settings',
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $data = Setting::query()
+            ->orderBy('id', 'asc')
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
     }
 
-    public function breakingNewses(): CursorPaginator
+    public function breakingNewses(Request $request)
     {
+        $perPage = 15;
 
-        $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
-        return BreakingNews::query()->with("news","language","news.language")
+        $cursor    = $request->input('cursor');
+        $cursorKey = $cursor ? md5($cursor) : 'first';
+
+        $languageCode = SystemHelper::LANGUAGE_DEFAULT_CODE;
+
+        $cacheKey = "site breaking newses {$languageCode} cursor {$cursorKey} per page {$perPage}";
+
+        $cacheTags = [
+            'site',
+            'site-breaking-newses',
+            'site-breaking-newses-slider',
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $records = BreakingNews::query()
+            ->with([
+                'news',
+                'language',
+                'news.language',
+            ])
             ->where('is_published', true)
             ->whereRelation('language', 'code', $languageCode)
             ->whereRelation('news.language', 'code', $languageCode)
             ->orderByDesc('created_at')
             ->orderByDesc('updated_at')
             ->orderByDesc('id')
-            ->cursorPaginate(15);
+            ->cursorPaginate($perPage, ['*'], 'cursor');
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $records,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $records;
     }
 
 }
