@@ -122,7 +122,7 @@ class NewsRequest extends FormRequest
 
                 foreach ($dates as $date) {
                     $newsesQuery = News::where('title', $data['title'])
-                        ->whereDate('created_at', $date);
+                        ->whereDate('created_at', $date)->where("language_id", $data['language_id']);
 
                     if ($news) {
                         $newsesQuery->where('id', '!=', $news->id);

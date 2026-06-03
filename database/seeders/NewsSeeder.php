@@ -1647,6 +1647,8 @@ class NewsSeeder extends Seeder
                 "language_id" => $news->language_id,
 
                 "news_id"     => $news?->id ?? null,
+                'created_at'       => $news->created_at,
+                'updated_at'       => $news->updated_at,
             ])->create();
         }
     }

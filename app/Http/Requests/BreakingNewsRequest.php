@@ -26,7 +26,7 @@ class BreakingNewsRequest extends FormRequest
             "news_id"                      => ["nullable"],
             "language_id"                       => ["required"],
             "title"                             => ["required"],
-           
+
         ];
     }
 
@@ -58,7 +58,7 @@ class BreakingNewsRequest extends FormRequest
 
                 foreach ($dates as $date) {
                     $newsesQuery = BreakingNews::where('title', $data['title'])
-                        ->whereDate('created_at', $date);
+                        ->whereDate('created_at', $date)->where("language_id", $data['language_id']);
 
                     if ($breakingNews) {
                         $newsesQuery->where('id', '!=', $breakingNews->id);
