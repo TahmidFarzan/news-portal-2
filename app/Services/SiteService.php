@@ -3,12 +3,14 @@ namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
 //use App\Models\Language;
-use App\Models\Setting;
-use App\Helpers\SystemHelper;
 use App\Helpers\MenuHelper;
+use App\Helpers\SystemHelper;
+use App\Models\BreakingNews;
 use App\Models\MenuItem;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 
 class SiteService
 {
@@ -290,8 +292,8 @@ class SiteService
         $perPage = 10;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode = $menuItem->language->code;
-        $menuType     = $menuItem->menu->menuType->name;
+        $languageCode        = $menuItem->language->code;
+        $menuType            = $menuItem->menu->menuType->name;
         $menuTypeFormatedTag = Str::lower(Str::slug($menuType));
 
         $cacheKey = "theme {$menuType} menu {$menuItem->id} submenus ({$languageCode}) page {$page} per page {$perPage}";
@@ -349,6 +351,15 @@ class SiteService
     public function settings()
     {
         return Setting::orderBy('id', "asc")->get();
+    }
+
+    public function breakingNewses(): CursorPaginator
+    {
+        return BreakingNews::query()->with("news")->where('is_published', true)
+            ->orderByDesc('created_by')
+            ->orderByDesc('updated_by')
+            ->orderByDesc('id')
+            ->cursorPaginate(15);
     }
 
 }

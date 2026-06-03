@@ -31,4 +31,6 @@ class SettingHelper
     public const FIELD_SHOW_LOGO_ON_HEADER_MENU  = "Show Logo On Header Menu";
     public const FIELD_SHOW_NAME_ON_HEADER_MENU  = "Show Name On Header Menu";
 
+    public const FIELD_SHOW_BREAKING_NEWS  = "Show Breaking News";
+
 }

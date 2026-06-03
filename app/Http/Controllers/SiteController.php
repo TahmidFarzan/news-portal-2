@@ -58,4 +58,11 @@ class SiteController extends Controller
             $this->siteService->settings()
         );
     }
+
+    public function breakingNewses(): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->breakingNewses()
+        );
+    }
 }

@@ -26,6 +26,7 @@ export const settingFields = Object.freeze({
     GOOGLE_NEWS_SOCIAL_LINK: 'Google News Link',
     SHOW_LOGO_ON_HEADER_MENU: 'Show Logo On Header Menu',
     SHOW_NAME_ON_HEADER_MENU: 'Show Name On Header Menu',
+    SHOW_BREAKING_NEWS  : "Show Breaking News"
 })
 
 export function useSetting() {

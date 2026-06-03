@@ -5,6 +5,7 @@ import AuthTopbarDropdownMenu from '@/components/common/layout/public-layout/Aut
 import TopbarMenu from '@/components/common/layout/public-layout/TopbarMenu.vue'
 import FooterMenu from '@/components/common/layout/public-layout/FooterMenu.vue'
 import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
+import BreakingNewses from '@/components/common/layout/public-layout/BreakingNewses.vue'
 
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { usePage } from '@inertiajs/vue3'
@@ -104,6 +105,10 @@ const showLogoOnHeaderMenu = computed(() => {
     return getSetting(settingFields.SHOW_LOGO_ON_HEADER_MENU, settingGroups.App)
 })
 
+const showBreakingNews = computed(() => {
+    return getSetting(settingFields.SHOW_BREAKING_NEWS, settingGroups.App)
+})
+
 onMounted(async () => {
     await nextTick()
 
@@ -165,9 +170,10 @@ onBeforeUnmount(() => {
         <div ref="headerNavbar" class="bg-gray-900 text-white transition-shadow"
             :class="{ 'shadow-md sticky top-0 z-50': isHeaderSticky }">
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
-                <a  :href="route('home')"
+                <a :href="route('home')"
                     class="h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
-                    <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
+                    <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
+                        class="h-10 max-w-40 object-contain">
                     <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)"> {{ appName }}</b>
                 </a>
 
@@ -191,6 +197,8 @@ onBeforeUnmount(() => {
         <main class="flex-1 max-w-7xl mx-auto px-4 py-4 relative">
             <slot />
         </main>
+
+        <BreakingNewses v-if="isTruthyValue(showBreakingNews?.value)" title="Breaking Newses" />
 
         <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">

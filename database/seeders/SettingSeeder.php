@@ -42,6 +42,14 @@ class SettingSeeder extends Seeder
             'value' => true,
         ])->create();
 
+
+        Setting::factory()->state([
+            'group' => SettingHelper::GROUP_APP,
+            'label' => SettingHelper::FIELD_SHOW_BREAKING_NEWS,
+            'type'  => SettingHelper::TYPE_BOOLEAN,
+            'value' => true,
+        ])->create();
+
         Setting::factory()->state([
             'group' => SettingHelper::GROUP_MENU,
             'label' => SettingHelper::FIELD_SHOW_TOPBAR_MENU,

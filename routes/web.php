@@ -3,17 +3,17 @@
 use App\Http\Controllers\AuthController;
 //
 use App\Http\Controllers\BackOffice\ActivityLogController;
+use App\Http\Controllers\BackOffice\BreakingNewsController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
-use App\Http\Controllers\BackOffice\MediaController;
 
 // Backoffice
+use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
-use App\Http\Controllers\BackOffice\BreakingNewsController;
 use App\Http\Controllers\BackOffice\SettingController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
@@ -365,7 +365,12 @@ Route::prefix('site')->name('site.')->group(function () {
         });
 
     });
-    Route::get('settings', [SiteController::class, 'settings'])->name('settings');
+
+    Route::middleware(['response.cache:300,public,100,etag'])->group(function () {
+        Route::get('settings', [SiteController::class, 'settings'])->name('settings');
+        Route::get('breaking-newses', [SiteController::class, 'breakingNewses'])->name('breaking-newses');
+    });
+
 });
 
 Route::get('/', function () {
