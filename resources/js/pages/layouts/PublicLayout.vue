@@ -33,7 +33,7 @@ const page = usePage()
 
 const {
     settingGroups,
-    settingFields,
+    settingOptions,
     isTruthyValue,
 } = useSetting()
 
@@ -78,35 +78,35 @@ const getSetting = (field, group = null) => {
 }
 
 const facebookSetting = computed(() => {
-    return getSetting(settingFields.FB_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+    return getSetting(settingOptions.FB_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
 })
 
 const youtubeSetting = computed(() => {
-    return getSetting(settingFields.YOUTUBE_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+    return getSetting(settingOptions.YOUTUBE_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
 })
 
 const googleNewsSetting = computed(() => {
-    return getSetting(settingFields.GOOGLE_NEWS_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+    return getSetting(settingOptions.GOOGLE_NEWS_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
 })
 
 const showTopbarMenu = computed(() => {
-    return getSetting(settingFields.SHOW_TOPBAR_MENU, settingGroups.MENU)
+    return getSetting(settingOptions.SHOW_TOPBAR_MENU, settingGroups.MENU)
 })
 
 const showFooterMenu = computed(() => {
-    return getSetting(settingFields.SHOW_FOOTER_MENU, settingGroups.MENU)
+    return getSetting(settingOptions.SHOW_FOOTER_MENU, settingGroups.MENU)
 })
 
 const showNameOnHeaderMenu = computed(() => {
-    return getSetting(settingFields.SHOW_NAME_ON_HEADER_MENU, settingGroups.App)
+    return getSetting(settingOptions.SHOW_NAME_ON_HEADER_MENU, settingGroups.App)
 })
 
 const showLogoOnHeaderMenu = computed(() => {
-    return getSetting(settingFields.SHOW_LOGO_ON_HEADER_MENU, settingGroups.App)
+    return getSetting(settingOptions.SHOW_LOGO_ON_HEADER_MENU, settingGroups.App)
 })
 
 const showBreakingNews = computed(() => {
-    return getSetting(settingFields.SHOW_BREAKING_NEWS, settingGroups.App)
+    return getSetting(settingOptions.SHOW_BREAKING_NEWS, settingGroups.App)
 })
 
 onMounted(async () => {

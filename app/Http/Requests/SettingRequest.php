@@ -77,17 +77,17 @@ class SettingRequest extends FormRequest
 
             if (! empty($data['type'])) {
                 $allowedTypes = [
-                    SettingHelper::TYPE_TEXT,
-                    SettingHelper::TYPE_STRING,
-                    SettingHelper::TYPE_BOOLEAN,
-                    SettingHelper::TYPE_INTEGER,
-                    SettingHelper::TYPE_FLOAT,
-                    SettingHelper::TYPE_DECIMAL,
-                    SettingHelper::TYPE_JSON,
-                    SettingHelper::TYPE_ARRAY,
-                    SettingHelper::TYPE_URL,
-                    SettingHelper::TYPE_IMAGE,
-                    SettingHelper::TYPE_COLOR,
+                    SettingHelper::VALUE_TYPE_TEXT,
+                    SettingHelper::VALUE_TYPE_STRING,
+                    SettingHelper::VALUE_TYPE_BOOLEAN,
+                    SettingHelper::VALUE_TYPE_INTEGER,
+                    SettingHelper::VALUE_TYPE_FLOAT,
+                    SettingHelper::VALUE_TYPE_DECIMAL,
+                    SettingHelper::VALUE_TYPE_JSON,
+                    SettingHelper::VALUE_TYPE_ARRAY,
+                    SettingHelper::VALUE_TYPE_URL,
+                    SettingHelper::VALUE_TYPE_IMAGE,
+                    SettingHelper::VALUE_TYPE_COLOR,
                 ];
 
                 if (! in_array($data['type'], $allowedTypes, true)) {
@@ -131,32 +131,32 @@ class SettingRequest extends FormRequest
     private function isValidSettingValue(string $type, mixed $value): bool
     {
         return match ($type) {
-            SettingHelper::TYPE_TEXT,
-            SettingHelper::TYPE_STRING  => is_string($value),
+            SettingHelper::VALUE_TYPE_TEXT,
+            SettingHelper::VALUE_TYPE_STRING  => is_string($value),
 
-            SettingHelper::TYPE_BOOLEAN => is_bool($value)
+            SettingHelper::VALUE_TYPE_BOOLEAN => is_bool($value)
             || filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null,
 
-            SettingHelper::TYPE_INTEGER => is_int($value)
+            SettingHelper::VALUE_TYPE_INTEGER => is_int($value)
             || filter_var($value, FILTER_VALIDATE_INT) !== false,
 
-            SettingHelper::TYPE_FLOAT   => is_float($value)
+            SettingHelper::VALUE_TYPE_FLOAT   => is_float($value)
             || filter_var($value, FILTER_VALIDATE_FLOAT) !== false,
 
-            SettingHelper::TYPE_DECIMAL => is_numeric($value)
+            SettingHelper::VALUE_TYPE_DECIMAL => is_numeric($value)
             && preg_match('/^-?\d+(\.\d+)?$/', (string) $value),
 
-            SettingHelper::TYPE_JSON    => $this->isValidJson($value),
+            SettingHelper::VALUE_TYPE_JSON    => $this->isValidJson($value),
 
-            SettingHelper::TYPE_ARRAY   => is_array($value),
+            SettingHelper::VALUE_TYPE_ARRAY   => is_array($value),
 
-            SettingHelper::TYPE_URL     => is_string($value)
+            SettingHelper::VALUE_TYPE_URL     => is_string($value)
             && filter_var($value, FILTER_VALIDATE_URL) !== false,
 
-            SettingHelper::TYPE_IMAGE   => $value instanceof UploadedFile
+            SettingHelper::VALUE_TYPE_IMAGE   => $value instanceof UploadedFile
             && str_starts_with($value->getMimeType(), 'image/'),
 
-            SettingHelper::TYPE_COLOR   => is_string($value)
+            SettingHelper::VALUE_TYPE_COLOR   => is_string($value)
             && preg_match('/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/', $value),
 
             default                     => false,

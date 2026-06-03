@@ -67,12 +67,12 @@ class Setting extends Model
         }
 
         return match ($type) {
-            SettingHelper::TYPE_BOOLEAN => filter_var($value, FILTER_VALIDATE_BOOLEAN),
-            SettingHelper::TYPE_INTEGER => (int) $value,
-            SettingHelper::TYPE_FLOAT,
-            SettingHelper::TYPE_DECIMAL => (float) $value,
-            SettingHelper::TYPE_JSON,
-            SettingHelper::TYPE_ARRAY => json_decode($value, true),
+            SettingHelper::VALUE_TYPE_BOOLEAN => filter_var($value, FILTER_VALIDATE_BOOLEAN),
+            SettingHelper::VALUE_TYPE_INTEGER => (int) $value,
+            SettingHelper::VALUE_TYPE_FLOAT,
+            SettingHelper::VALUE_TYPE_DECIMAL => (float) $value,
+            SettingHelper::VALUE_TYPE_JSON,
+            SettingHelper::VALUE_TYPE_ARRAY => json_decode($value, true),
             default => $value,
         };
     }
@@ -84,12 +84,12 @@ class Setting extends Model
         }
 
         return match ($type) {
-            SettingHelper::TYPE_BOOLEAN => self::prepareBooleanValue($value),
-            SettingHelper::TYPE_INTEGER => (string) ((int) $value),
-            SettingHelper::TYPE_FLOAT,
-            SettingHelper::TYPE_DECIMAL => (string) ((float) $value),
-            SettingHelper::TYPE_JSON,
-            SettingHelper::TYPE_ARRAY => self::prepareJsonValue($value),
+            SettingHelper::VALUE_TYPE_BOOLEAN => self::prepareBooleanValue($value),
+            SettingHelper::VALUE_TYPE_INTEGER => (string) ((int) $value),
+            SettingHelper::VALUE_TYPE_FLOAT,
+            SettingHelper::VALUE_TYPE_DECIMAL => (string) ((float) $value),
+            SettingHelper::VALUE_TYPE_JSON,
+            SettingHelper::VALUE_TYPE_ARRAY => self::prepareJsonValue($value),
             default => (string) $value,
         };
     }

@@ -1,4 +1,4 @@
-export const settingTypes = Object.freeze({
+export const settingValueTypes = Object.freeze({
     TEXT: 'Text',
     STRING: 'String',
     BOOLEAN: 'Boolean',
@@ -18,7 +18,7 @@ export const settingGroups = Object.freeze({
     SOCIAL_LINK: 'Social Link',
 })
 
-export const settingFields = Object.freeze({
+export const settingOptions = Object.freeze({
     SHOW_FOOTER_MENU: 'Show Footer Menu',
     SHOW_TOPBAR_MENU: 'Show Topbar Menu',
     FB_SOCIAL_LINK: 'Fb Social Link',
@@ -30,7 +30,7 @@ export const settingFields = Object.freeze({
 })
 
 export function useSetting() {
-    const settingTypeOptions = Object.values(settingTypes)
+    const settingValueTypeOptions = Object.values(settingValueTypes)
 
     const isEmpty = (value) => {
         return value === null ||
@@ -52,19 +52,19 @@ export function useSetting() {
     }
 
     const getDefaultValueByType = (type) => {
-        if (type === settingTypes.BOOLEAN) {
+        if (type === settingValueTypes.BOOLEAN) {
             return false
         }
 
-        if (type === settingTypes.ARRAY) {
+        if (type === settingValueTypes.ARRAY) {
             return '[]'
         }
 
-        if (type === settingTypes.JSON) {
+        if (type === settingValueTypes.JSON) {
             return '{}'
         }
 
-        if (type === settingTypes.COLOR) {
+        if (type === settingValueTypes.COLOR) {
             return '#000000'
         }
 
@@ -72,10 +72,10 @@ export function useSetting() {
     }
 
     return {
-        settingTypes,
-        settingTypeOptions,
+        settingValueTypes,
+        settingValueTypeOptions,
         settingGroups,
-        settingFields,
+        settingOptions,
         isEmpty,
         hasValue,
         isTruthyValue,

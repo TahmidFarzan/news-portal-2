@@ -355,9 +355,14 @@ class SiteService
 
     public function breakingNewses(): CursorPaginator
     {
-        return BreakingNews::query()->with("news")->where('is_published', true)
-            ->orderByDesc('created_by')
-            ->orderByDesc('updated_by')
+
+        $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        return BreakingNews::query()->with("news","language","news.language")
+            ->where('is_published', true)
+            ->whereRelation('language', 'code', $languageCode)
+            ->whereRelation('news.language', 'code', $languageCode)
+            ->orderByDesc('created_at')
+            ->orderByDesc('updated_at')
             ->orderByDesc('id')
             ->cursorPaginate(15);
     }

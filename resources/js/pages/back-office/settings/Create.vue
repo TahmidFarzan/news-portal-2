@@ -19,7 +19,7 @@ const { setting } = defineProps({
 })
 
 const {
-    settingTypes,
+    settingValueTypes,
     isEmpty,
     hasValue,
     getDefaultValueByType,
@@ -89,7 +89,7 @@ function validateForm() {
         valid = false
     }
 
-    if (hasValue(saveForm.value) && saveForm.type === settingTypes.INTEGER) {
+    if (hasValue(saveForm.value) && saveForm.type === settingValueTypes.INTEGER) {
         if (!Number.isInteger(Number(saveForm.value))) {
             saveForm.setError('value', 'Value must be an integer.')
             valid = false
@@ -98,7 +98,7 @@ function validateForm() {
 
     if (
         hasValue(saveForm.value) &&
-        [settingTypes.FLOAT, settingTypes.DECIMAL].includes(saveForm.type)
+        [settingValueTypes.FLOAT, settingValueTypes.DECIMAL].includes(saveForm.type)
     ) {
         if (Number.isNaN(Number(saveForm.value))) {
             saveForm.setError('value', 'Value must be a valid number.')
@@ -108,12 +108,12 @@ function validateForm() {
 
     if (
         hasValue(saveForm.value) &&
-        [settingTypes.JSON, settingTypes.ARRAY].includes(saveForm.type)
+        [settingValueTypes.JSON, settingValueTypes.ARRAY].includes(saveForm.type)
     ) {
         try {
             const parsedValue = JSON.parse(saveForm.value)
 
-            if (saveForm.type === settingTypes.ARRAY && !Array.isArray(parsedValue)) {
+            if (saveForm.type === settingValueTypes.ARRAY && !Array.isArray(parsedValue)) {
                 saveForm.setError('value', 'Value must be a valid JSON array.')
                 valid = false
             }
@@ -123,7 +123,7 @@ function validateForm() {
         }
     }
 
-    if (hasValue(saveForm.value) && saveForm.type === settingTypes.URL) {
+    if (hasValue(saveForm.value) && saveForm.type === settingValueTypes.URL) {
         try {
             new URL(saveForm.value)
         } catch {
@@ -132,7 +132,7 @@ function validateForm() {
         }
     }
 
-    if (hasValue(saveForm.value) && saveForm.type === settingTypes.COLOR) {
+    if (hasValue(saveForm.value) && saveForm.type === settingValueTypes.COLOR) {
         const colorRegex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/
 
         if (!colorRegex.test(saveForm.value)) {
@@ -208,53 +208,53 @@ onMounted(async () => {
                                 {{ saveForm.label }} <span class="text-red-500">*</span>
                             </label>
 
-                            <textarea v-if="saveForm.type === settingTypes.TEXT" v-model="saveForm.value" rows="4"
+                            <textarea v-if="saveForm.type === settingValueTypes.TEXT" v-model="saveForm.value" rows="4"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'"></textarea>
 
-                            <input v-else-if="saveForm.type === settingTypes.STRING" v-model="saveForm.value"
+                            <input v-else-if="saveForm.type === settingValueTypes.STRING" v-model="saveForm.value"
                                 type="text"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
-                            <select v-else-if="saveForm.type === settingTypes.BOOLEAN" v-model="saveForm.value"
+                            <select v-else-if="saveForm.type === settingValueTypes.BOOLEAN" v-model="saveForm.value"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'">
                                 <option :value="true">True</option>
                                 <option :value="false">False</option>
                             </select>
 
-                            <input v-else-if="saveForm.type === settingTypes.INTEGER" v-model="saveForm.value"
+                            <input v-else-if="saveForm.type === settingValueTypes.INTEGER" v-model="saveForm.value"
                                 type="number" step="1"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
                             <input v-else-if="
-                                saveForm.type === settingTypes.FLOAT ||
-                                saveForm.type === settingTypes.DECIMAL
+                                saveForm.type === settingValueTypes.FLOAT ||
+                                saveForm.type === settingValueTypes.DECIMAL
                             " v-model="saveForm.value" type="number" step="any"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
                             <textarea v-else-if="
-                                saveForm.type === settingTypes.JSON ||
-                                saveForm.type === settingTypes.ARRAY
+                                saveForm.type === settingValueTypes.JSON ||
+                                saveForm.type === settingValueTypes.ARRAY
                             " v-model="saveForm.value" rows="6"
                                 placeholder='Example: {"key": "value"} or ["item1", "item2"]'
                                 class="w-full border rounded-md px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'"></textarea>
 
-                            <input v-else-if="saveForm.type === settingTypes.URL" v-model="saveForm.value" type="url"
+                            <input v-else-if="saveForm.type === settingValueTypes.URL" v-model="saveForm.value" type="url"
                                 placeholder="https://example.com"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
-                            <input v-else-if="saveForm.type === settingTypes.IMAGE" type="file" accept="image/*"
+                            <input v-else-if="saveForm.type === settingValueTypes.IMAGE" type="file" accept="image/*"
                                 @change="handleImageChange"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
-                            <div v-else-if="saveForm.type === settingTypes.COLOR" class="flex gap-3">
+                            <div v-else-if="saveForm.type === settingValueTypes.COLOR" class="flex gap-3">
                                 <input v-model="saveForm.value" type="color" class="w-16 h-10 border rounded-md" />
 
                                 <input v-model="saveForm.value" type="text" placeholder="#000000"
