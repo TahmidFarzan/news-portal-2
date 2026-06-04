@@ -6,6 +6,7 @@ import ImageWithLightBox from '@/components/common/media/ImageWithLightBox.vue'
 import SocialShare from '@/components/common/news/SocialShare.vue'
 import WriterConstributer from '@/components/common/news/WriterConstributer.vue'
 import TitleSubtitleContentShoulder from '@/components/common/news/TitleSubtitleContentShoulder.vue'
+import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 
 import { computed } from 'vue'
 import { formatDateTime } from '@/composables/useDateTime'
@@ -65,9 +66,13 @@ const { news } = defineProps({
 
         <TagTrend :news="news" />
 
-        <div v-if="news?.source" class="border-t pt-4 text-sm text-gray-500">
+        <div v-if="news?.source" class="pt-4 text-sm text-gray-500">
             <span>Source: </span>
             {{ news.source }}
+        </div>
+
+        <div class="border-t pt-4 text-sm text-gray-500">
+            <RelatedNewsGrid :news="news"/>
         </div>
     </article>
 </template>

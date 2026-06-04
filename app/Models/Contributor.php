@@ -119,7 +119,7 @@ class Contributor extends Model implements HasMedia
         $url = "";
 
         if ($this->slug) {
-            $url = route("feeds.atom.contributors.newses",['slug' => $this->slug]);
+            $url = route("feeds.atom.contributor.newses",['slug' => $this->slug]);
         }
 
         return $url;
@@ -130,7 +130,7 @@ class Contributor extends Model implements HasMedia
         $url = "";
 
         if ($this->slug) {
-            $url = route("feeds.rss.contributors.newses",['slug' => $this->slug]);
+            $url = route("feeds.rss.contributor.newses",['slug' => $this->slug]);
         }
 
         return $url;

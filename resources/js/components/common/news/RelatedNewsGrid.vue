@@ -1,0 +1,35 @@
+<script setup>
+import { computed } from 'vue'
+
+import GridCard from '@/Components/common/news/GridCard.vue'
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+
+const { news } = defineProps({
+    news: {
+        type: Object,
+        required: true,
+    },
+})
+
+const relatedNewses = computed(() => {
+    return Array.isArray(news?.related_newses) ? news.related_newses : []
+})
+</script>
+
+<template>
+    <section v-if="relatedNewses.length" class="space-y-5">
+        <div class="flex items-center gap-2">
+            <FontAwesomeIcon :icon="faAngleRight" class="text-red-600" />
+
+            <h2 class="text-xl font-bold text-gray-950">
+                Related News
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <GridCard v-for="item in relatedNewses" :key="item?.id || item?.slug" :item="item" />
+        </div>
+    </section>
+</template>

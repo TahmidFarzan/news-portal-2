@@ -33,7 +33,7 @@ const { news } = defineProps({
                     {{ contributor?.name }}
                 </a>
 
-                <span v-if="index + 1 < contributors.length">, </span>
+                <span v-if="index + 1 < news?.contributors.length">, </span>
             </template>
         </span>
     </div>

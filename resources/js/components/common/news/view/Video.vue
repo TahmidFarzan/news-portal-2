@@ -4,6 +4,7 @@ import CategoryLocationEvent from '@/components/common/news/CategoryLocationEven
 import TagTrend from '@/components/common/news/TagTrend.vue'
 import SocialShare from '@/components/common/news/SocialShare.vue'
 import TitleSubtitleContentShoulder from '@/components/common/news/TitleSubtitleContentShoulder.vue'
+import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 
 import { computed } from 'vue'
 import { formatDateTime } from '@/composables/useDateTime'
@@ -94,5 +95,9 @@ const isEmbedVideo = computed(() => {
         </header>
 
         <TagTrend :news="news" />
+
+        <div class="border-t pt-4 text-sm text-gray-500">
+            <RelatedNewsGrid :news="news"/>
+        </div>
     </article>
 </template>
