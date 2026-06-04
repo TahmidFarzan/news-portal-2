@@ -12,6 +12,7 @@ class CacheServerHelper
 {
     const oneDayInSecond   = 86400;
     const sixHoursInSecond = 21600;
+    const threeMinInSecond = 180;
 
     protected static function driver(): string
     {
