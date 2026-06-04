@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
                 <div
                     class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
                     <div v-if="isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
-                        <TopbarMenu />
+                        <TopbarMenu class="hidden min-[300px]:inline" />
                     </div>
 
                     <a v-if="!authUser" :href="route('login')"
@@ -174,12 +174,12 @@ onBeforeUnmount(() => {
                     class="h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
                     <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
                         class="h-10 max-w-40 object-contain">
-                    <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)"> {{ appName }}</b>
+                    <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)" class="hidden sm:inline"> {{ appName }}</b>
                 </a>
 
 
                 <div class="flex-1 min-w-0 h-10 flex items-center">
-                    <HeaderMenu />
+                    <HeaderMenu class="hidden min-[401px]:inline" />
                 </div>
 
                 <div class="h-10 flex items-center gap-2 flex-shrink-0">
@@ -194,7 +194,7 @@ onBeforeUnmount(() => {
             </div>
         </div>
 
-        <main class="flex-1 max-w-7xl mx-auto px-4 py-4 relative">
+        <main class="main mx-auto w-full max-w-7xl px-4 py-6">
             <slot />
         </main>
 
