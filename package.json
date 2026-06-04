@@ -34,6 +34,7 @@
         "vue-multiselect": "^3.5.0",
         "vue-sonner": "^2.0.9",
         "vue-tel-input": "^9.8.0",
+        "vue3-social-sharing": "^1.5.0",
         "world-countries": "^5.1.0",
         "ziggy-js": "^2.6.2"
     }
