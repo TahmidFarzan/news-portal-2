@@ -377,6 +377,8 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-Route::get('home', [PageController::class, 'home'])->name('home');
-Route::get('latest', [PageController::class, 'latest'])->name('latest');
-Route::get('news/{slug}', [NewsController::class, 'show'])->name('news.details');
+Route::middleware(['response.cache:120,public,60,etag'])->group(function () {
+    Route::get('home', [PageController::class, 'home'])->name('home');
+    Route::get('latest', [PageController::class, 'latest'])->name('latest');
+    Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
+});
