@@ -1,8 +1,8 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\SystemHelper;
 use App\Helpers\MenuHelper;
+use App\Helpers\SystemHelper;
 use App\Models\Category;
 use App\Models\Language;
 use App\Models\Menu;
@@ -86,12 +86,38 @@ class MenuSeeder extends Seeder
 
     private function headerMenuItemSave(Menu $menu, Language $language): void
     {
-        $categories = Category::inRandomOrder()->where("language_id", $language->id)->whereNull("parent_id")->limit(6)->get();
+        $categoryNames = $language->code == SystemHelper::LANGUAGE_DEFAULT_CODE
+            ? ['National', 'International', 'Business', 'Entertainment', 'Technology', 'Sports']
+            : ['জাতীয়', 'আন্তর্জাতিক', 'ব্যবসা', 'বিনোদন', 'প্রযুক্তি', 'খেলাধুলা'];
 
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Home" : "হোম");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Latest" : "সর্বশেষ");
+        $categories = Category::query()
+            ->where('language_id', $language->id)
+            ->whereNull('parent_id')
+            ->whereIn('name', $categoryNames)
+            ->get()
+            ->keyBy('name');
 
-        foreach ($categories as $category) {
+        $this->saveMenuItem(
+            $menu,
+            null,
+            $language,
+            $language->code == SystemHelper::LANGUAGE_DEFAULT_CODE ? 'Home' : 'হোম'
+        );
+
+        $this->saveMenuItem(
+            $menu,
+            null,
+            $language,
+            $language->code == SystemHelper::LANGUAGE_DEFAULT_CODE ? 'Latest' : 'সর্বশেষ'
+        );
+
+        foreach ($categoryNames as $categoryName) {
+            $category = $categories->get($categoryName);
+
+            if (! $category) {
+                continue;
+            }
+
             $this->saveMenuItem($menu, null, $language, $category);
         }
     }
