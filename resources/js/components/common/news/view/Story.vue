@@ -7,6 +7,7 @@ import SocialShare from '@/components/common/news/SocialShare.vue'
 import WriterConstributer from '@/components/common/news/WriterConstributer.vue'
 import TitleSubtitleContentShoulder from '@/components/common/news/TitleSubtitleContentShoulder.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
+import NewsBody from '@/components/common/news/NewsBody.vue'
 
 import { computed } from 'vue'
 import { formatDateTime } from '@/composables/useDateTime'
@@ -62,7 +63,7 @@ const { news } = defineProps({
             </figcaption>
         </figure>
 
-        <section v-if="news?.body" class="prose prose-lg max-w-none" v-html="news.body" />
+        <NewsBody v-if="news?.body" class="prose prose-lg max-w-none" :news="news"/>
 
         <TagTrend :news="news" />
 

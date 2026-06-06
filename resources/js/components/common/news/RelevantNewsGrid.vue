@@ -1,12 +1,13 @@
 <script setup>
 import { computed } from 'vue'
 
-import GridCard from '@/Components/common/news/GridCard.vue'
-
+import ListCard from '@/Components/common/news/ListCard.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
-const { news } = defineProps({
+const {
+    news,
+} = defineProps({
     news: {
         type: Object,
         required: true,
@@ -15,17 +16,17 @@ const { news } = defineProps({
 </script>
 
 <template>
-    <section v-if="news?.related_newses.length" class="space-y-5">
+    <section v-if="news?.relevant_newses.length" class="space-y-2 rounded-2xl border border-gray-200 p-2">
         <div class="flex items-center gap-2">
             <FontAwesomeIcon :icon="faAngleRight" class="text-red-600" />
 
             <h2 class="text-xl font-bold text-gray-950">
-                Related News
+                Relevant News
             </h2>
         </div>
 
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <GridCard v-for="item in news?.related_newses" :key="item?.id || item?.slug" :item="item" />
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-3">
+            <ListCard v-for="(item, index) in news?.relevant_newses" :key="item?.id || item?.slug || index" :item="item" :hideFeatureImage="true" :hideCategory="true" :hideSubtitle="true"/>
         </div>
     </section>
 </template>
