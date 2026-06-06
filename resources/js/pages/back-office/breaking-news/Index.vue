@@ -37,13 +37,13 @@ const trashingRow = ref(null)
 const showTrashModal = ref(false)
 const trashProcessing = ref(false)
 
-const { breakingNewses } = defineProps({
-    breakingNewses: Object,
+const { breakingNewsItems } = defineProps({
+    breakingNewsItems: Object,
 })
 
 const paginationOnly = computed(() => {
-    if (!breakingNewses) return {}
-    const { data, ...rest } = breakingNewses
+    if (!breakingNewsItems) return {}
+    const { data, ...rest } = breakingNewsItems
     return rest
 })
 
@@ -63,7 +63,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.breaking-newses.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.breaking-news.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -96,7 +96,7 @@ const handleDelete = (breakingNews) => {
     if (!breakingNews || deleteProcessing.value) return
 
     deleteProcessing.value = true
-    intertiaJsRoute.delete(route('back-office.breaking-newses.delete', { slug: breakingNews?.slug }), {
+    intertiaJsRoute.delete(route('back-office.breaking-news.delete', { slug: breakingNews?.slug }), {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -110,7 +110,7 @@ const handleRestore = (breakingNews) => {
 
     restoreProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.breaking-newses.restore', { slug: breakingNews?.slug }), {}, {
+    intertiaJsRoute.patch(route('back-office.breaking-news.restore', { slug: breakingNews?.slug }), {}, {
         onFinish: () => {
             restoringRow.value = null
             restoreProcessing.value = false
@@ -123,7 +123,7 @@ const handleTrash = (breakingNews) => {
     if (!breakingNews || trashProcessing.value) return
 
     trashProcessing.value = true
-    intertiaJsRoute.patch(route('back-office.breaking-newses.trash', { slug: breakingNews?.slug }), {}, {
+    intertiaJsRoute.patch(route('back-office.breaking-news.trash', { slug: breakingNews?.slug }), {}, {
         onFinish: () => {
             showTrashModal.value = false
             trashingRow.value = null
@@ -199,7 +199,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Breaking newses', active: true },
+                { text: 'Breaking news', active: true },
             ],
         })
     )
@@ -209,14 +209,14 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Breaking newses" />
+    <Head title="Breaking news" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Breaking newses</h2>
+            <h2 class="text-lg font-semibold">Breaking news</h2>
 
-            <a v-if="canCreate()" :href="route('back-office.breaking-newses.create')"
+            <a v-if="canCreate()" :href="route('back-office.breaking-news.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
                 Create
@@ -292,7 +292,7 @@ onMounted(async () => {
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in breakingNewses?.data" :key="item.id"
+                        <tr v-for="(item, index) in breakingNewsItems?.data" :key="item.id"
                             class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.title }}</td>
@@ -311,13 +311,13 @@ onMounted(async () => {
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
-                                    <a :href="route('back-office.breaking-newses.details', { slug: item.slug })"
+                                    <a :href="route('back-office.breaking-news.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canEdit(item)"
-                                        :href="route('back-office.breaking-newses.edit', { slug: item.slug })"
+                                        :href="route('back-office.breaking-news.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>

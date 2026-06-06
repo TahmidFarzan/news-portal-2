@@ -19,7 +19,7 @@ use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[Table('breaking_newses')]
+#[Table('breaking_news')]
 #[Fillable([
         'title', 'slug',"is_published",
         'language_id', 'created_by_id',

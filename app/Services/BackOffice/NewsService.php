@@ -72,11 +72,11 @@ class NewsService
 
             'breakingNews',
 
-            'relevantNewses',
-            'relevantNewses.category',
+            'relevantNews',
+            'relevantNews.category',
 
-            'relatedNewses',
-            'relatedNewses.category',
+            'relatedNews',
+            'relatedNews.category',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
@@ -201,6 +201,7 @@ class NewsService
             });
 
             $this->syncAttributesJob($request, $news);
+            $this->syncRelatedOrRelevantNews($request, $news);
             $this->syncBreakingNews($request, $news);
 
             if (NewsHelper::NEWS_TYPE_STORY == $news->newsType->name) {
@@ -518,7 +519,7 @@ class NewsService
     {
         // $page        = PageHelper::PAGE_HOME;
         // $pageSection = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
-        // $newses = News::query()
+        // $news = News::query()
         //     ->whereHas('newsPlacements', function ($query) use ($page, $pageSection, $categoryId) {
         //         $query->where('page', $page)
         //             ->where('page_section', $pageSection)
@@ -679,22 +680,93 @@ class NewsService
         }
     }
 
-    private function syncAttributesJob(NewsRequest $request, News $news)
+    private function syncAttributesJob(NewsRequest $request, News $news): void
     {
-        if ($request->input('tag_ids')) {
-            NewsTagSyncJob::dispatch($news, $request->input('tag_ids'));
+        if ($request->has('tag_ids')) {
+            $tagIds = collect($request->input('tag_ids', []))
+                ->map(fn($id) => (int) $id)
+                ->sort()
+                ->values()
+                ->all();
+
+            $existingTagIds = $news->tags()
+                ->pluck('tags.id')
+                ->map(fn($id) => (int) $id)
+                ->sort()
+                ->values()
+                ->all();
+
+            if ($tagIds !== $existingTagIds) {
+                NewsTagSyncJob::dispatch($news, $tagIds);
+            }
         }
 
-        if ($request->input('contributor_ids')) {
-            NewsContributorSyncJob::dispatch($news, $request->input('contributor_ids'));
+        if ($request->has('contributor_ids')) {
+            $contributorIds = collect($request->input('contributor_ids', []))
+                ->map(fn($id) => (int) $id)
+                ->sort()
+                ->values()
+                ->all();
+
+            $existingContributorIds = $news->contributors()
+                ->pluck('contributors.id')
+                ->map(fn($id) => (int) $id)
+                ->sort()
+                ->values()
+                ->all();
+
+            if ($contributorIds !== $existingContributorIds) {
+                NewsContributorSyncJob::dispatch($news, $contributorIds);
+            }
+        }
+    }
+
+    private function syncRelatedOrRelevantNews(NewsRequest $request, News $news): void
+    {
+        $newsTable = $news->getTable();
+
+        if ($request->has('relevant_news_ids')) {
+            $relevantNewsIds = collect($request->input('relevant_news_ids', []))
+                ->map(fn($id) => (int) $id)
+                ->reject(fn($id) => $id === (int) $news->id)
+                ->unique()
+                ->sort()
+                ->values()
+                ->all();
+
+            $existingRelevantNewsIds = $news->relevantNews()
+                ->pluck("{$newsTable}.id")
+                ->map(fn($id) => (int) $id)
+                ->unique()
+                ->sort()
+                ->values()
+                ->all();
+
+            if ($relevantNewsIds !== $existingRelevantNewsIds) {
+                NewsRelevantNewsSyncJob::dispatch($news, $relevantNewsIds);
+            }
         }
 
-        if ($request->input('relevant_news_ids')) {
-            NewsRelevantNewsSyncJob::dispatch($news, $request->input('relevant_news_ids'));
-        }
+        if ($request->has('related_news_ids')) {
+            $relatedNewsIds = collect($request->input('related_news_ids', []))
+                ->map(fn($id) => (int) $id)
+                ->reject(fn($id) => $id === (int) $news->id)
+                ->unique()
+                ->sort()
+                ->values()
+                ->all();
 
-        if ($request->input('related_news_ids')) {
-            NewsRelatedNewsSyncJob::dispatch($news, $request->input('related_news_ids'));
+            $existingRelatedNewsIds = $news->relatedNews()
+                ->pluck("{$newsTable}.id")
+                ->map(fn($id) => (int) $id)
+                ->unique()
+                ->sort()
+                ->values()
+                ->all();
+
+            if ($relatedNewsIds !== $existingRelatedNewsIds) {
+                NewsRelatedNewsSyncJob::dispatch($news, $relatedNewsIds);
+            }
         }
     }
 
@@ -982,7 +1054,7 @@ class NewsService
             return;
         }
         if (! $newsPlacementExists) {
-            $newses = News::query()
+            $newsItems = News::query()
                 ->when($categoryId !== null, function ($query) use ($categoryId) {
                     $query->where('category_id', $categoryId);
                 })
@@ -990,9 +1062,9 @@ class NewsService
                 ->limit(25)
                 ->get();
 
-            foreach ($newses as $news) {
+            foreach ($newsItems as $newsItem) {
                 $newsPositionExit = NewsPlacement::query()
-                    ->where('news_id', $news->id)
+                    ->where('news_id', $newsItem->id)
                     ->where('page', $page)
                     ->where('page_section', $pageSection)
                     ->when($categoryId !== null, function ($query) use ($categoryId) {
@@ -1007,7 +1079,7 @@ class NewsService
                         })->max("position");
 
                     NewsPlacement::create([
-                        'news_id'       => $news->id,
+                        'news_id'       => $newsItem->id,
                         'page'          => $page,
                         'page_section'  => $pageSection,
                         'category_id'   => ($categoryId !== null) ? $categoryId : null,

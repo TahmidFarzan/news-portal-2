@@ -71,11 +71,11 @@ class Category extends Model
         return SlugOptions::create()
             ->saveSlugsTo('slug')
             ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
+                $mainSlug     = $model->name;
                 $randomString = Str::random(11);
                 $createdAt    = $model->created_at ?? now();
                 $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
+                return "{$mainSlug}-{$createdAt}-{$randomString}";
             })
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255);
@@ -102,7 +102,7 @@ class Category extends Model
         $url = "";
 
         if ($this->slug_tree) {
-            $url = route("feeds.atom.category.newses", ['slugTree' => $this->slug_tree]);
+            $url = route("feeds.atom.category.news", ['slugTree' => $this->slug_tree]);
         }
 
         return $url;
@@ -113,7 +113,7 @@ class Category extends Model
         $url = "";
 
         if ($this->slug_tree) {
-            $url = route("feeds.rss.category.newses", ['slugTree' => $this->slug_tree]);
+            $url = route("feeds.rss.category.news", ['slugTree' => $this->slug_tree]);
         }
 
         return $url;
@@ -124,7 +124,7 @@ class Category extends Model
         $url = "";
 
         if ($this->slug_tree) {
-            $url = route("sitemaps.category.newses", ['slugTree' => $this->slug_tree]);
+            $url = route("sitemaps.category.news", ['slugTree' => $this->slug_tree]);
         }
 
         return $url;
@@ -187,7 +187,7 @@ class Category extends Model
         return $this->hasMany(Location::class);
     }
 
-    public function newses(): HasMany
+    public function news(): HasMany
     {
         return $this->hasMany(News::class);
     }

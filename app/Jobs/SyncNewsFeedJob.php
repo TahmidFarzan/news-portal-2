@@ -54,11 +54,11 @@ class SyncNewsFeedJob implements ShouldQueue, ShouldBeUnique
 
             if ($lastPage > 0) {
                 for ($page = 1; $page <= $lastPage; $page++) {
-                    $this->newsCacheService->cachedNewses('feed', ['page' => $page]);
+                    $this->newsCacheService->cachedNews('feed', ['page' => $page]);
                 }
             }
 
-            $this->newsCacheService->cachedNewsesCount('feed', $filters);
+            $this->newsCacheService->cachedNewsCount('feed', $filters);
             $this->newsCacheService->cachedLastPageNo('feed', $filters);
         } catch (Exception $exception) {
             Log::error('News feed sync job error: ' . $exception->getMessage(), [

@@ -226,18 +226,18 @@ const isSubMenuVisible = (key) => {
             </div>
         </Transition>
 
-        <a v-if="canAccessNewsMenuComputed" :href="route('back-office.newses.index')"
+        <a v-if="canAccessNewsMenuComputed" :href="route('back-office.news.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/newses/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/auth-user/news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            Newses
+            News
         </a>
 
-        <a v-if="canAccessBreakingNewsMenuComputed" :href="route('back-office.breaking-newses.index')"
+        <a v-if="canAccessBreakingNewsMenuComputed" :href="route('back-office.breaking-news.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/breaking-newses/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/auth-user/breaking-news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            Breaking newses
+            Breaking news
         </a>
 
         <a v-if="canAccessMenuMenuComputed" :href="route('back-office.menus.index')"

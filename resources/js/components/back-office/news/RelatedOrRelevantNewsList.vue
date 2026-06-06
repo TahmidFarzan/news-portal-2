@@ -7,8 +7,8 @@ import { formatDateTime } from '@/composables/useDateTime'
 
 FontAwesomeLibrary.add(faInfo)
 
-const { newses } = defineProps({
-    newses: {
+const { news } = defineProps({
+    news: {
         type: Array,
         default: () => [],
     },
@@ -17,7 +17,7 @@ const { newses } = defineProps({
 
 <template>
     <div class="w-full rounded-xl border border-gray-200 bg-white shadow-sm">
-        <div v-if="!newses.length" class="px-4 py-8 text-center text-sm text-gray-500">
+        <div v-if="!news.length" class="px-4 py-8 text-center text-sm text-gray-500">
             No news found.
         </div>
 
@@ -33,21 +33,21 @@ const { newses } = defineProps({
                 </thead>
 
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="news in newses" :key="news.id" class="hover:bg-gray-50">
+                    <tr v-for="perNews in news" :key="perNews.id" class="hover:bg-gray-50">
                         <td class="px-4 py-3 font-medium text-gray-800">
-                            {{ news.title }}
+                            {{ perNews.title }}
                         </td>
 
                         <td class="px-4 py-3 text-gray-700">
-                            {{ news.category?.name }}
+                            {{ perNews.category?.name }}
                         </td>
 
                         <td class="px-4 py-3 text-gray-700">
-                            {{ formatDateTime(news.created_at) }}
+                            {{ formatDateTime(perNews.created_at) }}
                         </td>
 
                         <td class="px-4 py-3">
-                            <a :href="route('back-office.newses.details', {slug: news?.slug})"
+                            <a :href="route('back-office.news.details', {slug: perNews?.slug})"
                                 class="inline-flex items-center gap-1 rounded border border-blue-500 px-2 py-1 text-xs text-blue-500 hover:bg-blue-50">
                                 <FontAwesomeIcon icon="info" />
                                 Details

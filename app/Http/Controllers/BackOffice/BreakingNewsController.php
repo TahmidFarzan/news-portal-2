@@ -23,10 +23,10 @@ class BreakingNewsController extends Controller
         $breakingNews = $this->breakingNewsService->new();
         Gate::authorize('viewAny', $breakingNews);
 
-        $breakingNewses = $this->breakingNewsService->search($request);
+        $breakingNewsItems = $this->breakingNewsService->search($request);
 
         return Inertia::render('back-office/breaking-news/Index', [
-            'breakingNewses' => $breakingNewses,
+            'breakingNewsItems' => $breakingNewsItems,
         ]);
     }
 
@@ -71,7 +71,7 @@ class BreakingNewsController extends Controller
 
         $result = $this->breakingNewsService->save($request, $breakingNews);
 
-        return to_route('back-office.breaking-newses.index')->with('flash_message', [
+        return to_route('back-office.breaking-news.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -85,7 +85,7 @@ class BreakingNewsController extends Controller
 
         $result = $this->breakingNewsService->save($request, $breakingNews);
 
-        return to_route('back-office.breaking-newses.index')->with('flash_message', [
+        return to_route('back-office.breaking-news.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -99,7 +99,7 @@ class BreakingNewsController extends Controller
 
         $result = $this->breakingNewsService->trash($breakingNews);
 
-        return to_route('back-office.breaking-newses.index')->with('flash_message', [
+        return to_route('back-office.breaking-news.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -113,7 +113,7 @@ class BreakingNewsController extends Controller
 
         $result = $this->breakingNewsService->restore($breakingNews);
 
-        return to_route('back-office.breaking-newses.index')->with('flash_message', [
+        return to_route('back-office.breaking-news.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -127,7 +127,7 @@ class BreakingNewsController extends Controller
 
         $result = $this->breakingNewsService->delete($breakingNews);
 
-        return to_route('back-office.breaking-newses.index')->with('flash_message', [
+        return to_route('back-office.breaking-news.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);

@@ -74,11 +74,11 @@ class Event extends Model implements HasMedia
         return SlugOptions::create()
             ->saveSlugsTo('slug')
             ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
+                $mainSlug     = $model->name;
                 $randomString = Str::random(11);
                 $createdAt    = $model->created_at ?? now();
                 $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
+                return "{$mainSlug}-{$createdAt}-{$randomString}";
             })
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255);
@@ -118,10 +118,10 @@ class Event extends Model implements HasMedia
     public function getFeedsAtomUrlAttribute(): string
     {
 
-                $url = "";
+        $url = "";
 
         if ($this->slug) {
-            $url = route("feeds.atom.event.newses",['slug' => $this->slug]);
+            $url = route("feeds.atom.event.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -132,7 +132,7 @@ class Event extends Model implements HasMedia
         $url = "";
 
         if ($this->slug) {
-            $url = route("feeds.rss.event.newses",['slug' => $this->slug]);
+            $url = route("feeds.rss.event.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -143,7 +143,7 @@ class Event extends Model implements HasMedia
         $url = "";
 
         if ($this->slug) {
-            $url = route("sitemaps.event.newses",['slug' => $this->slug]);
+            $url = route("sitemaps.event.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -223,7 +223,7 @@ class Event extends Model implements HasMedia
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function newses(): HasMany
+    public function news(): HasMany
     {
         return $this->hasMany(News::class);
     }

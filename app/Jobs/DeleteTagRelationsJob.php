@@ -42,7 +42,7 @@ class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $tag = Tag::find($this->tagId);
 
-        if ($tag && ($tag->activityLogs()->exists()) || ($tag->trend) || $tag->newses()->exists()) {
+        if ($tag && ($tag->activityLogs()->exists()) || ($tag->trend) || $tag->news()->exists()) {
 
             try {
 
@@ -55,8 +55,8 @@ class DeleteTagRelationsJob implements ShouldQueue, ShouldBeUnique
                         $tag->trend->delete();
                     }
 
-                    if ($tag->newses()->exists()) {
-                        $tag->newses()->delete();
+                    if ($tag->news()->exists()) {
+                        $tag->news()->delete();
                     }
                 });
 

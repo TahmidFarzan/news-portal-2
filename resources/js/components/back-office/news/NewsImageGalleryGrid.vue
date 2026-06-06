@@ -130,7 +130,7 @@ function handleSave() {
     if (!validateForm()) return
 
     saveForm.post(
-        route('back-office.newses.gallery-images.save', {
+        route('back-office.news.gallery-images.save', {
             slug: news?.slug,
         }),
         {
@@ -221,7 +221,7 @@ function saveSequence() {
     }
 
     sequenceForm.patch(
-        route('back-office.newses.gallery-images.update-sequence', {
+        route('back-office.news.gallery-images.update-sequence', {
             slug: news?.slug,
         }),
         {

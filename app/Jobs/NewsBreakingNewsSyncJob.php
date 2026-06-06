@@ -67,10 +67,12 @@ class NewsBreakingNewsSyncJob implements ShouldQueue, ShouldBeUnique
                 }
             } else {
                 $breakingNews = $news->breakingNews;
-                DB::transaction(function () use ($breakingNews) {
-                    $breakingNews->news_id = null;
-                    $breakingNews->save();
-                });
+                if ($breakingNews && $breakingNewsId) {
+                    DB::transaction(function () use ($breakingNews) {
+                        $breakingNews->news_id = null;
+                        $breakingNews->save();
+                    });
+                }
 
             }
 

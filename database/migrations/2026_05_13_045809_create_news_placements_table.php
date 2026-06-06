@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('news_placements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('news_id')->constrained('newses')->cascadeOnDelete();
+            $table->foreignId('news_id')->constrained('news')->cascadeOnDelete();
             $table->string('page')->default("Home");
             $table->string('page_section')->nullable()->default("Lead");
             $table->foreignId('category_id')->nullable()->constrained('categories')->cascadeOnDelete();

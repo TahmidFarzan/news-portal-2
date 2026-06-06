@@ -65,58 +65,58 @@ class FeedService
         return $this->contributorCacheService->contributor($slug);
     }
 
-    public function latestNewses()
+    public function latestNews()
     {
         return $this->newsCacheService->getLatest("feed");
     }
 
-    public function getNewses(Request $request)
+    public function getNews(Request $request)
     {
-        return $this->newsCacheService->newses("feed", $request->input());
+        return $this->newsCacheService->news("feed", $request->input());
     }
 
-    public function getNewsesLastPageNo(Request $request)
+    public function getNewsLastPageNo(Request $request)
     {
         return $this->newsCacheService->lastPageNo("feed", $request->input());
     }
 
-    public function getCategoryNewses(Request $request, Category $category)
+    public function getCategoryNews(Request $request, Category $category)
     {
         $request->merge([
             'category_id' => $category->id,
         ]);
-        return $this->newsCacheService->newses("feed", $request->input());
+        return $this->newsCacheService->news("feed", $request->input());
     }
 
-    public function getLocationNewses(Request $request, Location $location)
+    public function getLocationNews(Request $request, Location $location)
     {
         $request->merge([
             'location_id' => $location->id,
         ]);
-        return $this->newsCacheService->newses("feed", $request->input());
+        return $this->newsCacheService->news("feed", $request->input());
     }
 
-    public function getEventNewses(Request $request, Event $event)
+    public function getEventNews(Request $request, Event $event)
     {
         $request->merge([
             'event_id' => $event->id,
         ]);
-        return $this->newsCacheService->newses("feed", $request->input());
+        return $this->newsCacheService->news("feed", $request->input());
     }
 
-    public function getTagNewses(Request $request, Tag $tag)
+    public function getTagNews(Request $request, Tag $tag)
     {
         $request->merge([
             'tag_id' => $tag->id,
         ]);
-        return $this->newsCacheService->newses("feed", $request->input());
+        return $this->newsCacheService->news("feed", $request->input());
     }
 
-    public function getContributorNewses(Request $request, Contributor $contributor)
+    public function getContributorNews(Request $request, Contributor $contributor)
     {
         $request->merge([
             'contributor_id' => $contributor->id,
         ]);
-        return $this->newsCacheService->newses("feed", $request->input());
+        return $this->newsCacheService->news("feed", $request->input());
     }
 }

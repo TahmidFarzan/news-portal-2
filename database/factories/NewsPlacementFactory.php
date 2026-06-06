@@ -53,7 +53,7 @@ class NewsPlacementFactory extends Factory
                     ->when(! $skipCategory, function ($query) {
                         $query->whereColumn(
                             'news_placements.category_id',
-                            'newses.category_id'
+                            'news.category_id'
                         );
                     });
             })

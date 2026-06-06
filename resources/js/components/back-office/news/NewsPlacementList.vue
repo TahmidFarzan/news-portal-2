@@ -50,7 +50,7 @@ const { news, newsPlacements } = defineProps({
                         </td>
 
                         <td class="px-4 py-3">
-                            <a :href="route('back-office.newses.news-placements.details', {
+                            <a :href="route('back-office.news.news-placements.details', {
                                 slug: news?.slug,
                                 newsPlacementSlug: newsPlacement.slug,
                             })"

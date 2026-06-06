@@ -348,11 +348,11 @@ return [
         ],
 
         'relevant_news_ids'                 => [
-            "not_found" => 'Relevant newses is not exit.',
+            "not_found" => 'Relevant News is not exit.',
         ],
 
         'related_news_ids'                  => [
-            "not_found" => 'Related newses is not exit.',
+            "not_found" => 'Related News is not exit.',
         ],
 
 

@@ -39,16 +39,16 @@ class PageService
 
                 'contributors',
 
-                'relevantNewses' => fn($query) => $query
-                    ->orderByDesc('newses.created_at')
+                'relevantNews' => fn($query) => $query
+                    ->orderByDesc('news.created_at')
                     ->limit(4),
 
-                'relevantNewses.category',
+                'relevantNews.category',
 
-                'relatedNewses'  => fn($query)  => $query
-                    ->orderByDesc('newses.created_at')
+                'relatedNews'  => fn($query)  => $query
+                    ->orderByDesc('news.created_at')
                     ->limit(4),
-                'relatedNewses.category',
+                'relatedNews.category',
             ])
             ->where('slug', $slug)
             ->where('is_published', true)

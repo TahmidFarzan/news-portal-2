@@ -64,11 +64,11 @@ class Language extends Model
         return SlugOptions::create()
             ->saveSlugsTo('slug')
             ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
+                $mainSlug     = $model->name;
                 $randomString = Str::random(11);
                 $createdAt    = $model->created_at ?? now();
                 $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
+                return "{$mainSlug}-{$createdAt}-{$randomString}";
             })
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255);
@@ -114,7 +114,7 @@ class Language extends Model
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function newses(): HasMany
+    public function news(): HasMany
     {
         return $this->hasMany(News::class);
     }

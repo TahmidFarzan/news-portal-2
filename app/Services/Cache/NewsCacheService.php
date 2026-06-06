@@ -27,7 +27,7 @@ class NewsCacheService
         CacheServerHelper::clearCachedByTag(['news', 'sitemap']);
     }
 
-    public function dbNewsesCount(array $filters = []): int
+    public function dbNewsCount(array $filters = []): int
     {
         return $this->dbNewsQuery($filters)->count();
     }
@@ -36,10 +36,10 @@ class NewsCacheService
     {
         $perPage = $this->perPage($filters);
 
-        return (int) ceil($this->dbNewsesCount($filters) / $perPage);
+        return (int) ceil($this->dbNewsCount($filters) / $perPage);
     }
 
-    public function dbNewses(array $filters = []): LengthAwarePaginator
+    public function dbNews(array $filters = []): LengthAwarePaginator
     {
         $perPage = $this->perPage($filters);
         $page = $this->page($filters);
@@ -60,21 +60,21 @@ class NewsCacheService
             ->get();
     }
 
-    public function cachedNewses(string $key, array $filters = []): void
+    public function cachedNews(string $key, array $filters = []): void
     {
         CacheServerHelper::cachedData(
-            $this->newsesCacheKey($key, $filters),
-            $this->dbNewses($filters),
+            $this->newsCacheKey($key, $filters),
+            $this->dbNews($filters),
             $this->cachedTime,
             ['news', $key]
         );
     }
 
-    public function cachedNewsesCount(string $key, array $filters = []): void
+    public function cachedNewsCount(string $key, array $filters = []): void
     {
         CacheServerHelper::cachedData(
             $this->countCacheKey($key, $filters),
-            $this->dbNewsesCount($filters),
+            $this->dbNewsCount($filters),
             $this->cachedTime,
             ['news', $key]
         );
@@ -92,17 +92,17 @@ class NewsCacheService
 
     public function cachedLatest(string $cachedKey): void
     {
-        $cacheKey = " news {$cachedKey} latest newses";
-        $newses = $this->dbLatest();
+        $cacheKey = " news {$cachedKey} latest news";
+        $newsItems = $this->dbLatest();
 
         CacheServerHelper::cachedData(
             $cacheKey,
-            $newses,
+            $newsItems,
             $this->cachedTime
         );
     }
 
-    public function newsesCount(string $key, array $filters = []): int
+    public function newsCount(string $key, array $filters = []): int
     {
         $cacheKey = $this->countCacheKey($key, $filters);
 
@@ -112,7 +112,7 @@ class NewsCacheService
         );
 
         if ($count === null) {
-            $count = $this->dbNewsesCount($filters);
+            $count = $this->dbNewsCount($filters);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -148,54 +148,54 @@ class NewsCacheService
         return (int) $lastPage;
     }
 
-    public function newses(string $key, array $filters = []): LengthAwarePaginator
+    public function news(string $key, array $filters = []): LengthAwarePaginator
     {
-        $cacheKey = $this->newsesCacheKey($key, $filters);
+        $cacheKey = $this->newsCacheKey($key, $filters);
 
-        $newses = CacheServerHelper::getCachedData(
+        $newsItems = CacheServerHelper::getCachedData(
             $cacheKey,
             ['news', $key]
         );
 
-        if ($newses === null) {
-            $newses = $this->dbNewses($filters);
+        if ($newsItems === null) {
+            $newsItems = $this->dbNews($filters);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
-                $newses,
+                $newsItems,
                 $this->cachedTime,
                 ['news', $key]
             );
         }
 
-        return $newses;
+        return $newsItems;
     }
 
     public function getLatest(string $cachedKey, ?int $latestRecordLimit = null): EloquentCollection|SupportCollection
     {
-        $newses = null;
+        $newsItems = null;
         $cacheKey = " news {$cachedKey} latest news";
         $redisConnected = CacheServerHelper::isConnected();
 
         if ($redisConnected) {
-            $newses = CacheServerHelper::getCachedData($cacheKey);
+            $newsItems = CacheServerHelper::getCachedData($cacheKey);
 
-            if ($newses === null) {
-                $newses = $this->dbLatest($latestRecordLimit);
+            if ($newsItems === null) {
+                $newsItems = $this->dbLatest($latestRecordLimit);
 
                 CacheServerHelper::cachedData(
                     $cacheKey,
-                    $newses,
+                    $newsItems,
                     $this->cachedTime
                 );
             }
 
-            if ($newses !== null) {
+            if ($newsItems !== null) {
                 $limit = ($latestRecordLimit !== null && $latestRecordLimit > 0)
                     ? $latestRecordLimit
                     : $this->latestRecordLimit;
 
-                return collect($newses)->take($limit);
+                return collect($newsItems)->take($limit);
             }
         }
 
@@ -204,32 +204,32 @@ class NewsCacheService
 
     private function dbNewsQuery(array $filters = []): Builder
     {
-        $newses = News::query()->where('is_published', true);
+        $newsItems = News::query()->where('is_published', true);
 
         if ($this->filled($filters, 'category_id')) {
-            $newses = $newses->where('category_id', $filters['category_id']);
+            $newsItems = $newsItems->where('category_id', $filters['category_id']);
         }
 
         if ($this->filled($filters, 'event_id')) {
-            $newses = $newses->where('event_id', $filters['event_id']);
+            $newsItems = $newsItems->where('event_id', $filters['event_id']);
         }
 
         if ($this->filled($filters, 'location_id')) {
-            $newses = $newses->where('location_id', $filters['location_id']);
+            $newsItems = $newsItems->where('location_id', $filters['location_id']);
         }
 
         if ($this->filled($filters, 'language_id')) {
-            $newses = $newses->where('language_id', $filters['language_id']);
+            $newsItems = $newsItems->where('language_id', $filters['language_id']);
         }
 
         if ($this->filled($filters, 'news_type_id')) {
-            $newses = $newses->where('news_type_id', $filters['news_type_id']);
+            $newsItems = $newsItems->where('news_type_id', $filters['news_type_id']);
         }
 
         if ($this->filled($filters, 'tag_id')) {
             $tagId = $filters['tag_id'];
 
-            $newses = $newses->whereHas('tags', function (Builder $relationQuery) use ($tagId): void {
+            $newsItems = $newsItems->whereHas('tags', function (Builder $relationQuery) use ($tagId): void {
                 $relationQuery->where('id', $tagId);
             });
         }
@@ -237,12 +237,12 @@ class NewsCacheService
         if ($this->filled($filters, 'contributor_id')) {
             $contributorId = $filters['contributor_id'];
 
-            $newses = $newses->whereHas('contributors', function (Builder $relationQuery) use ($contributorId): void {
+            $newsItems = $newsItems->whereHas('contributors', function (Builder $relationQuery) use ($contributorId): void {
                 $relationQuery->where('id', $contributorId);
             });
         }
 
-        return $newses;
+        return $newsItems;
     }
 
     private function perPage(array $filters): int
@@ -340,7 +340,7 @@ class NewsCacheService
         return "news {$key} filter {$filterKey} per_page {$perPage} last page no";
     }
 
-    private function newsesCacheKey(string $key, array $filters): string
+    private function newsCacheKey(string $key, array $filters): string
     {
         $page = $this->page($filters);
 

@@ -71,11 +71,11 @@ class Location extends Model
         return SlugOptions::create()
             ->saveSlugsTo('slug')
             ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
+                $mainSlug     = $model->name;
                 $randomString = Str::random(11);
                 $createdAt    = $model->created_at ?? now();
                 $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
+                return "{$mainSlug}-{$createdAt}-{$randomString}";
             })
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255);
@@ -103,7 +103,7 @@ class Location extends Model
         $url = "";
 
         if ($this->slug_tree) {
-            $url = route("feeds.atom.location.newses", ['slugTree' => $this->slug_tree]);
+            $url = route("feeds.atom.location.news", ['slugTree' => $this->slug_tree]);
         }
 
         return $url;
@@ -114,7 +114,7 @@ class Location extends Model
         $url = "";
 
         if ($this->slug_tree) {
-            $url = route("feeds.rss.location.newses", ['slugTree' => $this->slug_tree]);
+            $url = route("feeds.rss.location.news", ['slugTree' => $this->slug_tree]);
         }
 
         return $url;
@@ -125,7 +125,7 @@ class Location extends Model
         $url = "";
 
         if ($this->slug_tree) {
-            $url = route("sitemaps.location.newses", ['slugTree' => $this->slug_tree]);
+            $url = route("sitemaps.location.news", ['slugTree' => $this->slug_tree]);
         }
 
         return $url;
@@ -180,7 +180,7 @@ class Location extends Model
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function newses(): HasMany
+    public function news(): HasMany
     {
         return $this->hasMany(News::class);
     }

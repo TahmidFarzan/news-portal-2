@@ -42,7 +42,7 @@ const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.newses.delete', { slug: news?.slug }), {
+    intertiaJsRoute.patch(route('back-office.news.delete', { slug: news?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -51,7 +51,7 @@ const handleRestore = () => {
     if (restoreProcessing.value) return
     restoreProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.newses.restore', { slug: news?.slug }), {
+    intertiaJsRoute.patch(route('back-office.news.restore', { slug: news?.slug }), {
         onFinish: () => restoreProcessing.value = false
     })
 }
@@ -62,7 +62,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Newses', href: route('back-office.newses.index') },
+                { text: 'News', href: route('back-office.news.index') },
                 { text: `${news?.title} details`, active: true }
             ],
         })
@@ -80,7 +80,7 @@ onMounted(async () => {
             <h2 class="text-lg font-semibold">News Details</h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(news)" :href="route('back-office.newses.edit', { slug: news?.slug })"
+                <a v-if="canEdit(news)" :href="route('back-office.news.edit', { slug: news?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     Edit
@@ -244,7 +244,13 @@ onMounted(async () => {
                         <div class="text-gray-500 mb-1">Feature Image</div>
                         <div class="text-gray-700 w-100">
                             <MediaRenderer v-if="news?.feature_image" :media="news?.feature_image" />
-                            <img v-else :src="'/uploads/images/news/feature-image.png'"
+                            <img v-else-if="checkIsStory(news.news_type)" :src="'/uploads/images/news/story-feature-image.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                            <img v-else-if="checkIsVideo(news.news_type)" :src="'/uploads/images/news/video-feature-image.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                            <img v-else-if="checkIsImageGallery(news.news_type)" :src="'/uploads/images/news/image-gallery-feature-image.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                            <img v-else :src="'/uploads/images/news/story-feature-image.png'"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>
@@ -255,7 +261,13 @@ onMounted(async () => {
                         <div class="text-gray-500 mb-1">Feature Image (Mobile)</div>
                         <div class="text-gray-700 w-100">
                             <MediaRenderer v-if="news?.feature_image_mobile" :media="news?.feature_image_mobile" />
-                            <img v-else :src="'/uploads/images/news/feature-image-mobile.png'"
+                            <img v-else-if="checkIsStory(news.news_type)" :src="'/uploads/images/news/story-feature-image-mobile.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                            <img v-else-if="checkIsVideo(news.news_type)" :src="'/uploads/images/news/video-feature-image-mobile.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                            <img v-else-if="checkIsImageGallery(news.news_type)" :src="'/uploads/images/news/image-gallery-feature-image-mobile.png'"
+                                class="object-cover rounded-xl border border-gray-200" />
+                            <img v-else :src="'/uploads/images/news/story-feature-image-mobile.png'"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
                     </div>
@@ -383,13 +395,13 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Relevant newses</h3>
-            <RelatedOrRelevantNewsList :newses="news?.relevant_newses" />
+            <h3 class="text-base font-semibold border-b pb-2">Relevant News</h3>
+            <RelatedOrRelevantNewsList :news="news?.relevant_news" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Related newses</h3>
-            <RelatedOrRelevantNewsList :newses="news?.related_newses" />
+            <h3 class="text-base font-semibold border-b pb-2">Related News</h3>
+            <RelatedOrRelevantNewsList :news="news?.related_news" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">

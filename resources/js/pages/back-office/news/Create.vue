@@ -29,6 +29,8 @@ const isStory = ref(false)
 const isVideo = ref(false)
 const isImageGallery = ref(false)
 
+const seoKeywordsKey = ref(0)
+
 const showLocation = ref(false)
 
 const isUpdate = computed(() => !!news?.slug)
@@ -70,8 +72,8 @@ const saveForm = useForm({
 
     breaking_news_id: news?.breaking_news?.id || null,
     editor_media_ids: null,
-    relevant_news_ids: [],
-    related_news_ids: []
+    relevant_news_ids: news?.relevant_news?.map(item => item.id) || [],
+    related_news_ids: news?.related_news?.map(item => item.id) || [],
 })
 
 const categoryApiUrl = computed(() => {
@@ -122,19 +124,19 @@ const contributorApiUrl = computed(() => {
 
 const relevantOrRelatedNewsApiUrl = computed(() => {
     if (!saveForm.language_id) {
-        return route('search.newses')
+        return route('search.news')
     }
 
-    return route('search.newses') + `?language_id=${saveForm.language_id}&news_type_id=${saveForm.news_type_id}`
+    return route('search.news') + `?language_id=${saveForm.language_id}&news_type_id=${saveForm.news_type_id}`
 })
 
 const breakingNewsApiUrl = computed(() => {
     const isSyncToNews = true;
     if (!saveForm.language_id) {
-        return route('search.breaking-newses')
+        return route('search.breaking-news')
     }
 
-    return route('search.breaking-newses') + `?language_id=${saveForm.language_id}&is_sync_to_news=${isSyncToNews}`
+    return route('search.breaking-news') + `?language_id=${saveForm.language_id}&is_sync_to_news=${isSyncToNews}`
 })
 
 function handleSelectedFeatureImage(media) {
@@ -265,12 +267,12 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.newses.update', { slug: news?.slug }),
+            route('back-office.news.update', { slug: news?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
         )
     } else {
-        saveForm.post(route('back-office.newses.save'), requestConfig)
+        saveForm.post(route('back-office.news.save'), requestConfig)
     }
 }
 
@@ -300,6 +302,12 @@ watch(
 watch(
     () => saveForm.language_id,
     () => {
+        saveForm.title = null
+        saveForm.sub_title = null
+        saveForm.content_shoulder = null
+        saveForm.brief = null
+        saveForm.body = null
+
         saveForm.category_id = null
         saveForm.event_id = null
         saveForm.location_id = null
@@ -307,8 +315,14 @@ watch(
         saveForm.contributor_ids = []
         saveForm.relevant_news_ids = []
         saveForm.related_news_ids = []
+        saveForm.breaking_news_id = null
 
-        showLocation.value = false
+        saveForm.feature_image_caption = null
+
+        saveForm.seo_title = null
+        saveForm.seo_brief = null
+        saveForm.seo_keywords = []
+        seoKeywordsKey.value++
 
         saveForm.clearErrors(
             'category_id',
@@ -352,7 +366,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Newses', href: route('back-office.newses.index') },
+                { text: 'News', href: route('back-office.news.index') },
                 { text: isUpdate.value ? `${news?.title} edit` : 'News create', active: true }
             ],
         })
@@ -605,7 +619,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.selected_feature_image_url }}
                             </p>
 
-                            <img :src="saveForm.selected_feature_image_url || news?.feature_image?.media_url || '/uploads/images/news/feature-image.png'"
+                            <img :src="saveForm.selected_feature_image_url || news?.feature_image?.media_url || '/uploads/images/news/story-feature-image.png'"
                                 class="w-75 object-contain rounded-xl border border-gray-200 mt-2" />
                         </div>
 
@@ -639,7 +653,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.selected_feature_image_mobile_url }}
                             </p>
 
-                            <img :src="saveForm.selected_feature_image_mobile_url || news?.feature_image_mobile?.media_url || '/uploads/images/news/feature-image.png'"
+                            <img :src="saveForm.selected_feature_image_mobile_url || news?.feature_image_mobile?.media_url || '/uploads/images/news/story-feature-image.png'"
                                 class="w-75 object-contain rounded-xl border border-gray-200 mt-2" />
                         </div>
 
@@ -689,15 +703,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Relevant Newses
+                                Relevant News
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="relevant_news_ids"
-                                :selectedItem="saveForm.relevant_news_ids ? news?.relevant_news_ids : null"
-                                :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.relevant_news_ids"
-                                selectedLabelKey="title_with_published_at" selectedValueKey="id"
-                                apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
-                                placeholder="Select relevant newses" />
+                                :selectedItem="news?.relevant_news || null" :apiUrl="relevantOrRelatedNewsApiUrl"
+                                :error="saveForm.errors.relevant_news_ids" selectedLabelKey="title_with_published_at"
+                                selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
+                                :multiple="true" placeholder="Select relevant news" />
                             <p v-if="saveForm.errors.relevant_news_ids" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.relevant_news_ids }}
                             </p>
@@ -705,15 +718,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Related Newses
+                                Related News
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="related_news_ids"
-                                :selectedItem="saveForm.related_news_ids ? news?.related_news_ids : null"
-                                :apiUrl="relevantOrRelatedNewsApiUrl" :error="saveForm.errors.related_news_ids"
-                                selectedLabelKey="title_with_published_at" selectedValueKey="id"
-                                apiLabelKey="title_with_published_at" apiValueKey="id" :multiple="true"
-                                placeholder="Select related newses" />
+                                :selectedItem="news?.related_news || null" :apiUrl="relevantOrRelatedNewsApiUrl"
+                                :error="saveForm.errors.related_news_ids" selectedLabelKey="title_with_published_at"
+                                selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
+                                :multiple="true" placeholder="Select related news" />
                             <p v-if="saveForm.errors.related_news_ids" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.related_news_ids }}
                             </p>
@@ -821,7 +833,7 @@ onMounted(async () => {
                                 SEO Keywords
                             </label>
 
-                            <MultiSelectTaggableSelect :selectedItem="saveForm.seo_keywords" fieldName="seo_keywords"
+                            <MultiSelectTaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords" fieldName="seo_keywords"
                                 :form="saveForm" :error="saveForm.errors.seo_keywords" placeholder="Add keywords" />
 
                             <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">

@@ -56,7 +56,7 @@ class NewsRelevantNewsSyncJob implements ShouldQueue, ShouldBeUnique
             $relevantIds = $this->relevantIds;
 
             DB::transaction(function () use ($news, $relevantIds) {
-                $news->relevantNewses()->sync($relevantIds);
+                $news->relevantNews()->sync($relevantIds);
             });
 
         } catch (Exception $ex) {

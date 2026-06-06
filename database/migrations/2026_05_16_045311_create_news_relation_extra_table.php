@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('news_relevant_news', function (Blueprint $table) {
             $table->foreignId('news_id')
-                ->constrained('newses')
+                ->constrained('news')
                 ->cascadeOnDelete();
 
             $table->foreignId('relevant_news_id')
-                ->constrained('newses')
+                ->constrained('news')
                 ->cascadeOnDelete();
 
             $table->timestamps();
@@ -24,11 +24,11 @@ return new class extends Migration
 
         Schema::create('news_related_news', function (Blueprint $table) {
             $table->foreignId('news_id')
-                ->constrained('newses')
+                ->constrained('news')
                 ->cascadeOnDelete();
 
             $table->foreignId('related_news_id')
-                ->constrained('newses')
+                ->constrained('news')
                 ->cascadeOnDelete();
 
             $table->timestamps();

@@ -164,7 +164,7 @@ onBeforeUnmount(() => {
         />
 
         <RelevantNewsGrid
-            v-if="news.relevant_newses.length > 0"
+            v-if="news.relevant_news.length > 0"
             :news="news"
         />
 

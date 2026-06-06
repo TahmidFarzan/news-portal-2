@@ -10,25 +10,25 @@
             <link href="{{ $feedLink }}" />
             <link href="{{ $selfUrl }}" rel="self" />
 
-            @if(method_exists($newses, 'url'))
-                <link href="{{ $newses->url(1) }}" rel="first" />
+            @if(method_exists($newsItems, 'url'))
+                <link href="{{ $newsItems->url(1) }}" rel="first" />
 
-                @if($newses->previousPageUrl())
-                    <link href="{{ $newses->previousPageUrl() }}" rel="previous" />
+                @if($newsItems->previousPageUrl())
+                    <link href="{{ $newsItems->previousPageUrl() }}" rel="previous" />
                 @endif
 
-                @if($newses->nextPageUrl())
-                    <link href="{{ $newses->nextPageUrl() }}" rel="next" />
+                @if($newsItems->nextPageUrl())
+                    <link href="{{ $newsItems->nextPageUrl() }}" rel="next" />
                 @endif
 
-                <link href="{{ $newses->url($newses->lastPage()) }}" rel="last" />
+                <link href="{{ $newsItems->url($newsItems->lastPage()) }}" rel="last" />
             @endif
 
             <id>{{ $selfUrl }}</id>
             <updated>{{ now()->toAtomString() }}</updated>
 
-            @foreach($newses as $news)
-                <x-feeds.news-component :news="$news" :views-type="$viewsType" />
+            @foreach($newsItems as $newsItem)
+                <x-feeds.news-component :news="$newsItem" :views-type="$viewsType" />
             @endforeach
         </feed>
         @break
@@ -42,7 +42,7 @@
                 <description>Latest news from {{ config('app.name') }}</description>
                 <lastBuildDate>{{ now()->toRfc2822String() }}</lastBuildDate>
 
-                @foreach($newses as $news)
+                @foreach($newsItems as $news)
                     <x-feeds.news-component :news="$news" :views-type="$viewsType" />
                 @endforeach
             </channel>

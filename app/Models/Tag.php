@@ -69,11 +69,11 @@ class Tag extends Model
         return SlugOptions::create()
             ->saveSlugsTo('slug')
             ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
+                $mainSlug     = $model->name;
                 $randomString = Str::random(11);
                 $createdAt    = $model->created_at ?? now();
                 $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
+                return "{$mainSlug}-{$createdAt}-{$randomString}";
             })
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255);
@@ -96,7 +96,7 @@ class Tag extends Model
         $url = "";
 
         if ($this->slug) {
-            $url = route("feeds.atom.tag.newses", ['slug' => $this->slug]);
+            $url = route("feeds.atom.tag.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -107,7 +107,7 @@ class Tag extends Model
         $url = "";
 
         if ($this->slug) {
-            $url = route("feeds.rss.tag.newses", ['slug' => $this->slug]);
+            $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -118,7 +118,7 @@ class Tag extends Model
         $url = "";
 
         if ($this->slug) {
-            $url = route("sitemaps.tag.newses", ['slug' => $this->slug]);
+            $url = route("sitemaps.tag.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -152,7 +152,7 @@ class Tag extends Model
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function newses(): HasMany
+    public function news(): HasMany
     {
         return $this->hasMany(News::class, 'news_tag');
     }

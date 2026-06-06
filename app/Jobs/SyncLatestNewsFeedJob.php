@@ -32,7 +32,7 @@ class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
     {
         $currentTime = time();
         $uqRandom    = Str::random(15);
-        return "latest-newses-feed-sync-jobs-{$uqRandom}-{$currentTime}";
+        return "latest-news-feed-sync-jobs-{$uqRandom}-{$currentTime}";
     }
 
     public function retryAfter()
@@ -50,7 +50,7 @@ class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
         try {
             $this->newsCacheService->cachedLatest("feed");
         } catch (Exception $ex) {
-            Log::error('Latest newses feed cached job error: ' . $ex->getMessage());
+            Log::error('Latest news feed cached job error: ' . $ex->getMessage());
         }
     }
 }

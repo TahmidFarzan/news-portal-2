@@ -376,7 +376,7 @@ class SiteService
         return $data;
     }
 
-    public function breakingNewses(Request $request)
+    public function breakingNews(Request $request)
     {
         $perPage = 15;
 
@@ -385,12 +385,12 @@ class SiteService
 
         $languageCode = SystemHelper::LANGUAGE_DEFAULT_CODE;
 
-        $cacheKey = "site breaking newses {$languageCode} cursor {$cursorKey} per page {$perPage}";
+        $cacheKey = "site breaking news {$languageCode} cursor {$cursorKey} per page {$perPage}";
 
         $cacheTags = [
             'site',
-            'site-breaking-newses',
-            'site-breaking-newses-slider',
+            'site-breaking-news',
+            'site-breaking-news-slider',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);

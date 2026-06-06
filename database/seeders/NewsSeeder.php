@@ -26,7 +26,7 @@ class NewsSeeder extends Seeder
             DB::statement('PRAGMA foreign_keys = OFF;');
             News::query()->delete();
             NewsPlacement::query()->delete();
-            DB::statement("DELETE FROM sqlite_sequence WHERE name='newses'");
+            DB::statement("DELETE FROM sqlite_sequence WHERE name='news'");
             DB::statement("DELETE FROM sqlite_sequence WHERE name='news_placements'");
             DB::statement('PRAGMA foreign_keys = ON;');
         }
@@ -49,9 +49,9 @@ class NewsSeeder extends Seeder
         foreach ($languages as $language) {
             $event = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
-            $randomDemoNewses = $this->getNewsesByLanguageFromStaticData($language, 13);
+            $randomDemoNews = $this->getNewsByLanguageFromStaticData($language, 13);
 
-            if ($randomDemoNewses->isEmpty() || $newsTypes->isEmpty()) {
+            if ($randomDemoNews->isEmpty() || $newsTypes->isEmpty()) {
                 continue;
             }
 
@@ -61,7 +61,7 @@ class NewsSeeder extends Seeder
                         $locationQuery->where('language_id', $language->id);
                     },
                 ])
-                ->chunkById(50, function ($categories) use ($language, $event, $randomDemoNewses, $newsTypes) {
+                ->chunkById(50, function ($categories) use ($language, $event, $randomDemoNews, $newsTypes) {
                     foreach ($categories as $category) {
                         $location = $category->locations->isNotEmpty()
                             ? $category->locations->random()
@@ -72,7 +72,7 @@ class NewsSeeder extends Seeder
                         $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
                         $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
 
-                        $states = $randomDemoNewses->map(function ($randomNews) use ($language, $category, $event, $location, $newsType, $isStory, $isVideo) {
+                        $states = $randomDemoNews->map(function ($randomNews) use ($language, $category, $event, $location, $newsType, $isStory, $isVideo) {
                             return [
                                 'news_type_id'     => $newsType->id,
                                 'language_id'      => $language->id,
@@ -103,12 +103,12 @@ class NewsSeeder extends Seeder
                             ];
                         })->all();
 
-                        $createdNewses = News::factory()
+                        $createdNews = News::factory()
                             ->count(count($states))
                             ->state(new Sequence(...$states))
                             ->create();
 
-                        $this->processCreatedNewses($createdNewses);
+                        $this->processCreatedNews($createdNews);
                     }
                 });
         }
@@ -116,7 +116,15 @@ class NewsSeeder extends Seeder
 
     private function addFeatureImage(News $news): void
     {
-        $imageUrl = asset("uploads/images/news/feature-image.png");
+        $imageUrl = asset("uploads/images/news/story-feature-image.png");
+
+        if ($news->newsType?->name == NewsHelper::NEWS_TYPE_VIDEO) {
+            $imageUrl = asset("uploads/images/news/video-feature-image.png");
+        }
+
+        if ($news->newsType?->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
+            $imageUrl = asset("uploads/images/news/image-gallery-feature-image.png");
+        }
 
         $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
         $imageFileName  = MediaHelper::generateMediaName($news->title, $imageExtension, 200);
@@ -135,7 +143,15 @@ class NewsSeeder extends Seeder
 
     private function addFeatureImageMobile(News $news): void
     {
-        $imageUrl = asset("uploads/images/news/feature-image-mobile.png");
+        $imageUrl = asset("uploads/images/news/story-feature-image-mobile.png");
+
+        if ($news->newsType?->name == NewsHelper::NEWS_TYPE_VIDEO) {
+            $imageUrl = asset("uploads/images/news/video-feature-image-mobile.png");
+        }
+
+        if ($news->newsType?->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
+            $imageUrl = asset("uploads/images/news/image-gallery-feature-image-mobile.png");
+        }
 
         $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
         $imageFileName  = MediaHelper::generateMediaName($news->title, $imageExtension, 200);
@@ -175,10 +191,10 @@ class NewsSeeder extends Seeder
             ->toMediaCollection($news->media_collection_name);
     }
 
-    private function processCreatedNewses($newses): void
+    private function processCreatedNews($newsItems): void
     {
-        foreach ($newses as $index => $news) {
-            $language = $news->language;
+        foreach ($newsItems as $index => $newsItem) {
+            $language = $newsItem->language;
 
             $tagIds          = Tag::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
             $contributorIds  = Contributor::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
@@ -186,32 +202,33 @@ class NewsSeeder extends Seeder
             $relatedNewsIds  = News::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
 
             if ($tagIds) {
-                $news->tags()->sync($tagIds);
+                $newsItem->tags()->sync($tagIds);
             }
 
-            if (($news->newsType->name == NewsHelper::NEWS_TYPE_STORY) && $contributorIds && $index < 10) {
-                $news->contributors()->sync($contributorIds);
+            if (($newsItem->newsType->name == NewsHelper::NEWS_TYPE_STORY) && $contributorIds && $index < 10) {
+                $newsItem->contributors()->sync($contributorIds);
             }
 
             if ($relevantNewsIds) {
-                $news->relevantNewses()->sync($relevantNewsIds);
+                $newsItem->relevantNews()->sync($relevantNewsIds);
             }
 
             if ($relatedNewsIds) {
-                $news->relatedNewses()->sync($relatedNewsIds);
+                $newsItem->relatedNews()->sync($relatedNewsIds);
             }
 
-            $this->addFeatureImage($news);
-            $this->addFeatureImageMobile($news);
+            $this->addFeatureImage($newsItem);
+            $this->addFeatureImageMobile($newsItem);
 
-            if ($news->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
+            if ($newsItem->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
                 for ($i = 0; $i < 5; $i++) {
-                    $this->addGalleryImage($news, $i);
+                    $this->addGalleryImage($newsItem, $i);
                 }
             }
 
-            $this->setNewsPlacements($news);
-            $this->setAsBreakingNews($news, $index);
+            $this->setNewsPlacements($newsItem);
+            $this->setAsBreakingNews($newsItem, $index);
+
         }
     }
 
@@ -247,32 +264,32 @@ class NewsSeeder extends Seeder
 
         foreach ($newsPlacements as $newsPlacement) {
             NewsPlacement::factory()->state([
-                 ...$newsPlacement,
+                ...$newsPlacement,
             ])->create();
         }
     }
 
-    private function getNewsesByLanguageFromStaticData(Language $language, int $limit = 10)
+    private function getNewsByLanguageFromStaticData(Language $language, int $limit = 10)
     {
-        $newsGroup = $this->getNewsesByLanguageGroupsFromStaticData()
+        $newsGroup = $this->getNewsByLanguageGroupsFromStaticData()
             ->firstWhere('language_code', $language->code);
 
         if (! $newsGroup) {
             return collect();
         }
 
-        return $newsGroup->newses
+        return $newsGroup->news
             ->shuffle()
             ->take($limit)
             ->values();
     }
 
-    private function getNewsesByLanguageGroupsFromStaticData()
+    private function getNewsByLanguageGroupsFromStaticData()
     {
         return collect([
             (object) [
                 'language_code' => SystemHelper::LANGUAGE_DEFAULT_CODE,
-                'newses'        => collect([
+                'news'          => collect([
 
                     (object) [
                         'title'            => "Demo City Opens New Public Service Help Desk",
@@ -1027,7 +1044,7 @@ class NewsSeeder extends Seeder
 
             (object) [
                 'language_code' => SystemHelper::LANGUAGE_EXTRA_BN_CODE,
-                'newses'        => collect([
+                'news'          => collect([
 
                     (object) [
                         'title'            => "ডেমো সিটিতে নতুন জনসেবা সহায়তা ডেস্ক চালু",

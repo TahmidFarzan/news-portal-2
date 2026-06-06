@@ -44,7 +44,7 @@ const handleDelete = () => {
     if (deleteProcessing.value) return
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.breaking-newses.delete', { slug: breakingNews?.slug }), {
+    intertiaJsRoute.delete(route('back-office.breaking-news.delete', { slug: breakingNews?.slug }), {
         onFinish: () => deleteProcessing.value = false
     })
 }
@@ -53,7 +53,7 @@ const handleRestore = () => {
     if (restoreProcessing.value) return
     restoreProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.breaking-newses.restore', { slug: breakingNews?.slug }), {
+    intertiaJsRoute.patch(route('back-office.breaking-news.restore', { slug: breakingNews?.slug }), {
         onFinish: () => restoreProcessing.value = false
     })
 }
@@ -62,7 +62,7 @@ const handleTrash = () => {
     if (trashProcessing.value) return
     trashProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.breaking-newses.trash', { slug: breakingNews?.slug }), {}, {
+    intertiaJsRoute.patch(route('back-office.breaking-news.trash', { slug: breakingNews?.slug }), {}, {
         onFinish: () => {
             showTrashModal.value = false
             trashProcessing.value = false
@@ -76,7 +76,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Breaking newses', href: route('back-office.breaking-newses.index') },
+                { text: 'Breaking news', href: route('back-office.breaking-news.index') },
                 { text: `${breakingNews?.title} details`, active: true }
             ],
         })
@@ -95,7 +95,7 @@ onMounted(async () => {
 
             <div class="flex gap-2">
                 <a v-if="canEdit(breakingNews)"
-                    :href="route('back-office.breaking-newses.edit', { slug: breakingNews?.slug })"
+                    :href="route('back-office.breaking-news.edit', { slug: breakingNews?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     Edit

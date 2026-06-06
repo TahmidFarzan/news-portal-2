@@ -57,7 +57,7 @@ const updateGalleryImage = () => {
     if (updateForm.processing) return
 
     updateForm.patch(
-        route('back-office.newses.gallery-images.update', {
+        route('back-office.news.gallery-images.update', {
             slug: news?.slug,
             mediaSlug: galleryImage?.slug,
         }),
@@ -89,7 +89,7 @@ const deleteGalleryImage = () => {
     deleteProcessing.value = true
 
     inertiaJsRoute.patch(
-        route('back-office.newses.gallery-images.delete', {
+        route('back-office.news.gallery-images.delete', {
             slug: news?.slug,
             mediaSlug: galleryImage?.slug,
         }),

@@ -16,7 +16,7 @@ const {
 </script>
 
 <template>
-    <section v-if="news?.relevant_newses.length" class="space-y-2 rounded-2xl border border-gray-200 p-2">
+    <section v-if="news?.relevant_news.length" class="space-y-2 rounded-2xl border border-gray-200 p-2">
         <div class="flex items-center gap-2">
             <FontAwesomeIcon :icon="faAngleRight" class="text-red-600" />
 
@@ -26,7 +26,7 @@ const {
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-3">
-            <ListCard v-for="(item, index) in news?.relevant_newses" :key="item?.id || item?.slug || index" :item="item" :hideFeatureImage="true" :hideCategory="true" :hideSubtitle="true"/>
+            <ListCard v-for="(item, index) in news?.relevant_news" :key="item?.id || item?.slug || index" :item="item" :hideFeatureImage="true" :hideCategory="true" :hideSubtitle="true"/>
         </div>
     </section>
 </template>

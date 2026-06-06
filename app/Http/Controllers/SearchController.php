@@ -141,17 +141,17 @@ class SearchController extends Controller
         );
     }
 
-    public function newses(Request $request): JsonResponse
+    public function news(Request $request): JsonResponse
     {
         return response()->json(
-            $this->searchService->newses($request)
+            $this->searchService->news($request)
         );
     }
 
-    public function breakingNewses(Request $request): JsonResponse
+    public function breakingNews(Request $request): JsonResponse
     {
         return response()->json(
-            $this->searchService->breakingNewses($request)
+            $this->searchService->breakingNews($request)
         );
     }
 

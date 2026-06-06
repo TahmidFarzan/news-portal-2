@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
 const {
-    title = 'Breaking Newses',
+    title = 'Breaking News',
     speed = 45, // px per second
 } = defineProps({
     title: String,
@@ -13,7 +13,7 @@ const {
 const wrapperRef = ref(null)
 const trackRef = ref(null)
 
-const newses = ref([])
+const news = ref([])
 const nextPageUrl = ref(null)
 
 const loading = ref(false)
@@ -23,16 +23,16 @@ const translateX = ref(0)
 let animationFrame = null
 let lastTimestamp = 0
 
-const hasNewses = computed(() => newses.value.length > 0)
+const hasNews = computed(() => news.value.length > 0)
 
-const displayNewses = computed(() => {
-    if (!newses.value.length) {
+const displayNews = computed(() => {
+    if (!news.value.length) {
         return []
     }
 
     return fullyLoaded.value
-        ? [...newses.value, ...newses.value]
-        : newses.value
+        ? [...news.value, ...news.value]
+        : news.value
 })
 
 const normalizeResponse = (response) => {
@@ -46,17 +46,17 @@ const hasPublicUrl = (news) => {
     return typeof news?.public_url === 'string' && news.public_url.trim() !== ''
 }
 
-const appendUniqueNewses = (items = []) => {
-    const existingIds = new Set(newses.value.map((news) => news.id))
+const appendUniqueNews = (items = []) => {
+    const existingIds = new Set(news.value.map((news) => news.id))
 
     const uniqueItems = items.filter((news) => {
         return news?.id && !existingIds.has(news.id)
     })
 
-    newses.value.push(...uniqueItems)
+    news.value.push(...uniqueItems)
 }
 
-const loadBreakingNewses = async (url = null) => {
+const loadBreakingNews = async (url = null) => {
     if (loading.value || fullyLoaded.value) {
         return
     }
@@ -64,10 +64,10 @@ const loadBreakingNewses = async (url = null) => {
     loading.value = true
 
     try {
-        const response = await fetchFromApi(url ?? route('site.breaking-newses'))
+        const response = await fetchFromApi(url ?? route('site.breaking-news'))
         const result = normalizeResponse(response)
 
-        appendUniqueNewses(result.data)
+        appendUniqueNews(result.data)
 
         nextPageUrl.value = result.nextPageUrl
 
@@ -77,7 +77,7 @@ const loadBreakingNewses = async (url = null) => {
 
         await nextTick()
     } catch (error) {
-        console.error('Failed to load breaking newses:', error)
+        console.error('Failed to load breaking news:', error)
     } finally {
         loading.value = false
     }
@@ -106,12 +106,12 @@ const animate = (timestamp) => {
     const deltaTime = timestamp - lastTimestamp
     lastTimestamp = timestamp
 
-    if (newses.value.length) {
+    if (news.value.length) {
         translateX.value -= (speed * deltaTime) / 1000
     }
 
     if (shouldLoadNextPage()) {
-        loadBreakingNewses(nextPageUrl.value)
+        loadBreakingNews(nextPageUrl.value)
     }
 
     if (fullyLoaded.value && trackRef.value) {
@@ -126,7 +126,7 @@ const animate = (timestamp) => {
 }
 
 onMounted(async () => {
-    await loadBreakingNewses()
+    await loadBreakingNews()
 
     animationFrame = requestAnimationFrame(animate)
 })
@@ -139,7 +139,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <section v-if="hasNewses" class="bg-white overflow-hidden">
+    <section v-if="hasNews" class="bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 h-11 flex items-center">
             <div
                 class="h-full px-4 -ml-4 flex items-center flex-shrink-0 bg-red-600 text-white font-bold text-sm md:text-base whitespace-nowrap">
@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
             <div ref="wrapperRef" class="flex-1 overflow-hidden min-w-0 px-4 text-gray-800">
                 <div ref="trackRef" class="inline-flex items-center whitespace-nowrap will-change-transform"
                     :style="{ transform: `translateX(${translateX}px)` }">
-                    <template v-for="(news, index) in displayNewses" :key="`${news.id}-${index}`">
+                    <template v-for="(news, index) in displayNews" :key="`${news.id}-${index}`">
                         <a v-if="hasPublicUrl(news)" :href="news.public_url"
                             class="inline-flex items-center text-sm md:text-base font-medium hover:text-blue-600 hover:underline">
                             {{ news.title }}

@@ -31,10 +31,10 @@ const saveForm = useForm({
 
 const newsApiUrl = computed(() => {
     if (!saveForm.language_id) {
-        return route('search.newses')
+        return route('search.news')
     }
 
-    return route('search.newses') + `?language_id=${saveForm.language_id}`
+    return route('search.news') + `?language_id=${saveForm.language_id}`
 })
 
 function validateForm() {
@@ -81,12 +81,12 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.breaking-newses.update', { slug: breakingNews?.slug }),
+            route('back-office.breaking-news.update', { slug: breakingNews?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
         )
     } else {
-        saveForm.post(route('back-office.breaking-newses.save'), requestConfig)
+        saveForm.post(route('back-office.breaking-news.save'), requestConfig)
     }
 }
 
@@ -107,7 +107,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Breaking newses', href: route('back-office.breaking-newses.index') },
+                { text: 'Breaking news', href: route('back-office.breaking-news.index') },
                 { text: isUpdate.value ? `${breakingNews?.title} edit` : 'Breaking news create', active: true }
             ],
         })

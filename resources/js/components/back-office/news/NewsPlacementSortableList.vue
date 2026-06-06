@@ -64,7 +64,7 @@ function handleDelete() {
     deleteProcessing.value = true
 
     router.delete(
-        route('back-office.newses.news-placements.delete', {
+        route('back-office.news.news-placements.delete', {
             slug: news?.slug,
             newsPlacementSlug: deletingItem?.slug
         }),

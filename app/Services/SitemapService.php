@@ -114,30 +114,30 @@ class SitemapService
         return $this->contributorCacheService->lastPageNo('sitemap',[]);
     }
 
-    public function latestNewses()
+    public function latestNews()
     {
         return $this->newsCacheService->getLatest("sitemap");
     }
 
-    public function getNewses(Request $request)
+    public function getNews(Request $request)
     {
-        return $this->newsCacheService->newses("sitemap", $request->input());
+        return $this->newsCacheService->news("sitemap", $request->input());
     }
 
-    public function getNewsesLastPageNo(Request $request)
+    public function getNewsLastPageNo(Request $request)
     {
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
     }
 
-    public function getCategoryNewses(Request $request, Category $category)
+    public function getCategoryNews(Request $request, Category $category)
     {
         $request->merge([
             'category_id' => $category->id,
         ]);
-        return $this->newsCacheService->newses("sitemap", $request->input());
+        return $this->newsCacheService->news("sitemap", $request->input());
     }
 
-    public function getCategoryNewsesLastPageNo(Request $request, Category $category)
+    public function getCategoryNewsLastPageNo(Request $request, Category $category)
     {
         $request->merge([
             'category_id' => $category->id,
@@ -145,15 +145,15 @@ class SitemapService
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
     }
 
-    public function getLocationNewses(Request $request, Location $location)
+    public function getLocationNews(Request $request, Location $location)
     {
         $request->merge([
             'location_id' => $location->id,
         ]);
-        return $this->newsCacheService->newses("sitemap", $request->input());
+        return $this->newsCacheService->news("sitemap", $request->input());
     }
 
-    public function getLocationNewsesLastPageNo(Request $request, Location $location)
+    public function getLocationNewsLastPageNo(Request $request, Location $location)
     {
         $request->merge([
             'location_id' => $location->id,
@@ -161,15 +161,15 @@ class SitemapService
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
     }
 
-    public function getEventNewses(Request $request, Event $event)
+    public function getEventNews(Request $request, Event $event)
     {
         $request->merge([
             'event_id' => $event->id,
         ]);
-        return $this->newsCacheService->newses("sitemap", $request->input());
+        return $this->newsCacheService->news("sitemap", $request->input());
     }
 
-    public function getEventNewsesLastPageNo(Request $request, Event $event)
+    public function getEventNewsLastPageNo(Request $request, Event $event)
     {
         $request->merge([
             'event_id' => $event->id,
@@ -177,15 +177,15 @@ class SitemapService
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
     }
 
-    public function getContributorNewses(Request $request, Contributor $contributor)
+    public function getContributorNews(Request $request, Contributor $contributor)
     {
         $request->merge([
             'contributor_id' => $contributor->id,
         ]);
-        return $this->newsCacheService->newses("sitemap", $request->input());
+        return $this->newsCacheService->news("sitemap", $request->input());
     }
 
-    public function getContributorNewsesLastPageNo(Request $request, Contributor $contributor)
+    public function getContributorNewsLastPageNo(Request $request, Contributor $contributor)
     {
         $request->merge([
             'contributor_id' => $contributor->id,
@@ -193,15 +193,15 @@ class SitemapService
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
     }
 
-    public function getTagNewses(Request $request, Tag $tag)
+    public function getTagNews(Request $request, Tag $tag)
     {
         $request->merge([
             'tag_id' => $tag->id,
         ]);
-        return $this->newsCacheService->newses("sitemap", $request->input());
+        return $this->newsCacheService->news("sitemap", $request->input());
     }
 
-    public function getTagNewsesLastPageNo(Request $request, Tag $tag)
+    public function getTagNewsLastPageNo(Request $request, Tag $tag)
     {
         $request->merge([
             'tag_id' => $tag->id,

@@ -33,13 +33,13 @@ const restoringRow = ref(null)
 const showRestoreModal = ref(false)
 const restoreProcessing = ref(false)
 
-const { newses } = defineProps({
-    newses: Object,
+const { newsItems } = defineProps({
+    newsItems: Object,
 })
 
 const paginationOnly = computed(() => {
-    if (!newses) return {}
-    const { data, ...rest } = newses
+    if (!newsItems) return {}
+    const { data, ...rest } = newsItems
     return rest
 })
 
@@ -59,7 +59,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.newses.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.news.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -87,7 +87,7 @@ const handleDelete = (news) => {
 
     deleteProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.newses.delete', { slug: news?.slug }), {}, {
+    intertiaJsRoute.patch(route('back-office.news.delete', { slug: news?.slug }), {}, {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -102,7 +102,7 @@ const handleRestore = (news) => {
 
     restoreProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.newses.restore', { slug: news?.slug }), {}, {
+    intertiaJsRoute.patch(route('back-office.news.restore', { slug: news?.slug }), {}, {
         onFinish: () => {
             restoringRow.value = null
             restoreProcessing.value = false
@@ -177,7 +177,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Newses', active: true },
+                { text: 'News', active: true },
             ],
         })
     )
@@ -187,14 +187,14 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Newses" />
+    <Head title="News" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Newses</h2>
+            <h2 class="text-lg font-semibold">News</h2>
 
-            <a v-if="canCreate()" :href="route('back-office.newses.create')"
+            <a v-if="canCreate()" :href="route('back-office.news.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
                 Create
@@ -274,7 +274,7 @@ onMounted(async () => {
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in newses?.data" :key="item.id" class="hover:bg-gray-50 transition">
+                        <tr v-for="(item, index) in newsItems?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
                             <td class="px-4 py-3">{{ item?.news_type?.name }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.title }}</td>
@@ -301,13 +301,13 @@ onMounted(async () => {
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
-                                    <a :href="route('back-office.newses.details', { slug: item.slug })"
+                                    <a :href="route('back-office.news.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canEdit(item)"
-                                        :href="route('back-office.newses.edit', { slug: item.slug })"
+                                        :href="route('back-office.news.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>

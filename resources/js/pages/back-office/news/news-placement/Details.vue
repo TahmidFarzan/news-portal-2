@@ -36,7 +36,7 @@ const handleDelete = () => {
     deleteProcessing.value = true
 
     inertiaJsRoute.patch(
-        route('back-office.newses.news-placements.delete', {
+        route('back-office.news.news-placements.delete', {
             slug: news?.slug,
             newsPlacementSlug: newsPlacement?.slug,
         }),
@@ -55,8 +55,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Newses', href: route('back-office.newses.index') },
-                { text: `${news?.title} details`, href: route('back-office.newses.details', { slug: news?.slug }) },
+                { text: 'News', href: route('back-office.news.index') },
+                { text: `${news?.title} details`, href: route('back-office.news.details', { slug: news?.slug }) },
                 { text: 'News Placement details', active: true },
             ],
         })

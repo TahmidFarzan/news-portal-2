@@ -586,7 +586,7 @@ class SearchService
         ];
     }
 
-    public function newses(Request $request): array
+    public function news(Request $request): array
     {
         $query = News::query();
 
@@ -645,7 +645,7 @@ class SearchService
         ];
     }
 
-    public function breakingNewses(Request $request): array
+    public function breakingNews(Request $request): array
     {
         $query = BreakingNews::query();
 

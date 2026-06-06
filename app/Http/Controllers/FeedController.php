@@ -14,80 +14,80 @@ class FeedController extends Controller
         $this->feedService = $feedService;
     }
 
-    public function latestNewses(Request $request): View
+    public function latestNews(Request $request): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
         $viewsType = $this->viewsType($request);
-        $newses    = $this->feedService->latestNewses();
+        $newsItems    = $this->feedService->latestNews();
 
-        return view('feeds.latest-newses', compact("newses", "feedLink", 'selfUrl', 'viewsType'));
+        return view('feeds.latest-news', compact("newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function newses(Request $request): View
+    public function news(Request $request): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
         $viewsType = $this->viewsType($request);
-        $newses    = $this->feedService->getNewses($request);
+        $newsItems    = $this->feedService->getNews($request);
 
-        return view('feeds.newses', compact("newses", "feedLink", 'selfUrl', 'viewsType'));
+        return view('feeds.news', compact("newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function categoryNewses(Request $request, $slugTree): View
+    public function categoryNews(Request $request, $slugTree): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
         $viewsType = $this->viewsType($request);
         $attribute = $this->feedService->categoryBySlugTree($slugTree);
-        $newses    = $this->feedService->getCategoryNewses($request, $attribute);
+        $newsItems    = $this->feedService->getCategoryNews($request, $attribute);
 
-        return view('feeds.attribute-newses', compact("attribute", "newses", "feedLink", 'selfUrl', 'viewsType'));
+        return view('feeds.attribute-news', compact("attribute", "newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function locationNewses(Request $request, $slugTree): View
+    public function locationNews(Request $request, $slugTree): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
         $viewsType = $this->viewsType($request);
         $attribute = $this->feedService->locationBySlugTree($slugTree);
-        $newses    = $this->feedService->getLocationNewses($request, $attribute);
+        $newsItems    = $this->feedService->getLocationNews($request, $attribute);
 
-        return view('feeds.attribute-newses', compact("attribute", "newses", "feedLink", 'selfUrl', 'viewsType'));
+        return view('feeds.attribute-news', compact("attribute", "newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function eventNewses(Request $request, $slug): View
+    public function eventNews(Request $request, $slug): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
         $viewsType = $this->viewsType($request);
         $attribute = $this->feedService->event($slug);
-        $newses    = $this->feedService->getEventNewses($request, $attribute);
+        $newsItems    = $this->feedService->getEventNews($request, $attribute);
 
-        return view('feeds.attribute-newses', compact("attribute", "newses", "feedLink", 'selfUrl', 'viewsType'));
+        return view('feeds.attribute-news', compact("attribute", "newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
 
-    public function tagNewses(Request $request, $slug): View
+    public function tagNews(Request $request, $slug): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
         $viewsType = $this->viewsType($request);
         $attribute = $this->feedService->tag($slug);
-        $newses    = $this->feedService->getTagNewses($request, $attribute);
+        $newsItems    = $this->feedService->getTagNews($request, $attribute);
 
-        return view('feeds.attribute-newses', compact("attribute", "newses", "feedLink", 'selfUrl', 'viewsType'));
+        return view('feeds.attribute-news', compact("attribute", "newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function contributorNewses(Request $request, $slug): View
+    public function contributorNews(Request $request, $slug): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
         $viewsType = $this->viewsType($request);
         $attribute = $this->feedService->contributor($slug);
-        $newses    = $this->feedService->getContributorNewses($request, $attribute);
+        $newsItems    = $this->feedService->getContributorNews($request, $attribute);
 
-        return view('feeds.attribute-newses', compact("attribute", "newses", "feedLink", 'selfUrl', 'viewsType'));
+        return view('feeds.attribute-news', compact("attribute", "newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
     private function viewsType(Request $request): string

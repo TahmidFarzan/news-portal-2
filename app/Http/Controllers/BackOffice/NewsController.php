@@ -25,10 +25,10 @@ class NewsController extends Controller
         $news = $this->newsService->new();
         Gate::authorize('viewAny', $news);
 
-        $newses = $this->newsService->search($request);
+        $newsItems = $this->newsService->search($request);
 
-        return Inertia::render('back-office/newses/Index', [
-            'newses' => $newses,
+        return Inertia::render('back-office/news/Index', [
+            'newsItems' => $newsItems,
         ]);
     }
 
@@ -39,7 +39,7 @@ class NewsController extends Controller
 
         Gate::authorize('view', $news);
 
-        return Inertia::render('back-office/newses/Details', [
+        return Inertia::render('back-office/news/Details', [
             'news' => $news,
         ]);
     }
@@ -49,7 +49,7 @@ class NewsController extends Controller
         $news = $this->newsService->new();
         Gate::authorize('create', $news);
 
-        return Inertia::render('back-office/newses/Create', [
+        return Inertia::render('back-office/news/Create', [
             'news' => $news,
         ]);
     }
@@ -61,7 +61,7 @@ class NewsController extends Controller
 
         Gate::authorize('update', $news);
 
-        return Inertia::render('back-office/newses/Create', [
+        return Inertia::render('back-office/news/Create', [
             'news' => $news,
         ]);
     }
@@ -96,7 +96,7 @@ class NewsController extends Controller
 
         $result = $this->newsService->delete($news);
 
-        return to_route('back-office.newses.index')->with('flash_message', [
+        return to_route('back-office.news.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -110,7 +110,7 @@ class NewsController extends Controller
 
         $result = $this->newsService->restore($news);
 
-        return to_route('back-office.newses.index')->with('flash_message', [
+        return to_route('back-office.news.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -183,7 +183,7 @@ class NewsController extends Controller
         $homeCategoryNewsPlacements = $this->newsService->newsPlacementHomeCategory($news->category_id);
         $categoryLeadNewsPlacements = $this->newsService->newsPlacementCategoryLead($news->category_id);
 
-        return Inertia::render('back-office/newses/news-placement/Index', [
+        return Inertia::render('back-office/news/news-placement/Index', [
             'news'                   => $news,
             'homeLeadNewsPlacements'     => $homeLeadNewsPlacements,
             'homeCategoryNewsPlacements' => $homeCategoryNewsPlacements,
@@ -199,7 +199,7 @@ class NewsController extends Controller
 
         $newsPlacement = $this->newsService->newsPlacementFind($news, $newsPlacementSlug);
 
-        return Inertia::render('back-office/newses/news-placement/Details', [
+        return Inertia::render('back-office/news/news-placement/Details', [
             'news'                   => $news,
             'newsPlacement'     => $newsPlacement,
         ]);
@@ -227,7 +227,7 @@ class NewsController extends Controller
 
         $result = $this->newsService->newsPlacementUpdateForNews($request, $news);
 
-        return to_route('back-office.newses.index')->with('flash_message', [
+        return to_route('back-office.news.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
@@ -252,13 +252,13 @@ class NewsController extends Controller
     private function redirectAfterNewsSave(array $result)
     {
         if (empty($result['data']['news_slug'])) {
-            return to_route('back-office.newses.index')->with('flash_message', [
+            return to_route('back-office.news.index')->with('flash_message', [
                 'message' => $result['message'],
                 'status'  => $result['status'],
             ]);
         }
 
-        return to_route('back-office.newses.news-placements.index', [
+        return to_route('back-office.news.news-placements.index', [
             'slug' => $result['data']['news_slug'],
         ])->with('flash_message', [
             'message' => $result['message'],

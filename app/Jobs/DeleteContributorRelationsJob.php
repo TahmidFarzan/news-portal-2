@@ -42,7 +42,7 @@ class DeleteContributorRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $contributor = Contributor::find($this->contributorId);
 
-        if ($contributor && ($contributor->activityLogs()->exists()) || ($contributor->newses()->exists())) {
+        if ($contributor && ($contributor->activityLogs()->exists()) || ($contributor->news()->exists())) {
 
             try {
 
@@ -51,8 +51,8 @@ class DeleteContributorRelationsJob implements ShouldQueue, ShouldBeUnique
                         $contributor->activityLogs()->delete();
                     }
 
-                    if ($contributor->newses()->exists()) {
-                        $contributor->newses()->delete();
+                    if ($contributor->news()->exists()) {
+                        $contributor->news()->delete();
                     }
                 });
 

@@ -63,7 +63,7 @@ function handleSave() {
     if (saveForm.processing) return
 
     saveForm.patch(
-        route('back-office.newses.news-placements.update', {
+        route('back-office.news.news-placements.update', {
             slug: news?.slug
         }),
         {
@@ -89,7 +89,7 @@ function handleAutoCreate() {
     autoCreateProcessing.value = true
 
     router.post(
-        route('back-office.newses.news-placements.generate', {
+        route('back-office.news.news-placements.generate', {
             slug: news?.slug
         }),
         {},
@@ -117,7 +117,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Newses', href: route('back-office.newses.index') },
+                { text: 'News', href: route('back-office.news.index') },
                 { text: `${news?.title} news placement`, active: true }
             ],
         })

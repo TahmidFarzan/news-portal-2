@@ -27,7 +27,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[Table('newses')]
+#[Table('news')]
 #[Fillable([
         'news_type_id', 'language_id', 'category_id', 'event_id', 'location_id',
         'title', 'sub_title', "content_shoulder", 'brief',
@@ -295,12 +295,12 @@ class News extends Model implements HasMedia
         return $this->belongsToMany(Tag::class, 'news_tag')->withTimestamps();
     }
 
-    public function relevantNewses(): BelongsToMany
+    public function relevantNews(): BelongsToMany
     {
         return $this->belongsToMany(News::class, 'news_relevant_news', 'news_id', 'relevant_news_id')->withTimestamps();
     }
 
-    public function relatedNewses(): BelongsToMany
+    public function relatedNews(): BelongsToMany
     {
         return $this->belongsToMany(News::class, 'news_related_news', 'news_id', 'related_news_id')->withTimestamps();
     }

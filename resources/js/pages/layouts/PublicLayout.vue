@@ -5,7 +5,7 @@ import AuthTopbarDropdownMenu from '@/components/common/layout/public-layout/Aut
 import TopbarMenu from '@/components/common/layout/public-layout/TopbarMenu.vue'
 import FooterMenu from '@/components/common/layout/public-layout/FooterMenu.vue'
 import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
-import BreakingNewses from '@/components/common/layout/public-layout/BreakingNewses.vue'
+import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { usePage } from '@inertiajs/vue3'
@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
             <slot />
         </main>
 
-        <BreakingNewses v-if="isTruthyValue(showBreakingNews?.value)" title="Breaking Newses" />
+        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" title="Breaking Newse" />
 
         <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">

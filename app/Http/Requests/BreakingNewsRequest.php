@@ -57,14 +57,14 @@ class BreakingNewsRequest extends FormRequest
                 ];
 
                 foreach ($dates as $date) {
-                    $newsesQuery = BreakingNews::where('title', $data['title'])
+                    $newsQuery = BreakingNews::where('title', $data['title'])
                         ->whereDate('created_at', $date)->where("language_id", $data['language_id']);
 
                     if ($breakingNews) {
-                        $newsesQuery->where('id', '!=', $breakingNews->id);
+                        $newsQuery->where('id', '!=', $breakingNews->id);
                     }
 
-                    if ($newsesQuery->exists()) {
+                    if ($newsQuery->exists()) {
                         $validator->errors()->add(
                             'title',
                             __("form-requests.news.title.unique")

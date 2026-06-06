@@ -15,7 +15,7 @@ const { news } = defineProps({
 </script>
 
 <template>
-    <section v-if="news?.related_newses.length" class="space-y-5">
+    <section v-if="news?.related_news.length" class="space-y-5">
         <div class="flex items-center gap-2">
             <FontAwesomeIcon :icon="faAngleRight" class="text-red-600" />
 
@@ -25,7 +25,7 @@ const { news } = defineProps({
         </div>
 
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <GridCard v-for="item in news?.related_newses" :key="item?.id || item?.slug" :item="item" />
+            <GridCard v-for="item in news?.related_news" :key="item?.id || item?.slug" :item="item" />
         </div>
     </section>
 </template>
