@@ -25,22 +25,17 @@ class NewsSeeder extends Seeder
         if (config('database.default') === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
             News::query()->delete();
-            NewsPlacement::query()->delete();
-            DB::statement("DELETE FROM sqlite_sequence WHERE name='news'");
-            DB::statement("DELETE FROM sqlite_sequence WHERE name='news_placements'");
             DB::statement('PRAGMA foreign_keys = ON;');
         }
 
         if (config('database.default') === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             News::truncate();
-            NewsPlacement::truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
 
         if (in_array(config('database.default'), ['pgsql', 'sqlsrv'])) {
             News::truncate();
-            NewsPlacement::truncate();
         }
 
         $languages = Language::get();
@@ -103,169 +98,12 @@ class NewsSeeder extends Seeder
                             ];
                         })->all();
 
-                        $createdNews = News::factory()
+                        News::factory()
                             ->count(count($states))
                             ->state(new Sequence(...$states))
                             ->create();
-
-                        $this->processCreatedNews($createdNews);
                     }
                 });
-        }
-    }
-
-    private function addFeatureImage(News $news): void
-    {
-        $imageUrl = asset("uploads/images/news/story-feature-image.png");
-
-        if ($news->newsType?->name == NewsHelper::NEWS_TYPE_VIDEO) {
-            $imageUrl = asset("uploads/images/news/video-feature-image.png");
-        }
-
-        if ($news->newsType?->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
-            $imageUrl = asset("uploads/images/news/image-gallery-feature-image.png");
-        }
-
-        $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
-        $imageFileName  = MediaHelper::generateMediaName($news->title, $imageExtension, 200);
-        $news->addMediaFromUrl($imageUrl)
-            ->usingName($news->title)
-            ->usingFileName($imageFileName)
-            ->withCustomProperties(
-                [
-                    'caption' => $news->title,
-                    'alt'     => $news->title,
-                    "role"    => MediaHelper::ROLE_NEWS_FEATURE_IMAGE,
-                ]
-            )
-            ->toMediaCollection($news->media_collection_name);
-    }
-
-    private function addFeatureImageMobile(News $news): void
-    {
-        $imageUrl = asset("uploads/images/news/story-feature-image-mobile.png");
-
-        if ($news->newsType?->name == NewsHelper::NEWS_TYPE_VIDEO) {
-            $imageUrl = asset("uploads/images/news/video-feature-image-mobile.png");
-        }
-
-        if ($news->newsType?->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
-            $imageUrl = asset("uploads/images/news/image-gallery-feature-image-mobile.png");
-        }
-
-        $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
-        $imageFileName  = MediaHelper::generateMediaName($news->title, $imageExtension, 200);
-        $news->addMediaFromUrl($imageUrl)
-            ->usingName($news->title)
-            ->usingFileName($imageFileName)
-            ->withCustomProperties(
-                [
-                    'caption' => $news->title,
-                    'alt'     => $news->title,
-                    "role"    => MediaHelper::ROLE_NEWS_FEATURE_IMAGE_MOBILE,
-                ]
-            )
-            ->toMediaCollection($news->media_collection_name);
-    }
-
-    private function addGalleryImage(News $news, int | string $imageSequence): void
-    {
-        $imageUrl = asset("uploads/images/news/news-gallery-image-3_2.png");
-
-        if (! (($imageSequence % 2) == 0)) {
-            $imageUrl = asset("uploads/images/news/news-gallery-image-2_3.png");
-        }
-
-        $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
-        $imageFileName  = MediaHelper::generateMediaName($news->title, $imageExtension, 200);
-        $news->addMediaFromUrl($imageUrl)
-            ->usingName($news->title)
-            ->usingFileName($imageFileName)
-            ->withCustomProperties(
-                [
-                    'caption' => $news->title,
-                    'alt'     => $news->title,
-                    "role"    => MediaHelper::ROLE_NEWS_GALLERY_IMAGE,
-                ]
-            )
-            ->toMediaCollection($news->media_collection_name);
-    }
-
-    private function processCreatedNews($newsItems): void
-    {
-        foreach ($newsItems as $index => $newsItem) {
-            $language = $newsItem->language;
-
-            $tagIds          = Tag::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
-            $contributorIds  = Contributor::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
-            $relevantNewsIds = News::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
-            $relatedNewsIds  = News::where("language_id", $language->id)->inRandomOrder()->limit(rand(3, 5))->pluck('id') ?? [];
-
-            if ($tagIds) {
-                $newsItem->tags()->sync($tagIds);
-            }
-
-            if (($newsItem->newsType->name == NewsHelper::NEWS_TYPE_STORY) && $contributorIds && $index < 10) {
-                $newsItem->contributors()->sync($contributorIds);
-            }
-
-            if ($relevantNewsIds) {
-                $newsItem->relevantNews()->sync($relevantNewsIds);
-            }
-
-            if ($relatedNewsIds) {
-                $newsItem->relatedNews()->sync($relatedNewsIds);
-            }
-
-            $this->addFeatureImage($newsItem);
-            $this->addFeatureImageMobile($newsItem);
-
-            if ($newsItem->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
-                for ($i = 0; $i < 5; $i++) {
-                    $this->addGalleryImage($newsItem, $i);
-                }
-            }
-
-            $this->setNewsPlacements($newsItem);
-            $this->setAsBreakingNews($newsItem, $index);
-
-        }
-    }
-
-    private function setNewsPlacements(News $news): void
-    {
-        $lastHomeLastLeadNewsPosition     = NewsPlacement::query()->where('page', PageHelper::PAGE_HOME)->where('page_section', PageHelper::PAGE_SECTION_LEAD_NEWS)->max('position');
-        $lastHomeLastCategoryNewsPosition = NewsPlacement::query()->where('page', PageHelper::PAGE_HOME)->where('page_section', PageHelper::PAGE_SECTION_CATEGORY_NEWS)->where("category_id", $news->category_id)->max('position');
-        $lastCategoryLastLeadNewsPosition = NewsPlacement::query()->where('page', PageHelper::PAGE_CATEGORY)->where('page_section', PageHelper::PAGE_SECTION_LEAD_NEWS)->where("category_id", $news->category_id)->max('position');
-
-        $newsPlacements = [
-            [
-                'news_id'      => $news->id,
-                'page'         => PageHelper::PAGE_HOME,
-                'page_section' => PageHelper::PAGE_SECTION_LEAD_NEWS,
-                'category_id'  => null,
-                'position'     => $lastHomeLastLeadNewsPosition + 1,
-            ],
-            [
-                'news_id'      => $news->id,
-                'page'         => PageHelper::PAGE_HOME,
-                'page_section' => PageHelper::PAGE_SECTION_CATEGORY_NEWS,
-                'category_id'  => $news->category_id,
-                'position'     => $lastHomeLastCategoryNewsPosition + 1,
-            ],
-            [
-                'news_id'      => $news->id,
-                'page'         => PageHelper::PAGE_CATEGORY,
-                'page_section' => PageHelper::PAGE_SECTION_LEAD_NEWS,
-                'category_id'  => $news->category_id,
-                'position'     => $lastCategoryLastLeadNewsPosition + 1,
-            ],
-        ];
-
-        foreach ($newsPlacements as $newsPlacement) {
-            NewsPlacement::factory()->state([
-                ...$newsPlacement,
-            ])->create();
         }
     }
 
@@ -1654,20 +1492,5 @@ class NewsSeeder extends Seeder
                 ]),
             ],
         ]);
-    }
-
-    private function setAsBreakingNews(News $news, int $index): void
-    {
-        if ($index > 1 && $index < 5) {
-            BreakingNews::factory()->state([
-                'title'        => $news?->title,
-                "language_id"  => $news->language_id,
-
-                "news_id"      => $news?->id ?? null,
-                'created_at'   => $news->created_at,
-                'updated_at'   => $news->updated_at,
-                "is_published" => true,
-            ])->create();
-        }
     }
 }

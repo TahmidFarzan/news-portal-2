@@ -32,5 +32,12 @@ class DatabaseSeeder extends Seeder
         $this->call(MenuSeeder::class);
 
         $this->call(NewsSeeder::class);
+        $this->call(NewsPlacementSeeder::class);
+        $this->call(BreakingNewsSeeder::class);
+        $this->call(RelatedNewsSyncSeeder::class);
+        $this->call(RelevantNewsSyncSeeder::class);
+        $this->call(NewsTagSyncSeeder::class);
+        $this->call(NewsContributorSyncSeeder::class);
+        $this->call(NewsMediaSeeder::class);
     }
 }
