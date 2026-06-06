@@ -1,20 +1,13 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\MediaHelper;
 use App\Helpers\NewsHelper;
-use App\Helpers\PageHelper;
 use App\Helpers\SystemHelper;
-use App\Models\BreakingNews;
 use App\Models\Category;
-use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\News;
-use App\Models\NewsPlacement;
 use App\Models\NewsType;
-use App\Models\Tag;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -38,72 +31,109 @@ class NewsSeeder extends Seeder
             News::truncate();
         }
 
-        $languages = Language::get();
+        $languages = Language::query()->get();
         $newsTypes = NewsType::query()->get();
 
         foreach ($languages as $language) {
-            $event = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
+            $mainCategories = Category::query()->with([
+                'locations' => function ($locationQuery) use ($language) {
+                    $locationQuery->where('language_id', $language->id);
+                },
+            ])->where('language_id', $language->id)->whereNull("parent_id")->get();
 
-            $randomDemoNews = $this->getNewsByLanguageFromStaticData($language, 13);
+            foreach ($mainCategories as $mainCategory) {
+                $randomDemoNews = $this->getNewsByLanguageFromStaticData($language, 15);
 
-            if ($randomDemoNews->isEmpty() || $newsTypes->isEmpty()) {
-                continue;
-            }
+                foreach ($randomDemoNews as $perRandomDemoNews) {
 
-            Category::query()->where('language_id', $language->id)
-                ->with([
-                    'locations' => function ($locationQuery) use ($language) {
-                        $locationQuery->where('language_id', $language->id);
-                    },
-                ])
-                ->chunkById(50, function ($categories) use ($language, $event, $randomDemoNews, $newsTypes) {
-                    foreach ($categories as $category) {
-                        $location = $category->locations->isNotEmpty()
-                            ? $category->locations->random()
-                            : null;
+                    $newsType = $newsTypes->random();
+                    $event    = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
-                        $newsType = $newsTypes->random();
-
-                        $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
-                        $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
-
-                        $states = $randomDemoNews->map(function ($randomNews) use ($language, $category, $event, $location, $newsType, $isStory, $isVideo) {
-                            return [
-                                'news_type_id'     => $newsType->id,
-                                'language_id'      => $language->id,
-                                'category_id'      => $category->id,
-
-                                'event_id'         => $event?->id,
-                                'location_id'      => $location?->id,
-
-                                'title'            => $randomNews->title,
-                                'sub_title'        => $randomNews->sub_title,
-                                'content_shoulder' => $randomNews->content_shoulder,
-                                'brief'            => $randomNews->brief,
-
-                                'body'             => $isStory ? $randomNews->body : null,
-                                'video_url'        => $isVideo ? $randomNews->video_url : null,
-
-                                'writer'           => $isStory ? 'News Desk' : null,
-                                'source'           => null,
-
-                                'seo_title'        => $randomNews->title,
-                                'seo_brief'        => $randomNews->brief,
-                                'seo_keywords'     => $randomNews->seo_keywords,
-
-                                'is_published'     => true,
-
-                                'created_at'       => $randomNews->published_at,
-                                'updated_at'       => $randomNews->published_at,
-                            ];
-                        })->all();
-
-                        News::factory()
-                            ->count(count($states))
-                            ->state(new Sequence(...$states))
-                            ->create();
+                    $location = null;
+                    if ( ($mainCategory->name == "National" && $language->code === SystemHelper::LANGUAGE_DEFAULT_CODE) || ($mainCategory->name == "জাতীয়" && $language->code === SystemHelper::LANGUAGE_EXTRA_BN_CODE)) {
+                        $location = $mainCategory->locations()->first() ?? null;
                     }
-                });
+
+                    $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
+                    $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
+
+                    News::factory()->state([
+                        'news_type_id'     => $newsType?->id ?? null,
+                        'language_id'      => $language?->id ?? null,
+                        'category_id'      => $mainCategory?->id ?? null,
+                        'event_id'         => $event?->id ?? null,
+                        'location_id'      => $location?->id ?? null,
+
+                        'title'            => $perRandomDemoNews->title,
+                        'sub_title'        => $perRandomDemoNews->sub_title,
+                        'content_shoulder' => $perRandomDemoNews->content_shoulder,
+                        'brief'            => $perRandomDemoNews->brief,
+
+                        'body'             => $isStory ? $perRandomDemoNews->body : null,
+                        'video_url'        => $isVideo ? $perRandomDemoNews->video_url : null,
+
+                        'writer'           => $isStory ? 'News Desk' : null,
+                        'source'           => null,
+
+                        'seo_title'        => $perRandomDemoNews->title,
+                        'seo_brief'        => $perRandomDemoNews->brief,
+                        'seo_keywords'     => $perRandomDemoNews->seo_keywords,
+
+                        'is_published'     => true,
+
+                        'created_at'       => $perRandomDemoNews->published_at,
+                        'updated_at'       => $perRandomDemoNews->published_at,
+                    ])->create();
+
+                }
+            }
+        }
+
+        foreach ($languages as $language) {
+            $categoryies = Category::query()->where('language_id', $language->id)->whereNotNull("parent_id")->get();
+
+            foreach ($categoryies as $category) {
+                $randomDemoNews = $this->getNewsByLanguageFromStaticData($language, 15);
+
+                foreach ($randomDemoNews as $perRandomDemoNews) {
+
+                    $newsType = $newsTypes->random();
+                    $event    = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
+
+
+                    $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
+                    $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
+
+                    News::factory()->state([
+                        'news_type_id'     => $newsType?->id ?? null,
+                        'language_id'      => $language?->id ?? null,
+                        'category_id'      => $category?->id ?? null,
+                        'event_id'         => $event?->id ?? null,
+                        'location_id'      =>  null,
+
+                        'title'            => $perRandomDemoNews->title,
+                        'sub_title'        => $perRandomDemoNews->sub_title,
+                        'content_shoulder' => $perRandomDemoNews->content_shoulder,
+                        'brief'            => $perRandomDemoNews->brief,
+
+                        'body'             => $isStory ? $perRandomDemoNews->body : null,
+                        'video_url'        => $isVideo ? $perRandomDemoNews->video_url : null,
+
+                        'writer'           => $isStory ? 'News Desk' : null,
+                        'source'           => null,
+
+                        'seo_title'        => $perRandomDemoNews->title,
+                        'seo_brief'        => $perRandomDemoNews->brief,
+                        'seo_keywords'     => $perRandomDemoNews->seo_keywords,
+
+                        'is_published'     => true,
+
+                        'created_at'       => $perRandomDemoNews->published_at,
+                        'updated_at'       => $perRandomDemoNews->published_at,
+                    ])->create();
+
+                }
+            }
         }
     }
 

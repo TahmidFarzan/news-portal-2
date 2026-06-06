@@ -22,13 +22,19 @@ class NewsMediaSeeder extends Seeder
             });
 
         News::query()
-            ->select(['id', 'language_id'])
+            ->select(['id',
+                'language_id',
+                'news_type_id',
+                'title',
+                'slug'
+            ])
+            ->with(['newsType'])
             ->chunkById(1000, function ($news) {
 
                 foreach ($news as $perNews) {
                     $this->addFeatureImage($perNews);
                     $this->addFeatureImageMobile($perNews);
-                    if ($perNews->newsType->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
+                    if ($perNews->newsType?->name == NewsHelper::NEWS_TYPE_IMAGE_GALLERY) {
                         for ($i = 0; $i < 5; $i++) {
                             $this->addGalleryImage($perNews, $i);
                         }
