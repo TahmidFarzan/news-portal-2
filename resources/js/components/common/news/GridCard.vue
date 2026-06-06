@@ -26,6 +26,15 @@ const {
         type: Boolean,
         default: false,
     },
+
+    hideCategory: {
+        type: Boolean,
+        default: false,
+    },
+    hideSubtitle: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 const imageSrc = computed(() => {
@@ -66,7 +75,7 @@ const shouldShowFeatureImage = computed(() => {
         </div>
 
         <div class="flex flex-1 flex-col space-y-2 p-4">
-            <p v-if="item?.category?.name" class="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+            <p v-if="item?.category?.name && !hideCategory" class="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
                 {{ item?.category?.name }}
             </p>
 
@@ -79,7 +88,7 @@ const shouldShowFeatureImage = computed(() => {
                 {{ item?.title }}
             </h3>
 
-            <p v-if="item?.sub_title" class="break-words text-sm leading-6 text-gray-600"
+            <p v-if="item?.sub_title && !hideSubtitle" class="break-words text-sm leading-6 text-gray-600"
                 :class="{ 'line-clamp-2': enableSubTitleLineClamp }">
                 {{ item?.sub_title }}
             </p>
