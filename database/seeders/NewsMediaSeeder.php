@@ -29,6 +29,7 @@ class NewsMediaSeeder extends Seeder
                 'slug'
             ])
             ->with(['newsType'])
+            ->orderBy("id","desc")
             ->chunkById(1000, function ($news) {
 
                 foreach ($news as $perNews) {
