@@ -111,6 +111,10 @@ class Contributor extends Model implements HasMedia
     {
         $url = null;
 
+        if($this->slug){
+            $url = route("contributor.news", ['slug' => $this->slug]);
+        }
+
         return $url ?? "";
     }
 

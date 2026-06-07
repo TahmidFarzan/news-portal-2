@@ -6,6 +6,7 @@ use App\Helpers\CacheServerHelper;
 use App\Helpers\SystemHelper;
 use App\Models\News;
 use App\Models\Tag;
+use App\Models\Contributor;
 use Illuminate\Http\Request;
 
 class PageService
@@ -81,6 +82,30 @@ class PageService
 
         $query->whereHas('tags', function ($tagQuery) use ($tag) {
             $tagQuery->where('id', $tag->id);
+        });
+
+        $query = $query
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->cursorPaginate($perPage)
+            ->withQueryString();
+        return $query;
+    }
+
+    public function contributor(string $slug): Contributor
+    {
+        return Contributor::where("slug", $slug)->firstOrFail();
+    }
+
+    public function contributorNews(Request $request, Contributor $contributor)
+    {
+        $perPage = $request->input('per_page', 24);
+
+        $query = News::query()->with(["newsType", "category"])
+            ->where("is_published", true);
+
+        $query->whereHas('contributors', function ($contributorQuery) use ($contributor) {
+            $contributorQuery->where('id', $contributor->id);
         });
 
         $query = $query

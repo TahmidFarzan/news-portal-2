@@ -45,4 +45,21 @@ class PageController extends Controller
             'news' => $news,
         ]);
     }
+
+    public function contributorNews(Request $request, $slug)
+    {
+        $contributor = $this->pageService->contributor($slug);
+        $news        = $this->pageService->contributorNews($request, $contributor);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('ContributorNews', [
+            'contributor' => $contributor,
+            'news'        => $news,
+        ]);
+    }
 }
