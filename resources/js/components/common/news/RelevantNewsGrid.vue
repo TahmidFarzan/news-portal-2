@@ -26,7 +26,7 @@ const {
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-3">
-            <ListCard v-for="(item, index) in news?.relevant_news" :key="item?.id || item?.slug || index" :item="item" :hideFeatureImage="true" :hideCategory="true" :hideSubtitle="true"/>
+            <ListCard v-for="(perNews, index) in news?.relevant_news" :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideFeatureImage="true" :hideCategory="true" :hideSubtitle="true"/>
         </div>
     </section>
 </template>

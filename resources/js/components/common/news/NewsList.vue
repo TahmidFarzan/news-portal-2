@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
 const {
-    newsItems,
+    news,
 } = defineProps({
-    newsItems: {
+    news: {
         type: Object,
         required: true,
     },
@@ -16,9 +16,9 @@ const {
 </script>
 
 <template>
-    <section v-if="newsItems.length" class="space-y-2 p-2">
+    <section v-if="news.length" class="space-y-2 p-2">
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-3">
-            <ListCard v-for="(item, index) in newsItems" :key="item?.id || item?.slug || index" :item="item"/>
+            <ListCard v-for="(perNews, index) in news" :key="perNews?.id || perNews?.slug || index" :news="perNews"/>
         </div>
     </section>
 </template>

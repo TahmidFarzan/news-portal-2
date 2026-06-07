@@ -25,7 +25,7 @@ const { news } = defineProps({
         </div>
 
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <GridCard v-for="item in news?.related_news" :key="item?.id || item?.slug" :item="item" />
+            <GridCard v-for="perNews in news?.related_news" :key="perNews?.id || perNews?.slug" :news="perNews" />
         </div>
     </section>
 </template>
