@@ -5,6 +5,8 @@ use App\Helpers\CacheServerHelper;
 //use App\Models\Language;
 use App\Helpers\SystemHelper;
 use App\Models\News;
+use App\Models\Tag;
+use Illuminate\Http\Request;
 
 class PageService
 {
@@ -65,4 +67,49 @@ class PageService
         return $news;
     }
 
+    public function tag(string $slug): Tag
+    {
+        return Tag::where("slug", $slug)->firstOrFail();
+    }
+
+    public function tagNews(Request $request, Tag $tag)
+    {
+        $perPage = $request->input('per_page', 24);
+
+        $query = News::query()->with(["newsType", "category"])
+            ->where("is_published", true);
+
+        $query->whereHas('tags', function ($tagQuery) use ($tag) {
+            $tagQuery->where('id', $tag->id);
+        });
+
+        $query = $query
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->cursorPaginate($perPage)
+            ->withQueryString();
+        return $query;
+    }
+
+    public function newsSearch(Request $request)
+    {
+        $perPage = $request->input('per_page', 15);
+
+        $query = News::query()->with(["newsType", "category"])
+            ->where("is_published", true);
+
+        if ($request->filled("tag_id")) {
+            $tagId = $request->input('tag_id');
+            $query->whereHas('tags', function ($tagQuery) use ($tagId) {
+                $tagQuery->where('id', $tagId);
+            });
+        }
+
+        $query = $query
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->cursorPaginate($perPage)
+            ->withQueryString();
+        return $query;
+    }
 }

@@ -1,11 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Services\PageService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
-use App\Services\PageService;
 
 class PageController extends Controller
 {
@@ -22,12 +20,28 @@ class PageController extends Controller
         return Inertia::render('Home');
     }
 
-
     public function newsDetails($slug)
     {
         $news = $this->pageService->news($slug);
 
         return Inertia::render('NewsDetails', [
+            'news' => $news,
+        ]);
+    }
+
+    public function tagNews(Request $request, $slug)
+    {
+        $tag  = $this->pageService->tag($slug);
+        $news = $this->pageService->tagNews($request, $tag);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('TagNews', [
+            'tag'  => $tag,
             'news' => $news,
         ]);
     }

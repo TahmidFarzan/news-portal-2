@@ -88,6 +88,10 @@ class Tag extends Model
     {
         $url = null;
 
+        if($this->slug){
+            $url = route("tag.news", ['slug' => $this->slug]);
+        }
+
         return $url ?? "";
     }
 
