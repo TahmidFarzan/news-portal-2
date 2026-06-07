@@ -20,14 +20,6 @@ const { tag, news } = defineProps({
     },
 })
 
-const pageTitle = computed(() => {
-    return tag?.name || 'Tag'
-})
-
-const canonicalUrl = computed(() => {
-    return tag?.public_url || ''
-})
-
 const metaTitle = computed(() => {
     return tag?.seo_title || tag?.name || ''
 })
@@ -51,8 +43,8 @@ const hasBrief = computed(() => {
 
 <template>
 
-    <Head :title="pageTitle">
-        <link v-if="canonicalUrl" rel="canonical" :href="canonicalUrl" />
+    <Head :title="tag?.name || 'Tag'">
+        <link v-if="tag?.public_url" rel="canonical" :href="tag?.public_url || ''" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 
