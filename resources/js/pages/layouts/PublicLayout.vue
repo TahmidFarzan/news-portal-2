@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
             <slot />
         </main>
 
-        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" title="Breaking Newse" />
+        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" title="Breaking News" />
 
         <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">

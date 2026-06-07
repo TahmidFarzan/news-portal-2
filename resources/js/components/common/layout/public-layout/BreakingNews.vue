@@ -4,7 +4,7 @@ import { fetchFromApi } from '@/composables/useSystemApi'
 
 const {
     title = 'Breaking News',
-    speed = 45, // px per second
+    speed = 45,
 } = defineProps({
     title: String,
     speed: Number,
@@ -19,11 +19,16 @@ const nextPageUrl = ref(null)
 const loading = ref(false)
 const fullyLoaded = ref(false)
 const translateX = ref(0)
+const isSmallScreen = ref(false)
 
 let animationFrame = null
 let lastTimestamp = 0
 
 const hasNews = computed(() => news.value.length > 0)
+
+const tickerSpeed = computed(() => {
+    return isSmallScreen.value ? Math.max(speed * 0.7, 22) : speed
+})
 
 const displayNews = computed(() => {
     if (!news.value.length) {
@@ -42,15 +47,15 @@ const normalizeResponse = (response) => {
     }
 }
 
-const hasPublicUrl = (news) => {
-    return typeof news?.public_url === 'string' && news.public_url.trim() !== ''
+const hasPublicUrl = (newsItem) => {
+    return typeof newsItem?.public_url === 'string' && newsItem.public_url.trim() !== ''
 }
 
 const appendUniqueNews = (items = []) => {
-    const existingIds = new Set(news.value.map((news) => news.id))
+    const existingIds = new Set(news.value.map((newsItem) => newsItem.id))
 
-    const uniqueItems = items.filter((news) => {
-        return news?.id && !existingIds.has(news.id)
+    const uniqueItems = items.filter((newsItem) => {
+        return newsItem?.id && !existingIds.has(newsItem.id)
     })
 
     news.value.push(...uniqueItems)
@@ -107,7 +112,7 @@ const animate = (timestamp) => {
     lastTimestamp = timestamp
 
     if (news.value.length) {
-        translateX.value -= (speed * deltaTime) / 1000
+        translateX.value -= (tickerSpeed.value * deltaTime) / 1000
     }
 
     if (shouldLoadNextPage()) {
@@ -125,7 +130,16 @@ const animate = (timestamp) => {
     animationFrame = requestAnimationFrame(animate)
 }
 
+const updateScreenSize = () => {
+    isSmallScreen.value = window.innerWidth < 640
+    translateX.value = 0
+    lastTimestamp = 0
+}
+
 onMounted(async () => {
+    updateScreenSize()
+    window.addEventListener('resize', updateScreenSize)
+
     await loadBreakingNews()
 
     animationFrame = requestAnimationFrame(animate)
@@ -135,39 +149,45 @@ onBeforeUnmount(() => {
     if (animationFrame) {
         cancelAnimationFrame(animationFrame)
     }
+
+    window.removeEventListener('resize', updateScreenSize)
 })
 </script>
 
 <template>
-    <section v-if="hasNews" class="bg-white overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 h-11 flex items-center">
+    <section v-if="hasNews" class="overflow-hidden border-y border-gray-100 bg-white">
+        <div class="mx-auto flex max-w-7xl flex-col overflow-hidden px-3 sm:h-11 sm:flex-row sm:items-center sm:px-4">
             <div
-                class="h-full px-4 -ml-4 flex items-center flex-shrink-0 bg-red-600 text-white font-bold text-sm md:text-base whitespace-nowrap">
+                class="flex h-9 w-full shrink-0 items-center justify-center bg-red-600 px-4 text-sm font-bold text-white sm:h-full sm:w-auto sm:justify-start sm:text-base">
                 {{ title }}
             </div>
 
-            <div ref="wrapperRef" class="flex-1 overflow-hidden min-w-0 px-4 text-gray-800">
-                <div ref="trackRef" class="inline-flex items-center whitespace-nowrap will-change-transform"
-                    :style="{ transform: `translateX(${translateX}px)` }">
-                    <template v-for="(news, index) in displayNews" :key="`${news.id}-${index}`">
-                        <a v-if="hasPublicUrl(news)" :href="news.public_url"
-                            class="inline-flex items-center text-sm md:text-base font-medium hover:text-blue-600 hover:underline">
-                            {{ news.title }}
-                        </a>
+            <div class="flex min-w-0 flex-1 items-center gap-3 py-2 sm:h-full sm:py-0">
+                <div ref="wrapperRef" class="min-w-0 flex-1 overflow-hidden px-1 text-gray-800 sm:px-4">
+                    <div ref="trackRef" class="inline-flex items-center whitespace-nowrap will-change-transform"
+                        :style="{ transform: `translateX(${translateX}px)` }">
+                        <template v-for="(newsItem, index) in displayNews" :key="`${newsItem.id}-${index}`">
+                            <a v-if="hasPublicUrl(newsItem)" :href="newsItem.public_url"
+                                class="inline-flex items-center text-xs font-medium transition duration-200 hover:text-blue-600 hover:underline sm:text-sm md:text-base">
+                                {{ newsItem.title }}
+                            </a>
 
-                        <span v-else class="inline-flex items-center text-sm md:text-base font-medium cursor-default">
-                            {{ news.title }}
-                        </span>
+                            <span v-else
+                                class="inline-flex cursor-default items-center text-xs font-medium sm:text-sm md:text-base">
+                                {{ newsItem.title }}
+                            </span>
 
-                        <span class="mx-4 text-gray-400 select-none">
-                            |
-                        </span>
-                    </template>
+                            <span class="mx-3 select-none text-gray-400 sm:mx-4">
+                                |
+                            </span>
+                        </template>
+                    </div>
                 </div>
-            </div>
 
-            <div v-if="loading && !fullyLoaded" class="flex-shrink-0 text-xs text-gray-500">
-                Loading...
+                <div v-if="loading && !fullyLoaded"
+                    class="shrink-0 whitespace-nowrap text-[11px] text-gray-500 sm:text-xs">
+                    Loading...
+                </div>
             </div>
         </div>
     </section>
