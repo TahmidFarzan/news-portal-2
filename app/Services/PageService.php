@@ -3,24 +3,21 @@ namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
 //use App\Models\Language;
-use App\Helpers\SystemHelper;
+use App\Models\Contributor;
 use App\Models\News;
 use App\Models\Tag;
-use App\Models\Contributor;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\CursorPaginator;
 
 class PageService
 {
     public function news(string $slug): News
     {
-        $languageCode = SystemHelper::LANGUAGE_DEFAULT_CODE;
-
-        $newsCacheKey = "news {$languageCode} details {$slug}";
+        $newsCacheKey = "news {$slug} details";
 
         $newsCacheTags = [
             'news',
-            'news-details',
-            "news-details-{$slug}",
+            "news-{$slug}-details",
         ];
 
         $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
@@ -55,7 +52,6 @@ class PageService
             ])
             ->where('slug', $slug)
             ->where('is_published', true)
-            ->whereRelation('language', 'code', $languageCode)
             ->firstOrFail();
 
         CacheServerHelper::cachedData(
@@ -70,50 +66,142 @@ class PageService
 
     public function tag(string $slug): Tag
     {
-        return Tag::where("slug", $slug)->firstOrFail();
+
+        $tagCacheKey = "tag {$slug} details";
+
+        $tagCacheTags = [
+            'tags',
+            "tag-{$slug}-details",
+        ];
+
+        $tagCachedData = CacheServerHelper::getCachedData($tagCacheKey, $tagCacheTags);
+
+        if (($tagCachedData !== null) && ($tagCachedData instanceof Tag)) {
+            return $tagCachedData;
+        }
+
+        $tag = Tag::query()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $tagCacheKey,
+            $tag,
+            CacheServerHelper::threeMinInSecond,
+            $tagCacheTags
+        );
+
+        return $tag;
     }
 
     public function tagNews(Request $request, Tag $tag)
     {
-        $perPage = $request->input('per_page', 24);
+        $perPage   = $request->input('per_page', 24);
+        $queryHash = md5(http_build_query($request->query()));
 
-        $query = News::query()->with(["newsType", "category"])
-            ->where("is_published", true);
+        $tagNewsCacheKey = "tag {$tag->slug} news per-page {$perPage} query {$queryHash}";
 
-        $query->whereHas('tags', function ($tagQuery) use ($tag) {
-            $tagQuery->where('id', $tag->id);
-        });
+        $tagNewsCacheTags = [
+            'tag',
+            'news',
+            "tag-{$tag->slug}-news",
+        ];
 
-        $query = $query
+        $tagNewsCachedData = CacheServerHelper::getCachedData($tagNewsCacheKey, $tagNewsCacheTags);
+
+        if (($tagNewsCachedData !== null) && ($tagNewsCachedData instanceof CursorPaginator)) {
+            return $tagNewsCachedData;
+        }
+
+        $tagNews = News::query()
+            ->with(["newsType", "category"])
+            ->where("is_published", true)
+            ->whereHas('tags', function ($tagQuery) use ($tag) {
+                $tagQuery->where('tags.id', $tag->id);
+            })
             ->orderByDesc('id')
             ->orderByDesc('created_at')
             ->cursorPaginate($perPage)
             ->withQueryString();
-        return $query;
+
+        CacheServerHelper::cachedData(
+            $tagNewsCacheKey,
+            $tagNews,
+            CacheServerHelper::threeMinInSecond,
+            $tagNewsCacheTags
+        );
+
+        return $tagNews;
     }
 
     public function contributor(string $slug): Contributor
     {
-        return Contributor::where("slug", $slug)->firstOrFail();
+
+        $contributorCacheKey = "contributor {$slug} details";
+
+        $contributorCacheTags = [
+            'contributors',
+            "contributor-{$slug}-details",
+        ];
+
+        $contributorCachedData = CacheServerHelper::getCachedData($contributorCacheKey, $contributorCacheTags);
+
+        if (($contributorCachedData !== null) && ($contributorCachedData instanceof Contributor)) {
+            return $contributorCachedData;
+        }
+
+        $contributor = Contributor::query()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $contributorCacheKey,
+            $contributor,
+            CacheServerHelper::threeMinInSecond,
+            $contributorCacheTags
+        );
+
+        return $contributor;
     }
 
     public function contributorNews(Request $request, Contributor $contributor)
     {
-        $perPage = $request->input('per_page', 24);
+        $perPage   = $request->input('per_page', 24);
+        $queryHash = md5(http_build_query($request->query()));
 
-        $query = News::query()->with(["newsType", "category"])
-            ->where("is_published", true);
+        $contributorNewsCacheKey = "contributor {$contributor->slug} news per-page {$perPage} query {$queryHash}";
 
-        $query->whereHas('contributors', function ($contributorQuery) use ($contributor) {
-            $contributorQuery->where('id', $contributor->id);
-        });
+        $contributorNewsCacheTags = [
+            'contributor',
+            'news',
+            "contributor-{$contributor->slug}-news",
+        ];
 
-        $query = $query
+        $contributorNewsCachedData = CacheServerHelper::getCachedData($contributorNewsCacheKey, $contributorNewsCacheTags);
+
+        if (($contributorNewsCachedData !== null) && ($contributorNewsCachedData instanceof CursorPaginator)) {
+            return $contributorNewsCachedData;
+        }
+
+        $contributorNews = News::query()
+            ->with(["newsType", "category"])
+            ->where("is_published", true)
+            ->whereHas('contributors', function ($contributorQuery) use ($contributor) {
+                $contributorQuery->where('contributors.id', $contributor->id);
+            })
             ->orderByDesc('id')
             ->orderByDesc('created_at')
             ->cursorPaginate($perPage)
             ->withQueryString();
-        return $query;
+
+        CacheServerHelper::cachedData(
+            $contributorNewsCacheKey,
+            $contributorNews,
+            CacheServerHelper::threeMinInSecond,
+            $contributorNewsCacheTags
+        );
+
+        return $contributorNews;
     }
 
     public function newsSearch(Request $request)
