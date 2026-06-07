@@ -399,7 +399,7 @@ class SiteService
             return $cachedData;
         }
 
-        $records = BreakingNews::query()
+        $query = BreakingNews::query()
             ->with([
                 'news',
                 'language',
@@ -415,12 +415,12 @@ class SiteService
 
         CacheServerHelper::cachedData(
             $cacheKey,
-            $records,
+            $query,
             CacheServerHelper::sixHoursInSecond,
             $cacheTags
         );
 
-        return $records;
+        return $query;
     }
 
 }

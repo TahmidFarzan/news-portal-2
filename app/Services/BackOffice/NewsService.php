@@ -114,6 +114,10 @@ class NewsService
             $query->where('location_id', $request->input('location_id'));
         }
 
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
         if ($request->filled("tag_id")) {
             $tagId = $request->input('tag_id');
             $query->whereHas('tags', function ($relationQuery) use ($tagId) {
