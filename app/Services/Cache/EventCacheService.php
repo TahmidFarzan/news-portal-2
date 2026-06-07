@@ -92,7 +92,7 @@ class EventCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "event {$key} page {$page} {$hash}",
+            "event:{$key}:page:{$page}:{$hash}",
             $this->dbEvents($filters),
             $this->cachedTime,
             ['event', $key]
@@ -103,7 +103,7 @@ class EventCacheService
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
         CacheServerHelper::cachedData(
-            "event {$key} count {$hash}",
+            "event:{$key}:count:{$hash}",
             $this->dbEventsCount($filters),
             $this->cachedTime,
             ['event', $key]
@@ -115,7 +115,7 @@ class EventCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "event {$key} last page no {$hash}",
+            "event:{$key}:last:page-no:{$hash}",
             $this->dbLastPageNo($filters),
             $this->cachedTime,
             ['event', $key]
@@ -125,7 +125,7 @@ class EventCacheService
     public function eventsCount(string $key, array $filters = []): int
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
-        $cacheKey = "event {$key} count {$hash}";
+        $cacheKey = "event:{$key}:count:{$hash}";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -149,7 +149,7 @@ class EventCacheService
     public function lastPageNo(string $key, array $filters = []): int
     {
         $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "event {$key} last page no {$hash}";
+        $cacheKey = "event:{$key}:last-page-no:{$hash}";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -174,7 +174,7 @@ class EventCacheService
     {
         $page = $this->getPage($filters);
         $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "event {$key} page {$page} {$hash}";
+        $cacheKey = "event:{$key}:page:{$page}:{$hash}";
 
         $events = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -197,11 +197,11 @@ class EventCacheService
 
     public function event(string $slug): Event
     {
-        $cacheKey = "event slug tree {$slug}";
+        $cacheKey = "event:slug:{$slug}";
 
         $event = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['event', 'public']
+            ['event', 'slug']
         );
 
         if (!$event instanceof Event) {
@@ -211,7 +211,7 @@ class EventCacheService
                 $cacheKey,
                 $event,
                 $this->cachedTime,
-                ['event', 'public']
+                ['event', 'slug']
             );
         }
 

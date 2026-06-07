@@ -92,7 +92,7 @@ class NewsCacheService
 
     public function cachedLatest(string $cachedKey): void
     {
-        $cacheKey = " news {$cachedKey} latest news";
+        $cacheKey = "news:{$cachedKey}:latest-news";
         $newsItems = $this->dbLatest();
 
         CacheServerHelper::cachedData(
@@ -174,7 +174,7 @@ class NewsCacheService
     public function getLatest(string $cachedKey, ?int $latestRecordLimit = null): EloquentCollection|SupportCollection
     {
         $newsItems = null;
-        $cacheKey = " news {$cachedKey} latest news";
+        $cacheKey = "news:{$cachedKey}:latest-news";
         $redisConnected = CacheServerHelper::isConnected();
 
         if ($redisConnected) {
@@ -320,24 +320,24 @@ class NewsCacheService
     private function countCacheKey(string $key, array $filters): string
     {
         if (! $this->hasFilters($filters)) {
-            return "news {$key} count";
+            return "news:{$key}:count";
         }
 
         $filterKey = $this->filterKey($filters);
 
-        return "news {$key} filter {$filterKey} count";
+        return "news:{$key}:filter:{$filterKey}:count";
     }
 
     private function lastPageCacheKey(string $key, array $filters): string
     {
         if (! $this->hasFilters($filters) && ! $this->filled($filters, 'per_page')) {
-            return "news {$key} last page no";
+            return "news:{$key}:last-page-no";
         }
 
         $filterKey = $this->filterKey($filters);
         $perPage = $this->perPage($filters);
 
-        return "news {$key} filter {$filterKey} per_page {$perPage} last page no";
+        return "news:{$key}:filter:{$filterKey}:per_page:{$perPage}:last-page-no";
     }
 
     private function newsCacheKey(string $key, array $filters): string
@@ -345,12 +345,12 @@ class NewsCacheService
         $page = $this->page($filters);
 
         if (! $this->hasFilters($filters) && ! $this->filled($filters, 'per_page')) {
-            return "news {$key} page {$page}";
+            return "news:{$key}:page:{$page}";
         }
 
         $filterKey = $this->filterKey($filters);
         $perPage = $this->perPage($filters);
 
-        return "news {$key} filter {$filterKey} per_page {$perPage} page {$page}";
+        return "news:{$key}:filter:{$filterKey}:per_page:{$perPage}:page:{$page}";
     }
 }

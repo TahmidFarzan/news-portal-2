@@ -92,7 +92,7 @@ class LocationCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "location {$key} page {$page} {$hash}",
+            "location:{$key}:page:{$page}:{$hash}",
             $this->dbLocations($filters),
             $this->cachedTime,
             ['location', $key]
@@ -103,7 +103,7 @@ class LocationCacheService
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
         CacheServerHelper::cachedData(
-            "location {$key} count {$hash}",
+            "location:{$key}:count:{$hash}",
             $this->dbLocationsCount($filters),
             $this->cachedTime,
             ['location', $key]
@@ -115,7 +115,7 @@ class LocationCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "location {$key} last page no {$hash}",
+            "location:{$key}:last_page_no:{$hash}",
             $this->dbLastPageNo($filters),
             $this->cachedTime,
             ['location', $key]
@@ -125,7 +125,7 @@ class LocationCacheService
     public function locationsCount(string $key, array $filters = []): int
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
-        $cacheKey = "location {$key} count {$hash}";
+        $cacheKey = "location:{$key}:count:{$hash}";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -149,7 +149,7 @@ class LocationCacheService
     public function lastPageNo(string $key, array $filters = []): int
     {
         $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "location {$key} last page no {$hash}";
+        $cacheKey = "location:{$key}:last-page-no:{$hash}";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -174,7 +174,7 @@ class LocationCacheService
     {
         $page = $this->getPage($filters);
         $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "location {$key} page {$page} {$hash}";
+        $cacheKey = "location:{$key}:page:{$page}:{$hash}";
 
         $locations = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -197,11 +197,11 @@ class LocationCacheService
 
     public function locationBySlugTree(string $slugTree): Location
     {
-        $cacheKey = "location slug tree {$slugTree}";
+        $cacheKey = "location:slug:tree:{$slugTree}";
 
         $location = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['location', 'public']
+            ['location', 'slug-tree']
         );
 
         if (!$location instanceof Location) {
@@ -211,7 +211,7 @@ class LocationCacheService
                 $cacheKey,
                 $location,
                 $this->cachedTime,
-                ['location', 'public']
+                ['location', 'slug-tree']
             );
         }
 

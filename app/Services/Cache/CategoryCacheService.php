@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services\Cache;
 
 use App\Helpers\CacheServerHelper;
@@ -10,7 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class CategoryCacheService
 {
     private int $cachedTime = 86400;
-    private int $perPage = 5000;
+    private int $perPage    = 5000;
 
     public function isConnected(): bool
     {
@@ -92,7 +91,7 @@ class CategoryCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "category {$key} page {$page} {$hash}",
+            "category:{$key}:page:{$page}:{$hash}",
             $this->dbCategories($filters),
             $this->cachedTime,
             ['category', $key]
@@ -103,7 +102,7 @@ class CategoryCacheService
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
         CacheServerHelper::cachedData(
-            "category {$key} count {$hash}",
+            "category:{$key}:count:{$hash}",
             $this->dbCategoriesCount($filters),
             $this->cachedTime,
             ['category', $key]
@@ -115,7 +114,7 @@ class CategoryCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "category {$key} last page no {$hash}",
+            "category:{$key}:last-page-no:{$hash}",
             $this->dbLastPageNo($filters),
             $this->cachedTime,
             ['category', $key]
@@ -124,8 +123,8 @@ class CategoryCacheService
 
     public function categoriesCount(string $key, array $filters = []): int
     {
-        $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
-        $cacheKey = "category {$key} count {$hash}";
+        $hash     = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
+        $cacheKey = "category:{$key}:count:{$hash}";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -148,8 +147,8 @@ class CategoryCacheService
 
     public function lastPageNo(string $key, array $filters = []): int
     {
-        $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "category {$key} last page no {$hash}";
+        $hash     = $this->filterHash($filters, ['page']);
+        $cacheKey = "category:{$key}:last-page-no:{$hash}";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -172,9 +171,9 @@ class CategoryCacheService
 
     public function categories(string $key, array $filters = []): LengthAwarePaginator
     {
-        $page = $this->getPage($filters);
-        $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "category {$key} page {$page} {$hash}";
+        $page     = $this->getPage($filters);
+        $hash     = $this->filterHash($filters, ['page']);
+        $cacheKey = "category:{$key}:page:{$page}:{$hash}";
 
         $categories = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -197,21 +196,27 @@ class CategoryCacheService
 
     public function categoryBySlugTree(string $slugTree): Category
     {
-        $cacheKey = "category slug tree {$slugTree}";
+        $cacheKey = "category:slug-tree:{$slugTree}";
 
         $category = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['category', 'public']
+            [
+                'category',
+                'slug',
+            ]
         );
 
-        if (!$category instanceof Category) {
+        if (! $category instanceof Category) {
             $category = Category::where('slug_tree', $slugTree)->firstOrFail();
 
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $category,
                 $this->cachedTime,
-                ['category', 'public']
+                [
+                    'category',
+                    'slug',
+                ]
             );
         }
 

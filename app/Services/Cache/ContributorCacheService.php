@@ -92,7 +92,7 @@ class ContributorCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "contributor {$key} page {$page} {$hash}",
+            "contributor:{$key}:page:{$page}:{$hash}",
             $this->dbContributors($filters),
             $this->cachedTime,
             ['contributor', $key]
@@ -103,7 +103,7 @@ class ContributorCacheService
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
         CacheServerHelper::cachedData(
-            "contributor {$key} count {$hash}",
+            "contributor:{$key}:count:{$hash}",
             $this->dbContributorsCount($filters),
             $this->cachedTime,
             ['contributor', $key]
@@ -115,7 +115,7 @@ class ContributorCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "contributor {$key} last page no {$hash}",
+            "contributor:{$key}:last-page-no:{$hash}",
             $this->dbLastPageNo($filters),
             $this->cachedTime,
             ['contributor', $key]
@@ -125,7 +125,7 @@ class ContributorCacheService
     public function contributorsCount(string $key, array $filters = []): int
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
-        $cacheKey = "contributor {$key} count {$hash}";
+        $cacheKey = "contributor:{$key}:count:{$hash}";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -149,7 +149,7 @@ class ContributorCacheService
     public function lastPageNo(string $key, array $filters = []): int
     {
         $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "contributor {$key} last page no {$hash}";
+        $cacheKey = "contributor:{$key}:last-page-no:{$hash}";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -174,7 +174,7 @@ class ContributorCacheService
     {
         $page = $this->getPage($filters);
         $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "contributor {$key} page {$page} {$hash}";
+        $cacheKey = "contributor:{$key}:page:{$page}:{$hash}";
 
         $contributors = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -197,11 +197,11 @@ class ContributorCacheService
 
     public function contributor(string $slug): Contributor
     {
-        $cacheKey = "contributor slug tree {$slug}";
+        $cacheKey = "contributor:slug:{$slug}";
 
         $contributor = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['contributor', 'public']
+            ['contributor', 'slug']
         );
 
         if (!$contributor instanceof Contributor) {
@@ -211,7 +211,7 @@ class ContributorCacheService
                 $cacheKey,
                 $contributor,
                 $this->cachedTime,
-                ['contributor', 'public']
+                ['contributor', 'slug']
             );
         }
 

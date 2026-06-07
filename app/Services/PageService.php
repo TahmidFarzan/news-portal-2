@@ -13,11 +13,11 @@ class PageService
 {
     public function news(string $slug): News
     {
-        $newsCacheKey = "news {$slug} details";
+        $newsCacheKey = "news-details:{$slug}";
 
         $newsCacheTags = [
             'news',
-            "news-{$slug}-details",
+            "news-details:{$slug}",
         ];
 
         $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
@@ -67,11 +67,11 @@ class PageService
     public function tag(string $slug): Tag
     {
 
-        $tagCacheKey = "tag {$slug} details";
+        $tagCacheKey = "tag-details:{$slug}";
 
         $tagCacheTags = [
             'tags',
-            "tag-{$slug}-details",
+            "tag-details:{$slug}",
         ];
 
         $tagCachedData = CacheServerHelper::getCachedData($tagCacheKey, $tagCacheTags);
@@ -99,12 +99,12 @@ class PageService
         $perPage   = $request->input('per_page', 24);
         $queryHash = md5(http_build_query($request->query()));
 
-        $tagNewsCacheKey = "tag {$tag->slug} news per-page {$perPage} query {$queryHash}";
+        $tagNewsCacheKey = "tag:{$tag->slug}:news:per-page:{$perPage}:query:{$queryHash}";
 
         $tagNewsCacheTags = [
             'tag',
-            'news',
-            "tag-{$tag->slug}-news",
+            'tag-news',
+            "tag:{$tag->slug}:news",
         ];
 
         $tagNewsCachedData = CacheServerHelper::getCachedData($tagNewsCacheKey, $tagNewsCacheTags);
@@ -137,11 +137,11 @@ class PageService
     public function contributor(string $slug): Contributor
     {
 
-        $contributorCacheKey = "contributor {$slug} details";
+        $contributorCacheKey = "contributor-details:{$slug}";
 
         $contributorCacheTags = [
             'contributors',
-            "contributor-{$slug}-details",
+            "contributor-details:{$slug}",
         ];
 
         $contributorCachedData = CacheServerHelper::getCachedData($contributorCacheKey, $contributorCacheTags);
@@ -169,12 +169,12 @@ class PageService
         $perPage   = $request->input('per_page', 24);
         $queryHash = md5(http_build_query($request->query()));
 
-        $contributorNewsCacheKey = "contributor {$contributor->slug} news per-page {$perPage} query {$queryHash}";
+        $contributorNewsCacheKey = "contributor:{$contributor->slug}:news:per-page:{$perPage}:query:{$queryHash}";
 
         $contributorNewsCacheTags = [
             'contributor',
-            'news',
-            "contributor-{$contributor->slug}-news",
+            'contributor-news',
+            "contributor:{$contributor->slug}:news",
         ];
 
         $contributorNewsCachedData = CacheServerHelper::getCachedData($contributorNewsCacheKey, $contributorNewsCacheTags);

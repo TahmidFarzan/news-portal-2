@@ -92,7 +92,7 @@ class TagCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "tag {$key} page {$page} {$hash}",
+            "tag:{$key}:page:{$page}:{$hash}",
             $this->dbTags($filters),
             $this->cachedTime,
             ['tag', $key]
@@ -103,7 +103,7 @@ class TagCacheService
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
         CacheServerHelper::cachedData(
-            "tag {$key} count {$hash}",
+            "tag:{$key}:count:{$hash}",
             $this->dbTagsCount($filters),
             $this->cachedTime,
             ['tag', $key]
@@ -115,7 +115,7 @@ class TagCacheService
         $hash = $this->filterHash($filters, ['page']);
 
         CacheServerHelper::cachedData(
-            "tag {$key} last page no {$hash}",
+            "tag:{$key}:last-page-no:{$hash}",
             $this->dbLastPageNo($filters),
             $this->cachedTime,
             ['tag', $key]
@@ -125,7 +125,7 @@ class TagCacheService
     public function tagsCount(string $key, array $filters = []): int
     {
         $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
-        $cacheKey = "tag {$key} count {$hash}";
+        $cacheKey = "tag:{$key}:count:{$hash}";
 
         $count = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -149,7 +149,7 @@ class TagCacheService
     public function lastPageNo(string $key, array $filters = []): int
     {
         $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "tag {$key} last page no {$hash}";
+        $cacheKey = "tag:{$key}:last-page-no:{$hash}";
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -174,7 +174,7 @@ class TagCacheService
     {
         $page = $this->getPage($filters);
         $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "tag {$key} page {$page} {$hash}";
+        $cacheKey = "tag:{$key}:page:{$page}:{$hash}";
 
         $tags = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -197,11 +197,11 @@ class TagCacheService
 
     public function tag(string $slug): Tag
     {
-        $cacheKey = "tag slug tree {$slug}";
+        $cacheKey = "tag:slug:{$slug}";
 
         $tag = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['tag', 'public']
+            ['tag', 'slug']
         );
 
         if (!$tag instanceof Tag) {
@@ -211,7 +211,7 @@ class TagCacheService
                 $cacheKey,
                 $tag,
                 $this->cachedTime,
-                ['tag', 'public']
+                ['tag', 'slug']
             );
         }
 
