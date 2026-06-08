@@ -54,10 +54,10 @@ const metaKeywords = computed(() => {
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
                     <img v-if="contributor?.profile_image"
-                        :src="contributor?.profile_image?.media_url || contributor?.profile_image?.original_url || '/uploads/images/news/contributor.png'"
+                        :src="contributor?.profile_image?.media_url || contributor?.profile_image?.original_url || '/uploads/images/logo/contributor.png'"
                         :alt="contributor?.name || 'Contributor image'" class="h-full w-full object-contain"
                         loading="lazy" />
-                    <img v-else :src="'/uploads/images/news/contributor.png'"
+                    <img v-else :src="'/uploads/images/logo/contributor.png'"
                         :alt="contributor?.name || 'Contributor image'" class="h-full w-full object-contain"
                         loading="lazy" />
                 </div>

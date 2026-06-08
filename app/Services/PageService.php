@@ -6,6 +6,7 @@ use App\Helpers\CacheServerHelper;
 use App\Models\Contributor;
 use App\Models\News;
 use App\Models\Tag;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
 
@@ -202,6 +203,75 @@ class PageService
         );
 
         return $contributorNews;
+    }
+
+    public function event(string $slug): Event
+    {
+
+        $eventCacheKey = "event-details:{$slug}";
+
+        $eventCacheEvents = [
+            'events',
+            "event-details:{$slug}",
+        ];
+
+        $eventCachedData = CacheServerHelper::getCachedData($eventCacheKey, $eventCacheEvents);
+
+        if (($eventCachedData !== null) && ($eventCachedData instanceof Event)) {
+            return $eventCachedData;
+        }
+
+        $event = Event::query()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $eventCacheKey,
+            $event,
+            CacheServerHelper::threeMinInSecond,
+            $eventCacheEvents
+        );
+
+        return $event;
+    }
+
+    public function eventNews(Request $request, Event $event)
+    {
+        $perPage   = $request->input('per_page', 24);
+        $queryHash = md5(http_build_query($request->query()));
+
+        $eventNewsCacheKey = "event:{$event->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+
+        $eventNewsCacheEvents = [
+            'event',
+            'event-news',
+            "event:{$event->slug}:news",
+        ];
+
+        $eventNewsCachedData = CacheServerHelper::getCachedData($eventNewsCacheKey, $eventNewsCacheEvents);
+
+        if (($eventNewsCachedData !== null) && ($eventNewsCachedData instanceof CursorPaginator)) {
+            return $eventNewsCachedData;
+        }
+
+        $eventNews = News::query()
+            ->with(["newsType", "category"])
+            ->where("is_published", true)
+            ->whereNotNull("event_id")
+            ->where("event_id", $event->id)
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->cursorPaginate($perPage)
+            ->withQueryString();
+
+        CacheServerHelper::cachedData(
+            $eventNewsCacheKey,
+            $eventNews,
+            CacheServerHelper::threeMinInSecond,
+            $eventNewsCacheEvents
+        );
+
+        return $eventNews;
     }
 
     public function newsSearch(Request $request)

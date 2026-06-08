@@ -8,8 +8,8 @@ import Grid from '@/components/common/news/Grid.vue'
 
 defineOptions({ layout: Layout })
 
-const { tag, news } = defineProps({
-    tag: {
+const { event, news } = defineProps({
+    event: {
         type: Object,
         required: true,
     },
@@ -21,30 +21,30 @@ const { tag, news } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return tag?.seo_title || tag?.name || ''
+    return event?.seo_title || event?.name || ''
 })
 
 const metaDescription = computed(() => {
-    return tag?.seo_brief || tag?.brief || ''
+    return event?.seo_brief || event?.brief || ''
 })
 
 const metaKeywords = computed(() => {
-    if (Array.isArray(tag?.seo_keywords)) {
-        return tag.seo_keywords.join(', ')
+    if (Array.isArray(event?.seo_keywords)) {
+        return event.seo_keywords.join(', ')
     }
 
-    return tag?.seo_keywords || ''
+    return event?.seo_keywords || ''
 })
 
 const hasBrief = computed(() => {
-    return Boolean(tag?.brief)
+    return Boolean(event?.brief)
 })
 </script>
 
 <template>
 
-    <Head :title="tag?.name || 'Tag'">
-        <link v-if="tag?.public_url" rel="canonical" :href="tag?.public_url || ''" />
+    <Head :title="event?.name || 'Event'">
+        <link v-if="event?.public_url" rel="canonical" :href="event?.public_url || ''" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 
@@ -57,22 +57,22 @@ const hasBrief = computed(() => {
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
-                    <img :src="'/uploads/images/logo/tag.png'" :alt="tag?.name || 'Tag image'"
+                    <img :src="'/uploads/images/logo/event.png'" :alt="event?.name || 'Event image'"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    Tag
+                    Event
                 </p>
 
                 <h1 class="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">
-                    {{ tag?.name }}
+                    {{ event?.name }}
                 </h1>
 
                 <p v-if="hasBrief" class="max-w-3xl text-sm leading-7 text-gray-600 sm:text-base">
-                    {{ tag?.brief }}
+                    {{ event?.brief }}
                 </p>
             </div>
         </section>

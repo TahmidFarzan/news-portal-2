@@ -383,4 +383,6 @@ Route::middleware(['response.cache:120,public,60,etag'])->group(function () {
     Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
     Route::get('tags/{slug}', [PageController::class, 'tagNews'])->name('tag.news');
     Route::get('contributors/{slug}', [PageController::class, 'contributorNews'])->name('contributor.news');
+    Route::get('events/{slug}', [PageController::class, 'eventNews'])->name('event.news');
+
 });

@@ -112,6 +112,10 @@ class Event extends Model implements HasMedia
     {
         $url = null;
 
+        if($this->slug){
+            $url = route("event.news", ['slug' => $this->slug]);
+        }
+
         return $url ?? "";
     }
 

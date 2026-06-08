@@ -62,4 +62,22 @@ class PageController extends Controller
             'news'        => $news,
         ]);
     }
+
+    public function eventNews(Request $request, $slug)
+    {
+        $event  = $this->pageService->event($slug);
+        $news = $this->pageService->eventNews($request, $event);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('EventNews', [
+            'event'  => $event,
+            'news' => $news,
+        ]);
+    }
+
 }
