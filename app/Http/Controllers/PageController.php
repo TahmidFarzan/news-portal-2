@@ -97,4 +97,22 @@ class PageController extends Controller
         ]);
     }
 
+
+    public function locationNews(Request $request, string $slugTree)
+    {
+        $location  = $this->pageService->location($slugTree);
+        $news = $this->pageService->locationNews($request, $location);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('LocationNews', [
+            'location'  => $location,
+            'news' => $news,
+        ]);
+    }
+
 }

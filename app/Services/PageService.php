@@ -3,11 +3,12 @@ namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
 //use App\Models\Language;
+use App\Models\Category;
 use App\Models\Contributor;
+use App\Models\Event;
+use App\Models\Location;
 use App\Models\News;
 use App\Models\Tag;
-use App\Models\Event;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
 
@@ -116,7 +117,7 @@ class PageService
         }
 
         $tagNews = News::query()
-            ->with(["newsType", "category","event","location"])
+            ->with(["newsType", "category", "event", "location"])
             ->where("is_published", true)
             ->whereHas('tags', function ($tagQuery) use ($tag) {
                 $tagQuery->where('tags.id', $tag->id);
@@ -186,7 +187,7 @@ class PageService
         }
 
         $contributorNews = News::query()
-            ->with(["newsType", "category","event","location"])
+            ->with(["newsType", "category", "event", "location"])
             ->where("is_published", true)
             ->whereHas('contributors', function ($contributorQuery) use ($contributor) {
                 $contributorQuery->where('contributors.id', $contributor->id);
@@ -256,7 +257,7 @@ class PageService
         }
 
         $eventNews = News::query()
-            ->with(["newsType", "category","event","location"])
+            ->with(["newsType", "category", "event", "location"])
             ->where("is_published", true)
             ->whereNotNull("event_id")
             ->where("event_id", $event->id)
@@ -290,7 +291,7 @@ class PageService
             return $categoryCachedData;
         }
 
-        $category = Category::query()->with(["parent","children"])
+        $category = Category::query()->with(["parent", "children"])
             ->where('slug_tree', $slugTree)
             ->firstOrFail();
 
@@ -324,7 +325,7 @@ class PageService
         }
 
         $categoryNews = News::query()
-            ->with(["newsType", "category","category","location"])
+            ->with(["newsType", "category", "event", "location"])
             ->where("is_published", true)
             ->whereNotNull("category_id")
             ->where("category_id", $category->id)
@@ -341,6 +342,74 @@ class PageService
         );
 
         return $categoryNews;
+    }
+
+    public function location(string $slugTree): Location
+    {
+        $locationCacheKey = "location-details:{$slugTree}";
+
+        $locationCacheLocations = [
+            'locations',
+            "location-details:{$slugTree}",
+        ];
+
+        $locationCachedData = CacheServerHelper::getCachedData($locationCacheKey, $locationCacheLocations);
+
+        if (($locationCachedData !== null) && ($locationCachedData instanceof Location)) {
+            return $locationCachedData;
+        }
+
+        $location = Location::query()->with(["parent", "children"])
+            ->where('slug_tree', $slugTree)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $locationCacheKey,
+            $location,
+            CacheServerHelper::threeMinInSecond,
+            $locationCacheLocations
+        );
+
+        return $location;
+    }
+
+    public function locationNews(Request $request, Location $location)
+    {
+        $perPage   = $request->input('per_page', 24);
+        $queryHash = md5(http_build_query($request->query()));
+
+        $locationNewsCacheKey = "location:{$location->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+
+        $locationNewsCacheLocations = [
+            'location',
+            'location-news',
+            "location:{$location->slug}:news",
+        ];
+
+        $locationNewsCachedData = CacheServerHelper::getCachedData($locationNewsCacheKey, $locationNewsCacheLocations);
+
+        if (($locationNewsCachedData !== null) && ($locationNewsCachedData instanceof CursorPaginator)) {
+            return $locationNewsCachedData;
+        }
+
+        $locationNews = News::query()
+            ->with(["newsType", "category", "event", "location"])
+            ->where("is_published", true)
+            ->whereNotNull("location_id")
+            ->where("location_id", $location->id)
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->cursorPaginate($perPage)
+            ->withQueryString();
+
+        CacheServerHelper::cachedData(
+            $locationNewsCacheKey,
+            $locationNews,
+            CacheServerHelper::threeMinInSecond,
+            $locationNewsCacheLocations
+        );
+
+        return $locationNews;
     }
 
     public function newsSearch(Request $request)

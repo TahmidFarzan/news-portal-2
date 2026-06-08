@@ -95,7 +95,11 @@ class Location extends Model
     {
         $url = null;
 
-        return $url ?? "";
+        if($this->slug_tree){
+            $url = route("location.news", ['slugTree' => $this->slug_tree]);
+        }
+
+        return $url;
     }
 
     public function getFeedsAtomUrlAttribute(): string
