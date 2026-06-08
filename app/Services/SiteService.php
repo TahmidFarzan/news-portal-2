@@ -302,7 +302,7 @@ class SiteService
         $languageCode = $menuItem->language->code;
 
         $menu     = $menuItem->menu;
-        $menuType = $menu->menuType->name;
+        $menuType = $menu->menuType;
 
         $cacheKey = "site:menu-type:{$menuType->slug}:menu:{$menu->slug}:language:{$languageCode}:menu-item:{$menuItem}:page:{$page}:per-page:{$perPage}";
 

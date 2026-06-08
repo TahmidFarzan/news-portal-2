@@ -11,20 +11,40 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 
 import {
+    faFolder,
     faBookOpen,
     faPlay,
+    faClock,
     faImages,
+    faLocationDot,
+    faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons'
 
-FontAwesomeLibrary.add(faBookOpen, faPlay, faImages)
+import { formatDateTime } from '@/composables/useDateTime'
+
+FontAwesomeLibrary.add(
+    faBookOpen,
+    faPlay,
+    faClock,
+    faImages,
+    faFolder,
+    faLocationDot,
+    faCalendarDays,
+)
 
 const {
     news,
     enableTitleLineClamp = false,
     enableSubTitleLineClamp = false,
-    hideFeatureImage = false,
-    hideCategory = false,
+    enableBriefLineClamp = false,
+
     hideSubtitle = false,
+    hideBrief = false,
+    hideCategory = false,
+    hideEvent = false,
+    hideLocation = false,
+
+    hideFeatureImage = false,
 } = defineProps({
     news: {
         type: Object,
@@ -33,22 +53,47 @@ const {
 
     enableTitleLineClamp: {
         type: Boolean,
+        default: false,
     },
 
     enableSubTitleLineClamp: {
         type: Boolean,
+        default: false,
     },
 
-    hideFeatureImage: {
+    enableBriefLineClamp: {
         type: Boolean,
-    },
-
-    hideCategory: {
-        type: Boolean,
+        default: false,
     },
 
     hideSubtitle: {
         type: Boolean,
+        default: false,
+    },
+
+    hideBrief: {
+        type: Boolean,
+        default: false,
+    },
+
+    hideCategory: {
+        type: Boolean,
+        default: false,
+    },
+
+    hideLocation: {
+        type: Boolean,
+        default: false,
+    },
+
+    hideEvent: {
+        type: Boolean,
+        default: false,
+    },
+
+    hideFeatureImage: {
+        type: Boolean,
+        default: false,
     },
 })
 
@@ -69,10 +114,6 @@ const imageAlt = computed(() => {
         news?.title ||
         'News image'
     )
-})
-
-const cardTag = computed(() => {
-    return news?.public_url ? 'a' : 'article'
 })
 
 const shouldShowFeatureImage = computed(() => {
@@ -124,10 +165,13 @@ const hasNewsTypeIcons = computed(() => {
 </script>
 
 <template>
-    <component :is="cardTag" :href="news?.public_url || undefined"
-        class="group flex h-full flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md sm:flex-row">
+    <article
+        class="group relative flex h-full flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md sm:flex-row">
+        <a v-if="news?.public_url" :href="news.public_url" :aria-label="news?.title || 'Read news'"
+            class="absolute inset-0 z-10 rounded-2xl"></a>
+
         <div v-if="shouldShowFeatureImage"
-            class="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-gray-100 md:h-32 sm:w-48 md:aspect-auto">
+            class="pointer-events-none relative z-20 aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-gray-100 sm:w-48 md:h-32 md:aspect-auto">
             <img :src="imageSrc" :alt="imageAlt"
                 class="h-full w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" />
 
@@ -139,7 +183,7 @@ const hasNewsTypeIcons = computed(() => {
             </div>
         </div>
 
-        <div class="min-w-0 flex flex-1 flex-col justify-center space-y-2">
+        <div class="pointer-events-none relative z-20 min-w-0 flex flex-1 flex-col justify-center space-y-2">
             <div v-if="!shouldShowFeatureImage && hasNewsTypeIcons" class="flex flex-wrap gap-1.5">
                 <span v-for="item in newsTypeIcons" :key="item.key" :title="item.title" :aria-label="item.title"
                     class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-50 text-red-600">
@@ -147,9 +191,46 @@ const hasNewsTypeIcons = computed(() => {
                 </span>
             </div>
 
-            <p v-if="news?.category?.name && !hideCategory"
-                class="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                {{ news?.category?.name }}
+            <div v-if="(news?.category && !hideCategory) || (news?.event && !hideEvent) || (news?.location && !hideLocation)"
+                class="pointer-events-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                <a v-if="news?.category && !hideCategory" :href="news.category.public_url" title="Category"
+                    class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600"
+                    @click.stop>
+                    <FontAwesomeIcon icon="folder" class="shrink-0" />
+                    <span class="truncate">{{ news?.category?.name }}</span>
+                </a>
+
+
+                <span v-if="news?.event && !hideEvent && news?.category && !hideCategory" class="text-gray-300"
+                    aria-hidden="true">
+                    |
+                </span>
+
+                <a v-if="news?.event && !hideEvent" :href="news?.event?.public_url" title="Event"
+                    class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600"
+                    @click.stop>
+                    <FontAwesomeIcon icon="calendar-days" class="shrink-0" />
+                    <span class="truncate">{{ news?.event?.name }}</span>
+                </a>
+
+                <span
+                    v-if="news?.location && !hideLocation && ((news?.category && !hideCategory) || (news?.event && !hideEvent))"
+                    class="text-gray-300" aria-hidden="true">
+                    |
+                </span>
+
+                <a v-if="news?.location && !hideLocation" :href="news.location.public_url" title="Location"
+                    class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600"
+                    @click.stop>
+                    <FontAwesomeIcon icon="location-dot" class="shrink-0" />
+                    <span class="truncate">{{ news?.location?.name }}</span>
+                </a>
+
+            </div>
+
+            <p v-if="news?.sub_title && !hideSubtitle" class="break-words text-sm leading-6 text-gray-600"
+                :class="{ 'line-clamp-2': enableSubTitleLineClamp }">
+                {{ news?.sub_title }}
             </p>
 
             <h3 class="break-words text-sm font-bold leading-snug text-gray-950 transition duration-300 group-hover:text-red-600 sm:text-base"
@@ -161,10 +242,17 @@ const hasNewsTypeIcons = computed(() => {
                 {{ news?.title }}
             </h3>
 
-            <p v-if="news?.sub_title && !hideSubtitle" class="break-words text-sm leading-6 text-gray-600"
-                :class="{ 'line-clamp-2': enableSubTitleLineClamp }">
-                {{ news?.sub_title }}
+            <p v-if="news?.brief && !hideBrief" class="break-words text-sm text-gray-600"
+                :class="{ 'line-clamp-2': enableBriefLineClamp }">
+                {{ news?.brief }}
             </p>
+
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-gray-500 mb-3">
+                <span class="inline-flex items-center gap-1.5">
+                    <FontAwesomeIcon icon="clock" class="text-xs text-gray-400" />
+                    {{ news?.published_at || formatDateTime(news?.created_at) }}
+                </span>
+            </div>
         </div>
-    </component>
+    </article>
 </template>

@@ -115,7 +115,7 @@ class PageService
         }
 
         $tagNews = News::query()
-            ->with(["newsType", "category"])
+            ->with(["newsType", "category","event","location"])
             ->where("is_published", true)
             ->whereHas('tags', function ($tagQuery) use ($tag) {
                 $tagQuery->where('tags.id', $tag->id);
@@ -185,7 +185,7 @@ class PageService
         }
 
         $contributorNews = News::query()
-            ->with(["newsType", "category"])
+            ->with(["newsType", "category","event","location"])
             ->where("is_published", true)
             ->whereHas('contributors', function ($contributorQuery) use ($contributor) {
                 $contributorQuery->where('contributors.id', $contributor->id);
@@ -255,7 +255,7 @@ class PageService
         }
 
         $eventNews = News::query()
-            ->with(["newsType", "category"])
+            ->with(["newsType", "category","event","location"])
             ->where("is_published", true)
             ->whereNotNull("event_id")
             ->where("event_id", $event->id)
