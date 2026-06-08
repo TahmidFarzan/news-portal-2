@@ -2,17 +2,17 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 
-import { ref, onMounted, nextTick, inject } from 'vue'
+import { ref, onMounted, nextTick, inject, computed } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPen, faEye, faEyeSlash, faSpinner, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
 import { canEditLocation, canDeleteLocation } from '@/composables/useAuthUserAccessPermissions'
 
-FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
+FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner, faCopy, faCheck)
 
 defineOptions({ layout: Layout })
 
@@ -20,9 +20,22 @@ const authUser = inject("authUser")
 
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
+const boundaryGeoJsonCopied = ref(false)
 
 const { location } = defineProps({
     location: Object,
+})
+
+const boundaryGeoJsonText = computed(() => {
+    if (!location?.boundary_geojson) {
+        return 'N/A'
+    }
+
+    if (typeof location.boundary_geojson === 'string') {
+        return location.boundary_geojson
+    }
+
+    return JSON.stringify(location.boundary_geojson, null, 2)
 })
 
 const canEdit = (location) => canEditLocation(authUser?.value, location)
@@ -37,18 +50,45 @@ const handleDelete = () => {
     })
 }
 
+const copyBoundaryGeoJson = async () => {
+    if (!boundaryGeoJsonText.value || boundaryGeoJsonText.value === 'N/A') {
+        return
+    }
+
+    try {
+        await navigator.clipboard.writeText(boundaryGeoJsonText.value)
+    } catch {
+        const textarea = document.createElement('textarea')
+        textarea.value = boundaryGeoJsonText.value
+        textarea.setAttribute('readonly', '')
+        textarea.style.position = 'fixed'
+        textarea.style.opacity = '0'
+
+        document.body.appendChild(textarea)
+        textarea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textarea)
+    }
+
+    boundaryGeoJsonCopied.value = true
+
+    setTimeout(() => {
+        boundaryGeoJsonCopied.value = false
+    }, 1500)
+}
 
 onMounted(async () => {
     await nextTick()
 
-    window.dispatchLocation(
-        new CustomLocation('set-breadcrumb', {
+    window.dispatchEvent(
+        new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: 'Locations', href: route('back-office.locations.index') },
                 { text: `${location?.name} details`, active: true }
             ],
         })
     )
+
 })
 </script>
 
@@ -138,7 +178,68 @@ onMounted(async () => {
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="text-gray-500 mb-2">Map Information</div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                            <div class="flex justify-between gap-4">
+                                <span class="text-gray-500">Latitude</span>
+                                <span class="font-medium break-all">{{ location?.latitude || 'N/A' }}</span>
+                            </div>
+
+                            <div class="flex justify-between gap-4">
+                                <span class="text-gray-500">Longitude</span>
+                                <span class="font-medium break-all">{{ location?.longitude || 'N/A' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                            <div class="flex justify-between gap-4">
+                                <span class="text-gray-500">Boundary North</span>
+                                <span class="font-medium break-all">{{ location?.boundary_north || 'N/A' }}</span>
+                            </div>
+
+                            <div class="flex justify-between gap-4">
+                                <span class="text-gray-500">Boundary South</span>
+                                <span class="font-medium break-all">{{ location?.boundary_south || 'N/A' }}</span>
+                            </div>
+
+                            <div class="flex justify-between gap-4">
+                                <span class="text-gray-500">Boundary East</span>
+                                <span class="font-medium break-all">{{ location?.boundary_east || 'N/A' }}</span>
+                            </div>
+
+                            <div class="flex justify-between gap-4">
+                                <span class="text-gray-500">Boundary West</span>
+                                <span class="font-medium break-all">{{ location?.boundary_west || 'N/A' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2 border border-gray-200 rounded-lg p-4">
+                            <div class="mb-2 flex items-center justify-between gap-3">
+                                <div class="text-gray-500">Boundary GeoJSON</div>
+
+                                <button type="button" :disabled="!boundaryGeoJsonText || boundaryGeoJsonText === 'N/A'"
+                                    @click="copyBoundaryGeoJson"
+                                    class="inline-flex items-center gap-2 rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50">
+                                    <FontAwesomeIcon :icon="boundaryGeoJsonCopied ? 'check' : 'copy'" />
+
+                                    {{ boundaryGeoJsonCopied ? 'Copied' : 'Copy' }}
+                                </button>
+                            </div>
+
+                            <pre
+                                class="max-h-80 overflow-auto rounded-lg bg-gray-950 p-4 text-xs leading-6 text-gray-100 whitespace-pre-wrap break-words">{{ boundaryGeoJsonText }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4">
                     <div class="text-gray-500 mb-2">SEO</div>
 
@@ -186,7 +287,6 @@ onMounted(async () => {
                         <span class="font-medium">{{ location?.feeds_atom_url || 'N/A' }}</span>
                     </div>
                 </div>
-
             </div>
         </div>
 

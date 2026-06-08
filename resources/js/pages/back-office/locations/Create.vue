@@ -29,6 +29,19 @@ const saveForm = useForm({
     parent_id: location?.parent_id || null,
     language_id: location?.language_id || null,
     category_id: location?.category_id || null,
+
+    latitude: location?.latitude || null,
+    longitude: location?.longitude || null,
+    boundary_geojson: location?.boundary_geojson
+        ? typeof location.boundary_geojson === 'string'
+            ? location.boundary_geojson
+            : JSON.stringify(location.boundary_geojson, null, 2)
+        : null,
+    boundary_north: location?.boundary_north || null,
+    boundary_south: location?.boundary_south || null,
+    boundary_east: location?.boundary_east || null,
+    boundary_west: location?.boundary_west || null,
+
     seo_brief: location?.seo_brief || null,
     seo_title: location?.seo_title || null,
     seo_keywords: location?.seo_keywords ? location.seo_keywords.split(',') : [],
@@ -81,6 +94,14 @@ watch(
         saveForm.category_id = null
         saveForm.parent_id = null
 
+        saveForm.latitude = null
+        saveForm.longitude = null
+        saveForm.boundary_geojson = null
+        saveForm.boundary_north = null
+        saveForm.boundary_south = null
+        saveForm.boundary_east = null
+        saveForm.boundary_west = null
+
         saveForm.seo_title = null
         saveForm.seo_brief = null
         saveForm.seo_keywords = []
@@ -89,6 +110,13 @@ watch(
         saveForm.clearErrors(
             'category_id',
             'parent_id',
+            'latitude',
+            'longitude',
+            'boundary_geojson',
+            'boundary_north',
+            'boundary_south',
+            'boundary_east',
+            'boundary_west',
         )
     }
 )
@@ -262,6 +290,114 @@ onMounted(async () => {
                             </p>
                         </div>
 
+                    </div>
+                </div>
+
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">Map Information</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Latitude
+                            </label>
+
+                            <input v-model="saveForm.latitude" type="number" step="any" placeholder="Enter latitude"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.latitude ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.latitude" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.latitude }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Longitude
+                            </label>
+
+                            <input v-model="saveForm.longitude" type="number" step="any" placeholder="Enter longitude"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.longitude ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.longitude" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.longitude }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Boundary North
+                            </label>
+
+                            <input v-model="saveForm.boundary_north" type="number" step="any"
+                                placeholder="Enter boundary north"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.boundary_north ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.boundary_north" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.boundary_north }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Boundary South
+                            </label>
+
+                            <input v-model="saveForm.boundary_south" type="number" step="any"
+                                placeholder="Enter boundary south"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.boundary_south ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.boundary_south" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.boundary_south }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Boundary East
+                            </label>
+
+                            <input v-model="saveForm.boundary_east" type="number" step="any"
+                                placeholder="Enter boundary east"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.boundary_east ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.boundary_east" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.boundary_east }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Boundary West
+                            </label>
+
+                            <input v-model="saveForm.boundary_west" type="number" step="any"
+                                placeholder="Enter boundary west"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.boundary_west ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.boundary_west" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.boundary_west }}
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                Boundary GeoJSON
+                            </label>
+
+                            <textarea v-model="saveForm.boundary_geojson" rows="10" placeholder="Enter boundary GeoJSON"
+                                class="w-full border rounded-md px-3 py-2 font-mono text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.boundary_geojson ? 'border-red-500' : 'border-gray-300'"></textarea>
+
+                            <p v-if="saveForm.errors.boundary_geojson" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.boundary_geojson }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 

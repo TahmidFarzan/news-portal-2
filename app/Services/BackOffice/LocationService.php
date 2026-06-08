@@ -110,11 +110,24 @@ class LocationService
                     $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
                 }
 
-                $location->name          = $request->input('name');
-                $location->brief         = $request->input('brief');
-                $location->parent_id     = $request->boolean('has_parent') ? $request->input('parent_id') : null;
-                $location->category_id   = $request->input('category_id');
-                $location->language_id   = $request->input('language_id');
+                $location->name        = $request->input('name');
+                $location->brief       = $request->input('brief');
+                $location->parent_id   = $request->boolean('has_parent') ? $request->input('parent_id') : null;
+                $location->category_id = $request->input('category_id');
+                $location->language_id = $request->input('language_id');
+
+                $boundaryGeojson = $request->input('boundary_geojson') ?? null;
+
+                if (is_string($boundaryGeojson) && filled($boundaryGeojson)) {
+                    $boundaryGeojson = json_decode($boundaryGeojson, true);
+                }
+
+                $location->boundary_geojson = $boundaryGeojson;
+                $location->boundary_north   = $request->input('boundary_north');
+                $location->boundary_south   = $request->input('boundary_south');
+                $location->boundary_east    = $request->input('boundary_east');
+                $location->boundary_west    = $request->input('boundary_west');
+
                 $location->seo_title     = $request->input('seo_title', $request->input('name'));
                 $location->seo_brief     = $request->input('seo_brief', $request->input('brief'));
                 $location->seo_keywords  = $seoKeywords;

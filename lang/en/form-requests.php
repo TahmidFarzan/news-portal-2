@@ -250,25 +250,59 @@ return [
     ],
 
     'location'      => [
-        'name'        => [
+        'name'             => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
             'max'      => 'Name max chars is 200.',
             'unique'   => 'Name must be unique.',
         ],
 
-        'parent_id'   => [
+        'parent_id'        => [
             'required'  => 'Parent is required.',
             "not_found" => 'Parent is not exit.',
         ],
 
-        'language_id' => [
+        'language_id'      => [
             'required'  => 'Language is required.',
             "not_found" => 'Language is not exit.',
         ],
 
-        'category_id' => [
+        'category_id'      => [
             'required' => 'Category is required.',
+        ],
+
+        'latitude'         => [
+            'numeric' => 'The latitude must be a valid number.',
+            'between' => 'The latitude must be between -90 and 90.',
+        ],
+
+        'longitude'        => [
+            'numeric' => 'The longitude must be a valid number.',
+            'between' => 'The longitude must be between -180 and 180.',
+        ],
+
+        'boundary_geojson' => [
+            'valid' => 'The boundary GeoJSON must be a valid JSON object or array.',
+        ],
+
+        'boundary_north'   => [
+            'numeric' => 'The north boundary must be a valid number.',
+            'between' => 'The north boundary must be between -90 and 90.',
+        ],
+
+        'boundary_south'   => [
+            'numeric' => 'The south boundary must be a valid number.',
+            'between' => 'The south boundary must be between -90 and 90.',
+        ],
+
+        'boundary_east'    => [
+            'numeric' => 'The east boundary must be a valid number.',
+            'between' => 'The east boundary must be between -180 and 180.',
+        ],
+
+        'boundary_west'    => [
+            'numeric' => 'The west boundary must be a valid number.',
+            'between' => 'The west boundary must be between -180 and 180.',
         ],
     ],
 
@@ -355,10 +389,9 @@ return [
             "not_found" => 'Related News is not exit.',
         ],
 
-
         'breaking_news_id'                  => [
-            "not_found" => 'Breaking news is not exit.',
-            "already_sync_to_news"  => 'Breaking news already sync.',
+            "not_found"            => 'Breaking news is not exit.',
+            "already_sync_to_news" => 'Breaking news already sync.',
         ],
 
         'body'                              => [
@@ -452,7 +485,7 @@ return [
         ],
 
         'news_id'     => [
-            "not_found" => 'News is not exit.',
+            "not_found"    => 'News is not exit.',
             "already_sync" => 'Already sync to news.',
         ],
     ],

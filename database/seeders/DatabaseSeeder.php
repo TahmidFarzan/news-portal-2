@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
         $this->call(EventSeeder::class);
         $this->call(ContributorSeeder::class);
 
+        $this->call(LocationMapInfoSeeder::class);
+
         $this->call(MenuSeeder::class);
 
         $this->call(NewsSeeder::class);

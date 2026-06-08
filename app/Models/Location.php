@@ -26,7 +26,9 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
         'name', 'brief', 'parent_id', 'slug', 'category_id',
         'language_id', 'name_tree', "slug_tree", 'created_by_id',
         "seo_brief", 'seo_title', 'seo_keywords',
-        'latitude', 'longitude',
+        'latitude', 'longitude', 'boundary_geojson',
+        'boundary_north', 'boundary_south',
+        'boundary_east', 'boundary_west',
     ])]
 #[UsePolicy(LocationPolicy::class)]
 #[ObservedBy([LocationObserver::class])]
@@ -35,7 +37,7 @@ class Location extends Model
     use HasFactory, LogsActivity, HasSlug, HasRecursiveRelationships;
 
     protected $appends = [
-        'public_url', "has_parent", "indentation_name",
+        'public_url', "has_parent", "indentation_name", "enable_map",
         "has_descendants", "feeds_rss_url", "feeds_atom_url", "sitemap_url",
 
     ];
@@ -43,8 +45,17 @@ class Location extends Model
     protected function casts(): array
     {
         return [
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+            'latitude'         => 'decimal:7',
+            'longitude'        => 'decimal:7',
+
+            'boundary_geojson' => 'array',
+            'boundary_north'   => 'decimal:7',
+            'boundary_south'   => 'decimal:7',
+            'boundary_east'    => 'decimal:7',
+            'boundary_west'    => 'decimal:7',
+
+            'created_at'       => 'datetime',
+            'updated_at'       => 'datetime',
         ];
     }
 
@@ -53,7 +64,10 @@ class Location extends Model
         return LogOptions::defaults()
             ->logOnly([
                 'name', 'brief', 'parent_id', 'slug', 'category_id',
-                'latitude', 'longitude', 'name_tree', "slug_tree",
+                'name_tree', "slug_tree",
+                'latitude', 'longitude', 'boundary_geojson',
+                'boundary_north', 'boundary_south',
+                'boundary_east', 'boundary_west',
             ])
             ->useLogName('Location')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
@@ -95,7 +109,7 @@ class Location extends Model
     {
         $url = null;
 
-        if($this->slug_tree){
+        if ($this->slug_tree) {
             $url = route("location.news", ['slugTree' => $this->slug_tree]);
         }
 
@@ -157,6 +171,17 @@ class Location extends Model
         $transformed = str_repeat('-- ', count($parts)) . $last;
 
         return trim($transformed);
+    }
+
+    public function getEnableMapAttribute(): string
+    {
+        $enableMap = false;
+
+        if ($this->latitude && $this->longitude && $this->boundary_geojson && $this->boundary_north && $this->boundary_south && $this->boundary_east && $this->boundary_west) {
+            $enableMap = true;
+        }
+
+        return $enableMap;
     }
 
     public function activityLogs(): MorphMany
