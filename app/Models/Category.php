@@ -93,8 +93,13 @@ class Category extends Model
 
     public function getPublicUrlAttribute(): string
     {
-        $url = "";
-        return $url ?? "";
+        $url = null;
+
+        if($this->slug_tree){
+            $url = route("category.news", ['slugTree' => $this->slug_tree]);
+        }
+
+        return $url;
     }
 
     public function getFeedsAtomUrlAttribute(): string

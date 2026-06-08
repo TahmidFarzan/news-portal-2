@@ -29,7 +29,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function tagNews(Request $request, $slug)
+    public function tagNews(Request $request, string $slug)
     {
         $tag  = $this->pageService->tag($slug);
         $news = $this->pageService->tagNews($request, $tag);
@@ -46,7 +46,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function contributorNews(Request $request, $slug)
+    public function contributorNews(Request $request, string $slug)
     {
         $contributor = $this->pageService->contributor($slug);
         $news        = $this->pageService->contributorNews($request, $contributor);
@@ -63,7 +63,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function eventNews(Request $request, $slug)
+    public function eventNews(Request $request, string $slug)
     {
         $event  = $this->pageService->event($slug);
         $news = $this->pageService->eventNews($request, $event);
@@ -76,6 +76,23 @@ class PageController extends Controller
 
         return Inertia::render('EventNews', [
             'event'  => $event,
+            'news' => $news,
+        ]);
+    }
+
+    public function categoryNews(Request $request, string $slugTree)
+    {
+        $category  = $this->pageService->category($slugTree);
+        $news = $this->pageService->categoryNews($request, $category);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('CategoryNews', [
+            'category'  => $category,
             'news' => $news,
         ]);
     }

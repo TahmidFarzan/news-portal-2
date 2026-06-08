@@ -7,6 +7,7 @@ use App\Models\Contributor;
 use App\Models\News;
 use App\Models\Tag;
 use App\Models\Event;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
 
@@ -272,6 +273,74 @@ class PageService
         );
 
         return $eventNews;
+    }
+
+    public function category(string $slugTree): Category
+    {
+        $categoryCacheKey = "category-details:{$slugTree}";
+
+        $categoryCacheCategorys = [
+            'categorys',
+            "category-details:{$slugTree}",
+        ];
+
+        $categoryCachedData = CacheServerHelper::getCachedData($categoryCacheKey, $categoryCacheCategorys);
+
+        if (($categoryCachedData !== null) && ($categoryCachedData instanceof Category)) {
+            return $categoryCachedData;
+        }
+
+        $category = Category::query()->with(["parent","children"])
+            ->where('slug_tree', $slugTree)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $categoryCacheKey,
+            $category,
+            CacheServerHelper::threeMinInSecond,
+            $categoryCacheCategorys
+        );
+
+        return $category;
+    }
+
+    public function categoryNews(Request $request, Category $category)
+    {
+        $perPage   = $request->input('per_page', 24);
+        $queryHash = md5(http_build_query($request->query()));
+
+        $categoryNewsCacheKey = "category:{$category->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+
+        $categoryNewsCacheCategorys = [
+            'category',
+            'category-news',
+            "category:{$category->slug}:news",
+        ];
+
+        $categoryNewsCachedData = CacheServerHelper::getCachedData($categoryNewsCacheKey, $categoryNewsCacheCategorys);
+
+        if (($categoryNewsCachedData !== null) && ($categoryNewsCachedData instanceof CursorPaginator)) {
+            return $categoryNewsCachedData;
+        }
+
+        $categoryNews = News::query()
+            ->with(["newsType", "category","category","location"])
+            ->where("is_published", true)
+            ->whereNotNull("category_id")
+            ->where("category_id", $category->id)
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->cursorPaginate($perPage)
+            ->withQueryString();
+
+        CacheServerHelper::cachedData(
+            $categoryNewsCacheKey,
+            $categoryNews,
+            CacheServerHelper::threeMinInSecond,
+            $categoryNewsCacheCategorys
+        );
+
+        return $categoryNews;
     }
 
     public function newsSearch(Request $request)
