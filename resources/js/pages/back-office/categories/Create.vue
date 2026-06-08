@@ -3,7 +3,7 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 
-import { computed, onMounted, nextTick, inject } from 'vue'
+import { computed, onMounted, nextTick, inject, watch, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
@@ -18,6 +18,8 @@ const { category } = defineProps({
     category: Object,
 })
 
+const seoKeywordsKey = ref(0)
+
 const isUpdate = computed(() => !!category?.slug)
 
 const saveForm = useForm({
@@ -29,6 +31,14 @@ const saveForm = useForm({
     seo_brief: category?.seo_brief || null,
     seo_title: category?.seo_title || null,
     seo_keywords: category?.seo_keywords ? category.seo_keywords.split(',') : [],
+})
+
+const categoryApiUrl = computed(() => {
+    if (!saveForm.language_id) {
+        return route('search.category-tree')
+    }
+
+    return route('search.category-tree') + `?language_id=${saveForm.language_id}`
 })
 
 function validateForm() {
@@ -52,7 +62,6 @@ function validateForm() {
 
     return valid
 }
-
 
 function handleSave() {
     if (saveForm.processing) return
@@ -89,6 +98,24 @@ function handleSave() {
     }
 }
 
+watch(
+    () => saveForm.language_id,
+    () => {
+        saveForm.name = null
+        saveForm.brief = null
+
+        saveForm.parent_id = null
+
+        saveForm.seo_title = null
+        saveForm.seo_brief = null
+        saveForm.seo_keywords = []
+        seoKeywordsKey.value++
+
+        saveForm.clearErrors(
+            'parent_id',
+        )
+    }
+)
 
 onMounted(async () => {
     await nextTick()
@@ -189,7 +216,7 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi :selectedItem="category?.parent"
-                                fieldName="parent_id" :form="saveForm" :apiUrl="route('search.category-tree')"
+                                fieldName="parent_id" :form="saveForm" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.parent_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id"
                                 :multiple="false" placeholder="Select parent" />

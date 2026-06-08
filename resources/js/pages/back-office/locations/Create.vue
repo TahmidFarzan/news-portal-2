@@ -3,7 +3,7 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 
-import { computed, onMounted, nextTick, inject } from 'vue'
+import { computed, onMounted, nextTick, inject, watch, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
@@ -18,6 +18,8 @@ const { location } = defineProps({
     location: Object,
 })
 
+const seoKeywordsKey = ref(0)
+
 const isUpdate = computed(() => !!location?.slug)
 
 const saveForm = useForm({
@@ -30,6 +32,22 @@ const saveForm = useForm({
     seo_brief: location?.seo_brief || null,
     seo_title: location?.seo_title || null,
     seo_keywords: location?.seo_keywords ? location.seo_keywords.split(',') : [],
+})
+
+const categoryApiUrl = computed(() => {
+    if (!saveForm.language_id) {
+        return route('search.category-tree')
+    }
+
+    return route('search.category-tree') + `?language_id=${saveForm.language_id}`
+})
+
+const locationApiUrl = computed(() => {
+    if (!saveForm.language_id) {
+        return route('search.location-tree')
+    }
+
+    return route('search.location-tree') + `?language_id=${saveForm.language_id}`
 })
 
 function validateForm() {
@@ -54,6 +72,26 @@ function validateForm() {
     return valid
 }
 
+watch(
+    () => saveForm.language_id,
+    () => {
+        saveForm.name = null
+        saveForm.brief = null
+
+        saveForm.category_id = null
+        saveForm.parent_id = null
+
+        saveForm.seo_title = null
+        saveForm.seo_brief = null
+        saveForm.seo_keywords = []
+        seoKeywordsKey.value++
+
+        saveForm.clearErrors(
+            'category_id',
+            'parent_id',
+        )
+    }
+)
 
 function handleSave() {
     if (saveForm.processing) return
@@ -126,8 +164,8 @@ onMounted(async () => {
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
-                                :selectedItem="location?.language" :apiUrl="route('search.locations')" :error="saveForm.errors.language_id"
-                                :multiple="false" placeholder="Select language" />
+                                :selectedItem="location?.language" :apiUrl="route('search.languages')"
+                                :error="saveForm.errors.language_id" :multiple="false" placeholder="Select language" />
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
                             </p>
@@ -191,11 +229,10 @@ onMounted(async () => {
                                 Parent <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :selectedItem="location?.parent"
-                                fieldName="parent_id" :form="saveForm" :apiUrl="route('search.location-tree')"
-                                :error="saveForm.errors.parent_id" selectedLabelKey="indentation_name"
-                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id"
-                                :multiple="false" placeholder="Select parent" />
+                            <MultiSelectInfinityLoadingApi :selectedItem="location?.parent" fieldName="parent_id"
+                                :form="saveForm" :apiUrl="locationApiUrl" :error="saveForm.errors.parent_id"
+                                selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
+                                apiValueKey="id" :multiple="false" placeholder="Select parent" />
 
                             <p v-if="saveForm.errors.parent_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.parent_id }}
@@ -215,11 +252,10 @@ onMounted(async () => {
                                 Category
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :selectedItem="location?.category"
-                                fieldName="category_id" :form="saveForm" :apiUrl="route('search.location-tree')"
-                                :error="saveForm.errors.category_id" selectedLabelKey="indentation_name"
-                                selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id"
-                                :multiple="false" placeholder="Select category" />
+                            <MultiSelectInfinityLoadingApi :selectedItem="location?.category" fieldName="category_id"
+                                :form="saveForm" :apiUrl="categoryApiUrl" :error="saveForm.errors.category_id"
+                                selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
+                                apiValueKey="id" :multiple="false" placeholder="Select category" />
 
                             <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.category_id }}
@@ -253,8 +289,7 @@ onMounted(async () => {
                                 SEO Brief
                             </label>
 
-                            <textarea v-model="saveForm.seo_brief" rows="3"
-                                placeholder="Enter SEO brief"
+                            <textarea v-model="saveForm.seo_brief" rows="3" placeholder="Enter SEO brief"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
