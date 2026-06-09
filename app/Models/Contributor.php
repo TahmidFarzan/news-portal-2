@@ -107,7 +107,7 @@ class Contributor extends Model implements HasMedia
         return "Contributor";
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
         $url = null;
 
@@ -118,9 +118,9 @@ class Contributor extends Model implements HasMedia
         return $url ?? "";
     }
 
-    public function getFeedsAtomUrlAttribute(): string
+    public function getFeedsAtomUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("feeds.atom.contributor.news",['slug' => $this->slug]);
@@ -129,9 +129,9 @@ class Contributor extends Model implements HasMedia
         return $url;
     }
 
-    public function getFeedsRSSUrlAttribute(): string
+    public function getFeedsRSSUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("feeds.rss.contributor.news",['slug' => $this->slug]);
@@ -140,9 +140,9 @@ class Contributor extends Model implements HasMedia
         return $url;
     }
 
-    public function getSitemapUrlAttribute(): string
+    public function getSitemapUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("sitemaps.contributor.news",['slug' => $this->slug]);

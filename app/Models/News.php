@@ -118,28 +118,34 @@ class News extends Model implements HasMedia
         return "News";
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
         $url = null;
 
-        return $url ?? route("news.details", ["slug" => $this->slug]);
+        if ($this->slug) {
+            $url = route("news.details", ["slug" => $this->slug]);
+        }
+
+        return $url;
     }
 
-    public function getPublishedAtAttribute(): string
+    public function getPublishedAtAttribute(): ?string
     {
         $publishedTime = null;
 
-        $current     = now();
-        $publishedAt = $this->created_at;
-        $interval    = $current->diff($publishedAt);
-        if ($interval->h > 0) {
-            $publishedTime = $publishedAt->format('h\h i\m \a\g\o');
-        } elseif ($interval->i > 0) {
-            $publishedTime = $publishedAt->format('i\m s\s \a\g\o');
-        } elseif ($interval->s > 0) {
-            $publishedTime = $publishedAt->format('s\s \a\g\o');
-        } else {
-            $publishedTime = $publishedAt->format(config("app.date_time_format"));
+        if ($this->slug) {
+            $current     = now();
+            $publishedAt = $this->created_at;
+            $interval    = $current->diff($publishedAt);
+            if ($interval->h > 0) {
+                $publishedTime = $publishedAt->format('h\h i\m \a\g\o');
+            } elseif ($interval->i > 0) {
+                $publishedTime = $publishedAt->format('i\m s\s \a\g\o');
+            } elseif ($interval->s > 0) {
+                $publishedTime = $publishedAt->format('s\s \a\g\o');
+            } else {
+                $publishedTime = $publishedAt->format(config("app.date_time_format"));
+            }
         }
         return $publishedTime;
     }

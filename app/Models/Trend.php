@@ -80,11 +80,9 @@ class Trend extends Model
         return 'slug';
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
-        $url = null;
-
-        return $url ?? "";
+        return $this->tag?->public_url ?? null;
     }
 
     public function activityLogs(): MorphMany

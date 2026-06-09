@@ -91,7 +91,7 @@ class Category extends Model
         return 'parent_id';
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
         $url = null;
 
@@ -102,9 +102,9 @@ class Category extends Model
         return $url;
     }
 
-    public function getFeedsAtomUrlAttribute(): string
+    public function getFeedsAtomUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug_tree) {
             $url = route("feeds.atom.category.news", ['slugTree' => $this->slug_tree]);
@@ -113,9 +113,9 @@ class Category extends Model
         return $url;
     }
 
-    public function getFeedsRSSUrlAttribute(): string
+    public function getFeedsRSSUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug_tree) {
             $url = route("feeds.rss.category.news", ['slugTree' => $this->slug_tree]);
@@ -124,9 +124,9 @@ class Category extends Model
         return $url;
     }
 
-    public function getSitemapUrlAttribute(): string
+    public function getSitemapUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug_tree) {
             $url = route("sitemaps.category.news", ['slugTree' => $this->slug_tree]);

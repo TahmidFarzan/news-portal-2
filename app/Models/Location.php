@@ -105,7 +105,7 @@ class Location extends Model
         return 'parent_id';
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
         $url = null;
 
@@ -116,9 +116,9 @@ class Location extends Model
         return $url;
     }
 
-    public function getFeedsAtomUrlAttribute(): string
+    public function getFeedsAtomUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug_tree) {
             $url = route("feeds.atom.location.news", ['slugTree' => $this->slug_tree]);
@@ -127,9 +127,9 @@ class Location extends Model
         return $url;
     }
 
-    public function getFeedsRSSUrlAttribute(): string
+    public function getFeedsRSSUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug_tree) {
             $url = route("feeds.rss.location.news", ['slugTree' => $this->slug_tree]);
@@ -138,9 +138,9 @@ class Location extends Model
         return $url;
     }
 
-    public function getSitemapUrlAttribute(): string
+    public function getSitemapUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug_tree) {
             $url = route("sitemaps.location.news", ['slugTree' => $this->slug_tree]);

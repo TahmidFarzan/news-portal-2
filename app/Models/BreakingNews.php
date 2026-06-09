@@ -83,7 +83,7 @@ class BreakingNews extends Model
         return 'slug';
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
         $url = null;
 
@@ -97,7 +97,7 @@ class BreakingNews extends Model
             $url = $this->news->public_url ?? null;
         }
 
-        return $url ?? "";
+        return $url;
     }
 
     public function getIsRecentCreatedAttribute(): bool

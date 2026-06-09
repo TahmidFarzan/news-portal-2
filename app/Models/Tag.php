@@ -84,7 +84,7 @@ class Tag extends Model
         return 'slug';
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
         $url = null;
 
@@ -95,9 +95,9 @@ class Tag extends Model
         return $url ?? "";
     }
 
-    public function getFeedsAtomUrlAttribute(): string
+    public function getFeedsAtomUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("feeds.atom.tag.news", ['slug' => $this->slug]);
@@ -106,9 +106,9 @@ class Tag extends Model
         return $url;
     }
 
-    public function getFeedsRSSUrlAttribute(): string
+    public function getFeedsRSSUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
@@ -117,9 +117,9 @@ class Tag extends Model
         return $url;
     }
 
-    public function getSitemapUrlAttribute(): string
+    public function getSitemapUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("sitemaps.tag.news", ['slug' => $this->slug]);

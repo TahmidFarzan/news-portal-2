@@ -108,7 +108,7 @@ class Event extends Model implements HasMedia
         return "Event";
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
         $url = null;
 
@@ -119,10 +119,10 @@ class Event extends Model implements HasMedia
         return $url ?? "";
     }
 
-    public function getFeedsAtomUrlAttribute(): string
+    public function getFeedsAtomUrlAttribute(): ?string
     {
 
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("feeds.atom.event.news", ['slug' => $this->slug]);
@@ -131,9 +131,9 @@ class Event extends Model implements HasMedia
         return $url;
     }
 
-    public function getFeedsRSSUrlAttribute(): string
+    public function getFeedsRSSUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("feeds.rss.event.news", ['slug' => $this->slug]);
@@ -142,9 +142,9 @@ class Event extends Model implements HasMedia
         return $url;
     }
 
-    public function getSitemapUrlAttribute(): string
+    public function getSitemapUrlAttribute(): ?string
     {
-        $url = "";
+        $url = null;
 
         if ($this->slug) {
             $url = route("sitemaps.event.news", ['slug' => $this->slug]);

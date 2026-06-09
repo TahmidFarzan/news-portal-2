@@ -118,7 +118,7 @@ class MenuItem extends Model
         return trim($transformed);
     }
 
-    public function getPublicUrlAttribute(): string
+    public function getPublicUrlAttribute(): ?string
     {
         $url = $this->url;
 
