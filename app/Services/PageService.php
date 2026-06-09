@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Location;
 use App\Models\News;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
 
@@ -344,6 +345,51 @@ class PageService
         return $categoryNews;
     }
 
+    public function categoryLocationMaxDepthAndLevel(Category $category): object
+    {
+        $cacheKey = "category:{$category->slug}:locations:tree:max-depth-level";
+
+        $cacheCategories = [
+            'category',
+            "category:{$category->slug}:locations",
+            "category:{$category->slug}:locations:tree",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheCategories);
+
+        if ($cachedData !== null && is_object($cachedData)) {
+            return $cachedData;
+        }
+
+        $maxDepth = Location::withQueryConstraint(
+            function (Builder $query) use ($category) {
+                $query->where('locations.category_id', $category->id);
+            },
+            function () use ($category) {
+                return Location::treeOf(function (Builder $query) use ($category) {
+                    $query->whereNull('locations.parent_id')
+                        ->where('locations.category_id', $category->id);
+                })
+                    ->max('depth');
+            }
+        );
+
+        $maxDepth = $maxDepth !== null ? (int) $maxDepth : null;
+
+        $data = (object) [
+            'max_depth' => $maxDepth ?? 0,
+            'max_level' => $maxDepth !== null ? $maxDepth + 1 : 0,
+        ];
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::threeMinInSecond,
+            $cacheCategories
+        );
+
+        return $data;
+    }
     public function location(string $slugTree): Location
     {
         $locationCacheKey = "location-details:{$slugTree}";

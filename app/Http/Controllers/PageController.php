@@ -65,8 +65,8 @@ class PageController extends Controller
 
     public function eventNews(Request $request, string $slug)
     {
-        $event  = $this->pageService->event($slug);
-        $news = $this->pageService->eventNews($request, $event);
+        $event = $this->pageService->event($slug);
+        $news  = $this->pageService->eventNews($request, $event);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -75,15 +75,16 @@ class PageController extends Controller
         }
 
         return Inertia::render('EventNews', [
-            'event'  => $event,
-            'news' => $news,
+            'event' => $event,
+            'news'  => $news,
         ]);
     }
 
     public function categoryNews(Request $request, string $slugTree)
     {
-        $category  = $this->pageService->category($slugTree);
-        $news = $this->pageService->categoryNews($request, $category);
+        $category                         = $this->pageService->category($slugTree);
+        $news                             = $this->pageService->categoryNews($request, $category);
+        $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -92,16 +93,16 @@ class PageController extends Controller
         }
 
         return Inertia::render('CategoryNews', [
-            'category'  => $category,
-            'news' => $news,
+            'category'                         => $category,
+            'news'                             => $news,
+            'categoryLocationMaxDepthAndLevel' => $categoryLocationMaxDepthAndLevel,
         ]);
     }
 
-
     public function locationNews(Request $request, string $slugTree)
     {
-        $location  = $this->pageService->location($slugTree);
-        $news = $this->pageService->locationNews($request, $location);
+        $location = $this->pageService->location($slugTree);
+        $news     = $this->pageService->locationNews($request, $location);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -110,8 +111,8 @@ class PageController extends Controller
         }
 
         return Inertia::render('LocationNews', [
-            'location'  => $location,
-            'news' => $news,
+            'location' => $location,
+            'news'     => $news,
         ]);
     }
 
