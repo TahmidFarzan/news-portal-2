@@ -1,8 +1,9 @@
 <?php
-
 namespace App\Services\Cache;
 
 use App\Helpers\CacheServerHelper;
+use App\Models\Category;
+use App\Models\Location;
 use App\Models\News;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,8 +12,8 @@ use Illuminate\Support\Collection as SupportCollection;
 
 class NewsCacheService
 {
-    private int $cachedTime = 86400;
-    private int $perPage = 5000;
+    private int $cachedTime        = 86400;
+    private int $perPage           = 5000;
     private int $latestRecordLimit = 1000;
 
     public function isConnected(): bool
@@ -42,11 +43,11 @@ class NewsCacheService
     public function dbNews(array $filters = []): LengthAwarePaginator
     {
         $perPage = $this->perPage($filters);
-        $page = $this->page($filters);
+        $page    = $this->page($filters);
 
         return $this->dbNewsQuery($filters)
             ->orderBy('id', 'desc')
-            ->with(['language','newsType'])
+            ->with(['language', 'newsType'])
             ->paginate($perPage, ['*'], 'page', $page);
     }
 
@@ -92,7 +93,7 @@ class NewsCacheService
 
     public function cachedLatest(string $cachedKey): void
     {
-        $cacheKey = "news:{$cachedKey}:latest-news";
+        $cacheKey  = "news:{$cachedKey}:latest-news";
         $newsItems = $this->dbLatest();
 
         CacheServerHelper::cachedData(
@@ -171,10 +172,10 @@ class NewsCacheService
         return $newsItems;
     }
 
-    public function getLatest(string $cachedKey, ?int $latestRecordLimit = null): EloquentCollection|SupportCollection
+    public function getLatest(string $cachedKey, ?int $latestRecordLimit = null): EloquentCollection | SupportCollection
     {
-        $newsItems = null;
-        $cacheKey = "news:{$cachedKey}:latest-news";
+        $newsItems      = null;
+        $cacheKey       = "news:{$cachedKey}:latest-news";
         $redisConnected = CacheServerHelper::isConnected();
 
         if ($redisConnected) {
@@ -207,7 +208,16 @@ class NewsCacheService
         $newsItems = News::query()->where('is_published', true);
 
         if ($this->filled($filters, 'category_id')) {
-            $newsItems = $newsItems->where('category_id', $filters['category_id']);
+
+            $categoryIds = [];
+
+            $category = $this->categoryById($filters['category_id']);
+            array_push($categoryIds, $filters['category_id']);
+
+            foreach ($category->children as $perChildren) {
+                array_push($categoryIds, $perChildren->id);
+            }
+            $newsItems = $newsItems->whereIn('category_id', $categoryIds);
         }
 
         if ($this->filled($filters, 'event_id')) {
@@ -215,7 +225,15 @@ class NewsCacheService
         }
 
         if ($this->filled($filters, 'location_id')) {
-            $newsItems = $newsItems->where('location_id', $filters['location_id']);
+            $locationIds = [];
+
+            $location = $this->locationById($filters['location_id']);
+            array_push($locationIds, $filters['location_id']);
+
+            foreach ($location->children as $perChildren) {
+                array_push($locationIds, $perChildren->id);
+            }
+            $newsItems = $newsItems->whereIn('location_id', $locationIds);
         }
 
         if ($this->filled($filters, 'language_id')) {
@@ -335,7 +353,7 @@ class NewsCacheService
         }
 
         $filterKey = $this->filterKey($filters);
-        $perPage = $this->perPage($filters);
+        $perPage   = $this->perPage($filters);
 
         return "news:{$key}:filter:{$filterKey}:per_page:{$perPage}:last-page-no";
     }
@@ -349,8 +367,18 @@ class NewsCacheService
         }
 
         $filterKey = $this->filterKey($filters);
-        $perPage = $this->perPage($filters);
+        $perPage   = $this->perPage($filters);
 
         return "news:{$key}:filter:{$filterKey}:per_page:{$perPage}:page:{$page}";
+    }
+
+    private function categoryById(string | int $slugOrId): Category
+    {
+        return Category::with("children")->where("id", $slugOrId)->where("slug", $slugOrId)->first();
+    }
+
+    private function locationById(string | int $slugOrId): Location
+    {
+        return Location::with("children")->where("id", $slugOrId)->where("slug", $slugOrId)->first();
     }
 }

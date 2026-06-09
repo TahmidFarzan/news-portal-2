@@ -143,6 +143,16 @@ class MenuSeeder extends Seeder
         $isCategory = $item instanceof Category;
 
         $name = $isCategory ? $item->name : $item;
+        $url  = null;
+
+        if (! $isCategory) {
+            if ($name == "Home" || $name == "হোম") {
+                $url = route("home");
+            }
+            if ($name == "Latest" || $name == "সর্বশেষ") {
+                $url = route("latest");
+            }
+        }
 
         $saveMenuItem = MenuItem::factory()->state([
             'name'        => $name,
@@ -154,7 +164,7 @@ class MenuSeeder extends Seeder
             'model_type'  => $isCategory ? $item->getMorphClass() : null,
             'model_id'    => $isCategory ? $item->id : null,
 
-            'url'         => $isCategory ? null : route("home"),
+            'url'         => $url,
 
             'position'    => $this->menuItemLastPosition($menu, $language->id, $parent?->id) + 1,
 

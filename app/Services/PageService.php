@@ -2,10 +2,11 @@
 namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
-//use App\Models\Language;
+use App\Helpers\SystemHelper;
 use App\Models\Category;
 use App\Models\Contributor;
 use App\Models\Event;
+use App\Models\Language;
 use App\Models\Location;
 use App\Models\News;
 use App\Models\Tag;
@@ -15,6 +16,16 @@ use Illuminate\Pagination\CursorPaginator;
 
 class PageService
 {
+
+    public function language(): Language
+    {
+        $languageCode = SystemHelper::LANGUAGE_DEFAULT_CODE;
+
+        $language = Language::query()->where('code', $languageCode)->firstOrFail();
+
+        return $language;
+    }
+
     public function news(string $slug): News
     {
         $newsCacheKey = "news-details:{$slug}";
@@ -325,11 +336,18 @@ class PageService
             return $categoryNewsCachedData;
         }
 
+        $categoryIds = [];
+
+        array_push($categoryIds, $category->id);
+
+        foreach ($category->children as $perChildren) {
+            array_push($categoryIds, $perChildren->id);
+        }
+
         $categoryNews = News::query()
             ->with(["newsType", "category", "event", "location"])
             ->where("is_published", true)
-            ->whereNotNull("category_id")
-            ->where("category_id", $category->id)
+            ->whereIn("category_id", $categoryIds)
             ->orderByDesc('id')
             ->orderByDesc('created_at')
             ->cursorPaginate($perPage)
@@ -438,11 +456,18 @@ class PageService
             return $locationNewsCachedData;
         }
 
+        $locationIds = [];
+
+        array_push($locationIds, $location->id);
+
+        foreach ($location->children as $perChildren) {
+            array_push($locationIds, $perChildren->id);
+        }
+
         $locationNews = News::query()
             ->with(["newsType", "category", "event", "location"])
             ->where("is_published", true)
-            ->whereNotNull("location_id")
-            ->where("location_id", $location->id)
+            ->whereIn("location_id", $locationIds)
             ->orderByDesc('id')
             ->orderByDesc('created_at')
             ->cursorPaginate($perPage)
@@ -460,23 +485,92 @@ class PageService
 
     public function newsSearch(Request $request)
     {
-        $perPage = $request->input('per_page', 15);
+        $language = $this->language();
 
-        $query = News::query()->with(["newsType", "category"])
+        $perPage = $request->input('per_page', 24);
+
+        $queryHash = md5(http_build_query($request->query()));
+
+        $newsCacheKey = "news:language:{$language->slug}:per-page:{$perPage}:query:{$queryHash}";
+
+        $newsCacheTags = [
+            'news',
+            "news:language:{$language->slug}",
+        ];
+
+        $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
+
+        if (($newsCachedData !== null) && ($newsCachedData instanceof CursorPaginator)) {
+            return $newsCachedData;
+        }
+
+        $news = News::query()->with(["newsType", "category", "event", "location"])
+            ->where('language_id', $language->id)
             ->where("is_published", true);
+
+        if ($request->filled('news_type_id')) {
+            $news = $news->where('news_type_id', $request->input('news_type_id'));
+        }
+
+        if ($request->filled('category_id')) {
+            $news = $news->where('category_id', $request->input('category_id'));
+        }
+
+        if ($request->filled('event_id')) {
+            $news = $news->where('event_id', $request->input('event_id'));
+        }
+
+        if ($request->filled('location_id')) {
+            $news = $news->where('location_id', $request->input('location_id'));
+        }
 
         if ($request->filled("tag_id")) {
             $tagId = $request->input('tag_id');
-            $query->whereHas('tags', function ($tagQuery) use ($tagId) {
+            $news  = $news->whereHas('tags', function ($tagQuery) use ($tagId) {
                 $tagQuery->where('id', $tagId);
             });
         }
 
-        $query = $query
+        if ($request->filled("contributor_id")) {
+            $contributorId = $request->input('contributor_id');
+            $news          = $news->whereHas('contributors', function ($contributorQuery) use ($contributorId) {
+                $contributorQuery->where('id', $contributorId);
+            });
+        }
+
+        if ($request->filled('date')) {
+            $date = $request->input('date');
+            $date = is_string($date) ? new \DateTime($date) : $date;
+            $news = $news->whereDate('created_at', '<=', $date);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+
+            $news = $news->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('sub_title', 'like', "%{$search}%")
+                    ->orWhere('content_shoulder', 'like', "%{$search}%")
+                    ->orWhere('brief', 'like', "%{$search}%")
+                    ->orWhere('seo_brief', 'like', '%' . $search . '%')
+                    ->orWhere('seo_title', 'like', '%' . $search . '%')
+                    ->orWhere('source', 'like', "%{$search}%");
+            });
+        }
+
+        $news = $news
             ->orderByDesc('id')
             ->orderByDesc('created_at')
             ->cursorPaginate($perPage)
             ->withQueryString();
-        return $query;
+
+        CacheServerHelper::cachedData(
+            $newsCacheKey,
+            $news,
+            CacheServerHelper::threeMinInSecond,
+            $newsCacheTags
+        );
+
+        return $news;
     }
 }

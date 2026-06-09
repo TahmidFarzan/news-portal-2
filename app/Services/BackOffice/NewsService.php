@@ -16,6 +16,8 @@ use App\Jobs\NewsNewsPlacementAfterCreateSyncJob;
 use App\Jobs\NewsRelatedNewsSyncJob;
 use App\Jobs\NewsRelevantNewsSyncJob;
 use App\Jobs\NewsTagSyncJob;
+use App\Models\Category;
+use App\Models\Location;
 use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\NewsType;
@@ -98,8 +100,16 @@ class NewsService
             $query->where('news_type_id', $request->input('news_type_id'));
         }
 
-        if ($request->filled('created_by_id')) {
-            $query->where('created_by_id', $request->input('created_by_id'));
+        if ($request->filled('category_id')) {
+            $categoryIds = [];
+
+            $category = $this->categoryById($request->input('category_id'));
+            array_push($categoryIds, $request->input('category_id'));
+
+            foreach ($category->children as $perChildren) {
+                array_push($categoryIds, $perChildren->id);
+            }
+            $query->whereIn('category_id', $categoryIds);
         }
 
         if ($request->filled('category_id')) {
@@ -111,7 +121,15 @@ class NewsService
         }
 
         if ($request->filled('location_id')) {
-            $query->where('location_id', $request->input('location_id'));
+            $locationIds = [];
+
+            $location = $this->locationById($request->input('location_id'));
+            array_push($locationIds, $request->input('location_id'));
+
+            foreach ($location->children as $perChildren) {
+                array_push($locationIds, $perChildren->id);
+            }
+            $query->whereIn('location_id', $locationIds);
         }
 
         if ($request->filled('language_id')) {
@@ -1095,5 +1113,15 @@ class NewsService
             }
 
         }
+    }
+
+    private function categoryById(string | int $slugOrId): Category
+    {
+        return Category::with("children")->where("id", $slugOrId)->where("slug", $slugOrId)->first();
+    }
+
+    private function locationById(string | int $slugOrId): Location
+    {
+        return Location::with("children")->where("id", $slugOrId)->where("slug", $slugOrId)->first();
     }
 }

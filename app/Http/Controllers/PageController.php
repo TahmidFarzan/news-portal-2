@@ -20,7 +20,22 @@ class PageController extends Controller
         return Inertia::render('Home');
     }
 
-    public function newsDetails($slug)
+    public function latest(Request $request)
+    {
+        $news = $this->pageService->newsSearch($request);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('Latest', [
+            'news' => $news,
+        ]);
+    }
+
+    public function newsDetails(string $slug)
     {
         $news = $this->pageService->news($slug);
 
