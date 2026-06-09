@@ -197,7 +197,7 @@ class NewsController extends Controller
 
         Gate::authorize('view', $news);
 
-        $newsPlacement = $this->newsService->newsPlacementFind($news, $newsPlacementSlug);
+        $newsPlacement = $this->newsService->newsPlacementFind($newsPlacementSlug);
 
         return Inertia::render('back-office/news/news-placement/Details', [
             'news'                   => $news,
@@ -239,7 +239,7 @@ class NewsController extends Controller
 
         Gate::authorize('update', $news);
 
-        $newsPlacement = $this->newsService->newsPlacementFind($news, $newsPlacementSlug);
+        $newsPlacement = $this->newsService->newsPlacementFind($newsPlacementSlug);
 
         $result = $this->newsService->newsPlacementDelete($news, $newsPlacement);
 

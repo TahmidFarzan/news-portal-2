@@ -106,8 +106,10 @@ class NewsService
             $category = $this->categoryById($request->input('category_id'));
             array_push($categoryIds, $request->input('category_id'));
 
-            foreach ($category->children as $perChildren) {
-                array_push($categoryIds, $perChildren->id);
+            if ($category) {
+                foreach ($category->children as $perChildren) {
+                    array_push($categoryIds, $perChildren->id);
+                }
             }
             $query->whereIn('category_id', $categoryIds);
         }
@@ -126,8 +128,10 @@ class NewsService
             $location = $this->locationById($request->input('location_id'));
             array_push($locationIds, $request->input('location_id'));
 
-            foreach ($location->children as $perChildren) {
-                array_push($locationIds, $perChildren->id);
+            if ($location) {
+                foreach ($location->children as $perChildren) {
+                    array_push($locationIds, $perChildren->id);
+                }
             }
             $query->whereIn('location_id', $locationIds);
         }
@@ -501,9 +505,9 @@ class NewsService
         }
     }
 
-    public function newsPlacementFind(News $news, string $newsPlacementSlug): NewsPlacement
+    public function newsPlacementFind(string $newsPlacementSlug): NewsPlacement
     {
-        return $news->newsPlacements()->where("slug", $newsPlacementSlug)->firstOrFail();
+        return NewsPlacement::where("slug", $newsPlacementSlug)->firstOrFail();
     }
 
     public function newsPlacementLoadRelations(NewsPlacement $newsPlacement): NewsPlacement
@@ -557,7 +561,7 @@ class NewsService
         //     ->limit(10)
         //     ->get();
 
-        $newsPlacement = NewsPlacement::query()->with("news")
+        $newsPlacements = NewsPlacement::query()->with("news")
             ->where('page', PageHelper::PAGE_HOME)
             ->where('page_section', PageHelper::PAGE_SECTION_CATEGORY_NEWS)
             ->where("category_id", $categoryId)
@@ -566,7 +570,7 @@ class NewsService
             ->limit(10)
             ->get();
 
-        return $newsPlacement;
+        return $newsPlacements;
     }
 
     public function newsPlacementCategoryLead(int | string $categoryId)
@@ -636,8 +640,12 @@ class NewsService
                 }
 
                 if ($request->filled('home_category_news_ids_sequence')) {
+                    $homeCategoryNewsIdsSequence = $request->input('home_category_news_ids_sequence');
+                    if (count($request->input('home_category_news_ids_sequence')) < 10) {
+                        $homeCategoryNewsIdsSequence = array_merge($request->input('home_lead_news_ids_sequence'), $request->input('home_category_news_ids_sequence'));
+                    }
                     $this->newsPlacementUpdate(
-                        $request->input('home_category_news_ids_sequence'),
+                        $homeCategoryNewsIdsSequence,
                         $pageHome,
                         $pageSectionCategoryNews,
                         $news->category_id
@@ -645,8 +653,14 @@ class NewsService
                 }
 
                 if ($request->filled('category_lead_news_ids_sequence')) {
+
+                    $categoryLeadNewsIdsSequence = $request->input('category_lead_news_ids_sequence');
+                    if (count($request->input('category_lead_news_ids_sequence')) < 10) {
+                        $categoryLeadNewsIdsSequence = array_merge($request->input('home_lead_news_ids_sequence'), $request->input('category_lead_news_ids_sequence'));
+                    }
+
                     $this->newsPlacementUpdate(
-                        $request->input('category_lead_news_ids_sequence'),
+                        $categoryLeadNewsIdsSequence,
                         $pageCategory,
                         $pageSectionLeadNews,
                         $news->category_id
@@ -1117,11 +1131,11 @@ class NewsService
 
     private function categoryById(string | int $slugOrId): Category
     {
-        return Category::with("children")->where("id", $slugOrId)->where("slug", $slugOrId)->first();
+        return Category::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
     }
 
     private function locationById(string | int $slugOrId): Location
     {
-        return Location::with("children")->where("id", $slugOrId)->where("slug", $slugOrId)->first();
+        return Location::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
     }
 }

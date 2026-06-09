@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
+use App\Helpers\PageHelper;
 use App\Helpers\SystemHelper;
 use App\Models\Category;
 use App\Models\Contributor;
@@ -9,10 +10,12 @@ use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
 use App\Models\News;
+use App\Models\NewsPlacement;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Str;
 
 class PageService
 {
@@ -317,6 +320,111 @@ class PageService
         return $category;
     }
 
+    public function categoryLocationMaxDepthAndLevel(Category $category): object
+    {
+        $cacheKey = "category:{$category->slug}:locations:tree:max-depth-level";
+
+        $cacheCategories = [
+            'category',
+            "category:{$category->slug}:locations",
+            "category:{$category->slug}:locations:tree",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheCategories);
+
+        if ($cachedData !== null && is_object($cachedData)) {
+            return $cachedData;
+        }
+
+        $maxDepth = Location::withQueryConstraint(
+            function (Builder $query) use ($category) {
+                $query->where('locations.category_id', $category->id);
+            },
+            function () use ($category) {
+                return Location::treeOf(function (Builder $query) use ($category) {
+                    $query->whereNull('locations.parent_id')
+                        ->where('locations.category_id', $category->id);
+                })
+                    ->max('depth');
+            }
+        );
+
+        $maxDepth = $maxDepth !== null ? (int) $maxDepth : null;
+
+        $data = (object) [
+            'max_depth' => $maxDepth ?? 0,
+            'max_level' => $maxDepth !== null ? $maxDepth + 1 : 0,
+        ];
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::threeMinInSecond,
+            $cacheCategories
+        );
+
+        return $data;
+    }
+
+    public function categoryNewsPlacement(Category $category)
+    {
+        $page        = PageHelper::PAGE_CATEGORY;
+        $pageSection = PageHelper::PAGE_SECTION_LEAD_NEWS;
+
+        $categoryId = $category->id;
+
+        $pageSlugKey        = Str::lower(Str::slug($page));
+        $pageSectionSlugKey = Str::lower(Str::slug($pageSection));
+
+        $cacheKey = "page:{$pageSlugKey}:page-section:{$pageSectionSlugKey}:category:{$category->slug}:news";
+
+        $cacheCategories = [
+            'page',
+            "page:{$pageSlugKey}:page-section:{$pageSectionSlugKey}",
+            "page:{$pageSlugKey}:page-section:{$pageSectionSlugKey}:category:{$category->slug}",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheCategories);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $newsPlacementTable = (new NewsPlacement())->getTable();
+
+        $news = News::query()
+            ->with(["newsType", "category", "event", "location"])
+            ->withWhereHas('newsPlacements', function ($query) use ($categoryId, $page, $pageSection) {
+                $query->where('category_id', $categoryId)
+                    ->where('page', $page)
+                    ->where('page_section', $pageSection);
+            })
+            ->where('category_id', $categoryId)
+            ->where('is_published', true)
+            ->orderBy(
+                NewsPlacement::query()
+                    ->select('position')
+                    ->whereColumn("{$newsPlacementTable}.news_id", 'news.id')
+                    ->where('category_id', $categoryId)
+                    ->where('page', $page)
+                    ->where('page_section', $pageSection)
+                    ->limit(1),
+                'asc'
+            )
+            ->orderByDesc('id')
+            ->limit(5)
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $news,
+            CacheServerHelper::threeMinInSecond,
+            $cacheCategories
+        );
+
+        return $news;
+    }
+
     public function categoryNews(Request $request, Category $category)
     {
         $perPage   = $request->input('per_page', 24);
@@ -363,51 +471,6 @@ class PageService
         return $categoryNews;
     }
 
-    public function categoryLocationMaxDepthAndLevel(Category $category): object
-    {
-        $cacheKey = "category:{$category->slug}:locations:tree:max-depth-level";
-
-        $cacheCategories = [
-            'category',
-            "category:{$category->slug}:locations",
-            "category:{$category->slug}:locations:tree",
-        ];
-
-        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheCategories);
-
-        if ($cachedData !== null && is_object($cachedData)) {
-            return $cachedData;
-        }
-
-        $maxDepth = Location::withQueryConstraint(
-            function (Builder $query) use ($category) {
-                $query->where('locations.category_id', $category->id);
-            },
-            function () use ($category) {
-                return Location::treeOf(function (Builder $query) use ($category) {
-                    $query->whereNull('locations.parent_id')
-                        ->where('locations.category_id', $category->id);
-                })
-                    ->max('depth');
-            }
-        );
-
-        $maxDepth = $maxDepth !== null ? (int) $maxDepth : null;
-
-        $data = (object) [
-            'max_depth' => $maxDepth ?? 0,
-            'max_level' => $maxDepth !== null ? $maxDepth + 1 : 0,
-        ];
-
-        CacheServerHelper::cachedData(
-            $cacheKey,
-            $data,
-            CacheServerHelper::threeMinInSecond,
-            $cacheCategories
-        );
-
-        return $data;
-    }
     public function location(string $slugTree): Location
     {
         $locationCacheKey = "location-details:{$slugTree}";
@@ -513,7 +576,17 @@ class PageService
         }
 
         if ($request->filled('category_id')) {
-            $news = $news->where('category_id', $request->input('category_id'));
+            $categoryIds = [];
+
+            $category = $this->categoryById($request->input('category_id'));
+            array_push($categoryIds, $request->input('category_id'));
+
+            if ($category) {
+                foreach ($category->children as $perChildren) {
+                    array_push($categoryIds, $perChildren->id);
+                }
+            }
+            $news = $news->whereIn('category_id',  $categoryIds);
         }
 
         if ($request->filled('event_id')) {
@@ -521,7 +594,17 @@ class PageService
         }
 
         if ($request->filled('location_id')) {
-            $news = $news->where('location_id', $request->input('location_id'));
+            $locationIds = [];
+
+            $location = $this->locationById($request->input('location_id'));
+            array_push($locationIds, $request->input('location_id'));
+
+            if ($location) {
+                foreach ($location->children as $perChildren) {
+                    array_push($locationIds, $perChildren->id);
+                }
+            }
+            $news = $news->whereIn('location_id',  $locationIds);
         }
 
         if ($request->filled("tag_id")) {
@@ -572,5 +655,15 @@ class PageService
         );
 
         return $news;
+    }
+
+    private function categoryById(string | int $slugOrId): Category
+    {
+        return Category::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
+    }
+
+    private function locationById(string | int $slugOrId): Location
+    {
+        return Location::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
     }
 }

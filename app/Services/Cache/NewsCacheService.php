@@ -214,8 +214,10 @@ class NewsCacheService
             $category = $this->categoryById($filters['category_id']);
             array_push($categoryIds, $filters['category_id']);
 
-            foreach ($category->children as $perChildren) {
-                array_push($categoryIds, $perChildren->id);
+            if ($category) {
+                foreach ($category->children as $perChildren) {
+                    array_push($categoryIds, $perChildren->id);
+                }
             }
             $newsItems = $newsItems->whereIn('category_id', $categoryIds);
         }
@@ -230,8 +232,10 @@ class NewsCacheService
             $location = $this->locationById($filters['location_id']);
             array_push($locationIds, $filters['location_id']);
 
-            foreach ($location->children as $perChildren) {
-                array_push($locationIds, $perChildren->id);
+            if ($location) {
+                foreach ($location->children as $perChildren) {
+                    array_push($locationIds, $perChildren->id);
+                }
             }
             $newsItems = $newsItems->whereIn('location_id', $locationIds);
         }
@@ -374,11 +378,11 @@ class NewsCacheService
 
     private function categoryById(string | int $slugOrId): Category
     {
-        return Category::with("children")->where("id", $slugOrId)->where("slug", $slugOrId)->first();
+        return Category::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
     }
 
     private function locationById(string | int $slugOrId): Location
     {
-        return Location::with("children")->where("id", $slugOrId)->where("slug", $slugOrId)->first();
+        return Location::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
     }
 }

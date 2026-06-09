@@ -97,8 +97,11 @@ class PageController extends Controller
 
     public function categoryNews(Request $request, string $slugTree)
     {
-        $category                         = $this->pageService->category($slugTree);
-        $news                             = $this->pageService->categoryNews($request, $category);
+        $category = $this->pageService->category($slugTree);
+        $news     = $this->pageService->categoryNews($request, $category);
+
+        $pageSectionNews = $this->pageService->categoryNewsPlacement($category);
+
         $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
 
         if ($request->expectsJson()) {
@@ -110,6 +113,7 @@ class PageController extends Controller
         return Inertia::render('CategoryNews', [
             'category'                         => $category,
             'news'                             => $news,
+            "pageSectionNews"                  => $pageSectionNews,
             'categoryLocationMaxDepthAndLevel' => $categoryLocationMaxDepthAndLevel,
         ]);
     }
