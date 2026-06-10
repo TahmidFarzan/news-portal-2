@@ -183,11 +183,11 @@ onBeforeUnmount(() => {
                 </div>
 
                 <div class="h-10 flex items-center gap-2 flex-shrink-0">
-                    <button type="button"
+                    <a :href="route('search')"
                         class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
                         aria-label="Search">
                         <FontAwesomeIcon icon="magnifying-glass" />
-                    </button>
+                    </a>
 
                     <OffCanvasMenu />
                 </div>

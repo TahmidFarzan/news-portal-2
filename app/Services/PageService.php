@@ -586,7 +586,7 @@ class PageService
                     array_push($categoryIds, $perChildren->id);
                 }
             }
-            $news = $news->whereIn('category_id',  $categoryIds);
+            $news = $news->whereIn('category_id', $categoryIds);
         }
 
         if ($request->filled('event_id')) {
@@ -604,7 +604,7 @@ class PageService
                     array_push($locationIds, $perChildren->id);
                 }
             }
-            $news = $news->whereIn('location_id',  $locationIds);
+            $news = $news->whereIn('location_id', $locationIds);
         }
 
         if ($request->filled("tag_id")) {
@@ -656,7 +656,6 @@ class PageService
 
         return $news;
     }
-
 
     public function recentNews()
     {

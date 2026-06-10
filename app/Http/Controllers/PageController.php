@@ -35,6 +35,23 @@ class PageController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $news = $this->pageService->newsSearch($request);
+        $language = $this->pageService->language($request);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('Search', [
+            "language" => $language,
+            'news' => $news,
+        ]);
+    }
+
     public function newsDetails(string $slug)
     {
         $news = $this->pageService->news($slug);

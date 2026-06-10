@@ -380,6 +380,7 @@ Route::get('/', function () {
 Route::middleware(['response.cache:120,public,60,etag'])->group(function () {
     Route::get('home', [PageController::class, 'home'])->name('home');
     Route::get('latest', [PageController::class, 'latest'])->name('latest');
+    Route::get('search', [PageController::class, 'search'])->name('search');
     Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
     Route::get('tags/{slug}', [PageController::class, 'tagNews'])->name('tag.news');
     Route::get('contributors/{slug}', [PageController::class, 'contributorNews'])->name('contributor.news');
