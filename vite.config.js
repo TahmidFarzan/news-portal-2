@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
-import Components from 'unplugin-vue-components/vite'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
@@ -13,8 +12,6 @@ export default defineConfig({
         }),
 
         vue(),
-
-        Components(),
 
         tailwindcss(),
     ],
