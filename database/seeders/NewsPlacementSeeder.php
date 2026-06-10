@@ -56,7 +56,7 @@ class NewsPlacementSeeder extends Seeder
         $categories = Category::orderBy("id", "desc")->get();
         foreach ($categories as $category) {
             $news = News::query()
-                ->where("category", $category->id)
+                ->where("category_id", $category->id)
                 ->latest()
                 ->limit(25)
                 ->get();
