@@ -16,13 +16,6 @@ class SyncTagSitemapJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public TagCacheService $tagCacheService;
-
-    public function __construct()
-    {
-        $this->tagCacheService = app(TagCacheService::class);
-    }
-
     public function progressCooldown(): int
     {
         return 10;
@@ -45,16 +38,16 @@ class SyncTagSitemapJob implements ShouldQueue, ShouldBeUnique
         return [61, 123, 185];
     }
 
-    public function handle(): void
+    public function handle(TagCacheService $tagCacheService): void
     {
         try {
             $filters = [];
 
-            $dbRecordCount     = $this->tagCacheService->dbTagsCount($filters);
-            $cachedRecordTotal = $this->tagCacheService->tagsCount('sitemap', $filters);
+            $dbRecordCount     = $tagCacheService->dbTagsCount($filters);
+            $cachedRecordTotal = $tagCacheService->tagsCount('sitemap', $filters);
 
-            $dbLastPageNo     = $this->tagCacheService->dbLastPageNo($filters);
-            $cachedLastPageNo = $this->tagCacheService->lastPageNo('sitemap', $filters);
+            $dbLastPageNo     = $tagCacheService->dbLastPageNo($filters);
+            $cachedLastPageNo = $tagCacheService->lastPageNo('sitemap', $filters);
 
             if ($cachedRecordTotal !== $dbRecordCount) {
                 $pageStart = $cachedLastPageNo;
@@ -71,7 +64,7 @@ class SyncTagSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->tagCacheService->cachedTags(
+                    $tagCacheService->cachedTags(
                         'sitemap',
                         array_merge($filters, [
                             'page' => $page,
@@ -80,8 +73,8 @@ class SyncTagSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
             }
 
-            $this->tagCacheService->cachedTagsCount('sitemap', $filters);
-            $this->tagCacheService->cachedLastPageNo('sitemap', $filters);
+            $tagCacheService->cachedTagsCount('sitemap', $filters);
+            $tagCacheService->cachedLastPageNo('sitemap', $filters);
         } catch (Exception $ex) {
             Log::error('Tag sitemap sync job error: ' . $ex->getMessage());
 

@@ -16,13 +16,6 @@ class SyncEventSitemapJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public EventCacheService $eventCacheService;
-
-    public function __construct()
-    {
-        $this->eventCacheService = app(EventCacheService::class);
-    }
-
     public function progressCooldown(): int
     {
         return 10;
@@ -45,16 +38,16 @@ class SyncEventSitemapJob implements ShouldQueue, ShouldBeUnique
         return [61, 123, 185];
     }
 
-    public function handle(): void
+    public function handle(EventCacheService $eventCacheService): void
     {
         try {
             $filters = [];
 
-            $dbRecordCount     = $this->eventCacheService->dbEventsCount($filters);
-            $cachedRecordTotal = $this->eventCacheService->eventsCount('sitemap', $filters);
+            $dbRecordCount     = $eventCacheService->dbEventsCount($filters);
+            $cachedRecordTotal = $eventCacheService->eventsCount('sitemap', $filters);
 
-            $dbLastPageNo     = $this->eventCacheService->dbLastPageNo($filters);
-            $cachedLastPageNo = $this->eventCacheService->lastPageNo('sitemap', $filters);
+            $dbLastPageNo     = $eventCacheService->dbLastPageNo($filters);
+            $cachedLastPageNo = $eventCacheService->lastPageNo('sitemap', $filters);
 
             if ($cachedRecordTotal !== $dbRecordCount) {
                 $pageStart = $cachedLastPageNo;
@@ -71,7 +64,7 @@ class SyncEventSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->eventCacheService->cachedEvents(
+                    $eventCacheService->cachedEvents(
                         'sitemap',
                         array_merge($filters, [
                             'page' => $page,
@@ -80,8 +73,8 @@ class SyncEventSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
             }
 
-            $this->eventCacheService->cachedEventsCount('sitemap', $filters);
-            $this->eventCacheService->cachedLastPageNo('sitemap', $filters);
+            $eventCacheService->cachedEventsCount('sitemap', $filters);
+            $eventCacheService->cachedLastPageNo('sitemap', $filters);
         } catch (Exception $ex) {
             Log::error('Event sitemap sync job error: ' . $ex->getMessage());
 

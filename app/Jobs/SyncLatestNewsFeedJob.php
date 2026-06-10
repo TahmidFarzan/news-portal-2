@@ -16,13 +16,6 @@ class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public NewsCacheService $newsCacheService;
-
-    public function __construct()
-    {
-        $this->newsCacheService = app(NewsCacheService::class);
-    }
-
     public function progressCooldown(): int
     {
         return 10;
@@ -45,10 +38,10 @@ class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
         return [61, 123, 185];
     }
 
-    public function handle(): void
+    public function handle(NewsCacheService $newsCacheService): void
     {
         try {
-            $this->newsCacheService->cachedLatest("feed");
+            $newsCacheService->cachedLatest("feed");
         } catch (Exception $ex) {
             Log::error('Latest news feed cached job error: ' . $ex->getMessage());
         }

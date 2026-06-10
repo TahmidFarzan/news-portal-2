@@ -16,13 +16,6 @@ class SyncContributorSitemapJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public ContributorCacheService $contributorCacheService;
-
-    public function __construct()
-    {
-        $this->contributorCacheService = app(ContributorCacheService::class);
-    }
-
     public function progressCooldown(): int
     {
         return 10;
@@ -45,16 +38,16 @@ class SyncContributorSitemapJob implements ShouldQueue, ShouldBeUnique
         return [61, 123, 185];
     }
 
-    public function handle(): void
+    public function handle(ContributorCacheService $contributorCacheService): void
     {
         try {
             $filters = [];
 
-            $dbRecordCount     = $this->contributorCacheService->dbContributorsCount($filters);
-            $cachedRecordTotal = $this->contributorCacheService->contributorsCount('sitemap', $filters);
+            $dbRecordCount     = $contributorCacheService->dbContributorsCount($filters);
+            $cachedRecordTotal = $contributorCacheService->contributorsCount('sitemap', $filters);
 
-            $dbLastPageNo     = $this->contributorCacheService->dbLastPageNo($filters);
-            $cachedLastPageNo = $this->contributorCacheService->lastPageNo('sitemap', $filters);
+            $dbLastPageNo     = $contributorCacheService->dbLastPageNo($filters);
+            $cachedLastPageNo = $contributorCacheService->lastPageNo('sitemap', $filters);
 
             if ($cachedRecordTotal !== $dbRecordCount) {
                 $pageStart = $cachedLastPageNo;
@@ -71,7 +64,7 @@ class SyncContributorSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $this->contributorCacheService->cachedContributors(
+                    $contributorCacheService->cachedContributors(
                         'sitemap',
                         array_merge($filters, [
                             'page' => $page,
@@ -80,8 +73,8 @@ class SyncContributorSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
             }
 
-            $this->contributorCacheService->cachedContributorsCount('sitemap', $filters);
-            $this->contributorCacheService->cachedLastPageNo('sitemap', $filters);
+            $contributorCacheService->cachedContributorsCount('sitemap', $filters);
+            $contributorCacheService->cachedLastPageNo('sitemap', $filters);
         } catch (Exception $ex) {
             Log::error('Contributor sitemap sync job error: ' . $ex->getMessage());
 

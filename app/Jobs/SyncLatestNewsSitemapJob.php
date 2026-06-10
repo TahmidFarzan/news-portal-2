@@ -16,13 +16,6 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public NewsCacheService $newsCacheService;
-
-    public function __construct()
-    {
-        $this->newsCacheService = app(NewsCacheService::class);
-    }
-
     public function progressCooldown(): int
     {
         return 10;
@@ -45,10 +38,10 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
         return [61, 123, 185];
     }
 
-    public function handle(): void
+    public function handle(NewsCacheService $newsCacheService): void
     {
         try {
-            $this->newsCacheService->cachedLatest("sitemap");
+            $newsCacheService->cachedLatest("sitemap");
         } catch (Exception $ex) {
             Log::error('Latest news sitemap job error: ' . $ex->getMessage());
         }
