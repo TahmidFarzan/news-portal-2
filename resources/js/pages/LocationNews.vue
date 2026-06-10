@@ -349,7 +349,7 @@ onBeforeUnmount(() => {
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <div class="space-y-6">
+    <div class="space-y-6 location-container">
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
@@ -441,48 +441,3 @@ onBeforeUnmount(() => {
         <List :news="news" pagination-type="Cursor" />
     </div>
 </template>
-
-<style scoped>
-:deep(.leaflet-container) {
-    z-index: 0;
-    font-family: inherit;
-    background: #eef3f7;
-}
-
-:deep(.leaflet-control-zoom) {
-    overflow: hidden;
-    border: 1px solid rgb(229 231 235);
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgb(15 23 42 / 12%);
-}
-
-:deep(.leaflet-control-zoom a) {
-    border: 0;
-    color: #111827;
-}
-
-:deep(.leaflet-control-zoom a:hover) {
-    background: #f3f4f6;
-    color: #dc2626;
-}
-
-:deep(.leaflet-popup-content-wrapper) {
-    border-radius: 12px;
-}
-
-:deep(.leaflet-popup-content) {
-    margin: 10px 12px;
-    font-size: 12px;
-}
-
-:deep(.leaflet-popup-content a) {
-    color: #2563eb;
-    font-weight: 600;
-}
-
-:deep(.location-popup p) {
-    margin: 0 0 4px;
-    font-weight: 700;
-    color: #111827;
-}
-</style>

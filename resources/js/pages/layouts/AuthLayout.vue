@@ -38,7 +38,7 @@ provide('authUser', authUser)
             </div>
         </header>
 
-        <main class="flex-1 flex pt-16">
+        <main class="main flex-1 flex pt-16">
             <OffcanvasMenu mode="sidebar" :auth-user="authUser" />
 
             <div class="flex-1 p-4 min-w-0">

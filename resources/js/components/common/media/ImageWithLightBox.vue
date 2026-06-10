@@ -247,7 +247,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <figure :class="figureClass">
+    <figure class="light-box-container" :class="figureClass">
         <div v-if="shouldShowItemCounter" class="flex items-center gap-2 text-sm leading-6 text-gray-600">
             <span class="rounded border border-gray-300 px-2 py-0.5 font-semibold text-gray-900">
                 {{ itemCounter }}
@@ -365,40 +365,3 @@ onBeforeUnmount(() => {
     </figure>
 </template>
 
-<style scoped>
-.lightbox-fade-enter-active,
-.lightbox-fade-leave-active {
-    transition: opacity 220ms ease;
-}
-
-.lightbox-fade-enter-from,
-.lightbox-fade-leave-to {
-    opacity: 0;
-}
-
-.lightbox-fade-enter-active .lightbox-panel,
-.lightbox-fade-leave-active .lightbox-panel {
-    transition:
-        transform 220ms ease,
-        opacity 220ms ease;
-}
-
-.lightbox-fade-enter-from .lightbox-panel,
-.lightbox-fade-leave-to .lightbox-panel {
-    transform: scale(0.96);
-    opacity: 0;
-}
-
-.image-slide-enter-active,
-.image-slide-leave-active {
-    transition:
-        opacity 180ms ease,
-        transform 180ms ease;
-}
-
-.image-slide-enter-from,
-.image-slide-leave-to {
-    opacity: 0;
-    transform: scale(0.98);
-}
-</style>

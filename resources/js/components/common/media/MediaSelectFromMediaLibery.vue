@@ -145,7 +145,7 @@ defineExpose({
 
 
 <template>
-    <div>
+    <div class="media-library-select">
         <button v-if="!disableOpenMediaButton" type="button"
             class="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-400 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-2"
             @click="openModal" :hidden="hideDefaultOpenButton">
@@ -237,8 +237,4 @@ defineExpose({
     </div>
 </template>
 
-<style scoped>
-.hover\:scale-102:hover {
-    transform: scale(1.02);
-}
-</style>
+

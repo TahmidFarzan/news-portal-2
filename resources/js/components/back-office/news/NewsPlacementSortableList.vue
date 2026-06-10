@@ -100,7 +100,7 @@ function isCurrentNewsItem(item) {
 </script>
 
 <template>
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4 news-placement">
 
         <h3 class="text-base font-semibold border-b pb-2">
             {{ title }}
@@ -219,12 +219,4 @@ function isCurrentNewsItem(item) {
     </Teleport>
 </template>
 
-<style scoped>
-.drag-ghost {
-    opacity: 0.5;
-}
 
-.drag-chosen {
-    box-shadow: 0 0 0 2px rgb(191 219 254);
-}
-</style>

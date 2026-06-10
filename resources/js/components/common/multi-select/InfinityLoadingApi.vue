@@ -1,5 +1,5 @@
 <template>
-    <div :class="props.error ? 'border border-red-500 rounded-md' : ''">
+    <div class="multi-select-cointainer" :class="props.error ? 'border border-red-500 rounded-md' : ''">
         <Multiselect ref="vselectRef" v-model="proxyModel" :options="formattedOptions" :multiple="props.multiple"
             :loading="loading" :searchable="true" :clear-on-select="!props.multiple" :close-on-select="!props.multiple"
             :placeholder="props.placeholder" label="label" track-by="value" @search-change="onSearchDebounced"
@@ -250,9 +250,4 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
-:deep(.multiselect__content-wrapper) {
-    max-height: 250px;
-    overflow-y: auto;
-}
-</style>
+
