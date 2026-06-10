@@ -5,6 +5,7 @@ import { Head, router, useForm } from '@inertiajs/vue3'
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
+import RecentNewsList from '@/components/common/news/RecentNewsList.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
@@ -29,6 +30,7 @@ defineOptions({ layout: Layout })
 const {
     category,
     news,
+    recentNews,
     pageSectionNews,
     categoryLocationMaxDepthAndLevel,
 } = defineProps({
@@ -38,6 +40,11 @@ const {
     },
 
     news: {
+        type: Object,
+        required: true,
+    },
+
+    recentNews: {
         type: Object,
         required: true,
     },
@@ -430,6 +437,8 @@ watch(
                         </span>
                     </button>
                 </div>
+
+                <RecentNewsList :news="recentNews" :class="{ 'mt-2': hasLocationFilter }" />
             </div>
         </section>
 

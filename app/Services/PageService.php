@@ -657,6 +657,43 @@ class PageService
         return $news;
     }
 
+
+    public function recentNews()
+    {
+        $language = $this->language();
+
+        $newsCacheKey = "news:recent-news:language:{$language->slug}";
+
+        $newsCacheTags = [
+            'news',
+            'news:recent-news',
+            "news:recent-news:language:{$language->slug}",
+        ];
+
+        $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
+
+        if (($newsCachedData !== null) && ($newsCachedData instanceof CursorPaginator)) {
+            return $newsCachedData;
+        }
+
+        $news = News::query()->with(["newsType", "category", "event", "location"])
+            ->where('language_id', $language->id)
+            ->where("is_published", true)
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->limit(25)
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $newsCacheKey,
+            $news,
+            CacheServerHelper::threeMinInSecond,
+            $newsCacheTags
+        );
+
+        return $news;
+    }
+
     private function categoryById(string | int $slugOrId): Category
     {
         return Category::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();

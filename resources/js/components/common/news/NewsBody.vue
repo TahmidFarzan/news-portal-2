@@ -1,7 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, watch } from 'vue'
 
-import RelevantNewsGrid from '@/Components/common/news/RelevantNewsGrid.vue'
+import RelevantNewsList from '@/Components/common/news/RelevantNewsList.vue'
 
 import { Fancybox } from '@fancyapps/ui/dist/fancybox/'
 import '@fancyapps/ui/dist/fancybox/fancybox.css'
@@ -163,7 +163,7 @@ onBeforeUnmount(() => {
             v-html="splitNewsBody.beforeHtml"
         />
 
-        <RelevantNewsGrid
+        <RelevantNewsList
             v-if="news.relevant_news.length > 0"
             :news="news"
         />

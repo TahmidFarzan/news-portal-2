@@ -101,6 +101,7 @@ class PageController extends Controller
         $news     = $this->pageService->categoryNews($request, $category);
 
         $pageSectionNews = $this->pageService->categoryNewsPlacement($category);
+        $recentNews      = $this->pageService->recentNews();
 
         $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
 
@@ -113,6 +114,7 @@ class PageController extends Controller
         return Inertia::render('CategoryNews', [
             'category'                         => $category,
             'news'                             => $news,
+            "recentNews"                       => $recentNews,
             "pageSectionNews"                  => $pageSectionNews,
             'categoryLocationMaxDepthAndLevel' => $categoryLocationMaxDepthAndLevel,
         ]);
