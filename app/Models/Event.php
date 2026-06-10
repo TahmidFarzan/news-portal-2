@@ -116,7 +116,7 @@ class Event extends Model implements HasMedia
             $url = route("event.news", ['slug' => $this->slug]);
         }
 
-        return $url ?? "";
+        return $url;
     }
 
     public function getFeedsAtomUrlAttribute(): ?string

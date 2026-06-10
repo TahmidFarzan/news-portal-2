@@ -92,7 +92,7 @@ class Tag extends Model
             $url = route("tag.news", ['slug' => $this->slug]);
         }
 
-        return $url ?? "";
+        return $url;
     }
 
     public function getFeedsAtomUrlAttribute(): ?string

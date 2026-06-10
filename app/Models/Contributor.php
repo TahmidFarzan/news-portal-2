@@ -115,7 +115,7 @@ class Contributor extends Model implements HasMedia
             $url = route("contributor.news", ['slug' => $this->slug]);
         }
 
-        return $url ?? "";
+        return $url;
     }
 
     public function getFeedsAtomUrlAttribute(): ?string
