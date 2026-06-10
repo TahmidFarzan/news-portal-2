@@ -46,15 +46,16 @@ class SettingService
         }
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
+            $search     = $request->input('search');
+            $likeSearch = "%{$search}%";
 
-            $query->where(function ($q) use ($search) {
-                $q->where('label', 'like', "%{$search}%")
-                    ->orWhere('group', 'like', "%{$search}%")
-                    ->orWhere('key', 'like', '%' . $search . '%')
-                    ->orWhere('value', 'like', '%' . $search . '%')
-                    ->orWhere('type', 'like', '%' . $search . '%');
-            });
+            $query->whereAny([
+                'label',
+                'group',
+                'key',
+                'value',
+                'type',
+            ], 'like', $likeSearch);
         }
 
         return $query->orderByDesc('id')

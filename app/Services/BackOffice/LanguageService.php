@@ -56,12 +56,13 @@ class LanguageService
         }
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
+            $search     = $request->input('search');
+            $likeSearch = "%{$search}%";
 
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('code', 'like', "%{$search}%");
-            });
+            $query->whereAny([
+                'name',
+                'code',
+            ], 'like', $likeSearch);
         }
 
         return $query->orderByDesc('id')
@@ -115,7 +116,6 @@ class LanguageService
                 'message' => __('status-messages.language.delete.success'),
             ];
         } catch (Exception $exception) {
-
 
             Log::error('Language delete failed.', [
                 'exception' => $exception,

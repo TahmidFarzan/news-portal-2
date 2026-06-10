@@ -87,20 +87,23 @@ class BreakingNewsService
         }
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
+            $search     = $request->input('search');
+            $likeSearch = "%{$search}%";
 
-            $query->where(function ($query) use ($search) {
-                $query->where('title', 'like', "%{$search}%")
-                    ->orWhereHas('news', function ($newsQuery) use ($search) {
-                        $newsQuery->where(function ($q) use ($search) {
-                            $q->where('title', 'like', "%{$search}%")
-                                ->orWhere('sub_title', 'like', "%{$search}%")
-                                ->orWhere('content_shoulder', 'like', "%{$search}%")
-                                ->orWhere('brief', 'like', "%{$search}%")
-                                ->orWhere('seo_brief', 'like', "%{$search}%")
-                                ->orWhere('seo_title', 'like', "%{$search}%")
-                                ->orWhere('source', 'like', "%{$search}%");
-                        });
+            $query->where(function ($query) use ($likeSearch) {
+                $query->whereAny([
+                    'title',
+                ], 'like', $likeSearch)
+                    ->orWhereHas('news', function ($newsQuery) use ($likeSearch) {
+                        $newsQuery->whereAny([
+                            'title',
+                            'sub_title',
+                            'content_shoulder',
+                            'brief',
+                            'seo_brief',
+                            'seo_title',
+                            'source',
+                        ], 'like', $likeSearch);
                     });
             });
         }

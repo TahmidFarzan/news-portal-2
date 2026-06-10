@@ -81,13 +81,14 @@ class UserService
         }
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
+            $search     = $request->input('search');
+            $likeSearch = "%{$search}%";
 
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('mobile', 'like', "%{$search}%");
-            });
+            $query->whereAny([
+                'name',
+                'email',
+                'mobile',
+            ], 'like', $likeSearch);
         }
 
         return $query->orderByDesc('id')

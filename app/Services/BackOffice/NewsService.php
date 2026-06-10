@@ -159,19 +159,19 @@ class NewsService
             $date = is_string($date) ? new \DateTime($date) : $date;
             $query->whereDate('created_at', '<=', $date);
         }
-
         if ($request->filled('search')) {
-            $search = $request->input('search');
+            $search     = $request->input('search');
+            $likeSearch = "%{$search}%";
 
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('sub_title', 'like', "%{$search}%")
-                    ->orWhere('content_shoulder', 'like', "%{$search}%")
-                    ->orWhere('brief', 'like', "%{$search}%")
-                    ->orWhere('seo_brief', 'like', '%' . $search . '%')
-                    ->orWhere('seo_title', 'like', '%' . $search . '%')
-                    ->orWhere('source', 'like', "%{$search}%");
-            });
+            $query->whereAny([
+                'title',
+                'sub_title',
+                'content_shoulder',
+                'brief',
+                'seo_brief',
+                'seo_title',
+                'source',
+            ], 'like', $likeSearch);
         }
 
         return $query->orderByDesc('id')

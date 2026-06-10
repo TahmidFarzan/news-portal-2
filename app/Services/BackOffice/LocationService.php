@@ -81,14 +81,15 @@ class LocationService
         }
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
+            $search     = $request->input('search');
+            $likeSearch = "%{$search}%";
 
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('brief', 'like', "%{$search}%")
-                    ->orWhere('seo_brief', 'like', '%' . $search . '%')
-                    ->orWhere('seo_title', 'like', '%' . $search . '%');
-            });
+            $query->whereAny([
+                'name',
+                'brief',
+                'seo_brief',
+                'seo_title',
+            ], 'like', $likeSearch);
         }
 
         return $query->orderByDesc('id')

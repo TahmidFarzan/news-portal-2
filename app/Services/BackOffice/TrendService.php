@@ -78,16 +78,18 @@ class TrendService
             $query->whereDate("created_at", '<=', $date);
         }
 
-        if ($request->filled("search")) {
+        if ($request->filled('search')) {
             $searchValue = $request->input('search');
-            $query->whereHas('tag', function ($query) use ($searchValue) {
-                $query->where('name', 'like', '%' . $searchValue . '%')
-                    ->orWhere('brief', 'like', "%{$searchValue}%")
-                    ->orWhere('seo_brief', 'like', '%' . $searchValue . '%')
+            $likeSearch  = "%{$searchValue}%";
 
-                    ->orWhere('seo_title', 'like', '%' . $searchValue . '%');
+            $query->whereHas('tag', function ($tagQuery) use ($likeSearch) {
+                $tagQuery->whereAny([
+                    'name',
+                    'brief',
+                    'seo_brief',
+                    'seo_title',
+                ], 'like', $likeSearch);
             });
-
         }
 
         return $query->orderByDesc('id')
@@ -128,7 +130,6 @@ class TrendService
 
     public function delete(Trend $trend): array
     {
-
 
         try {
 
