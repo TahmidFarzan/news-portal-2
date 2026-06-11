@@ -2,7 +2,8 @@
 
 use Spatie\Sluggable\Actions\BuildSelfHealingRouteKeyAction;
 use Spatie\Sluggable\Actions\ExtractIdentifierFromSelfHealingRouteKeyAction;
-use Spatie\Sluggable\Actions\GenerateSlugAction;
+//use Spatie\Sluggable\Actions\GenerateSlugAction;
+use App\Actions\Sluggable\UnicodeGenerateSlugAction;
 
 return [
     /*
@@ -12,7 +13,8 @@ return [
      * here to customize the package's behavior.
      */
     'actions' => [
-        'generate_slug' => GenerateSlugAction::class,
+        //'generate_slug' => GenerateSlugAction::class,
+        'generate_slug' => UnicodeGenerateSlugAction::class,
         'build_self_healing_route_key' => BuildSelfHealingRouteKeyAction::class,
         'extract_identifier_from_self_healing_route_key' => ExtractIdentifierFromSelfHealingRouteKeyAction::class,
     ],

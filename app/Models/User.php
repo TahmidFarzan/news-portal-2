@@ -94,15 +94,10 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     {
         return SlugOptions::create()
             ->saveSlugsTo('slug')
-            ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
-                $randomString = Str::random(11);
-                $createdAt    = $model->created_at ?? now();
-                $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
-            })
+            ->generateSlugsFrom("name")
             ->doNotGenerateSlugsOnUpdate()
-            ->slugsShouldBeNoLongerThan(255);
+            ->slugsShouldBeNoLongerThan(255)
+            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string

@@ -21,7 +21,7 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('breaking_news')]
 #[Fillable([
-        'title', 'slug',"is_published",
+        'title', 'slug', "is_published",
         'language_id', 'created_by_id',
         "news_id",
     ])]
@@ -39,8 +39,8 @@ class BreakingNews extends Model
     {
         return [
             'is_published' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+            'created_at'   => 'datetime',
+            'updated_at'   => 'datetime',
         ];
     }
 
@@ -48,7 +48,7 @@ class BreakingNews extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'title', 'slug',"is_published",
+                'title', 'slug', "is_published",
                 'language_id',
                 "news_id",
             ])
@@ -67,15 +67,10 @@ class BreakingNews extends Model
     {
         return SlugOptions::create()
             ->saveSlugsTo('slug')
-            ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
-                $randomString = Str::random(11);
-                $createdAt    = $model->created_at ?? now();
-                $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
-            })
+            ->generateSlugsFrom("title")
             ->doNotGenerateSlugsOnUpdate()
-            ->slugsShouldBeNoLongerThan(255);
+            ->slugsShouldBeNoLongerThan(255)
+            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string

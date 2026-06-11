@@ -5,8 +5,8 @@ use App\Observers\MenuItemObserver;
 use App\Policies\MenuItemPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,7 +23,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('menu_items')]
 #[Fillable([
-        'name', 'slug','position',
+        'name', 'slug', 'position',
         "menu_id", 'language_id', 'created_by_id',
         "url", "parent_id",
         "model_type", "model_id",
@@ -34,7 +34,7 @@ class MenuItem extends Model
 {
     use HasFactory, LogsActivity, HasSlug, HasRecursiveRelationships;
 
-    protected $appends = ["public_url", "has_parent", "has_descendants", "indentation_name","is_custom_url"];
+    protected $appends = ["public_url", "has_parent", "has_descendants", "indentation_name", "is_custom_url"];
 
     protected function casts(): array
     {
@@ -68,15 +68,10 @@ class MenuItem extends Model
     {
         return SlugOptions::create()
             ->saveSlugsTo('slug')
-            ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
-                $randomString = Str::random(11);
-                $createdAt    = $model->created_at ?? now();
-                $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
-            })
+            ->generateSlugsFrom("name")
             ->doNotGenerateSlugsOnUpdate()
-            ->slugsShouldBeNoLongerThan(255);
+            ->slugsShouldBeNoLongerThan(255)
+            ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string

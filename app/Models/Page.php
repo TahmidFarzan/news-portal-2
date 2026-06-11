@@ -17,6 +17,7 @@ use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('pages')]
@@ -71,7 +72,8 @@ class Page extends Model
             ->saveSlugsTo('slug')
             ->generateSlugsFrom("title")
             ->doNotGenerateSlugsOnUpdate()
-            ->slugsShouldBeNoLongerThan(255);
+            ->slugsShouldBeNoLongerThan(255)
+            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string

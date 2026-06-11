@@ -65,14 +65,13 @@ class Trend extends Model
         return SlugOptions::create()
             ->saveSlugsTo('slug')
             ->generateSlugsFrom(function ($model) {
-                $mainSlug     = Str::uuid();
-                $randomString = Str::random(11);
+                $mainSlug     = $model?->tag->name ?? Str::random(5);
                 $createdAt    = $model->created_at ?? now();
                 $createdAt    = $createdAt->format('HisdmY');
-                return "{$createdAt}-{$randomString}-{$mainSlug}";
+                return "{$mainSlug}-{$createdAt}";
             })
             ->doNotGenerateSlugsOnUpdate()
-            ->slugsShouldBeNoLongerThan(255);
+            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string

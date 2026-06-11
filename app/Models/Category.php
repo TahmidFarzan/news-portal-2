@@ -70,15 +70,10 @@ class Category extends Model
     {
         return SlugOptions::create()
             ->saveSlugsTo('slug')
-            ->generateSlugsFrom(function ($model) {
-                $mainSlug     = $model->name;
-                $randomString = Str::random(11);
-                $createdAt    = $model->created_at ?? now();
-                $createdAt    = $createdAt->format('HisdmY');
-                return "{$mainSlug}-{$createdAt}-{$randomString}";
-            })
+            ->generateSlugsFrom('name')
             ->doNotGenerateSlugsOnUpdate()
-            ->slugsShouldBeNoLongerThan(255);
+            ->slugsShouldBeNoLongerThan(255)
+            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string
@@ -95,7 +90,7 @@ class Category extends Model
     {
         $url = null;
 
-        if($this->slug_tree){
+        if ($this->slug_tree) {
             $url = route("category.news", ['slugTree' => $this->slug_tree]);
         }
 
