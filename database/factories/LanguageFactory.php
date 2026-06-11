@@ -26,6 +26,7 @@ class LanguageFactory extends Factory
         return [
             'name'          => $this->faker->name(),
             'code'          => Str::snake(Str::lower($this->faker->unique()->lexify('??'))),
+            'locale'          => Str::snake(Str::lower($this->faker->unique()->lexify('??'))),
             'brief'         => $this->faker->sentence(),
             "created_by_id" => $user?->id ?? "1",
         ];

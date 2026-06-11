@@ -47,25 +47,25 @@ class MenuSeeder extends Seeder
         foreach ($languages as $language) {
 
             $topbarMenu = Menu::factory()->state([
-                'name'         => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Top bar" : "উপরের বার",
+                'name'         => ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Top bar" : "উপরের বার",
                 "language_id"  => $language->id,
                 'menu_type_id' => $menuTypeTopBar?->id,
             ])->create();
 
             $headerMenu = Menu::factory()->state([
-                'name'         => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Header" : "হেডার",
+                'name'         => ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Header" : "হেডার",
                 "language_id"  => $language->id,
                 'menu_type_id' => $menuTypeHeader?->id,
             ])->create();
 
             $offCanvasMenu = Menu::factory()->state([
-                'name'         => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "OffCanvas" : "অফক্যানভাস",
+                'name'         => ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "OffCanvas" : "অফক্যানভাস",
                 "language_id"  => $language->id,
                 'menu_type_id' => $menuTypeOffCanvas?->id,
             ])->create();
 
             $footerMenu = Menu::factory()->state([
-                'name'         => ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Footer" : "ফুটার",
+                'name'         => ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Footer" : "ফুটার",
                 "language_id"  => $language->id,
                 'menu_type_id' => $menuTypeFooter?->id,
             ])->create();
@@ -80,13 +80,13 @@ class MenuSeeder extends Seeder
 
     private function topBarMenuItemSave(Menu $menu, Language $language): void
     {
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Contact" : "যোগাযোগ");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "About" : "সম্পর্কে");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Contact" : "যোগাযোগ");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "About" : "সম্পর্কে");
     }
 
     private function headerMenuItemSave(Menu $menu, Language $language): void
     {
-        $categoryNames = $language->code == SystemHelper::LANGUAGE_DEFAULT_CODE
+        $categoryNames = $language->code == SystemHelper::DEFAULT_LANGUAGE_CODE
             ? ['National', 'International', 'Business', 'Entertainment', 'Technology', 'Sports']
             : ['জাতীয়', 'আন্তর্জাতিক', 'ব্যবসা', 'বিনোদন', 'প্রযুক্তি', 'খেলাধুলা'];
 
@@ -101,14 +101,14 @@ class MenuSeeder extends Seeder
             $menu,
             null,
             $language,
-            $language->code == SystemHelper::LANGUAGE_DEFAULT_CODE ? 'Home' : 'হোম'
+            $language->code == SystemHelper::DEFAULT_LANGUAGE_CODE ? 'Home' : 'হোম'
         );
 
         $this->saveMenuItem(
             $menu,
             null,
             $language,
-            $language->code == SystemHelper::LANGUAGE_DEFAULT_CODE ? 'Latest' : 'সর্বশেষ'
+            $language->code == SystemHelper::DEFAULT_LANGUAGE_CODE ? 'Latest' : 'সর্বশেষ'
         );
 
         foreach ($categoryNames as $categoryName) {
@@ -132,10 +132,10 @@ class MenuSeeder extends Seeder
 
     private function footerMenuItemSave(Menu $menu, Language $language): void
     {
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Contact" : "যোগাযোগ");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "About" : "সম্পর্কে");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Privacy Policy" : "গোপনীয়তা নীতি");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::LANGUAGE_DEFAULT_CODE) ? "Terms and Conditions" : "শর্তাবলি ও নীতিমালা");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Contact" : "যোগাযোগ");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "About" : "সম্পর্কে");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Privacy Policy" : "গোপনীয়তা নীতি");
+        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Terms and Conditions" : "শর্তাবলি ও নীতিমালা");
     }
 
     private function saveMenuItem(Menu $menu, ?MenuItem $parent, Language $language, Category | string $item): void

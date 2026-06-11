@@ -66,11 +66,11 @@ class LocationMapInfoSeeder extends Seeder
 
         return collect([
             (object) [
-                'language_code' => SystemHelper::LANGUAGE_DEFAULT_CODE,
+                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
                 'locations'     => collect($rows)->map(fn($row) => $this->makeLocation($row, false, $adm2Features, 1)),
             ],
             (object) [
-                'language_code' => SystemHelper::LANGUAGE_EXTRA_BN_CODE,
+                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
                 'locations'     => collect($rows)->map(fn($row) => $this->makeLocation($row, true, $adm2Features, 1)),
             ],
         ]);

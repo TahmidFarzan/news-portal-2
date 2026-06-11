@@ -34,7 +34,7 @@ class SiteService
         $perPage = 10;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        $languageCode   = SystemHelper::DEFAULT_LANGUAGE_CODE;
         $headerMenuCode = MenuHelper::MENU_TYPE_HEADER;
 
         $cacheKey = "site:{$headerMenuCode}:navbar:language:{$languageCode}:menu:{$headerMenuCode}:page:{$page}:per-page:{$perPage}";
@@ -100,7 +100,7 @@ class SiteService
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode      = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        $languageCode      = SystemHelper::DEFAULT_LANGUAGE_CODE;
         $offcanvasMenuCode = MenuHelper::MENU_TYPE_OFFCANVAS;
 
         $cacheKey = "site:{$offcanvasMenuCode}:language:{$languageCode}:page:{$page}:per-page:{$perPage}";
@@ -166,7 +166,7 @@ class SiteService
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        $languageCode   = SystemHelper::DEFAULT_LANGUAGE_CODE;
         $topbarMenuCode = MenuHelper::MENU_TYPE_TOPBAR;
 
         $cacheKey = "site:header:{$topbarMenuCode}:language:{$languageCode}:page:{$page}:per-page:{$perPage}";
@@ -233,7 +233,7 @@ class SiteService
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode   = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        $languageCode   = SystemHelper::DEFAULT_LANGUAGE_CODE;
         $footerMenuCode = MenuHelper::MENU_TYPE_FOOTER;
 
         $cacheKey = "site:{$footerMenuCode}:language:{$languageCode}:page:{$page}:per-page:{$perPage}";
@@ -394,7 +394,7 @@ class SiteService
         $cursor    = $request->input('cursor');
         $cursorKey = $cursor ? md5($cursor) : 'first';
 
-        $languageCode = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        $languageCode = SystemHelper::DEFAULT_LANGUAGE_CODE;
 
         $cacheKey = "site:breaking-news:language:{$languageCode}:cursor:{$cursorKey}:per-page:{$perPage}";
 

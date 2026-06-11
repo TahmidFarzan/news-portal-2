@@ -82,7 +82,7 @@ class PageSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::LANGUAGE_DEFAULT_CODE,
+                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
                 'pages'         => collect([
                     (object) [
                         'title'        => 'Home',
@@ -123,7 +123,7 @@ class PageSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::LANGUAGE_EXTRA_BN_CODE,
+                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
                 'pages'         => collect([
                     (object) [
                         'title'        => 'হোম',

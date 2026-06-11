@@ -62,6 +62,7 @@ class LanguageService
             $query->whereAny([
                 'name',
                 'code',
+                "locale",
             ], 'like', $likeSearch);
         }
 
@@ -80,6 +81,7 @@ class LanguageService
             DB::transaction(function () use ($request, $language, $isNew) {
                 $language->name          = $request->input('name');
                 $language->code          = $request->input('code');
+                $language->locale        = $request->input('locale');
                 $language->brief         = $request->input('brief');
                 $language->created_by_id = $isNew ? Auth::id() : $language->created_by_id;
 

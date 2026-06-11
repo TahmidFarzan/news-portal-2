@@ -22,7 +22,7 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('languages')]
 #[Fillable([
-        'name', 'code', 'slug',
+        'name', 'code', "locale",'slug',
         'detail', 'created_by_id',
     ])]
 #[UsePolicy(LanguagePolicy::class)]
@@ -45,7 +45,7 @@ class Language extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'code',
+                'name', 'code',"locale",
                 'slug', 'detail',
             ])
             ->useLogName('Language')

@@ -33,6 +33,7 @@ const isUpdate = computed(() => !!language?.slug)
 const saveForm = useForm({
     name: language?.name || '',
     code: language?.code || '',
+    locale: language?.locale || '',
     brief: language?.brief || '',
 })
 
@@ -47,6 +48,11 @@ function validateForm() {
 
     if (!saveForm.code) {
         saveForm.setError('code', 'Code is required.')
+        valid = false
+    }
+
+    if (!saveForm.locale) {
+        saveForm.setError('locale', 'Locale is required.')
         valid = false
     }
 
@@ -142,6 +148,20 @@ onMounted(async () => {
 
                             <p v-if="saveForm.errors.code" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.code }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                Locale <span class="text-red-500">*</span>
+                            </label>
+
+                            <input v-model="saveForm.locale" type="text" placeholder="Enter locale"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.locale ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.locale" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.locale }}
                             </p>
                         </div>
 

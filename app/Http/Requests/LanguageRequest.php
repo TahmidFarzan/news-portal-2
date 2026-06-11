@@ -14,23 +14,29 @@ class LanguageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'    => ['required', 'string', 'max:255'],
-            'code'    => ['required', 'string', 'max:255', Rule::unique('languages')->ignore($this->route('slug'), 'slug')],
-            'brief' => ['nullable'],
+            'name'   => ['required', 'string', 'max:255'],
+            'code'   => ['required', 'string', 'max:255', Rule::unique('languages')->ignore($this->route('slug'), 'slug')],
+            'locale' => ['required', 'string', 'max:255', Rule::unique('languages')->ignore($this->route('slug'), 'slug')],
+            'brief'  => ['nullable'],
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => __('form-requests.language.name.required'),
-            'name.string'   => __('form-requests.language.name.string'),
-            'name.max'      => __('form-requests.language.name.max'),
+            'name.required'   => __('form-requests.language.name.required'),
+            'name.string'     => __('form-requests.language.name.string'),
+            'name.max'        => __('form-requests.language.name.max'),
 
-            'code.required' => __('form-requests.language.code.required'),
-            'code.string'   => __('form-requests.language.code.string'),
-            'code.max'      => __('form-requests.language.code.max'),
-            'code.unique'   => __('form-requests.language.code.unique'),
+            'code.required'   => __('form-requests.language.code.required'),
+            'code.string'     => __('form-requests.language.code.string'),
+            'code.max'        => __('form-requests.language.code.max'),
+            'code.unique'     => __('form-requests.language.code.unique'),
+
+            'locale.required' => __('form-requests.language.locale.required'),
+            'locale.string'   => __('form-requests.language.locale.string'),
+            'locale.max'      => __('form-requests.language.locale.max'),
+            'locale.unique'   => __('form-requests.language.locale.unique'),
         ];
     }
 }
