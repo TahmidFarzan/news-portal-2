@@ -22,7 +22,7 @@ class PageService
 
     public function language(): Language
     {
-        $languageCode = SystemHelper::LANGUAGE_DEFAULT_CODE;
+        $languageCode = SystemHelper::DEFAULT_LANGUAGE_CODE;
 
         $language = Language::query()->where('code', $languageCode)->firstOrFail();
 

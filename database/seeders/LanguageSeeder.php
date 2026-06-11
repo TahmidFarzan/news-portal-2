@@ -28,14 +28,15 @@ class LanguageSeeder extends Seeder
         }
 
         $languagesFromStaticData = collect([
-            (object) ['name' => 'English', 'code' => SystemHelper::LANGUAGE_DEFAULT_CODE],
-            (object) ['name' => 'Bangla', 'code' => SystemHelper::LANGUAGE_EXTRA_BN_CODE],
+            (object) ['name' => 'English', 'code' => SystemHelper::DEFAULT_LANGUAGE_CODE, 'locale' => SystemHelper::DEFAULT_LANGUAGE_CODE."_US"],
+            (object) ['name' => 'Bangla', 'code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE, 'locale' => SystemHelper::EXTRA_LANGUAGE_BN_CODE."_BD"],
         ]);
 
         foreach ($languagesFromStaticData as $language) {
             Language::factory()->state([
                 'name' => $language->name,
                 'code' => $language->code,
+                'locale' => $language->locale,
             ])->create();
         }
     }

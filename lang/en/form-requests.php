@@ -190,17 +190,24 @@ return [
     ],
 
     'language'      => [
-        'name' => [
+        'name'   => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
             'max'      => 'Name max chars is 200.',
             'unique'   => 'Name must be unique.',
         ],
-        'code' => [
+        'code'   => [
             'required' => 'Code is required.',
             'string'   => 'Code must be string.',
             'max'      => 'Code max chars is 200.',
             'unique'   => 'Code must be unique.',
+        ],
+
+        'locale' => [
+            'required' => 'Locale is required.',
+            'string'   => 'Locale must be string.',
+            'max'      => 'Locale max chars is 200.',
+            'unique'   => 'Locale must be unique.',
         ],
     ],
 
@@ -498,7 +505,7 @@ return [
             'unique'   => 'Title must be unique.',
         ],
 
-        'body'          => [
+        'body'           => [
             'required' => 'Body is required.',
         ],
 

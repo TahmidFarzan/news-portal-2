@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->string('slug')->unique();
+            $table->string('locale')->unique();
             $table->text('brief')->nullable();
 
             $table->foreignId('created_by_id')->constrained('users')->cascadeOnDelete();

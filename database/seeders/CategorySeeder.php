@@ -66,7 +66,7 @@ class CategorySeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::LANGUAGE_DEFAULT_CODE,
+                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
                 'categories'    => collect([
 
                     (object) [
@@ -216,7 +216,7 @@ class CategorySeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::LANGUAGE_EXTRA_BN_CODE,
+                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
                 'categories'    => collect([
                     (object) [
                         'name'           => 'জাতীয়',

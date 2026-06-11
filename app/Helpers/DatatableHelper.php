@@ -6,9 +6,6 @@ use Illuminate\Support\Collection;
 
 class DatatableHelper
 {
-    public const LANGUAGE_DEFAULT_CODE  = 'en';
-    public const LANGUAGE_EXTRA_BN_CODE = 'bn';
-
     private const PER_PAGE_10  = 10;
     private const PER_PAGE_25  = 25;
     private const PER_PAGE_50  = 50;
