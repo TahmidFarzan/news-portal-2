@@ -324,6 +324,58 @@ export const canDeleteBreakingNews = (authUser, breakingNews) => {
     return isNewsDesk(role) && (breakingNews.is_published == false)
 }
 
+
+// ================= PAGE =================
+
+export const canCreatePage = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
+export const canEditPage = (authUser, page) => {
+    if (!authUser || !page) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return false
+}
+
+export const canTrashPage = (authUser, page) => {
+    if (!authUser || !page) return false
+
+    if (page.is_default) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role) && page.is_published) return true
+
+    return false
+}
+
+export const canRestorePage = (authUser, page) => {
+    if (!authUser || !page) return false
+
+    if (page.is_default) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role) && !page.is_published) return true
+
+    return false
+}
+
+export const canDeletePage = (authUser, page) => {
+    if (!authUser || !page) return false
+
+    if (page.is_default) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role) && !page.is_published) return true
+
+    return false
+}
+
 // ================= MENU =================
 
 export const canCreateMenu = (authUser) =>
@@ -427,6 +479,14 @@ export const canAccessNewsMenu = (authUser) => {
     const role = getUserRoleName(authUser)
 
     return isAdmin(role) || isNewsDesk(role)
+}
+
+export const canAccessPageMenu = (authUser) => {
+    if (!authUser) return false
+
+    const role = getUserRoleName(authUser)
+
+    return isAdmin(role)
 }
 
 export const canAccessMenuMenu = (authUser) => {

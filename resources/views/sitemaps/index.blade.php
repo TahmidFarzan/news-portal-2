@@ -31,4 +31,11 @@
         <loc>{{ route('sitemaps.news') }}</loc>
         <lastmod>{{ now()->format('Y-m-d\TH:i:sP') }}</lastmod>
     </sitemap>
+
+    @foreach ($pages as $page)
+        <sitemap>
+            <loc>{{ $page->public_url }}</loc>
+            <lastmod>{{ now()->format('Y-m-d\TH:i:sP') }}</lastmod>
+        </sitemap>
+    @endforeach
 </sitemapindex>

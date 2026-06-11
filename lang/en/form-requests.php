@@ -490,6 +490,34 @@ return [
         ],
     ],
 
+    'page'          => [
+        'title'          => [
+            'required' => 'Title is required.',
+            'string'   => 'Title must be string.',
+            'max'      => 'Title max chars is 200.',
+            'unique'   => 'Title must be unique.',
+        ],
+
+        'body'          => [
+            'required' => 'Body is required.',
+        ],
+
+        'language_id'    => [
+            'required'  => 'Language is required.',
+            "not_found" => 'Language is not exit.',
+        ],
+
+        'parent_id'      => [
+            'required'  => 'Parent is required.',
+            "not_found" => 'Parent is not exit.',
+        ],
+
+        'default_use_as' => [
+            'in' => 'Must be one out of [:values].',
+        ],
+
+    ],
+
     'menu'          => [
         'name'         => [
             'required' => 'Name is required.',

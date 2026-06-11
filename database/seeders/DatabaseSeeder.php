@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(LocationMapInfoSeeder::class);
 
+        $this->call(PageSeeder::class);
         $this->call(MenuSeeder::class);
 
         $this->call(NewsSeeder::class);

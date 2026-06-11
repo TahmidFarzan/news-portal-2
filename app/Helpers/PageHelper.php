@@ -6,11 +6,16 @@ use Illuminate\Support\Collection;
 
 class PageHelper
 {
+    public const DAFAULT_USE_AS_HOME     = 'Home';
+    public const DAFAULT_USE_AS_LATEST     = 'Latest';
+    public const DAFAULT_USE_AS_SEARCH     = 'Search';
+
     public const PAGE_HOME     = 'Home';
     public const PAGE_CATEGORY = 'Category';
 
     public const PAGE_SECTION_LEAD_NEWS     = 'Lead News';
     public const PAGE_SECTION_CATEGORY_NEWS = 'Category News';
+
 
     public static function pages(): Collection
     {

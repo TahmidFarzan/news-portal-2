@@ -243,6 +243,33 @@ return [
         ],
     ],
 
+    'page'          => [
+        'save'   => [
+            'success' => 'Page saved successfully.',
+            'failed'  => 'Failed to save page.',
+        ],
+        'update' => [
+            'success'         => 'Page updated successfully.',
+            'failed'          => 'Failed to update page.',
+            'default_warning' => 'Default page status can not change.',
+        ],
+        'delete' => [
+            'success'         => 'Page deleted successfully.',
+            'failed'          => 'Failed to delete page.',
+            'default_warning' => 'Default page can not deleted.',
+        ],
+
+        'trash'   => [
+            'success' => 'Page trash successfully.',
+            'failed'  => 'Failed to trash page.',
+        ],
+
+        'restore' => [
+            'success' => 'Page restore successfully.',
+            'failed'  => 'Failed to restore page.',
+        ],
+    ],
+
     'menu'          => [
         'save'   => [
             'success' => 'Menu saved successfully.',

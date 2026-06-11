@@ -13,9 +13,10 @@ class SitemapController extends Controller
         $this->sitemapService = $sitemapService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->view('sitemaps.index');
+        $pages = $this->sitemapService->getPages($request);
+        return response()->view('sitemaps.index', compact('pages'));
     }
 
     public function categories(Request $request)

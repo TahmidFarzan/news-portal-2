@@ -11,6 +11,7 @@ use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\EventCacheService;
 use App\Services\Cache\LocationCacheService;
 use App\Services\Cache\NewsCacheService;
+use App\Services\Cache\PageCacheService;
 use App\Services\Cache\TagCacheService;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,7 @@ class SitemapService
     protected ContributorCacheService $contributorCacheService;
     protected TagCacheService $tagCacheService;
     protected NewsCacheService $newsCacheService;
+    protected PageCacheService $pageCacheService;
 
     public function __construct(
         CategoryCacheService $categoryCacheService,
@@ -29,7 +31,8 @@ class SitemapService
         LocationCacheService $locationCacheService,
         EventCacheService $eventCacheService,
         ContributorCacheService $contributorCacheService,
-        NewsCacheService $newsCacheService
+        NewsCacheService $newsCacheService,
+        PageCacheService $pageCacheService
     ) {
         $this->categoryCacheService    = $categoryCacheService;
         $this->tagCacheService         = $tagCacheService;
@@ -37,6 +40,7 @@ class SitemapService
         $this->eventCacheService       = $eventCacheService;
         $this->contributorCacheService = $contributorCacheService;
         $this->newsCacheService        = $newsCacheService;
+        $this->pageCacheService        = $pageCacheService;
     }
 
     public function categoryBySlugTree(string $slugTree): Category
@@ -207,5 +211,15 @@ class SitemapService
             'tag_id' => $tag->id,
         ]);
         return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+    }
+
+    public function getPages(Request $request)
+    {
+        return $this->pageCacheService->pages("sitemap", $request->input());
+    }
+
+    public function getPagesLastPageNo(Request $request)
+    {
+        return $this->pageCacheService->lastPageNo("sitemap", $request->input());
     }
 }

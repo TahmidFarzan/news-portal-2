@@ -155,6 +155,13 @@ class SearchController extends Controller
         );
     }
 
+    public function pages(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->pages($request)
+        );
+    }
+
     public function medias(Request $request): JsonResponse
     {
         return response()->json(
@@ -190,73 +197,87 @@ class SearchController extends Controller
         );
     }
 
-    public function user(string|int $slugOrId): JsonResponse
+    public function pageTree(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->pageTree($request)
+        );
+    }
+
+    public function user(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->user($slugOrId)
         );
     }
 
-    public function userRole(string|int $slugOrId): JsonResponse
+    public function userRole(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->userRole($slugOrId)
         );
     }
 
-    public function newsType(string|int $slugOrId): JsonResponse
+    public function newsType(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->newsType($slugOrId)
         );
     }
 
-    public function language(string|int $slugOrId): JsonResponse
+    public function language(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->language($slugOrId)
         );
     }
 
-    public function category(string|int $slugOrId): JsonResponse
+    public function category(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->category($slugOrId)
         );
     }
 
-    public function tag(string|int $slugOrId): JsonResponse
+    public function tag(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->tag($slugOrId)
         );
     }
 
-    public function location(string|int $slugOrId): JsonResponse
+    public function location(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->location($slugOrId)
         );
     }
 
-    public function event(string|int $slugOrId): JsonResponse
+    public function event(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->event($slugOrId)
         );
     }
 
-    public function contributor(string|int $slugOrId): JsonResponse
+    public function contributor(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->contributor($slugOrId)
         );
     }
 
-    public function menuItem(string|int $slugOrId): JsonResponse
+    public function menuItem(string | int $slugOrId): JsonResponse
     {
         return response()->json(
             $this->searchService->menuItem($slugOrId)
+        );
+    }
+
+    public function page(string | int $slugOrId): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->page($slugOrId)
         );
     }
 }

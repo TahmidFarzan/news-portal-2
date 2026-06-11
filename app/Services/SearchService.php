@@ -1,12 +1,13 @@
 <?php
 namespace App\Services;
 
-use App\Helpers\MenuHelper;
-use App\Helpers\MediaHelper;
-use App\Helpers\PageHelper;
-use App\Helpers\DatatableHelper;
 use App\Helpers\ActivityLogHelper;
+use App\Helpers\DatatableHelper;
+use App\Helpers\MediaHelper;
+use App\Helpers\MenuHelper;
+use App\Helpers\PageHelper;
 use App\Helpers\UserHelper;
+use App\Models\BreakingNews;
 use App\Models\Category;
 use App\Models\Contributor;
 use App\Models\Event;
@@ -15,8 +16,8 @@ use App\Models\Location;
 use App\Models\MenuItem;
 use App\Models\MenuType;
 use App\Models\News;
-use App\Models\BreakingNews;
 use App\Models\NewsType;
+use App\Models\Page;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserRole;
@@ -657,10 +658,9 @@ class SearchService
             });
         }
 
-        if ($request->filled('is_sync_to_news') && !$request->boolean('is_sync_to_news')) {
+        if ($request->filled('is_sync_to_news') && ! $request->boolean('is_sync_to_news')) {
             $query->whereNull("news_id");
         }
-
 
         if ($request->filled('language_id')) {
             $query->where('language_id', $request->input('language_id'));
@@ -670,9 +670,49 @@ class SearchService
             ->paginate($request->input('per_page', 50));
 
         $list = $records->map(fn($news) => [
-            'id'                      => $news->id,
-            'title'                   => $news->title,
-            'slug'                    => $news->slug,
+            'id'    => $news->id,
+            'title' => $news->title,
+            'slug'  => $news->slug,
+        ]);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
+    public function pages(Request $request): array
+    {
+        $query = Page::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
+        if ($request->filled('parent_id')) {
+            $query->where('parent_id', $request->input('parent_id'));
+        }
+
+        if ($request->filled('only_main') &&
+            $request->boolean('only_main') &&
+            ! $request->filled('parent_id')
+        ) {
+            $query->whereNull('parent_id');
+        }
+
+        $records = $query->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = $records->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+            'slug' => $row->slug,
         ]);
 
         return [
@@ -863,6 +903,40 @@ class SearchService
         ];
     }
 
+    public function pageTree(Request $request): array
+    {
+        $query = Page::whereNull('parent_id');
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('parent_id')) {
+            $parent = $this->page($request->input('parent_id'));
+            $root   = self::rootPageParent($parent);
+            $query->where('id', $root->id);
+        }
+
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->input('language_id'));
+        }
+
+        $records = $query->orderBy('id', 'asc')
+            ->with(['children'])
+            ->orderBy('id', 'desc')
+            ->paginate($request->input('per_page', 25));
+
+        $list = self::formatPageTree($records->getCollection(), 0, null);
+
+        return [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+            'per_page'     => $records->perPage(),
+        ];
+    }
+
     public function user(int | string $slugOrId): User
     {
         return User::where('id', $slugOrId)
@@ -929,6 +1003,13 @@ class SearchService
             ->firstOrFail();
     }
 
+    public function page(int | string $slugOrId): Page
+    {
+        return Page::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
+
     private static function rootCategoryParent(Category $record): Category
     {
         $parent = $record;
@@ -968,6 +1049,21 @@ class SearchService
 
             if ($parent->parent_id !== null) {
                 $parent = self::rootMenuItemParent($parent);
+            }
+        }
+
+        return $parent;
+    }
+
+    private static function rootPageParent(Page $record): Page
+    {
+        $parent = $record;
+
+        if ($record->parent_id !== null) {
+            $parent = $record->parent;
+
+            if ($parent->parent_id !== null) {
+                $parent = self::rootPageParent($parent);
             }
         }
 
@@ -1063,6 +1159,38 @@ class SearchService
                 $list = array_merge(
                     $list,
                     self::formatMenuItemTree($record->children, $level + 1, $visited)
+                );
+            }
+        }
+
+        return $list;
+    }
+
+    private static function formatPageTree(Collection $records, int $level = 0, ?array $visited = null): array
+    {
+        $visited ??= [];
+
+        $list = [];
+
+        foreach ($records as $record) {
+
+            if (in_array($record->id, $visited, true)) {
+                continue;
+            }
+
+            $visited[] = $record->id;
+
+            $list[] = [
+                'id'               => $record->id,
+                'title'             => $record->title,
+                'title_tree'        => $record->title_tree,
+                'indentation_title' => $record->indentation_title,
+            ];
+
+            if (! empty($record->children) && $record->children->isNotEmpty()) {
+                $list = array_merge(
+                    $list,
+                    self::formatPageTree($record->children, $level + 1, $visited)
                 );
             }
         }

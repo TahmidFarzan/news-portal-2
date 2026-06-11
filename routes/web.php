@@ -18,6 +18,7 @@ use App\Http\Controllers\BackOffice\SettingController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
+use App\Http\Controllers\BackOffice\PageController as BackOfficePageController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
@@ -101,12 +102,14 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('locations', [SearchController::class, 'locations'])->name('locations');
         Route::get('events', [SearchController::class, 'events'])->name('events');
         Route::get('contributors', [SearchController::class, 'contributors'])->name('contributors');
+        Route::get('pages', [SearchController::class, 'pages'])->name('pages');
 
         Route::get('medias', [SearchController::class, 'medias'])->name('medias');
 
         Route::get('category-tree', [SearchController::class, 'categoryTree'])->name('category-tree');
         Route::get('location-tree', [SearchController::class, 'locationTree'])->name('location-tree');
         Route::get('menu-item-tree', [SearchController::class, 'menuItemTree'])->name('menu-item-tree');
+        Route::get('page-tree', [SearchController::class, 'pageTree'])->name('page-tree');
 
         Route::get('news', [SearchController::class, 'news'])->name('news');
         Route::get('breaking-news', [SearchController::class, 'breakingNews'])->name('breaking-news');
@@ -268,6 +271,20 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::patch('restore/{slug}', [BreakingNewsController::class, 'restore'])->name('restore');
     });
 
+    Route::prefix('pages')->name('pages.')->group(function () {
+        Route::get('/', [BackOfficePageController::class, 'index'])->name('index');
+        Route::get('create', [BackOfficePageController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [BackOfficePageController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [BackOfficePageController::class, 'details'])->name('details');
+
+        Route::post('save', [BackOfficePageController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [BackOfficePageController::class, 'update'])->name('update');
+
+        Route::patch('trash/{slug}', [BackOfficePageController::class, 'trash'])->name('trash');
+        Route::patch('restore/{slug}', [BackOfficePageController::class, 'restore'])->name('restore');
+        Route::patch('delete/{slug}', [BackOfficePageController::class, 'delete'])->name('delete');
+    });
+
     Route::prefix('menus')->name('menus.')->group(function () {
         Route::get('/', [MenuController::class, 'index'])->name('index');
         Route::get('create', [MenuController::class, 'create'])->name('create');
@@ -388,4 +405,6 @@ Route::middleware(['response.cache:120,public,60,etag'])->group(function () {
 
     Route::get('categories/{slugTree}', [PageController::class, 'categoryNews'])->where('slugTree', '.*')->name('category.news');
     Route::get('locations/{slugTree}', [PageController::class, 'locationNews'])->where('slugTree', '.*')->name('location.news');
+
+    Route::get('{slugTree}', [PageController::class, 'latest'])->where('slugTree', '.*')->name('page');
 });

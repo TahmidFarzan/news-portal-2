@@ -1,0 +1,53 @@
+<?php
+namespace App\Observers;
+
+use App\Jobs\SyncPageSitemapJob;
+use App\Models\Page;
+use Illuminate\Support\Str;
+use App\Jobs\DeletePageRelationsJob;
+
+class PageObserver
+{
+    public function creating(Page $page): void
+    {
+        $this->treeUpdate($page);
+    }
+
+    public function updating(Page $page): void
+    {
+        $this->treeUpdate($page);
+    }
+
+    public function deleting(Page $page): void
+    {
+        DeletePageRelationsJob::dispatchSync($page->id);
+    }
+
+    public function created(Page $page): void
+    {
+        SyncPageSitemapJob::dispatch();
+    }
+
+    public function deleted(Page $page): void
+    {
+        SyncPageSitemapJob::dispatch();
+    }
+
+    private function treeUpdate(Page $page)
+    {
+        $title = $page->title;
+        $slug = Str::slug($page->title);
+
+        $titleTree = $title;
+        $slugTree = $slug;
+        if ($page->parent_id) {
+            if (! $page->relationLoaded('parent')) {
+                $page->load('parent');
+            }
+            $slugTree = "{$page->parent->slug_tree}/{$slugTree}";
+            $titleTree = "{$page->parent->title_tree} - {$titleTree}";
+        }
+        $page->slug_tree = $slugTree;
+        $page->title_tree = $titleTree;
+    }
+}

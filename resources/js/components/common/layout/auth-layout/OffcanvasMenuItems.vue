@@ -21,7 +21,8 @@ import {
     faFan,
     faGlobe,
     faEllipsisVertical,
-    faGears
+    faGears,
+    faFile
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -40,7 +41,8 @@ library.add(
     faFan,
     faGlobe,
     faEllipsisVertical,
-    faGears
+    faGears,
+    faFile
 )
 
 import {
@@ -48,8 +50,9 @@ import {
     canAccessNewsAttributesMenu,
     canAccessNewsMenu,
     canAccessBreakingNewsMenu,
+    canAccessPageMenu,
     canAccessMenuMenu,
-    canAccessSetting
+    canAccessSetting,
 } from '@/composables/useAuthUserAccessPermissions'
 
 const {
@@ -99,6 +102,10 @@ const canAccessNewsMenuComputed = computed(() => {
 const canAccessBreakingNewsMenuComputed = computed(() => {
     return canAccessBreakingNewsMenu(authUser)
 })
+const canAccessPageMenuComputed = computed(() => {
+    return canAccessPageMenu(authUser)
+})
+
 const canAccessMenuMenuComputed = computed(() => {
     return canAccessMenuMenu(authUser)
 })
@@ -238,6 +245,13 @@ const isSubMenuVisible = (key) => {
             :class="isCurrentPage('/auth-user/breaking-news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
             Breaking news
+        </a>
+
+        <a v-if="canAccessPageMenuComputed" :href="route('back-office.pages.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/auth-user/pages/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="file" />
+            Pages
         </a>
 
         <a v-if="canAccessMenuMenuComputed" :href="route('back-office.menus.index')"
