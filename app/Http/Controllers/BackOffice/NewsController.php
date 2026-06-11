@@ -106,7 +106,7 @@ class NewsController extends Controller
     {
         $news = $this->newsService->find($slug);
 
-        Gate::authorize('update', $news);
+        Gate::authorize('restore', $news);
 
         $result = $this->newsService->restore($news);
 
