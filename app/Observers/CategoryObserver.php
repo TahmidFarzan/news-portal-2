@@ -36,7 +36,7 @@ class CategoryObserver
     private function treeUpdate(Category $category)
     {
         $name = $category->name;
-        $slug = Str::slug($category->name);
+        $slug = $category->slug ?? Str::lower($category->name);
 
         $nameTree = $name;
         $slugTree = $slug;

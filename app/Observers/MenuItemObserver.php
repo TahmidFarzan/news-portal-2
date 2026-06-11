@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Observers;
 
 use App\Models\MenuItem;
 use Illuminate\Support\Str;
-use App\Jobs\DeleteMenuItemRelationsJob;
 
 class MenuItemObserver
 {
@@ -21,7 +19,7 @@ class MenuItemObserver
     private function treeUpdate(MenuItem $menuItem)
     {
         $name = $menuItem->name;
-        $slug = Str::slug($menuItem->name);
+        $slug = $menuItem->slug ?? Str::lower($menuItem->name);
 
         $nameTree = $name;
         $slugTree = $slug;

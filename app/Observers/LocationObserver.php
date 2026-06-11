@@ -36,7 +36,7 @@ class LocationObserver
     private function treeUpdate(Location $location)
     {
         $name = $location->name;
-        $slug = Str::slug($location->name);
+        $slug = $location->slug ?? Str::lower($location->name);
 
         $nameTree = $name;
         $slugTree = $slug;

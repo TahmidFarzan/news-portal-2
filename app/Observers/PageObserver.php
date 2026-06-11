@@ -1,10 +1,10 @@
 <?php
 namespace App\Observers;
 
+use App\Jobs\DeletePageRelationsJob;
 use App\Jobs\SyncPageSitemapJob;
 use App\Models\Page;
 use Illuminate\Support\Str;
-use App\Jobs\DeletePageRelationsJob;
 
 class PageObserver
 {
@@ -36,18 +36,18 @@ class PageObserver
     private function treeUpdate(Page $page)
     {
         $title = $page->title;
-        $slug = Str::slug($page->title);
+        $slug = $page->slug ?? Str::lower($page->title);
 
         $titleTree = $title;
-        $slugTree = $slug;
+        $slugTree  = $slug;
         if ($page->parent_id) {
             if (! $page->relationLoaded('parent')) {
                 $page->load('parent');
             }
-            $slugTree = "{$page->parent->slug_tree}/{$slugTree}";
+            $slugTree  = "{$page->parent->slug_tree}/{$slugTree}";
             $titleTree = "{$page->parent->title_tree} - {$titleTree}";
         }
-        $page->slug_tree = $slugTree;
+        $page->slug_tree  = $slugTree;
         $page->title_tree = $titleTree;
     }
 }
