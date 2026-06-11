@@ -25,7 +25,7 @@ class PageController extends Controller
 
         $pages = $this->pageService->search($request);
 
-        return Inertia::render('back-office/page/Index', [
+        return Inertia::render('back-office/pages/Index', [
             'pages' => $pages,
         ]);
     }
@@ -37,7 +37,7 @@ class PageController extends Controller
 
         Gate::authorize('view', $page);
 
-        return Inertia::render('back-office/page/Details', [
+        return Inertia::render('back-office/pages/Details', [
             'page' => $page,
         ]);
     }
@@ -47,7 +47,7 @@ class PageController extends Controller
         $page = $this->pageService->new();
         Gate::authorize('create', $page);
 
-        return Inertia::render('back-office/page/Create', [
+        return Inertia::render('back-office/pages/Create', [
             'page' => $page,
         ]);
     }
@@ -59,7 +59,7 @@ class PageController extends Controller
 
         Gate::authorize('update', $page);
 
-        return Inertia::render('back-office/page/Create', [
+        return Inertia::render('back-office/pages/Create', [
             'page' => $page,
         ]);
     }
@@ -72,7 +72,7 @@ class PageController extends Controller
 
         $result = $this->pageService->save($request, $page);
 
-        return to_route('back-office.page.index')->with('flash_message', [
+        return to_route('back-office.pages.index')->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
         ]);
