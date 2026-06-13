@@ -1,13 +1,13 @@
 <?php
 namespace App\Services\BackOffice;
 
-use App\Helpers\SystemHelper;
 use App\Helpers\MenuHelper;
 use App\Http\Requests\MenuItemRequest;
 use App\Http\Requests\MenuRequest;
 use App\Models\Category;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\Page;
 use App\Models\Tag;
 use Exception;
 use Illuminate\Http\Request;
@@ -172,7 +172,7 @@ class MenuService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = MenuItem::query()->with("parent","language");
+        $query = MenuItem::query()->with("parent", "language");
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
@@ -224,6 +224,10 @@ class MenuService
 
                     case MenuHelper::MENU_ITEM_MODEL_TAG:
                         $modelRecord = Tag::where("id", $request->input('model_id'))->first();
+                        break;
+
+                    case MenuHelper::MENU_ITEM_MODEL_PAGE:
+                        $modelRecord = Page::where("id", $request->input('model_id'))->where("is_published", true)->first();
                         break;
 
                     default:

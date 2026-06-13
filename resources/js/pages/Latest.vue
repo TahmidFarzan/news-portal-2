@@ -8,24 +8,29 @@ import Grid from '@/components/common/news/Grid.vue'
 
 defineOptions({ layout: Layout })
 
-const {news } = defineProps({
+const {news, page } = defineProps({
     news: {
+        type: Object,
+        required: true,
+    },
+
+    page: {
         type: Object,
         required: true,
     },
 })
 
 const metaTitle = computed(() => {
-    return  'Latest'
+    return page?.seo_title ?? page?.title
 })
 
 const metaDescription = computed(() => {
-    return 'Latest'
+    return page?.seo_brief ?? page?.brief
 })
 
 const metaKeywords = computed(() => {
 
-    return 'Latest News, Top News'
+    return page?.seo_keywords
 })
 
 </script>

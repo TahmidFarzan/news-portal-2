@@ -115,7 +115,7 @@ onMounted(async () => {
                         <div class="text-gray-700">
                             {{ menuItem?.model_type ? extractModelName(menuItem.model_type) : 'N/A' }}
                             <span v-if="menuItem?.model?.name">
-                                - {{ menuItem.model.name }}
+                                - {{ menuItem?.model?.name }}
                             </span>
                         </div>
                     </div>

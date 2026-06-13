@@ -2,12 +2,14 @@
 namespace Database\Seeders;
 
 use App\Helpers\MenuHelper;
+use App\Helpers\PageHelper;
 use App\Helpers\SystemHelper;
 use App\Models\Category;
 use App\Models\Language;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\MenuType;
+use App\Models\Page;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -80,8 +82,22 @@ class MenuSeeder extends Seeder
 
     private function topBarMenuItemSave(Menu $menu, Language $language): void
     {
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Contact" : "যোগাযোগ");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "About" : "সম্পর্কে");
+        $pageNames = [
+            SystemHelper::DEFAULT_LANGUAGE_CODE  => [
+                "Contact",
+                "About",
+            ],
+
+            SystemHelper::EXTRA_LANGUAGE_BN_CODE => [
+                "সম্পর্কে",
+                "যোগাযোগ",
+            ],
+        ];
+
+        $pages = Page::whereIn("title", $pageNames[$language->code])->where("language_id", $language->id)->where("is_default", false)->where("is_published", true)->get();
+        foreach ($pages as $page) {
+            $this->saveMenuItem($menu, null, $language, $page);
+        }
     }
 
     private function headerMenuItemSave(Menu $menu, Language $language): void
@@ -90,34 +106,21 @@ class MenuSeeder extends Seeder
             ? ['National', 'International', 'Business', 'Entertainment', 'Technology', 'Sports']
             : ['জাতীয়', 'আন্তর্জাতিক', 'ব্যবসা', 'বিনোদন', 'প্রযুক্তি', 'খেলাধুলা'];
 
+
+        $pages = Page::whereIn("default_use_as", [PageHelper::DAFAULT_USE_AS_HOME,PageHelper::DAFAULT_USE_AS_LATEST])->where("language_id", $language->id)->where("is_default", true)->where("is_published", true)->get();
+
         $categories = Category::query()
             ->where('language_id', $language->id)
             ->whereNull('parent_id')
             ->whereIn('name', $categoryNames)
-            ->get()
-            ->keyBy('name');
+            ->get();
 
-        $this->saveMenuItem(
-            $menu,
-            null,
-            $language,
-            $language->code == SystemHelper::DEFAULT_LANGUAGE_CODE ? 'Home' : 'হোম'
-        );
 
-        $this->saveMenuItem(
-            $menu,
-            null,
-            $language,
-            $language->code == SystemHelper::DEFAULT_LANGUAGE_CODE ? 'Latest' : 'সর্বশেষ'
-        );
+        foreach ($pages as $page) {
+            $this->saveMenuItem($menu, null, $language, $page);
+        }
 
-        foreach ($categoryNames as $categoryName) {
-            $category = $categories->get($categoryName);
-
-            if (! $category) {
-                continue;
-            }
-
+        foreach ($categories as $category) {
             $this->saveMenuItem($menu, null, $language, $category);
         }
     }
@@ -132,20 +135,39 @@ class MenuSeeder extends Seeder
 
     private function footerMenuItemSave(Menu $menu, Language $language): void
     {
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Contact" : "যোগাযোগ");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "About" : "সম্পর্কে");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Privacy Policy" : "গোপনীয়তা নীতি");
-        $this->saveMenuItem($menu, null, $language, ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Terms and Conditions" : "শর্তাবলি ও নীতিমালা");
+        $pageNames = [
+            SystemHelper::DEFAULT_LANGUAGE_CODE  => [
+                "Contact",
+                "About",
+                "Privacy Policy",
+                "Terms and Conditions",
+            ],
+
+            SystemHelper::EXTRA_LANGUAGE_BN_CODE => [
+                "সম্পর্কে",
+                "যোগাযোগ",
+                "গোপনীয়তা নীতি",
+                "শর্তাবলি ও নীতিমালা",
+            ],
+        ];
+
+        $pages = Page::whereIn("title", $pageNames[$language->code])->where("language_id", $language->id)->where("is_default", false)->where("is_published", true)->get();
+        foreach ($pages as $page) {
+            $this->saveMenuItem($menu, null, $language, $page);
+        }
     }
 
-    private function saveMenuItem(Menu $menu, ?MenuItem $parent, Language $language, Category | string $item): void
+    private function saveMenuItem(Menu $menu, ?MenuItem $parent, Language $language, Category | Page | string $item): void
     {
         $isCategory = $item instanceof Category;
+        $isPage     = $item instanceof Page;
 
         $name = $isCategory ? $item->name : $item;
-        $url  = null;
+        $name = $isPage ? $item->title : $item;
 
-        if (! $isCategory) {
+        $url = null;
+
+        if (! $isCategory && ! $isPage) {
             if ($name == "Home" || $name == "হোম") {
                 $url = route("home");
             }
@@ -161,8 +183,8 @@ class MenuSeeder extends Seeder
 
             'menu_id'     => $menu->id,
 
-            'model_type'  => $isCategory ? $item->getMorphClass() : null,
-            'model_id'    => $isCategory ? $item->id : null,
+            'model_type'  => ($isCategory || $isPage) ? $item->getMorphClass() : null,
+            'model_id'    => ($isCategory || $isPage) ? $item->id : null,
 
             'url'         => $url,
 
@@ -172,12 +194,11 @@ class MenuSeeder extends Seeder
             'slug_tree'   => ($parent ? $parent->slug_tree . '/' : '') . Str::slug($name),
         ])->create();
 
-        if ($isCategory && ! empty($item->descendants)) {
-            foreach ($item->descendants as $subCategory) {
-                $this->saveMenuItem($menu, $saveMenuItem, $language, $subCategory);
+        if ( ($isCategory || $isPage) && ! empty($item->descendants)) {
+            foreach ($item->descendants as $subItem) {
+                $this->saveMenuItem($menu, $saveMenuItem, $language, $subItem);
             }
         }
-
     }
 
     private function menuItemLastPosition(Menu $menu, int $languageId, ?int $parentId)

@@ -28,17 +28,6 @@ const children = computed(() => item.children ?? [])
 
 const hasChildren = computed(() => children.value.length > 0)
 
-const href = computed(() => {
-    if (item.url) return item.url
-    if (item.href) return item.href
-
-    if (item.route_name) {
-        return route(item.route_name)
-    }
-
-    return '#'
-})
-
 const isRoot = computed(() => level === 0)
 
 const linkClasses = computed(() => {
@@ -56,19 +45,15 @@ const dropdownClasses = computed(() => {
 
     return 'absolute left-full top-0 ml-1 min-w-44 bg-white border border-gray-200 shadow-lg rounded-xl py-1 z-[999]'
 })
+
 </script>
 
 <template>
     <li class="relative" @mouseenter="isOpen = true" @mouseleave="isOpen = false">
-        <a v-if="href !== '#'" :href="href" :class="linkClasses">
-            <span>{{ title }}</span>
+        <a :href="item?.public_url" :class="linkClasses">
+            <span>{{ item.name }}</span>
             <span v-if="hasChildren" class="text-xs">▾</span>
         </a>
-
-        <button v-else type="button" :class="linkClasses">
-            <span>{{ title }}</span>
-            <span v-if="hasChildren" class="text-xs">▾</span>
-        </button>
 
         <Transition enter-active-class="transition ease-out duration-150"
             enter-from-class="opacity-0 scale-95 translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0"

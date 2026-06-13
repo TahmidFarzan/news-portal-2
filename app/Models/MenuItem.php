@@ -121,6 +121,10 @@ class MenuItem extends Model
             $url = $this->model?->public_url;
         }
 
+        if(!$this->url && !$this->model && $this->slug_tree){
+            $url = route("page",["slugTree" => $this->slug_tree]);
+        }
+
         return $url ?? null;
     }
 

@@ -44,8 +44,8 @@ class CategoryObserver
             if (! $category->relationLoaded('parent')) {
                 $category->load('parent');
             }
-            $slugTree = "{$category->parent->slug_tree}/{$slugTree}";
-            $nameTree = "{$category->parent->name_tree} - {$nameTree}";
+            $slugTree = "{$category->parent?->slug_tree}/{$slugTree}";
+            $nameTree = "{$category->parent?->name_tree} - {$nameTree}";
         }
         $category->slug_tree = $slugTree;
         $category->name_tree = $nameTree;

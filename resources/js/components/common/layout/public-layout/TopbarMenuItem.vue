@@ -17,27 +17,10 @@ const {
 
 const isOpen = ref(false)
 
-const title = computed(() => {
-    return item.title
-        ?? item.name
-        ?? item.label
-        ?? 'Menu'
-})
-
 const children = computed(() => item.children ?? [])
 
 const hasChildren = computed(() => children.value.length > 0)
 
-const href = computed(() => {
-    if (item.url) return item.url
-    if (item.href) return item.href
-
-    if (item.route_name) {
-        return route(item.route_name)
-    }
-
-    return '#'
-})
 
 const isRoot = computed(() => level === 0)
 
@@ -60,19 +43,12 @@ const dropdownClasses = computed(() => {
 
 <template>
     <li class="relative flex-shrink-0" @mouseenter="isOpen = true" @mouseleave="isOpen = false">
-        <a v-if="href !== '#'" :href="href" :class="linkClasses">
+        <a :href="item?.public_url" :class="linkClasses">
             <span class="max-[450px]:max-w-20 max-[450px]:truncate">
-                {{ title }}
+                {{ item?.name }}
             </span>
             <span v-if="hasChildren" class="text-xs">▾</span>
         </a>
-
-        <button v-else type="button" :class="linkClasses">
-            <span class="max-[450px]:max-w-20 max-[450px]:truncate">
-                {{ title }}
-            </span>
-            <span v-if="hasChildren" class="text-xs">▾</span>
-        </button>
 
         <Transition enter-active-class="transition ease-out duration-150"
             enter-from-class="opacity-0 scale-95 translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0"

@@ -406,5 +406,5 @@ Route::middleware(['response.cache:120,public,60,etag'])->group(function () {
     Route::get('categories/{slugTree}', [PageController::class, 'categoryNews'])->where('slugTree', '.*')->name('category.news');
     Route::get('locations/{slugTree}', [PageController::class, 'locationNews'])->where('slugTree', '.*')->name('location.news');
 
-    Route::get('{slugTree}', [PageController::class, 'latest'])->where('slugTree', '.*')->name('page');
+    Route::get('{slugTree}', [PageController::class, 'page'])->where('slugTree', '.*')->name('page');
 });

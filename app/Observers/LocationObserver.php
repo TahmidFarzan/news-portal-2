@@ -44,8 +44,8 @@ class LocationObserver
             if (! $location->relationLoaded('parent')) {
                 $location->load('parent');
             }
-            $slugTree = "{$location->parent->slug_tree}/{$slugTree}";
-            $nameTree = "{$location->parent->name_tree} - {$nameTree}";
+            $slugTree = "{$location->parent?->slug_tree}/{$slugTree}";
+            $nameTree = "{$location->parent?->name_tree} - {$nameTree}";
         }
         $location->slug_tree = $slugTree;
         $location->name_tree = $nameTree;

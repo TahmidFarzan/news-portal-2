@@ -17,13 +17,18 @@ FontAwesomeLibrary.add(faFilter, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const { news, language } = defineProps({
+const { news, language, page } = defineProps({
     news: {
         type: Object,
         required: true,
     },
 
     language: {
+        type: Object,
+        required: true,
+    },
+
+    page: {
         type: Object,
         required: true,
     },
@@ -41,6 +46,8 @@ const filterForm = useForm({
     search: '',
 })
 
+
+
 const makeLanguageUrl = (routeName) => {
     if (!language?.id) {
         return route(routeName)
@@ -54,9 +61,18 @@ const categoryApiUrl = computed(() => makeLanguageUrl('search.category-tree'))
 const locationApiUrl = computed(() => makeLanguageUrl('search.location-tree'))
 const eventApiUrl = computed(() => makeLanguageUrl('search.events'))
 
-const metaTitle = computed(() => 'Search')
-const metaDescription = computed(() => 'Search')
-const metaKeywords = computed(() => 'Search News, Top News')
+const metaTitle = computed(() => {
+    return page?.seo_title ?? page?.title
+})
+
+const metaDescription = computed(() => {
+    return page?.seo_brief ?? page?.brief
+})
+
+const metaKeywords = computed(() => {
+
+    return page?.seo_keywords
+})
 
 const getFilterValue = (value) => {
     if (!value) {
@@ -152,117 +168,57 @@ onMounted(async () => {
 </script>
 
 <template>
+
     <Head :title="metaTitle">
         <link rel="canonical" :href="route('search')" />
 
-        <meta
-            v-if="metaTitle"
-            name="title"
-            :content="metaTitle"
-        />
+        <meta v-if="metaTitle" name="title" :content="metaTitle" />
 
-        <meta
-            v-if="metaDescription"
-            name="description"
-            :content="metaDescription"
-        />
+        <meta v-if="metaDescription" name="description" :content="metaDescription" />
 
-        <meta
-            v-if="metaKeywords"
-            name="keywords"
-            :content="metaKeywords"
-        />
+        <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
     <div class="space-y-6">
-        <form
-            @submit.prevent="applyFilter"
-            class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4"
-        >
+        <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <MultiSelectInfinityLoadingApi
-                    :form="filterForm"
-                    fieldName="news_type_id"
-                    :selectedItem="filterForm.news_type_id || null"
-                    :apiUrl="newsTypesApiUrl"
-                    :multiple="false"
-                    placeholder="News type"
-                />
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
+                    :selectedItem="filterForm.news_type_id || null" :apiUrl="newsTypesApiUrl" :multiple="false"
+                    placeholder="News type" />
 
-                <MultiSelectInfinityLoadingApi
-                    :form="filterForm"
-                    fieldName="category_id"
-                    selectedLabelKey="indentation_name"
-                    selectedValueKey="id"
-                    :selectedItem="filterForm.category_id || null"
-                    apiLabelKey="indentation_name"
-                    apiValueKey="id"
-                    :apiUrl="categoryApiUrl"
-                    :multiple="false"
-                    placeholder="Category"
-                />
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
+                    selectedLabelKey="indentation_name" selectedValueKey="id"
+                    :selectedItem="filterForm.category_id || null" apiLabelKey="indentation_name" apiValueKey="id"
+                    :apiUrl="categoryApiUrl" :multiple="false" placeholder="Category" />
 
-                <MultiSelectInfinityLoadingApi
-                    :form="filterForm"
-                    fieldName="location_id"
-                    selectedLabelKey="indentation_name"
-                    selectedValueKey="id"
-                    :selectedItem="filterForm.location_id || null"
-                    apiLabelKey="indentation_name"
-                    apiValueKey="id"
-                    :apiUrl="locationApiUrl"
-                    :multiple="false"
-                    placeholder="Location"
-                />
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
+                    selectedLabelKey="indentation_name" selectedValueKey="id"
+                    :selectedItem="filterForm.location_id || null" apiLabelKey="indentation_name" apiValueKey="id"
+                    :apiUrl="locationApiUrl" :multiple="false" placeholder="Location" />
 
-                <MultiSelectInfinityLoadingApi
-                    :form="filterForm"
-                    fieldName="event_id"
-                    :selectedItem="filterForm.event_id || null"
-                    :apiUrl="eventApiUrl"
-                    :multiple="false"
-                    placeholder="Event"
-                />
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
+                    :selectedItem="filterForm.event_id || null" :apiUrl="eventApiUrl" :multiple="false"
+                    placeholder="Event" />
 
-                <input
-                    type="date"
-                    v-model="filterForm.date"
-                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
+                <input type="date" v-model="filterForm.date"
+                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input
-                    type="search"
-                    v-model="filterForm.search"
-                    placeholder="Search news..."
-                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
+                <input type="search" v-model="filterForm.search" placeholder="Search news..."
+                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
             </div>
 
             <div class="flex justify-end">
-                <button
-                    type="submit"
-                    :disabled="isFiltering"
-                    class="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white px-5 py-2 rounded-md flex items-center gap-2 transition"
-                >
-                    <FontAwesomeIcon
-                        v-if="isFiltering"
-                        icon="spinner"
-                        spin
-                    />
+                <button type="submit" :disabled="isFiltering"
+                    class="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white px-5 py-2 rounded-md flex items-center gap-2 transition">
+                    <FontAwesomeIcon v-if="isFiltering" icon="spinner" spin />
 
-                    <FontAwesomeIcon
-                        v-else
-                        icon="filter"
-                    />
+                    <FontAwesomeIcon v-else icon="filter" />
 
                     Apply Filter
                 </button>
             </div>
         </form>
 
-        <List
-            :news="news"
-            pagination-type="Cursor"
-        />
+        <List :news="news" pagination-type="Cursor" />
     </div>
 </template>

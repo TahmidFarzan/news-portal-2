@@ -11,6 +11,7 @@ use App\Models\Language;
 use App\Models\Location;
 use App\Models\News;
 use App\Models\NewsPlacement;
+use App\Models\Page;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -19,7 +20,6 @@ use Illuminate\Support\Str;
 
 class PageService
 {
-
     public function language(): Language
     {
         $languageCode = SystemHelper::DEFAULT_LANGUAGE_CODE;
@@ -27,6 +27,146 @@ class PageService
         $language = Language::query()->where('code', $languageCode)->firstOrFail();
 
         return $language;
+    }
+
+    public function page(string $slugTree): Page
+    {
+        $language = $this->language();
+
+        $pageCacheKey = "pages:language:{$language->id}:page:{$slugTree}";
+
+        $pageCacheTags = [
+            'pages',
+            "pages:language:{$language->id}",
+            "pages:language:{$language->id}:page:{$slugTree}",
+        ];
+
+        $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
+
+        if (($pageCachedData !== null) && ($pageCachedData instanceof Page)) {
+            return $pageCachedData;
+        }
+
+        $page = Page::query()
+            ->where("language_id", $language->id)
+            ->where("slug_tree", $slugTree)
+            ->where("is_default", false)
+            ->where("is_published", true)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $pageCacheKey,
+            $page,
+            CacheServerHelper::threeMinInSecond,
+            $pageCacheTags
+        );
+
+        return $page;
+    }
+
+    public function homePage(): Page
+    {
+        $language = $this->language();
+
+        $pageCacheKey = "pages:language:{$language->id}:page:home";
+
+        $pageCacheTags = [
+            'pages',
+            "pages:language:{$language->id}",
+            "pages:language:{$language->id}:page:home",
+        ];
+
+        $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
+
+        if (($pageCachedData !== null) && ($pageCachedData instanceof Page)) {
+            return $pageCachedData;
+        }
+
+        $page = Page::query()
+            ->where("language_id", $language->id)
+            ->where("default_use_as", PageHelper::DAFAULT_USE_AS_HOME)
+            ->where("is_default", true)
+            ->where("is_published", true)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $pageCacheKey,
+            $page,
+            CacheServerHelper::threeMinInSecond,
+            $pageCacheTags
+        );
+
+        return $page;
+    }
+
+    public function latestPage(): Page
+    {
+        $language = $this->language();
+
+        $pageCacheKey = "pages:language:{$language->id}:page:latest";
+
+        $pageCacheTags = [
+            'pages',
+            "pages:language:{$language->id}",
+            "pages:language:{$language->id}:page:latest",
+        ];
+
+        $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
+
+        if (($pageCachedData !== null) && ($pageCachedData instanceof Page)) {
+            return $pageCachedData;
+        }
+
+        $page = Page::query()
+            ->where("language_id", $language->id)
+            ->where("default_use_as", PageHelper::DAFAULT_USE_AS_LATEST)
+            ->where("is_default", true)
+            ->where("is_published", true)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $pageCacheKey,
+            $page,
+            CacheServerHelper::threeMinInSecond,
+            $pageCacheTags
+        );
+
+        return $page;
+    }
+
+    public function searchPage(): Page
+    {
+        $language = $this->language();
+
+        $pageCacheKey = "pages:language:{$language->id}:page:search";
+
+        $pageCacheTags = [
+            'pages',
+            "pages:language:{$language->id}",
+            "pages:language:{$language->id}:page:search",
+        ];
+
+        $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
+
+        if (($pageCachedData !== null) && ($pageCachedData instanceof Page)) {
+            return $pageCachedData;
+        }
+
+        $page = Page::query()
+            ->where("language_id", $language->id)
+            ->where("default_use_as", PageHelper::DAFAULT_USE_AS_SEARCH)
+            ->where("is_default", true)
+            ->where("is_published", true)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $pageCacheKey,
+            $page,
+            CacheServerHelper::threeMinInSecond,
+            $pageCacheTags
+        );
+
+        return $page;
     }
 
     public function news(string $slug): News

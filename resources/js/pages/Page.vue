@@ -1,11 +1,14 @@
 <script setup>
-import Layout from '@/pages/layouts/PublicLayout.vue'
 import { computed } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
+import Layout from '@/pages/layouts/PublicLayout.vue'
+import List from '@/components/common/news/List.vue'
+import Grid from '@/components/common/news/Grid.vue'
+
 defineOptions({ layout: Layout })
 
-const { page } = defineProps({
+const {page } = defineProps({
     page: {
         type: Object,
         required: true,
@@ -29,7 +32,7 @@ const metaKeywords = computed(() => {
 <template>
 
     <Head :title="metaTitle">
-        <link rel="canonical" :href="route('home')" />
+        <link rel="canonical" :href="page?.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 
@@ -38,16 +41,7 @@ const metaKeywords = computed(() => {
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <div class="bg-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="bg-white shadow rounded-2xl p-6">
-                <h1 class="text-2xl font-semibold text-gray-800 mb-4">
-                    Home
-                </h1>
-                <p class="text-gray-600">
-                    Welcome to your TailwindCSS page.
-                </p>
-            </div>
-        </div>
+    <div class="space-y-6">
+        <div v-html="page?.body"></div>
     </div>
 </template>

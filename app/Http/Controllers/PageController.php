@@ -17,12 +17,16 @@ class PageController extends Controller
 
     public function home()
     {
-        return Inertia::render('Home');
+        $page = $this->pageService->homePage();
+        return Inertia::render('Home', [
+            'page' => $page,
+        ]);
     }
 
     public function latest(Request $request)
     {
         $news = $this->pageService->newsSearch($request);
+        $page = $this->pageService->latestPage();
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -32,13 +36,15 @@ class PageController extends Controller
 
         return Inertia::render('Latest', [
             'news' => $news,
+            'page' => $page,
         ]);
     }
 
     public function search(Request $request)
     {
-        $news = $this->pageService->newsSearch($request);
-        $language = $this->pageService->language($request);
+        $news     = $this->pageService->newsSearch($request);
+        $language = $this->pageService->language();
+        $page     = $this->pageService->searchPage();
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -48,7 +54,17 @@ class PageController extends Controller
 
         return Inertia::render('Search', [
             "language" => $language,
-            'news' => $news,
+            'news'     => $news,
+            "page"     => $page,
+        ]);
+    }
+
+    public function page(string $slugTree)
+    {
+        $page = $this->pageService->page($slugTree);
+
+        return Inertia::render('Page', [
+            "page" => $page,
         ]);
     }
 

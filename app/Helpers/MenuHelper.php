@@ -12,6 +12,7 @@ class MenuHelper
 
     public const MENU_ITEM_MODEL_CATEGORY = 'Category';
     public const MENU_ITEM_MODEL_TAG      = 'Tag';
+    public const MENU_ITEM_MODEL_PAGE      = 'Page';
 
     public static function menuTypes(): Collection
     {
@@ -28,6 +29,7 @@ class MenuHelper
         return collect([
             (object) ['id' => self::MENU_ITEM_MODEL_CATEGORY, 'name' => self::MENU_ITEM_MODEL_CATEGORY],
             (object) ['id' => self::MENU_ITEM_MODEL_TAG, 'name' => self::MENU_ITEM_MODEL_TAG],
+            (object) ['id' => self::MENU_ITEM_MODEL_PAGE, 'name' => self::MENU_ITEM_MODEL_PAGE],
         ]);
     }
 }
