@@ -1,5 +1,9 @@
 <template>
-    <div class="multi-select-cointainer" :class="error ? 'border border-red-500 rounded-md' : ''">
+    <div class="multi-select-cointainer" :class="[
+        error ? 'border border-red-500 rounded-md' : '',
+        compactDesign ? 'multi-select-compact' : '',
+        useDarkTheme ? 'multi-select-dark' : ''
+    ]">
         <Multiselect ref="vselectRef" v-model="proxyModel" :options="formattedOptions" :multiple="multiple"
             :searchable="true" :clear-on-select="!multiple" :close-on-select="!multiple" :placeholder="placeholder"
             label="label" track-by="value" @search-change="onSearchDebounced" @open="onDropdownOpen">
@@ -20,21 +24,6 @@ import { ref, computed, onMounted, watch, nextTick } from "vue"
 import Multiselect from "vue-multiselect"
 import "vue-multiselect/dist/vue-multiselect.css"
 
-const props = defineProps({
-    selectedItem: { type: [String, Number, Object, Array], default: null },
-    fieldName: { type: String, required: true },
-    form: { type: Object, required: true },
-    dataList: { type: [Array, Object], default: () => [] },
-    error: { type: [String, Boolean], default: null },
-    multiple: { type: Boolean, default: false },
-    debounce: { type: Number, default: 300 },
-    placeholder: { type: String, default: "Select" },
-    selectedLabelKey: { type: String, default: "text" },
-    selectedValueKey: { type: String, default: "value" },
-    dataListLabelKey: { type: String, default: "text" },
-    dataListValueKey: { type: String, default: "value" },
-})
-
 const {
     selectedItem,
     fieldName,
@@ -48,7 +37,24 @@ const {
     selectedValueKey,
     dataListLabelKey,
     dataListValueKey,
-} = props
+    compactDesign,
+    useDarkTheme,
+} = defineProps({
+    selectedItem: { type: [String, Number, Object, Array], default: null },
+    fieldName: { type: String, required: true },
+    form: { type: Object, required: true },
+    dataList: { type: [Array, Object], default: () => [] },
+    error: { type: [String, Boolean], default: null },
+    multiple: { type: Boolean, default: false },
+    debounce: { type: Number, default: 300 },
+    placeholder: { type: String, default: "Select" },
+    selectedLabelKey: { type: String, default: "text" },
+    selectedValueKey: { type: String, default: "value" },
+    dataListLabelKey: { type: String, default: "text" },
+    dataListValueKey: { type: String, default: "value" },
+    compactDesign: { type: Boolean, default: false },
+    useDarkTheme: { type: Boolean, default: false },
+})
 
 const options = ref([])
 const loadingMore = ref(false)
@@ -57,12 +63,15 @@ const perPage = 10
 const lastPage = ref(1)
 const searchQuery = ref("")
 const vselectRef = ref(null)
-const proxyModel = ref(null)
+const proxyModel = ref(multiple ? [] : null)
+
 let searchTimeout = null
 
-const allItems = Array.isArray(dataList)
-    ? dataList.filter(Boolean)
-    : Object.values(dataList).filter(Boolean)
+const allItems = computed(() =>
+    Array.isArray(dataList)
+        ? dataList.filter(Boolean)
+        : Object.values(dataList ?? {}).filter(Boolean)
+)
 
 const formattedOptions = computed(() =>
     options.value.map(item => ({
@@ -105,7 +114,7 @@ const normalizeItem = item => {
         }
     }
 
-    const found = allItems.find(i => i?.[dataListValueKey] == item)
+    const found = allItems.value.find(i => i?.[dataListValueKey] == item)
 
     return found
         ? {
@@ -123,8 +132,9 @@ watch(proxyModel, val => updateForm(val), { deep: true })
 const fetchPage = (pageNumber = 1, reset = false) => {
     const start = (pageNumber - 1) * perPage
 
-    const filtered = allItems.filter(item => {
+    const filtered = allItems.value.filter(item => {
         const label = item?.[dataListLabelKey]
+
         return (
             typeof label === "string" &&
             label.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -203,3 +213,108 @@ onMounted(() => {
     fetchPage(1, true)
 })
 </script>
+
+<style scoped>
+.multi-select-compact :deep(.multiselect) {
+    min-height: 31px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__select) {
+    height: 31px;
+    padding: 4px 8px;
+}
+
+.multi-select-compact :deep(.multiselect__tags) {
+    min-height: 31px;
+    padding: 4px 32px 0 8px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__single) {
+    margin-bottom: 0;
+    padding-top: 2px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__input) {
+    font-size: 13px;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.multi-select-compact :deep(.multiselect__placeholder) {
+    margin-bottom: 0;
+    padding-top: 2px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__option) {
+    min-height: 30px;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__tag) {
+    margin-bottom: 2px;
+    padding: 3px 22px 3px 8px;
+    font-size: 12px;
+}
+
+.multi-select-dark :deep(.multiselect) {
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__tags) {
+    background: #111827;
+    border-color: #374151;
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__single) {
+    background: transparent;
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__input) {
+    background: transparent;
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__placeholder) {
+    color: #9ca3af;
+}
+
+.multi-select-dark :deep(.multiselect__content-wrapper) {
+    background: #111827;
+    border-color: #374151;
+}
+
+.multi-select-dark :deep(.multiselect__option) {
+    background: #111827;
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__option--highlight) {
+    background: #1f2937;
+    color: #ffffff;
+}
+
+.multi-select-dark :deep(.multiselect__option--selected) {
+    background: #374151;
+    color: #ffffff;
+}
+
+.multi-select-dark :deep(.multiselect__tag) {
+    background: #374151;
+    color: #ffffff;
+}
+
+.multi-select-dark :deep(.multiselect__tag-icon::after) {
+    color: #ffffff;
+}
+
+.multi-select-dark :deep(.multiselect__spinner) {
+    background: #111827;
+}
+</style>

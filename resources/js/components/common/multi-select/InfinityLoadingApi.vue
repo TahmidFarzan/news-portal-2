@@ -1,28 +1,26 @@
-<template>
-    <div class="multi-select-cointainer" :class="props.error ? 'border border-red-500 rounded-md' : ''">
-        <Multiselect ref="vselectRef" v-model="proxyModel" :options="formattedOptions" :multiple="props.multiple"
-            :loading="loading" :searchable="true" :clear-on-select="!props.multiple" :close-on-select="!props.multiple"
-            :placeholder="props.placeholder" label="label" track-by="value" @search-change="onSearchDebounced"
-            @open="onDropdownOpen">
-            <template #afterList>
-                <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
-                    Loading more...
-                </div>
-                <div v-else class="text-center py-1 text-xs text-gray-400">
-                    Page {{ page }} / {{ lastPage }}
-                </div>
-            </template>
-        </Multiselect>
-    </div>
-</template>
-
 <script setup>
 import { ref, computed, onMounted, nextTick, watch } from "vue"
 import axios from "axios"
 import Multiselect from "vue-multiselect"
 import "vue-multiselect/dist/vue-multiselect.css"
 
-const props = defineProps({
+const {
+    selectedItem,
+    fieldName,
+    form,
+    apiUrl,
+    error,
+    multiple,
+    debounce,
+    placeholder,
+    selectedLabelKey,
+    selectedValueKey,
+    apiLabelKey,
+    apiValueKey,
+    compactDesign,
+    useDarkTheme,
+    defaultLabel,
+} = defineProps({
     selectedItem: { type: [String, Number, Object, Array], default: null },
     fieldName: { type: String, required: true },
     form: { type: Object, required: true },
@@ -35,6 +33,9 @@ const props = defineProps({
     selectedValueKey: { type: String, default: "id" },
     apiLabelKey: { type: String, default: "name" },
     apiValueKey: { type: String, default: "id" },
+    compactDesign: { type: Boolean, default: false },
+    useDarkTheme: { type: Boolean, default: false },
+    defaultLabel: { type: String, default: "Select item" },
 })
 
 const options = ref([])
@@ -44,15 +45,18 @@ const page = ref(1)
 const lastPage = ref(1)
 const searchQuery = ref("")
 const vselectRef = ref(null)
-const proxyModel = ref(props.multiple ? [] : null)
+const proxyModel = ref(multiple ? [] : null)
 
 let searchTimeout = null
 
+const getLabel = item => item?.[apiLabelKey] ?? defaultLabel
+const getValue = item => item?.[apiValueKey] ?? null
+
 const formattedOptions = computed(() =>
     options.value.map(item => ({
-        label: item?.[props.apiLabelKey] ?? "",
-        value: item?.[props.apiValueKey] ?? null,
-        raw: item
+        label: getLabel(item),
+        value: getValue(item),
+        raw: item,
     }))
 )
 
@@ -60,35 +64,35 @@ const normalizeItems = raw =>
     !raw ? [] : Array.isArray(raw) ? raw : Object.values(raw)
 
 const updateForm = val => {
-    if (!props.form || !props.fieldName) return
+    if (!form || !fieldName) return
 
-    if (props.multiple) {
-        props.form[props.fieldName] = Array.isArray(val)
-            ? val.map(v => v?.raw?.[props.selectedValueKey] ?? v?.value ?? v)
+    if (multiple) {
+        form[fieldName] = Array.isArray(val)
+            ? val.map(v => v?.raw?.[selectedValueKey] ?? v?.value ?? v)
             : []
     } else {
-        props.form[props.fieldName] = val
-            ? val?.raw?.[props.selectedValueKey] ?? val?.value ?? val
+        form[fieldName] = val
+            ? val?.raw?.[selectedValueKey] ?? val?.value ?? val
             : null
     }
 }
 
 const normalizeItem = async item => {
-    if (!item) return props.multiple ? [] : null
+    if (!item) return multiple ? [] : null
 
     if (typeof item === "object") {
-        if (props.multiple && Array.isArray(item)) {
+        if (multiple && Array.isArray(item)) {
             return item.map(v => ({
-                label: v?.[props.selectedLabelKey] ?? v?.[props.apiLabelKey] ?? "",
-                value: v?.[props.selectedValueKey] ?? v?.[props.apiValueKey] ?? null,
-                raw: v
+                label: v?.[selectedLabelKey] ?? v?.[apiLabelKey] ?? defaultLabel,
+                value: v?.[selectedValueKey] ?? v?.[apiValueKey] ?? null,
+                raw: v,
             }))
         }
 
         return {
-            label: item?.[props.selectedLabelKey] ?? item?.[props.apiLabelKey] ?? "",
-            value: item?.[props.selectedValueKey] ?? item?.[props.apiValueKey] ?? null,
-            raw: item
+            label: item?.[selectedLabelKey] ?? item?.[apiLabelKey] ?? defaultLabel,
+            value: item?.[selectedValueKey] ?? item?.[apiValueKey] ?? null,
+            raw: item,
         }
     }
 
@@ -101,26 +105,26 @@ const fetchItemByValue = async value => {
     let totalPages = 1
 
     do {
-        const res = await axios.get(props.apiUrl, {
-            params: { search: value, page: p }
+        const res = await axios.get(apiUrl, {
+            params: { search: value, page: p },
         })
 
         const items = normalizeItems(res.data?.items)
 
         totalPages = res.data?.last_page || 1
-        found = items.find(i => i?.[props.apiValueKey] == value)
+        found = items.find(i => i?.[apiValueKey] == value)
 
         if (found) break
 
         p++
     } while (p <= totalPages)
 
-    if (!found) return props.multiple ? [] : null
+    if (!found) return multiple ? [] : null
 
     return {
-        label: found?.[props.selectedLabelKey] ?? found?.[props.apiLabelKey] ?? "",
-        value: found?.[props.selectedValueKey] ?? found?.[props.apiValueKey] ?? null,
-        raw: found
+        label: found?.[selectedLabelKey] ?? found?.[apiLabelKey] ?? defaultLabel,
+        value: found?.[selectedValueKey] ?? found?.[apiValueKey] ?? null,
+        raw: found,
     }
 }
 
@@ -133,29 +137,21 @@ const fetchPage = async (pageNumber = 1, reset = false) => {
 
     const scrollTop = dropdown ? dropdown.scrollTop : 0
 
-    if (reset) {
-        loading.value = true
-    } else {
-        loadingMore.value = true
-    }
+    reset ? loading.value = true : loadingMore.value = true
 
     try {
-        const res = await axios.get(props.apiUrl, {
+        const res = await axios.get(apiUrl, {
             params: {
                 search: searchQuery.value,
-                page: pageNumber
-            }
+                page: pageNumber,
+            },
         })
 
         const data = normalizeItems(res.data?.items)
 
         lastPage.value = res.data?.last_page || 1
 
-        if (reset) {
-            options.value = data
-        } else {
-            options.value = [...options.value, ...data]
-        }
+        options.value = reset ? data : [...options.value, ...data]
     } finally {
         loading.value = false
         loadingMore.value = false
@@ -170,7 +166,7 @@ const fetchPage = async (pageNumber = 1, reset = false) => {
 
 const resetAndFetch = async () => {
     options.value = []
-    proxyModel.value = props.multiple ? [] : null
+    proxyModel.value = multiple ? [] : null
     searchQuery.value = ""
     page.value = 1
     lastPage.value = 1
@@ -185,10 +181,22 @@ watch(proxyModel, val => {
 }, { deep: true })
 
 watch(
-    () => props.apiUrl,
+    () => apiUrl,
     async () => {
         await resetAndFetch()
     }
+)
+
+watch(
+    () => selectedItem,
+    async newValue => {
+        const normalized = await normalizeItem(newValue)
+
+        proxyModel.value = normalized
+
+        updateForm(proxyModel.value)
+    },
+    { deep: true }
 )
 
 const onSearchDebounced = search => {
@@ -200,7 +208,7 @@ const onSearchDebounced = search => {
         page.value = 1
         lastPage.value = 1
         fetchPage(1, true)
-    }, props.debounce)
+    }, debounce)
 }
 
 const loadMoreManual = async () => {
@@ -240,7 +248,7 @@ const onDropdownOpen = () => {
 }
 
 onMounted(async () => {
-    const normalized = await normalizeItem(props.selectedItem)
+    const normalized = await normalizeItem(selectedItem)
 
     proxyModel.value = normalized
 
@@ -250,4 +258,159 @@ onMounted(async () => {
 })
 </script>
 
+<template>
+    <div class="multi-select-cointainer" :class="[
+        error ? 'border border-red-500 rounded-md' : '',
+        compactDesign ? 'multi-select-compact' : '',
+        useDarkTheme ? 'multi-select-dark' : ''
+    ]">
+        <Multiselect ref="vselectRef" v-model="proxyModel" :options="formattedOptions" :multiple="multiple"
+            :loading="loading" :searchable="true" :clear-on-select="!multiple" :close-on-select="!multiple"
+            :placeholder="placeholder" label="label" track-by="value" @search-change="onSearchDebounced"
+            @open="onDropdownOpen">
+            <template #option="{ option }">
+                <span>{{ option?.label ?? defaultLabel }}</span>
+            </template>
 
+            <template #singleLabel="{ option }">
+                <span>{{ option?.label ?? defaultLabel }}</span>
+            </template>
+
+            <template #tag="{ option, remove }">
+                <span class="multiselect__tag">
+                    <span>{{ option?.label ?? defaultLabel }}</span>
+                    <i class="multiselect__tag-icon" @click="remove(option)"></i>
+                </span>
+            </template>
+
+            <template #afterList>
+                <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
+                    Loading more...
+                </div>
+                <div v-else class="text-center py-1 text-xs text-gray-400">
+                    Page {{ page }} / {{ lastPage }}
+                </div>
+            </template>
+        </Multiselect>
+    </div>
+</template>
+
+<style scoped>
+.multi-select-compact :deep(.multiselect) {
+    min-height: 31px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__select) {
+    height: 31px;
+    padding: 4px 8px;
+}
+
+.multi-select-compact :deep(.multiselect__tags) {
+    min-height: 31px;
+    padding: 4px 32px 0 8px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__single) {
+    margin-bottom: 0;
+    padding-top: 2px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__input) {
+    font-size: 13px;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.multi-select-compact :deep(.multiselect__placeholder) {
+    margin-bottom: 0;
+    padding-top: 2px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__option) {
+    min-height: 30px;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.multi-select-compact :deep(.multiselect__tag) {
+    margin-bottom: 2px;
+    padding: 3px 22px 3px 8px;
+    font-size: 12px;
+}
+
+.multi-select-dark :deep(.multiselect) {
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__tags) {
+    background: #111827;
+    border-color: #374151;
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__single) {
+    background: transparent;
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__input) {
+    background: transparent;
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__placeholder) {
+    color: #9ca3af;
+}
+
+.multi-select-dark :deep(.multiselect__content-wrapper) {
+    background: #111827;
+    border-color: #374151;
+}
+
+.multi-select-dark :deep(.multiselect__option) {
+    background: #111827;
+    color: #e5e7eb;
+}
+
+.multi-select-dark :deep(.multiselect__option--highlight) {
+    background: #1f2937;
+    color: #ffffff;
+}
+
+.multi-select-dark :deep(.multiselect__option--selected) {
+    background: #374151;
+    color: #ffffff;
+}
+
+.multi-select-dark :deep(.multiselect__tag) {
+    background: #374151;
+    color: #ffffff;
+}
+
+.multi-select-dark :deep(.multiselect__tag-icon::after) {
+    color: #ffffff;
+}
+
+.multi-select-dark :deep(.multiselect__spinner) {
+    background: #111827;
+}
+
+:deep(.multiselect__option::after) {
+    display: none !important;
+    content: none !important;
+}
+
+:deep(.multiselect__option--highlight::after) {
+    display: none !important;
+    content: none !important;
+}
+
+:deep(.multiselect__option--selected::after) {
+    display: none !important;
+    content: none !important;
+}
+</style>
