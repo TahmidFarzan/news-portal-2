@@ -38,15 +38,20 @@ const metaKeywords = computed(() => {
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <div class="bg-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="bg-white shadow rounded-2xl p-6">
-                <h1 class="text-2xl font-semibold text-gray-800 mb-4">
-                    Home
-                </h1>
-                <p class="text-gray-600">
-                    Welcome to your TailwindCSS page.
-                </p>
+    <div class="bg-gray-100 py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-9">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        Main Content
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        Sidebar Content
+                    </div>
+                </div>
             </div>
         </div>
     </div>
