@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Models\Language;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
@@ -52,7 +52,7 @@ class TagSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SeederHelper::LANGUAGE_EN_CODE,
                 'tags'       => collect([
 
                     (object) ['name' => 'National', 'brief' => 'National news', 'seo_keywords' => 'national news, country updates'],
@@ -136,7 +136,7 @@ class TagSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                 'tags'       => collect([
                     (object) ['name' => 'জাতীয়', 'brief' => 'জাতীয় সংবাদ', 'seo_keywords' => 'জাতীয় সংবাদ, দেশ আপডেট'],
                     (object) ['name' => 'রাজনীতি', 'brief' => 'রাজনৈতিক সংবাদ', 'seo_keywords' => 'রাজনীতি, নির্বাচন, সংসদ'],

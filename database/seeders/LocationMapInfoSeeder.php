@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Models\Language;
 use App\Models\Location;
 use Illuminate\Database\Seeder;
@@ -66,11 +66,11 @@ class LocationMapInfoSeeder extends Seeder
 
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SeederHelper::LANGUAGE_EN_CODE,
                 'locations'     => collect($rows)->map(fn($row) => $this->makeLocation($row, false, $adm2Features, 1)),
             ],
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                 'locations'     => collect($rows)->map(fn($row) => $this->makeLocation($row, true, $adm2Features, 1)),
             ],
         ]);

@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Models\Category;
 use App\Models\Language;
 use App\Models\Location;
@@ -39,7 +39,7 @@ class LocationSeeder extends Seeder
             foreach ($locationsByLanguageGroup->locations as $location) {
                 $category = Category::where("name", 'National')->first() ?? null;
 
-                if ($language->code == SystemHelper::EXTRA_LANGUAGE_BN_CODE) {
+                if ($language->code == SeederHelper::LANGUAGE_BN_CODE) {
                     $category = Category::where("name", 'জাতীয়')->first() ?? null;
                 }
 
@@ -80,7 +80,7 @@ class LocationSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SeederHelper::LANGUAGE_EN_CODE,
                 'locations'     => collect([
                     (object) [
                         'name'      => 'Dhaka',
@@ -221,7 +221,7 @@ class LocationSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                 'locations'     => collect([
 
                     (object) [
@@ -302,7 +302,7 @@ class LocationSeeder extends Seeder
                     ],
 
                     (object) [
-                        'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                        'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                         'name'          => 'বরিশাল',
                         'brief'         => 'দক্ষিণাঞ্চলের নদীমাতৃক বিভাগ',
                         'latitude'      => 22.7010,
@@ -318,7 +318,7 @@ class LocationSeeder extends Seeder
                     ],
 
                     (object) [
-                        'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                        'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                         'name'          => 'সিলেট',
                         'brief'         => 'চা বাগান ও হাওর অঞ্চল',
                         'latitude'      => 24.8949,
@@ -332,7 +332,7 @@ class LocationSeeder extends Seeder
                     ],
 
                     (object) [
-                        'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                        'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                         'name'          => 'রংপুর',
                         'brief'         => 'উত্তরাঞ্চলের কৃষি বিভাগ',
                         'latitude'      => 25.7439,
@@ -350,7 +350,7 @@ class LocationSeeder extends Seeder
                     ],
 
                     (object) [
-                        'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                        'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                         'name'          => 'ময়মনসিংহ',
                         'brief'         => 'উত্তর-মধ্যাঞ্চলের বিভাগ',
                         'latitude'      => 24.7471,

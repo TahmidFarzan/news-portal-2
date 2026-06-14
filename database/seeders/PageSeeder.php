@@ -2,7 +2,7 @@
 namespace Database\Seeders;
 
 use App\Helpers\PageHelper;
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Models\Language;
 use App\Models\Page;
 use Illuminate\Database\Seeder;
@@ -83,7 +83,7 @@ class PageSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SeederHelper::LANGUAGE_EN_CODE,
                 'pages'         => collect([
                     (object) [
                         'title'        => 'Home',
@@ -336,7 +336,7 @@ class PageSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                 'pages'         => collect([
                     (object) [
                         'title'        => 'হোম',

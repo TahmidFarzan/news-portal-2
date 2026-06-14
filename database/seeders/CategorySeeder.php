@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Models\Category;
 use App\Models\Language;
 use Illuminate\Database\Seeder;
@@ -66,7 +66,7 @@ class CategorySeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SeederHelper::LANGUAGE_EN_CODE,
                 'categories'    => collect([
 
                     (object) [
@@ -216,7 +216,7 @@ class CategorySeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                 'categories'    => collect([
                     (object) [
                         'name'           => 'জাতীয়',

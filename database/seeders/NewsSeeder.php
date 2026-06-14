@@ -2,7 +2,7 @@
 namespace Database\Seeders;
 
 use App\Helpers\NewsHelper;
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Models\Category;
 use App\Models\Event;
 use App\Models\Language;
@@ -50,7 +50,7 @@ class NewsSeeder extends Seeder
                     $event    = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
                     $location = null;
-                    if ( ($mainCategory->name == "National" && $language->code === SystemHelper::DEFAULT_LANGUAGE_CODE) || ($mainCategory->name == "জাতীয়" && $language->code === SystemHelper::EXTRA_LANGUAGE_BN_CODE)) {
+                    if ( ($mainCategory->name == "National" && $language->code === SeederHelper::LANGUAGE_EN_CODE) || ($mainCategory->name == "জাতীয়" && $language->code === SeederHelper::LANGUAGE_BN_CODE)) {
                         $location = $mainCategory->locations()->first() ?? null;
                     }
 
@@ -156,7 +156,7 @@ class NewsSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SeederHelper::LANGUAGE_EN_CODE,
                 'news'          => collect([
 
                     (object) [
@@ -911,7 +911,7 @@ class NewsSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                 'news'          => collect([
 
                     (object) [

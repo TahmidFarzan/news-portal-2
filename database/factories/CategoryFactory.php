@@ -1,7 +1,7 @@
 <?php
 namespace Database\Factories;
 
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Helpers\UserHelper;
 use App\Models\Language;
 use App\Models\User;
@@ -24,7 +24,7 @@ class CategoryFactory extends Factory
     {
         $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
-        $language      = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
+        $language      = Language::where("code", SeederHelper::LANGUAGE_EN_CODE)->first() ?? null;
 
         $name  = $this->faker->name();
         $brief = $this->faker->sentence();

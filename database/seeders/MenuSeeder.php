@@ -3,7 +3,7 @@ namespace Database\Seeders;
 
 use App\Helpers\MenuHelper;
 use App\Helpers\PageHelper;
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Models\Category;
 use App\Models\Language;
 use App\Models\Menu;
@@ -49,25 +49,25 @@ class MenuSeeder extends Seeder
         foreach ($languages as $language) {
 
             $topbarMenu = Menu::factory()->state([
-                'name'         => ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Top bar" : "উপরের বার",
+                'name'         => ($language->code == SeederHelper::LANGUAGE_EN_CODE) ? "Top bar" : "উপরের বার",
                 "language_id"  => $language->id,
                 'menu_type_id' => $menuTypeTopBar?->id,
             ])->create();
 
             $headerMenu = Menu::factory()->state([
-                'name'         => ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Header" : "হেডার",
+                'name'         => ($language->code == SeederHelper::LANGUAGE_EN_CODE) ? "Header" : "হেডার",
                 "language_id"  => $language->id,
                 'menu_type_id' => $menuTypeHeader?->id,
             ])->create();
 
             $offCanvasMenu = Menu::factory()->state([
-                'name'         => ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "OffCanvas" : "অফক্যানভাস",
+                'name'         => ($language->code == SeederHelper::LANGUAGE_EN_CODE) ? "OffCanvas" : "অফক্যানভাস",
                 "language_id"  => $language->id,
                 'menu_type_id' => $menuTypeOffCanvas?->id,
             ])->create();
 
             $footerMenu = Menu::factory()->state([
-                'name'         => ($language->code == SystemHelper::DEFAULT_LANGUAGE_CODE) ? "Footer" : "ফুটার",
+                'name'         => ($language->code == SeederHelper::LANGUAGE_EN_CODE) ? "Footer" : "ফুটার",
                 "language_id"  => $language->id,
                 'menu_type_id' => $menuTypeFooter?->id,
             ])->create();
@@ -83,12 +83,12 @@ class MenuSeeder extends Seeder
     private function topBarMenuItemSave(Menu $menu, Language $language): void
     {
         $pageNames = [
-            SystemHelper::DEFAULT_LANGUAGE_CODE  => [
+            SeederHelper::LANGUAGE_EN_CODE  => [
                 "Contact",
                 "About",
             ],
 
-            SystemHelper::EXTRA_LANGUAGE_BN_CODE => [
+            SeederHelper::LANGUAGE_BN_CODE => [
                 "সম্পর্কে",
                 "যোগাযোগ",
             ],
@@ -132,14 +132,14 @@ class MenuSeeder extends Seeder
     private function footerMenuItemSave(Menu $menu, Language $language): void
     {
         $pageNames = [
-            SystemHelper::DEFAULT_LANGUAGE_CODE  => [
+            SeederHelper::LANGUAGE_EN_CODE  => [
                 "Contact",
                 "About",
                 "Privacy Policy",
                 "Terms and Conditions",
             ],
 
-            SystemHelper::EXTRA_LANGUAGE_BN_CODE => [
+            SeederHelper::LANGUAGE_BN_CODE => [
                 "সম্পর্কে",
                 "যোগাযোগ",
                 "গোপনীয়তা নীতি",

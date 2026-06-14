@@ -2,7 +2,7 @@
 namespace Database\Seeders;
 
 use App\Helpers\MediaHelper;
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Models\Contributor;
 use App\Models\Language;
 use Exception;
@@ -78,7 +78,7 @@ class ContributorSeeder extends Seeder
     {
         return collect([
             (object) [
-                'language_code' => SystemHelper::DEFAULT_LANGUAGE_CODE,
+                'language_code' => SeederHelper::LANGUAGE_EN_CODE,
                 'contributors'       => collect([
 
                     (object) [
@@ -238,7 +238,7 @@ class ContributorSeeder extends Seeder
             ],
 
             (object) [
-                'language_code' => SystemHelper::EXTRA_LANGUAGE_BN_CODE,
+                'language_code' => SeederHelper::LANGUAGE_BN_CODE,
                 'contributors'       => collect([
                     (object) [
                         'name'            => 'তাহমিমা আনাম',

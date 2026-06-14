@@ -1,7 +1,7 @@
 <?php
 namespace Database\Factories;
 
-use App\Helpers\SystemHelper;
+use App\Helpers\SeederHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\UserHelper;
 use App\Models\Language;
@@ -11,7 +11,6 @@ use App\Models\MenuType;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<MenuItem>
@@ -27,7 +26,7 @@ class MenuItemFactory extends Factory
     {
         $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
         $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
-        $language      = Language::where("code", SystemHelper::DEFAULT_LANGUAGE_CODE)->first() ?? null;
+        $language      = Language::where("code", SeederHelper::LANGUAGE_EN_CODE)->first() ?? null;
 
         $menuTypes      = [MenuHelper::MENU_TYPE_HEADER, MenuHelper::MENU_TYPE_TOPBAR, MenuHelper::MENU_TYPE_FOOTER];
         $randomMenuType = $menuTypes[array_rand($menuTypes)];

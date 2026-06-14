@@ -5,8 +5,8 @@ use Illuminate\Support\Collection;
 
 class SystemHelper
 {
-    public const DEFAULT_LANGUAGE_CODE  = 'en';
-    public const EXTRA_LANGUAGE_BN_CODE = 'bn';
+    public const LANGUAGE_EN_CODE  = 'en';
+    public const LANGUAGE_BN_CODE = 'bn';
 
     public static function toOptions(array $items): Collection
     {
