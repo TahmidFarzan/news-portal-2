@@ -29,7 +29,7 @@ class LanguageSeeder extends Seeder
 
         $languagesFromStaticData = collect([
             (object) ['name' => 'English', 'code' => SeederHelper::LANGUAGE_EN_CODE, 'locale' => SeederHelper::LANGUAGE_EN_CODE."_US"],
-            (object) ['name' => 'Bangla', 'code' => SeederHelper::LANGUAGE_BN_CODE, 'locale' => SeederHelper::LANGUAGE_BN_CODE."_BD"],
+            (object) ['name' => 'বাংলা', 'code' => SeederHelper::LANGUAGE_BN_CODE, 'locale' => SeederHelper::LANGUAGE_BN_CODE."_BD"],
         ]);
 
         foreach ($languagesFromStaticData as $language) {
