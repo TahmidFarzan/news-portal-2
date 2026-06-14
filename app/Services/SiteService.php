@@ -2,16 +2,32 @@
 namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
-//use App\Models\Language;
 use App\Helpers\MenuHelper;
-use App\Helpers\SystemHelper;
 use App\Models\BreakingNews;
+use App\Models\Language;
+use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SiteService
 {
+    public function language(): Language
+    {
+        $languageId = session('selected_language_id');
+
+        if ($languageId) {
+            return Language::query()
+                ->where('id', $languageId)
+                ->firstOrFail();
+        }
+
+        return Language::query()
+            ->oldest('id')
+            ->firstOrFail();
+    }
+
     public function menuItem(string $slug): MenuItem
     {
         return MenuItem::where('slug', $slug)->firstOrFail();
@@ -34,18 +50,17 @@ class SiteService
         $perPage = 10;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode   = SystemHelper::DEFAULT_LANGUAGE_CODE;
-        $headerMenuCode = MenuHelper::MENU_TYPE_HEADER;
+        $language          = $this->language();
+        $headerMenuCode    = MenuHelper::MENU_TYPE_HEADER;
+        $headerMenuCodeKey = Str::lower($headerMenuCode);
 
-        $cacheKey = "site:{$headerMenuCode}:navbar:language:{$languageCode}:menu:{$headerMenuCode}:page:{$page}:per-page:{$perPage}";
+        $cacheKey = "site:language:{$language->locale}:{$headerMenuCodeKey}:menu-items:per-page:{$perPage}:page:{$page}";
 
         $cacheTags = [
-            'site',
-            "site:{$headerMenuCode}",
-            "site:{$headerMenuCode}:navbar",
-            "site:{$headerMenuCode}:navbar:language:{$languageCode}",
-            "site:{$headerMenuCode}:navbar:language:{$languageCode}:menu:{$headerMenuCode}",
-            "site:{$headerMenuCode}:navbar:language:{$languageCode}:menu:{$headerMenuCode}:menu-items",
+            "site",
+            "site:language:{$language->locale}",
+            "site:language:{$language->locale}:{$headerMenuCodeKey}",
+            "site:language:{$language->locale}:{$headerMenuCodeKey}:menu-items",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -54,16 +69,15 @@ class SiteService
             return $cachedData;
         }
 
+        $menu = Menu::where("language_id", $language->id)->whereRelation('menuType', 'name', $headerMenuCode)->firstOrFail();
+
         $query = MenuItem::query()
             ->with([
-                'menu.language',
-                'menu.menuType',
                 'children',
                 'model',
             ])
             ->whereNull("parent_id")
-            ->whereRelation('menu.language', 'code', $languageCode)
-            ->whereRelation('menu.menuType', 'name', $headerMenuCode)
+            ->where('menu_id', $menu->id)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
@@ -100,18 +114,17 @@ class SiteService
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode      = SystemHelper::DEFAULT_LANGUAGE_CODE;
-        $offcanvasMenuCode = MenuHelper::MENU_TYPE_OFFCANVAS;
+        $language             = $this->language();
+        $offcanvasMenuCode    = MenuHelper::MENU_TYPE_OFFCANVAS;
+        $offcanvasMenuCodeKey = Str::lower($offcanvasMenuCode);
 
-        $cacheKey = "site:{$offcanvasMenuCode}:language:{$languageCode}:page:{$page}:per-page:{$perPage}";
+        $cacheKey = "site:language:{$language->locale}:{$offcanvasMenuCodeKey}:menu-items:per-page:{$perPage}:page:{$page}";
 
         $cacheTags = [
-            'site',
-            "site:{$offcanvasMenuCode}",
-            "site:{$offcanvasMenuCode}:navbar",
-            "site:{$offcanvasMenuCode}:navbar:language:{$languageCode}",
-            "site:{$offcanvasMenuCode}:navbar:language:{$languageCode}:menu:{$offcanvasMenuCode}",
-            "site:{$offcanvasMenuCode}:navbar:language:{$languageCode}:menu:{$offcanvasMenuCode}:menu-items",
+            "site",
+            "site:language:{$language->locale}",
+            "site:language:{$language->locale}:{$offcanvasMenuCodeKey}",
+            "site:language:{$language->locale}:{$offcanvasMenuCodeKey}:menu-items",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -119,17 +132,15 @@ class SiteService
         if ($cachedData !== null) {
             return $cachedData;
         }
+        $menu = Menu::where("language_id", $language->id)->whereRelation('menuType', 'name', $offcanvasMenuCode)->firstOrFail();
 
         $query = MenuItem::query()
             ->with([
-                'menu.language',
-                'menu.menuType',
                 'children',
                 'model',
             ])
             ->whereNull("parent_id")
-            ->whereRelation('menu.language', 'code', $languageCode)
-            ->whereRelation('menu.menuType', 'name', $offcanvasMenuCode)
+            ->where('menu_id', $menu->id)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
@@ -166,19 +177,17 @@ class SiteService
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode   = SystemHelper::DEFAULT_LANGUAGE_CODE;
-        $topbarMenuCode = MenuHelper::MENU_TYPE_TOPBAR;
+        $language          = $this->language();
+        $topbarMenuCode    = MenuHelper::MENU_TYPE_TOPBAR;
+        $topbarMenuCodeKey = Str::lower($topbarMenuCode);
 
-        $cacheKey = "site:header:{$topbarMenuCode}:language:{$languageCode}:page:{$page}:per-page:{$perPage}";
+        $cacheKey = "site:language:{$language->locale}:{$topbarMenuCodeKey}:menu-items:per-page:{$perPage}:page:{$page}";
 
         $cacheTags = [
-            'site',
-            "site:header",
-            "site:header:{$topbarMenuCode}",
-            "site:header:{$topbarMenuCode}:navbar",
-            "site:header:{$topbarMenuCode}:navbar:language:{$languageCode}",
-            "site:header:{$topbarMenuCode}:navbar:language:{$languageCode}:menu:{$topbarMenuCode}",
-            "site:header:{$topbarMenuCode}:navbar:language:{$languageCode}:menu:{$topbarMenuCode}:menu-items",
+            "site",
+            "site:language:{$language->locale}",
+            "site:language:{$language->locale}:{$topbarMenuCodeKey}",
+            "site:language:{$language->locale}:{$topbarMenuCodeKey}:menu-items",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -187,16 +196,15 @@ class SiteService
             return $cachedData;
         }
 
+        $menu = Menu::where("language_id", $language->id)->whereRelation('menuType', 'name', $topbarMenuCode)->firstOrFail();
+
         $query = MenuItem::query()
             ->with([
-                'menu.language',
-                'menu.menuType',
                 'children',
                 'model',
             ])
             ->whereNull("parent_id")
-            ->whereRelation('menu.language', 'code', $languageCode)
-            ->whereRelation('menu.menuType', 'name', $topbarMenuCode)
+            ->where('menu_id', $menu->id)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
@@ -233,18 +241,17 @@ class SiteService
         $perPage = 20;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode   = SystemHelper::DEFAULT_LANGUAGE_CODE;
-        $footerMenuCode = MenuHelper::MENU_TYPE_FOOTER;
+        $language          = $this->language();
+        $footerMenuCode    = MenuHelper::MENU_TYPE_FOOTER;
+        $footerMenuCodeKey = Str::lower($footerMenuCode);
 
-        $cacheKey = "site:{$footerMenuCode}:language:{$languageCode}:page:{$page}:per-page:{$perPage}";
+        $cacheKey = "site:language:{$language->locale}:{$footerMenuCodeKey}:menu-items:per-page:{$perPage}:page:{$page}";
 
         $cacheTags = [
-            'site',
-            "site:{$footerMenuCode}",
-            "site:{$footerMenuCode}:navbar",
-            "site:{$footerMenuCode}:navbar:language:{$languageCode}",
-            "site:{$footerMenuCode}:navbar:language:{$languageCode}:menu:{$footerMenuCode}",
-            "site:{$footerMenuCode}:navbar:language:{$languageCode}:menu:{$footerMenuCode}:menu-items",
+            "site",
+            "site:language:{$language->locale}",
+            "site:language:{$language->locale}:{$footerMenuCodeKey}",
+            "site:language:{$language->locale}:{$footerMenuCodeKey}:menu-items",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -253,15 +260,15 @@ class SiteService
             return $cachedData;
         }
 
+        $menu = Menu::where("language_id", $language->id)->whereRelation('menuType', 'name', $footerMenuCode)->firstOrFail();
+
         $query = MenuItem::query()
             ->with([
-                'menu.language',
-                'menu.menuType',
                 'children',
                 'model',
             ])
             ->whereNull("parent_id")
-            ->whereRelation('menu.language', 'code', $languageCode)
+            ->whereRelation('menu.language', 'id', $language->id)
             ->whereRelation('menu.menuType', 'name', $footerMenuCode)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
@@ -299,20 +306,20 @@ class SiteService
         $perPage = 10;
         $page    = max((int) $request->input('page', 1), 1);
 
-        $languageCode = $menuItem->language->code;
+        $language = $menuItem->language;
 
         $menu     = $menuItem->menu;
         $menuType = $menu->menuType;
 
-        $cacheKey = "site:menu-type:{$menuType->slug}:menu:{$menu->slug}:language:{$languageCode}:menu-item:{$menuItem}:page:{$page}:per-page:{$perPage}";
+        $cacheKey = "site:language:{$language->locale}:menu-type:{$menuType->slug}:menu:{$menu->slug}:menu-item:{$menuItem->slug}:menu-items:per-page:{$perPage}:page:{$page}";
 
         $cacheTags = [
             'site',
-            'site:menu',
-            "site:menu-type:{$menuType->slug}",
-            "site:menu-type:{$menuType->slug}:menu:{$menu->slug}",
-            "site:menu-type:{$menuType->slug}:menu:{$menu->slug}:language-{$languageCode}",
-            "site:menu-type:{$menuType->slug}:menu:{$menu->slug}:language:{$languageCode}:menu-item:{$menuItem}",
+            "site:language:{$language->locale}",
+            "site:language:{$language->locale}:menu-type:{$menuType->slug}",
+            "site:language:{$language->locale}:menu-type:{$menuType->slug}:menu:{$menu->slug}",
+            "site:language:{$language->locale}:menu-type:{$menuType->slug}:menu:{$menu->slug}:menu-item:{$menuItem->slug}",
+            "site:language:{$language->locale}:menu-type:{$menuType->slug}:menu:{$menu->slug}:menu-item:{$menuItem->slug}:menu-items",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -394,15 +401,15 @@ class SiteService
         $cursor    = $request->input('cursor');
         $cursorKey = $cursor ? md5($cursor) : 'first';
 
-        $languageCode = SystemHelper::DEFAULT_LANGUAGE_CODE;
+        $language = $this->language();
 
-        $cacheKey = "site:breaking-news:language:{$languageCode}:cursor:{$cursorKey}:per-page:{$perPage}";
+        $cacheKey = "site:language:{$language->locale}:breaking-news:cursor:{$cursorKey}:per-page:{$perPage}";
 
         $cacheTags = [
             'site',
-            'site-breaking-news',
-            "site:breaking-news:language:{$languageCode}",
-            "site:breaking-news:language:{$languageCode}:news-slider",
+            "site:language:{$language->locale}",
+            "site:language:{$language->locale}:breaking-news",
+            "site:language:{$language->locale}:breaking-news",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -418,8 +425,8 @@ class SiteService
                 'news.language',
             ])
             ->where('is_published', true)
-            ->whereRelation('language', 'code', $languageCode)
-            ->whereRelation('news.language', 'code', $languageCode)
+            ->whereRelation('language', 'id', $language->id)
+            ->whereRelation('news.language', 'id', $language->id)
             ->orderByDesc('created_at')
             ->orderByDesc('updated_at')
             ->orderByDesc('id')
@@ -435,4 +442,75 @@ class SiteService
         return $query;
     }
 
+    public function languages(Request $request)
+    {
+        $perPage = (int) $request->input('per_page', 15);
+        $search  = $request->input('search');
+        $page    = (int) $request->input('page', 1);
+
+        $cacheSearch = md5($search ?? '');
+
+        $cacheKey = "site:languages:basic-pagination:search:{$cacheSearch}:page:{$page}:per-page:{$perPage}";
+
+        $cacheTags = [
+            'site',
+            'site.languages',
+            'site:languages:basic-pagination',
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $query = Language::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $records = $query
+            ->orderByDesc('id')
+            ->paginate($perPage);
+
+        $list = $records->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+            'slug' => $row->slug,
+        ]);
+
+        $data = [
+            'items'        => $list,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+            'per_page'     => $records->perPage(),
+        ];
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function languageChange(int | string $slugOrId): array
+    {
+        $language = Language::query()
+            ->where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+
+        session()->put('selected_language_id', $language->id);
+
+        return [
+            'status'  => true,
+            'message' => __('status-messages.site.language.change.success'),
+            'data'    => $language,
+        ];
+    }
 }

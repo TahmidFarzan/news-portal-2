@@ -244,16 +244,16 @@ return [
     ],
 
     'page'          => [
-        'save'   => [
+        'save'    => [
             'success' => 'Page saved successfully.',
             'failed'  => 'Failed to save page.',
         ],
-        'update' => [
+        'update'  => [
             'success'         => 'Page updated successfully.',
             'failed'          => 'Failed to update page.',
             'default_warning' => 'Default page status can not change.',
         ],
-        'delete' => [
+        'delete'  => [
             'success'         => 'Page deleted successfully.',
             'failed'          => 'Failed to delete page.',
             'default_warning' => 'Default page can not deleted.',
@@ -347,6 +347,15 @@ return [
             'save' => [
                 'success' => 'Auth user account saved successfully.',
                 'failed'  => 'Failed to save auth user account.',
+            ],
+        ],
+    ],
+
+    // Site
+    'site'          => [
+        'language' => [
+            'change' => [
+                "success"=> 'Language has been change.'
             ],
         ],
     ],

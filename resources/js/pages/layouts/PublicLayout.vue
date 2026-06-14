@@ -6,6 +6,7 @@ import TopbarMenu from '@/components/common/layout/public-layout/TopbarMenu.vue'
 import FooterMenu from '@/components/common/layout/public-layout/FooterMenu.vue'
 import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
+import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { usePage } from '@inertiajs/vue3'
@@ -163,6 +164,8 @@ onBeforeUnmount(() => {
                     <div v-else class="max-[450px]:flex-shrink-0">
                         <AuthTopbarDropdownMenu :auth-user="authUser" />
                     </div>
+
+                    <LanguageSelect class="max-[450px]:flex-shrink-0" />
                 </div>
             </div>
         </div>

@@ -23,7 +23,7 @@ use Spatie\Sluggable\SlugOptions;
 #[Table('languages')]
 #[Fillable([
         'name', 'code', "locale",'slug',
-        'detail', 'created_by_id',
+        'detail', 'created_by_id',"is_default"
     ])]
 #[UsePolicy(LanguagePolicy::class)]
 #[ObservedBy([LanguageObserver::class])]

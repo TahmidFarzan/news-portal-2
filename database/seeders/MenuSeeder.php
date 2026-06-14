@@ -102,19 +102,15 @@ class MenuSeeder extends Seeder
 
     private function headerMenuItemSave(Menu $menu, Language $language): void
     {
-        $categoryNames = $language->code == SystemHelper::DEFAULT_LANGUAGE_CODE
-            ? ['National', 'International', 'Business', 'Entertainment', 'Technology', 'Sports']
-            : ['জাতীয়', 'আন্তর্জাতিক', 'ব্যবসা', 'বিনোদন', 'প্রযুক্তি', 'খেলাধুলা'];
+        $categoryNames = ['National', 'International', 'Business', 'Entertainment', 'Technology', 'Sports', 'জাতীয়', 'আন্তর্জাতিক', 'ব্যবসা', 'বিনোদন', 'প্রযুক্তি', 'খেলাধুলা'];
 
-
-        $pages = Page::whereIn("default_use_as", [PageHelper::DAFAULT_USE_AS_HOME,PageHelper::DAFAULT_USE_AS_LATEST])->where("language_id", $language->id)->where("is_default", true)->where("is_published", true)->get();
+        $pages = Page::whereIn("default_use_as", [PageHelper::DAFAULT_USE_AS_HOME, PageHelper::DAFAULT_USE_AS_LATEST])->where("language_id", $language->id)->where("is_default", true)->where("is_published", true)->get();
 
         $categories = Category::query()
             ->where('language_id', $language->id)
             ->whereNull('parent_id')
             ->whereIn('name', $categoryNames)
             ->get();
-
 
         foreach ($pages as $page) {
             $this->saveMenuItem($menu, null, $language, $page);
@@ -162,25 +158,22 @@ class MenuSeeder extends Seeder
         $isCategory = $item instanceof Category;
         $isPage     = $item instanceof Page;
 
-        $name = $isCategory ? $item->name : $item;
-        $name = $isPage ? $item->title : $item;
+        $name = match (true) {
+            $isCategory => $item->name,
+            $isPage     => $item->title,
+            default     => $item,
+        };
 
-        $url = null;
-
-        if (! $isCategory && ! $isPage) {
-            if ($name == "Home" || $name == "হোম") {
-                $url = route("home");
-            }
-            if ($name == "Latest" || $name == "সর্বশেষ") {
-                $url = route("latest");
-            }
-        }
+        $url = match ($name) {
+            'Home', 'হোম'       => route('home'),
+            'Latest', 'সর্বশেষ' => route('latest'),
+            default => null,
+        };
 
         $saveMenuItem = MenuItem::factory()->state([
             'name'        => $name,
             'language_id' => $language->id,
             'parent_id'   => $parent?->id,
-
             'menu_id'     => $menu->id,
 
             'model_type'  => ($isCategory || $isPage) ? $item->getMorphClass() : null,
@@ -194,7 +187,7 @@ class MenuSeeder extends Seeder
             'slug_tree'   => ($parent ? $parent->slug_tree . '/' : '') . Str::slug($name),
         ])->create();
 
-        if ( ($isCategory || $isPage) && ! empty($item->descendants)) {
+        if (($isCategory || $isPage) && $item->descendants->isNotEmpty()) {
             foreach ($item->descendants as $subItem) {
                 $this->saveMenuItem($menu, $saveMenuItem, $language, $subItem);
             }

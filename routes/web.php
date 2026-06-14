@@ -14,11 +14,11 @@ use App\Http\Controllers\BackOffice\LocationController;
 use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
+use App\Http\Controllers\BackOffice\PageController as BackOfficePageController;
 use App\Http\Controllers\BackOffice\SettingController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
-use App\Http\Controllers\BackOffice\PageController as BackOfficePageController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
@@ -369,25 +369,23 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
 });
 
 Route::prefix('site')->name('site.')->group(function () {
-    Route::middleware(['response.cache:3600,public,300,etag'])->group(function () {
-        Route::prefix('menus')->name('menus.')->group(function () {
-            Route::get('header-menu-items', [SiteController::class, 'menuHeaderMenuMenuItems'])->name('header-menu-items');
-            Route::get('off-canvas-menu-items', [SiteController::class, 'menuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
-            Route::get('topbar-menu-items', [SiteController::class, 'menuTopbarMenuMenuItems'])->name('topbar-menu-items');
-            Route::get('footer-menu-items', [SiteController::class, 'menuFooterMenuMenuItems'])->name('footer-menu-items');
-        });
+    Route::get('language', [SiteController::class, 'language'])->name('language');
+    Route::post('language-change/{slugOrId}', [SiteController::class, 'languageChange'])->name('language-change');
 
-        Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
-            Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
-        });
-
+    Route::prefix('menus')->name('menus.')->group(function () {
+        Route::get('header-menu-items', [SiteController::class, 'menuHeaderMenuMenuItems'])->name('header-menu-items');
+        Route::get('off-canvas-menu-items', [SiteController::class, 'menuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
+        Route::get('topbar-menu-items', [SiteController::class, 'menuTopbarMenuMenuItems'])->name('topbar-menu-items');
+        Route::get('footer-menu-items', [SiteController::class, 'menuFooterMenuMenuItems'])->name('footer-menu-items');
     });
 
-    Route::middleware(['response.cache:300,public,100,etag'])->group(function () {
-        Route::get('settings', [SiteController::class, 'settings'])->name('settings');
-        Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
+    Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
+        Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
     });
 
+    Route::get('settings', [SiteController::class, 'settings'])->name('settings');
+    Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
+    Route::get('languages', [SiteController::class, 'languages'])->name('languages');
 });
 
 Route::get('/', function () {

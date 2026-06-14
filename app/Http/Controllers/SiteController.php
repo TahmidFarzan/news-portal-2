@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Services\SiteService;
@@ -13,6 +12,13 @@ class SiteController extends Controller
     public function __construct(SiteService $siteService)
     {
         $this->siteService = $siteService;
+    }
+
+    public function language(): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->language()
+        );
     }
 
     public function menuHeaderMenuMenuItems(Request $request): JsonResponse
@@ -64,5 +70,19 @@ class SiteController extends Controller
         return response()->json(
             $this->siteService->breakingNews($request)
         );
+    }
+
+    public function languages(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->languages($request)
+        );
+    }
+
+    public function languageChange(int | string $slugOrId)
+    {
+        $result = $this->siteService->languageChange($slugOrId);
+
+        return response()->json($result);
     }
 }

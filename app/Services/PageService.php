@@ -3,7 +3,6 @@ namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
 use App\Helpers\PageHelper;
-use App\Helpers\SystemHelper;
 use App\Models\Category;
 use App\Models\Contributor;
 use App\Models\Event;
@@ -13,6 +12,7 @@ use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\Page;
 use App\Models\Tag;
+use App\Services\SiteService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
@@ -20,25 +20,29 @@ use Illuminate\Support\Str;
 
 class PageService
 {
+    protected SiteService $siteService;
+
+    public function __construct(SiteService $siteService)
+    {
+        $this->siteService = $siteService;
+    }
+
     public function language(): Language
     {
-        $languageCode = SystemHelper::DEFAULT_LANGUAGE_CODE;
-
-        $language = Language::query()->where('code', $languageCode)->firstOrFail();
-
-        return $language;
+        return $this->siteService->language();
     }
 
     public function page(string $slugTree): Page
     {
         $language = $this->language();
 
-        $pageCacheKey = "pages:language:{$language->id}:page:{$slugTree}";
+        $pageCacheKey = "page:language:{$language->locale}:page:{$slugTree}";
 
         $pageCacheTags = [
-            'pages',
-            "pages:language:{$language->id}",
-            "pages:language:{$language->id}:page:{$slugTree}",
+            'page',
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:page",
+            "page:language:{$language->locale}:page:{$slugTree}",
         ];
 
         $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
@@ -68,12 +72,13 @@ class PageService
     {
         $language = $this->language();
 
-        $pageCacheKey = "pages:language:{$language->id}:page:home";
+        $pageCacheKey = "page:language:{$language->locale}:page:home";
 
         $pageCacheTags = [
-            'pages',
-            "pages:language:{$language->id}",
-            "pages:language:{$language->id}:page:home",
+            'page',
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:page",
+            "page:language:{$language->locale}:page:home",
         ];
 
         $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
@@ -103,12 +108,13 @@ class PageService
     {
         $language = $this->language();
 
-        $pageCacheKey = "pages:language:{$language->id}:page:latest";
+        $pageCacheKey = "page:language:{$language->locale}:page:latest";
 
         $pageCacheTags = [
-            'pages',
-            "pages:language:{$language->id}",
-            "pages:language:{$language->id}:page:latest",
+            'page',
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:page",
+            "page:language:{$language->locale}:page:latest",
         ];
 
         $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
@@ -138,12 +144,13 @@ class PageService
     {
         $language = $this->language();
 
-        $pageCacheKey = "pages:language:{$language->id}:page:search";
+        $pageCacheKey = "page:language:{$language->locale}:page:search";
 
         $pageCacheTags = [
-            'pages',
-            "pages:language:{$language->id}",
-            "pages:language:{$language->id}:page:search",
+            'page',
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:page",
+            "page:language:{$language->locale}:page:search",
         ];
 
         $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
@@ -171,11 +178,12 @@ class PageService
 
     public function news(string $slug): News
     {
-        $newsCacheKey = "news-details:{$slug}";
+        $language     = $this->language();
+        $newsCacheKey = "page:news:{$slug}";
 
         $newsCacheTags = [
-            'news',
-            "news-details:{$slug}",
+            'page',
+            "page:news:{$slug}",
         ];
 
         $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
@@ -208,6 +216,7 @@ class PageService
                     ->limit(4),
                 'relatedNews.category',
             ])
+            ->where('language_id', $language->id)
             ->where('slug', $slug)
             ->where('is_published', true)
             ->firstOrFail();
@@ -225,11 +234,14 @@ class PageService
     public function tag(string $slug): Tag
     {
 
-        $tagCacheKey = "tag-details:{$slug}";
+        $language = $this->language();
+
+        $tagCacheKey = "page:language:{$language->locale}:tag:{$slug}";
 
         $tagCacheTags = [
-            'tags',
-            "tag-details:{$slug}",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:tag:{$slug}",
         ];
 
         $tagCachedData = CacheServerHelper::getCachedData($tagCacheKey, $tagCacheTags);
@@ -239,6 +251,7 @@ class PageService
         }
 
         $tag = Tag::query()
+            ->where('language_id', $language->id)
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -257,12 +270,15 @@ class PageService
         $perPage   = $request->input('per_page', 24);
         $queryHash = md5(http_build_query($request->query()));
 
-        $tagNewsCacheKey = "tag:{$tag->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+        $language = $this->language();
+
+        $tagNewsCacheKey = "page:language:{$language->locale}:tag:{$tag->slug}:news:per-page:{$perPage}:query:{$queryHash}";
 
         $tagNewsCacheTags = [
-            'tag',
-            'tag-news',
-            "tag:{$tag->slug}:news",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:tag:{$tag->slug}",
+            "page:language:{$language->locale}:tag:{$tag->slug}:news",
         ];
 
         $tagNewsCachedData = CacheServerHelper::getCachedData($tagNewsCacheKey, $tagNewsCacheTags);
@@ -273,6 +289,7 @@ class PageService
 
         $tagNews = News::query()
             ->with(["newsType", "category", "event", "location"])
+            ->where("language_id", $language->id)
             ->where("is_published", true)
             ->whereHas('tags', function ($tagQuery) use ($tag) {
                 $tagQuery->where('tags.id', $tag->id);
@@ -294,12 +311,13 @@ class PageService
 
     public function contributor(string $slug): Contributor
     {
-
-        $contributorCacheKey = "contributor-details:{$slug}";
+        $language            = $this->language();
+        $contributorCacheKey = "page:language:{$language->locale}:contributor:{$slug}";
 
         $contributorCacheTags = [
-            'contributors',
-            "contributor-details:{$slug}",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:contributor:{$slug}",
         ];
 
         $contributorCachedData = CacheServerHelper::getCachedData($contributorCacheKey, $contributorCacheTags);
@@ -309,6 +327,7 @@ class PageService
         }
 
         $contributor = Contributor::query()
+            ->where("language_id", $language->id)
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -327,12 +346,15 @@ class PageService
         $perPage   = $request->input('per_page', 24);
         $queryHash = md5(http_build_query($request->query()));
 
-        $contributorNewsCacheKey = "contributor:{$contributor->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+        $language = $this->language();
+
+        $contributorNewsCacheKey = "page:language:{$language->locale}:contributor:{$contributor->slug}:news:per-page:{$perPage}:query:{$queryHash}";
 
         $contributorNewsCacheTags = [
-            'contributor',
-            'contributor-news',
-            "contributor:{$contributor->slug}:news",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:contributor:{$contributor->slug}",
+            "page:language:{$language->locale}:contributor:{$contributor->slug}:news",
         ];
 
         $contributorNewsCachedData = CacheServerHelper::getCachedData($contributorNewsCacheKey, $contributorNewsCacheTags);
@@ -343,6 +365,7 @@ class PageService
 
         $contributorNews = News::query()
             ->with(["newsType", "category", "event", "location"])
+            ->where("language_id", $language->id)
             ->where("is_published", true)
             ->whereHas('contributors', function ($contributorQuery) use ($contributor) {
                 $contributorQuery->where('contributors.id', $contributor->id);
@@ -364,12 +387,13 @@ class PageService
 
     public function event(string $slug): Event
     {
-
-        $eventCacheKey = "event-details:{$slug}";
+        $language      = $this->language();
+        $eventCacheKey = "page:language:{$language->locale}:event:{$slug}";
 
         $eventCacheEvents = [
-            'events',
-            "event-details:{$slug}",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:event:{$slug}",
         ];
 
         $eventCachedData = CacheServerHelper::getCachedData($eventCacheKey, $eventCacheEvents);
@@ -379,6 +403,7 @@ class PageService
         }
 
         $event = Event::query()
+            ->where('language_id', $language->id)
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -397,15 +422,18 @@ class PageService
         $perPage   = $request->input('per_page', 24);
         $queryHash = md5(http_build_query($request->query()));
 
-        $eventNewsCacheKey = "event:{$event->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+        $language = $this->language();
 
-        $eventNewsCacheEvents = [
-            'event',
-            'event-news',
-            "event:{$event->slug}:news",
+        $eventNewsCacheKey = "page:language:{$language->locale}:event:{$event->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+
+        $eventNewsCacheTags = [
+            "page",
+            "page:language:{$language->locale}:",
+            "page:language:{$language->locale}:event:{$event->slug}",
+            "page:language:{$language->locale}:event:{$event->slug}:news",
         ];
 
-        $eventNewsCachedData = CacheServerHelper::getCachedData($eventNewsCacheKey, $eventNewsCacheEvents);
+        $eventNewsCachedData = CacheServerHelper::getCachedData($eventNewsCacheKey, $eventNewsCacheTags);
 
         if (($eventNewsCachedData !== null) && ($eventNewsCachedData instanceof CursorPaginator)) {
             return $eventNewsCachedData;
@@ -413,6 +441,7 @@ class PageService
 
         $eventNews = News::query()
             ->with(["newsType", "category", "event", "location"])
+            ->where("language_id", $language->id)
             ->where("is_published", true)
             ->whereNotNull("event_id")
             ->where("event_id", $event->id)
@@ -425,7 +454,7 @@ class PageService
             $eventNewsCacheKey,
             $eventNews,
             CacheServerHelper::threeMinInSecond,
-            $eventNewsCacheEvents
+            $eventNewsCacheTags
         );
 
         return $eventNews;
@@ -433,11 +462,14 @@ class PageService
 
     public function category(string $slugTree): Category
     {
-        $categoryCacheKey = "category-details:{$slugTree}";
+        $language = $this->language();
+
+        $categoryCacheKey = "page:language:{$language->locale}:category:{$slugTree}";
 
         $categoryCacheCategorys = [
-            'categorys',
-            "category-details:{$slugTree}",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:category:{$slugTree}",
         ];
 
         $categoryCachedData = CacheServerHelper::getCachedData($categoryCacheKey, $categoryCacheCategorys);
@@ -447,6 +479,7 @@ class PageService
         }
 
         $category = Category::query()->with(["parent", "children"])
+            ->where("lanuage_id", $language->id)
             ->where('slug_tree', $slugTree)
             ->firstOrFail();
 
@@ -462,12 +495,16 @@ class PageService
 
     public function categoryLocationMaxDepthAndLevel(Category $category): object
     {
-        $cacheKey = "category:{$category->slug}:locations:tree:max-depth-level";
+        $language = $this->language();
+
+        $cacheKey = "page:language:{$language->locale}:category:{$category->slug}:locations:tree:max-depth-level";
 
         $cacheCategories = [
-            'category',
-            "category:{$category->slug}:locations",
-            "category:{$category->slug}:locations:tree",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:category:{$category->slug}",
+            "page:language:{$language->locale}:category:{$category->slug}:locations",
+            "page:language:{$language->locale}:category:{$category->slug}:locations:tree",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheCategories);
@@ -476,7 +513,7 @@ class PageService
             return $cachedData;
         }
 
-        $maxDepth = Location::withQueryConstraint(
+        $maxDepth = Location::where("language_id", $language->id)::withQueryConstraint(
             function (Builder $query) use ($category) {
                 $query->where('locations.category_id', $category->id);
             },
@@ -511,17 +548,18 @@ class PageService
         $page        = PageHelper::PAGE_CATEGORY;
         $pageSection = PageHelper::PAGE_SECTION_LEAD_NEWS;
 
-        $categoryId = $category->id;
-
-        $pageSlugKey        = Str::lower(Str::slug($page));
+        $categoryId         = $category->id;
+        $language           = $this->language();
         $pageSectionSlugKey = Str::lower(Str::slug($pageSection));
 
-        $cacheKey = "page:{$pageSlugKey}:page-section:{$pageSectionSlugKey}:category:{$category->slug}:news";
+        $cacheKey = "page:language:{$language->locale}:category:{$category->slug}:page-section:{$pageSectionSlugKey}:news";
 
         $cacheCategories = [
-            'page',
-            "page:{$pageSlugKey}:page-section:{$pageSectionSlugKey}",
-            "page:{$pageSlugKey}:page-section:{$pageSectionSlugKey}:category:{$category->slug}",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:category:{$category->slug}",
+            "page:language:{$language->locale}:category:{$category->slug}:page-section:{$pageSectionSlugKey}",
+            "page:language:{$language->locale}:category:{$category->slug}:page-section:{$pageSectionSlugKey}:news",
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheCategories);
@@ -539,11 +577,13 @@ class PageService
                     ->where('page', $page)
                     ->where('page_section', $pageSection);
             })
+            ->where("language_id", $language->id)
             ->where('category_id', $categoryId)
             ->where('is_published', true)
             ->orderBy(
                 NewsPlacement::query()
                     ->select('position')
+                    ->where("language_id", $language->id)
                     ->whereColumn("{$newsPlacementTable}.news_id", 'news.id')
                     ->where('category_id', $categoryId)
                     ->where('page', $page)
@@ -570,15 +610,18 @@ class PageService
         $perPage   = $request->input('per_page', 24);
         $queryHash = md5(http_build_query($request->query()));
 
-        $categoryNewsCacheKey = "category:{$category->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+        $language = $this->language();
 
-        $categoryNewsCacheCategorys = [
-            'category',
-            'category-news',
-            "category:{$category->slug}:news",
+        $categoryNewsCacheKey = "page:language:{$language->locale}:category:{$category->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+
+        $categoryNewsCacheTags = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:category:{$category->slug}",
+            "page:language:{$language->locale}:category:{$category->slug}:news",
         ];
 
-        $categoryNewsCachedData = CacheServerHelper::getCachedData($categoryNewsCacheKey, $categoryNewsCacheCategorys);
+        $categoryNewsCachedData = CacheServerHelper::getCachedData($categoryNewsCacheKey, $categoryNewsCacheTags);
 
         if (($categoryNewsCachedData !== null) && ($categoryNewsCachedData instanceof CursorPaginator)) {
             return $categoryNewsCachedData;
@@ -594,6 +637,7 @@ class PageService
 
         $categoryNews = News::query()
             ->with(["newsType", "category", "event", "location"])
+            ->where("language_id", $language->id)
             ->where("is_published", true)
             ->whereIn("category_id", $categoryIds)
             ->orderByDesc('id')
@@ -605,7 +649,7 @@ class PageService
             $categoryNewsCacheKey,
             $categoryNews,
             CacheServerHelper::threeMinInSecond,
-            $categoryNewsCacheCategorys
+            $categoryNewsCacheTags
         );
 
         return $categoryNews;
@@ -613,11 +657,14 @@ class PageService
 
     public function location(string $slugTree): Location
     {
-        $locationCacheKey = "location-details:{$slugTree}";
+        $language = $this->language();
+
+        $locationCacheKey = "page:language:{$language->locale}:location:{$slugTree}";
 
         $locationCacheLocations = [
-            'locations',
-            "location-details:{$slugTree}",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:location:{$slugTree}",
         ];
 
         $locationCachedData = CacheServerHelper::getCachedData($locationCacheKey, $locationCacheLocations);
@@ -627,6 +674,7 @@ class PageService
         }
 
         $location = Location::query()->with(["parent", "children"])
+            ->where("lanuage_id", $language->id)
             ->where('slug_tree', $slugTree)
             ->firstOrFail();
 
@@ -645,15 +693,18 @@ class PageService
         $perPage   = $request->input('per_page', 24);
         $queryHash = md5(http_build_query($request->query()));
 
-        $locationNewsCacheKey = "location:{$location->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+        $language = $this->language();
 
-        $locationNewsCacheLocations = [
-            'location',
-            'location-news',
-            "location:{$location->slug}:news",
+        $locationNewsCacheKey = "page:language:{$language->locale}:location:{$location->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+
+        $locationNewsCacheTags = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:location:{$location->slug}",
+            "page:language:{$language->locale}:location:{$location->slug}:news",
         ];
 
-        $locationNewsCachedData = CacheServerHelper::getCachedData($locationNewsCacheKey, $locationNewsCacheLocations);
+        $locationNewsCachedData = CacheServerHelper::getCachedData($locationNewsCacheKey, $locationNewsCacheTags);
 
         if (($locationNewsCachedData !== null) && ($locationNewsCachedData instanceof CursorPaginator)) {
             return $locationNewsCachedData;
@@ -669,6 +720,7 @@ class PageService
 
         $locationNews = News::query()
             ->with(["newsType", "category", "event", "location"])
+            ->where("location_id", $language->id)
             ->where("is_published", true)
             ->whereIn("location_id", $locationIds)
             ->orderByDesc('id')
@@ -680,7 +732,7 @@ class PageService
             $locationNewsCacheKey,
             $locationNews,
             CacheServerHelper::threeMinInSecond,
-            $locationNewsCacheLocations
+            $locationNewsCacheTags
         );
 
         return $locationNews;
@@ -694,11 +746,13 @@ class PageService
 
         $queryHash = md5(http_build_query($request->query()));
 
-        $newsCacheKey = "news:language:{$language->slug}:per-page:{$perPage}:query:{$queryHash}";
+        $newsCacheKey = "page:language:{$language->locale}:news-search:news:per-page:{$perPage}:query:{$queryHash}";
 
         $newsCacheTags = [
-            'news',
-            "news:language:{$language->slug}",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:news-search",
+            "page:language:{$language->locale}:news-search:news",
         ];
 
         $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
@@ -801,12 +855,12 @@ class PageService
     {
         $language = $this->language();
 
-        $newsCacheKey = "news:recent-news:language:{$language->slug}";
+        $newsCacheKey = "page:language:{$language->locale}:recent-news";
 
         $newsCacheTags = [
-            'news',
-            'news:recent-news',
-            "news:recent-news:language:{$language->slug}",
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:recent-news",
         ];
 
         $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);

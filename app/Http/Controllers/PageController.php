@@ -18,6 +18,7 @@ class PageController extends Controller
     public function home()
     {
         $page = $this->pageService->homePage();
+
         return Inertia::render('Home', [
             'page' => $page,
         ]);
