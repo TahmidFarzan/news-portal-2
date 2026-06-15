@@ -471,7 +471,6 @@ class PageService
             "page:language:{$language->locale}",
             "page:language:{$language->locale}:category:{$slugTree}",
         ];
-
         $categoryCachedData = CacheServerHelper::getCachedData($categoryCacheKey, $categoryCacheCategorys);
 
         if (($categoryCachedData !== null) && ($categoryCachedData instanceof Category)) {
@@ -479,7 +478,7 @@ class PageService
         }
 
         $category = Category::query()->with(["parent", "children"])
-            ->where("lanuage_id", $language->id)
+            ->where("language_id", $language->id)
             ->where('slug_tree', $slugTree)
             ->firstOrFail();
 
@@ -513,9 +512,10 @@ class PageService
             return $cachedData;
         }
 
-        $maxDepth = Location::where("language_id", $language->id)::withQueryConstraint(
-            function (Builder $query) use ($category) {
-                $query->where('locations.category_id', $category->id);
+        $maxDepth = Location::withQueryConstraint(
+            function (Builder $query) use ($category, $language) {
+                $query->where('locations.category_id', $category->id)
+                    ->where('locations.language_id', $language->id);
             },
             function () use ($category) {
                 return Location::treeOf(function (Builder $query) use ($category) {
@@ -674,7 +674,7 @@ class PageService
         }
 
         $location = Location::query()->with(["parent", "children"])
-            ->where("lanuage_id", $language->id)
+            ->where("language_id", $language->id)
             ->where('slug_tree', $slugTree)
             ->firstOrFail();
 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Helpers\PageHelper;
 use App\Observers\PageObserver;
 use App\Policies\PagePolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -12,12 +13,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('pages')]
@@ -73,7 +74,7 @@ class Page extends Model
             ->generateSlugsFrom("title")
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
+            ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string
@@ -88,12 +89,16 @@ class Page extends Model
 
     public function getPublicUrlAttribute(): ?string
     {
-        $url = null;
-
-        if ($this->slug_tree) {
-            $url = route("page", ['slugTree' => $this->slug_tree]);
+        if (! $this->is_default) {
+            return route('page', ['slugTree' => $this->slug_tree]);
         }
-        return $url;
+
+        return match ($this->default_use_as) {
+            PageHelper::DAFAULT_USE_AS_HOME   => route('home'),
+            PageHelper::DAFAULT_USE_AS_LATEST => route('latest'),
+            PageHelper::DAFAULT_USE_AS_SEARCH => route('search'),
+            default                           => null,
+        };
     }
 
     public function getIsRecentCreatedAttribute(): bool
