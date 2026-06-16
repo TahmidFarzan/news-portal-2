@@ -12,7 +12,12 @@ import {
     faSpinner
 } from '@fortawesome/free-solid-svg-icons'
 
+
+import { useTranslate } from '@/composables/useTranslate'
+
 library.add(faBars, faXmark, faSpinner)
+
+const { t } = useTranslate()
 
 const appName = import.meta.env.VITE_APP_NAME
 const appLogo = import.meta.env.VITE_APP_LOGO
@@ -116,7 +121,7 @@ onMounted(() => {
                         <img v-if="appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
 
                         <span v-else class="text-lg font-semibold text-gray-800">
-                            {{ appName }}
+                            {{ t(app.appName) }}
                         </span>
                     </a>
 
@@ -142,13 +147,13 @@ onMounted(() => {
                             </template>
 
                             <li v-else class="px-3 py-2 text-sm text-gray-400">
-                                No menu items
+                                {{ t("labels.no_menu_found") }}
                             </li>
 
                             <li v-if="offCanvasMenu.loading && hasOffCanvasMenu"
                                 class="px-3 py-2 text-sm text-gray-400">
                                 <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
-                                Loading...
+                                {{ t("labels.loading") }}
                             </li>
                         </ul>
                     </VerticalScroller>

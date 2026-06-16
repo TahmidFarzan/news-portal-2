@@ -1,41 +1,104 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
+import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
+import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
-import { ref, onMounted, nextTick, inject } from 'vue'
-import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { computed, onMounted, nextTick, ref } from 'vue'
+import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { formatDate, formatDateTime } from '@/composables/useDateTime'
-import { canEditContributor, canDeleteContributor } from '@/composables/useAuthUserAccessPermissions'
+import { useTranslate } from '@/composables/useTranslate'
 
-FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
+FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const authUser = inject("authUser")
-
-const showDeleteModal = ref(false)
-const deleteProcessing = ref(false)
+const { t } = useTranslate()
 
 const { contributor } = defineProps({
-    contributor: Object,
+    contributor: {
+        type: Object,
+        default: () => ({})
+    },
 })
 
-const canEdit = (contributor) => canEditContributor(authUser?.value, contributor)
-const canDelete = (contributor) => canDeleteContributor(authUser?.value, contributor)
+const seoKeywordsKey = ref(0)
 
-const handleDelete = () => {
-    if (deleteProcessing.value) return
-    deleteProcessing.value = true
+const isUpdate = computed(() => !!contributor?.slug)
 
-    intertiaJsRoute.delete(route('back-office.contributors.delete', { slug: contributor?.slug }), {
-        onFinish: () => deleteProcessing.value = false
-    })
+const pageTitle = computed(() => {
+    return isUpdate.value
+        ? `${contributor?.name} ${t('labels.edit')}`
+        : t('contributors.form.create_page_title')
+})
+
+const saveForm = useForm({
+    name: contributor?.name || null,
+    brief: contributor?.brief || null,
+    profile_details: contributor?.profile_details || null,
+    language_id: contributor?.language_id || null,
+    profile_image: null,
+    seo_brief: contributor?.seo_brief || null,
+    seo_title: contributor?.seo_title || null,
+    seo_keywords: contributor?.seo_keywords ? contributor.seo_keywords.split(',') : [],
+})
+
+function validateForm() {
+    saveForm.clearErrors()
+
+    let valid = true
+
+    if (!saveForm.name) {
+        saveForm.setError('name', t('form.validation_errors.name_is_required'))
+        valid = false
+    }
+
+    if (!saveForm.language_id) {
+        saveForm.setError('language_id', t('form.validation_errors.language_is_required'))
+        valid = false
+    }
+
+    return valid
+}
+
+function handleSave() {
+    if (saveForm.processing) return
+
+    if (!validateForm()) return
+
+    saveForm.processing = true
+
+    const requestConfig = {
+        preserveScroll: true,
+        preserveState: true,
+        forceFormData: true,
+        onSuccess: () => {
+            saveForm.reset()
+            saveForm.clearErrors()
+        },
+        onError: (errors) => {
+            saveForm.clearErrors()
+            saveForm.setError(errors)
+        },
+        onFinish: () => {
+            saveForm.processing = false
+        }
+    }
+
+    if (isUpdate.value) {
+        intertiaJsRoute.post(
+            route('back-office.contributors.update', { slug: contributor?.slug }),
+            { ...saveForm.data(), _method: 'patch' },
+            requestConfig
+        )
+    } else {
+        saveForm.post(route('back-office.contributors.save'), requestConfig)
+    }
 }
 
 onMounted(async () => {
@@ -44,8 +107,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Contributors', href: route('back-office.contributors.index') },
-                { text: `${contributor?.name} details`, active: true }
+                { text: t('layout_menus.contributors'), href: route('back-office.contributors.index') },
+                { text: pageTitle.value, active: true }
             ],
         })
     )
@@ -54,216 +117,175 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${contributor?.name} details`" />
+    <Head :title="pageTitle" />
 
-    <div class="w-full space-y-6">
+    <div class="w-full">
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
 
-        <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Contributor Details</h2>
+            <form @submit.prevent="handleSave" class="space-y-6">
 
-            <div class="flex gap-2">
-                <a v-if="canEdit(contributor)"
-                    :href="route('back-office.contributors.edit', { slug: contributor?.slug })"
-                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
-                    <FontAwesomeIcon icon="pen" />
-                    Edit
-                </a>
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">
+                        {{ t('labels.basic_information') }}
+                    </h3>
 
-                <button v-if="canDelete(contributor)" @click="showDeleteModal = true"
-                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
-                    <FontAwesomeIcon icon="trash" />
-                    Delete
-                </button>
-            </div>
-        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ contributor?.name || 'N/A' }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ contributor?.language?.name || 'N/A' }}</span>
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div>
-                        <div class="text-gray-500 mb-1">Profile Image</div>
-                        <div class="text-gray-700 p-4">
-                            <div class="w-32 h-32">
-                                <MediaRenderer v-if="contributor?.profile_image" :media="contributor?.profile_image" />
-                                <img v-else :src="'/uploads/icons/auth/user.png'"
-                                    class="object-cover rounded-xl border border-gray-200" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div>
-                        <div class="text-gray-500 mb-1">Brief</div>
-                        <div class="text-gray-700">
-                            {{ contributor?.brief || 'N/A' }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div>
-                        <div class="text-gray-500 mb-1">Profile details</div>
-                        <div class="text-gray-700">
-                            <div v-html="contributor?.profile_details || 'N/A'"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">SEO</div>
-
-                    <div class="space-y-3 text-sm">
                         <div>
-                            <div class="text-gray-500 mb-1">Title</div>
-                            <div class="font-medium text-gray-700">
-                                {{ contributor?.seo_title || 'N/A' }}
-                            </div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('labels.language') }} <span class="text-red-500">*</span>
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                                :selectedItem="contributor?.language" :apiUrl="route('search.languages')"
+                                :error="saveForm.errors.language_id" :multiple="false"
+                                :placeholder="t('contributors.form.language_placeholder')" />
+
+                            <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.language_id }}
+                            </p>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">Brief</div>
-                            <div class="font-medium text-gray-700">
-                                {{ contributor?.seo_brief || 'N/A' }}
-                            </div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('labels.name') }} <span class="text-red-500">*</span>
+                            </label>
+
+                            <input v-model="saveForm.name" :placeholder="t('contributors.form.name_placeholder')"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.name" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.name }}
+                            </p>
                         </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('contributors.form.brief') }}
+                            </label>
+
+                            <textarea v-model="saveForm.brief" rows="4"
+                                :placeholder="t('contributors.form.brief_placeholder')"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
+
+                            <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.brief }}
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('contributors.form.profile_details') }}
+                            </label>
+
+                            <TinyMCEEditor inputField="profile_details" :form="saveForm" erroField="profile_details"
+                                :isSimple="true" :enableMediaUpload="false" :enableSelectFormMediaLibery="false" />
+
+                            <p v-if="saveForm.errors.profile_details" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.profile_details }}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">
+                        {{ t('contributors.form.profile_image_section') }}
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
-                            <div class="text-gray-500 mb-1">Keywords</div>
-                            <div class="font-medium text-gray-700">
-                                {{ contributor?.seo_keywords || 'N/A' }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('labels.profile_image') }}
+                            </label>
 
-                <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">Sitemap</div>
+                            <input type="file" @change="e => saveForm.profile_image = e.target.files[0]"
+                                class="border rounded px-3 py-2 w-full"
+                                :class="saveForm.errors.profile_image ? 'border-red-500' : 'border-gray-300'" />
 
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Sitemap url</span>
-                            <span class="font-medium">{{ contributor?.sitemap_url || 'N/A' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Feeds (RSS)</span>
-                        <span class="font-medium">{{ contributor?.feeds_rss_url || 'N/A' }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Feeds (ATOM)</span>
-                        <span class="font-medium">{{ contributor?.feeds_atom_url || 'N/A' }}</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">System Information</h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Created At</span>
-                        <span class="font-medium">
-                            {{ contributor?.created_at ? formatDateTime(contributor.created_at) : 'N/A' }}
-                        </span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Created By</span>
-                        <span class="font-medium">
-                            {{ contributor?.created_by?.name || 'N/A' }}
-                        </span>
-                    </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Updated At</span>
-                        <span class="font-medium">
-                            {{ contributor?.updated_at ? formatDateTime(contributor.updated_at) : 'N/A' }}
-                        </span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Updated By</span>
-                        <span class="font-medium">
-                            {{ contributor?.latest_activity_log?.causer?.name || 'N/A' }}
-                        </span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
-            <RecentActivities :model-slug="'contributor'" :model="contributor" />
-        </div>
-
-        <Teleport to="body">
-            <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
-                enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
-                leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showDeleteModal"
-                    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-
-                    <Transition enter-active-class="transition ease-out duration-200"
-                        enter-from-class="opacity-0 scale-95 translate-y-4"
-                        enter-to-class="opacity-100 scale-100 translate-y-0"
-                        leave-active-class="transition ease-in duration-150"
-                        leave-from-class="opacity-100 scale-100 translate-y-0"
-                        leave-to-class="opacity-0 scale-95 translate-y-4">
-                        <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
-                            <h3 class="text-lg font-semibold text-red-600">
-                                Delete Contributor
-                            </h3>
-
-                            <p class="text-sm font-medium">
-                                {{ contributor?.name }}
+                            <p v-if="saveForm.errors.profile_image" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.profile_image }}
                             </p>
 
-                            <p class="text-sm text-gray-500">
-                                This action cannot be undone.
-                            </p>
+                            <MediaRenderer v-if="contributor?.profile_image" :media="contributor?.profile_image" />
 
-                            <div class="flex justify-end gap-2 pt-2">
-                                <button @click="showDeleteModal = false"
-                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
-                                </button>
-
-                                <button @click="handleDelete" :disabled="deleteProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
-                                    <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
-                                </button>
-                            </div>
+                            <img v-else :src="'/uploads/icons/auth/user.png'" :alt="t('auth.profile.profile_image_alt')"
+                                class="object-cover rounded-xl border border-gray-200 mt-2 w-32 h-32" />
                         </div>
-                    </Transition>
 
+                    </div>
                 </div>
-            </Transition>
-        </Teleport>
+
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                    <h3 class="text-base font-semibold">
+                        {{ t('contributors.form.seo_settings') }}
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('contributors.form.seo_title') }}
+                            </label>
+
+                            <input v-model="saveForm.seo_title" type="text"
+                                :placeholder="t('contributors.form.seo_title_placeholder')"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.seo_title" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.seo_title }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('contributors.form.seo_brief') }}
+                            </label>
+
+                            <textarea v-model="saveForm.seo_brief" rows="3"
+                                :placeholder="t('contributors.form.seo_brief_placeholder')"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
+
+                            <p v-if="saveForm.errors.seo_brief" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.seo_brief }}
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('contributors.form.seo_keywords') }}
+                            </label>
+
+                            <MultiSelectTaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
+                                fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
+                                :placeholder="t('contributors.form.seo_keywords_placeholder')" />
+
+                            <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.seo_keywords }}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <button type="submit" :disabled="saveForm.processing"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed">
+                        <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
+                        <FontAwesomeIcon v-else icon="save" />
+
+                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
     </div>
 </template>

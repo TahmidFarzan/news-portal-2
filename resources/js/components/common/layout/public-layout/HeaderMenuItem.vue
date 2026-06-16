@@ -9,7 +9,11 @@ import {
     faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 library.add(faChevronDown)
+
+const { t } = useTranslate()
 
 const { item, level = 0 } = defineProps({
     item: {
@@ -207,12 +211,12 @@ onBeforeUnmount(() => {
                         <HeaderMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
-                            Loading...
+                            {{ t("labels.loading") }}
                         </li>
 
                         <li v-if="childrenLoaded && !childrenLoading && !children.length"
                             class="px-3 py-2 text-sm text-gray-400">
-                            No items
+                            {{ t("labels.no_menu_found") }}
                         </li>
                     </ul>
                 </VerticalScroller>

@@ -4,11 +4,14 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
-import Grid from '@/components/common/news/Grid.vue'
+
+import { useTranslate } from '@/composables/useTranslate'
 
 defineOptions({ layout: Layout })
 
-const {news, page } = defineProps({
+const { t } = useTranslate()
+
+const { news, page } = defineProps({
     news: {
         type: Object,
         required: true,
@@ -21,18 +24,20 @@ const {news, page } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title
+    return page?.seo_title ?? page?.title ?? t('labels.latest_news')
 })
 
 const metaDescription = computed(() => {
-    return page?.seo_brief ?? page?.brief
+    return page?.seo_brief ?? page?.brief ?? ''
 })
 
 const metaKeywords = computed(() => {
+    if (Array.isArray(page?.seo_keywords)) {
+        return page.seo_keywords.join(', ')
+    }
 
-    return page?.seo_keywords
+    return page?.seo_keywords ?? ''
 })
-
 </script>
 
 <template>

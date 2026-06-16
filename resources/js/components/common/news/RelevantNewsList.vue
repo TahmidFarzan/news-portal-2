@@ -4,6 +4,15 @@ import { computed } from 'vue'
 import ListCard from '@/Components/common/news/ListCard.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
+
+import { useTranslate } from '@/composables/useTranslate'
+
+FontAwesomeLibrary.add(
+    faAngleRight
+)
+
+const { t } = useTranslate()
 
 const {
     news,
@@ -21,7 +30,7 @@ const {
             <FontAwesomeIcon :icon="faAngleRight" class="text-red-600" />
 
             <h2 class="text-xl font-bold text-gray-950">
-                Relevant News
+                {{ t("labels.relevant_news") }}
             </h2>
         </div>
 

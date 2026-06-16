@@ -18,9 +18,13 @@ import {
     faClock,
 } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(
     faClock
 )
+
+const { t } = useTranslate()
 
 const { news } = defineProps({
     news: {
@@ -68,7 +72,7 @@ const { news } = defineProps({
         <TagTrend :news="news" />
 
         <div v-if="news?.source" class="pt-4 text-sm text-gray-500">
-            <span>Source: </span>
+            <span>{{ t("labels.source") }}: </span>
             {{ news.source }}
         </div>
 

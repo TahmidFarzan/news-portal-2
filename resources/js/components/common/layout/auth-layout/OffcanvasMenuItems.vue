@@ -25,6 +25,8 @@ import {
     faFile
 } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 library.add(
     faUser,
     faUsers,
@@ -44,6 +46,7 @@ library.add(
     faGears,
     faFile
 )
+const { t } = useTranslate()
 
 import {
     canAccessUserManagementMenu,
@@ -157,20 +160,20 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/dashboard/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gauge" />
-            Dashboard
+            {{ t("layout_menus.dashboard") }}
         </a>
 
         <a :href="route('back-office.medias.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/medias/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="photo-film" />
-            Medias
+           {{ t("layout_menus.medias") }}
         </a>
 
         <button @click="toggleShowSubMenu('NewsAttributes')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="layer-group" />
-                News Attributes
+                {{ t("layout_menus.news_attributes") }}
             </span>
             <FontAwesomeIcon :icon="isSubMenuVisible('NewsAttributes') ? 'chevron-up' : 'chevron-down'" />
         </button>
@@ -185,49 +188,49 @@ const isSubMenuVisible = (key) => {
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/languages/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="language" />
-                    Languages
+                    {{ t("layout_menus.languages") }}
                 </a>
 
                 <a :href="route('back-office.categories.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/categories/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="layer-group" />
-                    Categories
+                    {{ t("layout_menus.categories") }}
                 </a>
 
                 <a :href="route('back-office.tags.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/tags/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="tags" />
-                    Tags
+                    {{ t("layout_menus.tags") }}
                 </a>
 
                 <a :href="route('back-office.trends.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/trends/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="star" />
-                    Trends
+                    {{ t("layout_menus.trends") }}
                 </a>
 
                 <a :href="route('back-office.locations.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/locations/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="globe" />
-                    Locations
+                    {{ t("layout_menus.location") }}
                 </a>
 
                 <a :href="route('back-office.events.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/events/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="fan" />
-                    Events
+                    {{ t("layout_menus.events") }}
                 </a>
 
                 <a :href="route('back-office.contributors.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/contributors/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="users" />
-                    Contributors
+                    {{ t("layout_menus.contributors") }}
                 </a>
 
             </div>
@@ -237,35 +240,35 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            News
+            {{ t("layout_menus.news") }}
         </a>
 
         <a v-if="canAccessBreakingNewsMenuComputed" :href="route('back-office.breaking-news.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/breaking-news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            Breaking news
+            {{ t("layout_menus.breaking_news") }}
         </a>
 
         <a v-if="canAccessPageMenuComputed" :href="route('back-office.pages.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/pages/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="file" />
-            Pages
+            {{ t("layout_menus.pages") }}
         </a>
 
         <a v-if="canAccessMenuMenuComputed" :href="route('back-office.menus.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/menus/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="ellipsis-vertical" />
-            Menus
+            {{ t("layout_menus.menus") }}
         </a>
 
         <button @click="toggleShowSubMenu('UserManagement')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="users" />
-                User Management
+               {{ t("layout_menus.user_anagement") }}
             </span>
             <FontAwesomeIcon :icon="isSubMenuVisible('UserManagement') ? 'chevron-up' : 'chevron-down'" />
         </button>
@@ -280,7 +283,7 @@ const isSubMenuVisible = (key) => {
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isAnyCurrentPage(routeMap.UserManagement) ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="user" />
-                    Users
+                    {{ t("layout_menus.users") }}
                 </a>
 
             </div>
@@ -290,7 +293,7 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/settings/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gears" />
-            Settings
+            {{ t("layout_menus.settings") }}
         </a>
     </div>
 </template>

@@ -3,12 +3,13 @@ import { computed } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
-import List from '@/components/common/news/List.vue'
-import Grid from '@/components/common/news/Grid.vue'
+import { useTranslate } from '@/composables/useTranslate'
 
 defineOptions({ layout: Layout })
 
-const {page } = defineProps({
+const { t } = useTranslate()
+
+const { page } = defineProps({
     page: {
         type: Object,
         required: true,
@@ -16,32 +17,33 @@ const {page } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title
+    return page?.seo_title ?? page?.title ?? t('labels.page')
 })
 
 const metaDescription = computed(() => {
-    return page?.seo_brief ?? page?.brief
+    return page?.seo_brief ?? page?.brief ?? ''
 })
 
 const metaKeywords = computed(() => {
+    if (Array.isArray(page?.seo_keywords)) {
+        return page.seo_keywords.join(', ')
+    }
 
-    return page?.seo_keywords
+    return page?.seo_keywords ?? ''
 })
 </script>
 
 <template>
 
     <Head :title="metaTitle">
-        <link rel="canonical" :href="page?.public_url" />
+        <link v-if="page?.public_url" rel="canonical" :href="page.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
-
         <meta v-if="metaDescription" name="description" :content="metaDescription" />
-
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
     <div class="space-y-6">
-        <div v-html="page?.body"></div>
+        <div v-if="page?.body" class="prose max-w-none" v-html="page.body" />
     </div>
 </template>

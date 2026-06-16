@@ -5,7 +5,11 @@ import { faInfo } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(faInfo)
+
+const { t } = useTranslate()
 
 const { model, modelSlug } = defineProps({
     model: { type: Object, required: true },
@@ -26,11 +30,21 @@ const { model, modelSlug } = defineProps({
 
                     <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                         <tr>
-                            <th class="px-4 py-2">SL</th>
-                            <th class="px-4 py-2">Description</th>
-                            <th class="px-4 py-2">Causer</th>
-                            <th class="px-4 py-2">Date</th>
-                            <th class="px-4 py-2">Action</th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.sl") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.description") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.causer") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.created_at") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.action") }}
+                            </th>
                         </tr>
                     </thead>
 
@@ -58,7 +72,7 @@ const { model, modelSlug } = defineProps({
                                 <a :href="route('back-office.activity-logs.details', { slug: item.slug })"
                                     class="inline-flex items-center gap-1 px-2 py-1 text-xs border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
                                     <FontAwesomeIcon icon="info" />
-                                    Details
+                                    {{ t("table.menus.details") }}
                                 </a>
                             </td>
 
@@ -71,7 +85,7 @@ const { model, modelSlug } = defineProps({
             <div class="flex justify-center mt-4">
                 <a :href="route('back-office.activity-logs.show-all', { modelSlug: modelSlug, recordSlug: model?.slug })"
                     class="inline-flex items-center justify-center px-4 py-2 border border-gray-400 text-gray-600 rounded hover:bg-gray-100">
-                    Show all
+                    {{ t("labels.show_all") }}
                 </a>
             </div>
 
@@ -79,7 +93,7 @@ const { model, modelSlug } = defineProps({
 
         <div v-else>
             <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded">
-                Activity log is empty
+                {{ t("labels.no_record_found") }}
             </div>
         </div>
 

@@ -2,8 +2,9 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import ModelPropertieAttributes from '@/components/back-office/activity-log/ModelPropertieAttributes.vue'
 
-import { ref, onMounted, computed, nextTick, inject } from 'vue'
-import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { ref, onMounted, nextTick } from 'vue'
+import { Head, router as inertiaJsRoute } from '@inertiajs/vue3'
+import { useTranslate } from '@/composables/useTranslate'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -16,6 +17,8 @@ FontAwesomeLibrary.add(faTrash, faSpinner)
 
 defineOptions({ layout: Layout })
 
+const { t } = useTranslate()
+
 const { activityLog } = defineProps({
     activityLog: Object,
 })
@@ -23,20 +26,12 @@ const { activityLog } = defineProps({
 const deleting = ref(false)
 const showDeleteModal = ref(false)
 
-const parseJson = (value) => {
-    try {
-        return JSON.parse(value ?? '{}')
-    } catch {
-        return {}
-    }
-}
-
 function handleDelete() {
     if (deleting.value) return
 
     deleting.value = true
 
-    intertiaJsRoute.delete(route('back-office.activity-logs.delete', { slug: activityLog?.slug }), {
+    inertiaJsRoute.delete(route('back-office.activity-logs.delete', { slug: activityLog?.slug }), {
         onFinish: () => {
             deleting.value = false
             showDeleteModal.value = false
@@ -46,11 +41,18 @@ function handleDelete() {
 
 onMounted(async () => {
     await nextTick()
+
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Activity logs', href: route('back-office.activity-logs.index') },
-                { text: 'Activity log details', active: true },
+                {
+                    text: t('layout_menus.activity_logs'),
+                    href: route('back-office.activity-logs.index')
+                },
+                {
+                    text: t('activity_logs.details.page_title'),
+                    active: true
+                },
             ],
         })
     )
@@ -59,41 +61,58 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Activity log details" />
+    <Head :title="t('activity_logs.details.page_title')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Activity Log Details</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('activity_logs.details.title') }}
+            </h2>
 
             <button @click="showDeleteModal = true"
                 class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="trash" />
-                Delete
+                {{ t('buttons.delete') }}
             </button>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('activity_logs.details.basic_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Log Name</span>
-                        <span class="font-medium">{{ activityLog?.log_name || 'N/A' }}</span>
+                        <span class="text-gray-500">
+                            {{ t('activity_logs.details.log_name') }}
+                        </span>
+
+                        <span class="font-medium">
+                            {{ activityLog?.log_name || t('labels.not_available') }}
+                        </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Causer</span>
-                        <span class="font-medium">{{ activityLog?.causer?.name || 'System' }}</span>
+                        <span class="text-gray-500">
+                            {{ t('table.columns.causer') }}
+                        </span>
+
+                        <span class="font-medium">
+                            {{ activityLog?.causer?.name || t('labels.system') }}
+                        </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-1">Description</div>
+                    <div class="text-gray-500 mb-1">
+                        {{ t('table.columns.description') }}
+                    </div>
+
                     <div class="text-gray-700">
-                        {{ activityLog?.description || 'N/A' }}
+                        {{ activityLog?.description || t('labels.not_available') }}
                     </div>
                 </div>
 
@@ -102,7 +121,9 @@ onMounted(async () => {
 
         <div v-if="Object.keys(activityLog?.properties || {}).length"
             class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Properties</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('activity_logs.details.properties') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -120,7 +141,9 @@ onMounted(async () => {
 
         <div v-if="Object.keys(activityLog?.attribute_changes || {}).length"
             class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Attribute Changes</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('activity_logs.details.attribute_changes') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -137,12 +160,21 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">System Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('activity_logs.details.system_information') }}
+            </h3>
 
             <div class="text-sm border border-gray-200 rounded-lg p-4 flex justify-between">
-                <span class="text-gray-500">Created At</span>
+                <span class="text-gray-500">
+                    {{ t('table.columns.created_at') }}
+                </span>
+
                 <span class="font-medium">
-                    {{ activityLog?.created_at ? formatDateTime(activityLog?.created_at) : 'N/A' }}
+                    {{
+                        activityLog?.created_at
+                            ? formatDateTime(activityLog?.created_at)
+                            : t('labels.not_available')
+                    }}
                 </span>
             </div>
         </div>
@@ -162,23 +194,28 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete Activity Log
+                                {{ t('activity_logs.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm text-gray-500">
-                                Are you sure you want to delete this activity log?
+                                {{ t('activity_logs.delete_modal.body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleting"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="deleting" icon="spinner" spin />
-                                    Delete
+
+                                    {{
+                                        deleting
+                                            ? t('buttons.deleting')
+                                            : t('buttons.delete')
+                                    }}
                                 </button>
                             </div>
                         </div>

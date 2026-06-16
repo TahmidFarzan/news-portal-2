@@ -5,7 +5,11 @@ import { faInfo, faPen } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
 
-FontAwesomeLibrary.add(faInfo,faPen)
+import { useTranslate } from '@/composables/useTranslate'
+
+FontAwesomeLibrary.add(faInfo)
+
+const { t } = useTranslate()
 
 const { menu } = defineProps({
     menu: { type: Object, required: true },
@@ -22,19 +26,32 @@ const { menu } = defineProps({
 
                     <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                         <tr>
-                            <th class="px-4 py-2">SL</th>
-                            <th class="px-4 py-2">Name</th>
-                            <th class="px-4 py-2">Language</th>
-                            <th class="px-4 py-2">Parent</th>
-                            <th class="px-4 py-2">Position</th>
-                            <th class="px-4 py-2">Date</th>
-                            <th class="px-4 py-2">Action</th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.sl") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.name") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.language") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.parent") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.position") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.created_at") }}
+                            </th>
+                            <th class="px-4 py-2">
+                                {{ t("table.columns.action") }}
+                            </th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr v-for="(item, index) in menu?.menu_items" :key="item.id"
-                            class="border-t hover:bg-gray-50">
+                        <tr v-for="(item, index) in menu?.menu_items" :key="item.id" class="border-t hover:bg-gray-50">
 
                             <td class="px-4 py-2">
                                 {{ index + 1 }}
@@ -48,7 +65,7 @@ const { menu } = defineProps({
                                 {{ item.language?.name }}
                             </td>
 
-                             <td class="px-4 py-3 text-gray-600">
+                            <td class="px-4 py-3 text-gray-600">
                                 {{ item?.parent?.name || "N/A" }}
                             </td>
 
@@ -64,13 +81,13 @@ const { menu } = defineProps({
                                 <a :href="route('back-office.menus.menu-items.details', { slug: menu.slug, menuItemSlug: item.slug })"
                                     class="inline-flex items-center gap-1 px-2 py-1 m-1 text-xs border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
                                     <FontAwesomeIcon icon="info" />
-                                    Details
+                                    {{ t("table.menus.details") }}
                                 </a>
 
                                 <a :href="route('back-office.menus.menu-items.edit', { slug: menu.slug, menuItemSlug: item.slug })"
                                     class="inline-flex items-center gap-1 px-2 py-1 m-1 text-xs border border-yallow-500 text-yallow-500 rounded hover:bg-yallow-50">
                                     <FontAwesomeIcon icon="pen" />
-                                    Edit
+                                    {{ t("table.menus.edit") }}
                                 </a>
                             </td>
 
@@ -83,7 +100,7 @@ const { menu } = defineProps({
             <div class="flex justify-center mt-4">
                 <a :href="route('back-office.menus.menu-items.index', { slug: menu?.slug })"
                     class="inline-flex items-center justify-center px-4 py-2 border border-gray-400 text-gray-600 rounded hover:bg-gray-100">
-                    Show all
+                    {{ t("layout_menus.show_all") }}
                 </a>
             </div>
 
@@ -91,7 +108,7 @@ const { menu } = defineProps({
 
         <div v-else>
             <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded">
-                Menu item is empty
+                {{ t("labels.no_record_found") }}
             </div>
         </div>
 

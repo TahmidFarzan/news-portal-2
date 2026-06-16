@@ -6,24 +6,26 @@ import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/Infi
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import {
     faTrash, faFilter, faInfo,
-    faPlus, faPen, faEye, faEyeSlash, faSpinner
+    faPlus, faPen, faEye, faEyeSlash, faSpinner,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
-
 import { canCreateNews, canEditNews, canDeleteNews, canRestoreNews } from '@/composables/useAuthUserAccessPermissions'
+import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const authUser = inject("authUser")
+const { t } = useTranslate()
+
+const authUser = inject('authUser')
 
 const deletingRow = ref(null)
 const showDeleteModal = ref(false)
@@ -33,13 +35,20 @@ const restoringRow = ref(null)
 const showRestoreModal = ref(false)
 const restoreProcessing = ref(false)
 
-const { newsItems } = defineProps({
-    newsItems: Object,
+const { newsItems = {} } = defineProps({
+    newsItems: {
+        type: Object,
+        default: () => ({}),
+    },
 })
+
+const notAvailable = computed(() => t('labels.not_available'))
 
 const paginationOnly = computed(() => {
     if (!newsItems) return {}
+
     const { data, ...rest } = newsItems
+
     return rest
 })
 
@@ -59,6 +68,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
+
     intertiaJsRoute.get(route('back-office.news.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
@@ -67,22 +77,22 @@ const applyFilter = () => {
     })
 }
 
-const confirmDelete = (news) => {
+const confirmDelete = news => {
     deletingRow.value = news
     showDeleteModal.value = true
 }
 
-const confirmRestore = (news) => {
+const confirmRestore = news => {
     restoringRow.value = news
     showRestoreModal.value = true
 }
 
 const canCreate = () => canCreateNews(authUser?.value)
-const canEdit = (news) => canEditNews(authUser?.value, news)
-const canDelete = (news) => canDeleteNews(authUser?.value, news)
-const canRestore = (news) => canRestoreNews(authUser?.value, news)
+const canEdit = news => canEditNews(authUser?.value, news)
+const canDelete = news => canDeleteNews(authUser?.value, news)
+const canRestore = news => canRestoreNews(authUser?.value, news)
 
-const handleDelete = (news) => {
+const handleDelete = news => {
     if (!news || deleteProcessing.value) return
 
     deleteProcessing.value = true
@@ -92,12 +102,11 @@ const handleDelete = (news) => {
             showDeleteModal.value = false
             deletingRow.value = null
             deleteProcessing.value = false
-        }
+        },
     })
 }
 
-
-const handleRestore = (news) => {
+const handleRestore = news => {
     if (!news || restoreProcessing.value) return
 
     restoreProcessing.value = true
@@ -107,7 +116,7 @@ const handleRestore = (news) => {
             restoringRow.value = null
             restoreProcessing.value = false
             showRestoreModal.value = false
-        }
+        },
     })
 }
 
@@ -123,7 +132,6 @@ onMounted(async () => {
     filterForm.event_id = urlParams.get('event_id') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
-
 
     if (filterForm.news_type_id) {
         const rNewsType = await fetchFromApi(
@@ -169,6 +177,7 @@ onMounted(async () => {
         const rCreatedBy = await fetchFromApi(
             route('search.user', { slugOrId: filterForm.created_by_id })
         )
+
         filterForm.created_by_id = rCreatedBy || null
     }
 
@@ -177,156 +186,170 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'News', active: true },
+                { text: t('labels.news'), active: true },
             ],
         })
     )
-
 })
 </script>
 
 <template>
 
-    <Head title="News" />
+    <Head :title="t('labels.news')" />
 
     <div class="w-full space-y-6">
-
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">News</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('labels.news') }}
+            </h2>
 
             <a v-if="canCreate()" :href="route('back-office.news.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
-                Create
+                {{ t('buttons.create') }}
             </a>
         </div>
 
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                    placeholder="Per page" />
+                    :placeholder="t('labels.per_page')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    placeholder="Created by" />
+                    :placeholder="t('news.index.created_by_placeholder')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id" :apiUrl="route('search.news-types')" :multiple="false"
-                    placeholder="News type" />
+                    :placeholder="t('labels.news_type')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
-                    placeholder="Language" />
+                    :placeholder="t('labels.language')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.category_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.category-tree')"
-                    :multiple="false" placeholder="Category" />
+                    :multiple="false" :placeholder="t('news.form.category')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.location_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.location-tree')"
-                    :multiple="false" placeholder="Location" />
+                    :multiple="false" :placeholder="t('news.form.location')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id" :apiUrl="route('search.events')" :multiple="false"
-                    placeholder="Event" />
+                    :placeholder="t('news.form.event')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search news..."
+                <input type="search" v-model="filterForm.search" :placeholder="t('news.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-
             </div>
 
             <div class="flex justify-end">
                 <button type="submit" :disabled="filterForm.processing"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition">
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60">
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
-                    <FontAwesomeIcon icon="filter" />
-                    Apply Filter
+                    <FontAwesomeIcon v-else icon="filter" />
+                    {{ filterForm.processing ? t('news.index.applying_filter') : t('news.index.apply_filter') }}
                 </button>
             </div>
         </form>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm">
-
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">News type</th>
-                            <th class="px-4 py-3 text-left">Title</th>
-                            <th class="px-4 py-3 text-left">Language</th>
-                            <th class="px-4 py-3 text-left">Category</th>
-                            <th class="px-4 py-3 text-left">Event</th>
-                            <th class="px-4 py-3 text-left">Location</th>
-
-                            <th class="px-4 py-3 text-left">Created</th>
-                            <th class="px-4 py-3 text-left">Is Published</th>
-                            <th class="px-4 py-3 text-right">Actions</th>
+                            <th class="px-4 py-3 text-left">{{ t('labels.news_type') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('labels.title') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('labels.language') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('news.form.category') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('news.form.event') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('news.form.location') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('news.index.created') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('labels.is_published') }}</th>
+                            <th class="px-4 py-3 text-right">{{ t('news.index.actions') }}</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y">
                         <tr v-for="(item, index) in newsItems?.data" :key="item.id" class="hover:bg-gray-50 transition">
-                            <td class="px-4 py-3">{{ index + 1 }}</td>
-                            <td class="px-4 py-3">{{ item?.news_type?.name }}</td>
-                            <td class="px-4 py-3 font-medium">{{ item.title }}</td>
-                            <td class="px-4 py-3 text-gray-600">
-                                {{ item.language ? item.language.name : 'N/A' }}
+                            <td class="px-4 py-3">
+                                {{ index + 1 }}
                             </td>
-                            <td class="px-4 py-3 text-gray-600">
-                                {{ item.category ? item.category.name : 'N/A' }}
+
+                            <td class="px-4 py-3">
+                                {{ item?.news_type?.name || notAvailable }}
                             </td>
-                            <td class="px-4 py-3 text-gray-600">
-                                {{ item.event ? item.event.name : 'N/A' }}
-                            </td>
-                            <td class="px-4 py-3 text-gray-600">
-                                {{ item.location ? item.location.name : 'N/A' }}
-                            </td>
-                            <td class="px-4 py-3 text-gray-500">
-                                {{ formatDateTime(item.created_at) }}
+
+                            <td class="px-4 py-3 font-medium">
+                                {{ item?.title || notAvailable }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item.is_published ? "Yes" : 'No' }}
+                                {{ item?.language?.name || notAvailable }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ item?.category?.name || notAvailable }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ item?.event?.name || notAvailable }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ item?.location?.name || notAvailable }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-500">
+                                {{ item?.created_at ? formatDateTime(item.created_at) : notAvailable }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ item?.is_published ? t('labels.yes') : t('labels.no') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
-
                                     <a :href="route('back-office.news.details', { slug: item.slug })"
-                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
+                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
+                                        :title="t('labels.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
-                                        :href="route('back-office.news.edit', { slug: item.slug })"
-                                        class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
+                                    <a v-if="canEdit(item)" :href="route('back-office.news.edit', { slug: item.slug })"
+                                        class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
+                                        :title="t('buttons.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
                                     <button v-if="canDelete(item)" @click="confirmDelete(item)"
-                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border">
+                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
+                                        :title="t('buttons.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
                                     <button v-if="canRestore(item)" @click="confirmRestore(item)"
-                                        class="p-2 rounded-md text-green-600 hover:bg-green-50 border">
+                                        class="p-2 rounded-md text-green-600 hover:bg-green-50 border"
+                                        :title="t('buttons.restore')">
                                         <FontAwesomeIcon icon="eye" />
                                     </button>
-
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
 
+                        <tr v-if="!newsItems?.data || newsItems.data.length === 0">
+                            <td colspan="10" class="px-4 py-6 text-center text-gray-500">
+                                {{ t('labels.no_record_found') }}
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -339,7 +362,6 @@ onMounted(async () => {
                 leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <div v-if="showDeleteModal"
                     class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-
                     <Transition enter-active-class="transition ease-out duration-200"
                         enter-from-class="opacity-0 scale-95 translate-y-4"
                         enter-to-class="opacity-100 scale-100 translate-y-0"
@@ -348,32 +370,31 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete News
+                                {{ t('news.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
-                                {{ deletingRow?.name }}
+                                {{ deletingRow?.title }}
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action can be undone by restoring news.
+                                {{ t('news.delete_modal.body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-60">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
                                 </button>
                             </div>
                         </div>
                     </Transition>
-
                 </div>
             </Transition>
 
@@ -382,7 +403,6 @@ onMounted(async () => {
                 leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <div v-if="showRestoreModal"
                     class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-
                     <Transition enter-active-class="transition ease-out duration-200"
                         enter-from-class="opacity-0 scale-95 translate-y-4"
                         enter-to-class="opacity-100 scale-100 translate-y-0"
@@ -390,36 +410,34 @@ onMounted(async () => {
                         leave-from-class="opacity-100 scale-100 translate-y-0"
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showRestoreModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
-                            <h3 class="text-lg font-semibold text-red-600">
-                                Restore News
+                            <h3 class="text-lg font-semibold text-green-600">
+                                {{ t('news.restore_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
-                                {{ restoringRow?.name }}
+                                {{ restoringRow?.title }}
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action can be undone by deleting news.
+                                {{ t('news.restore_modal.body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showRestoreModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleRestore(restoringRow)" :disabled="restoreProcessing"
-                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm flex items-center gap-2">
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-60">
                                     <FontAwesomeIcon v-if="restoreProcessing" icon="spinner" spin />
-                                    Restore
+                                    {{ restoreProcessing ? t('buttons.restoring') : t('buttons.restore') }}
                                 </button>
                             </div>
                         </div>
                     </Transition>
-
                 </div>
             </Transition>
         </Teleport>
-
     </div>
 </template>

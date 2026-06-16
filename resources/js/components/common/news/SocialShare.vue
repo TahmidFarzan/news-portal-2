@@ -18,6 +18,8 @@ import {
     faTelegram,
 } from '@fortawesome/free-brands-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(
     faLink,
     faCheck,
@@ -27,6 +29,8 @@ FontAwesomeLibrary.add(
     faWhatsapp,
     faTelegram,
 )
+
+const { t } = useTranslate()
 
 const { news} = defineProps({
     news: {
@@ -115,7 +119,7 @@ const copyShareLink = async () => {
 <template>
     <div class="flex flex-wrap items-center gap-2">
             <span class="text-gray-400">
-                Share:
+                {{ t("labels.share") }} :
             </span>
 
             <ShareNetwork v-for="network in networks" :key="network.key" :network="network.key" :url="shareUrl"
@@ -133,7 +137,7 @@ const copyShareLink = async () => {
                 <FontAwesomeIcon :icon="isCopied ? faCheck : faLink" class="text-xs" />
 
                 <span>
-                    {{ isCopied ? 'Copied' : 'Copy' }}
+                    {{ isCopied ? t("labels.copied") : t("labels.copy") }}
                 </span>
             </button>
         </div>

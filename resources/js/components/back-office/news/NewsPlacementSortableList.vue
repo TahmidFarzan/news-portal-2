@@ -11,7 +11,11 @@ import {
     faSpinner
 } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(faTrash, faGripVertical, faSpinner)
+
+const { t } = useTranslate()
 
 const {
     title,
@@ -108,7 +112,7 @@ function isCurrentNewsItem(item) {
 
         <div v-if="!draggableItems.length"
             class="border border-dashed border-gray-300 rounded-xl p-6 text-center text-sm text-gray-500">
-            No placements found.
+            {{ t("labels.no_record_found") }}
         </div>
 
         <VueDraggable v-else v-model="draggableItems" handle=".drag-handle" ghost-class="drag-ghost"
@@ -145,7 +149,7 @@ function isCurrentNewsItem(item) {
 
                             <p v-if="isCurrentNewsItem(item)"
                                 class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
-                                Current News
+                                {{ t("labels.create_news") }}
                             </p>
 
                         </div>
@@ -179,15 +183,11 @@ function isCurrentNewsItem(item) {
 
                         <div class="space-y-2">
                             <h3 class="text-lg font-semibold text-gray-900">
-                                Delete Placement
+                                {{ t("delete_confirmation_modal.title") }}
                             </h3>
 
                             <p class="text-sm text-gray-500">
-                                Are you sure you want to delete this placement?
-                            </p>
-
-                            <p class="text-sm font-medium text-gray-700">
-                                {{ selectedItem?.news?.title ?? 'Untitled News' }}
+                                {{ t("delete_confirmation_modal.body") }}
                             </p>
                         </div>
 
@@ -195,7 +195,7 @@ function isCurrentNewsItem(item) {
                             <button type="button"
                                 class="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50"
                                 :disabled="deleteProcessing" @click="closeDeleteModal">
-                                Cancel
+                                {{ t("button.cancel") }}
                             </button>
 
                             <button type="button"
@@ -203,11 +203,11 @@ function isCurrentNewsItem(item) {
                                 :disabled="deleteProcessing" @click="handleDelete">
                                 <span v-if="deleteProcessing" class="inline-flex items-center gap-2">
                                     <FontAwesomeIcon icon="fa-solid fa-spinner" spin />
-                                    Deleting...
+                                    {{ t("button.deleting") }}
                                 </span>
 
                                 <span v-else>
-                                    Delete
+                                    {{ t("button.delete") }}
                                 </span>
                             </button>
                         </div>
@@ -218,5 +218,3 @@ function isCurrentNewsItem(item) {
         </Transition>
     </Teleport>
 </template>
-
-

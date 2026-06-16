@@ -3,19 +3,22 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentLocations from '@/components/back-office/location/RecentLocations.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 
-import { ref, onMounted, nextTick, inject } from 'vue'
+import { ref, onMounted, nextTick, inject, computed } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { formatDate, formatDateTime } from '@/composables/useDateTime'
+import { formatDateTime } from '@/composables/useDateTime'
 import { canEditCategory, canDeleteCategory } from '@/composables/useAuthUserAccessPermissions'
+import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const authUser = inject("authUser")
 
@@ -23,14 +26,20 @@ const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
 const { category } = defineProps({
-    category: Object,
+    category: {
+        type: Object,
+        default: () => ({})
+    },
 })
+
+const pageTitle = computed(() => `${category?.name} ${t('labels.details')}`)
 
 const canEdit = (category) => canEditCategory(authUser?.value, category)
 const canDelete = (category) => canDeleteCategory(authUser?.value, category)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
+
     deleteProcessing.value = true
 
     intertiaJsRoute.delete(route('back-office.categories.delete', { slug: category?.slug }), {
@@ -38,15 +47,14 @@ const handleDelete = () => {
     })
 }
 
-
 onMounted(async () => {
     await nextTick()
 
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Categories', href: route('back-office.categories.index') },
-                { text: `${category?.name} details`, active: true }
+                { text: t('layout_menus.categories'), href: route('back-office.categories.index') },
+                { text: pageTitle.value, active: true }
             ],
         })
     )
@@ -55,112 +63,136 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${category?.name} details`" />
+    <Head :title="pageTitle" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Category Details</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('categories.details.title') }}
+            </h2>
 
             <div class="flex gap-2">
                 <a v-if="canEdit(category)" :href="route('back-office.categories.edit', { slug: category?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    Edit
+                    {{ t('table.menus.edit') }}
                 </a>
 
                 <button v-if="canDelete(category)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    Delete
+                    {{ t('buttons.delete') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('labels.basic_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ category?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('labels.name') }}</span>
+                        <span class="font-medium">{{ category?.name || t('labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ category?.language?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('labels.language') }}</span>
+                        <span class="font-medium">{{ category?.language?.name || t('labels.not_available') }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Parent</span>
-                        <span class="font-medium">{{ category?.parent?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('categories.details.parent') }}</span>
+                        <span class="font-medium">{{ category?.parent?.name || t('labels.not_available') }}</span>
                     </div>
 
                     <div>
-                        <div class="text-gray-500 mb-1">Brief</div>
-                        <div class="text-gray-700">{{ category?.brief || 'N/A' }}</div>
+                        <div class="text-gray-500 mb-1">
+                            {{ t('categories.form.brief') }}
+                        </div>
+                        <div class="text-gray-700">
+                            {{ category?.brief || t('labels.not_available') }}
+                        </div>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-3">
-                    <div class="text-gray-500">Tree</div>
+                    <div class="text-gray-500">
+                        {{ t('categories.details.tree') }}
+                    </div>
 
                     <div class="flex flex-wrap gap-2">
                         <span v-for="node in category?.bloodline || []" :key="node.id"
                             class="bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
                             {{ node.name }}
                         </span>
+
+                        <span v-if="!category?.bloodline?.length" class="text-gray-500">
+                            {{ t('labels.not_available') }}
+                        </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">SEO</div>
+                    <div class="text-gray-500 mb-2">
+                        {{ t('categories.details.seo') }}
+                    </div>
 
                     <div class="space-y-3 text-sm">
                         <div>
-                            <div class="text-gray-500 mb-1">Title</div>
+                            <div class="text-gray-500 mb-1">
+                                {{ t('labels.title') }}
+                            </div>
                             <div class="font-medium text-gray-700">
-                                {{ category?.seo_title || 'N/A' }}
+                                {{ category?.seo_title || t('labels.not_available') }}
                             </div>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">Brief</div>
+                            <div class="text-gray-500 mb-1">
+                                {{ t('categories.form.brief') }}
+                            </div>
                             <div class="font-medium text-gray-700">
-                                {{ category?.seo_brief || 'N/A' }}
+                                {{ category?.seo_brief || t('labels.not_available') }}
                             </div>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">Keywords</div>
+                            <div class="text-gray-500 mb-1">
+                                {{ t('categories.form.seo_keywords') }}
+                            </div>
                             <div class="font-medium text-gray-700">
-                                {{ category?.seo_keywords || 'N/A' }}
+                                {{ category?.seo_keywords || t('labels.not_available') }}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">Sitemap & Feeds</div>
+                    <div class="text-gray-500 mb-2">
+                        {{ t('categories.details.sitemap_and_feeds') }}
+                    </div>
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Sitemap url</span>
-                            <span class="font-medium">{{ category?.sitemap_url || 'N/A' }}</span>
+                            <span class="text-gray-500">{{ t('categories.details.sitemap_url') }}</span>
+                            <span class="font-medium">{{ category?.sitemap_url || t('labels.not_available') }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Feeds (RSS)</span>
-                            <span class="font-medium">{{ category?.feeds_rss_url || 'N/A' }}</span>
+                            <span class="text-gray-500">{{ t('categories.details.feeds_rss') }}</span>
+                            <span class="font-medium">{{ category?.feeds_rss_url || t('labels.not_available') }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Feeds (ATOM)</span>
-                            <span class="font-medium">{{ category?.feeds_atom_url || 'N/A' }}</span>
+                            <span class="text-gray-500">{{ t('categories.details.feeds_atom') }}</span>
+                            <span class="font-medium">{{ category?.feeds_atom_url || t('labels.not_available') }}</span>
                         </div>
                     </div>
                 </div>
@@ -169,38 +201,40 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">System Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('activity_logs.details.system_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Created At</span>
+                        <span class="text-gray-500">{{ t('table.columns.created_at') }}</span>
                         <span class="font-medium">
-                            {{ category?.created_at ? formatDateTime(category.created_at) : 'N/A' }}
+                            {{ category?.created_at ? formatDateTime(category.created_at) : t('labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Created By</span>
+                        <span class="text-gray-500">{{ t('labels.created_by') }}</span>
                         <span class="font-medium">
-                            {{ category?.created_by?.name || 'N/A' }}
+                            {{ category?.created_by?.name || t('labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Updated At</span>
+                        <span class="text-gray-500">{{ t('labels.updated_at') }}</span>
                         <span class="font-medium">
-                            {{ category?.updated_at ? formatDateTime(category.updated_at) : 'N/A' }}
+                            {{ category?.updated_at ? formatDateTime(category.updated_at) : t('labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Updated By</span>
+                        <span class="text-gray-500">{{ t('labels.updated_by') }}</span>
                         <span class="font-medium">
-                            {{ category?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ category?.latest_activity_log?.causer?.name || t('labels.not_available') }}
                         </span>
                     </div>
                 </div>
@@ -209,12 +243,16 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Recent Locations</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('categories.details.recent_locations') }}
+            </h3>
             <RecentLocations :model="category" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('layout_menus.activity_logs') }}
+            </h3>
             <RecentActivities :model-slug="'category'" :model="category" />
         </div>
 
@@ -233,7 +271,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete Category
+                                {{ t('categories.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -241,19 +279,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action cannot be undone.
+                                {{ t('delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
                                 </button>
                             </div>
                         </div>

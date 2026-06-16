@@ -9,6 +9,7 @@ import RecentNewsList from '@/components/common/news/RecentNewsList.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { useTranslate } from '@/composables/useTranslate'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -27,6 +28,8 @@ FontAwesomeLibrary.add(
 
 defineOptions({ layout: Layout })
 
+const { t } = useTranslate()
+
 const {
     category,
     news,
@@ -38,22 +41,18 @@ const {
         type: Object,
         required: true,
     },
-
     news: {
         type: Object,
         required: true,
     },
-
     recentNews: {
         type: Object,
         required: true,
     },
-
     pageSectionNews: {
         type: [Array, Object],
         required: true,
     },
-
     categoryLocationMaxDepthAndLevel: {
         type: Object,
         required: true,
@@ -169,10 +168,6 @@ const getSecondGridColumnClass = (index) => {
 
     if (total === 2) {
         return 'col-span-1 sm:col-span-1 md:col-span-6'
-    }
-
-    if (index === 2) {
-        return 'col-span-1 sm:col-span-2 md:col-span-4'
     }
 
     return 'col-span-1 sm:col-span-1 md:col-span-4'
@@ -327,13 +322,11 @@ watch(
 
 <template>
 
-    <Head :title="category?.name || 'Category'">
+    <Head :title="category?.name || t('labels.category')">
         <link v-if="category?.public_url" rel="canonical" :href="category.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
-
         <meta v-if="metaDescription" name="description" :content="metaDescription" />
-
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
@@ -341,19 +334,20 @@ watch(
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
-                    <img :src="'/uploads/images/logo/category.png'" :alt="category?.name || 'Category image'"
+                    <img :src="'/uploads/images/logo/category.png'"
+                        :alt="category?.name || t('categories.details.category_image_alt')"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    Category
+                    {{ t('labels.category') }}
                 </p>
 
                 <div v-if="category?.parent"
                     class="pointer-events-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                    <a :href="category.parent.public_url" title="Category"
+                    <a :href="category.parent.public_url" :title="t('labels.category')"
                         class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600"
                         @click.stop>
                         <FontAwesomeIcon icon="folder" class="shrink-0" />
@@ -415,7 +409,7 @@ watch(
                     <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-700">
                         <FontAwesomeIcon icon="location-dot" class="text-blue-600" />
 
-                        <span>Location</span>
+                        <span>{{ t('labels.location') }}</span>
                     </div>
 
                     <div v-for="levelIndex in locationLevels" :key="levelIndex" class="space-y-1">
@@ -424,7 +418,7 @@ watch(
                             :selectedItem="searchLocationForm[getLocationFieldName(levelIndex)]"
                             :apiUrl="getLocationApiUrl(levelIndex)"
                             :error="searchLocationForm.errors?.[getLocationFieldName(levelIndex)]" :multiple="false"
-                            placeholder="Select location" />
+                            :placeholder="t('locations.form.location_placeholder')" />
                     </div>
 
                     <button type="button"
@@ -433,7 +427,7 @@ watch(
                         <FontAwesomeIcon icon="magnifying-glass" />
 
                         <span>
-                            {{ isSearchingLocation ? 'Searching...' : 'Search' }}
+                            {{ isSearchingLocation ? t('buttons.searching') : t('buttons.search') }}
                         </span>
                     </button>
                 </div>

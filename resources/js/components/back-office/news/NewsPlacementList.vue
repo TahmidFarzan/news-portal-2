@@ -3,7 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faInfo } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(faInfo)
+
+const { t } = useTranslate()
 
 const { news, newsPlacements } = defineProps({
     news: {
@@ -21,17 +25,17 @@ const { news, newsPlacements } = defineProps({
 <template>
     <div class="w-full rounded-xl border border-gray-200 bg-white shadow-sm">
         <div v-if="!newsPlacements.length" class="px-4 py-8 text-center text-sm text-gray-500">
-            No placement found.
+            {{ t("labels.no_record_found") }}
         </div>
 
         <div v-else class="overflow-x-auto">
             <table class="w-full text-left text-sm">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-500">
                     <tr>
-                        <th class="px-4 py-3 font-semibold">Page</th>
-                        <th class="px-4 py-3 font-semibold">Section</th>
-                        <th class="px-4 py-3 font-semibold">Position</th>
-                        <th class="px-4 py-3 font-semibold">Action</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("table.columns.page") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("table.columns.section") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("table.columns.position") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("table.columns.action") }}</th>
                     </tr>
                 </thead>
 
@@ -56,7 +60,7 @@ const { news, newsPlacements } = defineProps({
                             })"
                                 class="inline-flex items-center gap-1 rounded border border-blue-500 px-2 py-1 text-xs text-blue-500 hover:bg-blue-50">
                                 <FontAwesomeIcon icon="info" />
-                                Details
+                                {{ t("layout_menus.details") }}
                             </a>
                         </td>
                     </tr>

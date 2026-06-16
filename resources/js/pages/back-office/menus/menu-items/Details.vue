@@ -3,28 +3,36 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
-import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { Head, router as inertiaJsRouter } from '@inertiajs/vue3'
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPen, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { extractModelName } from '@/composables/useStringFormat'
-import { formatDate, formatDateTime } from '@/composables/useDateTime'
+import { formatDateTime } from '@/composables/useDateTime'
 import { canEditMenuItem, canDeleteMenuItem } from '@/composables/useAuthUserAccessPermissions'
+import { useTranslate } from '@/composables/useTranslate'
 
-FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
+FontAwesomeLibrary.add(faTrash, faPen, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const authUser = inject("authUser")
+const authUser = inject('authUser')
+const { t } = useTranslate()
 
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
 const { menu, menuItem } = defineProps({
-    menu: Object,
-    menuItem: Object,
+    menu: {
+        type: Object,
+        default: null,
+    },
+    menuItem: {
+        type: Object,
+        default: null,
+    },
 })
 
 const canEdit = (menuItem) => canEditMenuItem(authUser?.value, menuItem)
@@ -32,11 +40,20 @@ const canDelete = (menuItem) => canDeleteMenuItem(authUser?.value, menuItem)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
+
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.menus.menu-items.delete', { slug: menu?.slug, menuItemSlug: menuItem?.slug }), {
-        onFinish: () => deleteProcessing.value = false
-    })
+    inertiaJsRouter.delete(
+        route('back-office.menus.menu-items.delete', {
+            slug: menu?.slug,
+            menuItemSlug: menuItem?.slug,
+        }),
+        {
+            onFinish: () => {
+                deleteProcessing.value = false
+            },
+        }
+    )
 }
 
 onMounted(async () => {
@@ -45,10 +62,16 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Menus', href: route('back-office.menus.index') },
-                { text: `${menu?.name} details`, href: route('back-office.menus.details', { slug: menu?.slug }) },
-                { text: 'Menu Items', href: route('back-office.menus.menu-items.index', { slug: menu?.slug }) },
-                { text: `${menuItem?.name} details`, active: true }
+                { text: t('menus.menus'), href: route('back-office.menus.index') },
+                {
+                    text: `${menu?.name} ${t('labels.details')}`,
+                    href: route('back-office.menus.details', { slug: menu?.slug }),
+                },
+                {
+                    text: t('menus.details.menu_items'),
+                    href: route('back-office.menus.menu-items.index', { slug: menu?.slug }),
+                },
+                { text: `${menuItem?.name} ${t('labels.details')}`, active: true },
             ],
         })
     )
@@ -57,63 +80,71 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${menuItem?.name} details`" />
+    <Head :title="`${menuItem?.name} ${t('labels.details')}`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Menu item Details</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('menu_items.details.title') }}
+            </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(menuItem)"
-                    :href="route('back-office.menus.menu-items.edit', { slug: menu?.slug, menuItemSlug: menuItem?.slug })"
+                <a v-if="canEdit(menuItem)" :href="route('back-office.menus.menu-items.edit', {
+                    slug: menu?.slug,
+                    menuItemSlug: menuItem?.slug,
+                })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    Edit
+                    {{ t('buttons.edit') }}
                 </a>
 
                 <button v-if="canDelete(menuItem)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    Delete
+                    {{ t('buttons.delete') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('labels.basic_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ menuItem?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('labels.name') }}</span>
+                        <span class="font-medium">{{ menuItem?.name || t('labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ menuItem?.language?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('labels.language') }}</span>
+                        <span class="font-medium">{{ menuItem?.language?.name || t('labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <div class="text-gray-500 mb-1">Parent</div>
-                        <div class="text-gray-700">{{ menuItem?.parent?.name || "N/A" }}</div>
+                        <div class="text-gray-500 mb-1">{{ t('categories.form.parent') }}</div>
+                        <div class="text-gray-700">{{ menuItem?.parent?.name || t('labels.not_available') }}</div>
                     </div>
 
                     <div class="flex justify-between">
-                        <div class="text-gray-500 mb-1">Position</div>
-                        <div class="text-gray-700">{{ menuItem?.position || "N/A" }}</div>
+                        <div class="text-gray-500 mb-1">{{ t('table.columns.position') }}</div>
+                        <div class="text-gray-700">{{ menuItem?.position || t('labels.not_available') }}</div>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
-                        <div class="text-gray-500 mb-1">Model</div>
+                        <div class="text-gray-500 mb-1">{{ t('menu_items.form.model') }}</div>
 
                         <div class="text-gray-700">
-                            {{ menuItem?.model_type ? extractModelName(menuItem.model_type) : 'N/A' }}
+                            {{ menuItem?.model_type ? extractModelName(menuItem.model_type) : t('labels.not_available')
+                            }}
+
                             <span v-if="menuItem?.model?.name">
                                 - {{ menuItem?.model?.name }}
                             </span>
@@ -121,13 +152,13 @@ onMounted(async () => {
                     </div>
 
                     <div class="flex justify-between">
-                        <div class="text-gray-500 mb-1">Url</div>
-                        <div class="text-gray-700">{{ menuItem?.url || "N/A" }}</div>
+                        <div class="text-gray-500 mb-1">{{ t('labels.url') }}</div>
+                        <div class="text-gray-700">{{ menuItem?.url || t('labels.not_available') }}</div>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500 mb-1">Public url</span>
-                        <span class="font-medium">{{ menuItem?.public_url || 'N/A' }}</span>
+                        <span class="text-gray-500 mb-1">{{ t('menu_items.details.public_url') }}</span>
+                        <span class="font-medium">{{ menuItem?.public_url || t('labels.not_available') }}</span>
                     </div>
                 </div>
 
@@ -135,38 +166,40 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">System Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('medias.details.system_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Created At</span>
+                        <span class="text-gray-500">{{ t('table.columns.created_at') }}</span>
                         <span class="font-medium">
-                            {{ menuItem?.created_at ? formatDateTime(menuItem.created_at) : 'N/A' }}
+                            {{ menuItem?.created_at ? formatDateTime(menuItem.created_at) : t('labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Created By</span>
+                        <span class="text-gray-500">{{ t('labels.created_by') }}</span>
                         <span class="font-medium">
-                            {{ menuItem?.created_by?.name || 'N/A' }}
+                            {{ menuItem?.created_by?.name || t('labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Updated At</span>
+                        <span class="text-gray-500">{{ t('labels.updated_at') }}</span>
                         <span class="font-medium">
-                            {{ menuItem?.updated_at ? formatDateTime(menuItem.updated_at) : 'N/A' }}
+                            {{ menuItem?.updated_at ? formatDateTime(menuItem.updated_at) : t('labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Updated By</span>
+                        <span class="text-gray-500">{{ t('labels.updated_by') }}</span>
                         <span class="font-medium">
-                            {{ menuItem?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ menuItem?.latest_activity_log?.causer?.name || t('labels.not_available') }}
                         </span>
                     </div>
                 </div>
@@ -175,7 +208,10 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('activity_logs.index.title') }}
+            </h3>
+
             <RecentActivities :model-slug="'menu-item'" :model="menuItem" />
         </div>
 
@@ -194,7 +230,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete menu item
+                                {{ t('menu_items.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -202,19 +238,20 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action cannot be undone.
+                                {{ t('delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+
+                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
                                 </button>
                             </div>
                         </div>

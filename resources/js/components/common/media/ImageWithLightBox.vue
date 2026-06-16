@@ -21,6 +21,15 @@ import {
     faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons'
 
+library.add(
+    faMagnifyingGlassPlus,
+    faMagnifyingGlassMinus,
+    faXmark,
+    faChevronLeft,
+    faChevronRight,
+    faUpRightFromSquare,
+)
+
 const {
     image,
     lightboxName = 'Image gallery',

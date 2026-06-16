@@ -9,12 +9,15 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons'
 
-import { formatDate, formatDateTime } from '@/composables/useDateTime'
+import { formatDateTime } from '@/composables/useDateTime'
 import { canEditLocation, canDeleteLocation } from '@/composables/useAuthUserAccessPermissions'
+import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner, faCopy, faCheck)
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const authUser = inject("authUser")
 
@@ -23,12 +26,17 @@ const deleteProcessing = ref(false)
 const boundaryGeoJsonCopied = ref(false)
 
 const { location } = defineProps({
-    location: Object,
+    location: {
+        type: Object,
+        default: () => ({})
+    },
 })
+
+const pageTitle = computed(() => `${location?.name} ${t('labels.details')}`)
 
 const boundaryGeoJsonText = computed(() => {
     if (!location?.boundary_geojson) {
-        return 'N/A'
+        return t('labels.not_available')
     }
 
     if (typeof location.boundary_geojson === 'string') {
@@ -43,15 +51,18 @@ const canDelete = (location) => canDeleteLocation(authUser?.value, location)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
+
     deleteProcessing.value = true
 
     intertiaJsRoute.delete(route('back-office.locations.delete', { slug: location?.slug }), {
-        onFinish: () => deleteProcessing.value = false
+        onFinish: () => {
+            deleteProcessing.value = false
+        }
     })
 }
 
 const copyBoundaryGeoJson = async () => {
-    if (!boundaryGeoJsonText.value || boundaryGeoJsonText.value === 'N/A') {
+    if (!boundaryGeoJsonText.value || boundaryGeoJsonText.value === t('labels.not_available')) {
         return
     }
 
@@ -83,97 +94,115 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Locations', href: route('back-office.locations.index') },
-                { text: `${location?.name} details`, active: true }
+                { text: t('layout_menus.locations'), href: route('back-office.locations.index') },
+                { text: pageTitle.value, active: true }
             ],
         })
     )
-
 })
 </script>
 
 <template>
 
-    <Head :title="`${location?.name} details`" />
+    <Head :title="pageTitle" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Location Details</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('locations.details.title') }}
+            </h2>
 
             <div class="flex gap-2">
                 <a v-if="canEdit(location)" :href="route('back-office.locations.edit', { slug: location?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    Edit
+                    {{ t('table.menus.edit') }}
                 </a>
 
                 <button v-if="canDelete(location)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    Delete
+                    {{ t('buttons.delete') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('labels.basic_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ location?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('labels.name') }}</span>
+                        <span class="font-medium">{{ location?.name || t('labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Language</span>
-                        <span class="font-medium">{{ location?.language?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('labels.language') }}</span>
+                        <span class="font-medium">{{ location?.language?.name || t('labels.not_available') }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Parent</span>
-                        <span class="font-medium">{{ location?.parent?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('locations.details.parent') }}</span>
+                        <span class="font-medium">{{ location?.parent?.name || t('labels.not_available') }}</span>
                     </div>
 
                     <div>
-                        <div class="text-gray-500 mb-1">Brief</div>
-                        <div class="text-gray-700">{{ location?.brief || 'N/A' }}</div>
+                        <div class="text-gray-500 mb-1">
+                            {{ t('locations.form.brief') }}
+                        </div>
+                        <div class="text-gray-700">
+                            {{ location?.brief || t('labels.not_available') }}
+                        </div>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-3">
-                    <div class="text-gray-500">Tree</div>
+                    <div class="text-gray-500">
+                        {{ t('locations.details.tree') }}
+                    </div>
 
                     <div class="flex flex-wrap gap-2">
                         <span v-for="node in location?.bloodline || []" :key="node.id"
                             class="bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
                             {{ node.name }}
                         </span>
+
+                        <span v-if="!location?.bloodline?.length" class="text-gray-500">
+                            {{ t('labels.not_available') }}
+                        </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">Category</div>
+                    <div class="text-gray-500 mb-2">
+                        {{ t('locations.details.category') }}
+                    </div>
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Title</span>
-                            <span class="font-medium">{{ location?.category?.name || 'N/A' }}</span>
+                            <span class="text-gray-500">{{ t('labels.title') }}</span>
+                            <span class="font-medium">{{ location?.category?.name || t('labels.not_available') }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Parent</span>
-                            <span class="font-medium">{{ location?.category?.parent?.name || 'N/A' }}</span>
+                            <span class="text-gray-500">{{ t('locations.details.parent') }}</span>
+                            <span class="font-medium">{{ location?.category?.parent?.name || t('labels.not_available')
+                                }}</span>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">Brief</div>
+                            <div class="text-gray-500 mb-1">
+                                {{ t('locations.form.brief') }}
+                            </div>
                             <div class="text-gray-700">
-                                {{ location?.category?.brief || 'N/A' }}
+                                {{ location?.category?.brief || t('labels.not_available') }}
                             </div>
                         </div>
                     </div>
@@ -182,53 +211,64 @@ onMounted(async () => {
 
             <div class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">Map Information</div>
+                    <div class="text-gray-500 mb-2">
+                        {{ t('locations.details.map_information') }}
+                    </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">Latitude</span>
-                                <span class="font-medium break-all">{{ location?.latitude || 'N/A' }}</span>
+                                <span class="text-gray-500">{{ t('locations.details.latitude') }}</span>
+                                <span class="font-medium break-all">{{ location?.latitude || t('labels.not_available')
+                                    }}</span>
                             </div>
 
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">Longitude</span>
-                                <span class="font-medium break-all">{{ location?.longitude || 'N/A' }}</span>
+                                <span class="text-gray-500">{{ t('locations.details.longitude') }}</span>
+                                <span class="font-medium break-all">{{ location?.longitude || t('labels.not_available')
+                                    }}</span>
                             </div>
                         </div>
 
                         <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">Boundary North</span>
-                                <span class="font-medium break-all">{{ location?.boundary_north || 'N/A' }}</span>
+                                <span class="text-gray-500">{{ t('locations.details.boundary_north') }}</span>
+                                <span class="font-medium break-all">{{ location?.boundary_north ||
+                                    t('labels.not_available') }}</span>
                             </div>
 
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">Boundary South</span>
-                                <span class="font-medium break-all">{{ location?.boundary_south || 'N/A' }}</span>
+                                <span class="text-gray-500">{{ t('locations.details.boundary_south') }}</span>
+                                <span class="font-medium break-all">{{ location?.boundary_south ||
+                                    t('labels.not_available') }}</span>
                             </div>
 
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">Boundary East</span>
-                                <span class="font-medium break-all">{{ location?.boundary_east || 'N/A' }}</span>
+                                <span class="text-gray-500">{{ t('locations.details.boundary_east') }}</span>
+                                <span class="font-medium break-all">{{ location?.boundary_east ||
+                                    t('labels.not_available') }}</span>
                             </div>
 
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">Boundary West</span>
-                                <span class="font-medium break-all">{{ location?.boundary_west || 'N/A' }}</span>
+                                <span class="text-gray-500">{{ t('locations.details.boundary_west') }}</span>
+                                <span class="font-medium break-all">{{ location?.boundary_west ||
+                                    t('labels.not_available') }}</span>
                             </div>
                         </div>
 
                         <div class="md:col-span-2 border border-gray-200 rounded-lg p-4">
                             <div class="mb-2 flex items-center justify-between gap-3">
-                                <div class="text-gray-500">Boundary GeoJSON</div>
+                                <div class="text-gray-500">
+                                    {{ t('locations.details.boundary_geojson') }}
+                                </div>
 
-                                <button type="button" :disabled="!boundaryGeoJsonText || boundaryGeoJsonText === 'N/A'"
+                                <button type="button"
+                                    :disabled="!boundaryGeoJsonText || boundaryGeoJsonText === t('labels.not_available')"
                                     @click="copyBoundaryGeoJson"
                                     class="inline-flex items-center gap-2 rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50">
                                     <FontAwesomeIcon :icon="boundaryGeoJsonCopied ? 'check' : 'copy'" />
 
-                                    {{ boundaryGeoJsonCopied ? 'Copied' : 'Copy' }}
+                                    {{ boundaryGeoJsonCopied ? t('labels.copied') : t('labels.copy') }}
                                 </button>
                             </div>
 
@@ -241,88 +281,100 @@ onMounted(async () => {
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">SEO</div>
+                    <div class="text-gray-500 mb-2">
+                        {{ t('locations.details.seo') }}
+                    </div>
 
                     <div class="space-y-3 text-sm">
                         <div>
-                            <div class="text-gray-500 mb-1">Title</div>
+                            <div class="text-gray-500 mb-1">
+                                {{ t('labels.title') }}
+                            </div>
                             <div class="font-medium text-gray-700">
-                                {{ location?.seo_title || 'N/A' }}
+                                {{ location?.seo_title || t('labels.not_available') }}
                             </div>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">Brief</div>
+                            <div class="text-gray-500 mb-1">
+                                {{ t('locations.form.brief') }}
+                            </div>
                             <div class="font-medium text-gray-700">
-                                {{ location?.seo_brief || 'N/A' }}
+                                {{ location?.seo_brief || t('labels.not_available') }}
                             </div>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">Keywords</div>
+                            <div class="text-gray-500 mb-1">
+                                {{ t('locations.form.seo_keywords') }}
+                            </div>
                             <div class="font-medium text-gray-700">
-                                {{ location?.seo_keywords || 'N/A' }}
+                                {{ location?.seo_keywords || t('labels.not_available') }}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">Sitemap</div>
+                    <div class="text-gray-500 mb-2">
+                        {{ t('locations.details.sitemap_and_feeds') }}
+                    </div>
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Sitemap url</span>
-                            <span class="font-medium">{{ location?.sitemap_url || 'N/A' }}</span>
+                            <span class="text-gray-500">{{ t('locations.details.sitemap_url') }}</span>
+                            <span class="font-medium">{{ location?.sitemap_url || t('labels.not_available') }}</span>
                         </div>
-                    </div>
 
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Feeds (RSS)</span>
-                        <span class="font-medium">{{ location?.feeds_rss_url || 'N/A' }}</span>
-                    </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">{{ t('locations.details.feeds_rss') }}</span>
+                            <span class="font-medium">{{ location?.feeds_rss_url || t('labels.not_available') }}</span>
+                        </div>
 
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Feeds (ATOM)</span>
-                        <span class="font-medium">{{ location?.feeds_atom_url || 'N/A' }}</span>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">{{ t('locations.details.feeds_atom') }}</span>
+                            <span class="font-medium">{{ location?.feeds_atom_url || t('labels.not_available') }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">System Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('activity_logs.details.system_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Created At</span>
+                        <span class="text-gray-500">{{ t('table.columns.created_at') }}</span>
                         <span class="font-medium">
-                            {{ location?.created_at ? formatDateTime(location.created_at) : 'N/A' }}
+                            {{ location?.created_at ? formatDateTime(location.created_at) : t('labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Created By</span>
+                        <span class="text-gray-500">{{ t('labels.created_by') }}</span>
                         <span class="font-medium">
-                            {{ location?.created_by?.name || 'N/A' }}
+                            {{ location?.created_by?.name || t('labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Updated At</span>
+                        <span class="text-gray-500">{{ t('labels.updated_at') }}</span>
                         <span class="font-medium">
-                            {{ location?.updated_at ? formatDateTime(location.updated_at) : 'N/A' }}
+                            {{ location?.updated_at ? formatDateTime(location.updated_at) : t('labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Updated By</span>
+                        <span class="text-gray-500">{{ t('labels.updated_by') }}</span>
                         <span class="font-medium">
-                            {{ location?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ location?.latest_activity_log?.causer?.name || t('labels.not_available') }}
                         </span>
                     </div>
                 </div>
@@ -331,7 +383,10 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('layout_menus.activity_logs') }}
+            </h3>
+
             <RecentActivities :model-slug="'location'" :model="location" />
         </div>
 
@@ -350,7 +405,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete Location
+                                {{ t('locations.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -358,19 +413,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action cannot be undone.
+                                {{ t('delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
                                 </button>
                             </div>
                         </div>

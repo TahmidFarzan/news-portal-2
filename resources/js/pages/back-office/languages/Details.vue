@@ -3,19 +3,22 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 import RecentCatgories from '@/components/back-office/category/RecentCatgories.vue'
 
-import { ref, onMounted, nextTick, inject } from 'vue'
+import { ref, onMounted, nextTick, inject, computed } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { formatDate, formatDateTime } from '@/composables/useDateTime'
+import { formatDateTime } from '@/composables/useDateTime'
 import { canEditLanguage, canDeleteLanguage } from '@/composables/useAuthUserAccessPermissions'
+import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const authUser = inject("authUser")
 
@@ -23,21 +26,28 @@ const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
 const { language } = defineProps({
-    language: Object,
+    language: {
+        type: Object,
+        default: () => ({})
+    },
 })
+
+const pageTitle = computed(() => `${language?.name} ${t('labels.details')}`)
 
 const canEdit = (language) => canEditLanguage(authUser?.value, language)
 const canDelete = (language) => canDeleteLanguage(authUser?.value, language)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
+
     deleteProcessing.value = true
 
     intertiaJsRoute.delete(route('back-office.languages.delete', { slug: language?.slug }), {
-        onFinish: () => deleteProcessing.value = false
+        onFinish: () => {
+            deleteProcessing.value = false
+        }
     })
 }
-
 
 onMounted(async () => {
     await nextTick()
@@ -45,8 +55,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Languages', href: route('back-office.languages.index') },
-                { text: `${language?.name} details`, active: true }
+                { text: t('layout_menus.languages'), href: route('back-office.languages.index') },
+                { text: pageTitle.value, active: true }
             ],
         })
     )
@@ -55,54 +65,61 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${language?.name} details`" />
+    <Head :title="pageTitle" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Language Details</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('languages.details.title') }}
+            </h2>
 
             <div class="flex gap-2">
                 <a v-if="canEdit(language)" :href="route('back-office.languages.edit', { slug: language?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    Edit
+                    {{ t('table.menus.edit') }}
                 </a>
 
                 <button v-if="canDelete(language)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    Delete
+                    {{ t('buttons.delete') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Basic Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('labels.basic_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Name</span>
-                        <span class="font-medium">{{ language?.name || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('labels.name') }}</span>
+                        <span class="font-medium">{{ language?.name || t('labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Code</span>
-                        <span class="font-medium">{{ language?.code || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('languages.details.code') }}</span>
+                        <span class="font-medium">{{ language?.code || t('labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Locale</span>
-                        <span class="font-medium">{{ language?.locale || 'N/A' }}</span>
+                        <span class="text-gray-500">{{ t('languages.details.locale') }}</span>
+                        <span class="font-medium">{{ language?.locale || t('labels.not_available') }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-1">Brief</div>
+                    <div class="text-gray-500 mb-1">
+                        {{ t('languages.form.brief') }}
+                    </div>
+
                     <div class="text-sm text-gray-700">
-                        {{ language?.brief || 'N/A' }}
+                        {{ language?.brief || t('labels.not_available') }}
                     </div>
                 </div>
 
@@ -110,38 +127,40 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">System Information</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('activity_logs.details.system_information') }}
+            </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Created At</span>
+                        <span class="text-gray-500">{{ t('table.columns.created_at') }}</span>
                         <span class="font-medium">
-                            {{ language?.created_at ? formatDateTime(language.created_at) : 'N/A' }}
+                            {{ language?.created_at ? formatDateTime(language.created_at) : t('labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Created By</span>
+                        <span class="text-gray-500">{{ t('labels.created_by') }}</span>
                         <span class="font-medium">
-                            {{ language?.created_by?.name || 'N/A' }}
+                            {{ language?.created_by?.name || t('labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Updated At</span>
+                        <span class="text-gray-500">{{ t('labels.updated_at') }}</span>
                         <span class="font-medium">
-                            {{ language?.updated_at ? formatDateTime(language.updated_at) : 'N/A' }}
+                            {{ language?.updated_at ? formatDateTime(language.updated_at) : t('labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Updated By</span>
+                        <span class="text-gray-500">{{ t('labels.updated_by') }}</span>
                         <span class="font-medium">
-                            {{ language?.latest_activity_log?.causer?.name || 'N/A' }}
+                            {{ language?.latest_activity_log?.causer?.name || t('labels.not_available') }}
                         </span>
                     </div>
                 </div>
@@ -150,12 +169,18 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Recent Categories</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('languages.details.recent_categories') }}
+            </h3>
+
             <RecentCatgories :model="language" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="text-base font-semibold border-b pb-2">Activity Logs</h3>
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('layout_menus.activity_logs') }}
+            </h3>
+
             <RecentActivities :model-slug="'language'" :model="language" />
         </div>
 
@@ -174,7 +199,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete Language
+                                {{ t('languages.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -182,19 +207,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action cannot be undone.
+                                {{ t('delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
                                 </button>
                             </div>
                         </div>

@@ -11,6 +11,7 @@ import {
     faSpinner,
     faXmark,
 } from '@fortawesome/free-solid-svg-icons'
+import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(
     faEye,
@@ -19,6 +20,8 @@ FontAwesomeLibrary.add(
     faSpinner,
     faXmark
 )
+
+const { t } = useTranslate()
 
 const {
     image,
@@ -74,7 +77,7 @@ const caption = computed(() => {
 })
 
 const altText = computed(() => {
-    return image?.alt || image?.custom_properties?.alt || caption.value || 'Gallery image'
+    return image?.alt || image?.custom_properties?.alt || caption.value || null
 })
 
 const imageSlug = computed(() => {
@@ -93,7 +96,7 @@ function normalizeErrors(error) {
 
     if (!Object.keys(normalizedErrors).length) {
         normalizedErrors.general =
-            error?.response?.data?.message || 'Something went wrong.'
+            error?.response?.data?.message || t("api.errors.invalid_data")
     }
 
     return normalizedErrors
@@ -110,7 +113,7 @@ function closeViewModal() {
 function openEditModal() {
     editForm.value = {
         caption: caption.value,
-        alt: image?.alt || image?.custom_properties?.alt || '',
+        alt: image?.alt || image?.custom_properties?.alt || null,
     }
 
     editErrors.value = {}
@@ -134,7 +137,7 @@ async function updateImage() {
     if (editProcessing.value) return
 
     if (!imageSlug.value) {
-        editErrors.value.general = 'Image slug is missing. Please return slug from backend response.'
+        editErrors.value.general = t("api.errors.missing_slug")
         return
     }
 
@@ -153,14 +156,14 @@ async function updateImage() {
         )
 
         if (response?.data?.status === 'error') {
-            editErrors.value.general = response?.data?.message || 'Image update failed.'
+            editErrors.value.general = response?.data?.message || t("api.errors.fail_to_update_image")
             return
         }
 
         const updatedImage = response?.data?.media
 
         if (!updatedImage?.id) {
-            editErrors.value.general = 'Image updated but invalid media response returned.'
+            editErrors.value.general = t("api.errors.invalid_response_after_image_update")
             return
         }
 
@@ -193,7 +196,7 @@ async function deleteImage() {
     if (deleteProcessing.value) return
 
     if (!imageSlug.value) {
-        deleteErrors.value.general = 'Image slug is missing. Please return slug from backend response.'
+        deleteErrors.value.general = t("api.errors.missing_slug")
         return
     }
 
@@ -208,7 +211,7 @@ async function deleteImage() {
         )
 
         if (response?.data?.status === 'error') {
-            deleteErrors.value.general = response?.data?.message || 'Image delete failed.'
+            deleteErrors.value.general = response?.data?.message || t("api.errors.fail_to_delete_image")
             return
         }
 
@@ -256,9 +259,9 @@ async function deleteImage() {
             </div>
         </div>
 
-        <div class="p-3 text-sm text-gray-700">
+        <div v-if="caption" class="p-3 text-sm text-gray-700">
             <span class="font-medium">Caption:</span>
-            {{ caption || 'N/A' }}
+            {{ caption }}
         </div>
 
     </div>
@@ -286,9 +289,9 @@ async function deleteImage() {
                         <img :src="fullImageUrl" :alt="altText"
                             class="mx-auto max-h-[80vh] max-w-full rounded-xl bg-white object-contain">
 
-                        <div class="mt-3 rounded-lg bg-white p-3 text-sm text-gray-700">
+                        <div v-if="caption" class="mt-3 rounded-lg bg-white p-3 text-sm text-gray-700">
                             <span class="font-medium">Caption:</span>
-                            {{ caption || 'N/A' }}
+                            {{ caption}}
                         </div>
                     </div>
                 </Transition>
@@ -303,7 +306,7 @@ async function deleteImage() {
                 <div class="w-full max-w-lg rounded-xl bg-white p-5 shadow-xl">
                     <div class="mb-4 flex items-center justify-between">
                         <h2 class="text-lg font-semibold text-gray-800">
-                            Edit Image
+                            {{ t("labels.edit_image") }}
                         </h2>
 
                         <button type="button"
@@ -321,7 +324,7 @@ async function deleteImage() {
                         <div class="space-y-4">
                             <div>
                                 <div class="mb-1 text-sm text-gray-500">
-                                    Preview
+                                    {{ t("labels.preview") }}
                                 </div>
 
                                 <img :src="imageUrl" :alt="altText"
@@ -330,7 +333,7 @@ async function deleteImage() {
 
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    Caption
+                                    {{ t("labels.caption") }}
                                 </label>
 
                                 <input v-model="editForm.caption" type="text"
@@ -344,7 +347,7 @@ async function deleteImage() {
 
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    Alt Text
+                                    {{ t("labels.alt_text") }}
                                 </label>
 
                                 <input v-model="editForm.alt" type="text"
@@ -361,7 +364,7 @@ async function deleteImage() {
                             <button type="button"
                                 class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
                                 :disabled="editProcessing" @click="closeEditModal">
-                                Cancel
+                                {{ t("buttons.cancel") }}
                             </button>
 
                             <button type="submit"
@@ -370,7 +373,7 @@ async function deleteImage() {
                                 <FontAwesomeIcon v-if="editProcessing" icon="spinner" class="animate-spin" />
 
                                 <span>
-                                    {{ editProcessing ? 'Updating...' : 'Update' }}
+                                    {{ editProcessing ? t("buttons.updating") : t("buttons.update") }}
                                 </span>
                             </button>
                         </div>
@@ -387,7 +390,7 @@ async function deleteImage() {
                 <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
                     <div class="mb-4 flex items-center justify-between">
                         <h2 class="text-lg font-semibold text-gray-800">
-                            Delete Image
+                            {{ t("delete_confirmation_modal.title") }}
                         </h2>
 
                         <button type="button"
@@ -406,11 +409,7 @@ async function deleteImage() {
 
                         <div>
                             <p class="text-sm font-medium text-gray-800">
-                                Are you sure you want to delete this image?
-                            </p>
-
-                            <p class="mt-1 text-sm text-gray-500">
-                                This action will remove it from this draft gallery.
+                                {{ t("delete_confirmation_modal.body") }}
                             </p>
                         </div>
                     </div>
@@ -419,7 +418,7 @@ async function deleteImage() {
                         <button type="button"
                             class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
                             :disabled="deleteProcessing" @click="closeDeleteModal">
-                            Cancel
+                            {{ t("buttons.cancel") }}
                         </button>
 
                         <button type="button"
@@ -430,7 +429,7 @@ async function deleteImage() {
                             <FontAwesomeIcon v-else icon="trash" />
 
                             <span>
-                                {{ deleteProcessing ? 'Deleting...' : 'Delete' }}
+                                {{ deleteProcessing ? t("buttons.deleting") : t("buttons.delete") }}
                             </span>
                         </button>
                     </div>

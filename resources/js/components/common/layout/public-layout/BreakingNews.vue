@@ -2,6 +2,10 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
+import { useTranslate } from '@/composables/useTranslate'
+
+const { t } = useTranslate()
+
 const {
     title = 'Breaking News',
     speed = 45,
@@ -186,7 +190,7 @@ onBeforeUnmount(() => {
 
                 <div v-if="loading && !fullyLoaded"
                     class="shrink-0 whitespace-nowrap text-[11px] text-gray-500 sm:text-xs">
-                    Loading...
+                    {{ t('labels.loading') }}
                 </div>
             </div>
         </div>

@@ -7,7 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faTrash, faPen, faEye, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons'
 
-FontAwesomeLibrary.add(faTrash, faPen, faEye, faSpinner, faXmark)
+import { useTranslate } from '@/composables/useTranslate'
+
+FontAwesomeLibrary.add(
+    faTrash, faPen, faEye, faSpinner, faXmark
+)
+
+const { t } = useTranslate()
 
 const { news, galleryImage, sequenceMode } = defineProps({
     news: {
@@ -186,7 +192,7 @@ const deleteGalleryImage = () => {
                     <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">
-                                Update Gallery Image
+                                {{ t("labels.update_gallery_image") }}
                             </h3>
 
                             <button type="button"
@@ -199,7 +205,7 @@ const deleteGalleryImage = () => {
                         <div class="mt-4 space-y-4">
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    Caption
+                                    {{ t("labels.caption") }}
                                 </label>
 
                                 <input v-model="updateForm.caption" type="text"
@@ -212,7 +218,7 @@ const deleteGalleryImage = () => {
 
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    Alt
+                                    {{ t("labels.alt_text") }}
                                 </label>
 
                                 <input v-model="updateForm.alt" type="text"
@@ -225,7 +231,7 @@ const deleteGalleryImage = () => {
 
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    Order Column
+                                    {{ t("labels.order_column") }}
                                 </label>
 
                                 <input v-model="updateForm.order_column" type="number" min="1"
@@ -241,7 +247,7 @@ const deleteGalleryImage = () => {
                             <button type="button"
                                 class="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
                                 :disabled="updateForm.processing" @click="closeUpdateModal">
-                                Cancel
+                                {{ t("buttons.cancel") }}
                             </button>
 
                             <button type="button"
@@ -249,7 +255,7 @@ const deleteGalleryImage = () => {
                                 :disabled="updateForm.processing" @click="updateGalleryImage">
                                 <FontAwesomeIcon v-if="updateForm.processing" :icon="faSpinner"
                                     class="mr-1 animate-spin" />
-                                Update
+                                {{ t("buttons.update") }}
                             </button>
                         </div>
                     </div>
@@ -268,38 +274,38 @@ const deleteGalleryImage = () => {
                     leave-active-class="transition ease-in duration-150"
                     leave-from-class="opacity-100 scale-100 translate-y-0"
                     leave-to-class="opacity-0 scale-95 translate-y-4">
-                <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            Delete Gallery Image?
-                        </h3>
+                    <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                Delete Gallery Image?
+                            </h3>
 
-                        <button type="button"
-                            class="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                            @click="closeDeleteModal">
-                            <FontAwesomeIcon :icon="faXmark" />
-                        </button>
+                            <button type="button"
+                                class="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                                @click="closeDeleteModal">
+                                <FontAwesomeIcon :icon="faXmark" />
+                            </button>
+                        </div>
+
+                        <p class="mt-2 text-sm text-gray-600">
+                            Are you sure you want to delete this gallery image?
+                        </p>
+
+                        <div class="mt-5 flex justify-end gap-2">
+                            <button type="button"
+                                class="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+                                :disabled="deleteProcessing" @click="closeDeleteModal">
+                                Cancel
+                            </button>
+
+                            <button type="button"
+                                class="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 disabled:opacity-60"
+                                :disabled="deleteProcessing" @click="deleteGalleryImage">
+                                <FontAwesomeIcon v-if="deleteProcessing" :icon="faSpinner" class="mr-1 animate-spin" />
+                                Delete
+                            </button>
+                        </div>
                     </div>
-
-                    <p class="mt-2 text-sm text-gray-600">
-                        Are you sure you want to delete this gallery image?
-                    </p>
-
-                    <div class="mt-5 flex justify-end gap-2">
-                        <button type="button"
-                            class="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
-                            :disabled="deleteProcessing" @click="closeDeleteModal">
-                            Cancel
-                        </button>
-
-                        <button type="button"
-                            class="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 disabled:opacity-60"
-                            :disabled="deleteProcessing" @click="deleteGalleryImage">
-                            <FontAwesomeIcon v-if="deleteProcessing" :icon="faSpinner" class="mr-1 animate-spin" />
-                            Delete
-                        </button>
-                    </div>
-                </div>
                 </Transition>
             </div>
         </Transition>

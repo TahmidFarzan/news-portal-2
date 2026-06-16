@@ -16,12 +16,15 @@ import {
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { useTranslate } from '@/composables/useTranslate'
 
 import { canEditUser, canDeleteUser, canActiveInactiveUser } from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const authUser = inject("authUser")
 
@@ -55,6 +58,7 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
+
     intertiaJsRoute.get(route('back-office.users.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
@@ -68,6 +72,11 @@ const confirmDelete = (user) => {
     showDeleteModal.value = true
 }
 
+const closeDeleteModal = () => {
+    showDeleteModal.value = false
+    deletingRow.value = null
+}
+
 const canEdit = (user) => canEditUser(authUser?.value, user)
 const canDelete = (user) => canDeleteUser(authUser?.value, user)
 const canActiveInactive = (user) => canActiveInactiveUser(authUser?.value, user)
@@ -76,10 +85,10 @@ const handleDelete = (user) => {
     if (!user || deleteProcessing.value) return
 
     deleteProcessing.value = true
+
     intertiaJsRoute.delete(route('back-office.users.delete', { slug: user?.slug }), {
         onFinish: () => {
-            showDeleteModal.value = false
-            deletingRow.value = null
+            closeDeleteModal()
             deleteProcessing.value = false
         }
     })
@@ -87,6 +96,7 @@ const handleDelete = (user) => {
 
 const handleInactive = (user) => {
     if (inactiveProcessing.value) return
+
     inactiveProcessing.value = user.slug
 
     intertiaJsRoute.patch(route('back-office.users.inactive', { slug: user?.slug }), {
@@ -96,6 +106,7 @@ const handleInactive = (user) => {
 
 const handleActive = (user) => {
     if (activeProcessing.value) return
+
     activeProcessing.value = user.slug
 
     intertiaJsRoute.patch(route('back-office.users.active', { slug: user?.slug }), {
@@ -104,7 +115,6 @@ const handleActive = (user) => {
 }
 
 onMounted(async () => {
-
     const urlParams = new URLSearchParams(window.location.search)
 
     filterForm.per_page = urlParams.get('per_page') || ''
@@ -117,6 +127,7 @@ onMounted(async () => {
         const rCreatedBy = await fetchFromApi(
             route('search.user', { slugOrId: filterForm.created_by_id })
         )
+
         filterForm.created_by_id = rCreatedBy || null
     }
 
@@ -124,7 +135,8 @@ onMounted(async () => {
         const rUserRole = await fetchFromApi(
             route('search.user-role', { slugOrId: filterForm.user_role_id })
         )
-        filterForm.created_by_id = rUserRole || null
+
+        filterForm.user_role_id = rUserRole || null
     }
 
     await nextTick()
@@ -132,27 +144,28 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Users', active: true },
+                { text: t('labels.users'), active: true },
             ],
         })
     )
-
 })
 </script>
 
 <template>
 
-    <Head title="Users" />
+    <Head :title="t('labels.users')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Users</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('labels.users') }}
+            </h2>
 
             <a :href="route('back-office.users.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
-                Create
+                {{ t('buttons.create') }}
             </a>
         </div>
 
@@ -161,34 +174,36 @@ onMounted(async () => {
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                    placeholder="Per page" />
+                    :placeholder="t('labels.per_page')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    placeholder="Created by" />
+                    :placeholder="t('labels.created_by')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="user_role_id"
                     :selectedItem="filterForm.user_role_id" :apiUrl="route('search.user-roles')" :multiple="false"
-                    placeholder="User Role" />
+                    :placeholder="t('users.form.user_role')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search user..."
+                <input type="search" v-model="filterForm.search" :placeholder="t('users.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
                 <div class="flex items-center gap-4 text-sm">
                     <label class="flex items-center gap-1">
                         <input type="radio" v-model="filterForm.is_active" :value="null" />
-                        All
+                        {{ t('labels.all') }}
                     </label>
+
                     <label class="flex items-center gap-1">
                         <input type="radio" v-model="filterForm.is_active" :value="true" />
-                        Active
+                        {{ t('users.buttons.active') }}
                     </label>
+
                     <label class="flex items-center gap-1">
                         <input type="radio" v-model="filterForm.is_active" :value="false" />
-                        Inactive
+                        {{ t('users.buttons.inactive') }}
                     </label>
                 </div>
 
@@ -196,10 +211,10 @@ onMounted(async () => {
 
             <div class="flex justify-end">
                 <button type="submit" :disabled="filterForm.processing"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition">
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed">
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon icon="filter" />
-                    Apply Filter
+                    {{ filterForm.processing ? t('users.index.applying_filter') : t('users.index.apply_filter') }}
                 </button>
             </div>
         </form>
@@ -212,26 +227,34 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">Name</th>
-                            <th class="px-4 py-3 text-left">Role</th>
-                            <th class="px-4 py-3 text-left">Created</th>
-                            <th class="px-4 py-3 text-left">Active</th>
-                            <th class="px-4 py-3 text-right">Actions</th>
+                            <th class="px-4 py-3 text-left">{{ t('labels.name') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('users.index.role') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('users.index.created') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('users.buttons.active') }}</th>
+                            <th class="px-4 py-3 text-right">{{ t('news.index.actions') }}</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y">
                         <tr v-for="(item, index) in users?.data" :key="item.id" class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
-                            <td class="px-4 py-3 font-medium">{{ item.name }}</td>
-                            <td class="px-4 py-3 text-gray-600">{{ item?.user_role?.name }}</td>
-                            <td class="px-4 py-3 text-gray-500">
-                                {{ formatDateTime(item.created_at) }}
+
+                            <td class="px-4 py-3 font-medium">
+                                {{ item.name || t('labels.not_available') }}
                             </td>
+
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ item?.user_role?.name || t('labels.not_available') }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-500">
+                                {{ item.created_at ? formatDateTime(item.created_at) : t('labels.not_available') }}
+                            </td>
+
                             <td class="px-4 py-3">
                                 <span :class="item.is_active ? 'text-green-600' : 'text-red-500'"
                                     class="text-xs font-medium">
-                                    {{ item.is_active ? 'Active' : 'Inactive' }}
+                                    {{ item.is_active ? t('users.buttons.active') : t('users.buttons.inactive') }}
                                 </span>
                             </td>
 
@@ -239,35 +262,46 @@ onMounted(async () => {
                                 <div class="flex justify-end gap-2">
 
                                     <a :href="route('back-office.users.details', { slug: item.slug })"
-                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
+                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
+                                        :title="t('table.menus.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canEdit(item)" :href="route('back-office.users.edit', { slug: item.slug })"
-                                        class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
+                                        class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
+                                        :title="t('buttons.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
-                                    <button v-if="item.is_active && canActiveInactive(item)"
+                                    <button v-if="item.is_active && canActiveInactive(item)" type="button"
                                         @click="handleInactive(item)" :disabled="inactiveProcessing === item.slug"
-                                        class="p-2 rounded-md text-gray-600 hover:bg-gray-100 border">
+                                        class="p-2 rounded-md text-gray-600 hover:bg-gray-100 border disabled:opacity-60 disabled:cursor-not-allowed"
+                                        :title="t('users.buttons.inactive')">
                                         <FontAwesomeIcon v-if="inactiveProcessing === item.slug" icon="spinner" spin />
                                         <FontAwesomeIcon v-else icon="eye-slash" />
                                     </button>
 
-                                    <button v-if="!item.is_active && canActiveInactive(item)"
+                                    <button v-if="!item.is_active && canActiveInactive(item)" type="button"
                                         @click="handleActive(item)" :disabled="activeProcessing === item.slug"
-                                        class="p-2 rounded-md text-green-600 hover:bg-green-50 border">
+                                        class="p-2 rounded-md text-green-600 hover:bg-green-50 border disabled:opacity-60 disabled:cursor-not-allowed"
+                                        :title="t('users.buttons.active')">
                                         <FontAwesomeIcon v-if="activeProcessing === item.slug" icon="spinner" spin />
                                         <FontAwesomeIcon v-else icon="eye" />
                                     </button>
 
-                                    <button v-if="canDelete(item)" @click="confirmDelete(item)"
-                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border">
+                                    <button v-if="canDelete(item)" type="button" @click="confirmDelete(item)"
+                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
+                                        :title="t('buttons.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
                                 </div>
+                            </td>
+                        </tr>
+
+                        <tr v-if="!users?.data?.length">
+                            <td colspan="6" class="px-4 py-8 text-center text-gray-500">
+                                {{ t('users.index.no_user_found') }}
                             </td>
                         </tr>
                     </tbody>
@@ -293,7 +327,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete User
+                                {{ t('users.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -301,19 +335,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action cannot be undone.
+                                {{ t('delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
-                                <button @click="showDeleteModal = false"
+                                <button type="button" @click="closeDeleteModal"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
-                                <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
+                                <button type="button" @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
                                 </button>
                             </div>
                         </div>

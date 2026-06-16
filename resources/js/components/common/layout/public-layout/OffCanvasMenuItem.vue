@@ -4,6 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 
+import { useTranslate } from '@/composables/useTranslate'
+
+const { t } = useTranslate()
+
 const { item, level = 0 } = defineProps({
     item: {
         type: Object,
@@ -135,12 +139,12 @@ const handleReachEnd = async () => {
                         <OffCanvasMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
-                            Loading...
+                            {{ t("labels.loading") }}
                         </li>
 
                         <li v-if="childrenLoaded && !childrenLoading && !children.length"
                             class="px-3 py-2 text-sm text-gray-400">
-                            No items
+                            {{ t("labels.no_menu_found") }}
                         </li>
                     </ul>
                 </VerticalScroller>

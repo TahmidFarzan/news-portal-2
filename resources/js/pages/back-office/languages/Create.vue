@@ -1,34 +1,35 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 
-import { computed, onMounted, nextTick, inject } from 'vue'
+import { computed, onMounted, nextTick } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { VueTelInput } from 'vue-tel-input'
-
-import { formatDate } from '@/composables/useDateTime'
-import {
-    showPassword,
-    showConfirmPassword,
-    togglePasswordVisibility,
-    toggleConfirmPasswordVisibility,
-} from '@/composables/usePassword'
-
-import 'vue-tel-input/vue-tel-input.css'
+import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
+const { t } = useTranslate()
+
 const { language } = defineProps({
-    language: Object,
+    language: {
+        type: Object,
+        default: () => ({})
+    },
 })
 
 const isUpdate = computed(() => !!language?.slug)
+
+const pageTitle = computed(() => {
+    return isUpdate.value
+        ? `${language?.name} ${t('labels.edit')}`
+        : t('languages.form.create_page_title')
+})
 
 const saveForm = useForm({
     name: language?.name || '',
@@ -39,26 +40,26 @@ const saveForm = useForm({
 
 function validateForm() {
     saveForm.clearErrors()
+
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', 'Name is required.')
+        saveForm.setError('name', t('form.validation_errors.name_is_required'))
         valid = false
     }
 
     if (!saveForm.code) {
-        saveForm.setError('code', 'Code is required.')
+        saveForm.setError('code', t('form.validation_errors.code_is_required'))
         valid = false
     }
 
     if (!saveForm.locale) {
-        saveForm.setError('locale', 'Locale is required.')
+        saveForm.setError('locale', t('form.validation_errors.locale_is_required'))
         valid = false
     }
 
     return valid
 }
-
 
 function handleSave() {
     if (saveForm.processing) return
@@ -101,8 +102,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Languages', href: route('back-office.languages.index') },
-                { text: isUpdate.value ? `${language?.name} edit` : 'Language create', active: true }
+                { text: t('layout_menus.languages'), href: route('back-office.languages.index') },
+                { text: pageTitle.value, active: true }
             ],
         })
     )
@@ -111,7 +112,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${language?.name} edit` : 'Language create'" />
+    <Head :title="pageTitle" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -119,16 +120,18 @@ onMounted(async () => {
             <form @submit.prevent="handleSave" class="space-y-6">
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">Basic Information</h3>
+                    <h3 class="text-base font-semibold">
+                        {{ t('labels.basic_information') }}
+                    </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Name <span class="text-red-500">*</span>
+                                {{ t('labels.name') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name" placeholder="Enter name"
+                            <input v-model="saveForm.name" :placeholder="t('languages.form.name_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -139,10 +142,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Code <span class="text-red-500">*</span>
+                                {{ t('languages.form.code') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.code" type="text" placeholder="Enter code"
+                            <input v-model="saveForm.code" type="text"
+                                :placeholder="t('languages.form.code_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.code ? 'border-red-500' : 'border-gray-300'" />
 
@@ -153,10 +157,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Locale <span class="text-red-500">*</span>
+                                {{ t('languages.form.locale') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.locale" type="text" placeholder="Enter locale"
+                            <input v-model="saveForm.locale" type="text"
+                                :placeholder="t('languages.form.locale_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.locale ? 'border-red-500' : 'border-gray-300'" />
 
@@ -167,10 +172,11 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                Brief
+                                {{ t('languages.form.brief') }}
                             </label>
 
-                            <textarea v-model="saveForm.brief" rows="4" placeholder="Enter brief"
+                            <textarea v-model="saveForm.brief" rows="4"
+                                :placeholder="t('languages.form.brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300"></textarea>
                         </div>
 
@@ -179,10 +185,11 @@ onMounted(async () => {
 
                 <div class="flex justify-center">
                     <button type="submit" :disabled="saveForm.processing"
-                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition">
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        Save
+
+                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
                     </button>
                 </div>
 

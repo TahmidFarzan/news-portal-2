@@ -2,23 +2,35 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
-import { computed, onMounted, nextTick, inject } from 'vue'
-import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { computed, onMounted, nextTick } from 'vue'
+import { Head, useForm, router as inertiaJsRouter } from '@inertiajs/vue3'
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSave, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
+import { useTranslate } from '@/composables/useTranslate'
+
+FontAwesomeLibrary.add(faSave, faSpinner)
 
 defineOptions({ layout: Layout })
 
+const { t } = useTranslate()
+
 const { menu } = defineProps({
-    menu: Object,
+    menu: {
+        type: Object,
+        default: null,
+    },
 })
 
-
 const isUpdate = computed(() => !!menu?.slug)
+
+const pageTitle = computed(() => {
+    return isUpdate.value
+        ? `${menu?.name} ${t('labels.edit')}`
+        : t('menus.form.create_page_title')
+})
 
 const saveForm = useForm({
     name: menu?.name || null,
@@ -28,26 +40,26 @@ const saveForm = useForm({
 
 function validateForm() {
     saveForm.clearErrors()
+
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', 'Name is required.')
+        saveForm.setError('name', t('form.validation_errors.name_is_required'))
         valid = false
     }
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', 'Language is required.')
+        saveForm.setError('language_id', t('form.validation_errors.language_is_required'))
         valid = false
     }
 
     if (!saveForm.menu_type_id) {
-        saveForm.setError('menu_type_id', 'Menu type is required.')
+        saveForm.setError('menu_type_id', t('form.validation_errors.menu_type_is_required'))
         valid = false
     }
 
     return valid
 }
-
 
 function handleSave() {
     if (saveForm.processing) return
@@ -61,7 +73,10 @@ function handleSave() {
         preserveState: true,
         forceFormData: true,
         onSuccess: () => {
-            saveForm.reset()
+            if (!isUpdate.value) {
+                saveForm.reset()
+            }
+
             saveForm.clearErrors()
         },
         onError: (errors) => {
@@ -70,11 +85,11 @@ function handleSave() {
         },
         onFinish: () => {
             saveForm.processing = false
-        }
+        },
     }
 
     if (isUpdate.value) {
-        intertiaJsRoute.post(
+        inertiaJsRouter.post(
             route('back-office.menus.update', { slug: menu?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
@@ -84,15 +99,14 @@ function handleSave() {
     }
 }
 
-
 onMounted(async () => {
     await nextTick()
 
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Menus', href: route('back-office.menus.index') },
-                { text: isUpdate.value ? `${menu?.name} edit` : 'Menu create', active: true }
+                { text: t('layout_menus.menus'), href: route('back-office.menus.index') },
+                { text: pageTitle.value, active: true },
             ],
         })
     )
@@ -101,7 +115,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${menu?.name} edit` : 'Menu create'" />
+    <Head :title="pageTitle" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -109,18 +123,23 @@ onMounted(async () => {
             <form @submit.prevent="handleSave" class="space-y-6">
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">Basic Information</h3>
+                    <h3 class="text-base font-semibold">
+                        {{ t('labels.basic_information') }}
+                    </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Language <span class="text-red-500">*</span>
+                                {{ t('labels.language') }}
+                                <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
-                                :selectedItem="menu?.language" :apiUrl="route('search.languages')" :error="saveForm.errors.language_id"
-                                :multiple="false" placeholder="Select language" />
+                                :selectedItem="menu?.language" :apiUrl="route('search.languages')"
+                                :error="saveForm.errors.language_id" :multiple="false"
+                                :placeholder="t('menus.form.language_placeholder')" />
+
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
                             </p>
@@ -128,12 +147,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Name <span class="text-red-500">*</span>
+                                {{ t('labels.name') }}
+                                <span class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.name"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
+                                :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'"
+                                :placeholder="t('menus.form.name_placeholder')" />
 
                             <p v-if="saveForm.errors.name" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.name }}
@@ -142,17 +163,19 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Menu type <span class="text-red-500">*</span>
+                                {{ t('menus.form.menu_type') }}
+                                <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="menu_type_id"
-                                :selectedItem="menu?.menu_type" :apiUrl="route('search.menu-types')" :error="saveForm.errors.menu_type_id"
-                                :multiple="false" placeholder="Select menu type" />
+                                :selectedItem="menu?.menu_type" :apiUrl="route('search.menu-types')"
+                                :error="saveForm.errors.menu_type_id" :multiple="false"
+                                :placeholder="t('menus.form.menu_type_placeholder')" />
+
                             <p v-if="saveForm.errors.menu_type_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.menu_type_id }}
                             </p>
                         </div>
-
 
                     </div>
                 </div>
@@ -162,7 +185,8 @@ onMounted(async () => {
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        Save
+
+                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
                     </button>
                 </div>
 

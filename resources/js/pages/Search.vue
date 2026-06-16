@@ -6,16 +6,19 @@ import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
+import { useTranslate } from '@/composables/useTranslate'
+import { fetchFromApi } from '@/composables/useSystemApi'
+import { itemListFilterParameters } from '@/composables/useDataTable'
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faFilter, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { itemListFilterParameters } from '@/composables/useDataTable'
-
 FontAwesomeLibrary.add(faFilter, faSpinner)
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const { news, language, page } = defineProps({
     news: {
@@ -46,8 +49,6 @@ const filterForm = useForm({
     search: '',
 })
 
-
-
 const makeLanguageUrl = (routeName) => {
     if (!language?.id) {
         return route(routeName)
@@ -62,16 +63,19 @@ const locationApiUrl = computed(() => makeLanguageUrl('search.location-tree'))
 const eventApiUrl = computed(() => makeLanguageUrl('search.events'))
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title
+    return page?.seo_title ?? page?.title ?? t('labels.search')
 })
 
 const metaDescription = computed(() => {
-    return page?.seo_brief ?? page?.brief
+    return page?.seo_brief ?? page?.brief ?? ''
 })
 
 const metaKeywords = computed(() => {
+    if (Array.isArray(page?.seo_keywords)) {
+        return page.seo_keywords.join(', ')
+    }
 
-    return page?.seo_keywords
+    return page?.seo_keywords ?? ''
 })
 
 const getFilterValue = (value) => {
@@ -87,7 +91,9 @@ const getFilterValue = (value) => {
 }
 
 const applyFilter = () => {
-    if (isFiltering.value) return
+    if (isFiltering.value) {
+        return
+    }
 
     const params = {
         created_by_id: getFilterValue(filterForm.created_by_id),
@@ -180,41 +186,41 @@ onMounted(async () => {
     </Head>
 
     <div class="space-y-6">
-        <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4" @submit.prevent="applyFilter">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id || null" :apiUrl="newsTypesApiUrl" :multiple="false"
-                    placeholder="News type" />
+                    :placeholder="t('labels.news_type')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.category_id || null" apiLabelKey="indentation_name" apiValueKey="id"
-                    :apiUrl="categoryApiUrl" :multiple="false" placeholder="Category" />
+                    :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('labels.category')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.location_id || null" apiLabelKey="indentation_name" apiValueKey="id"
-                    :apiUrl="locationApiUrl" :multiple="false" placeholder="Location" />
+                    :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('labels.location')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id || null" :apiUrl="eventApiUrl" :multiple="false"
-                    placeholder="Event" />
+                    :placeholder="t('labels.event')" />
 
-                <input type="date" v-model="filterForm.date"
-                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                <input v-model="filterForm.date" type="date" :aria-label="t('labels.date')"
+                    class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search news..."
-                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                <input v-model="filterForm.search" type="search" :placeholder="t('news.index.search_placeholder')"
+                    class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
             <div class="flex justify-end">
                 <button type="submit" :disabled="isFiltering"
-                    class="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white px-5 py-2 rounded-md flex items-center gap-2 transition">
+                    class="flex items-center gap-2 rounded-md bg-blue-600 px-5 py-2 text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60">
                     <FontAwesomeIcon v-if="isFiltering" icon="spinner" spin />
 
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    Apply Filter
+                    {{ isFiltering ? t('labels.loading') : t('categories.index.apply_filter') }}
                 </button>
             </div>
         </form>

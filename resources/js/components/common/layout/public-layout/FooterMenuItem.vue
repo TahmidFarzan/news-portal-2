@@ -15,13 +15,17 @@ const {
     }
 })
 
+import { useTranslate } from '@/composables/useTranslate'
+
+const { t } = useTranslate()
+
 const isOpen = ref(false)
 
 const title = computed(() => {
     return item.title
         ?? item.name
         ?? item.label
-        ?? 'Menu'
+        ?? t("labels.menu")
 })
 
 const children = computed(() => item.children ?? [])

@@ -4,6 +4,9 @@ import axios from "axios"
 import Multiselect from "vue-multiselect"
 import "vue-multiselect/dist/vue-multiselect.css"
 
+import { useTranslate } from '@/composables/useTranslate'
+const { t } = useTranslate()
+
 const {
     selectedItem,
     fieldName,
@@ -176,6 +179,13 @@ const resetAndFetch = async () => {
     await fetchPage(1, true)
 }
 
+const translateNumerText = value => {
+    return String(value)
+        .split('')
+        .map(char => t(`number.${char}`))
+        .join('')
+}
+
 watch(proxyModel, val => {
     updateForm(val)
 }, { deep: true })
@@ -235,6 +245,7 @@ const handleScroll = e => {
     }
 }
 
+
 const onDropdownOpen = () => {
     nextTick(() => {
         const dropdown =
@@ -285,10 +296,10 @@ onMounted(async () => {
 
             <template #afterList>
                 <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
-                    Loading more...
+                    {{ t("labels.loading") }}
                 </div>
                 <div v-else class="text-center py-1 text-xs text-gray-400">
-                    Page {{ page }} / {{ lastPage }}
+                    {{ t("labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
                 </div>
             </template>
         </Multiselect>

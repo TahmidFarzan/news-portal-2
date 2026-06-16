@@ -3,11 +3,19 @@ import { computed, ref, watch } from 'vue'
 import axios from 'axios'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import {
     faAngleDown,
     faAngleUp,
     faSpinner,
 } from '@fortawesome/free-solid-svg-icons'
+
+import { useTranslate } from '@/composables/useTranslate'
+
+
+FontAwesomeLibrary.add(faAngleDown,faAngleUp,faSpinner,)
+
+const { t } = useTranslate()
 
 const {
     pagination,
@@ -206,7 +214,7 @@ const loadLess = () => {
                 class="text-xs transition duration-300 group-hover:-translate-y-0.5" />
 
             <span>
-                {{ isLoadingLess ? 'Loading...' : 'Load Less' }}
+                {{ isLoadingLess ? t("buttons.loading") : t("buttons.load_less") }}
             </span>
         </button>
 
@@ -214,7 +222,7 @@ const loadLess = () => {
             class="group inline-flex min-w-32 items-center justify-center gap-2 rounded-xl border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-200 transition duration-300 hover:-translate-y-0.5 hover:border-blue-700 hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             @click="loadMore">
             <span>
-                {{ isLoadingMore ? 'Loading...' : 'Load More' }}
+                {{ isLoadingMore ? t("buttons.loading") : t("buttons.load_more") }}
             </span>
 
             <FontAwesomeIcon v-if="isLoadingMore" :icon="faSpinner" class="animate-spin text-xs" />

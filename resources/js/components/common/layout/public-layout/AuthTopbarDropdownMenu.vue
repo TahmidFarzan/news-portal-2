@@ -23,6 +23,9 @@ library.add(
     faSpinner,
     faChevronDown
 )
+import { useTranslate } from '@/composables/useTranslate'
+
+const { t } = useTranslate()
 
 const { authUser } = defineProps({
     authUser: {
@@ -96,25 +99,25 @@ onBeforeUnmount(() => {
                 <a @click="closeDropdown" :href="route('auth-user.dashboard.index')"
                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="gauge" class="text-gray-500" />
-                    <span>Dashboard</span>
+                    <span>{{ t("layout_menus.dashboard") }}</span>
                 </a>
 
                 <a @click="closeDropdown" :href="route('auth-user.profile.index')"
                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="user" class="text-gray-500" />
-                    <span>Profile</span>
+                    <span>{{ t("layout_menus.profile") }}</span>
                 </a>
 
                 <a @click="closeDropdown" :href="route('auth-user.account.index')"
                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="user-gear" class="text-gray-500" />
-                    <span>Account</span>
+                    <span>{{ t("layout_menus.account") }}</span>
                 </a>
 
                 <button type="button" @click="openLogoutModal"
                     class="flex items-center gap-2 w-full text-left px-3 py-2 text-red-500 hover:bg-gray-100">
                     <FontAwesomeIcon icon="right-from-bracket" />
-                    <span>Logout</span>
+                    <span>{{ t("buttons.logout") }}</span>
                 </button>
             </div>
         </Transition>
@@ -136,19 +139,19 @@ onBeforeUnmount(() => {
                         <div class="flex items-center gap-2 mb-3 text-red-500">
                             <FontAwesomeIcon icon="right-from-bracket" />
                             <span class="font-semibold text-gray-800">
-                                Logout Confirmation
+                                {{ t("logout_modal.title") }}
                             </span>
                         </div>
 
                         <div class="mb-4 text-gray-600">
-                            Are you sure you want to logout?
+                            {{ t("logout_modal.body") }}
                         </div>
 
                         <div class="flex justify-end gap-2">
                             <button type="button" @click="closeLogoutModal" :disabled="loggingOut"
                                 class="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-70 disabled:cursor-not-allowed">
                                 <FontAwesomeIcon icon="xmark" />
-                                <span>Cancel</span>
+                                <span>{{ t("buttons.cancel") }}</span>
                             </button>
 
                             <button type="button" @click="logoutHandler" :disabled="loggingOut"
@@ -157,7 +160,7 @@ onBeforeUnmount(() => {
 
                                 <FontAwesomeIcon v-else icon="spinner" spin />
 
-                                <span>Logout</span>
+                                <span>{{ t("buttons.logout") }}</span>
                             </button>
                         </div>
                     </div>

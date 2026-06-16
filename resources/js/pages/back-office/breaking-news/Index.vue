@@ -4,9 +4,10 @@ import ModelPagination from '@/components/common/model/Pagination.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
-import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
+import { useTranslate } from '@/composables/useTranslate'
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import {
     faTrash, faFilter, faInfo,
@@ -17,13 +18,21 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateBreakingNews, canEditBreakingNews, canDeleteBreakingNews, canTrashBreakingNews, canRestoreBreakingNews } from '@/composables/useAuthUserAccessPermissions'
+import {
+    canCreateBreakingNews,
+    canEditBreakingNews,
+    canDeleteBreakingNews,
+    canTrashBreakingNews,
+    canRestoreBreakingNews
+} from '@/composables/useAuthUserAccessPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const authUser = inject("authUser")
+const { t } = useTranslate()
+
+const authUser = inject('authUser')
 
 const deletingRow = ref(null)
 const showDeleteModal = ref(false)
@@ -43,7 +52,9 @@ const { breakingNewsItems } = defineProps({
 
 const paginationOnly = computed(() => {
     if (!breakingNewsItems) return {}
+
     const { data, ...rest } = breakingNewsItems
+
     return rest
 })
 
@@ -63,11 +74,11 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.breaking-news.index'), cleanParams, {
+
+    inertiaJsRoute.get(route('back-office.breaking-news.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
-        onFinish: () => filterForm.processing = false,
     })
 }
 
@@ -96,7 +107,8 @@ const handleDelete = (breakingNews) => {
     if (!breakingNews || deleteProcessing.value) return
 
     deleteProcessing.value = true
-    intertiaJsRoute.delete(route('back-office.breaking-news.delete', { slug: breakingNews?.slug }), {
+
+    inertiaJsRoute.delete(route('back-office.breaking-news.delete', { slug: breakingNews?.slug }), {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -110,7 +122,7 @@ const handleRestore = (breakingNews) => {
 
     restoreProcessing.value = true
 
-    intertiaJsRoute.patch(route('back-office.breaking-news.restore', { slug: breakingNews?.slug }), {}, {
+    inertiaJsRoute.patch(route('back-office.breaking-news.restore', { slug: breakingNews?.slug }), {}, {
         onFinish: () => {
             restoringRow.value = null
             restoreProcessing.value = false
@@ -123,7 +135,8 @@ const handleTrash = (breakingNews) => {
     if (!breakingNews || trashProcessing.value) return
 
     trashProcessing.value = true
-    intertiaJsRoute.patch(route('back-office.breaking-news.trash', { slug: breakingNews?.slug }), {}, {
+
+    inertiaJsRoute.patch(route('back-office.breaking-news.trash', { slug: breakingNews?.slug }), {}, {
         onFinish: () => {
             showTrashModal.value = false
             trashingRow.value = null
@@ -131,7 +144,6 @@ const handleTrash = (breakingNews) => {
         }
     })
 }
-
 
 onMounted(async () => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -145,7 +157,6 @@ onMounted(async () => {
     filterForm.event_id = urlParams.get('event_id') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
-
 
     if (filterForm.news_type_id) {
         const rNewsType = await fetchFromApi(
@@ -191,6 +202,7 @@ onMounted(async () => {
         const rCreatedBy = await fetchFromApi(
             route('search.user', { slugOrId: filterForm.created_by_id })
         )
+
         filterForm.created_by_id = rCreatedBy || null
     }
 
@@ -199,27 +211,28 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Breaking news', active: true },
+                { text: t('layout_menus.breaking_news'), active: true },
             ],
         })
     )
-
 })
 </script>
 
 <template>
 
-    <Head title="Breaking news" />
+    <Head :title="t('layout_menus.breaking_news')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Breaking news</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('layout_menus.breaking_news') }}
+            </h2>
 
             <a v-if="canCreate()" :href="route('back-office.breaking-news.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
-                Create
+                {{ t('buttons.create') }}
             </a>
         </div>
 
@@ -228,48 +241,54 @@ onMounted(async () => {
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                    placeholder="Per page" />
+                    :placeholder="t('labels.per_page')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    placeholder="Created by" />
+                    :placeholder="t('labels.created_by')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id" :apiUrl="route('search.news-types')" :multiple="false"
-                    placeholder="News type" />
+                    :placeholder="t('labels.news_type')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
-                    placeholder="Language" />
+                    :placeholder="t('labels.language')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.category_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.category-tree')"
-                    :multiple="false" placeholder="Category" />
+                    :multiple="false" :placeholder="t('layout_menus.categories')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.location_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.location-tree')"
-                    :multiple="false" placeholder="Location" />
+                    :multiple="false" :placeholder="t('layout_menus.locations')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id" :apiUrl="route('search.events')" :multiple="false"
-                    placeholder="Event" />
+                    :placeholder="t('layout_menus.events')" />
 
-                <input type="date" v-model="filterForm.date"
+                <input v-model="filterForm.date" type="date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search news..."
+                <input v-model="filterForm.search" type="search"
+                    :placeholder="t('breaking_news.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
 
             <div class="flex justify-end">
                 <button type="submit" :disabled="filterForm.processing"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition">
+                    class="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-5 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon icon="filter" />
-                    Apply Filter
+
+                    {{
+                        filterForm.processing
+                            ? t('activity_logs.index.applying_filter')
+                            : t('activity_logs.index.apply_filter')
+                    }}
                 </button>
             </div>
         </form>
@@ -281,23 +300,45 @@ onMounted(async () => {
 
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
-                            <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">Title</th>
-                            <th class="px-4 py-3 text-left">Language</th>
+                            <th class="px-4 py-3 text-left">
+                                #
+                            </th>
 
-                            <th class="px-4 py-3 text-left">Created</th>
-                            <th class="px-4 py-3 text-left">Is Published</th>
-                            <th class="px-4 py-3 text-right">Actions</th>
+                            <th class="px-4 py-3 text-left">
+                                {{ t('labels.title') }}
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                {{ t('labels.language') }}
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                {{ t('activity_logs.index.created') }}
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                {{ t('labels.is_published') }}
+                            </th>
+
+                            <th class="px-4 py-3 text-right">
+                                {{ t('table.columns.action') }}
+                            </th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y">
                         <tr v-for="(item, index) in breakingNewsItems?.data" :key="item.id"
                             class="hover:bg-gray-50 transition">
-                            <td class="px-4 py-3">{{ index + 1 }}</td>
-                            <td class="px-4 py-3 font-medium">{{ item.title }}</td>
+                            <td class="px-4 py-3">
+                                {{ index + 1 }}
+                            </td>
+
+                            <td class="px-4 py-3 font-medium">
+                                {{ item.title }}
+                            </td>
+
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item.language ? item.language.name : 'N/A' }}
+                                {{ item.language ? item.language.name : t('labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
@@ -305,39 +346,50 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item.is_published ? "Yes" : 'No' }}
+                                {{ item.is_published ? t('labels.yes') : t('labels.no') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
                                     <a :href="route('back-office.breaking-news.details', { slug: item.slug })"
-                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
+                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
+                                        :title="t('table.menus.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canEdit(item)"
                                         :href="route('back-office.breaking-news.edit', { slug: item.slug })"
-                                        class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border">
+                                        class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
+                                        :title="t('table.menus.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
                                     <button v-if="canDelete(item)" @click="confirmDelete(item)"
-                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border">
+                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
+                                        :title="t('buttons.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
                                     <button v-if="canRestore(item)" @click="confirmRestore(item)"
-                                        class="p-2 rounded-md text-green-600 hover:bg-blue-50 border">
+                                        class="p-2 rounded-md text-green-600 hover:bg-green-50 border"
+                                        :title="t('buttons.restore')">
                                         <FontAwesomeIcon icon="eye" />
                                     </button>
 
                                     <button v-if="canTrash(item)" @click="confirmTrash(item)"
-                                        class="p-2 rounded-md text-orange-600 hover:bg-orange-50 border">
+                                        class="p-2 rounded-md text-orange-600 hover:bg-orange-50 border"
+                                        :title="t('buttons.trash')">
                                         <FontAwesomeIcon icon="eye-slash" />
                                     </button>
 
                                 </div>
+                            </td>
+                        </tr>
+
+                        <tr v-if="!breakingNewsItems?.data?.length">
+                            <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                                {{ t('labels.no_record_found') }}
                             </td>
                         </tr>
                     </tbody>
@@ -363,27 +415,32 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete News
+                                {{ t('breaking_news.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
-                                {{ deletingRow?.name }}
+                                {{ deletingRow?.title }}
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action can not be undone.
+                                {{ t('delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+
+                                    {{
+                                        deleteProcessing
+                                            ? t('buttons.deleting')
+                                            : t('buttons.delete')
+                                    }}
                                 </button>
                             </div>
                         </div>
@@ -406,7 +463,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showTrashModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-orange-600">
-                                Trash News
+                                {{ t('breaking_news.trash_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -414,19 +471,24 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This news will be moved to trash.
+                                {{ t('breaking_news.trash_modal.body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showTrashModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleTrash(trashingRow)" :disabled="trashProcessing"
                                     class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="trashProcessing" icon="spinner" spin />
-                                    Trash
+
+                                    {{
+                                        trashProcessing
+                                            ? t('buttons.trashing')
+                                            : t('buttons.trash')
+                                    }}
                                 </button>
                             </div>
                         </div>
@@ -448,28 +510,33 @@ onMounted(async () => {
                         leave-from-class="opacity-100 scale-100 translate-y-0"
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showRestoreModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
-                            <h3 class="text-lg font-semibold text-red-600">
-                                Restore News
+                            <h3 class="text-lg font-semibold text-green-600">
+                                {{ t('breaking_news.restore_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
-                                {{ restoringRow?.name }}
+                                {{ restoringRow?.title }}
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action can be undone by deleting news.
+                                {{ t('breaking_news.restore_modal.body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showRestoreModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleRestore(restoringRow)" :disabled="restoreProcessing"
                                     class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="restoreProcessing" icon="spinner" spin />
-                                    Restore
+
+                                    {{
+                                        restoreProcessing
+                                            ? t('buttons.restoring')
+                                            : t('buttons.restore')
+                                    }}
                                 </button>
                             </div>
                         </div>
@@ -477,7 +544,6 @@ onMounted(async () => {
 
                 </div>
             </Transition>
-
 
         </Teleport>
 

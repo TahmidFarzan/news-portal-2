@@ -2,22 +2,32 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
-import { computed, onMounted, nextTick, inject } from 'vue'
+import { computed, onMounted, nextTick } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const { trend } = defineProps({
     trend: Object,
 })
 
 const isUpdate = computed(() => !!trend?.slug)
+
+const pageTitle = computed(() => {
+    return isUpdate.value
+        ? `${trend?.tag?.name} ${t('buttons.edit')}`
+        : t('trends.form.create_page_title')
+})
 
 const saveForm = useForm({
     is_current: trend?.is_current || false,
@@ -26,16 +36,16 @@ const saveForm = useForm({
 
 function validateForm() {
     saveForm.clearErrors()
+
     let valid = true
 
     if (!saveForm.tag_id) {
-        saveForm.setError('tag_id', 'Tag is required.')
+        saveForm.setError('tag_id', t('form.validation_errors.tag_is_required'))
         valid = false
     }
 
     return valid
 }
-
 
 function handleSave() {
     if (saveForm.processing) return
@@ -72,15 +82,14 @@ function handleSave() {
     }
 }
 
-
 onMounted(async () => {
     await nextTick()
 
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Trends', href: route('back-office.trends.index') },
-                { text: isUpdate.value ? `${trend?.tag?.name} edit` : 'Trend create', active: true }
+                { text: t('labels.trends'), href: route('back-office.trends.index') },
+                { text: pageTitle.value, active: true }
             ],
         })
     )
@@ -89,7 +98,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${trend?.tag?.name} edit` : 'Trend create'" />
+    <Head :title="pageTitle" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -97,18 +106,27 @@ onMounted(async () => {
             <form @submit.prevent="handleSave" class="space-y-6">
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">Basic Information</h3>
+                    <h3 class="text-base font-semibold">
+                        {{ t('labels.basic_information') }}
+                    </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Tag <span class="text-red-500">*</span>
+                                {{ t('labels.tag') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="tag_id"
-                                :selectedItem="trend?.tag" :apiUrl="route('search.tags')"
-                                :error="saveForm.errors.tag_id" :multiple="false" placeholder="Select tag" />
+                            <MultiSelectInfinityLoadingApi
+                                :form="saveForm"
+                                fieldName="tag_id"
+                                :selectedItem="trend?.tag"
+                                :apiUrl="route('search.tags')"
+                                :error="saveForm.errors.tag_id"
+                                :multiple="false"
+                                :placeholder="t('trends.form.tag_placeholder')"
+                            />
+
                             <p v-if="saveForm.errors.tag_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.tag_id }}
                             </p>
@@ -116,10 +134,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Is current
+                                {{ t('trends.form.is_current') }}
                             </label>
 
-                            <input type="checkbox" v-model="saveForm.is_current" :class="saveForm.errors.is_current ? 'border-red-500' : 'border-gray-300'">
+                            <input
+                                type="checkbox"
+                                v-model="saveForm.is_current"
+                                :class="saveForm.errors.is_current ? 'border-red-500' : 'border-gray-300'"
+                            >
 
                             <p v-if="saveForm.errors.is_current" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.is_current }}
@@ -130,11 +152,14 @@ onMounted(async () => {
                 </div>
 
                 <div class="flex justify-center">
-                    <button type="submit" :disabled="saveForm.processing"
-                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition">
+                    <button
+                        type="submit"
+                        :disabled="saveForm.processing"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        Save
+                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
                     </button>
                 </div>
 

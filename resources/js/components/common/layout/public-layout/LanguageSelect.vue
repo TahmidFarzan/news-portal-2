@@ -3,9 +3,12 @@ import { ref, reactive, watch, nextTick, onMounted } from 'vue'
 import axios from 'axios'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { setSelectedLanguage, useTranslate } from '@/composables/useTranslate'
 
 const language = ref(null)
 const isReady = ref(false)
+
+const { t } = useTranslate()
 
 const languageChangeForm = reactive({
     language_id: null,
@@ -17,7 +20,9 @@ const languageChangeForm = reactive({
 const loadLanguage = async () => {
     const response = await fetchFromApi(route('site.language'))
 
-    language.value = response?.data ?? response
+    language.value = response
+
+    setSelectedLanguage(language.value)
 
     languageChangeForm.language_id = language.value?.id ?? null
 
@@ -39,6 +44,10 @@ const languageChange = async () => {
         )
 
         if (response?.data?.status) {
+            language.value = response?.data?.data ?? language.value
+
+            setSelectedLanguage(language.value)
+
             window.location.href = route('home')
         }
 
@@ -60,7 +69,7 @@ watch(
 onMounted(async () => {
     await loadLanguage()
 })
-console.log(language)
+
 </script>
 
 <template>
@@ -68,7 +77,7 @@ console.log(language)
         <MultiSelectInfinityLoadingApi v-if="language" :key="language?.id" :selectedItem="language"
             fieldName="language_id" :form="languageChangeForm" :apiUrl="route('site.languages')"
             :error="languageChangeForm.errors.language_id" selectedLabelKey="name" selectedValueKey="id"
-            apiLabelKey="name" apiValueKey="id" :multiple="false" placeholder="Language" :compactDesign="true"
+            apiLabelKey="name" apiValueKey="id" :multiple="false" :placeholder="t('labels.language')" :compactDesign="true"
             :useDarkTheme="true" />
     </div>
 </template>

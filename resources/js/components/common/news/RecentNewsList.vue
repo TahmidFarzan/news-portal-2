@@ -1,6 +1,9 @@
 <script setup>
 import ListCard from '@/Components/common/news/ListCard.vue'
 
+import { useTranslate } from '@/composables/useTranslate'
+const { t } = useTranslate()
+
 const {
     news,
 } = defineProps({
@@ -15,7 +18,7 @@ const {
     <section v-if="news?.length" class="flex h-[500px] flex-col rounded-2xl border border-gray-200 p-2">
         <div class="flex shrink-0 items-center gap-2 recent-news">
             <h2 class="text-xl font-bold text-gray-950">
-                Recent News
+                {{ t("recent_news") }}
             </h2>
         </div>
 

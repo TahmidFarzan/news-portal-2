@@ -4,41 +4,45 @@ import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
-import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { Head, router as inertiaJsRouter } from '@inertiajs/vue3'
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { formatDate, formatDateTime } from '@/composables/useDateTime'
+import { formatDateTime } from '@/composables/useDateTime'
 import { extractModelName, titleFormat } from '@/composables/useStringFormat'
 import { canDeleteMedia } from '@/composables/useAuthUserAccessPermissions'
+import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faSpinner)
 
 defineOptions({ layout: Layout })
 
-const authUser = inject("authUser")
+const authUser = inject('authUser')
+const { t } = useTranslate()
 
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
 const { media } = defineProps({
-    media: Object,
+    media: {
+        type: Object,
+        default: null,
+    },
 })
-
 
 const canDelete = (media) => canDeleteMedia(authUser?.value, media)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
+
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.medias.delete', { slug: media?.slug }), {
-        onFinish: () => deleteProcessing.value = false
+    inertiaJsRouter.delete(route('back-office.medias.delete', { slug: media?.slug }), {
+        onFinish: () => deleteProcessing.value = false,
     })
 }
-
 
 onMounted(async () => {
     await nextTick()
@@ -46,8 +50,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Medias', href: route('back-office.medias.index') },
-                { text: `${media?.name} details`, active: true }
+                { text: t('layout_menus.medias'), href: route('back-office.medias.index') },
+                { text: `${media?.name} ${t('labels.details')}`, active: true },
             ],
         })
     )
@@ -56,98 +60,95 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${media?.name} details`" />
+    <Head :title="`${media?.name} ${t('labels.details')}`" />
 
     <div class="w-full space-y-6">
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Basic Information</h3>
+            <h3 class="text-lg font-semibold mb-4 border-b pb-2">
+                {{ t('labels.basic_information') }}
+            </h3>
+
             <div class="grid md:grid-cols-2 gap-4">
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div>
-                        <span class="font-medium text-gray-600">Name:</span>
-                        {{ media?.name || 'N/A' }}
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Collection name:</span>
-                        {{ media?.collection_name || 'N/A' }}
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Model type:</span>
-                        {{ extractModelName(media?.model_type) || 'N/A' }}
+                        <span class="font-medium text-gray-600">{{ t('labels.name') }}:</span>
+                        {{ media?.name || t('labels.not_available') }}
                     </div>
 
+                    <div>
+                        <span class="font-medium text-gray-600">{{ t('medias.details.collection_name') }}:</span>
+                        {{ media?.collection_name || t('labels.not_available') }}
+                    </div>
+
+                    <div>
+                        <span class="font-medium text-gray-600">{{ t('medias.details.model_type') }}:</span>
+                        {{ extractModelName(media?.model_type) || t('labels.not_available') }}
+                    </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div>
-                        <span class="font-medium text-gray-600">Mime type:</span>
-                        {{ media?.mime_type || 'N/A' }}
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Disk:</span>
-                        {{ media?.disk || 'N/A' }}
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-600">Size</span>
-                        {{ media?.size || 'N/A' }}
+                        <span class="font-medium text-gray-600">{{ t('medias.details.mime_type') }}:</span>
+                        {{ media?.mime_type || t('labels.not_available') }}
                     </div>
 
+                    <div>
+                        <span class="font-medium text-gray-600">{{ t('medias.details.disk') }}:</span>
+                        {{ media?.disk || t('labels.not_available') }}
+                    </div>
+
+                    <div>
+                        <span class="font-medium text-gray-600">{{ t('medias.details.size') }}:</span>
+                        {{ media?.size || t('labels.not_available') }}
+                    </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div class="text-sm font-semibold text-gray-700 mb-2">
-                        Custom properties:
+                        {{ t('medias.details.custom_properties') }}:
                     </div>
 
                     <div v-if="media?.custom_properties && Object.keys(media.custom_properties).length"
                         class="space-y-2">
-
                         <div v-for="(value, key) in media.custom_properties" :key="key"
                             class="flex justify-between items-start border-b border-gray-100 pb-1">
-
                             <span class="font-medium text-gray-600">
                                 {{ titleFormat(key) }}
                             </span>
 
                             <span class="text-gray-800 text-right">
-                                {{ value ? titleFormat(value) : 'N/A' }}
+                                {{ value ? titleFormat(value) : t('labels.not_available') }}
                             </span>
-
                         </div>
-
                     </div>
 
                     <p v-else class="text-sm text-gray-500">
-                        Not available.
+                        {{ t('medias.details.not_available') }}
                     </p>
                 </div>
 
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div class="text-sm font-semibold text-gray-700 mb-2">
-                        Generated conversions:
+                        {{ t('medias.details.generated_conversions') }}:
                     </div>
 
                     <div v-if="media?.generated_conversions && Object.keys(media.generated_conversions).length"
                         class="space-y-2">
-
                         <div v-for="(value, key) in media.generated_conversions" :key="key"
                             class="flex justify-between items-center border-b border-gray-100 pb-1">
-
                             <span class="font-medium text-gray-600">
                                 {{ titleFormat(key) }}
                             </span>
 
                             <span :class="value ? 'text-green-600 font-medium' : 'text-red-500 font-medium'">
-                                {{ value ? 'Yes' : 'No' }}
+                                {{ value ? t('labels.yes') : t('labels.no') }}
                             </span>
-
                         </div>
-
                     </div>
 
                     <p v-else class="text-sm text-gray-500">
-                        Not available.
+                        {{ t('medias.details.not_available') }}
                     </p>
                 </div>
             </div>
@@ -155,54 +156,59 @@ onMounted(async () => {
             <div class="grid md:grid-cols-1 gap-4 mt-4">
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div>
-                        <span class="font-medium text-gray-600">Media url:</span>
-                        {{ media?.media_url || 'N/A' }}
+                        <span class="font-medium text-gray-600">{{ t('medias.details.media_url') }}:</span>
+                        {{ media?.media_url || t('labels.not_available') }}
                     </div>
+
                     <div>
-                        <span class="font-medium text-gray-600">Order column:</span>
-                        {{ media?.order_column || 'N/A' }}
+                        <span class="font-medium text-gray-600">{{ t('labels.order_column') }}:</span>
+                        {{ media?.order_column || t('labels.not_available') }}
                     </div>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-1 gap-4 mt-4">
                 <div class="border border-gray-200 rounded-xl p-4 text-sm">
-                    <span class="font-medium text-gray-600">Media:</span>
+                    <span class="font-medium text-gray-600">{{ t('layout_menus.medias') }}:</span>
                     <MediaRenderer :media="media" />
                 </div>
             </div>
-
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">System Information</h3>
+            <h3 class="text-lg font-semibold mb-4 border-b pb-2">
+                {{ t('medias.details.system_information') }}
+            </h3>
+
             <div class="grid md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2">
                     <div>
-                        <span class="font-medium text-gray-600">Created At:</span>
-                        {{ media?.created_at ? formatDateTime(media.created_at) : 'N/A' }}
+                        <span class="font-medium text-gray-600">{{ t('table.columns.created_at') }}:</span>
+                        {{ media?.created_at ? formatDateTime(media.created_at) : t('labels.not_available') }}
                     </div>
+
                     <div>
-                        <span class="font-medium text-gray-600">Created By:</span>
-                        {{ media?.created_by?.name || 'N/A' }}
+                        <span class="font-medium text-gray-600">{{ t('labels.created_by') }}:</span>
+                        {{ media?.created_by?.name || t('labels.not_available') }}
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Activity Logs</h3>
+            <h3 class="text-lg font-semibold mb-4 border-b pb-2">
+                {{ t('activity_logs.index.title') }}
+            </h3>
+
             <RecentActivities :model-slug="'media'" :model="media" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex justify-end gap-2">
-
             <button v-if="canDelete(media)" @click="showDeleteModal = true"
                 class="px-4 py-2 border border-red-500 text-red-600 rounded hover:bg-red-50 flex items-center gap-2">
-                <FontAwesomeIcon icon="trash" /> Delete
+                <FontAwesomeIcon icon="trash" />
+                {{ t('buttons.delete') }}
             </button>
-
         </div>
 
         <Teleport to="body">
@@ -217,20 +223,27 @@ onMounted(async () => {
                         leave-from-class="opacity-100 scale-100 translate-y-0"
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div class="bg-white p-6 rounded-xl shadow-lg w-96">
-                            <div class="font-semibold mb-2">Delete Confirmation</div>
-                            <p class="mb-2">{{ media?.name }}</p>
+                            <div class="font-semibold mb-2">
+                                {{ t('delete_confirmation_modal.title') }}
+                            </div>
+
+                            <p class="mb-2">
+                                {{ media?.name }}
+                            </p>
+
                             <p class="text-sm text-gray-600 mb-4">
-                                This action cannot be undone.
+                                {{ t('delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2">
                                 <button @click="showDeleteModal = false" class="px-3 py-1 bg-gray-200 rounded">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
+
                                 <button @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
                                 </button>
                             </div>
                         </div>

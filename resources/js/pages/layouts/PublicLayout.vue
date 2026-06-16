@@ -21,6 +21,9 @@ import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-ic
 
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { useSetting } from '@/composables/useSetting'
+import { useTranslate } from '@/composables/useTranslate'
+
+const { t } = useTranslate()
 
 library.add(
     faArrowRightToBracket,
@@ -43,11 +46,19 @@ const isHeaderSticky = ref(false)
 const siteSettings = ref([])
 
 const year = new Date().getFullYear()
+
 const appName = import.meta.env.VITE_APP_NAME
 const appLogo = import.meta.env.VITE_APP_LOGO
 
 const authUser = computed(() => page.props.auth?.user ?? null)
 const flashMessage = computed(() => page.props.flashMessage)
+
+const translateNumerText = value => {
+    return String(value)
+        .split('')
+        .map(char => t(`number.${char}`))
+        .join('')
+}
 
 const handlePageScroll = () => {
     isHeaderSticky.value = window.scrollY > 0
@@ -158,7 +169,7 @@ onBeforeUnmount(() => {
                     <a v-if="!authUser" :href="route('login')"
                         class="flex items-center gap-1 text-gray-300 hover:text-white max-[450px]:flex-shrink-0">
                         <FontAwesomeIcon icon="arrow-right-to-bracket" />
-                        <span class="max-[450px]:hidden">Login</span>
+                        <span class="max-[450px]:hidden">{{ t('labels.login') }}</span>
                     </a>
 
                     <div v-else class="max-[450px]:flex-shrink-0">
@@ -177,7 +188,9 @@ onBeforeUnmount(() => {
                     class="h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
                     <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
                         class="h-10 max-w-40 object-contain">
-                    <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)" class="hidden sm:inline"> {{ appName }}</b>
+                    <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)" class="hidden sm:inline">
+                        {{ t('app.name') }}
+                    </b>
                 </a>
 
 
@@ -201,21 +214,21 @@ onBeforeUnmount(() => {
             <slot />
         </main>
 
-        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" title="Breaking News" />
+        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('app.breaking_news')" />
 
         <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
                 <span class="text-center md:text-left w-full md:w-auto flex-shrink-0">
-                    © {{ year }} {{ appName }}
+                    {{ t('footer.copyright') }} {{ translateNumerText(year) }} {{ t('app.name') }}
                 </span>
 
                 <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" />
 
                 <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
-                    Developed by
+                    {{ t('footer.developed_by') }}
                     <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank" rel="noopener noreferrer"
                         class="text-blue-600 hover:underline font-medium">
-                        Seikh Md Tahmid Farzan
+                        {{ t('footer.developer_name') }}
                     </a>
                 </span>
             </div>

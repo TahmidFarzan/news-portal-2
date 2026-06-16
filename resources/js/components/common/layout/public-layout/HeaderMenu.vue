@@ -10,7 +10,11 @@ import {
     faSpinner,
 } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 library.add(faSpinner)
+
+const { t } = useTranslate()
 
 const headerMenu = reactive({
     items: [],
@@ -90,7 +94,7 @@ onMounted(() => {
                 <li v-if="headerMenu.loading && headerMenu.items.length"
                     class="h-10 flex items-center px-3 text-sm text-gray-300 flex-shrink-0">
                     <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
-                    Loading...
+                    {{ t("loading") }}
                 </li>
             </ul>
         </HorizontalScroller>

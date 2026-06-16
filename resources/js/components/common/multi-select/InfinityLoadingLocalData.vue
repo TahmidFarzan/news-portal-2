@@ -1,28 +1,10 @@
-<template>
-    <div class="multi-select-cointainer" :class="[
-        error ? 'border border-red-500 rounded-md' : '',
-        compactDesign ? 'multi-select-compact' : '',
-        useDarkTheme ? 'multi-select-dark' : ''
-    ]">
-        <Multiselect ref="vselectRef" v-model="proxyModel" :options="formattedOptions" :multiple="multiple"
-            :searchable="true" :clear-on-select="!multiple" :close-on-select="!multiple" :placeholder="placeholder"
-            label="label" track-by="value" @search-change="onSearchDebounced" @open="onDropdownOpen">
-            <template #afterList>
-                <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
-                    Loading more...
-                </div>
-                <div v-else class="text-center py-1 text-xs text-gray-400">
-                    Page {{ page }} / {{ lastPage }}
-                </div>
-            </template>
-        </Multiselect>
-    </div>
-</template>
-
 <script setup>
 import { ref, computed, onMounted, watch, nextTick } from "vue"
 import Multiselect from "vue-multiselect"
 import "vue-multiselect/dist/vue-multiselect.css"
+
+import { useTranslate } from '@/composables/useTranslate'
+const { t } = useTranslate()
 
 const {
     selectedItem,
@@ -195,6 +177,13 @@ const handleScroll = e => {
     }
 }
 
+const translateNumerText = value => {
+    return String(value)
+        .split('')
+        .map(char => t(`number.${char}`))
+        .join('')
+}
+
 const onDropdownOpen = () => {
     nextTick(() => {
         const dropdown =
@@ -213,6 +202,27 @@ onMounted(() => {
     fetchPage(1, true)
 })
 </script>
+
+<template>
+    <div class="multi-select-cointainer" :class="[
+        error ? 'border border-red-500 rounded-md' : '',
+        compactDesign ? 'multi-select-compact' : '',
+        useDarkTheme ? 'multi-select-dark' : ''
+    ]">
+        <Multiselect ref="vselectRef" v-model="proxyModel" :options="formattedOptions" :multiple="multiple"
+            :searchable="true" :clear-on-select="!multiple" :close-on-select="!multiple" :placeholder="placeholder"
+            label="label" track-by="value" @search-change="onSearchDebounced" @open="onDropdownOpen">
+            <template #afterList>
+                <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
+                    {{ t("labels.loading") }}
+                </div>
+                <div v-else class="text-center py-1 text-xs text-gray-400">
+                    {{ t("labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
+                </div>
+            </template>
+        </Multiselect>
+    </div>
+</template>
 
 <style scoped>
 .multi-select-compact :deep(.multiselect) {

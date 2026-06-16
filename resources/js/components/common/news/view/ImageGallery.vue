@@ -16,9 +16,13 @@ import {
     faClock,
 } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(
     faClock
 )
+
+const { t } = useTranslate()
 
 const { news } = defineProps({
     news: {
@@ -57,7 +61,7 @@ const { news } = defineProps({
         </section>
 
         <div v-else class="rounded-2xl border border-dashed border-gray-300 p-8 text-center text-gray-500">
-            No gallery images found.
+            {{ t("labels.no_gallery_image_found") }}
         </div>
 
         <TagTrend :news="news" />

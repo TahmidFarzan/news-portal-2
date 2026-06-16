@@ -1,5 +1,4 @@
 <script setup>
-import { computed } from 'vue'
 import Layout from '@/pages/layouts/PublicLayout.vue'
 
 import {
@@ -21,13 +20,14 @@ const { news } = defineProps({
         required: true,
     },
 })
-
 </script>
 
 <template>
     <SeoHeader :news="news" />
 
     <Story v-if="checkIsStory(news?.news_type)" :news="news" />
+
     <Video v-if="checkIsVideo(news?.news_type)" :news="news" />
+
     <ImageGallery v-if="checkIsImageGallery(news?.news_type)" :news="news" />
 </template>

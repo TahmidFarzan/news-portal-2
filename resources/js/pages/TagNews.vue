@@ -4,9 +4,12 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
-import Grid from '@/components/common/news/Grid.vue'
+
+import { useTranslate } from '@/composables/useTranslate'
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const { tag, news } = defineProps({
     tag: {
@@ -43,13 +46,11 @@ const hasBrief = computed(() => {
 
 <template>
 
-    <Head :title="tag?.name || 'Tag'">
-        <link v-if="tag?.public_url" rel="canonical" :href="tag?.public_url || ''" />
+    <Head :title="tag?.name || t('labels.tag')">
+        <link v-if="tag?.public_url" rel="canonical" :href="tag.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
-
         <meta v-if="metaDescription" name="description" :content="metaDescription" />
-
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
@@ -57,14 +58,14 @@ const hasBrief = computed(() => {
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
-                    <img :src="'/uploads/images/logo/tag.png'" :alt="tag?.name || 'Tag image'"
+                    <img :src="'/uploads/images/logo/tag.png'" :alt="tag?.name || t('tags.details.tag_image_alt')"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    Tag
+                    {{ t('labels.tag') }}
                 </p>
 
                 <h1 class="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">
@@ -72,7 +73,7 @@ const hasBrief = computed(() => {
                 </h1>
 
                 <p v-if="hasBrief" class="max-w-3xl text-sm leading-7 text-gray-600 sm:text-base">
-                    {{ tag?.brief }}
+                    {{ tag.brief }}
                 </p>
             </div>
         </section>

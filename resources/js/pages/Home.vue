@@ -1,9 +1,13 @@
 <script setup>
-import Layout from '@/pages/layouts/PublicLayout.vue'
 import { computed } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
+import Layout from '@/pages/layouts/PublicLayout.vue'
+import { useTranslate } from '@/composables/useTranslate'
+
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const { page } = defineProps({
     page: {
@@ -13,23 +17,26 @@ const { page } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title
+    return page?.seo_title ?? page?.title ?? t('labels.page')
 })
 
 const metaDescription = computed(() => {
-    return page?.seo_brief ?? page?.brief
+    return page?.seo_brief ?? page?.brief ?? ''
 })
 
 const metaKeywords = computed(() => {
+    if (Array.isArray(page?.seo_keywords)) {
+        return page.seo_keywords.join(', ')
+    }
 
-    return page?.seo_keywords
+    return page?.seo_keywords ?? ''
 })
 </script>
 
 <template>
 
     <Head :title="metaTitle">
-        <link rel="canonical" :href="route('home')" />
+        <link v-if="page?.public_url" rel="canonical" :href="page.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 
@@ -40,16 +47,16 @@ const metaKeywords = computed(() => {
 
     <div class="bg-gray-100 py-8">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
                 <div class="lg:col-span-9">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        Main Content
+                    <div class="rounded-lg bg-white p-6 shadow">
+                        {{ t('pages.details.main_content') }}
                     </div>
                 </div>
 
                 <div class="lg:col-span-3">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        Sidebar Content
+                    <div class="rounded-lg bg-white p-6 shadow">
+                        {{ t('pages.details.sidebar_content') }}
                     </div>
                 </div>
             </div>

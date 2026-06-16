@@ -5,7 +5,11 @@ import { faInfo } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(faInfo)
+
+const { t } = useTranslate()
 
 const { news } = defineProps({
     news: {
@@ -47,10 +51,10 @@ const { news } = defineProps({
                         </td>
 
                         <td class="px-4 py-3">
-                            <a :href="route('back-office.news.details', {slug: perNews?.slug})"
+                            <a :href="route('back-office.news.details', { slug: perNews?.slug })"
                                 class="inline-flex items-center gap-1 rounded border border-blue-500 px-2 py-1 text-xs text-blue-500 hover:bg-blue-50">
                                 <FontAwesomeIcon icon="info" />
-                                Details
+                                {{ t("layout_menus.details") }}
                             </a>
                         </td>
                     </tr>

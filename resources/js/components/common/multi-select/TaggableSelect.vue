@@ -1,18 +1,3 @@
-<template>
-    <div :class="error ? 'border border-red-500 rounded-md' : ''">
-        <Multiselect
-            v-model="proxyModel"
-            :options="options"
-            :multiple="true"
-            :taggable="true"
-            :close-on-select="false"
-            :searchable="true"
-            :placeholder="placeholder"
-            @tag="addTag"
-        />
-    </div>
-</template>
-
 <script setup>
 import { ref, watch, onMounted } from "vue"
 import Multiselect from "vue-multiselect"
@@ -66,3 +51,18 @@ watch(proxyModel, () => {
     updateForm()
 }, { deep: true })
 </script>
+
+<template>
+    <div :class="error ? 'border border-red-500 rounded-md' : ''">
+        <Multiselect
+            v-model="proxyModel"
+            :options="options"
+            :multiple="true"
+            :taggable="true"
+            :close-on-select="false"
+            :searchable="true"
+            :placeholder="placeholder"
+            @tag="addTag"
+        />
+    </div>
+</template>

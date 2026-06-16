@@ -3,11 +3,12 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import ModelPagination from '@/components/common/model/Pagination.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
-import { ref, computed, onMounted, nextTick, inject } from 'vue'
-import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
+import { ref, computed, onMounted, nextTick } from 'vue'
+import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
+import { useTranslate } from '@/composables/useTranslate'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faTrash, faFilter, faInfo, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
@@ -17,6 +18,8 @@ import { fetchFromApi } from '@/composables/useSystemApi'
 library.add(faTrash, faFilter, faInfo, faSpinner)
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const { activityLogs, showSubjectType } = defineProps({
     activityLogs: Object,
@@ -35,16 +38,11 @@ const filterForm = useForm({
     search: null
 })
 
-const tableFields = [
-    { key: 'sl', label: 'SL' },
-    { key: 'log_name', label: 'Log Name' },
-    { key: 'event', label: 'Event' },
-    { key: 'created_at', label: 'Created At' },
-]
-
 const paginationOnly = computed(() => {
     if (!activityLogs) return {}
+
     const { data, ...rest } = activityLogs
+
     return rest
 })
 
@@ -52,11 +50,11 @@ const applyFilter = () => {
     if (filterForm.processing) return
 
     const cleanParams = itemListFilterParameters(filterForm.data())
-    intertiaJsRoute.get(route('back-office.activity-logs.index'), cleanParams, {
+
+    inertiaJsRoute.get(route('back-office.activity-logs.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
-        onFinish: () => filterForm.processing = false
     })
 }
 
@@ -69,7 +67,8 @@ const handleDelete = (activityLog) => {
     if (!activityLog || deleteProcessing.value) return
 
     deleteProcessing.value = true
-    intertiaJsRoute.delete(route('back-office.activity-logs.delete', { slug: activityLog?.slug }), {
+
+    inertiaJsRoute.delete(route('back-office.activity-logs.delete', { slug: activityLog?.slug }), {
         onFinish: () => {
             deleteProcessing.value = false
             showDeleteModal.value = false
@@ -97,7 +96,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Activity logs', active: true }
+                { text: t('layout_menus.activity_logs'), active: true }
             ],
         })
     )
@@ -106,12 +105,14 @@ onMounted(async () => {
 
 <template>
 
-    <Head title="Activity Logs" />
+    <Head :title="t('activity_logs.index.page_title')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">Activity Logs</h2>
+            <h2 class="text-lg font-semibold">
+                {{ t('activity_logs.index.title') }}
+            </h2>
         </div>
 
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
@@ -120,32 +121,38 @@ onMounted(async () => {
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                    placeholder="Per page" />
+                    :placeholder="t('labels.per_page')" />
 
-                <MultiSelectInfinityLoadingApi v-if="showSubjectType" :form="filterForm"
-                    fieldName="subject_type" :selectedItem="filterForm.subject_type"
-                    :apiUrl="route('search.activity-log-subject-types')" :multiple="false" selectedLabelKey="name"
-                    selectedValueKey="id" apiLabelKey="name" apiValueKey="id" placeholder="Subject" />
+                <MultiSelectInfinityLoadingApi v-if="showSubjectType" :form="filterForm" fieldName="subject_type"
+                    :selectedItem="filterForm.subject_type" :apiUrl="route('search.activity-log-subject-types')"
+                    :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
+                    :placeholder="t('activity_logs.index.subject_placeholder')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="causer_id"
                     :selectedItem="filterForm.causer_id" :apiUrl="route('search.users')" :multiple="false"
-                    selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
-                    apiValueKey="id" placeholder="Causer" />
+                    selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
+                    :placeholder="t('table.columns.causer')" />
 
-                <input type="date" v-model="filterForm.date"
+                <input v-model="filterForm.date" type="date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" placeholder="Search logs..."
+                <input v-model="filterForm.search" type="search"
+                    :placeholder="t('activity_logs.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none md:col-span-2" />
 
             </div>
 
             <div class="flex justify-end">
                 <button type="submit" :disabled="filterForm.processing"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition">
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-50">
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon icon="filter" />
-                    Apply Filter
+
+                    {{
+                        filterForm.processing
+                            ? t('activity_logs.index.applying_filter')
+                            : t('activity_logs.index.apply_filter')
+                    }}
                 </button>
             </div>
         </form>
@@ -157,20 +164,43 @@ onMounted(async () => {
 
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
-                            <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">Log Name</th>
-                            <th class="px-4 py-3 text-left">Event</th>
-                            <th class="px-4 py-3 text-left">Created</th>
-                            <th class="px-4 py-3 text-right">Actions</th>
+                            <th class="px-4 py-3 text-left">
+                                #
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                {{ t('activity_logs.details.log_name') }}
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                {{ t('activity_logs.index.event') }}
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                {{ t('activity_logs.index.created') }}
+                            </th>
+
+                            <th class="px-4 py-3 text-right">
+                                {{ t('table.columns.action') }}
+                            </th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y">
                         <tr v-for="(item, index) in activityLogs?.data" :key="item.id"
                             class="hover:bg-gray-50 transition">
-                            <td class="px-4 py-3">{{ index + 1 }}</td>
-                            <td class="px-4 py-3 font-medium">{{ item.log_name }}</td>
-                            <td class="px-4 py-3 text-gray-600">{{ item.event }}</td>
+                            <td class="px-4 py-3">
+                                {{ index + 1 }}
+                            </td>
+
+                            <td class="px-4 py-3 font-medium">
+                                {{ item.log_name }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ item.event }}
+                            </td>
+
                             <td class="px-4 py-3 text-gray-500">
                                 {{ formatDateTime(item.created_at) }}
                             </td>
@@ -179,16 +209,24 @@ onMounted(async () => {
                                 <div class="flex justify-end gap-2">
 
                                     <a :href="route('back-office.activity-logs.details', { slug: item.slug })"
-                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border">
+                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
+                                        :title="t('table.menus.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <button @click="confirmDelete(item)"
-                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border">
+                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
+                                        :title="t('buttons.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
                                 </div>
+                            </td>
+                        </tr>
+
+                        <tr v-if="!activityLogs?.data?.length">
+                            <td colspan="5" class="px-4 py-6 text-center text-gray-500">
+                                {{ t('labels.no_record_found') }}
                             </td>
                         </tr>
                     </tbody>
@@ -214,7 +252,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                Delete Activity Log
+                                {{ t('activity_logs.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -222,19 +260,24 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                This action cannot be undone.
+                                {{ t('activity_logs.delete_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    Cancel
+                                    {{ t('buttons.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing || !deletingRow"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    Delete
+
+                                    {{
+                                        deleteProcessing
+                                            ? t('buttons.deleting')
+                                            : t('buttons.delete')
+                                    }}
                                 </button>
                             </div>
                         </div>

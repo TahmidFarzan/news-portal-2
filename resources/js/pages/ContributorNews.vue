@@ -4,9 +4,12 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
-import Grid from '@/components/common/news/Grid.vue'
+
+import { useTranslate } from '@/composables/useTranslate'
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const { contributor, news } = defineProps({
     contributor: {
@@ -35,12 +38,18 @@ const metaKeywords = computed(() => {
 
     return contributor?.seo_keywords || ''
 })
+
+const contributorImage = computed(() => {
+    return contributor?.profile_image?.media_url
+        || contributor?.profile_image?.original_url
+        || '/uploads/images/logo/contributor.png'
+})
 </script>
 
 <template>
 
-    <Head :title="contributor?.name || 'Contributor'">
-        <link v-if="contributor?.public_url" rel="canonical" :href="contributor?.public_url" />
+    <Head :title="contributor?.name || t('labels.contributor')">
+        <link v-if="contributor?.public_url" rel="canonical" :href="contributor.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 
@@ -53,19 +62,15 @@ const metaKeywords = computed(() => {
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
-                    <img v-if="contributor?.profile_image"
-                        :src="contributor?.profile_image?.media_url || contributor?.profile_image?.original_url || '/uploads/images/logo/contributor.png'"
-                        :alt="contributor?.name || 'Contributor image'" class="h-full w-full object-contain"
-                        loading="lazy" />
-                    <img v-else :src="'/uploads/images/logo/contributor.png'"
-                        :alt="contributor?.name || 'Contributor image'" class="h-full w-full object-contain"
-                        loading="lazy" />
+                    <img :src="contributorImage"
+                        :alt="contributor?.name || t('contributors.details.contributor_image_alt')"
+                        class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    Contributor
+                    {{ t('labels.contributor') }}
                 </p>
 
                 <h1 class="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">
@@ -73,12 +78,12 @@ const metaKeywords = computed(() => {
                 </h1>
 
                 <p v-if="contributor?.brief" class="max-w-3xl text-sm leading-7 text-gray-600 sm:text-base">
-                    {{ contributor?.brief }}
+                    {{ contributor.brief }}
                 </p>
 
                 <section v-if="contributor?.profile_details"
                     class="max-w-3xl text-sm leading-7 text-gray-600 sm:text-base"
-                    v-html="contributor?.profile_details" />
+                    v-html="contributor.profile_details" />
             </div>
         </section>
 

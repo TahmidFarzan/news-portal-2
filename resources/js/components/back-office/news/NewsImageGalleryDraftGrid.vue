@@ -14,6 +14,8 @@ import {
     faFloppyDisk,
 } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(
     faPlus,
     faSpinner,
@@ -21,6 +23,8 @@ FontAwesomeLibrary.add(
     faGripVertical,
     faFloppyDisk
 )
+
+const { t } = useTranslate()
 
 const {
     form,
@@ -146,7 +150,7 @@ function validateCreateForm() {
     createErrors.value = {}
 
     if (!createForm.value.image) {
-        createErrors.value.media = 'Image is required.'
+        createErrors.value.media = t("form.validation_errors.image_is_required")
         return false
     }
 
@@ -165,7 +169,7 @@ function normalizeErrors(error) {
 
     if (!Object.keys(normalizedErrors).length) {
         normalizedErrors.general =
-            error?.response?.data?.message || 'Something went wrong.'
+            error?.response?.data?.message || t("api.errors.invalid_data")
     }
 
     return normalizedErrors
@@ -196,14 +200,14 @@ async function saveImage() {
         )
 
         if (response?.data?.status === 'error') {
-            createErrors.value.general = response?.data?.message || 'Image save failed.'
+            createErrors.value.general = response?.data?.message || t("api.errors.image_save_failed")
             return
         }
 
         const image = response?.data?.media
 
         if (!image?.id) {
-            createErrors.value.general = 'Image saved but invalid media response returned.'
+            createErrors.value.general = t("api.errors.invalid_image_response")
             return
         }
 
@@ -271,7 +275,7 @@ function cancelSequenceMode() {
 
 function saveSequence() {
     if (!sequenceImages.value.length) {
-        sequenceError.value = 'Sequence is required.'
+        sequenceError.value = t("form.validation_errors.sequence_is_required")
         return
     }
 
@@ -334,7 +338,7 @@ onBeforeUnmount(() => {
     <div>
         <div class="mb-3 flex items-center justify-between gap-3">
             <div class="text-gray-500">
-                Gallery Images
+                {{ t("labels.gallery_images") }}
             </div>
 
             <div class="flex items-center gap-2">
@@ -343,14 +347,14 @@ onBeforeUnmount(() => {
                         class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                         :disabled="createProcessing" @click="openCreateModal">
                         <FontAwesomeIcon icon="plus" />
-                        Add Image
+                        {{ t("buttons.add_image") }}
                     </button>
 
                     <button type="button"
                         class="inline-flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
                         :disabled="createProcessing || !selectedImages.length" @click="enableSequenceMode">
                         <FontAwesomeIcon icon="grip-vertical" />
-                        Drag & Sequence
+                        {{ t("buttons.drag_&_Sequence") }}
                     </button>
                 </template>
 
@@ -358,14 +362,14 @@ onBeforeUnmount(() => {
                     <button type="button"
                         class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                         @click="cancelSequenceMode">
-                        Cancel
+                        {{ t("buttons.cancel") }}
                     </button>
 
                     <button type="button"
                         class="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-green-700"
                         @click="saveSequence">
                         <FontAwesomeIcon icon="floppy-disk" />
-                        Save Sequence
+                        {{ t("buttons.save") }}
                     </button>
                 </template>
             </div>
@@ -381,7 +385,7 @@ onBeforeUnmount(() => {
 
         <div v-if="!displayImages.length"
             class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
-            No gallery images found.
+            {{ t("labels.no_record_found") }}
         </div>
 
         <div v-else class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -413,7 +417,7 @@ onBeforeUnmount(() => {
                     <div class="w-full max-w-lg rounded-xl bg-white p-5 shadow-xl">
                         <div class="mb-4 flex items-center justify-between">
                             <h2 class="text-lg font-semibold text-gray-800">
-                                Add Image
+                                {{ t("labels.add_image") }}
                             </h2>
 
                             <button type="button"
@@ -431,7 +435,7 @@ onBeforeUnmount(() => {
                             <div class="space-y-4">
                                 <div>
                                     <label class="mb-1 block text-sm font-medium text-gray-700">
-                                        Image <span class="text-red-500">*</span>
+                                        {{ t("labels.image") }} <span class="text-red-500">*</span>
                                     </label>
 
                                     <input ref="imageInputRef" type="file" accept="image/*"
@@ -444,7 +448,7 @@ onBeforeUnmount(() => {
 
                                     <div v-if="imagePreviewUrl" class="mt-3">
                                         <div class="mb-1 text-sm text-gray-500">
-                                            Preview
+                                            {{ t("labels.preview") }}
                                         </div>
 
                                         <img :src="imagePreviewUrl" alt="Selected image preview"
@@ -454,7 +458,7 @@ onBeforeUnmount(() => {
 
                                 <div>
                                     <label class="mb-1 block text-sm font-medium text-gray-700">
-                                        Caption
+                                        {{ t("labels.caption") }}
                                     </label>
 
                                     <input v-model="createForm.caption" type="text"
@@ -468,7 +472,7 @@ onBeforeUnmount(() => {
 
                                 <div>
                                     <label class="mb-1 block text-sm font-medium text-gray-700">
-                                        Alt Text
+                                        {{ t("labels.alt_text") }}
                                     </label>
 
                                     <input v-model="createForm.alt" type="text"
@@ -485,7 +489,7 @@ onBeforeUnmount(() => {
                                 <button type="button"
                                     class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
                                     :disabled="createProcessing" @click="closeCreateModal">
-                                    Cancel
+                                    {{ t("buttons.cancel") }}
                                 </button>
 
                                 <button type="submit"
@@ -494,7 +498,7 @@ onBeforeUnmount(() => {
                                     <FontAwesomeIcon v-if="createProcessing" icon="spinner" class="animate-spin" />
 
                                     <span>
-                                        {{ createProcessing ? 'Saving...' : 'Save' }}
+                                        {{ createProcessing ? t("buttons.saving") : t("buttons.save") }}
                                     </span>
                                 </button>
                             </div>

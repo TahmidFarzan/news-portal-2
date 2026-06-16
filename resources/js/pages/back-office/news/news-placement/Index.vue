@@ -3,20 +3,39 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import NewsPlacementSortableList from '@/components/back-office/news/NewsPlacementSortableList.vue'
 
 import { Head, useForm, router } from '@inertiajs/vue3'
-import { inject, onMounted, nextTick, ref, computed, watch } from 'vue'
+import { onMounted, nextTick, ref, computed, watch } from 'vue'
+import { useTranslate } from '@/composables/useTranslate'
 
 defineOptions({ layout: Layout })
 
+const { t } = useTranslate()
+
 const {
-    news,
+    news = {},
     homeLeadNewsPlacements,
     homeCategoryNewsPlacements,
-    categoryLeadNewsPlacements
+    categoryLeadNewsPlacements,
 } = defineProps({
-    news: Object,
-    homeLeadNewsPlacements: { type: Array, default: () => [] },
-    homeCategoryNewsPlacements: { type: Array, default: () => [] },
-    categoryLeadNewsPlacements: { type: Array, default: () => [] },
+    news: {
+        type: Object,
+        default: () => ({}),
+    },
+    homeLeadNewsPlacements: {
+        type: Array,
+        default: () => [],
+    },
+    homeCategoryNewsPlacements: {
+        type: Array,
+        default: () => [],
+    },
+    categoryLeadNewsPlacements: {
+        type: Array,
+        default: () => [],
+    },
+})
+
+const pageTitle = computed(() => {
+    return `${news?.title} ${t('news.placements.page_title_suffix')}`
 })
 
 const localHomeLeadNewsPlacements = ref([...homeLeadNewsPlacements])
@@ -64,7 +83,7 @@ function handleSave() {
 
     saveForm.patch(
         route('back-office.news.news-placements.update', {
-            slug: news?.slug
+            slug: news?.slug,
         }),
         {
             preserveScroll: true,
@@ -75,10 +94,10 @@ function handleSave() {
                 saveForm.clearErrors()
             },
 
-            onError: (errors) => {
+            onError: errors => {
                 saveForm.clearErrors()
                 saveForm.setError(errors)
-            }
+            },
         }
     )
 }
@@ -90,7 +109,7 @@ function handleAutoCreate() {
 
     router.post(
         route('back-office.news.news-placements.generate', {
-            slug: news?.slug
+            slug: news?.slug,
         }),
         {},
         {
@@ -101,12 +120,12 @@ function handleAutoCreate() {
                 'homeLeadNewsPlacements',
                 'homeCategoryNewsPlacements',
                 'categoryLeadNewsPlacements',
-                'flash'
+                'flash',
             ],
 
             onFinish: () => {
                 autoCreateProcessing.value = false
-            }
+            },
         }
     )
 }
@@ -117,8 +136,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'News', href: route('back-office.news.index') },
-                { text: `${news?.title} news placement`, active: true }
+                { text: t('labels.news'), href: route('back-office.news.index') },
+                { text: pageTitle.value, active: true },
             ],
         })
     )
@@ -127,40 +146,35 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${news?.title} news placement`" />
+    <Head :title="pageTitle" />
 
     <div class="w-full space-y-6">
-
         <div class="flex justify-end gap-3">
-
             <button v-if="shouldShowAutoCreate" type="button"
                 class="inline-flex items-center px-5 py-2 rounded-lg text-sm font-medium transition bg-green-600 text-white hover:bg-green-700 disabled:opacity-60"
                 :disabled="autoCreateProcessing" @click="handleAutoCreate">
-                {{ autoCreateProcessing ? 'Auto Creating...' : 'Auto Create' }}
+                {{ autoCreateProcessing ? t('news.placements.auto_creating') : t('news.placements.auto_create') }}
             </button>
 
             <button type="button"
                 class="inline-flex items-center px-5 py-2 rounded-lg text-sm font-medium transition bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
                 :disabled="saveForm.processing" @click="handleSave">
-                {{ saveForm.processing ? 'Saving...' : 'Save All' }}
+                {{ saveForm.processing ? t('buttons.saving') : t('news.placements.save_all') }}
             </button>
-
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+            <NewsPlacementSortableList :title="t('news.placements.home_lead_news_placements')"
+                v-model:items="localHomeLeadNewsPlacements" :news="news" field-name="home_lead_news_ids_sequence"
+                @sequence-change="handleSequenceChange" />
 
-            <NewsPlacementSortableList title="Home Lead News Placements" v-model:items="localHomeLeadNewsPlacements"
-                :news="news" field-name="home_lead_news_ids_sequence" @sequence-change="handleSequenceChange" />
-
-            <NewsPlacementSortableList title="Home Category News Placements"
+            <NewsPlacementSortableList :title="t('news.placements.home_category_news_placements')"
                 v-model:items="localHomeCategoryNewsPlacements" :news="news"
                 field-name="home_category_news_ids_sequence" @sequence-change="handleSequenceChange" />
 
-            <NewsPlacementSortableList title="Category Lead News Placements"
+            <NewsPlacementSortableList :title="t('news.placements.category_lead_news_placements')"
                 v-model:items="localCategoryLeadNewsPlacements" :news="news"
                 field-name="category_lead_news_ids_sequence" @sequence-change="handleSequenceChange" />
-
         </div>
-
     </div>
 </template>

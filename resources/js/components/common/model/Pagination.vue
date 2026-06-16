@@ -5,8 +5,11 @@ import { router } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faChevronLeft, faChevronRight)
+
+const { t } = useTranslate()
 
 const { pagination } = defineProps({
     pagination: { type: Object, required: true }
@@ -36,6 +39,13 @@ const goTo = (url) => {
 const sanitizeLabel = (label) => label.replace(/&laquo;|&raquo;/g, '').trim()
 const isPrevious = (label) => label.includes('&laquo;') || label.toLowerCase().includes('previous')
 const isNext = (label) => label.includes('&raquo;') || label.toLowerCase().includes('next')
+
+const translateNumerText = value => {
+    return String(value)
+        .split('')
+        .map(char => t(`number.${char}`))
+        .join('')
+}
 </script>
 
 <template>
@@ -44,14 +54,14 @@ const isNext = (label) => label.includes('&raquo;') || label.toLowerCase().inclu
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3 text-sm text-gray-600">
 
             <div v-if="hasPaginationInfo">
-                Showing <span class="font-medium">{{ from }}</span>
-                to <span class="font-medium">{{ to }}</span>
-                of <span class="font-medium">{{ total }}</span> entries
+                {{ t("labels.showing") }} <span class="font-medium">{{ translateNumerText(from) }}</span>
+                {{ t("labels.to") }} <span class="font-medium">{{ translateNumerText(to) }}</span>
+                {{ t("labels.of") }} <span class="font-medium">{{ translateNumerText(total) }}</span> {{ t("labels.entries") }}
             </div>
 
             <div v-if="hasPaginationInfo">
-                Page <span class="font-medium">{{ currentPage }}</span>
-                of <span class="font-medium">{{ lastPage }}</span>
+                {{ t("labels.page") }} <span class="font-medium">{{ translateNumerText(currentPage) }}</span>
+                {{ t("labels.of") }} <span class="font-medium">{{ translateNumerText(lastPage) }}</span>
             </div>
 
         </div>

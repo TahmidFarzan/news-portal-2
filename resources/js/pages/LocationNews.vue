@@ -5,6 +5,8 @@ import { Head } from '@inertiajs/vue3'
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 
@@ -17,6 +19,8 @@ import 'leaflet/dist/leaflet.css'
 FontAwesomeLibrary.add(faLocationDot)
 
 defineOptions({ layout: Layout })
+
+const { t } = useTranslate()
 
 const { location, news } = defineProps({
     location: {
@@ -198,7 +202,7 @@ const createAreaPopup = (item) => {
         <div class="location-popup">
             <p>${escapeHtml(item.name)}</p>
             ${item.public_url
-            ? `<a href="${escapeHtml(item.public_url)}">View Location</a>`
+            ? `<a href="${escapeHtml(item.public_url)}">${escapeHtml(t('locations.details.view_location'))}</a>`
             : ''
         }
         </div>
@@ -339,8 +343,8 @@ onBeforeUnmount(() => {
 
 <template>
 
-    <Head :title="location?.name || 'Location'">
-        <link v-if="location?.public_url" rel="canonical" :href="location?.public_url || ''" />
+    <Head :title="location?.name || t('labels.location')">
+        <link v-if="location?.public_url" rel="canonical" :href="location.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 
@@ -353,7 +357,8 @@ onBeforeUnmount(() => {
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
-                    <img :src="'/uploads/images/logo/location.png'" :alt="location?.name || 'Location image'"
+                    <img :src="'/uploads/images/logo/location.png'"
+                        :alt="location?.name || t('locations.details.location_image_alt')"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
@@ -370,17 +375,17 @@ onBeforeUnmount(() => {
                             : 'space-y-2',
                     ]">
                         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                            Location
+                            {{ t('labels.location') }}
                         </p>
 
                         <div v-if="location?.parent"
                             class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                            <a :href="location?.parent?.public_url" title="Parent Location"
+                            <a :href="location.parent.public_url" :title="t('locations.details.parent_location')"
                                 class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600">
                                 <FontAwesomeIcon icon="location-dot" class="shrink-0" />
 
                                 <span class="truncate">
-                                    {{ location?.parent?.name }}
+                                    {{ location.parent.name }}
                                 </span>
                             </a>
                         </div>
@@ -390,7 +395,7 @@ onBeforeUnmount(() => {
                         </h1>
 
                         <p v-if="hasBrief" class="max-w-3xl text-sm leading-7 text-gray-600 sm:text-base">
-                            {{ location?.brief }}
+                            {{ location.brief }}
                         </p>
 
                         <div v-if="location?.has_descendants && displayChildren.length"

@@ -4,22 +4,37 @@ import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/Infi
 import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
-import { computed, onMounted, nextTick, inject } from 'vue'
+import { computed, onMounted, nextTick, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
+import { useTranslate } from '@/composables/useTranslate'
+
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
+const { t } = useTranslate()
+
 const { event } = defineProps({
-    event: Object,
+    event: {
+        type: Object,
+        default: () => ({})
+    },
 })
 
+const seoKeywordsKey = ref(0)
+
 const isUpdate = computed(() => !!event?.slug)
+
+const pageTitle = computed(() => {
+    return isUpdate.value
+        ? `${event?.name} ${t('labels.edit')}`
+        : t('events.form.create_page_title')
+})
 
 const saveForm = useForm({
     name: event?.name || null,
@@ -34,21 +49,21 @@ const saveForm = useForm({
 
 function validateForm() {
     saveForm.clearErrors()
+
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', 'Name is required.')
+        saveForm.setError('name', t('form.validation_errors.name_is_required'))
         valid = false
     }
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', 'Language is required.')
+        saveForm.setError('language_id', t('form.validation_errors.language_is_required'))
         valid = false
     }
 
     return valid
 }
-
 
 function handleSave() {
     if (saveForm.processing) return
@@ -85,15 +100,14 @@ function handleSave() {
     }
 }
 
-
 onMounted(async () => {
     await nextTick()
 
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: 'Events', href: route('back-office.events.index') },
-                { text: isUpdate.value ? `${event?.name} edit` : 'Event create', active: true }
+                { text: t('layout_menus.events'), href: route('back-office.events.index') },
+                { text: pageTitle.value, active: true }
             ],
         })
     )
@@ -102,7 +116,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="isUpdate ? `${event?.name} edit` : 'Event create'" />
+    <Head :title="pageTitle" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -110,18 +124,22 @@ onMounted(async () => {
             <form @submit.prevent="handleSave" class="space-y-6">
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">Basic Information</h3>
+                    <h3 class="text-base font-semibold">
+                        {{ t('labels.basic_information') }}
+                    </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Language <span class="text-red-500">*</span>
+                                {{ t('labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="event?.language" :apiUrl="route('search.languages')"
-                                :error="saveForm.errors.language_id" :multiple="false" placeholder="Select language" />
+                                :error="saveForm.errors.language_id" :multiple="false"
+                                :placeholder="t('events.form.language_placeholder')" />
+
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
                             </p>
@@ -129,10 +147,10 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Name <span class="text-red-500">*</span>
+                                {{ t('labels.name') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name"
+                            <input v-model="saveForm.name" :placeholder="t('events.form.name_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -143,10 +161,11 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                Brief
+                                {{ t('events.form.brief') }}
                             </label>
 
-                            <textarea v-model="saveForm.brief" rows="4" placeholder="Enter brief"
+                            <textarea v-model="saveForm.brief" rows="4"
+                                :placeholder="t('events.form.brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -159,14 +178,17 @@ onMounted(async () => {
                 </div>
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">Banner Image</h3>
+                    <h3 class="text-base font-semibold">
+                        {{ t('events.form.banner_image_section') }}
+                    </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Desktop Banner Image
+                                {{ t('events.form.desktop_banner_image') }}
                             </label>
+
                             <input type="file" @change="e => saveForm.desktop_banner_image = e.target.files[0]"
                                 class="border rounded px-3 py-2 w-full"
                                 :class="saveForm.errors.desktop_banner_image ? 'border-red-500' : 'border-gray-300'" />
@@ -176,15 +198,17 @@ onMounted(async () => {
                             </p>
 
                             <MediaRenderer v-if="event?.desktop_banner_image" :media="event?.desktop_banner_image" />
-                            <img v-else :src="'/uploads/images/event/desktop.png'"
-                                class="object-cover rounded-xl border border-gray-200 mt-2" />
 
+                            <img v-else :src="'/uploads/images/event/desktop.png'"
+                                :alt="t('events.form.desktop_banner_image')"
+                                class="object-cover rounded-xl border border-gray-200 mt-2" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                Mobile Banner Image
+                                {{ t('events.form.mobile_banner_image') }}
                             </label>
+
                             <input type="file" @change="e => saveForm.mobile_banner_image = e.target.files[0]"
                                 class="border rounded px-3 py-2 w-full"
                                 :class="saveForm.errors.mobile_banner_image ? 'border-red-500' : 'border-gray-300'" />
@@ -194,7 +218,9 @@ onMounted(async () => {
                             </p>
 
                             <MediaRenderer v-if="event?.mobile_banner_image" :media="event?.mobile_banner_image" />
+
                             <img v-else :src="'/uploads/images/event/mobile.png'"
+                                :alt="t('events.form.mobile_banner_image')"
                                 class="object-cover rounded-xl border border-gray-200 mt-2" />
                         </div>
 
@@ -202,16 +228,19 @@ onMounted(async () => {
                 </div>
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">SEO Settings</h3>
+                    <h3 class="text-base font-semibold">
+                        {{ t('events.form.seo_settings') }}
+                    </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                SEO Title
+                                {{ t('events.form.seo_title') }}
                             </label>
 
-                            <input v-model="saveForm.seo_title" type="text" placeholder="Enter SEO title"
+                            <input v-model="saveForm.seo_title" type="text"
+                                :placeholder="t('events.form.seo_title_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
 
@@ -222,11 +251,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                SEO Brief
+                                {{ t('events.form.seo_brief') }}
                             </label>
 
                             <textarea v-model="saveForm.seo_brief" rows="3"
-                                placeholder="Enter SEO brief"
+                                :placeholder="t('events.form.seo_brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -237,11 +266,12 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                SEO Keywords
+                                {{ t('events.form.seo_keywords') }}
                             </label>
 
-                            <MultiSelectTaggableSelect :selectedItem="saveForm.seo_keywords" fieldName="seo_keywords"
-                                :form="saveForm" :error="saveForm.errors.seo_keywords" placeholder="Add keywords" />
+                            <MultiSelectTaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
+                                fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
+                                :placeholder="t('events.form.seo_keywords_placeholder')" />
 
                             <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.seo_keywords }}
@@ -253,10 +283,11 @@ onMounted(async () => {
 
                 <div class="flex justify-center">
                     <button type="submit" :disabled="saveForm.processing"
-                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition">
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        Save
+
+                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
                     </button>
                 </div>
 
