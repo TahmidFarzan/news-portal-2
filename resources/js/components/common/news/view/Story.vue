@@ -72,7 +72,7 @@ const { news } = defineProps({
         <TagTrend :news="news" />
 
         <div v-if="news?.source" class="pt-4 text-sm text-gray-500">
-            <span>{{ t("labels.source") }}: </span>
+            <span>{{ t("components.common.news.view.story.labels.source") }}: </span>
             {{ news.source }}
         </div>
 

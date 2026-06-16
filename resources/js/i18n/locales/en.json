@@ -1,894 +1,2966 @@
 {
-    "footer": {
-        "copyright": "©",
-        "developed_by": "Developed by",
-        "developer_name": "Seikh Md Tahmid Farzan"
-    },
-    "number": {
-        "0": "0",
-        "1": "1",
-        "2": "2",
-        "3": "3",
-        "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8",
-        "9": "9"
-    },
-    "labels": {
-        "login": "Login",
-        "tag": "Tag",
-        "language": "Language",
-        "location": "Location",
-        "search": "Search",
-        "menu": "Menu",
-        "no_menu_found": "No menu found",
-        "loading": "Loading",
-        "profile": "Profile",
-        "image_gallery": "Image Gallery",
-        "iframe_not_support": "Browser failed to display file type",
-        "gallery": "Gallery",
-        "gallery_images": "Gallery images",
-        "no_media_found": "No Media found.",
-        "entries": "Entries",
-        "to": "To",
-        "of": "Of",
-        "page": "Page",
-        "showing": "Showing",
-        "no_gallery_image_found": "No gallery image found",
-        "source": "Source",
-        "share": "Share",
-        "copied": "Copied",
-        "copy": "Copy",
-        "by": "By",
-        "show_all": "Show all",
-        "add_image": "Add Image",
-        "image": "Image",
-        "preview": "Preview",
-        "caption": "Caption",
-        "alt_text": "Alt text",
-        "delete_image": "Delete image",
-        "contributors": "Contributors",
-        "recent_news": "Recent news",
-        "related_news": "Related news",
-        "relevant_news": "Relevant news",
-        "no_record_found": "No record found",
-        "edit_image": "Edit Image",
-        "order_column": "Order Column",
-        "update_gallery_image": "Update gallery image",
-        "create_news": "Create news",
-        "name": "Name",
-        "email": "Email",
-        "gender": "Gender",
-        "religion": "Religion",
-        "marital_status": "Marital Status",
-        "mobile": "Mobile",
-        "birth_date": "Birth Date",
-        "age": "Age",
-        "address": "Address",
-        "profile_image": "Profile Image",
-        "not_available": "N/A",
-        "system": "System",
-        "per_page": "Per page",
-        "basic_information": "Basic Information",
-        "title": "Title",
-        "published": "Published",
-        "is_published": "Is Published",
-        "yes": "Yes",
-        "no": "No",
-        "details": "details",
-        "edit": "edit",
-        "url": "Url",
-        "created_by": "Created By",
-        "updated_at": "Updated At",
-        "updated_by": "Updated By",
-        "news_type": "News type",
-        "news": "News"
-    },
-    "app": {
-        "name": "News Portal",
-        "breaking_news": "Breaking News"
-    },
-    "auth": {
-        "profile": {
-            "page_title": "Profile",
-            "profile_image_alt": "User profile image",
-            "tabs": {
-                "profile": "Profile",
-                "update": "Update",
-                "activity_logs": "Activity Logs"
+    "components": {
+        "back_office": {
+            "activity_log": {
+                "recent_model_activity_logs": {
+                    "table": {
+                        "columns": {
+                            "sl": "sl",
+                            "description": "Description",
+                            "causer": "Causer",
+                            "created_at": "Created at",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "labels": {
+                        "show_all": "Show all",
+                        "no_record_found": "No record found"
+                    }
+                }
             },
-            "name_placeholder": "Enter name",
-            "gender_placeholder": "Select gender",
-            "religion_placeholder": "Select religion",
-            "marital_status_placeholder": "Select marital status",
-            "address_placeholder": "Enter address"
-        },
-        "account": {
-            "page_title": "Account",
-            "profile_image_alt": "User profile image",
-            "tabs": {
-                "info": "Info",
-                "update": "Update",
-                "activity_logs": "Activity Logs"
+            "category": {
+                "recent_catgories": {
+                    "table": {
+                        "columns": {
+                            "sl": "sl",
+                            "name": "Name",
+                            "parent": "Parent",
+                            "created_at": "Created at",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "navigation": {
+                        "show_all": "Show All"
+                    },
+                    "labels": {
+                        "no_record_found": "No record found"
+                    }
+                }
             },
-            "email_verified": "Email verified",
-            "not_verified": "Not verified",
-            "change_password": "Change password",
-            "current_password": "Current Password",
-            "new_password": "New Password",
-            "confirm_password": "Confirm Password",
-            "show_password": "Show password",
-            "hide_password": "Hide password",
-            "show_confirm_password": "Show confirm password",
-            "hide_confirm_password": "Hide confirm password",
-            "show_current_password": "Show current password",
-            "hide_current_password": "Hide current password"
+            "location": {
+                "recent_locations": {
+                    "table": {
+                        "columns": {
+                            "sl": "sl",
+                            "name": "Name",
+                            "parent": "Parent",
+                            "created_at": "Created at",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "navigation": {
+                        "show_all": "Show All"
+                    },
+                    "labels": {
+                        "no_record_found": "No record found"
+                    }
+                }
+            },
+            "menu": {
+                "menu_items": {
+                    "table": {
+                        "columns": {
+                            "sl": "sl",
+                            "name": "Name",
+                            "language": "Language",
+                            "parent": "Parent",
+                            "position": "Position",
+                            "created_at": "Created at",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "navigation": {
+                        "show_all": "Show All"
+                    },
+                    "labels": {
+                        "no_record_found": "No record found"
+                    }
+                }
+            },
+            "news": {
+                "news_image_gallery_draft_grid": {
+                    "validation": {
+                        "image_is_required": "Image is required",
+                        "sequence_is_required": "Sequence is required"
+                    },
+                    "messages": {
+                        "invalid_data": "Invalid data",
+                        "image_save_failed": "Image save failed",
+                        "invalid_image_response": "Image saved but invalid media response returned"
+                    },
+                    "labels": {
+                        "gallery_images": "Gallery images",
+                        "no_record_found": "No record found",
+                        "add_image": "Add Image",
+                        "image": "Image",
+                        "preview": "Preview",
+                        "caption": "Caption",
+                        "alt_text": "Alt text"
+                    },
+                    "actions": {
+                        "add_image": "Add image",
+                        "drag_and_sequence": "Drag & Sequence",
+                        "cancel": "Cancel",
+                        "save": "Save",
+                        "saving": "Saving"
+                    }
+                },
+                "news_image_gallery_draft_image_card": {
+                    "messages": {
+                        "invalid_data": "Invalid data",
+                        "missing_slug": "Slug is missing. Please return slug from backend response.",
+                        "fail_to_update_image": "Failed to update image.",
+                        "invalid_response_after_image_update": "Image updated but invalid media response returned",
+                        "fail_to_delete_image": "Failed to delete image"
+                    },
+                    "labels": {
+                        "edit_image": "Edit Image",
+                        "preview": "Preview",
+                        "caption": "Caption",
+                        "alt_text": "Alt text"
+                    },
+                    "actions": {
+                        "cancel": "Cancel",
+                        "updating": "Updating",
+                        "update": "Update",
+                        "deleting": "Deleting",
+                        "delete": "Delete"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "title": "Delete Confirmation",
+                            "body": "Are you sure you want to delete this"
+                        }
+                    }
+                },
+                "news_image_gallery_grid": {
+                    "validation": {
+                        "image_is_required": "Image is required",
+                        "sequence_is_required": "Sequence is required"
+                    },
+                    "labels": {
+                        "gallery_images": "Gallery images",
+                        "no_record_found": "No record found",
+                        "add_image": "Add Image",
+                        "image": "Image",
+                        "preview": "Preview",
+                        "order_column": "Order Column",
+                        "caption": "Caption",
+                        "alt_text": "Alt text"
+                    },
+                    "actions": {
+                        "add_image": "Add image",
+                        "drag_and_sequence": "Drag & Sequence",
+                        "cancel": "Cancel",
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "news_image_gallery_image_card": {
+                    "labels": {
+                        "update_gallery_image": "Update gallery image",
+                        "caption": "Caption",
+                        "alt_text": "Alt text",
+                        "order_column": "Order Column"
+                    },
+                    "actions": {
+                        "cancel": "Cancel",
+                        "update": "Update"
+                    }
+                },
+                "news_placement_list": {
+                    "labels": {
+                        "no_record_found": "No record found"
+                    },
+                    "table": {
+                        "columns": {
+                            "page": "Page",
+                            "section": "Section",
+                            "position": "Position",
+                            "action": "Action"
+                        }
+                    },
+                    "navigation": {
+                        "details": "Details"
+                    }
+                },
+                "news_placement_sortable_list": {
+                    "labels": {
+                        "no_record_found": "No record found",
+                        "create_news": "Create news"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "title": "Delete Confirmation",
+                            "body": "Are you sure you want to delete this"
+                        }
+                    },
+                    "actions": {
+                        "cancel": "Cancel",
+                        "deleting": "Deleting",
+                        "delete": "Delete"
+                    }
+                },
+                "related_or_relevant_news_list": {
+                    "navigation": {
+                        "details": "Details"
+                    }
+                }
+            }
         },
-        "login": {
-            "page_title": "Login",
-            "title": "Welcome",
-            "description": "Please log in to continue.",
-            "image_alt": "Login",
-            "email_placeholder": "Enter your email",
-            "password_placeholder": "Enter your password",
-            "remember_me": "Remember me",
-            "login_button": "Log In",
-            "logging_in_button": "Logging In...",
-            "create_account": "Create an account",
-            "forgot_password": "Forgot password?",
-            "show_password": "Show password",
-            "hide_password": "Hide password"
-        },
-        "register": {
-            "page_title": "Register",
-            "title": "Create Account",
-            "description": "Fill in your details to get started.",
-            "image_alt": "Register",
-            "name_placeholder": "Your full name",
-            "email_placeholder": "example@email.com",
-            "password_placeholder": "Enter password",
-            "password_confirmation_placeholder": "Confirm password",
-            "register_button": "Register",
-            "registering_button": "Registering...",
-            "already_have_account": "Already have an account?",
-            "login_here": "Log in here",
-            "show_password": "Show password",
-            "hide_password": "Hide password",
-            "show_confirm_password": "Show confirm password",
-            "hide_confirm_password": "Hide confirm password"
-        },
-        "forgot_password": {
-            "page_title": "Forgot password",
-            "title": "Forgot Password",
-            "description": "Enter your email to receive a reset link.",
-            "email_placeholder": "example@email.com",
-            "send_reset_link_button": "Send Reset Link",
-            "sending_button": "Sending...",
-            "already_have_account": "Already have an account?",
-            "back_to_login": "Back to login",
-            "image_alt": "Forgot Password"
-        },
-        "reset_password": {
-            "page_title": "Reset Password",
-            "title": "Reset Password",
-            "description": "Enter a new password to reset your account.",
-            "image_alt": "Reset Password",
-            "password_placeholder": "Enter new password",
-            "password_confirmation_placeholder": "Confirm password",
-            "reset_button": "Reset Password",
-            "resetting_button": "Resetting...",
-            "already_have_account": "Already have an account?",
-            "back_to_login": "Back to login",
-            "show_password": "Show password",
-            "hide_password": "Hide password",
-            "show_confirm_password": "Show confirm password",
-            "hide_confirm_password": "Hide confirm password"
-        },
-        "email_verification": {
-            "page_title": "Email verification",
-            "title": "Verify Your Email",
-            "description": "Before continuing, please check your email for a verification link.",
-            "resend_button": "Resend Verification Email",
-            "resending_button": "Resending...",
-            "image_alt": "User email verification"
-        }
-    },
-    "categories": {
-        "index": {
-            "search_placeholder": "Search category...",
-            "parent_placeholder": "Parent",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Category Details",
-            "parent": "Parent",
-            "tree": "Tree",
-            "seo": "SEO",
-            "sitemap_and_feeds": "Sitemap & Feeds",
-            "sitemap_url": "Sitemap url",
-            "feeds_rss": "Feeds (RSS)",
-            "feeds_atom": "Feeds (ATOM)",
-            "recent_locations": "Recent Locations"
-        },
-        "form": {
-            "create_page_title": "Category create",
-            "edit_page_title": "Category edit",
-            "language_placeholder": "Select language",
-            "name_placeholder": "Enter name",
-            "brief": "Brief",
-            "brief_placeholder": "Enter brief",
-            "hierarchy": "Hierarchy",
-            "has_parent": "Has Parent",
-            "parent": "Parent",
-            "parent_placeholder": "Select parent",
-            "seo_settings": "SEO Settings",
-            "seo_title": "SEO Title",
-            "seo_title_placeholder": "Enter SEO title",
-            "seo_brief": "SEO Brief",
-            "seo_brief_placeholder": "Enter SEO brief",
-            "seo_keywords": "SEO Keywords",
-            "seo_keywords_placeholder": "Add keywords"
-        },
-        "delete_modal": {
-            "title": "Delete Category"
-        }
-    },
-    "contributors": {
-        "index": {
-            "search_placeholder": "Search contributor...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Contributor Details",
-            "profile_details": "Profile details",
-            "seo": "SEO",
-            "sitemap_and_feeds": "Sitemap & Feeds",
-            "sitemap_url": "Sitemap url",
-            "feeds_rss": "Feeds (RSS)",
-            "feeds_atom": "Feeds (ATOM)",
-            "recent_news": "Recent news"
-        },
-        "form": {
-            "create_page_title": "Contributor create",
-            "edit_page_title": "Contributor edit",
-            "language_placeholder": "Select language",
-            "name_placeholder": "Enter name",
-            "brief": "Brief",
-            "brief_placeholder": "Enter brief",
-            "profile_details": "Profile details",
-            "profile_image_section": "Profile Image",
-            "seo_settings": "SEO Settings",
-            "seo_title": "SEO Title",
-            "seo_title_placeholder": "Enter SEO title",
-            "seo_brief": "SEO Brief",
-            "seo_brief_placeholder": "Enter SEO brief",
-            "seo_keywords": "SEO Keywords",
-            "seo_keywords_placeholder": "Add keywords"
-        },
-        "delete_modal": {
-            "title": "Delete Contributor"
-        }
-    },
-    "events": {
-        "index": {
-            "search_placeholder": "Search event...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Event Details",
-            "seo": "SEO",
-            "sitemap_and_feeds": "Sitemap & Feeds",
-            "sitemap_url": "Sitemap url",
-            "feeds_rss": "Feeds (RSS)",
-            "feeds_atom": "Feeds (ATOM)"
-        },
-        "form": {
-            "create_page_title": "Event create",
-            "edit_page_title": "Event edit",
-            "language_placeholder": "Select language",
-            "name_placeholder": "Enter name",
-            "brief": "Brief",
-            "brief_placeholder": "Enter brief",
-            "banner_image_section": "Banner Image",
-            "desktop_banner_image": "Desktop Banner Image",
-            "mobile_banner_image": "Mobile Banner Image",
-            "seo_settings": "SEO Settings",
-            "seo_title": "SEO Title",
-            "seo_title_placeholder": "Enter SEO title",
-            "seo_brief": "SEO Brief",
-            "seo_brief_placeholder": "Enter SEO brief",
-            "seo_keywords": "SEO Keywords",
-            "seo_keywords_placeholder": "Add keywords"
-        },
-        "delete_modal": {
-            "title": "Delete Event"
-        }
-    },
-    "breaking_news": {
-        "index": {
-            "search_placeholder": "Search news..."
-        },
-        "details": {
-            "title": "Breaking news Details"
-        },
-        "form": {
-            "create_page_title": "Breaking news create",
-            "language_placeholder": "Select language",
-            "title_placeholder": "Enter title",
-            "news_settings": "News Settings",
-            "news_placeholder": "Select news",
-            "publish_settings": "Publish Settings"
-        },
-        "delete_modal": {
-            "title": "Delete breaking news"
-        },
-        "trash_modal": {
-            "title": "Trash breaking news",
-            "body": "This breaking news will be moved to trash."
-        },
-        "restore_modal": {
-            "title": "Restore breaking news",
-            "body": "This action can be undone by deleting breaking news."
-        }
-    },
-    "activity_logs": {
-        "index": {
-            "page_title": "Activity Logs",
-            "title": "Activity Logs",
-            "subject_placeholder": "Subject",
-            "search_placeholder": "Search logs...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "event": "Event",
-            "created": "Created"
-        },
-        "details": {
-            "page_title": "Activity log details",
-            "title": "Activity Log Details",
-            "basic_information": "Basic Information",
-            "log_name": "Log Name",
-            "properties": "Properties",
-            "attribute_changes": "Attribute Changes",
-            "system_information": "System Information"
-        },
-        "delete_modal": {
-            "title": "Delete Activity Log",
-            "body": "Are you sure you want to delete this activity log?",
-            "irreversible_body": "This action cannot be undone."
-        }
-    },
-    "languages": {
-        "index": {
-            "search_placeholder": "Search language...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Language Details",
-            "code": "Code",
-            "locale": "Locale",
-            "recent_categories": "Recent Categories"
-        },
-        "form": {
-            "create_page_title": "Language create",
-            "edit_page_title": "Language edit",
-            "name_placeholder": "Enter name",
-            "code": "Code",
-            "code_placeholder": "Enter code",
-            "locale": "Locale",
-            "locale_placeholder": "Enter locale",
-            "brief": "Brief",
-            "brief_placeholder": "Enter brief"
-        },
-        "delete_modal": {
-            "title": "Delete Language"
-        }
-    },
-    "site_menus": {
-        "index": {
-            "search_placeholder": "Search menu...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Menu Details",
-            "menu_items": "Menu Items",
-            "add_menu_item": "Add Menu Item",
-            "item": "Item"
-        },
-        "form": {
-            "create_page_title": "Menu create",
-            "edit_page_title": "Menu edit",
-            "language_placeholder": "Select language",
-            "name_placeholder": "Enter name",
-            "menu_type": "Menu type",
-            "menu_type_placeholder": "Select menu type"
-        },
-        "delete_modal": {
-            "title": "Delete Menu"
-        }
-    },
-    "menu_items": {
-        "index": {
-            "title": "Menu Items",
-            "search_placeholder": "Search menu item...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Menu Item Details",
-            "public_url": "Public url"
-        },
-        "form": {
-            "create_page_title": "Menu item create",
-            "edit_page_title": "Menu item edit",
-            "latest_url": "Latest URL",
-            "home_url": "Home URL",
-            "position_placeholder": "Enter position",
-            "is_custom_url": "Is custom url",
-            "model": "Model",
-            "model_placeholder": "Select model",
-            "model_id": "Model id",
-            "tag_placeholder": "Select a tag",
-            "category_placeholder": "Select a category",
-            "page_placeholder": "Select a page",
-            "url_placeholder": "Enter url",
-            "parent_placeholder": "Select menu item"
-        },
-        "delete_modal": {
-            "title": "Delete Menu Item"
-        }
-    },
-    "news": {
-        "index": {
-            "search_placeholder": "Search news...",
-            "created_by_placeholder": "Created by",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created",
-            "actions": "Actions"
-        },
-        "form": {
-            "category": "Category",
-            "location": "Location",
-            "event": "Event"
-        },
-        "delete_modal": {
-            "title": "Delete News",
-            "body": "This action can be undone by restoring news."
-        },
-        "restore_modal": {
-            "title": "Restore News",
-            "body": "This action can be undone by deleting news."
-        },
-        "placements": {
-            "page_title_suffix": "news placement",
-            "auto_create": "Auto Create",
-            "auto_creating": "Auto Creating...",
-            "save_all": "Save All",
-            "home_lead_news_placements": "Home Lead News Placements",
-            "home_category_news_placements": "Home Category News Placements",
-            "category_lead_news_placements": "Category Lead News Placements"
-        },
-        "placement_details": {
-            "page_title": "News Placement details",
-            "heading": "News Placement Details",
-            "position": "Position",
-            "delete_modal": {
-                "title": "Delete news placement",
-                "message": "Delete this news placement",
-                "irreversible_body": "This action can not be undone."
+        "common": {
+            "layout": {
+                "auth_layout": {
+                    "auth_topbar_dropdown_menu": {
+                        "navigation": {
+                            "profile": "Profile",
+                            "account": "Account",
+                            "activity_logs": "Activity Logs"
+                        },
+                        "actions": {
+                            "logout": "Logout",
+                            "logging_out": "Logging out"
+                        },
+                        "modals": {
+                            "logout_modal": {
+                                "title": "Logout Confirmation",
+                                "body": "Are you sure you want to logout?"
+                            }
+                        }
+                    },
+                    "offcanvas_menu_items": {
+                        "navigation": {
+                            "dashboard": "Dashboard",
+                            "medias": "Media",
+                            "news_attributes": "News Attributes",
+                            "languages": "Languages",
+                            "categories": "Categories",
+                            "tags": "Tags",
+                            "trends": "Trends",
+                            "location": "Location",
+                            "events": "Events",
+                            "contributors": "Contributors",
+                            "news": "News",
+                            "breaking_news": "Breaking News",
+                            "pages": "Pages",
+                            "menus": "Menus",
+                            "user_anagement": "User Anagement",
+                            "users": "Users",
+                            "settings": "Settings"
+                        }
+                    }
+                },
+                "public_layout": {
+                    "auth_topbar_dropdown_menu": {
+                        "navigation": {
+                            "dashboard": "Dashboard",
+                            "profile": "Profile",
+                            "account": "Account"
+                        },
+                        "actions": {
+                            "logout": "Logout",
+                            "cancel": "Cancel"
+                        },
+                        "modals": {
+                            "logout_modal": {
+                                "title": "Logout Confirmation",
+                                "body": "Are you sure you want to logout?"
+                            }
+                        }
+                    },
+                    "breaking_news": {
+                        "labels": {
+                            "loading": "Loading"
+                        }
+                    },
+                    "footer_menu": {
+                        "labels": {
+                            "loading": "Loading"
+                        }
+                    },
+                    "footer_menu_item": {
+                        "labels": {
+                            "menu": "Menu"
+                        }
+                    },
+                    "header_menu": {
+                        "messages": {
+                            "loading": "Loading..."
+                        }
+                    },
+                    "header_menu_item": {
+                        "labels": {
+                            "loading": "Loading",
+                            "no_menu_found": "No menu found"
+                        }
+                    },
+                    "language_select": {
+                        "labels": {
+                            "language": "Language"
+                        }
+                    },
+                    "off_canvas_menu": {
+                        "labels": {
+                            "no_menu_found": "No menu found",
+                            "loading": "Loading"
+                        }
+                    },
+                    "off_canvas_menu_item": {
+                        "labels": {
+                            "loading": "Loading",
+                            "no_menu_found": "No menu found"
+                        }
+                    },
+                    "topbar_menu": {
+                        "labels": {
+                            "loading": "Loading"
+                        }
+                    }
+                }
+            },
+            "media": {
+                "media_renderer": {
+                    "labels": {
+                        "iframe_not_support": "Browser failed to display file type"
+                    },
+                    "actions": {
+                        "download": "Download"
+                    }
+                },
+                "media_select_from_media_libery": {
+                    "actions": {
+                        "open_media_library": "Open Media Library",
+                        "loading": "Loading",
+                        "load_more": "Load More",
+                        "close": "Close",
+                        "select": "Select"
+                    },
+                    "labels": {
+                        "gallery": "Gallery",
+                        "loading": "Loading",
+                        "no_media_found": "No Media found."
+                    }
+                }
+            },
+            "model": {
+                "cursor_pagination": {
+                    "actions": {
+                        "loading": "Loading",
+                        "load_less": "Load Less",
+                        "load_more": "Load More"
+                    }
+                },
+                "pagination": {
+                    "labels": {
+                        "showing": "Showing",
+                        "to": "To",
+                        "of": "Of",
+                        "entries": "Entries",
+                        "page": "Page"
+                    },
+                    "number": {
+                        "0": "0",
+                        "1": "1",
+                        "2": "2",
+                        "3": "3",
+                        "4": "4",
+                        "5": "5",
+                        "6": "6",
+                        "7": "7",
+                        "8": "8",
+                        "9": "9"
+                    }
+                }
+            },
+            "multi_select": {
+                "infinity_loading_api": {
+                    "labels": {
+                        "loading": "Loading",
+                        "page": "Page"
+                    },
+                    "number": {
+                        "0": "0",
+                        "1": "1",
+                        "2": "2",
+                        "3": "3",
+                        "4": "4",
+                        "5": "5",
+                        "6": "6",
+                        "7": "7",
+                        "8": "8",
+                        "9": "9"
+                    }
+                },
+                "infinity_loading_local_data": {
+                    "labels": {
+                        "loading": "Loading",
+                        "page": "Page"
+                    },
+                    "number": {
+                        "0": "0",
+                        "1": "1",
+                        "2": "2",
+                        "3": "3",
+                        "4": "4",
+                        "5": "5",
+                        "6": "6",
+                        "7": "7",
+                        "8": "8",
+                        "9": "9"
+                    }
+                }
+            },
+            "news": {
+                "recent_news_list": {
+                    "labels": {
+                        "recent_news": "Recent News"
+                    }
+                },
+                "related_news_grid": {
+                    "labels": {
+                        "related_news": "Related news"
+                    }
+                },
+                "relevant_news_list": {
+                    "labels": {
+                        "relevant_news": "Relevant news"
+                    }
+                },
+                "social_share": {
+                    "labels": {
+                        "share": "Share",
+                        "copied": "Copied",
+                        "copy": "Copy"
+                    }
+                },
+                "view": {
+                    "image_gallery": {
+                        "labels": {
+                            "no_gallery_image_found": "No gallery image found"
+                        }
+                    },
+                    "story": {
+                        "labels": {
+                            "source": "Source"
+                        }
+                    }
+                },
+                "writer_constributer": {
+                    "labels": {
+                        "by": "By",
+                        "contributors": "Contributors"
+                    }
+                }
             }
         }
     },
     "pages": {
-        "index": {
-            "search_placeholder": "Search page...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created",
-            "is_default": "Is Default",
-            "no_page_found": "No page found."
-        },
-        "details": {
-            "title": "Page Details",
-            "tree": "Tree",
-            "seo": "SEO",
-            "main_content": "Main Content",
-            "sidebar_content": "Sidebar Content"
-        },
-        "form": {
-            "create_page_title": "Page create",
-            "edit_page_title": "Page edit",
-            "default_use_as": "Default use as",
-            "language_placeholder": "Select language",
-            "title_placeholder": "Enter title",
-            "brief": "Brief",
-            "brief_placeholder": "Enter brief",
-            "body": "Body",
-            "hierarchy": "Hierarchy",
-            "has_parent": "Has Parent",
-            "parent": "Parent",
-            "parent_placeholder": "Select parent",
-            "publish_settings": "Publish Settings",
-            "seo_settings": "SEO Settings",
-            "seo_title": "SEO Title",
-            "seo_title_placeholder": "Enter SEO title",
-            "seo_brief": "SEO Brief",
-            "seo_brief_placeholder": "Enter SEO brief",
-            "seo_keywords": "SEO Keywords",
-            "seo_keywords_placeholder": "Add keywords",
-            "validation": {
-                "brief_required": "Brief is required.",
-                "body_required": "Body is required.",
-                "page_required": "Page is required."
+        "auth": {
+            "email_verification": {
+                "page_title": "Email verification",
+                "image_alt": "User email verification",
+                "title": "Verify Your Email",
+                "description": "Before continuing, please check your email for a verification link.",
+                "resending_button": "Resending...",
+                "resend_button": "Resend Verification Email"
+            },
+            "forgot_password": {
+                "validation": {
+                    "email_is_required": "Email is required.",
+                    "email_must_not_exceed_200_characters": "Email must not exceed 200 characters."
+                },
+                "page_title": "Forgot password",
+                "image_alt": "Forgot Password",
+                "title": "Forgot Password",
+                "description": "Enter your email to receive a reset link.",
+                "email_placeholder": "example@email.com",
+                "sending_button": "Sending...",
+                "send_reset_link_button": "Send Reset Link",
+                "already_have_account": "Already have an account?",
+                "back_to_login": "Back to login"
+            },
+            "login": {
+                "validation": {
+                    "email_is_required": "Email is required.",
+                    "email_must_not_exceed_200_characters": "Email must not exceed 200 characters.",
+                    "password_is_required": "Password is required."
+                },
+                "page_title": "Login",
+                "image_alt": "Login",
+                "title": "Welcome",
+                "description": "Please log in to continue.",
+                "email_placeholder": "Enter your email",
+                "password_placeholder": "Enter your password",
+                "hide_password": "Hide password",
+                "show_password": "Show password",
+                "remember_me": "Remember me",
+                "logging_in_button": "Logging In...",
+                "login_button": "Log In",
+                "create_account": "Create an account",
+                "forgot_password": "Forgot password?"
+            },
+            "register": {
+                "validation": {
+                    "name_is_required": "Name is required.",
+                    "name_must_not_exceed_200_characters": "Name must not exceed 200 characters.",
+                    "email_is_required": "Email is required.",
+                    "email_must_not_exceed_200_characters": "Email must not exceed 200 characters.",
+                    "password_is_required": "Password is required.",
+                    "password_confirmation_is_required": "Password confirmation is required.",
+                    "password_confirmation_does_not_match": "Password confirmation does not match."
+                },
+                "page_title": "Register",
+                "image_alt": "Register",
+                "title": "Create Account",
+                "description": "Fill in your details to get started.",
+                "name_placeholder": "Your full name",
+                "email_placeholder": "example@email.com",
+                "password_placeholder": "Enter password",
+                "hide_password": "Hide password",
+                "show_password": "Show password",
+                "password_confirmation_placeholder": "Confirm password",
+                "hide_confirm_password": "Hide confirm password",
+                "show_confirm_password": "Show confirm password",
+                "registering_button": "Registering...",
+                "register_button": "Register",
+                "already_have_account": "Already have an account?",
+                "login_here": "Log in here"
+            },
+            "reset_password": {
+                "validation": {
+                    "password_is_required": "Password is required.",
+                    "password_confirmation_is_required": "Password confirmation is required.",
+                    "password_confirmation_does_not_match": "Password confirmation does not match."
+                },
+                "page_title": "Reset Password",
+                "image_alt": "Reset Password",
+                "title": "Reset Password",
+                "description": "Enter a new password to reset your account.",
+                "password_placeholder": "Enter new password",
+                "hide_password": "Hide password",
+                "show_password": "Show password",
+                "password_confirmation_placeholder": "Confirm password",
+                "hide_confirm_password": "Hide confirm password",
+                "show_confirm_password": "Show confirm password",
+                "resetting_button": "Resetting...",
+                "reset_button": "Reset Password",
+                "already_have_account": "Already have an account?",
+                "back_to_login": "Back to login"
             }
         },
-        "delete_modal": {
-            "title": "Delete Page",
-            "body": "This action cannot be undone."
+        "auth_user": {
+            "account": {
+                "page_title": "Account",
+                "tabs": {
+                    "info": "Info",
+                    "update": "Update",
+                    "activity_logs": "Activity Logs"
+                },
+                "profile_image_alt": "User profile image",
+                "email_verified": "Email verified",
+                "not_verified": "Not verified",
+                "change_password": "Change password",
+                "current_password": "Current Password",
+                "hide_current_password": "Hide current password",
+                "show_current_password": "Show current password",
+                "new_password": "New Password",
+                "hide_password": "Hide password",
+                "show_password": "Show password",
+                "confirm_password": "Confirm Password",
+                "hide_confirm_password": "Hide confirm password",
+                "show_confirm_password": "Show confirm password",
+                "validation": {
+                    "name_is_required": "Name is required.",
+                    "email_is_required": "Email is required.",
+                    "current_password_is_required": "Current password is required.",
+                    "password_is_required": "Password is required.",
+                    "password_confirmation_is_required": "Password confirmation is required.",
+                    "password_confirmation_does_not_match": "Password confirmation does not match."
+                },
+                "labels": {
+                    "name": "Name",
+                    "email": "Email"
+                },
+                "actions": {
+                    "updating": "Updating...",
+                    "update": "Update"
+                }
+            },
+            "dashboard": {
+                "navigation": {
+                    "dashboard": "Dashboard"
+                },
+                "labels": {
+                    "dashboard": "Dashboard"
+                }
+            },
+            "profile": {
+                "tabs": {
+                    "profile": "Profile",
+                    "update": "Update",
+                    "activity_logs": "Activity Logs"
+                },
+                "profile_image_alt": "User profile image",
+                "name_placeholder": "Enter name",
+                "gender_placeholder": "Select gender",
+                "religion_placeholder": "Select religion",
+                "marital_status_placeholder": "Select marital status",
+                "address_placeholder": "Enter address",
+                "validation": {
+                    "name_is_required": "Name is required.",
+                    "gender_is_required": "Gender is required.",
+                    "marital_status_is_required": "Marital status is required.",
+                    "religion_is_required": "Religion is required."
+                },
+                "navigation": {
+                    "profile": "Profile"
+                },
+                "labels": {
+                    "name": "Name",
+                    "gender": "Gender",
+                    "not_available": "N/A",
+                    "marital_status": "Marital Status",
+                    "mobile": "Mobile",
+                    "birth_date": "Birth Date",
+                    "age": "Age",
+                    "address": "Address",
+                    "religion": "Religion",
+                    "profile_image": "Profile Image"
+                },
+                "actions": {
+                    "updating": "Updating...",
+                    "update": "Update"
+                }
+            }
         },
-        "trash_modal": {
-            "title": "Trash Page",
-            "body": "This action can be undone by restoring page."
-        },
-        "restore_modal": {
-            "title": "Restore Page",
-            "body": "This action can be undone by trashing page."
-        }
-    },
-    "locations": {
-        "index": {
-            "search_placeholder": "Search location...",
-            "parent_placeholder": "Parent",
-            "category_placeholder": "Category",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Location Details",
-            "parent": "Parent",
-            "category": "Category",
-            "tree": "Tree",
-            "map_information": "Map Information",
-            "latitude": "Latitude",
-            "longitude": "Longitude",
-            "boundary_north": "Boundary North",
-            "boundary_south": "Boundary South",
-            "boundary_east": "Boundary East",
-            "boundary_west": "Boundary West",
-            "boundary_geojson": "Boundary GeoJSON",
-            "seo": "SEO",
-            "sitemap_and_feeds": "Sitemap & Feeds",
-            "sitemap_url": "Sitemap url",
-            "feeds_rss": "Feeds (RSS)",
-            "feeds_atom": "Feeds (ATOM)",
-            "recent_news": "Recent news",
-            "location_image_alt": "Location image",
-            "parent_location": "Parent Location",
-            "view_location": "View Location"
-        },
-        "form": {
-            "create_page_title": "Location create",
-            "edit_page_title": "Location edit",
-            "language_placeholder": "Select language",
-            "name_placeholder": "Enter name",
-            "brief": "Brief",
-            "brief_placeholder": "Enter brief",
-            "hierarchy": "Hierarchy",
-            "has_parent": "Has Parent",
-            "parent": "Parent",
-            "parent_placeholder": "Select parent",
-            "category": "Category",
-            "category_placeholder": "Select category",
-            "map_information": "Map Information",
-            "latitude": "Latitude",
-            "latitude_placeholder": "Enter latitude",
-            "longitude": "Longitude",
-            "longitude_placeholder": "Enter longitude",
-            "boundary_north": "Boundary North",
-            "boundary_north_placeholder": "Enter boundary north",
-            "boundary_south": "Boundary South",
-            "boundary_south_placeholder": "Enter boundary south",
-            "boundary_east": "Boundary East",
-            "boundary_east_placeholder": "Enter boundary east",
-            "boundary_west": "Boundary West",
-            "boundary_west_placeholder": "Enter boundary west",
-            "boundary_geojson": "Boundary GeoJSON",
-            "boundary_geojson_placeholder": "Enter boundary GeoJSON",
-            "seo_settings": "SEO Settings",
-            "seo_title": "SEO Title",
-            "seo_title_placeholder": "Enter SEO title",
-            "seo_brief": "SEO Brief",
-            "seo_brief_placeholder": "Enter SEO brief",
-            "seo_keywords": "SEO Keywords",
-            "seo_keywords_placeholder": "Add keywords"
-        },
-        "delete_modal": {
-            "title": "Delete Location"
-        }
-    },
-    "medias": {
-        "index": {
-            "search_placeholder": "Search media...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Media Details",
-            "collection_name": "Collection name",
-            "model_type": "Model type",
-            "mime_type": "Mime type",
-            "disk": "Disk",
-            "size": "Size",
-            "custom_properties": "Custom properties",
-            "generated_conversions": "Generated conversions",
-            "media_url": "Media url",
-            "system_information": "System Information",
-            "not_available": "Not available."
-        },
-        "delete_modal": {
-            "title": "Delete Media"
-        }
-    },
-    "menus": {
-        "index": {
-            "search_placeholder": "Search menu...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created"
-        },
-        "details": {
-            "title": "Menu Details"
-        },
-        "form": {
-            "create_page_title": "Menu create",
-            "edit_page_title": "Menu edit",
-            "language_placeholder": "Select language",
-            "name_placeholder": "Enter name",
-            "menu_type": "Menu type",
-            "menu_type_placeholder": "Select menu type"
-        },
-        "delete_modal": {
-            "title": "Delete Menu"
-        }
-    },
-    "tags": {
-        "index": {
-            "search_placeholder": "Search tag...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created",
-            "no_tag_found": "No tag found."
-        },
-        "details": {
-            "title": "Tag Details",
-            "seo": "SEO",
-            "recent_news": "Recent news",
-            "trend_information": "Trend Information",
-            "is_trend": "Is Trend",
-            "is_current_trend": "Is current trend",
-            "sitemap": "Sitemap",
-            "sitemap_url": "Sitemap url",
-            "feeds_rss": "Feeds (RSS)",
-            "feeds_atom": "Feeds (ATOM)",
-            "tag_image_alt": "Tag image"
-        },
-        "form": {
-            "create_page_title": "Tag create",
-            "edit_page_title": "Tag edit",
-            "language_placeholder": "Select language",
-            "name_placeholder": "Enter name",
-            "brief": "Brief",
-            "brief_placeholder": "Enter brief",
-            "seo_settings": "SEO Settings",
-            "seo_title": "SEO Title",
-            "seo_title_placeholder": "Enter SEO title",
-            "seo_brief": "SEO Brief",
-            "seo_brief_placeholder": "Enter SEO brief",
-            "seo_keywords": "SEO Keywords",
-            "seo_keywords_placeholder": "Add keywords"
-        },
-        "delete_modal": {
-            "title": "Delete Tag"
-        }
-    },
-    "trends": {
-        "index": {
-            "search_placeholder": "Search trend...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created",
-            "no_trend_found": "No trend found."
-        },
-        "details": {
-            "title": "Trend Details",
-            "is_current": "Is current",
-            "is_current_trend": "Is current trend",
-            "tag_information": "Tag Information"
-        },
-        "form": {
-            "create_page_title": "Trend create",
-            "edit_page_title": "Trend edit",
-            "tag_placeholder": "Select tag",
-            "is_current": "Is current"
-        },
-        "delete_modal": {
-            "title": "Delete Trend"
-        }
-    },
-    "users": {
-        "index": {
-            "search_placeholder": "Search user...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created",
-            "role": "Role",
-            "no_user_found": "No user found."
-        },
-        "details": {
-            "title": "User Details",
-            "status": "Status"
-        },
-        "form": {
-            "create_page_title": "User create",
-            "edit_page_title": "User edit",
-            "name_placeholder": "Enter name",
-            "email_placeholder": "Enter email",
-            "address_placeholder": "Enter address",
-            "new_password_placeholder": "Enter new password",
-            "confirm_password_placeholder": "Confirm password",
-            "user_role": "User Role",
-            "set_as_verify_email": "Set as verify email"
-        },
-        "buttons": {
-            "active": "Active",
-            "inactive": "Inactive",
-            "activating": "Activating...",
-            "inactivating": "Inactivating..."
-        },
-        "delete_modal": {
-            "title": "Delete User"
-        }
-    },
-    "settings": {
-        "index": {
-            "page_title": "Settings",
-            "title": "Settings",
-            "search_placeholder": "Search setting...",
-            "apply_filter": "Apply Filter",
-            "applying_filter": "Applying Filter...",
-            "created": "Created",
-            "no_setting_found": "No setting found."
-        },
-        "details": {
-            "title": "Setting Details",
-            "setting_image_alt": "Setting image"
-        },
-        "buttons": {
-            "edit": "Edit",
-            "create": "Create",
-            "delete": "Delete",
-            "deleting": "Deleting",
-            "saving": "Saving",
-            "updating": "Updating",
-            "logout": "Logout",
-            "cancel": "Cancel",
-            "save": "Save",
-            "update": "Update",
-            "logging_out": "Logging out",
-            "download": "Download",
-            "loading": "Loading",
-            "load_more": "Load More",
-            "load_less": "Load Less",
-            "close": "Close",
-            "select": "Select",
-            "add_image": "Add image",
-            "drag_and_sequence": "Drag & Sequence",
-            "open_media_library": "Open Media Library",
-            "trash": "Trash",
-            "trashing": "Trashing...",
-            "restore": "Restore",
-            "restoring": "Restoring..."
-        },
-        "logout_modal": {
-            "title": "Logout Confirmation",
-            "body": "Are you sure you want to logout?"
-        },
-        "delete_confirmation_modal": {
-            "title": "Delete Confirmation",
-            "body": "Are you sure you want to delete this",
-            "irreversible_body": "This action cannot be undone."
-        },
-        "table": {
-            "columns": {
-                "sl": "sl",
-                "name": "Name",
-                "language": "Language",
-                "position": "Position",
-                "parent": "Parent",
-                "description": "Description",
-                "causer": "Causer",
-                "created_at": "Created at",
-                "action": "Action",
-                "page": "Page",
-                "section": "Section"
+        "back_office": {
+            "activity_logs": {
+                "details": {
+                    "navigation": {
+                        "activity_logs": "Activity Logs"
+                    },
+                    "page_title": "Activity log details",
+                    "title": "Activity Log Details",
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "basic_information": "Basic Information",
+                    "log_name": "Log Name",
+                    "labels": {
+                        "not_available": "N/A",
+                        "system": "System"
+                    },
+                    "table": {
+                        "columns": {
+                            "causer": "Causer",
+                            "description": "Description",
+                            "created_at": "Created at"
+                        }
+                    },
+                    "properties": "Properties",
+                    "attribute_changes": "Attribute Changes",
+                    "system_information": "System Information",
+                    "delete_modal": {
+                        "title": "Delete Activity Log",
+                        "body": "Are you sure you want to delete this activity log?"
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "activity_logs": "Activity Logs"
+                    },
+                    "page_title": "Activity Logs",
+                    "title": "Activity Logs",
+                    "labels": {
+                        "per_page": "Per page",
+                        "no_record_found": "No record found"
+                    },
+                    "subject_placeholder": "Subject",
+                    "table": {
+                        "columns": {
+                            "causer": "Causer",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "search_placeholder": "Search logs...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "details": {
+                        "log_name": "Log Name"
+                    },
+                    "event": "Event",
+                    "created": "Created",
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "delete_modal": {
+                        "title": "Delete Activity Log",
+                        "irreversible_body": "This action cannot be undone."
+                    }
+                }
+            },
+            "breaking_news": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "title": "Title",
+                        "published": "Published",
+                        "yes": "Yes",
+                        "no": "No"
+                    },
+                    "form": {
+                        "create_page_title": "Breaking news create",
+                        "language_placeholder": "Select language",
+                        "title_placeholder": "Enter title",
+                        "news_settings": "News Settings",
+                        "news_placeholder": "Select news",
+                        "publish_settings": "Publish Settings"
+                    },
+                    "validation": {
+                        "language_is_required": "Language is required.",
+                        "title_is_required": "Title is required."
+                    },
+                    "navigation": {
+                        "breaking_news": "Breaking News",
+                        "news": "News"
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "navigation": {
+                        "breaking_news": "Breaking News",
+                        "news": "News",
+                        "activity_logs": "Activity Logs"
+                    },
+                    "labels": {
+                        "details": "details",
+                        "basic_information": "Basic Information",
+                        "title": "Title",
+                        "not_available": "N/A",
+                        "language": "Language",
+                        "published": "Published",
+                        "yes": "Yes",
+                        "no": "No",
+                        "url": "URL",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "title": "Breaking news Details",
+                    "table": {
+                        "menus": {
+                            "edit": "Edit"
+                        },
+                        "columns": {
+                            "created_at": "Created at"
+                        }
+                    },
+                    "actions": {
+                        "delete": "Delete",
+                        "restore": "Restore",
+                        "trash": "Trash",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting",
+                        "trashing": "Trashing...",
+                        "restoring": "Restoring..."
+                    },
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "System Information"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete breaking news"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    },
+                    "trash_modal": {
+                        "title": "Trash breaking news",
+                        "body": "This breaking news will be moved to trash."
+                    },
+                    "restore_modal": {
+                        "title": "Restore breaking news",
+                        "body": "This action can be undone by deleting breaking news."
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "breaking_news": "Breaking News",
+                        "categories": "Categories",
+                        "locations": "Locations",
+                        "events": "Events"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "delete": "Delete",
+                        "restore": "Restore",
+                        "trash": "Trash",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting",
+                        "trashing": "Trashing...",
+                        "restoring": "Restoring..."
+                    },
+                    "labels": {
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "news_type": "News type",
+                        "language": "Language",
+                        "title": "Title",
+                        "is_published": "Is Published",
+                        "not_available": "N/A",
+                        "yes": "Yes",
+                        "no": "No",
+                        "no_record_found": "No record found"
+                    },
+                    "search_placeholder": "Search news...",
+                    "activity_logs": {
+                        "index": {
+                            "applying_filter": "Applying Filter...",
+                            "apply_filter": "Apply Filter",
+                            "created": "Created"
+                        }
+                    },
+                    "table": {
+                        "columns": {
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete breaking news"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    },
+                    "trash_modal": {
+                        "title": "Trash breaking news",
+                        "body": "This breaking news will be moved to trash."
+                    },
+                    "restore_modal": {
+                        "title": "Restore breaking news",
+                        "body": "This action can be undone by deleting breaking news."
+                    }
+                }
+            },
+            "categories": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "name": "Name"
+                    },
+                    "form": {
+                        "create_page_title": "Category create",
+                        "language_placeholder": "Select language",
+                        "name_placeholder": "Enter name",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief",
+                        "hierarchy": "Hierarchy",
+                        "has_parent": "Has Parent",
+                        "parent": "Parent",
+                        "parent_placeholder": "Select parent",
+                        "seo_settings": "SEO Settings",
+                        "seo_title": "SEO Title",
+                        "seo_title_placeholder": "Enter SEO title",
+                        "seo_brief": "SEO Brief",
+                        "seo_brief_placeholder": "Enter SEO brief",
+                        "seo_keywords": "SEO Keywords",
+                        "seo_keywords_placeholder": "Add keywords"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "language_is_required": "Language is required.",
+                        "parent_category_is_required": "Parent category is required."
+                    },
+                    "navigation": {
+                        "categories": "Categories"
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "language": "Language",
+                        "title": "Title",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "navigation": {
+                        "categories": "Categories",
+                        "activity_logs": "Activity Logs"
+                    },
+                    "title": "Category Details",
+                    "table": {
+                        "menus": {
+                            "edit": "Edit"
+                        },
+                        "columns": {
+                            "created_at": "Created at"
+                        }
+                    },
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "parent": "Parent",
+                    "form": {
+                        "brief": "Brief",
+                        "seo_keywords": "SEO Keywords"
+                    },
+                    "tree": "Tree",
+                    "seo": "SEO",
+                    "sitemap_and_feeds": "Sitemap & Feeds",
+                    "sitemap_url": "Sitemap URL",
+                    "feeds_rss": "Feeds (RSS)",
+                    "feeds_atom": "Feeds (ATOM)",
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "System Information"
+                        }
+                    },
+                    "recent_locations": "Recent Locations",
+                    "delete_modal": {
+                        "title": "Delete Category"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "categories": "Categories"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "labels": {
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "language": "Language",
+                        "not_available": "N/A",
+                        "no_record_found": "No record found"
+                    },
+                    "parent_placeholder": "Parent",
+                    "search_placeholder": "Search category...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "table": {
+                        "columns": {
+                            "name": "Name",
+                            "parent": "Parent",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "created": "Created",
+                    "delete_modal": {
+                        "title": "Delete Category"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
+            },
+            "contributors": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "name": "Name",
+                        "profile_image": "Profile Image"
+                    },
+                    "form": {
+                        "create_page_title": "Contributor create",
+                        "language_placeholder": "Select language",
+                        "name_placeholder": "Enter name",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief",
+                        "profile_details": "Profile details",
+                        "profile_image_section": "Profile Image",
+                        "seo_settings": "SEO Settings",
+                        "seo_title": "SEO Title",
+                        "seo_title_placeholder": "Enter SEO title",
+                        "seo_brief": "SEO Brief",
+                        "seo_brief_placeholder": "Enter SEO brief",
+                        "seo_keywords": "SEO Keywords",
+                        "seo_keywords_placeholder": "Add keywords"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "language_is_required": "Language is required."
+                    },
+                    "navigation": {
+                        "contributors": "Contributors"
+                    },
+                    "auth": {
+                        "profile": {
+                            "profile_image_alt": "User profile image"
+                        }
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "name": "Name",
+                        "profile_image": "Profile Image"
+                    },
+                    "form": {
+                        "create_page_title": "Contributor create",
+                        "language_placeholder": "Select language",
+                        "name_placeholder": "Enter name",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief",
+                        "profile_details": "Profile details",
+                        "profile_image_section": "Profile Image",
+                        "seo_settings": "SEO Settings",
+                        "seo_title": "SEO Title",
+                        "seo_title_placeholder": "Enter SEO title",
+                        "seo_brief": "SEO Brief",
+                        "seo_brief_placeholder": "Enter SEO brief",
+                        "seo_keywords": "SEO Keywords",
+                        "seo_keywords_placeholder": "Add keywords"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "language_is_required": "Language is required."
+                    },
+                    "navigation": {
+                        "contributors": "Contributors"
+                    },
+                    "auth": {
+                        "profile": {
+                            "profile_image_alt": "User profile image"
+                        }
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "contributors": "Contributors"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "labels": {
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "language": "Language",
+                        "not_available": "N/A",
+                        "no_record_found": "No record found"
+                    },
+                    "search_placeholder": "Search contributor...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "table": {
+                        "columns": {
+                            "name": "Name",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "created": "Created",
+                    "delete_modal": {
+                        "title": "Delete Contributor"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
+            },
+            "events": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "name": "Name"
+                    },
+                    "form": {
+                        "create_page_title": "Event create",
+                        "language_placeholder": "Select language",
+                        "name_placeholder": "Enter name",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief",
+                        "banner_image_section": "Banner Image",
+                        "desktop_banner_image": "Desktop Banner Image",
+                        "mobile_banner_image": "Mobile Banner Image",
+                        "seo_settings": "SEO Settings",
+                        "seo_title": "SEO Title",
+                        "seo_title_placeholder": "Enter SEO title",
+                        "seo_brief": "SEO Brief",
+                        "seo_brief_placeholder": "Enter SEO brief",
+                        "seo_keywords": "SEO Keywords",
+                        "seo_keywords_placeholder": "Add keywords"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "language_is_required": "Language is required."
+                    },
+                    "navigation": {
+                        "events": "Events"
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "language": "Language",
+                        "title": "Title",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "navigation": {
+                        "events": "Events",
+                        "activity_logs": "Activity Logs"
+                    },
+                    "title": "Event Details",
+                    "table": {
+                        "menus": {
+                            "edit": "Edit"
+                        },
+                        "columns": {
+                            "created_at": "Created at"
+                        }
+                    },
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "form": {
+                        "brief": "Brief",
+                        "desktop_banner_image": "Desktop Banner Image",
+                        "mobile_banner_image": "Mobile Banner Image",
+                        "seo_keywords": "SEO Keywords"
+                    },
+                    "seo": "SEO",
+                    "sitemap_and_feeds": "Sitemap & Feeds",
+                    "sitemap_url": "Sitemap URL",
+                    "feeds_rss": "Feeds (RSS)",
+                    "feeds_atom": "Feeds (ATOM)",
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "System Information"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete Event"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "events": "Events"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "labels": {
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "language": "Language",
+                        "not_available": "N/A",
+                        "no_record_found": "No record found"
+                    },
+                    "search_placeholder": "Search event...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "table": {
+                        "columns": {
+                            "name": "Name",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "created": "Created",
+                    "delete_modal": {
+                        "title": "Delete Event"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
+            },
+            "languages": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "name": "Name"
+                    },
+                    "form": {
+                        "create_page_title": "Language create",
+                        "name_placeholder": "Enter name",
+                        "code": "Code",
+                        "code_placeholder": "Enter code",
+                        "locale": "Locale",
+                        "locale_placeholder": "Enter locale",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "code_is_required": "Code is required.",
+                        "locale_is_required": "Locale is required."
+                    },
+                    "navigation": {
+                        "languages": "Languages"
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "navigation": {
+                        "languages": "Languages",
+                        "activity_logs": "Activity Logs"
+                    },
+                    "title": "Language Details",
+                    "table": {
+                        "menus": {
+                            "edit": "Edit"
+                        },
+                        "columns": {
+                            "created_at": "Created at"
+                        }
+                    },
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "code": "Code",
+                    "locale": "Locale",
+                    "form": {
+                        "brief": "Brief"
+                    },
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "System Information"
+                        }
+                    },
+                    "recent_categories": "Recent Categories",
+                    "delete_modal": {
+                        "title": "Delete Language"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "languages": "Languages"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "labels": {
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "not_available": "N/A",
+                        "no_record_found": "No record found"
+                    },
+                    "search_placeholder": "Search language...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "table": {
+                        "columns": {
+                            "name": "Name",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "details": {
+                        "code": "Code",
+                        "locale": "Locale"
+                    },
+                    "created": "Created",
+                    "delete_modal": {
+                        "title": "Delete Language"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
+            },
+            "locations": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "name": "Name"
+                    },
+                    "form": {
+                        "create_page_title": "Location create",
+                        "language_placeholder": "Select language",
+                        "name_placeholder": "Enter name",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief",
+                        "hierarchy": "Hierarchy",
+                        "has_parent": "Has Parent",
+                        "parent": "Parent",
+                        "parent_placeholder": "Select parent",
+                        "category": "Category",
+                        "category_placeholder": "Select category",
+                        "map_information": "Map Information",
+                        "latitude": "Latitude",
+                        "latitude_placeholder": "Enter latitude",
+                        "longitude": "Longitude",
+                        "longitude_placeholder": "Enter longitude",
+                        "boundary_north": "Boundary North",
+                        "boundary_north_placeholder": "Enter boundary north",
+                        "boundary_south": "Boundary South",
+                        "boundary_south_placeholder": "Enter boundary south",
+                        "boundary_east": "Boundary East",
+                        "boundary_east_placeholder": "Enter boundary east",
+                        "boundary_west": "Boundary West",
+                        "boundary_west_placeholder": "Enter boundary west",
+                        "boundary_geojson": "Boundary GeoJSON",
+                        "boundary_geojson_placeholder": "Enter boundary GeoJSON",
+                        "seo_settings": "SEO Settings",
+                        "seo_title": "SEO Title",
+                        "seo_title_placeholder": "Enter SEO title",
+                        "seo_brief": "SEO Brief",
+                        "seo_brief_placeholder": "Enter SEO brief",
+                        "seo_keywords": "SEO Keywords",
+                        "seo_keywords_placeholder": "Add keywords"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "language_is_required": "Language is required.",
+                        "parent_location_is_required": "Parent location is required."
+                    },
+                    "navigation": {
+                        "locations": "Locations"
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "not_available": "N/A",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "language": "Language",
+                        "title": "Title",
+                        "copied": "Copied",
+                        "copy": "Copy",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "navigation": {
+                        "locations": "Locations",
+                        "activity_logs": "Activity Logs"
+                    },
+                    "title": "Location Details",
+                    "table": {
+                        "menus": {
+                            "edit": "Edit"
+                        },
+                        "columns": {
+                            "created_at": "Created at"
+                        }
+                    },
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "parent": "Parent",
+                    "form": {
+                        "brief": "Brief",
+                        "seo_keywords": "SEO Keywords"
+                    },
+                    "tree": "Tree",
+                    "category": "Category",
+                    "map_information": "Map Information",
+                    "latitude": "Latitude",
+                    "longitude": "Longitude",
+                    "boundary_north": "Boundary North",
+                    "boundary_south": "Boundary South",
+                    "boundary_east": "Boundary East",
+                    "boundary_west": "Boundary West",
+                    "boundary_geojson": "Boundary GeoJSON",
+                    "seo": "SEO",
+                    "sitemap_and_feeds": "Sitemap & Feeds",
+                    "sitemap_url": "Sitemap URL",
+                    "feeds_rss": "Feeds (RSS)",
+                    "feeds_atom": "Feeds (ATOM)",
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "System Information"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete Location"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "locations": "Locations"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "labels": {
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "language": "Language",
+                        "not_available": "N/A",
+                        "no_record_found": "No record found"
+                    },
+                    "parent_placeholder": "Parent",
+                    "category_placeholder": "Category",
+                    "search_placeholder": "Search location...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "table": {
+                        "columns": {
+                            "name": "Name",
+                            "parent": "Parent",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "created": "Created",
+                    "delete_modal": {
+                        "title": "Delete Location"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
+            },
+            "medias": {
+                "details": {
+                    "navigation": {
+                        "medias": "Media"
+                    },
+                    "labels": {
+                        "details": "details",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "yes": "Yes",
+                        "no": "No",
+                        "order_column": "Order Column",
+                        "created_by": "Created By"
+                    },
+                    "collection_name": "Collection name",
+                    "model_type": "Model type",
+                    "mime_type": "Mime type",
+                    "disk": "Disk",
+                    "size": "Size",
+                    "custom_properties": "Custom properties",
+                    "not_available": "Not available.",
+                    "generated_conversions": "Generated conversions",
+                    "media_url": "Media URL",
+                    "system_information": "System Information",
+                    "table": {
+                        "columns": {
+                            "created_at": "Created at"
+                        }
+                    },
+                    "activity_logs": {
+                        "index": {
+                            "title": "Activity Logs"
+                        }
+                    },
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "title": "Delete Confirmation",
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "medias": "Media"
+                    },
+                    "labels": {
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "no_record_found": "No record found"
+                    },
+                    "search_placeholder": "Search media...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "table": {
+                        "columns": {
+                            "sl": "sl",
+                            "created_at": "Created at",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "details": {
+                        "collection_name": "Collection name"
+                    },
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "delete_modal": {
+                        "title": "Delete Media"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
             },
             "menus": {
-                "details": "Details",
-                "edit": "Edit"
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "name": "Name"
+                    },
+                    "form": {
+                        "create_page_title": "Menu create",
+                        "language_placeholder": "Select language",
+                        "name_placeholder": "Enter name",
+                        "menu_type": "Menu type",
+                        "menu_type_placeholder": "Select menu type"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "language_is_required": "Language is required.",
+                        "menu_type_is_required": "Menu type is required."
+                    },
+                    "navigation": {
+                        "menus": "Menus"
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "menus": "Menus",
+                    "labels": {
+                        "details": "details",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "language": "Language",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "title": "Menu Details",
+                    "actions": {
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "add_menu_item": "Add Menu Item",
+                    "form": {
+                        "menu_type": "Menu type"
+                    },
+                    "menu_items": "Menu Items",
+                    "medias": {
+                        "details": {
+                            "system_information": "System Information"
+                        }
+                    },
+                    "table": {
+                        "columns": {
+                            "created_at": "Created at"
+                        }
+                    },
+                    "activity_logs": {
+                        "index": {
+                            "title": "Activity Logs"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete Menu"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "menus": "Menus",
+                    "actions": {
+                        "create": "Create",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "labels": {
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "language": "Language",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "no_record_found": "No record found"
+                    },
+                    "search_placeholder": "Search menu...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "table": {
+                        "columns": {
+                            "sl": "sl",
+                            "created_at": "Created at",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "details": {
+                        "menu_items": "Menu Items",
+                        "item": "Item",
+                        "add_menu_item": "Add Menu Item"
+                    },
+                    "delete_modal": {
+                        "title": "Delete Menu"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "menu_items": {
+                    "create": {
+                        "labels": {
+                            "edit": "edit",
+                            "details": "details",
+                            "basic_information": "Basic Information",
+                            "copied": "Copied",
+                            "language": "Language",
+                            "name": "Name",
+                            "yes": "Yes",
+                            "no": "No",
+                            "url": "URL"
+                        },
+                        "form": {
+                            "create_page_title": "Menu item create",
+                            "latest_url": "Latest URL",
+                            "home_url": "Home URL",
+                            "language_placeholder": "Select language",
+                            "name_placeholder": "Enter name",
+                            "position_placeholder": "Enter position",
+                            "is_custom_url": "Is custom URL",
+                            "model": "Model",
+                            "model_placeholder": "Select model",
+                            "model_id": "Model id",
+                            "tag_placeholder": "Select a tag",
+                            "category_placeholder": "Select a category",
+                            "page_placeholder": "Select a page",
+                            "url_placeholder": "Enter URL",
+                            "parent_placeholder": "Select menu item"
+                        },
+                        "validation": {
+                            "name_is_required": "Name is required.",
+                            "language_is_required": "Language is required.",
+                            "parent_menu_item_is_required": "Parent menu item is required.",
+                            "url_is_required": "URL is required.",
+                            "model_is_required": "Model is required.",
+                            "model_record_is_required": "Model record is required."
+                        },
+                        "menus": "Menus",
+                        "details": {
+                            "menu_items": "Menu Items"
+                        },
+                        "table": {
+                            "columns": {
+                                "position": "Position"
+                            }
+                        },
+                        "categories": {
+                            "form": {
+                                "hierarchy": "Hierarchy",
+                                "has_parent": "Has Parent",
+                                "parent": "Parent"
+                            }
+                        },
+                        "actions": {
+                            "saving": "Saving",
+                            "save": "Save"
+                        }
+                    },
+                    "details": {
+                        "menus": "Menus",
+                        "labels": {
+                            "details": "details",
+                            "basic_information": "Basic Information",
+                            "name": "Name",
+                            "not_available": "N/A",
+                            "language": "Language",
+                            "url": "URL",
+                            "created_by": "Created By",
+                            "updated_at": "Updated At",
+                            "updated_by": "Updated By"
+                        },
+                        "menu_items": "Menu Items",
+                        "title": "Menu Item Details",
+                        "actions": {
+                            "edit": "Edit",
+                            "delete": "Delete",
+                            "cancel": "Cancel",
+                            "deleting": "Deleting"
+                        },
+                        "categories": {
+                            "form": {
+                                "parent": "Parent"
+                            }
+                        },
+                        "table": {
+                            "columns": {
+                                "position": "Position",
+                                "created_at": "Created at"
+                            }
+                        },
+                        "form": {
+                            "model": "Model"
+                        },
+                        "public_url": "Public URL",
+                        "medias": {
+                            "details": {
+                                "system_information": "System Information"
+                            }
+                        },
+                        "activity_logs": {
+                            "index": {
+                                "title": "Activity Logs"
+                            }
+                        },
+                        "delete_modal": {
+                            "title": "Delete Menu Item"
+                        },
+                        "modals": {
+                            "delete_confirmation_modal": {
+                                "irreversible_body": "This action cannot be undone."
+                            }
+                        }
+                    },
+                    "index": {
+                        "menus": "Menus",
+                        "labels": {
+                            "details": "details",
+                            "per_page": "Per page",
+                            "created_by": "Created By",
+                            "language": "Language",
+                            "name": "Name",
+                            "not_available": "N/A",
+                            "no_record_found": "No record found"
+                        },
+                        "details": {
+                            "menu_items": "Menu Items"
+                        },
+                        "title": "Menu Items",
+                        "actions": {
+                            "create": "Create",
+                            "delete": "Delete",
+                            "cancel": "Cancel",
+                            "deleting": "Deleting"
+                        },
+                        "form": {
+                            "model": "Model"
+                        },
+                        "search_placeholder": "Search menu item...",
+                        "applying_filter": "Applying Filter...",
+                        "apply_filter": "Apply Filter",
+                        "table": {
+                            "columns": {
+                                "sl": "sl",
+                                "position": "Position",
+                                "created_at": "Created at",
+                                "action": "Action"
+                            },
+                            "menus": {
+                                "details": "Details",
+                                "edit": "Edit"
+                            }
+                        },
+                        "categories": {
+                            "form": {
+                                "parent": "Parent"
+                            }
+                        },
+                        "delete_modal": {
+                            "title": "Delete Menu Item"
+                        },
+                        "modals": {
+                            "delete_confirmation_modal": {
+                                "irreversible_body": "This action cannot be undone."
+                            }
+                        }
+                    }
+                }
+            },
+            "news": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "news": "News",
+                        "basic_information": "Basic Information",
+                        "news_type": "News type",
+                        "language": "Language",
+                        "title": "Title",
+                        "gallery_images": "Gallery images",
+                        "contributors": "Contributors",
+                        "relevant_news": "Relevant news",
+                        "related_news": "Related news",
+                        "source": "Source",
+                        "published": "Published",
+                        "yes": "Yes",
+                        "no": "No"
+                    },
+                    "form": {
+                        "create_page_title": "Create News",
+                        "validation": {
+                            "news_type_required": "News type is required.",
+                            "category_required": "Category is required.",
+                            "brief_required": "Brief is required.",
+                            "body_required": "Body is required.",
+                            "video_url_required": "Video URL is required.",
+                            "gallery_image_required": "Gallery image is required.",
+                            "use_one_feature_image": "Use at least one feature image.",
+                            "use_one_mobile_image": "Use at least one mobile image.",
+                            "feature_image_caption_required": "Feature image caption is required."
+                        },
+                        "news_type_placeholder": "Select news type",
+                        "language_placeholder": "Select language",
+                        "category": "Category",
+                        "category_placeholder": "Select category",
+                        "event": "Event",
+                        "event_placeholder": "Select event",
+                        "location": "Location",
+                        "location_placeholder": "Select location",
+                        "title_placeholder": "Enter title",
+                        "sub_title": "Subtitle",
+                        "sub_title_placeholder": "Enter subtitle",
+                        "content_shoulder": "Content Shoulder",
+                        "content_shoulder_placeholder": "Enter content shoulder",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief",
+                        "body": "Body",
+                        "video_url": "Video URL",
+                        "video_url_placeholder": "Enter video URL",
+                        "tags": "Tags",
+                        "tags_placeholder": "Select tags",
+                        "image_settings": "Image Settings",
+                        "feature_image": "Feature Image",
+                        "caption_placeholder": "Enter caption",
+                        "feature_image_mobile": "Mobile Feature Image",
+                        "contributor_settings": "Contributor Settings",
+                        "contributors_placeholder": "Select contributors",
+                        "writer": "Writer",
+                        "writer_placeholder": "Enter writer name",
+                        "extra_settings": "Extra Settings",
+                        "relevant_news_placeholder": "Select relevant news",
+                        "related_news_placeholder": "Select related news",
+                        "breaking_news_placeholder": "Select breaking news",
+                        "publish_settings": "Publish Settings",
+                        "source_placeholder": "Enter source",
+                        "seo_settings": "SEO Settings",
+                        "seo_title": "SEO Title",
+                        "seo_title_placeholder": "Enter SEO title",
+                        "seo_brief": "SEO Brief",
+                        "seo_brief_placeholder": "Enter SEO brief",
+                        "seo_keywords": "SEO Keywords",
+                        "seo_keywords_placeholder": "Add keywords"
+                    },
+                    "validation": {
+                        "language_is_required": "Language is required.",
+                        "title_is_required": "Title is required."
+                    },
+                    "app": {
+                        "breaking_news": "Breaking News"
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "not_available": "N/A",
+                        "details": "details",
+                        "news": "News",
+                        "basic_information": "Basic Information",
+                        "news_type": "News type",
+                        "language": "Language",
+                        "title": "Title",
+                        "contributors": "Contributors",
+                        "source": "Source",
+                        "published": "Published",
+                        "yes": "Yes",
+                        "no": "No",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By",
+                        "relevant_news": "Relevant news",
+                        "related_news": "Related news"
+                    },
+                    "page_title": "News Details",
+                    "actions": {
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "restore": "Restore",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting",
+                        "restoring": "Restoring..."
+                    },
+                    "form": {
+                        "category": "Category",
+                        "location": "Location",
+                        "event": "Event",
+                        "sub_title": "Subtitle",
+                        "content_shoulder": "Content Shoulder",
+                        "brief": "Brief",
+                        "body": "Body",
+                        "video_url": "Video URL",
+                        "tags": "Tags",
+                        "feature_image": "Feature Image",
+                        "feature_image_mobile": "Mobile Feature Image",
+                        "seo_settings": "SEO Settings",
+                        "seo_keywords": "SEO Keywords",
+                        "writer": "Writer"
+                    },
+                    "no_tag_added": "No tag added.",
+                    "no_contributor_added": "No contributor added.",
+                    "medias": {
+                        "details": {
+                            "system_information": "System Information"
+                        }
+                    },
+                    "created_at": "Created At",
+                    "app": {
+                        "breaking_news": "Breaking News"
+                    },
+                    "news_placements": "News Placements",
+                    "activity_logs": {
+                        "index": {
+                            "title": "Activity Logs"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete News",
+                        "body": "This action can be undone by restoring news."
+                    },
+                    "restore_modal": {
+                        "title": "Restore News",
+                        "body": "This action can be undone by deleting news."
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "not_available": "N/A",
+                        "news": "News",
+                        "per_page": "Per page",
+                        "news_type": "News type",
+                        "language": "Language",
+                        "title": "Title",
+                        "is_published": "Is Published",
+                        "yes": "Yes",
+                        "no": "No",
+                        "details": "details",
+                        "no_record_found": "No record found",
+                        "actions": "Actions"
+                    },
+                    "actions": {
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "restore": "Restore",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting...",
+                        "restoring": "Restoring...",
+                        "create": "Create"
+                    },
+                    "created_by_placeholder": "Created by",
+                    "form": {
+                        "category": "Category",
+                        "location": "Location",
+                        "event": "Event"
+                    },
+                    "search_placeholder": "Search news...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "created": "Created",
+                    "delete_modal": {
+                        "title": "Delete News",
+                        "body": "This action can be undone by restoring news."
+                    },
+                    "restore_modal": {
+                        "title": "Restore News",
+                        "body": "This action can be undone by deleting news."
+                    }
+                },
+                "news_placement": {
+                    "details": {
+                        "labels": {
+                            "not_available": "N/A",
+                            "news": "News",
+                            "details": "details",
+                            "basic_information": "Basic Information",
+                            "system": "System",
+                            "created_by": "Created By",
+                            "updated_at": "Updated At",
+                            "updated_by": "Updated By"
+                        },
+                        "placement_details": {
+                            "page_title": "News Placement details",
+                            "heading": "News Placement Details",
+                            "position": "Position",
+                            "delete_modal": {
+                                "title": "Delete news placement",
+                                "message": "Delete this news placement",
+                                "irreversible_body": "This action cannot be undone."
+                            }
+                        },
+                        "actions": {
+                            "delete": "Delete",
+                            "cancel": "Cancel",
+                            "deleting": "Deleting"
+                        },
+                        "table": {
+                            "columns": {
+                                "page": "Page",
+                                "section": "Section"
+                            }
+                        },
+                        "form": {
+                            "category": "Category"
+                        },
+                        "created_at": "Created At",
+                        "activity_logs": {
+                            "index": {
+                                "title": "Activity Logs"
+                            }
+                        }
+                    },
+                    "index": {
+                        "placements": {
+                            "page_title_suffix": "news placement",
+                            "auto_creating": "Auto Creating...",
+                            "auto_create": "Auto Create",
+                            "save_all": "Save All",
+                            "home_lead_news_placements": "Home Lead News Placements",
+                            "home_category_news_placements": "Home Category News Placements",
+                            "category_lead_news_placements": "Category Lead News Placements"
+                        },
+                        "labels": {
+                            "news": "News"
+                        },
+                        "actions": {
+                            "saving": "Saving"
+                        }
+                    }
+                }
+            },
+            "pages": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "page": "Page",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "title": "Title",
+                        "published": "Published",
+                        "yes": "Yes",
+                        "no": "No"
+                    },
+                    "form": {
+                        "create_page_title": "Page create",
+                        "validation": {
+                            "brief_required": "Brief is required.",
+                            "body_required": "Body is required.",
+                            "page_required": "Page is required."
+                        },
+                        "default_use_as": "Default use as",
+                        "language_placeholder": "Select language",
+                        "title_placeholder": "Enter title",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief",
+                        "body": "Body",
+                        "hierarchy": "Hierarchy",
+                        "has_parent": "Has Parent",
+                        "parent": "Parent",
+                        "parent_placeholder": "Select parent",
+                        "publish_settings": "Publish Settings",
+                        "seo_settings": "SEO Settings",
+                        "seo_title": "SEO Title",
+                        "seo_title_placeholder": "Enter SEO title",
+                        "seo_brief": "SEO Brief",
+                        "seo_brief_placeholder": "Enter SEO brief",
+                        "seo_keywords": "SEO Keywords",
+                        "seo_keywords_placeholder": "Add keywords"
+                    },
+                    "validation": {
+                        "language_is_required": "Language is required.",
+                        "title_is_required": "Title is required."
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "page": "Page",
+                        "details": "details",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "not_available": "N/A",
+                        "title": "Title",
+                        "tree": "Tree",
+                        "seo_settings": "SEO Settings",
+                        "brief": "Brief",
+                        "keywords": "Keywords"
+                    },
+                    "form": {
+                        "edit_page_title": "Page edit",
+                        "default_use_as": "Default use as",
+                        "body": "Body"
+                    },
+                    "actions": {
+                        "edit": "Edit",
+                        "trash": "Trash",
+                        "restore": "Restore",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "trashing": "Trashing..."
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "page": "Page",
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "language": "Language",
+                        "title": "Title",
+                        "is_published": "Is Published",
+                        "not_available": "N/A",
+                        "yes": "Yes",
+                        "no": "No"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "edit": "Edit",
+                        "trash": "Trash",
+                        "restore": "Restore",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "trashing": "Trashing...",
+                        "restoring": "Restoring...",
+                        "deleting": "Deleting"
+                    },
+                    "search_placeholder": "Search page...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "form": {
+                        "parent": "Parent"
+                    },
+                    "created": "Created",
+                    "is_default": "Is Default",
+                    "news": {
+                        "index": {
+                            "actions": "Actions"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "no_page_found": "No page found.",
+                    "trash_modal": {
+                        "title": "Trash Page",
+                        "body": "This action can be undone by restoring page."
+                    },
+                    "restore_modal": {
+                        "title": "Restore Page",
+                        "body": "This action can be undone by trashing page."
+                    },
+                    "delete_modal": {
+                        "title": "Delete Page",
+                        "body": "This action cannot be undone."
+                    }
+                }
+            },
+            "settings": {
+                "create": {
+                    "actions": {
+                        "edit": "Edit",
+                        "saving": "Saving",
+                        "save": "Save"
+                    },
+                    "form": {
+                        "create_page_title": "Setting create",
+                        "validation": {
+                            "group_required": "Group is required.",
+                            "label_required": "Label is required.",
+                            "type_required": "Type is required.",
+                            "value_required": "Value is required.",
+                            "value_must_be_integer": "Value must be an integer.",
+                            "value_must_be_valid_number": "Value must be a valid number.",
+                            "value_must_be_valid_json_array": "Value must be a valid JSON array.",
+                            "value_must_be_valid_json": "Value must be valid JSON.",
+                            "value_must_be_valid_url": "Value must be a valid URL.",
+                            "value_must_be_valid_color": "Value must be a valid color code."
+                        },
+                        "invalid_setting_data": "Invalid setting data",
+                        "invalid_setting_data_body": "Setting group and label are required. Please go back and select a valid setting.",
+                        "json_placeholder": "Example: {\"key\": \"value\"} or [\"item1\", \"item2\"]",
+                        "url_placeholder": "https://example.com",
+                        "color_placeholder": "#000000"
+                    },
+                    "labels": {
+                        "settings": "Settings",
+                        "basic_information": "Basic Information",
+                        "true": "True",
+                        "false": "False"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "not_available": "N/A",
+                        "true": "True",
+                        "false": "False",
+                        "settings": "Settings",
+                        "basic_information": "Basic Information",
+                        "group": "Group",
+                        "label": "Label",
+                        "type": "Type",
+                        "value": "Value",
+                        "system_information": "System Information",
+                        "created_at": "Created At",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "title": "Setting Details",
+                    "actions": {
+                        "edit": "Edit"
+                    },
+                    "setting_image_alt": "Setting image",
+                    "activity_logs": {
+                        "index": {
+                            "title": "Activity Logs"
+                        }
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "settings": "Settings",
+                        "per_page": "Per page",
+                        "group": "Group",
+                        "label": "Label",
+                        "not_available": "N/A"
+                    },
+                    "page_title": "Settings",
+                    "title": "Settings",
+                    "search_placeholder": "Search setting...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "created": "Created",
+                    "news": {
+                        "index": {
+                            "actions": "Actions"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "actions": {
+                        "edit": "Edit"
+                    },
+                    "no_setting_found": "No setting found."
+                }
+            },
+            "tags": {
+                "create": {
+                    "actions": {
+                        "edit": "Edit",
+                        "saving": "Saving",
+                        "save": "Save"
+                    },
+                    "form": {
+                        "create_page_title": "Tag create",
+                        "language_placeholder": "Select language",
+                        "name_placeholder": "Enter name",
+                        "brief": "Brief",
+                        "brief_placeholder": "Enter brief",
+                        "seo_settings": "SEO Settings",
+                        "seo_title": "SEO Title",
+                        "seo_title_placeholder": "Enter SEO title",
+                        "seo_brief": "SEO Brief",
+                        "seo_brief_placeholder": "Enter SEO brief",
+                        "seo_keywords": "SEO Keywords",
+                        "seo_keywords_placeholder": "Add keywords"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "language_is_required": "Language is required."
+                    },
+                    "labels": {
+                        "tags": "Tags",
+                        "basic_information": "Basic Information",
+                        "language": "Language",
+                        "name": "Name"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "tags": "Tags",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "language": "Language",
+                        "yes": "Yes",
+                        "no": "No",
+                        "title": "Title",
+                        "system_information": "System Information",
+                        "created_at": "Created At",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "title": "Tag Details",
+                    "actions": {
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "form": {
+                        "brief": "Brief",
+                        "seo_keywords": "SEO Keywords"
+                    },
+                    "trend_information": "Trend Information",
+                    "is_trend": "Is Trend",
+                    "is_current_trend": "Is current trend",
+                    "seo": "SEO",
+                    "sitemap": "Sitemap",
+                    "sitemap_url": "Sitemap URL",
+                    "feeds_rss": "Feeds (RSS)",
+                    "feeds_atom": "Feeds (ATOM)",
+                    "activity_logs": {
+                        "index": {
+                            "title": "Activity Logs"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete Tag"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "tags": "Tags",
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "language": "Language",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "yes": "Yes",
+                        "no": "No"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "search_placeholder": "Search tag...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "details": {
+                        "is_trend": "Is Trend"
+                    },
+                    "created": "Created",
+                    "news": {
+                        "index": {
+                            "actions": "Actions"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "no_tag_found": "No tag found.",
+                    "delete_modal": {
+                        "title": "Delete Tag"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
+            },
+            "trends": {
+                "create": {
+                    "actions": {
+                        "edit": "Edit",
+                        "saving": "Saving",
+                        "save": "Save"
+                    },
+                    "form": {
+                        "create_page_title": "Trend create",
+                        "tag_placeholder": "Select tag",
+                        "is_current": "Is current"
+                    },
+                    "validation": {
+                        "tag_is_required": "Tag is required."
+                    },
+                    "labels": {
+                        "trends": "Trends",
+                        "basic_information": "Basic Information",
+                        "tag": "Tag"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "trends": "Trends",
+                        "basic_information": "Basic Information",
+                        "yes": "Yes",
+                        "no": "No",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "language": "Language",
+                        "title": "Title",
+                        "system_information": "System Information",
+                        "created_at": "Created At",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "title": "Trend Details",
+                    "actions": {
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "is_current_trend": "Is current trend",
+                    "tag_information": "Tag Information",
+                    "tags": {
+                        "form": {
+                            "brief": "Brief",
+                            "seo_keywords": "SEO Keywords"
+                        },
+                        "details": {
+                            "seo": "SEO",
+                            "sitemap": "Sitemap",
+                            "sitemap_url": "Sitemap URL",
+                            "feeds_rss": "Feeds (RSS)",
+                            "feeds_atom": "Feeds (ATOM)"
+                        }
+                    },
+                    "activity_logs": {
+                        "index": {
+                            "title": "Activity Logs"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete Trend"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "trends": "Trends",
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "language": "Language",
+                        "name": "Name",
+                        "not_available": "N/A"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "search_placeholder": "Search trend...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "created": "Created",
+                    "news": {
+                        "index": {
+                            "actions": "Actions"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "no_trend_found": "No trend found.",
+                    "delete_modal": {
+                        "title": "Delete Trend"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
+            },
+            "users": {
+                "create": {
+                    "actions": {
+                        "edit": "Edit",
+                        "select": "Select",
+                        "saving": "Saving",
+                        "save": "Save"
+                    },
+                    "form": {
+                        "create_page_title": "User create",
+                        "name_placeholder": "Enter name",
+                        "email_placeholder": "Enter email",
+                        "address_placeholder": "Enter address",
+                        "user_role": "User Role",
+                        "set_as_verify_email": "Set as verify email",
+                        "new_password_placeholder": "Enter new password",
+                        "confirm_password_placeholder": "Confirm password"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "email_is_required": "Email is required.",
+                        "gender_is_required": "Gender is required.",
+                        "marital_status_is_required": "Marital status is required.",
+                        "religion_is_required": "Religion is required.",
+                        "user_role_is_required": "User role is required.",
+                        "password_is_required": "Password is required.",
+                        "password_confirmation_is_required": "Password confirmation is required."
+                    },
+                    "labels": {
+                        "users": "Users",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "email": "Email",
+                        "birth_date": "Birth Date",
+                        "gender": "Gender",
+                        "religion": "Religion",
+                        "marital_status": "Marital Status",
+                        "mobile": "Mobile",
+                        "address": "Address"
+                    },
+                    "auth": {
+                        "account": {
+                            "change_password": "Change password",
+                            "new_password": "New Password",
+                            "hide_password": "Hide password",
+                            "show_password": "Show password",
+                            "confirm_password": "Confirm Password",
+                            "hide_confirm_password": "Hide confirm password",
+                            "show_confirm_password": "Show confirm password"
+                        }
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "users": "Users",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "email": "Email",
+                        "mobile": "Mobile",
+                        "birth_date": "Birth Date",
+                        "gender": "Gender",
+                        "age": "Age",
+                        "religion": "Religion",
+                        "marital_status": "Marital Status",
+                        "system_information": "System Information",
+                        "created_at": "Created At",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By"
+                    },
+                    "title": "User Details",
+                    "actions": {
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "buttons": {
+                        "inactivating": "Inactivating...",
+                        "inactive": "Inactive",
+                        "activating": "Activating...",
+                        "active": "Active"
+                    },
+                    "status": "Status",
+                    "auth": {
+                        "profile": {
+                            "profile_image_alt": "User profile image"
+                        }
+                    },
+                    "form": {
+                        "user_role": "User Role"
+                    },
+                    "activity_logs": {
+                        "index": {
+                            "title": "Activity Logs"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete User"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "users": "Users",
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "all": "All",
+                        "name": "Name",
+                        "not_available": "N/A"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "edit": "Edit",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "form": {
+                        "user_role": "User Role"
+                    },
+                    "search_placeholder": "Search user...",
+                    "buttons": {
+                        "active": "Active",
+                        "inactive": "Inactive"
+                    },
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "role": "Role",
+                    "created": "Created",
+                    "news": {
+                        "index": {
+                            "actions": "Actions"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "Details"
+                        }
+                    },
+                    "no_user_found": "No user found.",
+                    "delete_modal": {
+                        "title": "Delete User"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                }
             }
         },
-        "form": {
-            "create_page_title": "Setting create",
-            "edit_page_title": "Setting edit",
-            "invalid_setting_data": "Invalid setting data",
-            "invalid_setting_data_body": "Setting group and label are required. Please go back and select a valid setting.",
-            "json_placeholder": "Example: {\"key\": \"value\"} or [\"item1\", \"item2\"]",
-            "url_placeholder": "https://example.com",
-            "color_placeholder": "#000000",
-            "validation": {
-                "group_required": "Group is required.",
-                "label_required": "Label is required.",
-                "type_required": "Type is required.",
-                "value_required": "Value is required.",
-                "value_must_be_integer": "Value must be an integer.",
-                "value_must_be_valid_number": "Value must be a valid number.",
-                "value_must_be_valid_json": "Value must be valid JSON.",
-                "value_must_be_valid_json_array": "Value must be a valid JSON array.",
-                "value_must_be_valid_url": "Value must be a valid URL.",
-                "value_must_be_valid_color": "Value must be a valid color code."
+        "category_news": {
+            "labels": {
+                "category": "Category",
+                "location": "Location"
             },
-            "validation_errors": {
-                "sequence_is_required": "Sequence is required",
-                "image_is_required": "Image is required",
-                "name_is_required": "Name is required.",
-                "name_must_not_exceed_200_characters": "Name must not exceed 200 characters.",
-                "email_is_required": "Email is required.",
-                "email_must_not_exceed_200_characters": "Email must not exceed 200 characters.",
-                "gender_is_required": "Gender is required.",
-                "marital_status_is_required": "Marital status is required.",
-                "religion_is_required": "Religion is required.",
-                "language_is_required": "Language is required.",
-                "parent_category_is_required": "Parent category is required.",
-                "parent_location_is_required": "Parent location is required.",
-                "title_is_required": "Title is required.",
-                "current_password_is_required": "Current password is required.",
-                "password_is_required": "Password is required.",
-                "password_confirmation_is_required": "Password confirmation is required.",
-                "password_confirmation_does_not_match": "Password confirmation does not match.",
-                "code_is_required": "Code is required.",
-                "locale_is_required": "Locale is required.",
-                "menu_type_is_required": "Menu type is required.",
-                "parent_menu_item_is_required": "Parent menu item is required.",
-                "url_is_required": "Url is required.",
-                "model_is_required": "Model is required.",
-                "model_record_is_required": "Model record is required."
+            "categories": {
+                "details": {
+                    "category_image_alt": "Category image"
+                }
+            },
+            "locations": {
+                "form": {
+                    "location_placeholder": "Select location"
+                }
+            },
+            "actions": {
+                "searching": "Searching...",
+                "search": "Search"
             }
-        }
-    },
-    "api": {
-        "errors": {
-            "invalid_data": "Invalid data",
-            "image_save_failed": "Image save failed",
-            "invalid_image_response": "Image saved but invalid media response returned",
-            "missing_slug": "Slug is missing. Please return slug from backend response.",
-            "fail_to_update_image": "Fail to update image.",
-            "invalid_response_after_image_update": "Image updated but invalid media response returned",
-            "fail_to_delete_image": "Fail to delete image"
+        },
+        "contributor_news": {
+            "labels": {
+                "contributor": "Contributor"
+            },
+            "contributors": {
+                "details": {
+                    "contributor_image_alt": "Contributor image"
+                }
+            }
+        },
+        "event_news": {
+            "labels": {
+                "event": "Event"
+            },
+            "events": {
+                "details": {
+                    "event_image_alt": "Event image"
+                }
+            }
+        },
+        "home": {
+            "labels": {
+                "page": "Page"
+            },
+            "details": {
+                "main_content": "Main Content",
+                "sidebar_content": "Sidebar Content"
+            }
+        },
+        "latest": {
+            "labels": {
+                "latest_news": "Latest News"
+            }
+        },
+        "layouts": {
+            "auth_layout": {
+                "auth": {
+                    "account": {
+                        "not_verified": "Not verified"
+                    }
+                },
+                "footer": {
+                    "copyright": "©",
+                    "developed_by": "Developed by",
+                    "developer_name": "Seikh Md Tahmid Farzan"
+                }
+            },
+            "public_layout": {
+                "labels": {
+                    "login": "Login"
+                },
+                "app": {
+                    "name": "News Portal",
+                    "breaking_news": "Breaking News"
+                },
+                "footer": {
+                    "copyright": "©",
+                    "developed_by": "Developed by",
+                    "developer_name": "Seikh Md Tahmid Farzan"
+                },
+                "number": {
+                    "0": "0",
+                    "1": "1",
+                    "2": "2",
+                    "3": "3",
+                    "4": "4",
+                    "5": "5",
+                    "6": "6",
+                    "7": "7",
+                    "8": "8",
+                    "9": "9"
+                }
+            }
+        },
+        "location_news": {
+            "locations": {
+                "details": {
+                    "view_location": "View Location",
+                    "location_image_alt": "Location image",
+                    "parent_location": "Parent Location"
+                }
+            },
+            "labels": {
+                "location": "Location"
+            }
+        },
+        "page": {
+            "labels": {
+                "page": "Page"
+            }
+        },
+        "search": {
+            "labels": {
+                "search": "Search",
+                "news_type": "News type",
+                "category": "Category",
+                "location": "Location",
+                "event": "Event",
+                "date": "Date",
+                "loading": "Loading"
+            },
+            "news": {
+                "index": {
+                    "search_placeholder": "Search news..."
+                }
+            },
+            "categories": {
+                "index": {
+                    "apply_filter": "Apply Filter"
+                }
+            }
+        },
+        "tag_news": {
+            "labels": {
+                "tag": "Tag"
+            },
+            "tags": {
+                "details": {
+                    "tag_image_alt": "Tag image"
+                }
+            }
         }
     }
 }

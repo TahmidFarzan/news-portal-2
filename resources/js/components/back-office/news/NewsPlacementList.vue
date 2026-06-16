@@ -25,17 +25,17 @@ const { news, newsPlacements } = defineProps({
 <template>
     <div class="w-full rounded-xl border border-gray-200 bg-white shadow-sm">
         <div v-if="!newsPlacements.length" class="px-4 py-8 text-center text-sm text-gray-500">
-            {{ t("labels.no_record_found") }}
+            {{ t("components.back_office.news.news_placement_list.labels.no_record_found") }}
         </div>
 
         <div v-else class="overflow-x-auto">
             <table class="w-full text-left text-sm">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-500">
                     <tr>
-                        <th class="px-4 py-3 font-semibold">{{ t("table.columns.page") }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ t("table.columns.section") }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ t("table.columns.position") }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ t("table.columns.action") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("components.back_office.news.news_placement_list.table.columns.page") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("components.back_office.news.news_placement_list.table.columns.section") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("components.back_office.news.news_placement_list.table.columns.position") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("components.back_office.news.news_placement_list.table.columns.action") }}</th>
                     </tr>
                 </thead>
 
@@ -60,7 +60,7 @@ const { news, newsPlacements } = defineProps({
                             })"
                                 class="inline-flex items-center gap-1 rounded border border-blue-500 px-2 py-1 text-xs text-blue-500 hover:bg-blue-50">
                                 <FontAwesomeIcon icon="info" />
-                                {{ t("layout_menus.details") }}
+                                {{ t("components.back_office.news.news_placement_list.navigation.details") }}
                             </a>
                         </td>
                     </tr>

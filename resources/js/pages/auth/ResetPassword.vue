@@ -38,15 +38,15 @@ function validateForm() {
     let valid = true
 
     if (!resetPasswordForm.password || resetPasswordForm.password.trim() === '') {
-        resetPasswordForm.setError('password', t('form.validation_errors.password_is_required'))
+        resetPasswordForm.setError('password', t('pages.auth.reset_password.validation.password_is_required'))
         valid = false
     }
 
     if (!resetPasswordForm.password_confirmation || resetPasswordForm.password_confirmation.trim() === '') {
-        resetPasswordForm.setError('password_confirmation', t('form.validation_errors.password_confirmation_is_required'))
+        resetPasswordForm.setError('password_confirmation', t('pages.auth.reset_password.validation.password_confirmation_is_required'))
         valid = false
     } else if (resetPasswordForm.password !== resetPasswordForm.password_confirmation) {
-        resetPasswordForm.setError('password_confirmation', t('form.validation_errors.password_confirmation_does_not_match'))
+        resetPasswordForm.setError('password_confirmation', t('pages.auth.reset_password.validation.password_confirmation_does_not_match'))
         valid = false
     }
 
@@ -75,21 +75,21 @@ function handleResetPassword() {
 
 <template>
 
-    <Head :title="t('auth.reset_password.page_title')" />
+    <Head :title="t('pages.auth.reset_password.page_title')" />
 
     <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
         <div class="w-full max-w-md bg-white shadow-md rounded-2xl p-6 border border-gray-200">
 
             <div class="text-center mb-6">
-                <img src="/uploads/icons/auth/forgot-password.png" :alt="t('auth.reset_password.image_alt')"
+                <img :src="'/uploads/icons/auth/forgot-password.png'" :alt="t('pages.auth.reset_password.image_alt')"
                     class="mx-auto mb-3 w-16 h-16 object-contain" />
 
                 <h2 class="text-xl font-semibold text-blue-600">
-                    {{ t('auth.reset_password.title') }}
+                    {{ t('pages.auth.reset_password.title') }}
                 </h2>
 
                 <p class="text-sm text-gray-500">
-                    {{ t('auth.reset_password.description') }}
+                    {{ t('pages.auth.reset_password.description') }}
                 </p>
             </div>
 
@@ -100,13 +100,13 @@ function handleResetPassword() {
 
                 <div class="mb-4 relative">
                     <input id="password" v-model="resetPasswordForm.password" :type="showPassword ? 'text' : 'password'"
-                        :placeholder="t('auth.reset_password.password_placeholder')"
+                        :placeholder="t('pages.auth.reset_password.password_placeholder')"
                         class="w-full px-3 py-2 border rounded-lg pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :class="resetPasswordForm.errors.password ? 'border-red-500' : 'border-gray-300'" />
 
                     <button type="button" @click="togglePasswordVisibility"
                         class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                        :aria-label="showPassword ? t('auth.reset_password.hide_password') : t('auth.reset_password.show_password')">
+                        :aria-label="showPassword ? t('pages.auth.reset_password.hide_password') : t('pages.auth.reset_password.show_password')">
                         <FontAwesomeIcon :icon="showPassword ? 'eye-slash' : 'eye'" />
                     </button>
 
@@ -118,13 +118,13 @@ function handleResetPassword() {
                 <div class="mb-5 relative">
                     <input id="password_confirmation" v-model="resetPasswordForm.password_confirmation"
                         :type="showConfirmPassword ? 'text' : 'password'"
-                        :placeholder="t('auth.reset_password.password_confirmation_placeholder')"
+                        :placeholder="t('pages.auth.reset_password.password_confirmation_placeholder')"
                         class="w-full px-3 py-2 border rounded-lg pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :class="resetPasswordForm.errors.password_confirmation ? 'border-red-500' : 'border-gray-300'" />
 
                     <button type="button" @click="toggleConfirmPasswordVisibility"
                         class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                        :aria-label="showConfirmPassword ? t('auth.reset_password.hide_confirm_password') : t('auth.reset_password.show_confirm_password')">
+                        :aria-label="showConfirmPassword ? t('pages.auth.reset_password.hide_confirm_password') : t('pages.auth.reset_password.show_confirm_password')">
                         <FontAwesomeIcon :icon="showConfirmPassword ? 'eye-slash' : 'eye'" />
                     </button>
 
@@ -139,18 +139,18 @@ function handleResetPassword() {
 
                     {{
                         resetPasswordForm.processing
-                            ? t('auth.reset_password.resetting_button')
-                            : t('auth.reset_password.reset_button')
+                            ? t('pages.auth.reset_password.resetting_button')
+                            : t('pages.auth.reset_password.reset_button')
                     }}
                 </button>
 
             </form>
 
             <div class="mt-4 text-center text-sm">
-                {{ t('auth.reset_password.already_have_account') }}
+                {{ t('pages.auth.reset_password.already_have_account') }}
 
                 <a :href="route('login')" class="text-blue-600 hover:underline ml-1">
-                    {{ t('auth.reset_password.back_to_login') }}
+                    {{ t('pages.auth.reset_password.back_to_login') }}
                 </a>
             </div>
 

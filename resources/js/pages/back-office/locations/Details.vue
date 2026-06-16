@@ -32,11 +32,11 @@ const { location } = defineProps({
     },
 })
 
-const pageTitle = computed(() => `${location?.name} ${t('labels.details')}`)
+const pageTitle = computed(() => `${location?.name} ${t('pages.back_office.locations.details.labels.details')}`)
 
 const boundaryGeoJsonText = computed(() => {
     if (!location?.boundary_geojson) {
-        return t('labels.not_available')
+        return t('pages.back_office.locations.details.labels.not_available')
     }
 
     if (typeof location.boundary_geojson === 'string') {
@@ -62,7 +62,7 @@ const handleDelete = () => {
 }
 
 const copyBoundaryGeoJson = async () => {
-    if (!boundaryGeoJsonText.value || boundaryGeoJsonText.value === t('labels.not_available')) {
+    if (!boundaryGeoJsonText.value || boundaryGeoJsonText.value === t('pages.back_office.locations.details.labels.not_available')) {
         return
     }
 
@@ -94,7 +94,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('layout_menus.locations'), href: route('back-office.locations.index') },
+                { text: t('pages.back_office.locations.details.navigation.locations'), href: route('back-office.locations.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -110,62 +110,62 @@ onMounted(async () => {
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('locations.details.title') }}
+                {{ t('pages.back_office.locations.details.title') }}
             </h2>
 
             <div class="flex gap-2">
                 <a v-if="canEdit(location)" :href="route('back-office.locations.edit', { slug: location?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('table.menus.edit') }}
+                    {{ t('pages.back_office.locations.details.table.menus.edit') }}
                 </a>
 
                 <button v-if="canDelete(location)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    {{ t('buttons.delete') }}
+                    {{ t('pages.back_office.locations.details.actions.delete') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('labels.basic_information') }}
+                {{ t('pages.back_office.locations.details.labels.basic_information') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('labels.name') }}</span>
-                        <span class="font-medium">{{ location?.name || t('labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.locations.details.labels.name') }}</span>
+                        <span class="font-medium">{{ location?.name || t('pages.back_office.locations.details.labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('labels.language') }}</span>
-                        <span class="font-medium">{{ location?.language?.name || t('labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.locations.details.labels.language') }}</span>
+                        <span class="font-medium">{{ location?.language?.name || t('pages.back_office.locations.details.labels.not_available') }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('locations.details.parent') }}</span>
-                        <span class="font-medium">{{ location?.parent?.name || t('labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.locations.details.parent') }}</span>
+                        <span class="font-medium">{{ location?.parent?.name || t('pages.back_office.locations.details.labels.not_available') }}</span>
                     </div>
 
                     <div>
                         <div class="text-gray-500 mb-1">
-                            {{ t('locations.form.brief') }}
+                            {{ t('pages.back_office.locations.details.form.brief') }}
                         </div>
                         <div class="text-gray-700">
-                            {{ location?.brief || t('labels.not_available') }}
+                            {{ location?.brief || t('pages.back_office.locations.details.labels.not_available') }}
                         </div>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-3">
                     <div class="text-gray-500">
-                        {{ t('locations.details.tree') }}
+                        {{ t('pages.back_office.locations.details.tree') }}
                     </div>
 
                     <div class="flex flex-wrap gap-2">
@@ -175,34 +175,34 @@ onMounted(async () => {
                         </span>
 
                         <span v-if="!location?.bloodline?.length" class="text-gray-500">
-                            {{ t('labels.not_available') }}
+                            {{ t('pages.back_office.locations.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
                     <div class="text-gray-500 mb-2">
-                        {{ t('locations.details.category') }}
+                        {{ t('pages.back_office.locations.details.category') }}
                     </div>
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-500">{{ t('labels.title') }}</span>
-                            <span class="font-medium">{{ location?.category?.name || t('labels.not_available') }}</span>
+                            <span class="text-gray-500">{{ t('pages.back_office.locations.details.labels.title') }}</span>
+                            <span class="font-medium">{{ location?.category?.name || t('pages.back_office.locations.details.labels.not_available') }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-500">{{ t('locations.details.parent') }}</span>
-                            <span class="font-medium">{{ location?.category?.parent?.name || t('labels.not_available')
+                            <span class="text-gray-500">{{ t('pages.back_office.locations.details.parent') }}</span>
+                            <span class="font-medium">{{ location?.category?.parent?.name || t('pages.back_office.locations.details.labels.not_available')
                                 }}</span>
                         </div>
 
                         <div>
                             <div class="text-gray-500 mb-1">
-                                {{ t('locations.form.brief') }}
+                                {{ t('pages.back_office.locations.details.form.brief') }}
                             </div>
                             <div class="text-gray-700">
-                                {{ location?.category?.brief || t('labels.not_available') }}
+                                {{ location?.category?.brief || t('pages.back_office.locations.details.labels.not_available') }}
                             </div>
                         </div>
                     </div>
@@ -212,63 +212,63 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4">
                     <div class="text-gray-500 mb-2">
-                        {{ t('locations.details.map_information') }}
+                        {{ t('pages.back_office.locations.details.map_information') }}
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">{{ t('locations.details.latitude') }}</span>
-                                <span class="font-medium break-all">{{ location?.latitude || t('labels.not_available')
+                                <span class="text-gray-500">{{ t('pages.back_office.locations.details.latitude') }}</span>
+                                <span class="font-medium break-all">{{ location?.latitude || t('pages.back_office.locations.details.labels.not_available')
                                     }}</span>
                             </div>
 
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">{{ t('locations.details.longitude') }}</span>
-                                <span class="font-medium break-all">{{ location?.longitude || t('labels.not_available')
+                                <span class="text-gray-500">{{ t('pages.back_office.locations.details.longitude') }}</span>
+                                <span class="font-medium break-all">{{ location?.longitude || t('pages.back_office.locations.details.labels.not_available')
                                     }}</span>
                             </div>
                         </div>
 
                         <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">{{ t('locations.details.boundary_north') }}</span>
+                                <span class="text-gray-500">{{ t('pages.back_office.locations.details.boundary_north') }}</span>
                                 <span class="font-medium break-all">{{ location?.boundary_north ||
-                                    t('labels.not_available') }}</span>
+                                    t('pages.back_office.locations.details.labels.not_available') }}</span>
                             </div>
 
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">{{ t('locations.details.boundary_south') }}</span>
+                                <span class="text-gray-500">{{ t('pages.back_office.locations.details.boundary_south') }}</span>
                                 <span class="font-medium break-all">{{ location?.boundary_south ||
-                                    t('labels.not_available') }}</span>
+                                    t('pages.back_office.locations.details.labels.not_available') }}</span>
                             </div>
 
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">{{ t('locations.details.boundary_east') }}</span>
+                                <span class="text-gray-500">{{ t('pages.back_office.locations.details.boundary_east') }}</span>
                                 <span class="font-medium break-all">{{ location?.boundary_east ||
-                                    t('labels.not_available') }}</span>
+                                    t('pages.back_office.locations.details.labels.not_available') }}</span>
                             </div>
 
                             <div class="flex justify-between gap-4">
-                                <span class="text-gray-500">{{ t('locations.details.boundary_west') }}</span>
+                                <span class="text-gray-500">{{ t('pages.back_office.locations.details.boundary_west') }}</span>
                                 <span class="font-medium break-all">{{ location?.boundary_west ||
-                                    t('labels.not_available') }}</span>
+                                    t('pages.back_office.locations.details.labels.not_available') }}</span>
                             </div>
                         </div>
 
                         <div class="md:col-span-2 border border-gray-200 rounded-lg p-4">
                             <div class="mb-2 flex items-center justify-between gap-3">
                                 <div class="text-gray-500">
-                                    {{ t('locations.details.boundary_geojson') }}
+                                    {{ t('pages.back_office.locations.details.boundary_geojson') }}
                                 </div>
 
                                 <button type="button"
-                                    :disabled="!boundaryGeoJsonText || boundaryGeoJsonText === t('labels.not_available')"
+                                    :disabled="!boundaryGeoJsonText || boundaryGeoJsonText === t('pages.back_office.locations.details.labels.not_available')"
                                     @click="copyBoundaryGeoJson"
                                     class="inline-flex items-center gap-2 rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50">
                                     <FontAwesomeIcon :icon="boundaryGeoJsonCopied ? 'check' : 'copy'" />
 
-                                    {{ boundaryGeoJsonCopied ? t('labels.copied') : t('labels.copy') }}
+                                    {{ boundaryGeoJsonCopied ? t('pages.back_office.locations.details.labels.copied') : t('pages.back_office.locations.details.labels.copy') }}
                                 </button>
                             </div>
 
@@ -282,34 +282,34 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4">
                     <div class="text-gray-500 mb-2">
-                        {{ t('locations.details.seo') }}
+                        {{ t('pages.back_office.locations.details.seo') }}
                     </div>
 
                     <div class="space-y-3 text-sm">
                         <div>
                             <div class="text-gray-500 mb-1">
-                                {{ t('labels.title') }}
+                                {{ t('pages.back_office.locations.details.labels.title') }}
                             </div>
                             <div class="font-medium text-gray-700">
-                                {{ location?.seo_title || t('labels.not_available') }}
+                                {{ location?.seo_title || t('pages.back_office.locations.details.labels.not_available') }}
                             </div>
                         </div>
 
                         <div>
                             <div class="text-gray-500 mb-1">
-                                {{ t('locations.form.brief') }}
+                                {{ t('pages.back_office.locations.details.form.brief') }}
                             </div>
                             <div class="font-medium text-gray-700">
-                                {{ location?.seo_brief || t('labels.not_available') }}
+                                {{ location?.seo_brief || t('pages.back_office.locations.details.labels.not_available') }}
                             </div>
                         </div>
 
                         <div>
                             <div class="text-gray-500 mb-1">
-                                {{ t('locations.form.seo_keywords') }}
+                                {{ t('pages.back_office.locations.details.form.seo_keywords') }}
                             </div>
                             <div class="font-medium text-gray-700">
-                                {{ location?.seo_keywords || t('labels.not_available') }}
+                                {{ location?.seo_keywords || t('pages.back_office.locations.details.labels.not_available') }}
                             </div>
                         </div>
                     </div>
@@ -317,23 +317,23 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4">
                     <div class="text-gray-500 mb-2">
-                        {{ t('locations.details.sitemap_and_feeds') }}
+                        {{ t('pages.back_office.locations.details.sitemap_and_feeds') }}
                     </div>
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-500">{{ t('locations.details.sitemap_url') }}</span>
-                            <span class="font-medium">{{ location?.sitemap_url || t('labels.not_available') }}</span>
+                            <span class="text-gray-500">{{ t('pages.back_office.locations.details.sitemap_url') }}</span>
+                            <span class="font-medium">{{ location?.sitemap_url || t('pages.back_office.locations.details.labels.not_available') }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-500">{{ t('locations.details.feeds_rss') }}</span>
-                            <span class="font-medium">{{ location?.feeds_rss_url || t('labels.not_available') }}</span>
+                            <span class="text-gray-500">{{ t('pages.back_office.locations.details.feeds_rss') }}</span>
+                            <span class="font-medium">{{ location?.feeds_rss_url || t('pages.back_office.locations.details.labels.not_available') }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-500">{{ t('locations.details.feeds_atom') }}</span>
-                            <span class="font-medium">{{ location?.feeds_atom_url || t('labels.not_available') }}</span>
+                            <span class="text-gray-500">{{ t('pages.back_office.locations.details.feeds_atom') }}</span>
+                            <span class="font-medium">{{ location?.feeds_atom_url || t('pages.back_office.locations.details.labels.not_available') }}</span>
                         </div>
                     </div>
                 </div>
@@ -342,39 +342,39 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('activity_logs.details.system_information') }}
+                {{ t('pages.back_office.locations.details.activity_logs.details.system_information') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('table.columns.created_at') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.locations.details.table.columns.created_at') }}</span>
                         <span class="font-medium">
-                            {{ location?.created_at ? formatDateTime(location.created_at) : t('labels.not_available') }}
+                            {{ location?.created_at ? formatDateTime(location.created_at) : t('pages.back_office.locations.details.labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('labels.created_by') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.locations.details.labels.created_by') }}</span>
                         <span class="font-medium">
-                            {{ location?.created_by?.name || t('labels.not_available') }}
+                            {{ location?.created_by?.name || t('pages.back_office.locations.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.locations.details.labels.updated_at') }}</span>
                         <span class="font-medium">
-                            {{ location?.updated_at ? formatDateTime(location.updated_at) : t('labels.not_available') }}
+                            {{ location?.updated_at ? formatDateTime(location.updated_at) : t('pages.back_office.locations.details.labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.locations.details.labels.updated_by') }}</span>
                         <span class="font-medium">
-                            {{ location?.latest_activity_log?.causer?.name || t('labels.not_available') }}
+                            {{ location?.latest_activity_log?.causer?.name || t('pages.back_office.locations.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
@@ -384,7 +384,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('layout_menus.activity_logs') }}
+                {{ t('pages.back_office.locations.details.navigation.activity_logs') }}
             </h3>
 
             <RecentActivities :model-slug="'location'" :model="location" />
@@ -405,7 +405,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('locations.delete_modal.title') }}
+                                {{ t('pages.back_office.locations.details.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -413,19 +413,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('delete_confirmation_modal.irreversible_body') }}
+                                {{ t('pages.back_office.locations.details.modals.delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('buttons.cancel') }}
+                                    {{ t('pages.back_office.locations.details.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
+                                    {{ deleteProcessing ? t('pages.back_office.locations.details.actions.deleting') : t('pages.back_office.locations.details.actions.delete') }}
                                 </button>
                             </div>
                         </div>

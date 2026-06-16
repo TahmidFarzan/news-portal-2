@@ -27,25 +27,25 @@ const { menu } = defineProps({
                     <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                         <tr>
                             <th class="px-4 py-2">
-                                {{ t("table.columns.sl") }}
+                                {{ t("components.back_office.menu.menu_items.table.columns.sl") }}
                             </th>
                             <th class="px-4 py-2">
-                                {{ t("table.columns.name") }}
+                                {{ t("components.back_office.menu.menu_items.table.columns.name") }}
                             </th>
                             <th class="px-4 py-2">
-                                {{ t("table.columns.language") }}
+                                {{ t("components.back_office.menu.menu_items.table.columns.language") }}
                             </th>
                             <th class="px-4 py-2">
-                                {{ t("table.columns.parent") }}
+                                {{ t("components.back_office.menu.menu_items.table.columns.parent") }}
                             </th>
                             <th class="px-4 py-2">
-                                {{ t("table.columns.position") }}
+                                {{ t("components.back_office.menu.menu_items.table.columns.position") }}
                             </th>
                             <th class="px-4 py-2">
-                                {{ t("table.columns.created_at") }}
+                                {{ t("components.back_office.menu.menu_items.table.columns.created_at") }}
                             </th>
                             <th class="px-4 py-2">
-                                {{ t("table.columns.action") }}
+                                {{ t("components.back_office.menu.menu_items.table.columns.action") }}
                             </th>
                         </tr>
                     </thead>
@@ -81,13 +81,13 @@ const { menu } = defineProps({
                                 <a :href="route('back-office.menus.menu-items.details', { slug: menu.slug, menuItemSlug: item.slug })"
                                     class="inline-flex items-center gap-1 px-2 py-1 m-1 text-xs border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
                                     <FontAwesomeIcon icon="info" />
-                                    {{ t("table.menus.details") }}
+                                    {{ t("components.back_office.menu.menu_items.table.menus.details") }}
                                 </a>
 
                                 <a :href="route('back-office.menus.menu-items.edit', { slug: menu.slug, menuItemSlug: item.slug })"
                                     class="inline-flex items-center gap-1 px-2 py-1 m-1 text-xs border border-yallow-500 text-yallow-500 rounded hover:bg-yallow-50">
                                     <FontAwesomeIcon icon="pen" />
-                                    {{ t("table.menus.edit") }}
+                                    {{ t("components.back_office.menu.menu_items.table.menus.edit") }}
                                 </a>
                             </td>
 
@@ -100,7 +100,7 @@ const { menu } = defineProps({
             <div class="flex justify-center mt-4">
                 <a :href="route('back-office.menus.menu-items.index', { slug: menu?.slug })"
                     class="inline-flex items-center justify-center px-4 py-2 border border-gray-400 text-gray-600 rounded hover:bg-gray-100">
-                    {{ t("layout_menus.show_all") }}
+                    {{ t("components.back_office.menu.menu_items.navigation.show_all") }}
                 </a>
             </div>
 
@@ -108,7 +108,7 @@ const { menu } = defineProps({
 
         <div v-else>
             <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded">
-                {{ t("labels.no_record_found") }}
+                {{ t("components.back_office.menu.menu_items.labels.no_record_found") }}
             </div>
         </div>
 

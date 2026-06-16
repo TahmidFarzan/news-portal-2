@@ -182,7 +182,7 @@ const resetAndFetch = async () => {
 const translateNumerText = value => {
     return String(value)
         .split('')
-        .map(char => t(`number.${char}`))
+        .map(char => t(`components.common.multi_select.infinity_loading_api.number.${char}`))
         .join('')
 }
 
@@ -296,10 +296,10 @@ onMounted(async () => {
 
             <template #afterList>
                 <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
-                    {{ t("labels.loading") }}
+                    {{ t("components.common.multi_select.infinity_loading_api.labels.loading") }}
                 </div>
                 <div v-else class="text-center py-1 text-xs text-gray-400">
-                    {{ t("labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
+                    {{ t("components.common.multi_select.infinity_loading_api.labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
                 </div>
             </template>
         </Multiselect>

@@ -116,7 +116,7 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.image) {
-        saveForm.setError('image', t("form.validation_errors.image_is_required"))
+        saveForm.setError('image', t("components.back_office.news.news_image_gallery_grid.validation.image_is_required"))
         valid = false
     }
 
@@ -223,7 +223,7 @@ function saveSequence() {
     sequenceForm.sequence = sequenceImages.value.map((galleryImage) => galleryImage.id)
 
     if (!sequenceForm.sequence.length) {
-        sequenceForm.setError('sequence', t("form.validation_errors.sequence_is_required"))
+        sequenceForm.setError('sequence', t("components.back_office.news.news_image_gallery_grid.validation.sequence_is_required"))
         return
     }
 
@@ -259,7 +259,7 @@ onBeforeUnmount(() => {
     <div>
         <div class="mb-3 flex items-center justify-between gap-3">
             <div class="text-gray-500">
-                {{ t("labels.gallery_images") }}
+                {{ t("components.back_office.news.news_image_gallery_grid.labels.gallery_images") }}
             </div>
 
             <div class="flex items-center gap-2">
@@ -268,14 +268,14 @@ onBeforeUnmount(() => {
                         class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                         @click="openModal">
                         <FontAwesomeIcon icon="plus" />
-                        {{ t("buttons.add_image") }}
+                        {{ t("components.back_office.news.news_image_gallery_grid.actions.add_image") }}
                     </button>
 
                     <button type="button"
                         class="inline-flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
                         :disabled="saveForm.processing || sequenceForm.processing" @click="enableSequenceMode">
                         <FontAwesomeIcon icon="grip-vertical" />
-                        {{ t("buttons.drag_&_Sequence") }}
+                        {{ t("components.back_office.news.news_image_gallery_grid.actions.drag_and_sequence") }}
                     </button>
                 </template>
 
@@ -283,7 +283,7 @@ onBeforeUnmount(() => {
                     <button type="button"
                         class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
                         :disabled="sequenceForm.processing" @click="cancelSequenceMode">
-                        {{ t("buttons.cancel") }}
+                        {{ t("components.back_office.news.news_image_gallery_grid.actions.cancel") }}
                     </button>
 
                     <button type="button"
@@ -294,7 +294,7 @@ onBeforeUnmount(() => {
                         <FontAwesomeIcon v-else icon="floppy-disk" />
 
                         <span>
-                            {{ sequenceForm.processing ? t("buttons.saveing") : t("buttons.save") }}
+                            {{ sequenceForm.processing ? t("components.back_office.news.news_image_gallery_grid.actions.saving") : t("components.back_office.news.news_image_gallery_grid.actions.save") }}
                         </span>
                     </button>
                 </template>
@@ -307,7 +307,7 @@ onBeforeUnmount(() => {
 
         <div v-if="!displayGalleryImages.length"
             class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
-            {{ t("labels.no_record_found") }}
+            {{ t("components.back_office.news.news_image_gallery_grid.labels.no_record_found") }}
         </div>
 
         <div v-else class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -342,7 +342,7 @@ onBeforeUnmount(() => {
                         <div class="w-full max-w-lg rounded-xl bg-white p-5 shadow-xl">
                             <div class="mb-4 flex items-center justify-between">
                                 <h2 class="text-lg font-semibold text-gray-800">
-                                    {{ t("labels.add_image") }}
+                                    {{ t("components.back_office.news.news_image_gallery_grid.labels.add_image") }}
                                 </h2>
 
                                 <button type="button"
@@ -356,7 +356,7 @@ onBeforeUnmount(() => {
                                 <div class="space-y-4">
                                     <div>
                                         <label class="mb-1 block text-sm font-medium text-gray-700">
-                                            {{ t("labels.image") }} <span class="text-red-500">*</span>
+                                            {{ t("components.back_office.news.news_image_gallery_grid.labels.image") }} <span class="text-red-500">*</span>
                                         </label>
 
                                         <input ref="imageInputRef" type="file" accept="image/*"
@@ -369,7 +369,7 @@ onBeforeUnmount(() => {
 
                                         <div v-if="imagePreviewUrl" class="mt-3">
                                             <div class="mb-1 text-sm text-gray-500">
-                                                {{ t("labels.preview") }}
+                                                {{ t("components.back_office.news.news_image_gallery_grid.labels.preview") }}
                                             </div>
 
                                             <img :src="imagePreviewUrl" alt="Selected image preview"
@@ -379,7 +379,7 @@ onBeforeUnmount(() => {
 
                                     <div>
                                         <label class="mb-1 block text-sm font-medium text-gray-700">
-                                            {{ t("labels.order_column") }}
+                                            {{ t("components.back_office.news.news_image_gallery_grid.labels.order_column") }}
                                         </label>
 
                                         <input v-model="saveForm.order_column" type="number"
@@ -393,7 +393,7 @@ onBeforeUnmount(() => {
 
                                     <div>
                                         <label class="mb-1 block text-sm font-medium text-gray-700">
-                                            {{ t("labels.caption") }}
+                                            {{ t("components.back_office.news.news_image_gallery_grid.labels.caption") }}
                                         </label>
 
                                         <input v-model="saveForm.caption" type="text"
@@ -407,7 +407,7 @@ onBeforeUnmount(() => {
 
                                     <div>
                                         <label class="mb-1 block text-sm font-medium text-gray-700">
-                                            {{ t("labels.alt_text") }}
+                                            {{ t("components.back_office.news.news_image_gallery_grid.labels.alt_text") }}
                                         </label>
 
                                         <input v-model="saveForm.alt" type="text"
@@ -424,7 +424,7 @@ onBeforeUnmount(() => {
                                     <button type="button"
                                         class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
                                         :disabled="saveForm.processing" @click="closeModal">
-                                        {{ t("buttons.cancel") }}
+                                        {{ t("components.back_office.news.news_image_gallery_grid.actions.cancel") }}
                                     </button>
 
                                     <button type="submit"
@@ -434,7 +434,7 @@ onBeforeUnmount(() => {
                                             class="animate-spin" />
 
                                         <span>
-                                            {{ saveForm.processing ? t("buttons.saving") : t("buttons.save") }}
+                                            {{ saveForm.processing ? t("components.back_office.news.news_image_gallery_grid.actions.saving") : t("components.back_office.news.news_image_gallery_grid.actions.save") }}
                                         </span>
                                     </button>
                                 </div>

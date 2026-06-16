@@ -79,7 +79,7 @@ onMounted(() => {
 
             <li v-if="footerMenu.loading && footerMenu.items.length" class="text-xs text-gray-400">
                 <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
-                {{ t("labels.loading") }}
+                {{ t("components.common.layout.public_layout.footer_menu.labels.loading") }}
             </li>
         </ul>
     </nav>

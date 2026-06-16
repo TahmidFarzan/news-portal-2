@@ -33,8 +33,8 @@ const isUpdate = computed(() => !!menuItem?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${menuItem?.name} ${t('labels.edit')}`
-        : t('menu_items.form.create_page_title')
+        ? `${menuItem?.name} ${t('pages.back_office.menus.menu_items.create.labels.edit')}`
+        : t('pages.back_office.menus.menu_items.create.form.create_page_title')
 })
 
 const copiedRoute = ref(null)
@@ -106,33 +106,33 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('form.validation_errors.name_is_required'))
+        saveForm.setError('name', t('pages.back_office.menus.menu_items.create.validation.name_is_required'))
         valid = false
     }
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', t('form.validation_errors.language_is_required'))
+        saveForm.setError('language_id', t('pages.back_office.menus.menu_items.create.validation.language_is_required'))
         valid = false
     }
 
     if (saveForm.has_parent && !saveForm.parent_id) {
-        saveForm.setError('parent_id', t('form.validation_errors.parent_menu_item_is_required'))
+        saveForm.setError('parent_id', t('pages.back_office.menus.menu_items.create.validation.parent_menu_item_is_required'))
         valid = false
     }
 
     if (saveForm.is_custom_url && !saveForm.url) {
-        saveForm.setError('url', t('form.validation_errors.url_is_required'))
+        saveForm.setError('url', t('pages.back_office.menus.menu_items.create.validation.url_is_required'))
         valid = false
     }
 
     if (!saveForm.is_custom_url) {
         if (!saveForm.model_type) {
-            saveForm.setError('model_type', t('form.validation_errors.model_is_required'))
+            saveForm.setError('model_type', t('pages.back_office.menus.menu_items.create.validation.model_is_required'))
             valid = false
         }
 
         if (!saveForm.model_id) {
-            saveForm.setError('model_id', t('form.validation_errors.model_record_is_required'))
+            saveForm.setError('model_id', t('pages.back_office.menus.menu_items.create.validation.model_record_is_required'))
             valid = false
         }
     }
@@ -217,13 +217,13 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('menus.menus'), href: route('back-office.menus.index') },
+                { text: t('pages.back_office.menus.menu_items.create.menus'), href: route('back-office.menus.index') },
                 {
-                    text: `${menu?.name} ${t('labels.details')}`,
+                    text: `${menu?.name} ${t('pages.back_office.menus.menu_items.create.labels.details')}`,
                     href: route('back-office.menus.details', { slug: menu?.slug }),
                 },
                 {
-                    text: t('menus.details.menu_items'),
+                    text: t('pages.back_office.menus.menu_items.create.details.menu_items'),
                     href: route('back-office.menus.menu-items.index', { slug: menu?.slug }),
                 },
                 { text: pageTitle.value, active: true },
@@ -244,32 +244,32 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('labels.basic_information') }}
+                        {{ t('pages.back_office.menus.menu_items.create.labels.basic_information') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
-                            {{ t('menu_items.form.latest_url') }}:
+                            {{ t('pages.back_office.menus.menu_items.create.form.latest_url') }}:
 
                             <code class="cursor-pointer bg-gray-100 px-2 py-1 rounded" @click="copyUrl('latest')">
                                 {{ route('latest') }}
                             </code>
 
                             <span v-if="copiedRoute === 'latest'" class="text-green-600 ml-2">
-                                {{ t('labels.copied') }}
+                                {{ t('pages.back_office.menus.menu_items.create.labels.copied') }}
                             </span>
                         </div>
 
                         <div>
-                            {{ t('menu_items.form.home_url') }}:
+                            {{ t('pages.back_office.menus.menu_items.create.form.home_url') }}:
 
                             <code class="cursor-pointer bg-gray-100 px-2 py-1 rounded" @click="copyUrl('home')">
                                 {{ route('home') }}
                             </code>
 
                             <span v-if="copiedRoute === 'home'" class="text-green-600 ml-2">
-                                {{ t('labels.copied') }}
+                                {{ t('pages.back_office.menus.menu_items.create.labels.copied') }}
                             </span>
                         </div>
 
@@ -279,14 +279,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.language') }}
+                                {{ t('pages.back_office.menus.menu_items.create.labels.language') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="menuItem?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
-                                :placeholder="t('menus.form.language_placeholder')" />
+                                :placeholder="t('pages.back_office.menus.menu_items.create.form.language_placeholder')" />
 
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -295,14 +295,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.name') }}
+                                {{ t('pages.back_office.menus.menu_items.create.labels.name') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.name"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'"
-                                :placeholder="t('menus.form.name_placeholder')" />
+                                :placeholder="t('pages.back_office.menus.menu_items.create.form.name_placeholder')" />
 
                             <p v-if="saveForm.errors.name" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.name }}
@@ -311,13 +311,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('table.columns.position') }}
+                                {{ t('pages.back_office.menus.menu_items.create.table.columns.position') }}
                             </label>
 
                             <input v-model="saveForm.position"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.position ? 'border-red-500' : 'border-gray-300'" type="number"
-                                :placeholder="t('menu_items.form.position_placeholder')" />
+                                :placeholder="t('pages.back_office.menus.menu_items.create.form.position_placeholder')" />
 
                             <p v-if="saveForm.errors.position" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.position }}
@@ -326,7 +326,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('menu_items.form.is_custom_url') }}
+                                {{ t('pages.back_office.menus.menu_items.create.form.is_custom_url') }}
                             </label>
 
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -339,7 +339,7 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.is_custom_url ? t('labels.yes') : t('labels.no') }}
+                                    {{ saveForm.is_custom_url ? t('pages.back_office.menus.menu_items.create.labels.yes') : t('pages.back_office.menus.menu_items.create.labels.no') }}
                                 </span>
                             </label>
 
@@ -352,14 +352,14 @@ onMounted(async () => {
                     <div v-if="!saveForm.is_custom_url" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('menu_items.form.model') }}
+                                {{ t('pages.back_office.menus.menu_items.create.form.model') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :key="modelTypeKey" :form="saveForm" fieldName="model_type"
                                 :selectedItem="saveForm?.model_type" :apiUrl="route('search.menu-item-models')"
                                 :error="saveForm.errors.model_type" :multiple="false"
-                                :placeholder="t('menu_items.form.model_placeholder')" />
+                                :placeholder="t('pages.back_office.menus.menu_items.create.form.model_placeholder')" />
 
                             <p v-if="saveForm.errors.model_type" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.model_type }}
@@ -368,7 +368,7 @@ onMounted(async () => {
 
                         <div v-if="!saveForm.is_custom_url && saveForm.model_type">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('menu_items.form.model_id') }}
+                                {{ t('pages.back_office.menus.menu_items.create.form.model_id') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
@@ -376,21 +376,21 @@ onMounted(async () => {
                                 :key="`tag-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="saveForm?.model_id" :apiUrl="tagApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                                :multiple="false" :placeholder="t('menu_items.form.tag_placeholder')" />
+                                :multiple="false" :placeholder="t('pages.back_office.menus.menu_items.create.form.tag_placeholder')" />
 
                             <MultiSelectInfinityLoadingApi v-if="saveForm?.model_type == 'Category'"
                                 :key="`category-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="menuItem?.model" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.model_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
-                                :placeholder="t('menu_items.form.category_placeholder')" />
+                                :placeholder="t('pages.back_office.menus.menu_items.create.form.category_placeholder')" />
 
                             <MultiSelectInfinityLoadingApi v-if="saveForm?.model_type == 'Page'"
                                 :key="`page-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="menuItem?.model" :apiUrl="pageApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="indentation_title" selectedValueKey="id"
                                 apiLabelKey="indentation_title" apiValueKey="id" :multiple="false"
-                                :placeholder="t('menu_items.form.page_placeholder')" />
+                                :placeholder="t('pages.back_office.menus.menu_items.create.form.page_placeholder')" />
 
                             <p v-if="saveForm.errors.model_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.model_id }}
@@ -401,14 +401,14 @@ onMounted(async () => {
                     <div v-if="saveForm.is_custom_url" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.url') }}
+                                {{ t('pages.back_office.menus.menu_items.create.labels.url') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.url"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.url ? 'border-red-500' : 'border-gray-300'" type="url"
-                                :placeholder="t('menu_items.form.url_placeholder')" />
+                                :placeholder="t('pages.back_office.menus.menu_items.create.form.url_placeholder')" />
 
                             <p v-if="saveForm.errors.url" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.url }}
@@ -419,14 +419,14 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('categories.form.hierarchy') }}
+                        {{ t('pages.back_office.menus.menu_items.create.categories.form.hierarchy') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
 
                         <div>
                             <label class="block text-sm font-medium mb-2">
-                                {{ t('categories.form.has_parent') }}
+                                {{ t('pages.back_office.menus.menu_items.create.categories.form.has_parent') }}
                             </label>
 
                             <button type="button" @click="saveForm.has_parent = !saveForm.has_parent" :class="[
@@ -442,7 +442,7 @@ onMounted(async () => {
 
                         <div v-if="saveForm.has_parent">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('categories.form.parent') }}
+                                {{ t('pages.back_office.menus.menu_items.create.categories.form.parent') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
@@ -450,7 +450,7 @@ onMounted(async () => {
                                 fieldName="parent_id" :form="saveForm" :apiUrl="menuItemApiUrl"
                                 :error="saveForm.errors.parent_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
-                                :placeholder="t('menu_items.form.parent_placeholder')" />
+                                :placeholder="t('pages.back_office.menus.menu_items.create.form.parent_placeholder')" />
 
                             <p v-if="saveForm.errors.parent_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.parent_id }}
@@ -466,7 +466,7 @@ onMounted(async () => {
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
 
-                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.menus.menu_items.create.actions.saving') : t('pages.back_office.menus.menu_items.create.actions.save') }}
                     </button>
                 </div>
 

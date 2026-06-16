@@ -160,20 +160,20 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/dashboard/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gauge" />
-            {{ t("layout_menus.dashboard") }}
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.dashboard") }}
         </a>
 
         <a :href="route('back-office.medias.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/medias/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="photo-film" />
-           {{ t("layout_menus.medias") }}
+           {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.medias") }}
         </a>
 
         <button @click="toggleShowSubMenu('NewsAttributes')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="layer-group" />
-                {{ t("layout_menus.news_attributes") }}
+                {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.news_attributes") }}
             </span>
             <FontAwesomeIcon :icon="isSubMenuVisible('NewsAttributes') ? 'chevron-up' : 'chevron-down'" />
         </button>
@@ -188,49 +188,49 @@ const isSubMenuVisible = (key) => {
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/languages/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="language" />
-                    {{ t("layout_menus.languages") }}
+                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.languages") }}
                 </a>
 
                 <a :href="route('back-office.categories.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/categories/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="layer-group" />
-                    {{ t("layout_menus.categories") }}
+                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.categories") }}
                 </a>
 
                 <a :href="route('back-office.tags.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/tags/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="tags" />
-                    {{ t("layout_menus.tags") }}
+                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.tags") }}
                 </a>
 
                 <a :href="route('back-office.trends.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/trends/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="star" />
-                    {{ t("layout_menus.trends") }}
+                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.trends") }}
                 </a>
 
                 <a :href="route('back-office.locations.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/locations/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="globe" />
-                    {{ t("layout_menus.location") }}
+                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.location") }}
                 </a>
 
                 <a :href="route('back-office.events.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/events/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="fan" />
-                    {{ t("layout_menus.events") }}
+                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.events") }}
                 </a>
 
                 <a :href="route('back-office.contributors.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/contributors/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="users" />
-                    {{ t("layout_menus.contributors") }}
+                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.contributors") }}
                 </a>
 
             </div>
@@ -240,35 +240,35 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            {{ t("layout_menus.news") }}
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.news") }}
         </a>
 
         <a v-if="canAccessBreakingNewsMenuComputed" :href="route('back-office.breaking-news.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/breaking-news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            {{ t("layout_menus.breaking_news") }}
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.breaking_news") }}
         </a>
 
         <a v-if="canAccessPageMenuComputed" :href="route('back-office.pages.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/pages/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="file" />
-            {{ t("layout_menus.pages") }}
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.pages") }}
         </a>
 
         <a v-if="canAccessMenuMenuComputed" :href="route('back-office.menus.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/menus/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="ellipsis-vertical" />
-            {{ t("layout_menus.menus") }}
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.menus") }}
         </a>
 
         <button @click="toggleShowSubMenu('UserManagement')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="users" />
-               {{ t("layout_menus.user_anagement") }}
+               {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.user_anagement") }}
             </span>
             <FontAwesomeIcon :icon="isSubMenuVisible('UserManagement') ? 'chevron-up' : 'chevron-down'" />
         </button>
@@ -283,7 +283,7 @@ const isSubMenuVisible = (key) => {
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isAnyCurrentPage(routeMap.UserManagement) ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="user" />
-                    {{ t("layout_menus.users") }}
+                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.users") }}
                 </a>
 
             </div>
@@ -293,7 +293,7 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/settings/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gears" />
-            {{ t("layout_menus.settings") }}
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.settings") }}
         </a>
     </div>
 </template>

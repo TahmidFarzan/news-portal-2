@@ -32,8 +32,8 @@ const isUpdate = computed(() => !!setting?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${setting?.label} ${t('buttons.edit')}`
-        : t('settings.form.create_page_title')
+        ? `${setting?.label} ${t('pages.back_office.settings.create.actions.edit')}`
+        : t('pages.back_office.settings.create.form.create_page_title')
 })
 
 const saveForm = useForm({
@@ -79,28 +79,28 @@ function validateForm() {
     let valid = true
 
     if (isEmpty(saveForm.group)) {
-        saveForm.setError('group', t('settings.form.validation.group_required'))
+        saveForm.setError('group', t('pages.back_office.settings.create.form.validation.group_required'))
         valid = false
     }
 
     if (isEmpty(saveForm.label)) {
-        saveForm.setError('label', t('settings.form.validation.label_required'))
+        saveForm.setError('label', t('pages.back_office.settings.create.form.validation.label_required'))
         valid = false
     }
 
     if (isEmpty(saveForm.type)) {
-        saveForm.setError('type', t('settings.form.validation.type_required'))
+        saveForm.setError('type', t('pages.back_office.settings.create.form.validation.type_required'))
         valid = false
     }
 
     if (!hasValue(saveForm.value)) {
-        saveForm.setError('value', t('settings.form.validation.value_required'))
+        saveForm.setError('value', t('pages.back_office.settings.create.form.validation.value_required'))
         valid = false
     }
 
     if (hasValue(saveForm.value) && saveForm.type === settingValueTypes.INTEGER) {
         if (!Number.isInteger(Number(saveForm.value))) {
-            saveForm.setError('value', t('settings.form.validation.value_must_be_integer'))
+            saveForm.setError('value', t('pages.back_office.settings.create.form.validation.value_must_be_integer'))
             valid = false
         }
     }
@@ -110,7 +110,7 @@ function validateForm() {
         [settingValueTypes.FLOAT, settingValueTypes.DECIMAL].includes(saveForm.type)
     ) {
         if (Number.isNaN(Number(saveForm.value))) {
-            saveForm.setError('value', t('settings.form.validation.value_must_be_valid_number'))
+            saveForm.setError('value', t('pages.back_office.settings.create.form.validation.value_must_be_valid_number'))
             valid = false
         }
     }
@@ -123,11 +123,11 @@ function validateForm() {
             const parsedValue = JSON.parse(saveForm.value)
 
             if (saveForm.type === settingValueTypes.ARRAY && !Array.isArray(parsedValue)) {
-                saveForm.setError('value', t('settings.form.validation.value_must_be_valid_json_array'))
+                saveForm.setError('value', t('pages.back_office.settings.create.form.validation.value_must_be_valid_json_array'))
                 valid = false
             }
         } catch {
-            saveForm.setError('value', t('settings.form.validation.value_must_be_valid_json'))
+            saveForm.setError('value', t('pages.back_office.settings.create.form.validation.value_must_be_valid_json'))
             valid = false
         }
     }
@@ -136,7 +136,7 @@ function validateForm() {
         try {
             new URL(saveForm.value)
         } catch {
-            saveForm.setError('value', t('settings.form.validation.value_must_be_valid_url'))
+            saveForm.setError('value', t('pages.back_office.settings.create.form.validation.value_must_be_valid_url'))
             valid = false
         }
     }
@@ -145,7 +145,7 @@ function validateForm() {
         const colorRegex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/
 
         if (!colorRegex.test(saveForm.value)) {
-            saveForm.setError('value', t('settings.form.validation.value_must_be_valid_color'))
+            saveForm.setError('value', t('pages.back_office.settings.create.form.validation.value_must_be_valid_color'))
             valid = false
         }
     }
@@ -179,7 +179,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('labels.settings'), href: route('back-office.settings.index') },
+                { text: t('pages.back_office.settings.create.labels.settings'), href: route('back-office.settings.index') },
                 { text: pageTitle.value, active: true },
             ],
         })
@@ -196,11 +196,11 @@ onMounted(async () => {
 
             <div v-if="!hasSettingIdentity" class="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4">
                 <h3 class="font-semibold mb-1">
-                    {{ t('settings.form.invalid_setting_data') }}
+                    {{ t('pages.back_office.settings.create.form.invalid_setting_data') }}
                 </h3>
 
                 <p class="text-sm">
-                    {{ t('settings.form.invalid_setting_data_body') }}
+                    {{ t('pages.back_office.settings.create.form.invalid_setting_data_body') }}
                 </p>
 
                 <div class="mt-3 space-y-1 text-sm">
@@ -212,7 +212,7 @@ onMounted(async () => {
             <form v-else @submit.prevent="handleSave" class="space-y-6">
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('labels.basic_information') }}
+                        {{ t('pages.back_office.settings.create.labels.basic_information') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -234,8 +234,8 @@ onMounted(async () => {
                             <select v-else-if="saveForm.type === settingValueTypes.BOOLEAN" v-model="saveForm.value"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'">
-                                <option :value="true">{{ t('labels.true') }}</option>
-                                <option :value="false">{{ t('labels.false') }}</option>
+                                <option :value="true">{{ t('pages.back_office.settings.create.labels.true') }}</option>
+                                <option :value="false">{{ t('pages.back_office.settings.create.labels.false') }}</option>
                             </select>
 
                             <input v-else-if="saveForm.type === settingValueTypes.INTEGER" v-model="saveForm.value"
@@ -253,12 +253,12 @@ onMounted(async () => {
                             <textarea v-else-if="
                                 saveForm.type === settingValueTypes.JSON ||
                                 saveForm.type === settingValueTypes.ARRAY
-                            " v-model="saveForm.value" rows="6" :placeholder="t('settings.form.json_placeholder')"
+                            " v-model="saveForm.value" rows="6" :placeholder="t('pages.back_office.settings.create.form.json_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'"></textarea>
 
                             <input v-else-if="saveForm.type === settingValueTypes.URL" v-model="saveForm.value"
-                                type="url" :placeholder="t('settings.form.url_placeholder')"
+                                type="url" :placeholder="t('pages.back_office.settings.create.form.url_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
@@ -271,7 +271,7 @@ onMounted(async () => {
                                 <input v-model="saveForm.value" type="color" class="w-16 h-10 border rounded-md" />
 
                                 <input v-model="saveForm.value" type="text"
-                                    :placeholder="t('settings.form.color_placeholder')"
+                                    :placeholder="t('pages.back_office.settings.create.form.color_placeholder')"
                                     class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
                             </div>
@@ -295,7 +295,7 @@ onMounted(async () => {
                             : 'bg-gray-400 cursor-not-allowed'">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.settings.create.actions.saving') : t('pages.back_office.settings.create.actions.save') }}
                     </button>
                 </div>
             </form>

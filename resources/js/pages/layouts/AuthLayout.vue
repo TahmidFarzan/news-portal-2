@@ -2,7 +2,7 @@
 import OffcanvasMenu from '@/components/common/layout/auth-layout/OffcanvasMenu.vue'
 import Breadcrumbs from '@/components/common/layout/auth-layout/Breadcrumbs.vue'
 import AuthTopbarDropdownMenu from '@/components/common/layout/auth-layout/AuthTopbarDropdownMenu.vue'
-import ToasterMessage from '@/components/common/layout/auth-layout/ToasterMessage.vue'
+import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 
 import { usePage } from '@inertiajs/vue3'
 import { computed, provide } from 'vue'
@@ -63,7 +63,7 @@ provide('authUser', authUser)
                 <!-- EMAIL VERIFY WARNING -->
                 <div v-if="authUser && !authUser.email_verified_at"
                     class="mb-4 p-3 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded">
-                    {{ t('auth.account.not_verified') }}
+                    {{ t('pages.layouts.auth_layout.auth.account.not_verified') }}
                 </div>
 
                 <slot />
@@ -77,16 +77,16 @@ provide('authUser', authUser)
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
 
                 <span class="text-center md:text-left w-full md:w-auto">
-                    {{ t('footer.copyright') }}
+                    {{ t('pages.layouts.auth_layout.footer.copyright') }}
                     {{ new Date().getFullYear() }}
                     {{ appName }}
                 </span>
 
                 <span class="text-center md:text-right w-full md:w-auto">
-                    {{ t('footer.developed_by') }}
+                    {{ t('pages.layouts.auth_layout.footer.developed_by') }}
                     <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank" rel="noopener noreferrer"
                         class="text-blue-600 hover:underline font-medium">
-                        {{ t('footer.developer_name') }}
+                        {{ t('pages.layouts.auth_layout.footer.developer_name') }}
                     </a>
                 </span>
 

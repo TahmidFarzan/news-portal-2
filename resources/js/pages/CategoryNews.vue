@@ -322,7 +322,7 @@ watch(
 
 <template>
 
-    <Head :title="category?.name || t('labels.category')">
+    <Head :title="category?.name || t('pages.category_news.labels.category')">
         <link v-if="category?.public_url" rel="canonical" :href="category.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
@@ -335,19 +335,19 @@ watch(
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
                     <img :src="'/uploads/images/logo/category.png'"
-                        :alt="category?.name || t('categories.details.category_image_alt')"
+                        :alt="category?.name || t('pages.category_news.categories.details.category_image_alt')"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    {{ t('labels.category') }}
+                    {{ t('pages.category_news.labels.category') }}
                 </p>
 
                 <div v-if="category?.parent"
                     class="pointer-events-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                    <a :href="category.parent.public_url" :title="t('labels.category')"
+                    <a :href="category.parent.public_url" :title="t('pages.category_news.labels.category')"
                         class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600"
                         @click.stop>
                         <FontAwesomeIcon icon="folder" class="shrink-0" />
@@ -409,7 +409,7 @@ watch(
                     <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-700">
                         <FontAwesomeIcon icon="location-dot" class="text-blue-600" />
 
-                        <span>{{ t('labels.location') }}</span>
+                        <span>{{ t('pages.category_news.labels.location') }}</span>
                     </div>
 
                     <div v-for="levelIndex in locationLevels" :key="levelIndex" class="space-y-1">
@@ -418,7 +418,7 @@ watch(
                             :selectedItem="searchLocationForm[getLocationFieldName(levelIndex)]"
                             :apiUrl="getLocationApiUrl(levelIndex)"
                             :error="searchLocationForm.errors?.[getLocationFieldName(levelIndex)]" :multiple="false"
-                            :placeholder="t('locations.form.location_placeholder')" />
+                            :placeholder="t('pages.category_news.locations.form.location_placeholder')" />
                     </div>
 
                     <button type="button"
@@ -427,7 +427,7 @@ watch(
                         <FontAwesomeIcon icon="magnifying-glass" />
 
                         <span>
-                            {{ isSearchingLocation ? t('buttons.searching') : t('buttons.search') }}
+                            {{ isSearchingLocation ? t('pages.category_news.actions.searching') : t('pages.category_news.actions.search') }}
                         </span>
                     </button>
                 </div>

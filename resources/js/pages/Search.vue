@@ -63,7 +63,7 @@ const locationApiUrl = computed(() => makeLanguageUrl('search.location-tree'))
 const eventApiUrl = computed(() => makeLanguageUrl('search.events'))
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title ?? t('labels.search')
+    return page?.seo_title ?? page?.title ?? t('pages.search.labels.search')
 })
 
 const metaDescription = computed(() => {
@@ -190,26 +190,26 @@ onMounted(async () => {
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id || null" :apiUrl="newsTypesApiUrl" :multiple="false"
-                    :placeholder="t('labels.news_type')" />
+                    :placeholder="t('pages.search.labels.news_type')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.category_id || null" apiLabelKey="indentation_name" apiValueKey="id"
-                    :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('labels.category')" />
+                    :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('pages.search.labels.category')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.location_id || null" apiLabelKey="indentation_name" apiValueKey="id"
-                    :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('labels.location')" />
+                    :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('pages.search.labels.location')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id || null" :apiUrl="eventApiUrl" :multiple="false"
-                    :placeholder="t('labels.event')" />
+                    :placeholder="t('pages.search.labels.event')" />
 
-                <input v-model="filterForm.date" type="date" :aria-label="t('labels.date')"
+                <input v-model="filterForm.date" type="date" :aria-label="t('pages.search.labels.date')"
                     class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                <input v-model="filterForm.search" type="search" :placeholder="t('news.index.search_placeholder')"
+                <input v-model="filterForm.search" type="search" :placeholder="t('pages.search.news.index.search_placeholder')"
                     class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
@@ -220,7 +220,7 @@ onMounted(async () => {
 
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ isFiltering ? t('labels.loading') : t('categories.index.apply_filter') }}
+                    {{ isFiltering ? t('pages.search.labels.loading') : t('pages.search.categories.index.apply_filter') }}
                 </button>
             </div>
         </form>

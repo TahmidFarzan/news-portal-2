@@ -18,7 +18,7 @@ const {
     <section v-if="news?.length" class="flex h-[500px] flex-col rounded-2xl border border-gray-200 p-2">
         <div class="flex shrink-0 items-center gap-2 recent-news">
             <h2 class="text-xl font-bold text-gray-950">
-                {{ t("recent_news") }}
+                {{ t("components.common.news.recent_news_list.labels.recent_news") }}
             </h2>
         </div>
 

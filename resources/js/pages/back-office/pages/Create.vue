@@ -32,8 +32,8 @@ const isUpdate = computed(() => !!page?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${page?.title} ${t('labels.edit')}`
-        : t('pages.form.create_page_title')
+        ? `${page?.title} ${t('pages.back_office.pages.create.labels.edit')}`
+        : t('pages.back_office.pages.create.form.create_page_title')
 })
 
 const saveForm = useForm({
@@ -62,27 +62,27 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', t('form.validation_errors.language_is_required'))
+        saveForm.setError('language_id', t('pages.back_office.pages.create.validation.language_is_required'))
         valid = false
     }
 
     if (!saveForm.title) {
-        saveForm.setError('title', t('form.validation_errors.title_is_required'))
+        saveForm.setError('title', t('pages.back_office.pages.create.validation.title_is_required'))
         valid = false
     }
 
     if (!saveForm.brief) {
-        saveForm.setError('brief', t('pages.form.validation.brief_required'))
+        saveForm.setError('brief', t('pages.back_office.pages.create.form.validation.brief_required'))
         valid = false
     }
 
     if (!saveForm?.is_default && !saveForm.body) {
-        saveForm.setError('body', t('pages.form.validation.body_required'))
+        saveForm.setError('body', t('pages.back_office.pages.create.form.validation.body_required'))
         valid = false
     }
 
     if (saveForm.has_parent && !saveForm.parent_id) {
-        saveForm.setError('parent_id', t('pages.form.validation.page_required'))
+        saveForm.setError('parent_id', t('pages.back_office.pages.create.form.validation.page_required'))
         valid = false
     }
 
@@ -138,7 +138,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('labels.page'), href: route('back-office.pages.index') },
+                { text: t('pages.back_office.pages.create.labels.page'), href: route('back-office.pages.index') },
                 { text: pageTitle.value, active: true },
             ],
         })
@@ -155,25 +155,25 @@ onMounted(async () => {
             <form @submit.prevent="handleSave" class="space-y-6">
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('labels.basic_information') }}
+                        {{ t('pages.back_office.pages.create.labels.basic_information') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div v-if="saveForm?.is_default && page?.default_use_as" class="md:col-span-2">
                             <div class="rounded-md border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-700">
-                                {{ t('pages.form.default_use_as') }} : {{ page?.default_use_as }}
+                                {{ t('pages.back_office.pages.create.form.default_use_as') }} : {{ page?.default_use_as }}
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.language') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.pages.create.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="page?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
-                                :placeholder="t('pages.form.language_placeholder')" />
+                                :placeholder="t('pages.back_office.pages.create.form.language_placeholder')" />
 
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -182,10 +182,10 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.title') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.pages.create.labels.title') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.title" type="text" :placeholder="t('pages.form.title_placeholder')"
+                            <input v-model="saveForm.title" type="text" :placeholder="t('pages.back_office.pages.create.form.title_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.title ? 'border-red-500' : 'border-gray-300'" />
 
@@ -196,10 +196,10 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.form.brief') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.pages.create.form.brief') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <textarea v-model="saveForm.brief" rows="4" :placeholder="t('pages.form.brief_placeholder')"
+                            <textarea v-model="saveForm.brief" rows="4" :placeholder="t('pages.back_office.pages.create.form.brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -210,7 +210,7 @@ onMounted(async () => {
 
                         <div v-if="!saveForm?.is_default" class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.form.body') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.pages.create.form.body') }} <span class="text-red-500">*</span>
                             </label>
 
                             <TinyMCEEditor inputField="body" :form="saveForm" erroField="body" :isSimple="false"
@@ -225,13 +225,13 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.form.hierarchy') }}
+                        {{ t('pages.back_office.pages.create.form.hierarchy') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <div>
                             <label class="block text-sm font-medium mb-2">
-                                {{ t('pages.form.has_parent') }}
+                                {{ t('pages.back_office.pages.create.form.has_parent') }}
                             </label>
 
                             <button type="button" @click="saveForm.has_parent = !saveForm.has_parent" :class="[
@@ -247,14 +247,14 @@ onMounted(async () => {
 
                         <div v-if="saveForm.has_parent">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.form.parent') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.pages.create.form.parent') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :selectedItem="page?.parent" fieldName="parent_id"
                                 :form="saveForm" :apiUrl="pageApiUrl" :error="saveForm.errors.parent_id"
                                 selectedLabelKey="indentation_title" selectedValueKey="id"
                                 apiLabelKey="indentation_title" apiValueKey="id" :multiple="false"
-                                :placeholder="t('pages.form.parent_placeholder')" />
+                                :placeholder="t('pages.back_office.pages.create.form.parent_placeholder')" />
 
                             <p v-if="saveForm.errors.parent_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.parent_id }}
@@ -265,13 +265,13 @@ onMounted(async () => {
 
                 <div v-if="!saveForm?.is_default" class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.form.publish_settings') }}
+                        {{ t('pages.back_office.pages.create.form.publish_settings') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('labels.published') }}
+                                {{ t('pages.back_office.pages.create.labels.published') }}
                             </label>
 
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -284,7 +284,7 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.is_published ? t('labels.yes') : t('labels.no') }}
+                                    {{ saveForm.is_published ? t('pages.back_office.pages.create.labels.yes') : t('pages.back_office.pages.create.labels.no') }}
                                 </span>
                             </label>
 
@@ -297,17 +297,17 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.form.seo_settings') }}
+                        {{ t('pages.back_office.pages.create.form.seo_settings') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.form.seo_title') }}
+                                {{ t('pages.back_office.pages.create.form.seo_title') }}
                             </label>
 
                             <input v-model="saveForm.seo_title" type="text"
-                                :placeholder="t('pages.form.seo_title_placeholder')"
+                                :placeholder="t('pages.back_office.pages.create.form.seo_title_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
 
@@ -318,11 +318,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.form.seo_brief') }}
+                                {{ t('pages.back_office.pages.create.form.seo_brief') }}
                             </label>
 
                             <textarea v-model="saveForm.seo_brief" rows="3"
-                                :placeholder="t('pages.form.seo_brief_placeholder')"
+                                :placeholder="t('pages.back_office.pages.create.form.seo_brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -333,12 +333,12 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.form.seo_keywords') }}
+                                {{ t('pages.back_office.pages.create.form.seo_keywords') }}
                             </label>
 
                             <MultiSelectTaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
-                                :placeholder="t('pages.form.seo_keywords_placeholder')" />
+                                :placeholder="t('pages.back_office.pages.create.form.seo_keywords_placeholder')" />
 
                             <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.seo_keywords }}
@@ -352,7 +352,7 @@ onMounted(async () => {
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.pages.create.actions.saving') : t('pages.back_office.pages.create.actions.save') }}
                     </button>
                 </div>
             </form>

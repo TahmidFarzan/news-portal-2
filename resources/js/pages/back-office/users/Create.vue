@@ -36,8 +36,8 @@ const isUpdate = computed(() => !!user?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${user?.name} ${t('buttons.edit')}`
-        : t('users.form.create_page_title')
+        ? `${user?.name} ${t('pages.back_office.users.create.actions.edit')}`
+        : t('pages.back_office.users.create.form.create_page_title')
 })
 
 const saveForm = useForm({
@@ -63,43 +63,43 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('form.validation_errors.name_is_required'))
+        saveForm.setError('name', t('pages.back_office.users.create.validation.name_is_required'))
         valid = false
     }
 
     if (!saveForm.email) {
-        saveForm.setError('email', t('form.validation_errors.email_is_required'))
+        saveForm.setError('email', t('pages.back_office.users.create.validation.email_is_required'))
         valid = false
     }
 
     if (!saveForm.gender) {
-        saveForm.setError('gender', t('form.validation_errors.gender_is_required'))
+        saveForm.setError('gender', t('pages.back_office.users.create.validation.gender_is_required'))
         valid = false
     }
 
     if (!saveForm.marital_status) {
-        saveForm.setError('marital_status', t('form.validation_errors.marital_status_is_required'))
+        saveForm.setError('marital_status', t('pages.back_office.users.create.validation.marital_status_is_required'))
         valid = false
     }
 
     if (!saveForm.religion) {
-        saveForm.setError('religion', t('form.validation_errors.religion_is_required'))
+        saveForm.setError('religion', t('pages.back_office.users.create.validation.religion_is_required'))
         valid = false
     }
 
     if (!saveForm.user_role_id) {
-        saveForm.setError('user_role_id', t('form.validation_errors.user_role_is_required'))
+        saveForm.setError('user_role_id', t('pages.back_office.users.create.validation.user_role_is_required'))
         valid = false
     }
 
     if (saveForm.change_password) {
         if (!saveForm.password) {
-            saveForm.setError('password', t('form.validation_errors.password_is_required'))
+            saveForm.setError('password', t('pages.back_office.users.create.validation.password_is_required'))
             valid = false
         }
 
         if (!saveForm.password_confirmation) {
-            saveForm.setError('password_confirmation', t('form.validation_errors.password_confirmation_is_required'))
+            saveForm.setError('password_confirmation', t('pages.back_office.users.create.validation.password_confirmation_is_required'))
             valid = false
         }
     }
@@ -148,7 +148,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('labels.users'), href: route('back-office.users.index') },
+                { text: t('pages.back_office.users.create.labels.users'), href: route('back-office.users.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -167,17 +167,17 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('labels.basic_information') }}
+                        {{ t('pages.back_office.users.create.labels.basic_information') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.name') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.name') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name" :placeholder="t('users.form.name_placeholder')"
+                            <input v-model="saveForm.name" :placeholder="t('pages.back_office.users.create.form.name_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -188,11 +188,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.email') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.email') }} <span class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.email" type="email"
-                                :placeholder="t('users.form.email_placeholder')"
+                                :placeholder="t('pages.back_office.users.create.form.email_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.email ? 'border-red-500' : 'border-gray-300'" />
 
@@ -203,7 +203,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.birth_date') }}
+                                {{ t('pages.back_office.users.create.labels.birth_date') }}
                             </label>
 
                             <input type="date" v-model="saveForm.birth_date"
@@ -212,12 +212,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.gender') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.gender') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="gender"
                                 :selectedItem="saveForm.gender" :apiUrl="route('search.genders')" :multiple="false"
-                                :placeholder="t('buttons.select')" :error="saveForm.errors.gender" />
+                                :placeholder="t('pages.back_office.users.create.actions.select')" :error="saveForm.errors.gender" />
 
                             <p v-if="saveForm.errors.gender" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.gender }}
@@ -226,12 +226,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.religion') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.religion') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="religion"
                                 :selectedItem="saveForm.religion" :apiUrl="route('search.religions')" :multiple="false"
-                                :placeholder="t('buttons.select')" :error="saveForm.errors.religion" />
+                                :placeholder="t('pages.back_office.users.create.actions.select')" :error="saveForm.errors.religion" />
 
                             <p v-if="saveForm.errors.religion" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.religion }}
@@ -240,12 +240,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.marital_status') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.marital_status') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="marital_status"
                                 :selectedItem="saveForm.marital_status" :apiUrl="route('search.marital-statuses')"
-                                :multiple="false" :placeholder="t('buttons.select')"
+                                :multiple="false" :placeholder="t('pages.back_office.users.create.actions.select')"
                                 :error="saveForm.errors.marital_status" />
 
                             <p v-if="saveForm.errors.marital_status" class="text-red-500 text-sm mt-1">
@@ -255,7 +255,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.mobile') }}
+                                {{ t('pages.back_office.users.create.labels.mobile') }}
                             </label>
 
                             <VueTelInput v-model="saveForm.mobile" class="w-full border rounded-md px-2 py-1"
@@ -268,22 +268,22 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.address') }}
+                                {{ t('pages.back_office.users.create.labels.address') }}
                             </label>
 
                             <textarea v-model="saveForm.address" rows="3"
-                                :placeholder="t('users.form.address_placeholder')"
+                                :placeholder="t('pages.back_office.users.create.form.address_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300"></textarea>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('users.form.user_role') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.form.user_role') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="user_role_id"
                                 :selectedItem="user?.user_role" :apiUrl="route('search.user-roles')" :multiple="false"
-                                :placeholder="t('buttons.select')" :error="saveForm.errors.user_role_id" />
+                                :placeholder="t('pages.back_office.users.create.actions.select')" :error="saveForm.errors.user_role_id" />
 
                             <p v-if="saveForm.errors.user_role_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.user_role_id }}
@@ -294,12 +294,12 @@ onMounted(async () => {
 
                             <label class="flex items-center gap-2">
                                 <input type="checkbox" v-model="saveForm.set_as_verify_email" />
-                                <span class="text-sm">{{ t('users.form.set_as_verify_email') }}</span>
+                                <span class="text-sm">{{ t('pages.back_office.users.create.form.set_as_verify_email') }}</span>
                             </label>
 
                             <label class="flex items-center gap-2">
                                 <input type="checkbox" v-model="saveForm.change_password" />
-                                <span class="text-sm">{{ t('auth.account.change_password') }}</span>
+                                <span class="text-sm">{{ t('pages.back_office.users.create.auth.account.change_password') }}</span>
                             </label>
 
                         </div>
@@ -309,23 +309,23 @@ onMounted(async () => {
 
                 <div v-if="saveForm.change_password" class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('auth.account.change_password') }}
+                        {{ t('pages.back_office.users.create.auth.account.change_password') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('auth.account.new_password') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.auth.account.new_password') }} <span class="text-red-500">*</span>
                             </label>
 
                             <div class="relative">
                                 <input :type="showPassword ? 'text' : 'password'" v-model="saveForm.password"
-                                    :placeholder="t('users.form.new_password_placeholder')"
+                                    :placeholder="t('pages.back_office.users.create.form.new_password_placeholder')"
                                     class="w-full border rounded-md px-3 py-2 text-sm pr-10 focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
 
                                 <button type="button" @click="togglePasswordVisibility" class="absolute right-2 top-2"
-                                    :title="showPassword ? t('auth.account.hide_password') : t('auth.account.show_password')">
+                                    :title="showPassword ? t('pages.back_office.users.create.auth.account.hide_password') : t('pages.back_office.users.create.auth.account.show_password')">
                                     <FontAwesomeIcon :icon="showPassword ? 'eye-slash' : 'eye'" />
                                 </button>
                             </div>
@@ -337,18 +337,18 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('auth.account.confirm_password') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.auth.account.confirm_password') }} <span class="text-red-500">*</span>
                             </label>
 
                             <div class="relative">
                                 <input :type="showConfirmPassword ? 'text' : 'password'"
                                     v-model="saveForm.password_confirmation"
-                                    :placeholder="t('users.form.confirm_password_placeholder')"
+                                    :placeholder="t('pages.back_office.users.create.form.confirm_password_placeholder')"
                                     class="w-full border rounded-md px-3 py-2 text-sm pr-10 focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
 
                                 <button type="button" @click="toggleConfirmPasswordVisibility"
                                     class="absolute right-2 top-2"
-                                    :title="showConfirmPassword ? t('auth.account.hide_confirm_password') : t('auth.account.show_confirm_password')">
+                                    :title="showConfirmPassword ? t('pages.back_office.users.create.auth.account.hide_confirm_password') : t('pages.back_office.users.create.auth.account.show_confirm_password')">
                                     <FontAwesomeIcon :icon="showConfirmPassword ? 'eye-slash' : 'eye'" />
                                 </button>
                             </div>
@@ -366,7 +366,7 @@ onMounted(async () => {
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.users.create.actions.saving') : t('pages.back_office.users.create.actions.save') }}
                     </button>
                 </div>
 

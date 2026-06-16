@@ -61,7 +61,7 @@ const { news } = defineProps({
         </section>
 
         <div v-else class="rounded-2xl border border-dashed border-gray-300 p-8 text-center text-gray-500">
-            {{ t("labels.no_gallery_image_found") }}
+            {{ t("components.common.news.view.image_gallery.labels.no_gallery_image_found") }}
         </div>
 
         <TagTrend :news="news" />

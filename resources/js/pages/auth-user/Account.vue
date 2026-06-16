@@ -49,31 +49,31 @@ function validateForm() {
     let valid = true
 
     if (!accountUpdateForm.name || accountUpdateForm.name.trim() === '') {
-        accountUpdateForm.setError('name', t('form.validation_errors.name_is_required'))
+        accountUpdateForm.setError('name', t('pages.auth_user.account.validation.name_is_required'))
         valid = false
     }
 
     if (!accountUpdateForm.email || accountUpdateForm.email.trim() === '') {
-        accountUpdateForm.setError('email', t('form.validation_errors.email_is_required'))
+        accountUpdateForm.setError('email', t('pages.auth_user.account.validation.email_is_required'))
         valid = false
     }
 
     if (accountUpdateForm.change_password) {
         if (!accountUpdateForm.current_password || accountUpdateForm.current_password.trim() === '') {
-            accountUpdateForm.setError('current_password', t('form.validation_errors.current_password_is_required'))
+            accountUpdateForm.setError('current_password', t('pages.auth_user.account.validation.current_password_is_required'))
             valid = false
         }
 
         if (!accountUpdateForm.password || accountUpdateForm.password.trim() === '') {
-            accountUpdateForm.setError('password', t('form.validation_errors.password_is_required'))
+            accountUpdateForm.setError('password', t('pages.auth_user.account.validation.password_is_required'))
             valid = false
         }
 
         if (!accountUpdateForm.password_confirmation || accountUpdateForm.password_confirmation.trim() === '') {
-            accountUpdateForm.setError('password_confirmation', t('form.validation_errors.password_confirmation_is_required'))
+            accountUpdateForm.setError('password_confirmation', t('pages.auth_user.account.validation.password_confirmation_is_required'))
             valid = false
         } else if (accountUpdateForm.password !== accountUpdateForm.password_confirmation) {
-            accountUpdateForm.setError('password_confirmation', t('form.validation_errors.password_confirmation_does_not_match'))
+            accountUpdateForm.setError('password_confirmation', t('pages.auth_user.account.validation.password_confirmation_does_not_match'))
             valid = false
         }
     }
@@ -97,7 +97,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('auth.account.page_title'), active: true },
+                { text: t('pages.auth_user.account.page_title'), active: true },
             ],
         })
     )
@@ -106,7 +106,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('auth.account.page_title')" />
+    <Head :title="t('pages.auth_user.account.page_title')" />
 
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
@@ -116,19 +116,19 @@ onMounted(async () => {
                 <button @click="activeTab = 'info'" class="px-4 py-2 text-sm font-medium transition" :class="activeTab === 'info'
                     ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-500 hover:text-gray-700'">
-                    {{ t('auth.account.tabs.info') }}
+                    {{ t('pages.auth_user.account.tabs.info') }}
                 </button>
 
                 <button @click="activeTab = 'update'" class="px-4 py-2 text-sm font-medium transition" :class="activeTab === 'update'
                     ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-500 hover:text-gray-700'">
-                    {{ t('auth.account.tabs.update') }}
+                    {{ t('pages.auth_user.account.tabs.update') }}
                 </button>
 
                 <button @click="activeTab = 'logs'" class="px-4 py-2 text-sm font-medium transition" :class="activeTab === 'logs'
                     ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-500 hover:text-gray-700'">
-                    {{ t('auth.account.tabs.activity_logs') }}
+                    {{ t('pages.auth_user.account.tabs.activity_logs') }}
                 </button>
 
             </div>
@@ -143,34 +143,34 @@ onMounted(async () => {
                         <div class="w-32 h-32">
                             <MediaRenderer v-if="user?.profile_image" :media="user?.profile_image" />
 
-                            <img v-else src="/uploads/icons/auth/user.png" :alt="t('auth.account.profile_image_alt')"
+                            <img v-else :src="'/uploads/icons/auth/user.png'" :alt="t('pages.auth_user.account.profile_image_alt')"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
 
                         <div class="space-y-2 text-sm">
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.name') }}:
+                                    {{ t('pages.auth_user.account.labels.name') }}:
                                 </span>
                                 {{ user?.name }}
                             </div>
 
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.email') }}:
+                                    {{ t('pages.auth_user.account.labels.email') }}:
                                 </span>
                                 {{ user?.email }}
                             </div>
 
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('auth.account.email_verified') }}:
+                                    {{ t('pages.auth_user.account.email_verified') }}:
                                 </span>
 
                                 {{
                                     user?.email_verified_at
                                         ? formatDateTime(user.email_verified_at)
-                                        : t('auth.account.not_verified')
+                                        : t('pages.auth_user.account.not_verified')
                                 }}
                             </div>
                         </div>
@@ -186,7 +186,7 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.name') }}
+                                    {{ t('pages.auth_user.account.labels.name') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
@@ -200,7 +200,7 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.email') }}
+                                    {{ t('pages.auth_user.account.labels.email') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
@@ -219,7 +219,7 @@ onMounted(async () => {
                                 class="accent-blue-600" />
 
                             <span class="text-sm">
-                                {{ t('auth.account.change_password') }}
+                                {{ t('pages.auth_user.account.change_password') }}
                             </span>
                         </label>
 
@@ -227,7 +227,7 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('auth.account.current_password') }}
+                                    {{ t('pages.auth_user.account.current_password') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
@@ -239,7 +239,7 @@ onMounted(async () => {
 
                                     <button type="button" @click="toggleCurrentPasswordVisibility"
                                         class="absolute right-2 top-2 text-gray-500"
-                                        :aria-label="showCurrentPassword ? t('auth.account.hide_current_password') : t('auth.account.show_current_password')">
+                                        :aria-label="showCurrentPassword ? t('pages.auth_user.account.hide_current_password') : t('pages.auth_user.account.show_current_password')">
                                         <FontAwesomeIcon :icon="showCurrentPassword ? 'eye-slash' : 'eye'" />
                                     </button>
                                 </div>
@@ -251,7 +251,7 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('auth.account.new_password') }}
+                                    {{ t('pages.auth_user.account.new_password') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
@@ -263,7 +263,7 @@ onMounted(async () => {
 
                                     <button type="button" @click="togglePasswordVisibility"
                                         class="absolute right-2 top-2 text-gray-500"
-                                        :aria-label="showPassword ? t('auth.account.hide_password') : t('auth.account.show_password')">
+                                        :aria-label="showPassword ? t('pages.auth_user.account.hide_password') : t('pages.auth_user.account.show_password')">
                                         <FontAwesomeIcon :icon="showPassword ? 'eye-slash' : 'eye'" />
                                     </button>
                                 </div>
@@ -275,7 +275,7 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('auth.account.confirm_password') }}
+                                    {{ t('pages.auth_user.account.confirm_password') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
@@ -287,7 +287,7 @@ onMounted(async () => {
 
                                     <button type="button" @click="toggleConfirmPasswordVisibility"
                                         class="absolute right-2 top-2 text-gray-500"
-                                        :aria-label="showConfirmPassword ? t('auth.account.hide_confirm_password') : t('auth.account.show_confirm_password')">
+                                        :aria-label="showConfirmPassword ? t('pages.auth_user.account.hide_confirm_password') : t('pages.auth_user.account.show_confirm_password')">
                                         <FontAwesomeIcon :icon="showConfirmPassword ? 'eye-slash' : 'eye'" />
                                     </button>
                                 </div>
@@ -306,8 +306,8 @@ onMounted(async () => {
 
                             {{
                                 accountUpdateForm.processing
-                                    ? t('buttons.updating')
-                                    : t('buttons.update')
+                                    ? t('pages.auth_user.account.actions.updating')
+                                    : t('pages.auth_user.account.actions.update')
                             }}
                         </button>
 

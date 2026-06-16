@@ -1,198 +1,2966 @@
 {
-    "footer": {
-        "copyright": "©",
-        "developed_by": "ডেভেলপ করেছেন",
-        "developer_name": "শেখ মো. তাহমিদ ফারজান"
-    },
-    "number": {
-        "0": "০",
-        "1": "১",
-        "2": "২",
-        "3": "৩",
-        "4": "৪",
-        "5": "৫",
-        "6": "৬",
-        "7": "৭",
-        "8": "৮",
-        "9": "৯"
-    },
-    "labels": {
-        "login": "লগইন",
-        "tag": "ট্যাগ",
-        "language": "ভাষা",
-        "location": "অবস্থান",
-        "search": "অনুসন্ধান",
-        "menu": "মেনু",
-        "no_menu_found": "কোনো মেনু পাওয়া যায়নি",
-        "loading": "লোড হচ্ছে",
-        "profile": "প্রোফাইল",
-        "image_gallery": "ইমেজ গ্যালারি",
-        "iframe_not_support": "ব্রাউজার এই ফাইল টাইপ প্রদর্শন করতে ব্যর্থ হয়েছে",
-        "gallery": "গ্যালারি",
-        "gallery_images": "গ্যালারির ছবি",
-        "no_media_found": "কোনো মিডিয়া পাওয়া যায়নি।",
-        "entries": "এন্ট্রি",
-        "to": "থেকে",
-        "of": "এর",
-        "page": "পৃষ্ঠা",
-        "showing": "দেখানো হচ্ছে",
-        "no_gallery_image_found": "কোনো গ্যালারি ছবি পাওয়া যায়নি",
-        "source": "সূত্র",
-        "share": "শেয়ার",
-        "copied": "কপি হয়েছে",
-        "copy": "কপি",
-        "by": "দ্বারা",
-        "show_all": "সব দেখুন",
-        "add_image": "ছবি যোগ করুন",
-        "image": "ছবি",
-        "preview": "প্রিভিউ",
-        "caption": "ক্যাপশন",
-        "alt_text": "বিকল্প লেখা",
-        "delete_image": "ছবি মুছুন",
-        "contributors": "অবদানকারী",
-        "recent_news": "সাম্প্রতিক সংবাদ",
-        "related_news": "সম্পর্কিত সংবাদ",
-        "relevant_news": "প্রাসঙ্গিক সংবাদ",
-        "no_record_found": "কোনো রেকর্ড পাওয়া যায়নি",
-        "edit_image": "ছবি সম্পাদনা",
-        "order_column": "ক্রম কলাম",
-        "update_gallery_image": "গ্যালারি ছবি আপডেট করুন",
-        "create_news": "সংবাদ তৈরি করুন",
-        "name": "নাম",
-        "email": "ইমেইল",
-        "gender": "লিঙ্গ",
-        "religion": "ধর্ম",
-        "marital_status": "বৈবাহিক অবস্থা",
-        "mobile": "মোবাইল",
-        "birth_date": "জন্ম তারিখ",
-        "age": "বয়স",
-        "address": "ঠিকানা",
-        "profile_image": "প্রোফাইল ছবি",
-        "not_available": "প্রযোজ্য নয়",
-        "system": "সিস্টেম",
-        "per_page": "প্রতি পৃষ্ঠা",
-        "basic_information": "মৌলিক তথ্য",
-        "title": "শিরোনাম",
-        "published": "প্রকাশিত",
-        "is_published": "প্রকাশিত কি না",
-        "yes": "হ্যাঁ",
-        "no": "না",
-        "details": "বিস্তারিত",
-        "edit": "সম্পাদনা",
-        "url": "ইউআরএল",
-        "created_by": "তৈরি করেছেন",
-        "updated_at": "আপডেটের সময়",
-        "updated_by": "আপডেট করেছেন",
-        "news_type": "সংবাদের ধরন",
-        "news": "সংবাদ"
-    },
-    "app": {
-        "name": "নিউজ পোর্টাল",
-        "breaking_news": "ব্রেকিং নিউজ"
-    },
-    "auth": {
-        "profile": {
-            "page_title": "প্রোফাইল",
-            "profile_image_alt": "ব্যবহারকারীর প্রোফাইল ছবি",
-            "tabs": {
-                "profile": "প্রোফাইল",
-                "update": "আপডেট",
-                "activity_logs": "অ্যাক্টিভিটি লগ"
+    "components": {
+        "back_office": {
+            "activity_log": {
+                "recent_model_activity_logs": {
+                    "table": {
+                        "columns": {
+                            "sl": "ক্রম",
+                            "description": "বিবরণ",
+                            "causer": "কার্যকারী",
+                            "created_at": "তৈরির সময়",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "labels": {
+                        "show_all": "সব দেখুন",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    }
+                }
             },
-            "name_placeholder": "নাম লিখুন",
-            "gender_placeholder": "লিঙ্গ নির্বাচন করুন",
-            "religion_placeholder": "ধর্ম নির্বাচন করুন",
-            "marital_status_placeholder": "বৈবাহিক অবস্থা নির্বাচন করুন",
-            "address_placeholder": "ঠিকানা লিখুন"
-        },
-        "account": {
-            "page_title": "অ্যাকাউন্ট",
-            "profile_image_alt": "ব্যবহারকারীর প্রোফাইল ছবি",
-            "tabs": {
-                "info": "তথ্য",
-                "update": "আপডেট",
-                "activity_logs": "অ্যাক্টিভিটি লগ"
+            "category": {
+                "recent_catgories": {
+                    "table": {
+                        "columns": {
+                            "sl": "ক্রম",
+                            "name": "নাম",
+                            "parent": "মূল",
+                            "created_at": "তৈরির সময়",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "navigation": {
+                        "show_all": "সব দেখুন"
+                    },
+                    "labels": {
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    }
+                }
             },
-            "email_verified": "ইমেইল যাচাই করা হয়েছে",
-            "not_verified": "যাচাই করা হয়নি",
-            "change_password": "পাসওয়ার্ড পরিবর্তন",
-            "current_password": "বর্তমান পাসওয়ার্ড",
-            "new_password": "নতুন পাসওয়ার্ড",
-            "confirm_password": "পাসওয়ার্ড নিশ্চিত করুন",
-            "show_password": "পাসওয়ার্ড দেখান",
-            "hide_password": "পাসওয়ার্ড লুকান",
-            "show_confirm_password": "নিশ্চিত পাসওয়ার্ড দেখান",
-            "hide_confirm_password": "নিশ্চিত পাসওয়ার্ড লুকান",
-            "show_current_password": "বর্তমান পাসওয়ার্ড দেখান",
-            "hide_current_password": "বর্তমান পাসওয়ার্ড লুকান"
+            "location": {
+                "recent_locations": {
+                    "table": {
+                        "columns": {
+                            "sl": "ক্রম",
+                            "name": "নাম",
+                            "parent": "মূল",
+                            "created_at": "তৈরির সময়",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "navigation": {
+                        "show_all": "সব দেখুন"
+                    },
+                    "labels": {
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    }
+                }
+            },
+            "menu": {
+                "menu_items": {
+                    "table": {
+                        "columns": {
+                            "sl": "ক্রম",
+                            "name": "নাম",
+                            "language": "ভাষা",
+                            "parent": "মূল",
+                            "position": "অবস্থান",
+                            "created_at": "তৈরির সময়",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "navigation": {
+                        "show_all": "সব দেখুন"
+                    },
+                    "labels": {
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    }
+                }
+            },
+            "news": {
+                "news_image_gallery_draft_grid": {
+                    "validation": {
+                        "image_is_required": "ছবি প্রদান করা আবশ্যক",
+                        "sequence_is_required": "ক্রম প্রদান করা আবশ্যক"
+                    },
+                    "messages": {
+                        "invalid_data": "তথ্য সঠিক নয়",
+                        "image_save_failed": "ছবি সংরক্ষণ করা যায়নি",
+                        "invalid_image_response": "ছবি সংরক্ষণ হয়েছে, কিন্তু সঠিক মিডিয়া রেসপন্স পাওয়া যায়নি"
+                    },
+                    "labels": {
+                        "gallery_images": "গ্যালারি ছবি",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি",
+                        "add_image": "ছবি যোগ করুন",
+                        "image": "ছবি",
+                        "preview": "প্রিভিউ",
+                        "caption": "ক্যাপশন",
+                        "alt_text": "বিকল্প টেক্সট"
+                    },
+                    "actions": {
+                        "add_image": "ছবি যোগ করুন",
+                        "drag_and_sequence": "ড্র্যাগ করে ক্রম সাজান",
+                        "cancel": "বাতিল",
+                        "save": "সংরক্ষণ",
+                        "saving": "সংরক্ষণ হচ্ছে"
+                    }
+                },
+                "news_image_gallery_draft_image_card": {
+                    "messages": {
+                        "invalid_data": "তথ্য সঠিক নয়",
+                        "missing_slug": "Slug পাওয়া যায়নি। অনুগ্রহ করে backend response থেকে slug পাঠান।",
+                        "fail_to_update_image": "ছবি হালনাগাদ করা যায়নি।",
+                        "invalid_response_after_image_update": "ছবি হালনাগাদ হয়েছে, কিন্তু সঠিক মিডিয়া রেসপন্স পাওয়া যায়নি",
+                        "fail_to_delete_image": "ছবি মুছে ফেলা যায়নি"
+                    },
+                    "labels": {
+                        "edit_image": "ছবি সম্পাদনা",
+                        "preview": "প্রিভিউ",
+                        "caption": "ক্যাপশন",
+                        "alt_text": "বিকল্প টেক্সট"
+                    },
+                    "actions": {
+                        "cancel": "বাতিল",
+                        "updating": "হালনাগাদ হচ্ছে",
+                        "update": "হালনাগাদ",
+                        "deleting": "মুছে ফেলা হচ্ছে",
+                        "delete": "মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "title": "মুছে ফেলার নিশ্চিতকরণ",
+                            "body": "আপনি কি নিশ্চিতভাবে এটি মুছতে চান"
+                        }
+                    }
+                },
+                "news_image_gallery_grid": {
+                    "validation": {
+                        "image_is_required": "ছবি প্রদান করা আবশ্যক",
+                        "sequence_is_required": "ক্রম প্রদান করা আবশ্যক"
+                    },
+                    "labels": {
+                        "gallery_images": "গ্যালারি ছবি",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি",
+                        "add_image": "ছবি যোগ করুন",
+                        "image": "ছবি",
+                        "preview": "প্রিভিউ",
+                        "order_column": "অর্ডার কলাম",
+                        "caption": "ক্যাপশন",
+                        "alt_text": "বিকল্প টেক্সট"
+                    },
+                    "actions": {
+                        "add_image": "ছবি যোগ করুন",
+                        "drag_and_sequence": "ড্র্যাগ করে ক্রম সাজান",
+                        "cancel": "বাতিল",
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "news_image_gallery_image_card": {
+                    "labels": {
+                        "update_gallery_image": "গ্যালারি ছবি হালনাগাদ করুন",
+                        "caption": "ক্যাপশন",
+                        "alt_text": "বিকল্প টেক্সট",
+                        "order_column": "অর্ডার কলাম"
+                    },
+                    "actions": {
+                        "cancel": "বাতিল",
+                        "update": "হালনাগাদ"
+                    }
+                },
+                "news_placement_list": {
+                    "labels": {
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "table": {
+                        "columns": {
+                            "page": "পেজ",
+                            "section": "সেকশন",
+                            "position": "অবস্থান",
+                            "action": "কার্যক্রম"
+                        }
+                    },
+                    "navigation": {
+                        "details": "বিস্তারিত"
+                    }
+                },
+                "news_placement_sortable_list": {
+                    "labels": {
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি",
+                        "create_news": "সংবাদ তৈরি করুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "title": "মুছে ফেলার নিশ্চিতকরণ",
+                            "body": "আপনি কি নিশ্চিতভাবে এটি মুছতে চান"
+                        }
+                    },
+                    "actions": {
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে",
+                        "delete": "মুছুন"
+                    }
+                },
+                "related_or_relevant_news_list": {
+                    "navigation": {
+                        "details": "বিস্তারিত"
+                    }
+                }
+            }
         },
-        "login": {
-            "page_title": "লগইন",
-            "title": "স্বাগতম",
-            "description": "চালিয়ে যেতে অনুগ্রহ করে লগইন করুন।",
-            "image_alt": "লগইন",
-            "email_placeholder": "আপনার ইমেইল লিখুন",
-            "password_placeholder": "আপনার পাসওয়ার্ড লিখুন",
-            "remember_me": "আমাকে মনে রাখুন",
-            "login_button": "লগইন",
-            "logging_in_button": "লগইন হচ্ছে...",
-            "create_account": "অ্যাকাউন্ট তৈরি করুন",
-            "forgot_password": "পাসওয়ার্ড ভুলে গেছেন?",
-            "show_password": "পাসওয়ার্ড দেখান",
-            "hide_password": "পাসওয়ার্ড লুকান"
+        "common": {
+            "layout": {
+                "auth_layout": {
+                    "auth_topbar_dropdown_menu": {
+                        "navigation": {
+                            "profile": "প্রোফাইল",
+                            "account": "অ্যাকাউন্ট",
+                            "activity_logs": "কার্যক্রম লগ"
+                        },
+                        "actions": {
+                            "logout": "লগআউট",
+                            "logging_out": "লগআউট হচ্ছে"
+                        },
+                        "modals": {
+                            "logout_modal": {
+                                "title": "লগআউট নিশ্চিতকরণ",
+                                "body": "আপনি কি নিশ্চিতভাবে লগআউট করতে চান?"
+                            }
+                        }
+                    },
+                    "offcanvas_menu_items": {
+                        "navigation": {
+                            "dashboard": "ড্যাশবোর্ড",
+                            "medias": "মিডিয়া",
+                            "news_attributes": "সংবাদ অ্যাট্রিবিউট",
+                            "languages": "ভাষাসমূহ",
+                            "categories": "ক্যাটাগরি",
+                            "tags": "ট্যাগ",
+                            "trends": "ট্রেন্ড",
+                            "location": "অবস্থান",
+                            "events": "ইভেন্ট",
+                            "contributors": "অবদানকারী",
+                            "news": "সংবাদ",
+                            "breaking_news": "ব্রেকিং নিউজ",
+                            "pages": "পেজ",
+                            "menus": "মেনু",
+                            "user_anagement": "ব্যবহারকারী ব্যবস্থাপনা",
+                            "users": "ব্যবহারকারী",
+                            "settings": "সেটিংস"
+                        }
+                    }
+                },
+                "public_layout": {
+                    "auth_topbar_dropdown_menu": {
+                        "navigation": {
+                            "dashboard": "ড্যাশবোর্ড",
+                            "profile": "প্রোফাইল",
+                            "account": "অ্যাকাউন্ট"
+                        },
+                        "actions": {
+                            "logout": "লগআউট",
+                            "cancel": "বাতিল"
+                        },
+                        "modals": {
+                            "logout_modal": {
+                                "title": "লগআউট নিশ্চিতকরণ",
+                                "body": "আপনি কি নিশ্চিতভাবে লগআউট করতে চান?"
+                            }
+                        }
+                    },
+                    "breaking_news": {
+                        "labels": {
+                            "loading": "লোড হচ্ছে"
+                        }
+                    },
+                    "footer_menu": {
+                        "labels": {
+                            "loading": "লোড হচ্ছে"
+                        }
+                    },
+                    "footer_menu_item": {
+                        "labels": {
+                            "menu": "মেনু"
+                        }
+                    },
+                    "header_menu": {
+                        "messages": {
+                            "loading": "লোড হচ্ছে..."
+                        }
+                    },
+                    "header_menu_item": {
+                        "labels": {
+                            "loading": "লোড হচ্ছে",
+                            "no_menu_found": "কোনো মেনু পাওয়া যায়নি"
+                        }
+                    },
+                    "language_select": {
+                        "labels": {
+                            "language": "ভাষা"
+                        }
+                    },
+                    "off_canvas_menu": {
+                        "labels": {
+                            "no_menu_found": "কোনো মেনু পাওয়া যায়নি",
+                            "loading": "লোড হচ্ছে"
+                        }
+                    },
+                    "off_canvas_menu_item": {
+                        "labels": {
+                            "loading": "লোড হচ্ছে",
+                            "no_menu_found": "কোনো মেনু পাওয়া যায়নি"
+                        }
+                    },
+                    "topbar_menu": {
+                        "labels": {
+                            "loading": "লোড হচ্ছে"
+                        }
+                    }
+                }
+            },
+            "media": {
+                "media_renderer": {
+                    "labels": {
+                        "iframe_not_support": "ব্রাউজার এই ফাইল টাইপ প্রদর্শন করতে পারছে না"
+                    },
+                    "actions": {
+                        "download": "ডাউনলোড"
+                    }
+                },
+                "media_select_from_media_libery": {
+                    "actions": {
+                        "open_media_library": "মিডিয়া লাইব্রেরি খুলুন",
+                        "loading": "লোড হচ্ছে",
+                        "load_more": "আরও লোড করুন",
+                        "close": "বন্ধ করুন",
+                        "select": "নির্বাচন করুন"
+                    },
+                    "labels": {
+                        "gallery": "গ্যালারি",
+                        "loading": "লোড হচ্ছে",
+                        "no_media_found": "কোনো মিডিয়া পাওয়া যায়নি।"
+                    }
+                }
+            },
+            "model": {
+                "cursor_pagination": {
+                    "actions": {
+                        "loading": "লোড হচ্ছে",
+                        "load_less": "কম দেখান",
+                        "load_more": "আরও দেখান"
+                    }
+                },
+                "pagination": {
+                    "labels": {
+                        "showing": "দেখানো হচ্ছে",
+                        "to": "থেকে",
+                        "of": "মোট",
+                        "entries": "এন্ট্রি",
+                        "page": "পৃষ্ঠা"
+                    },
+                    "number": {
+                        "0": "০",
+                        "1": "১",
+                        "2": "২",
+                        "3": "৩",
+                        "4": "৪",
+                        "5": "৫",
+                        "6": "৬",
+                        "7": "৭",
+                        "8": "৮",
+                        "9": "৯"
+                    }
+                }
+            },
+            "multi_select": {
+                "infinity_loading_api": {
+                    "labels": {
+                        "loading": "লোড হচ্ছে",
+                        "page": "পৃষ্ঠা"
+                    },
+                    "number": {
+                        "0": "০",
+                        "1": "১",
+                        "2": "২",
+                        "3": "৩",
+                        "4": "৪",
+                        "5": "৫",
+                        "6": "৬",
+                        "7": "৭",
+                        "8": "৮",
+                        "9": "৯"
+                    }
+                },
+                "infinity_loading_local_data": {
+                    "labels": {
+                        "loading": "লোড হচ্ছে",
+                        "page": "পৃষ্ঠা"
+                    },
+                    "number": {
+                        "0": "০",
+                        "1": "১",
+                        "2": "২",
+                        "3": "৩",
+                        "4": "৪",
+                        "5": "৫",
+                        "6": "৬",
+                        "7": "৭",
+                        "8": "৮",
+                        "9": "৯"
+                    }
+                }
+            },
+            "news": {
+                "recent_news_list": {
+                    "labels": {
+                        "recent_news": "সাম্প্রতিক সংবাদ"
+                    }
+                },
+                "related_news_grid": {
+                    "labels": {
+                        "related_news": "সম্পর্কিত সংবাদ"
+                    }
+                },
+                "relevant_news_list": {
+                    "labels": {
+                        "relevant_news": "প্রাসঙ্গিক সংবাদ"
+                    }
+                },
+                "social_share": {
+                    "labels": {
+                        "share": "শেয়ার",
+                        "copied": "কপি হয়েছে",
+                        "copy": "কপি"
+                    }
+                },
+                "view": {
+                    "image_gallery": {
+                        "labels": {
+                            "no_gallery_image_found": "কোনো গ্যালারি ছবি পাওয়া যায়নি"
+                        }
+                    },
+                    "story": {
+                        "labels": {
+                            "source": "সূত্র"
+                        }
+                    }
+                },
+                "writer_constributer": {
+                    "labels": {
+                        "by": "লেখক",
+                        "contributors": "অবদানকারী"
+                    }
+                }
+            }
+        }
+    },
+    "pages": {
+        "auth": {
+            "email_verification": {
+                "page_title": "ইমেইল যাচাই",
+                "image_alt": "ব্যবহারকারীর ইমেইল যাচাই",
+                "title": "আপনার ইমেইল যাচাই করুন",
+                "description": "চালিয়ে যাওয়ার আগে, অনুগ্রহ করে যাচাইকরণ লিংকের জন্য আপনার ইমেইল চেক করুন।",
+                "resending_button": "পুনরায় পাঠানো হচ্ছে...",
+                "resend_button": "যাচাইকরণ ইমেইল পুনরায় পাঠান"
+            },
+            "forgot_password": {
+                "validation": {
+                    "email_is_required": "ইমেইল প্রদান করা আবশ্যক।",
+                    "email_must_not_exceed_200_characters": "ইমেইল ২০০ অক্ষরের বেশি হতে পারবে না।"
+                },
+                "page_title": "পাসওয়ার্ড ভুলে গেছেন",
+                "image_alt": "পাসওয়ার্ড ভুলে গেছেন",
+                "title": "পাসওয়ার্ড ভুলে গেছেন",
+                "description": "রিসেট লিংক পেতে আপনার ইমেইল লিখুন।",
+                "email_placeholder": "example@email.com",
+                "sending_button": "পাঠানো হচ্ছে...",
+                "send_reset_link_button": "রিসেট লিংক পাঠান",
+                "already_have_account": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+                "back_to_login": "লগইনে ফিরে যান"
+            },
+            "login": {
+                "validation": {
+                    "email_is_required": "ইমেইল প্রদান করা আবশ্যক।",
+                    "email_must_not_exceed_200_characters": "ইমেইল ২০০ অক্ষরের বেশি হতে পারবে না।",
+                    "password_is_required": "পাসওয়ার্ড প্রদান করা আবশ্যক।"
+                },
+                "page_title": "লগইন",
+                "image_alt": "লগইন",
+                "title": "স্বাগতম",
+                "description": "চালিয়ে যেতে অনুগ্রহ করে লগইন করুন।",
+                "email_placeholder": "আপনার ইমেইল লিখুন",
+                "password_placeholder": "আপনার পাসওয়ার্ড লিখুন",
+                "hide_password": "পাসওয়ার্ড লুকান",
+                "show_password": "পাসওয়ার্ড দেখান",
+                "remember_me": "আমাকে মনে রাখুন",
+                "logging_in_button": "লগইন হচ্ছে...",
+                "login_button": "লগইন",
+                "create_account": "অ্যাকাউন্ট তৈরি করুন",
+                "forgot_password": "পাসওয়ার্ড ভুলে গেছেন?"
+            },
+            "register": {
+                "validation": {
+                    "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                    "name_must_not_exceed_200_characters": "নাম ২০০ অক্ষরের বেশি হতে পারবে না।",
+                    "email_is_required": "ইমেইল প্রদান করা আবশ্যক।",
+                    "email_must_not_exceed_200_characters": "ইমেইল ২০০ অক্ষরের বেশি হতে পারবে না।",
+                    "password_is_required": "পাসওয়ার্ড প্রদান করা আবশ্যক।",
+                    "password_confirmation_is_required": "পাসওয়ার্ড নিশ্চিতকরণ প্রদান করা আবশ্যক।",
+                    "password_confirmation_does_not_match": "পাসওয়ার্ড নিশ্চিতকরণ মিলছে না।"
+                },
+                "page_title": "রেজিস্টার",
+                "image_alt": "রেজিস্টার",
+                "title": "অ্যাকাউন্ট তৈরি করুন",
+                "description": "শুরু করতে আপনার তথ্যগুলো পূরণ করুন।",
+                "name_placeholder": "আপনার পূর্ণ নাম",
+                "email_placeholder": "example@email.com",
+                "password_placeholder": "পাসওয়ার্ড লিখুন",
+                "hide_password": "পাসওয়ার্ড লুকান",
+                "show_password": "পাসওয়ার্ড দেখান",
+                "password_confirmation_placeholder": "পাসওয়ার্ড নিশ্চিত করুন",
+                "hide_confirm_password": "নিশ্চিত পাসওয়ার্ড লুকান",
+                "show_confirm_password": "নিশ্চিত পাসওয়ার্ড দেখান",
+                "registering_button": "রেজিস্টার হচ্ছে...",
+                "register_button": "রেজিস্টার",
+                "already_have_account": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+                "login_here": "এখানে লগইন করুন"
+            },
+            "reset_password": {
+                "validation": {
+                    "password_is_required": "পাসওয়ার্ড প্রদান করা আবশ্যক।",
+                    "password_confirmation_is_required": "পাসওয়ার্ড নিশ্চিতকরণ প্রদান করা আবশ্যক।",
+                    "password_confirmation_does_not_match": "পাসওয়ার্ড নিশ্চিতকরণ মিলছে না।"
+                },
+                "page_title": "পাসওয়ার্ড রিসেট",
+                "image_alt": "পাসওয়ার্ড রিসেট",
+                "title": "পাসওয়ার্ড রিসেট করুন",
+                "description": "আপনার অ্যাকাউন্টের পাসওয়ার্ড রিসেট করতে নতুন পাসওয়ার্ড লিখুন।",
+                "password_placeholder": "নতুন পাসওয়ার্ড লিখুন",
+                "hide_password": "পাসওয়ার্ড লুকান",
+                "show_password": "পাসওয়ার্ড দেখান",
+                "password_confirmation_placeholder": "পাসওয়ার্ড নিশ্চিত করুন",
+                "hide_confirm_password": "নিশ্চিত পাসওয়ার্ড লুকান",
+                "show_confirm_password": "নিশ্চিত পাসওয়ার্ড দেখান",
+                "resetting_button": "রিসেট হচ্ছে...",
+                "reset_button": "পাসওয়ার্ড রিসেট করুন",
+                "already_have_account": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+                "back_to_login": "লগইনে ফিরে যান"
+            }
         },
-        "register": {
-            "page_title": "রেজিস্টার",
-            "title": "অ্যাকাউন্ট তৈরি করুন",
-            "description": "শুরু করতে আপনার তথ্য পূরণ করুন।",
-            "image_alt": "রেজিস্টার",
-            "name_placeholder": "আপনার পূর্ণ নাম",
-            "email_placeholder": "example@email.com",
-            "password_placeholder": "পাসওয়ার্ড লিখুন",
-            "password_confirmation_placeholder": "পাসওয়ার্ড নিশ্চিত করুন",
-            "register_button": "রেজিস্টার",
-            "registering_button": "রেজিস্টার হচ্ছে...",
-            "already_have_account": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
-            "login_here": "এখানে লগইন করুন",
-            "show_password": "পাসওয়ার্ড দেখান",
-            "hide_password": "পাসওয়ার্ড লুকান",
-            "show_confirm_password": "নিশ্চিত পাসওয়ার্ড দেখান",
-            "hide_confirm_password": "নিশ্চিত পাসওয়ার্ড লুকান"
+        "auth_user": {
+            "account": {
+                "page_title": "অ্যাকাউন্ট",
+                "tabs": {
+                    "info": "তথ্য",
+                    "update": "হালনাগাদ",
+                    "activity_logs": "কার্যক্রম লগ"
+                },
+                "profile_image_alt": "ব্যবহারকারীর প্রোফাইল ছবি",
+                "email_verified": "ইমেইল যাচাই হয়েছে",
+                "not_verified": "যাচাই করা হয়নি",
+                "change_password": "পাসওয়ার্ড পরিবর্তন",
+                "current_password": "বর্তমান পাসওয়ার্ড",
+                "hide_current_password": "বর্তমান পাসওয়ার্ড লুকান",
+                "show_current_password": "বর্তমান পাসওয়ার্ড দেখান",
+                "new_password": "নতুন পাসওয়ার্ড",
+                "hide_password": "পাসওয়ার্ড লুকান",
+                "show_password": "পাসওয়ার্ড দেখান",
+                "confirm_password": "পাসওয়ার্ড নিশ্চিত করুন",
+                "hide_confirm_password": "নিশ্চিত পাসওয়ার্ড লুকান",
+                "show_confirm_password": "নিশ্চিত পাসওয়ার্ড দেখান",
+                "validation": {
+                    "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                    "email_is_required": "ইমেইল প্রদান করা আবশ্যক।",
+                    "current_password_is_required": "বর্তমান পাসওয়ার্ড প্রদান করা আবশ্যক।",
+                    "password_is_required": "পাসওয়ার্ড প্রদান করা আবশ্যক।",
+                    "password_confirmation_is_required": "পাসওয়ার্ড নিশ্চিতকরণ প্রদান করা আবশ্যক।",
+                    "password_confirmation_does_not_match": "পাসওয়ার্ড নিশ্চিতকরণ মিলছে না।"
+                },
+                "labels": {
+                    "name": "নাম",
+                    "email": "ইমেইল"
+                },
+                "actions": {
+                    "updating": "হালনাগাদ হচ্ছে...",
+                    "update": "হালনাগাদ"
+                }
+            },
+            "dashboard": {
+                "navigation": {
+                    "dashboard": "ড্যাশবোর্ড"
+                },
+                "labels": {
+                    "dashboard": "ড্যাশবোর্ড"
+                }
+            },
+            "profile": {
+                "tabs": {
+                    "profile": "প্রোফাইল",
+                    "update": "হালনাগাদ",
+                    "activity_logs": "কার্যক্রম লগ"
+                },
+                "profile_image_alt": "ব্যবহারকারীর প্রোফাইল ছবি",
+                "name_placeholder": "নাম লিখুন",
+                "gender_placeholder": "লিঙ্গ নির্বাচন করুন",
+                "religion_placeholder": "ধর্ম নির্বাচন করুন",
+                "marital_status_placeholder": "বৈবাহিক অবস্থা নির্বাচন করুন",
+                "address_placeholder": "ঠিকানা লিখুন",
+                "validation": {
+                    "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                    "gender_is_required": "লিঙ্গ নির্বাচন করা আবশ্যক।",
+                    "marital_status_is_required": "বৈবাহিক অবস্থা নির্বাচন করা আবশ্যক।",
+                    "religion_is_required": "ধর্ম নির্বাচন করা আবশ্যক।"
+                },
+                "navigation": {
+                    "profile": "প্রোফাইল"
+                },
+                "labels": {
+                    "name": "নাম",
+                    "gender": "লিঙ্গ",
+                    "not_available": "প্রযোজ্য নয়",
+                    "marital_status": "বৈবাহিক অবস্থা",
+                    "mobile": "মোবাইল",
+                    "birth_date": "জন্ম তারিখ",
+                    "age": "বয়স",
+                    "address": "ঠিকানা",
+                    "religion": "ধর্ম",
+                    "profile_image": "প্রোফাইল ছবি"
+                },
+                "actions": {
+                    "updating": "হালনাগাদ হচ্ছে...",
+                    "update": "হালনাগাদ"
+                }
+            }
         },
-        "forgot_password": {
-            "page_title": "পাসওয়ার্ড ভুলে গেছেন",
-            "title": "পাসওয়ার্ড ভুলে গেছেন",
-            "description": "রিসেট লিংক পেতে আপনার ইমেইল লিখুন।",
-            "email_placeholder": "example@email.com",
-            "send_reset_link_button": "রিসেট লিংক পাঠান",
-            "sending_button": "পাঠানো হচ্ছে...",
-            "already_have_account": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
-            "back_to_login": "লগইনে ফিরে যান",
-            "image_alt": "পাসওয়ার্ড ভুলে গেছেন"
-        },
-        "reset_password": {
-            "page_title": "পাসওয়ার্ড রিসেট",
-            "title": "পাসওয়ার্ড রিসেট",
-            "description": "আপনার অ্যাকাউন্ট রিসেট করতে নতুন পাসওয়ার্ড লিখুন।",
-            "image_alt": "পাসওয়ার্ড রিসেট",
-            "password_placeholder": "নতুন পাসওয়ার্ড লিখুন",
-            "password_confirmation_placeholder": "পাসওয়ার্ড নিশ্চিত করুন",
-            "reset_button": "পাসওয়ার্ড রিসেট",
-            "resetting_button": "রিসেট হচ্ছে...",
-            "already_have_account": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
-            "back_to_login": "লগইনে ফিরে যান",
-            "show_password": "পাসওয়ার্ড দেখান",
-            "hide_password": "পাসওয়ার্ড লুকান",
-            "show_confirm_password": "নিশ্চিত পাসওয়ার্ড দেখান",
-            "hide_confirm_password": "নিশ্চিত পাসওয়ার্ড লুকান"
-        },
-        "email_verification": {
-            "page_title": "ইমেইল যাচাইকরণ",
-            "title": "আপনার ইমেইল যাচাই করুন",
-            "description": "চালিয়ে যাওয়ার আগে, অনুগ্রহ করে যাচাইকরণ লিংকের জন্য আপনার ইমেইল চেক করুন।",
-            "resend_button": "যাচাইকরণ ইমেইল আবার পাঠান",
-            "resending_button": "আবার পাঠানো হচ্ছে...",
-            "image_alt": "ব্যবহারকারীর ইমেইল যাচাইকরণ"
+        "back_office": {
+            "activity_logs": {
+                "details": {
+                    "navigation": {
+                        "activity_logs": "কার্যক্রম লগ"
+                    },
+                    "page_title": "কার্যক্রম লগের বিস্তারিত",
+                    "title": "কার্যক্রম লগের বিস্তারিত",
+                    "actions": {
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "basic_information": "মৌলিক তথ্য",
+                    "log_name": "লগের নাম",
+                    "labels": {
+                        "not_available": "প্রযোজ্য নয়",
+                        "system": "সিস্টেম"
+                    },
+                    "table": {
+                        "columns": {
+                            "causer": "কার্যকারী",
+                            "description": "বিবরণ",
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "properties": "প্রোপার্টিজ",
+                    "attribute_changes": "অ্যাট্রিবিউট পরিবর্তন",
+                    "system_information": "সিস্টেম তথ্য",
+                    "delete_modal": {
+                        "title": "কার্যক্রম লগ মুছুন",
+                        "body": "আপনি কি নিশ্চিতভাবে এই কার্যক্রম লগটি মুছতে চান?"
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "activity_logs": "কার্যক্রম লগ"
+                    },
+                    "page_title": "কার্যক্রম লগ",
+                    "title": "কার্যক্রম লগ",
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "subject_placeholder": "বিষয়",
+                    "table": {
+                        "columns": {
+                            "causer": "কার্যকারী",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "search_placeholder": "লগ অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "details": {
+                        "log_name": "লগের নাম"
+                    },
+                    "event": "ইভেন্ট",
+                    "created": "তৈরি হয়েছে",
+                    "actions": {
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "delete_modal": {
+                        "title": "কার্যক্রম লগ মুছুন",
+                        "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                    }
+                }
+            },
+            "breaking_news": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "published": "প্রকাশিত",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
+                    },
+                    "form": {
+                        "create_page_title": "ব্রেকিং নিউজ তৈরি",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "title_placeholder": "শিরোনাম লিখুন",
+                        "news_settings": "সংবাদ সেটিংস",
+                        "news_placeholder": "সংবাদ নির্বাচন করুন",
+                        "publish_settings": "প্রকাশনা সেটিংস"
+                    },
+                    "validation": {
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।",
+                        "title_is_required": "শিরোনাম প্রদান করা আবশ্যক।"
+                    },
+                    "navigation": {
+                        "breaking_news": "ব্রেকিং নিউজ",
+                        "news": "সংবাদ"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "navigation": {
+                        "breaking_news": "ব্রেকিং নিউজ",
+                        "news": "সংবাদ",
+                        "activity_logs": "কার্যক্রম লগ"
+                    },
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "title": "শিরোনাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "language": "ভাষা",
+                        "published": "প্রকাশিত",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "url": "URL",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "title": "ব্রেকিং নিউজের বিস্তারিত",
+                    "table": {
+                        "menus": {
+                            "edit": "সম্পাদনা"
+                        },
+                        "columns": {
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "actions": {
+                        "delete": "মুছুন",
+                        "restore": "পুনরুদ্ধার",
+                        "trash": "ট্র্যাশে পাঠান",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে",
+                        "trashing": "ট্র্যাশে পাঠানো হচ্ছে...",
+                        "restoring": "পুনরুদ্ধার হচ্ছে..."
+                    },
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "সিস্টেম তথ্য"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "ব্রেকিং নিউজ মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    },
+                    "trash_modal": {
+                        "title": "ব্রেকিং নিউজ ট্র্যাশে পাঠান",
+                        "body": "এই ব্রেকিং নিউজটি ট্র্যাশে পাঠানো হবে।"
+                    },
+                    "restore_modal": {
+                        "title": "ব্রেকিং নিউজ পুনরুদ্ধার করুন",
+                        "body": "এই কাজটি পরে ব্রেকিং নিউজ মুছে দিয়ে ফিরিয়ে নেওয়া যাবে।"
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "breaking_news": "ব্রেকিং নিউজ",
+                        "categories": "ক্যাটাগরি",
+                        "locations": "অবস্থানসমূহ",
+                        "events": "ইভেন্টসমূহ"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "delete": "মুছুন",
+                        "restore": "পুনরুদ্ধার",
+                        "trash": "ট্র্যাশে পাঠান",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে",
+                        "trashing": "ট্র্যাশে পাঠানো হচ্ছে...",
+                        "restoring": "পুনরুদ্ধার হচ্ছে..."
+                    },
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "news_type": "সংবাদের ধরন",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "is_published": "প্রকাশিত কিনা",
+                        "not_available": "প্রযোজ্য নয়",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "search_placeholder": "সংবাদ অনুসন্ধান করুন...",
+                    "activity_logs": {
+                        "index": {
+                            "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                            "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                            "created": "তৈরি হয়েছে"
+                        }
+                    },
+                    "table": {
+                        "columns": {
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "ব্রেকিং নিউজ মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    },
+                    "trash_modal": {
+                        "title": "ব্রেকিং নিউজ ট্র্যাশে পাঠান",
+                        "body": "এই ব্রেকিং নিউজটি ট্র্যাশে পাঠানো হবে।"
+                    },
+                    "restore_modal": {
+                        "title": "ব্রেকিং নিউজ পুনরুদ্ধার করুন",
+                        "body": "এই কাজটি পরে ব্রেকিং নিউজ মুছে দিয়ে ফিরিয়ে নেওয়া যাবে।"
+                    }
+                }
+            },
+            "categories": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "name": "নাম"
+                    },
+                    "form": {
+                        "create_page_title": "ক্যাটাগরি তৈরি",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "name_placeholder": "নাম লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "hierarchy": "হায়ারার্কি",
+                        "has_parent": "মূল আছে",
+                        "parent": "মূল",
+                        "parent_placeholder": "মূল নির্বাচন করুন",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_title": "SEO শিরোনাম",
+                        "seo_title_placeholder": "SEO শিরোনাম লিখুন",
+                        "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
+                        "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।",
+                        "parent_category_is_required": "মূল ক্যাটাগরি নির্বাচন করা আবশ্যক।"
+                    },
+                    "navigation": {
+                        "categories": "ক্যাটাগরি"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "navigation": {
+                        "categories": "ক্যাটাগরি",
+                        "activity_logs": "কার্যক্রম লগ"
+                    },
+                    "title": "ক্যাটাগরির বিস্তারিত",
+                    "table": {
+                        "menus": {
+                            "edit": "সম্পাদনা"
+                        },
+                        "columns": {
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "actions": {
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "parent": "মূল",
+                    "form": {
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "seo_keywords": "SEO কীওয়ার্ড"
+                    },
+                    "tree": "ট্রি",
+                    "seo": "SEO",
+                    "sitemap_and_feeds": "সাইটম্যাপ ও ফিড",
+                    "sitemap_url": "সাইটম্যাপ URL",
+                    "feeds_rss": "ফিড (RSS)",
+                    "feeds_atom": "ফিড (ATOM)",
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "সিস্টেম তথ্য"
+                        }
+                    },
+                    "recent_locations": "সাম্প্রতিক অবস্থানসমূহ",
+                    "delete_modal": {
+                        "title": "ক্যাটাগরি মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "categories": "ক্যাটাগরি"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "language": "ভাষা",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "parent_placeholder": "মূল",
+                    "search_placeholder": "ক্যাটাগরি অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "table": {
+                        "columns": {
+                            "name": "নাম",
+                            "parent": "মূল",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "created": "তৈরি হয়েছে",
+                    "delete_modal": {
+                        "title": "ক্যাটাগরি মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "contributors": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "name": "নাম",
+                        "profile_image": "প্রোফাইল ছবি"
+                    },
+                    "form": {
+                        "create_page_title": "অবদানকারী তৈরি",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "name_placeholder": "নাম লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "profile_details": "প্রোফাইলের বিস্তারিত",
+                        "profile_image_section": "প্রোফাইল ছবি",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_title": "SEO শিরোনাম",
+                        "seo_title_placeholder": "SEO শিরোনাম লিখুন",
+                        "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
+                        "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।"
+                    },
+                    "navigation": {
+                        "contributors": "অবদানকারী"
+                    },
+                    "auth": {
+                        "profile": {
+                            "profile_image_alt": "ব্যবহারকারীর প্রোফাইল ছবি"
+                        }
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "name": "নাম",
+                        "profile_image": "প্রোফাইল ছবি"
+                    },
+                    "form": {
+                        "create_page_title": "অবদানকারী তৈরি",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "name_placeholder": "নাম লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "profile_details": "প্রোফাইলের বিস্তারিত",
+                        "profile_image_section": "প্রোফাইল ছবি",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_title": "SEO শিরোনাম",
+                        "seo_title_placeholder": "SEO শিরোনাম লিখুন",
+                        "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
+                        "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।"
+                    },
+                    "navigation": {
+                        "contributors": "অবদানকারী"
+                    },
+                    "auth": {
+                        "profile": {
+                            "profile_image_alt": "ব্যবহারকারীর প্রোফাইল ছবি"
+                        }
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "contributors": "অবদানকারী"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "language": "ভাষা",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "search_placeholder": "অবদানকারী অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "table": {
+                        "columns": {
+                            "name": "নাম",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "created": "তৈরি হয়েছে",
+                    "delete_modal": {
+                        "title": "অবদানকারী মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "events": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "name": "নাম"
+                    },
+                    "form": {
+                        "create_page_title": "ইভেন্ট তৈরি",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "name_placeholder": "নাম লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "banner_image_section": "ব্যানার ছবি",
+                        "desktop_banner_image": "ডেস্কটপ ব্যানার ছবি",
+                        "mobile_banner_image": "মোবাইল ব্যানার ছবি",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_title": "SEO শিরোনাম",
+                        "seo_title_placeholder": "SEO শিরোনাম লিখুন",
+                        "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
+                        "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।"
+                    },
+                    "navigation": {
+                        "events": "ইভেন্ট"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "navigation": {
+                        "events": "ইভেন্ট",
+                        "activity_logs": "কার্যক্রম লগ"
+                    },
+                    "title": "ইভেন্টের বিস্তারিত",
+                    "table": {
+                        "menus": {
+                            "edit": "সম্পাদনা"
+                        },
+                        "columns": {
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "actions": {
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "form": {
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "desktop_banner_image": "ডেস্কটপ ব্যানার ছবি",
+                        "mobile_banner_image": "মোবাইল ব্যানার ছবি",
+                        "seo_keywords": "SEO কীওয়ার্ড"
+                    },
+                    "seo": "SEO",
+                    "sitemap_and_feeds": "সাইটম্যাপ ও ফিড",
+                    "sitemap_url": "সাইটম্যাপ URL",
+                    "feeds_rss": "ফিড (RSS)",
+                    "feeds_atom": "ফিড (ATOM)",
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "সিস্টেম তথ্য"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "ইভেন্ট মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "events": "ইভেন্ট"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "language": "ভাষা",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "search_placeholder": "ইভেন্ট অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "table": {
+                        "columns": {
+                            "name": "নাম",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "created": "তৈরি হয়েছে",
+                    "delete_modal": {
+                        "title": "ইভেন্ট মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "languages": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম"
+                    },
+                    "form": {
+                        "create_page_title": "ভাষা তৈরি",
+                        "name_placeholder": "নাম লিখুন",
+                        "code": "কোড",
+                        "code_placeholder": "কোড লিখুন",
+                        "locale": "লোকেল",
+                        "locale_placeholder": "লোকেল লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "code_is_required": "কোড প্রদান করা আবশ্যক।",
+                        "locale_is_required": "লোকেল প্রদান করা আবশ্যক।"
+                    },
+                    "navigation": {
+                        "languages": "ভাষাসমূহ"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "navigation": {
+                        "languages": "ভাষাসমূহ",
+                        "activity_logs": "কার্যক্রম লগ"
+                    },
+                    "title": "ভাষার বিস্তারিত",
+                    "table": {
+                        "menus": {
+                            "edit": "সম্পাদনা"
+                        },
+                        "columns": {
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "actions": {
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "code": "কোড",
+                    "locale": "লোকেল",
+                    "form": {
+                        "brief": "সংক্ষিপ্ত বিবরণ"
+                    },
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "সিস্টেম তথ্য"
+                        }
+                    },
+                    "recent_categories": "সাম্প্রতিক ক্যাটাগরি",
+                    "delete_modal": {
+                        "title": "ভাষা মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "languages": "ভাষাসমূহ"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "search_placeholder": "ভাষা অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "table": {
+                        "columns": {
+                            "name": "নাম",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "details": {
+                        "code": "কোড",
+                        "locale": "লোকেল"
+                    },
+                    "created": "তৈরি হয়েছে",
+                    "delete_modal": {
+                        "title": "ভাষা মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "locations": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "name": "নাম"
+                    },
+                    "form": {
+                        "create_page_title": "অবস্থান তৈরি",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "name_placeholder": "নাম লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "hierarchy": "হায়ারার্কি",
+                        "has_parent": "মূল আছে",
+                        "parent": "মূল",
+                        "parent_placeholder": "মূল নির্বাচন করুন",
+                        "category": "ক্যাটাগরি",
+                        "category_placeholder": "ক্যাটাগরি নির্বাচন করুন",
+                        "map_information": "ম্যাপ তথ্য",
+                        "latitude": "অক্ষাংশ",
+                        "latitude_placeholder": "অক্ষাংশ লিখুন",
+                        "longitude": "দ্রাঘিমাংশ",
+                        "longitude_placeholder": "দ্রাঘিমাংশ লিখুন",
+                        "boundary_north": "উত্তর সীমানা",
+                        "boundary_north_placeholder": "উত্তর সীমানা লিখুন",
+                        "boundary_south": "দক্ষিণ সীমানা",
+                        "boundary_south_placeholder": "দক্ষিণ সীমানা লিখুন",
+                        "boundary_east": "পূর্ব সীমানা",
+                        "boundary_east_placeholder": "পূর্ব সীমানা লিখুন",
+                        "boundary_west": "পশ্চিম সীমানা",
+                        "boundary_west_placeholder": "পশ্চিম সীমানা লিখুন",
+                        "boundary_geojson": "সীমানা GeoJSON",
+                        "boundary_geojson_placeholder": "সীমানা GeoJSON লিখুন",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_title": "SEO শিরোনাম",
+                        "seo_title_placeholder": "SEO শিরোনাম লিখুন",
+                        "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
+                        "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।",
+                        "parent_location_is_required": "মূল অবস্থান নির্বাচন করা আবশ্যক।"
+                    },
+                    "navigation": {
+                        "locations": "অবস্থানসমূহ"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "not_available": "প্রযোজ্য নয়",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "copied": "কপি হয়েছে",
+                        "copy": "কপি",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "navigation": {
+                        "locations": "অবস্থানসমূহ",
+                        "activity_logs": "কার্যক্রম লগ"
+                    },
+                    "title": "অবস্থানের বিস্তারিত",
+                    "table": {
+                        "menus": {
+                            "edit": "সম্পাদনা"
+                        },
+                        "columns": {
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "actions": {
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "parent": "মূল",
+                    "form": {
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "seo_keywords": "SEO কীওয়ার্ড"
+                    },
+                    "tree": "ট্রি",
+                    "category": "ক্যাটাগরি",
+                    "map_information": "ম্যাপ তথ্য",
+                    "latitude": "অক্ষাংশ",
+                    "longitude": "দ্রাঘিমাংশ",
+                    "boundary_north": "উত্তর সীমানা",
+                    "boundary_south": "দক্ষিণ সীমানা",
+                    "boundary_east": "পূর্ব সীমানা",
+                    "boundary_west": "পশ্চিম সীমানা",
+                    "boundary_geojson": "সীমানা GeoJSON",
+                    "seo": "SEO",
+                    "sitemap_and_feeds": "সাইটম্যাপ ও ফিড",
+                    "sitemap_url": "সাইটম্যাপ URL",
+                    "feeds_rss": "ফিড (RSS)",
+                    "feeds_atom": "ফিড (ATOM)",
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "সিস্টেম তথ্য"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "অবস্থান মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "locations": "অবস্থানসমূহ"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "language": "ভাষা",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "parent_placeholder": "মূল",
+                    "category_placeholder": "ক্যাটাগরি",
+                    "search_placeholder": "অবস্থান অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "table": {
+                        "columns": {
+                            "name": "নাম",
+                            "parent": "মূল",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "created": "তৈরি হয়েছে",
+                    "delete_modal": {
+                        "title": "অবস্থান মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "medias": {
+                "details": {
+                    "navigation": {
+                        "medias": "মিডিয়া"
+                    },
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "order_column": "অর্ডার কলাম",
+                        "created_by": "তৈরি করেছেন"
+                    },
+                    "collection_name": "কালেকশনের নাম",
+                    "model_type": "মডেলের ধরন",
+                    "mime_type": "MIME টাইপ",
+                    "disk": "ডিস্ক",
+                    "size": "সাইজ",
+                    "custom_properties": "কাস্টম প্রোপার্টিজ",
+                    "not_available": "তথ্য পাওয়া যায়নি।",
+                    "generated_conversions": "জেনারেটেড কনভার্সন",
+                    "media_url": "মিডিয়া URL",
+                    "system_information": "সিস্টেম তথ্য",
+                    "table": {
+                        "columns": {
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "activity_logs": {
+                        "index": {
+                            "title": "কার্যক্রম লগ"
+                        }
+                    },
+                    "actions": {
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "title": "মুছে ফেলার নিশ্চিতকরণ",
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "medias": "মিডিয়া"
+                    },
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "search_placeholder": "মিডিয়া অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "table": {
+                        "columns": {
+                            "sl": "ক্রম",
+                            "created_at": "তৈরির সময়",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "details": {
+                        "collection_name": "কালেকশনের নাম"
+                    },
+                    "actions": {
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "delete_modal": {
+                        "title": "মিডিয়া মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "menus": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "name": "নাম"
+                    },
+                    "form": {
+                        "create_page_title": "মেনু তৈরি",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "name_placeholder": "নাম লিখুন",
+                        "menu_type": "মেনুর ধরন",
+                        "menu_type_placeholder": "মেনুর ধরন নির্বাচন করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।",
+                        "menu_type_is_required": "মেনুর ধরন নির্বাচন করা আবশ্যক।"
+                    },
+                    "navigation": {
+                        "menus": "মেনু"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "menus": "মেনু",
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "language": "ভাষা",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "title": "মেনুর বিস্তারিত",
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "add_menu_item": "মেনু আইটেম যোগ করুন",
+                    "form": {
+                        "menu_type": "মেনুর ধরন"
+                    },
+                    "menu_items": "মেনু আইটেম",
+                    "medias": {
+                        "details": {
+                            "system_information": "সিস্টেম তথ্য"
+                        }
+                    },
+                    "table": {
+                        "columns": {
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "activity_logs": {
+                        "index": {
+                            "title": "কার্যক্রম লগ"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "মেনু মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "menus": "মেনু",
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "labels": {
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "language": "ভাষা",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "search_placeholder": "মেনু অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "table": {
+                        "columns": {
+                            "sl": "ক্রম",
+                            "created_at": "তৈরির সময়",
+                            "action": "কার্যক্রম"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "details": {
+                        "menu_items": "মেনু আইটেম",
+                        "item": "আইটেম",
+                        "add_menu_item": "মেনু আইটেম যোগ করুন"
+                    },
+                    "delete_modal": {
+                        "title": "মেনু মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "menu_items": {
+                    "create": {
+                        "labels": {
+                            "edit": "সম্পাদনা",
+                            "details": "বিস্তারিত",
+                            "basic_information": "মৌলিক তথ্য",
+                            "copied": "কপি হয়েছে",
+                            "language": "ভাষা",
+                            "name": "নাম",
+                            "yes": "হ্যাঁ",
+                            "no": "না",
+                            "url": "URL"
+                        },
+                        "form": {
+                            "create_page_title": "মেনু আইটেম তৈরি",
+                            "latest_url": "সর্বশেষ URL",
+                            "home_url": "হোম URL",
+                            "language_placeholder": "ভাষা নির্বাচন করুন",
+                            "name_placeholder": "নাম লিখুন",
+                            "position_placeholder": "অবস্থান লিখুন",
+                            "is_custom_url": "কাস্টম URL কিনা",
+                            "model": "মডেল",
+                            "model_placeholder": "মডেল নির্বাচন করুন",
+                            "model_id": "মডেল আইডি",
+                            "tag_placeholder": "একটি ট্যাগ নির্বাচন করুন",
+                            "category_placeholder": "একটি ক্যাটাগরি নির্বাচন করুন",
+                            "page_placeholder": "একটি পেজ নির্বাচন করুন",
+                            "url_placeholder": "URL লিখুন",
+                            "parent_placeholder": "মেনু আইটেম নির্বাচন করুন"
+                        },
+                        "validation": {
+                            "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                            "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।",
+                            "parent_menu_item_is_required": "মূল মেনু আইটেম নির্বাচন করা আবশ্যক।",
+                            "url_is_required": "URL প্রদান করা আবশ্যক।",
+                            "model_is_required": "মডেল নির্বাচন করা আবশ্যক।",
+                            "model_record_is_required": "মডেল রেকর্ড নির্বাচন করা আবশ্যক।"
+                        },
+                        "menus": "মেনু",
+                        "details": {
+                            "menu_items": "মেনু আইটেম"
+                        },
+                        "table": {
+                            "columns": {
+                                "position": "অবস্থান"
+                            }
+                        },
+                        "categories": {
+                            "form": {
+                                "hierarchy": "হায়ারার্কি",
+                                "has_parent": "মূল আছে",
+                                "parent": "মূল"
+                            }
+                        },
+                        "actions": {
+                            "saving": "সংরক্ষণ হচ্ছে",
+                            "save": "সংরক্ষণ"
+                        }
+                    },
+                    "details": {
+                        "menus": "মেনু",
+                        "labels": {
+                            "details": "বিস্তারিত",
+                            "basic_information": "মৌলিক তথ্য",
+                            "name": "নাম",
+                            "not_available": "প্রযোজ্য নয়",
+                            "language": "ভাষা",
+                            "url": "URL",
+                            "created_by": "তৈরি করেছেন",
+                            "updated_at": "হালনাগাদের সময়",
+                            "updated_by": "হালনাগাদ করেছেন"
+                        },
+                        "menu_items": "মেনু আইটেম",
+                        "title": "মেনু আইটেমের বিস্তারিত",
+                        "actions": {
+                            "edit": "সম্পাদনা",
+                            "delete": "মুছুন",
+                            "cancel": "বাতিল",
+                            "deleting": "মুছে ফেলা হচ্ছে"
+                        },
+                        "categories": {
+                            "form": {
+                                "parent": "মূল"
+                            }
+                        },
+                        "table": {
+                            "columns": {
+                                "position": "অবস্থান",
+                                "created_at": "তৈরির সময়"
+                            }
+                        },
+                        "form": {
+                            "model": "মডেল"
+                        },
+                        "public_url": "পাবলিক URL",
+                        "medias": {
+                            "details": {
+                                "system_information": "সিস্টেম তথ্য"
+                            }
+                        },
+                        "activity_logs": {
+                            "index": {
+                                "title": "কার্যক্রম লগ"
+                            }
+                        },
+                        "delete_modal": {
+                            "title": "মেনু আইটেম মুছুন"
+                        },
+                        "modals": {
+                            "delete_confirmation_modal": {
+                                "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                            }
+                        }
+                    },
+                    "index": {
+                        "menus": "মেনু",
+                        "labels": {
+                            "details": "বিস্তারিত",
+                            "per_page": "প্রতি পৃষ্ঠা",
+                            "created_by": "তৈরি করেছেন",
+                            "language": "ভাষা",
+                            "name": "নাম",
+                            "not_available": "প্রযোজ্য নয়",
+                            "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                        },
+                        "details": {
+                            "menu_items": "মেনু আইটেম"
+                        },
+                        "title": "মেনু আইটেম",
+                        "actions": {
+                            "create": "নতুন তৈরি",
+                            "delete": "মুছুন",
+                            "cancel": "বাতিল",
+                            "deleting": "মুছে ফেলা হচ্ছে"
+                        },
+                        "form": {
+                            "model": "মডেল"
+                        },
+                        "search_placeholder": "মেনু আইটেম অনুসন্ধান করুন...",
+                        "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                        "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                        "table": {
+                            "columns": {
+                                "sl": "ক্রম",
+                                "position": "অবস্থান",
+                                "created_at": "তৈরির সময়",
+                                "action": "কার্যক্রম"
+                            },
+                            "menus": {
+                                "details": "বিস্তারিত",
+                                "edit": "সম্পাদনা"
+                            }
+                        },
+                        "categories": {
+                            "form": {
+                                "parent": "মূল"
+                            }
+                        },
+                        "delete_modal": {
+                            "title": "মেনু আইটেম মুছুন"
+                        },
+                        "modals": {
+                            "delete_confirmation_modal": {
+                                "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                            }
+                        }
+                    }
+                }
+            },
+            "news": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "news": "সংবাদ",
+                        "basic_information": "মৌলিক তথ্য",
+                        "news_type": "সংবাদের ধরন",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "gallery_images": "গ্যালারি ছবি",
+                        "contributors": "অবদানকারী",
+                        "relevant_news": "প্রাসঙ্গিক সংবাদ",
+                        "related_news": "সম্পর্কিত সংবাদ",
+                        "source": "সূত্র",
+                        "published": "প্রকাশিত",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
+                    },
+                    "form": {
+                        "create_page_title": "সংবাদ তৈরি",
+                        "validation": {
+                            "news_type_required": "সংবাদের ধরন নির্বাচন করা আবশ্যক।",
+                            "category_required": "ক্যাটাগরি নির্বাচন করা আবশ্যক।",
+                            "brief_required": "সংক্ষিপ্ত বিবরণ প্রদান করা আবশ্যক।",
+                            "body_required": "বডি প্রদান করা আবশ্যক।",
+                            "video_url_required": "ভিডিও URL প্রদান করা আবশ্যক।",
+                            "gallery_image_required": "গ্যালারি ছবি প্রদান করা আবশ্যক।",
+                            "use_one_feature_image": "কমপক্ষে একটি ফিচার ছবি ব্যবহার করুন।",
+                            "use_one_mobile_image": "কমপক্ষে একটি মোবাইল ছবি ব্যবহার করুন।",
+                            "feature_image_caption_required": "ফিচার ছবির ক্যাপশন প্রদান করা আবশ্যক।"
+                        },
+                        "news_type_placeholder": "সংবাদের ধরন নির্বাচন করুন",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "category": "ক্যাটাগরি",
+                        "category_placeholder": "ক্যাটাগরি নির্বাচন করুন",
+                        "event": "ইভেন্ট",
+                        "event_placeholder": "ইভেন্ট নির্বাচন করুন",
+                        "location": "অবস্থান",
+                        "location_placeholder": "অবস্থান নির্বাচন করুন",
+                        "title_placeholder": "শিরোনাম লিখুন",
+                        "sub_title": "উপশিরোনাম",
+                        "sub_title_placeholder": "উপশিরোনাম লিখুন",
+                        "content_shoulder": "কনটেন্ট শোল্ডার",
+                        "content_shoulder_placeholder": "কনটেন্ট শোল্ডার লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "body": "বডি",
+                        "video_url": "ভিডিও URL",
+                        "video_url_placeholder": "ভিডিও URL লিখুন",
+                        "tags": "ট্যাগ",
+                        "tags_placeholder": "ট্যাগ নির্বাচন করুন",
+                        "image_settings": "ছবি সেটিংস",
+                        "feature_image": "ফিচার ছবি",
+                        "caption_placeholder": "ক্যাপশন লিখুন",
+                        "feature_image_mobile": "মোবাইল ফিচার ছবি",
+                        "contributor_settings": "অবদানকারী সেটিংস",
+                        "contributors_placeholder": "অবদানকারী নির্বাচন করুন",
+                        "writer": "লেখক",
+                        "writer_placeholder": "লেখকের নাম লিখুন",
+                        "extra_settings": "অতিরিক্ত সেটিংস",
+                        "relevant_news_placeholder": "প্রাসঙ্গিক সংবাদ নির্বাচন করুন",
+                        "related_news_placeholder": "সম্পর্কিত সংবাদ নির্বাচন করুন",
+                        "breaking_news_placeholder": "ব্রেকিং নিউজ নির্বাচন করুন",
+                        "publish_settings": "প্রকাশনা সেটিংস",
+                        "source_placeholder": "সূত্র লিখুন",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_title": "SEO শিরোনাম",
+                        "seo_title_placeholder": "SEO শিরোনাম লিখুন",
+                        "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
+                        "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                    },
+                    "validation": {
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।",
+                        "title_is_required": "শিরোনাম প্রদান করা আবশ্যক।"
+                    },
+                    "app": {
+                        "breaking_news": "ব্রেকিং নিউজ"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "not_available": "প্রযোজ্য নয়",
+                        "details": "বিস্তারিত",
+                        "news": "সংবাদ",
+                        "basic_information": "মৌলিক তথ্য",
+                        "news_type": "সংবাদের ধরন",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "contributors": "অবদানকারী",
+                        "source": "সূত্র",
+                        "published": "প্রকাশিত",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন",
+                        "relevant_news": "প্রাসঙ্গিক সংবাদ",
+                        "related_news": "সম্পর্কিত সংবাদ"
+                    },
+                    "page_title": "সংবাদের বিস্তারিত",
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "restore": "পুনরুদ্ধার",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে",
+                        "restoring": "পুনরুদ্ধার হচ্ছে..."
+                    },
+                    "form": {
+                        "category": "ক্যাটাগরি",
+                        "location": "অবস্থান",
+                        "event": "ইভেন্ট",
+                        "sub_title": "উপশিরোনাম",
+                        "content_shoulder": "কনটেন্ট শোল্ডার",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "body": "বডি",
+                        "video_url": "ভিডিও URL",
+                        "tags": "ট্যাগ",
+                        "feature_image": "ফিচার ছবি",
+                        "feature_image_mobile": "মোবাইল ফিচার ছবি",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "writer": "লেখক"
+                    },
+                    "no_tag_added": "কোনো ট্যাগ যোগ করা হয়নি।",
+                    "no_contributor_added": "কোনো অবদানকারী যোগ করা হয়নি।",
+                    "medias": {
+                        "details": {
+                            "system_information": "সিস্টেম তথ্য"
+                        }
+                    },
+                    "created_at": "তৈরির সময়",
+                    "app": {
+                        "breaking_news": "ব্রেকিং নিউজ"
+                    },
+                    "news_placements": "সংবাদ প্লেসমেন্ট",
+                    "activity_logs": {
+                        "index": {
+                            "title": "কার্যক্রম লগ"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "সংবাদ মুছুন",
+                        "body": "সংবাদ পুনরুদ্ধার করে এই কাজটি ফিরিয়ে আনা যাবে।"
+                    },
+                    "restore_modal": {
+                        "title": "সংবাদ পুনরুদ্ধার করুন",
+                        "body": "সংবাদ মুছে দিয়ে এই কাজটি ফিরিয়ে নেওয়া যাবে।"
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "not_available": "প্রযোজ্য নয়",
+                        "news": "সংবাদ",
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "news_type": "সংবাদের ধরন",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "is_published": "প্রকাশিত কিনা",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "details": "বিস্তারিত",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি",
+                        "actions": "কার্যক্রম"
+                    },
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "restore": "পুনরুদ্ধার",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে...",
+                        "restoring": "পুনরুদ্ধার হচ্ছে...",
+                        "create": "নতুন তৈরি"
+                    },
+                    "created_by_placeholder": "তৈরি করেছেন",
+                    "form": {
+                        "category": "ক্যাটাগরি",
+                        "location": "অবস্থান",
+                        "event": "ইভেন্ট"
+                    },
+                    "search_placeholder": "সংবাদ অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "created": "তৈরি হয়েছে",
+                    "delete_modal": {
+                        "title": "সংবাদ মুছুন",
+                        "body": "সংবাদ পুনরুদ্ধার করে এই কাজটি ফিরিয়ে আনা যাবে।"
+                    },
+                    "restore_modal": {
+                        "title": "সংবাদ পুনরুদ্ধার করুন",
+                        "body": "সংবাদ মুছে দিয়ে এই কাজটি ফিরিয়ে নেওয়া যাবে।"
+                    }
+                },
+                "news_placement": {
+                    "details": {
+                        "labels": {
+                            "not_available": "প্রযোজ্য নয়",
+                            "news": "সংবাদ",
+                            "details": "বিস্তারিত",
+                            "basic_information": "মৌলিক তথ্য",
+                            "system": "সিস্টেম",
+                            "created_by": "তৈরি করেছেন",
+                            "updated_at": "হালনাগাদের সময়",
+                            "updated_by": "হালনাগাদ করেছেন"
+                        },
+                        "placement_details": {
+                            "page_title": "সংবাদ প্লেসমেন্টের বিস্তারিত",
+                            "heading": "সংবাদ প্লেসমেন্টের বিস্তারিত",
+                            "position": "অবস্থান",
+                            "delete_modal": {
+                                "title": "সংবাদ প্লেসমেন্ট মুছুন",
+                                "message": "এই সংবাদ প্লেসমেন্ট মুছুন",
+                                "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                            }
+                        },
+                        "actions": {
+                            "delete": "মুছুন",
+                            "cancel": "বাতিল",
+                            "deleting": "মুছে ফেলা হচ্ছে"
+                        },
+                        "table": {
+                            "columns": {
+                                "page": "পেজ",
+                                "section": "সেকশন"
+                            }
+                        },
+                        "form": {
+                            "category": "ক্যাটাগরি"
+                        },
+                        "created_at": "তৈরির সময়",
+                        "activity_logs": {
+                            "index": {
+                                "title": "কার্যক্রম লগ"
+                            }
+                        }
+                    },
+                    "index": {
+                        "placements": {
+                            "page_title_suffix": "সংবাদ প্লেসমেন্ট",
+                            "auto_creating": "স্বয়ংক্রিয়ভাবে তৈরি হচ্ছে...",
+                            "auto_create": "স্বয়ংক্রিয়ভাবে তৈরি করুন",
+                            "save_all": "সব সংরক্ষণ করুন",
+                            "home_lead_news_placements": "হোম লিড সংবাদ প্লেসমেন্ট",
+                            "home_category_news_placements": "হোম ক্যাটাগরি সংবাদ প্লেসমেন্ট",
+                            "category_lead_news_placements": "ক্যাটাগরি লিড সংবাদ প্লেসমেন্ট"
+                        },
+                        "labels": {
+                            "news": "সংবাদ"
+                        },
+                        "actions": {
+                            "saving": "সংরক্ষণ হচ্ছে"
+                        }
+                    }
+                }
+            },
+            "pages": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "page": "পেজ",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "published": "প্রকাশিত",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
+                    },
+                    "form": {
+                        "create_page_title": "পেজ তৈরি",
+                        "validation": {
+                            "brief_required": "সংক্ষিপ্ত বিবরণ প্রদান করা আবশ্যক।",
+                            "body_required": "বডি প্রদান করা আবশ্যক।",
+                            "page_required": "পেজ নির্বাচন করা আবশ্যক।"
+                        },
+                        "default_use_as": "ডিফল্ট হিসেবে ব্যবহার",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "title_placeholder": "শিরোনাম লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "body": "বডি",
+                        "hierarchy": "হায়ারার্কি",
+                        "has_parent": "মূল আছে",
+                        "parent": "মূল",
+                        "parent_placeholder": "মূল নির্বাচন করুন",
+                        "publish_settings": "প্রকাশনা সেটিংস",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_title": "SEO শিরোনাম",
+                        "seo_title_placeholder": "SEO শিরোনাম লিখুন",
+                        "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
+                        "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                    },
+                    "validation": {
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।",
+                        "title_is_required": "শিরোনাম প্রদান করা আবশ্যক।"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "page": "পেজ",
+                        "details": "বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "not_available": "প্রযোজ্য নয়",
+                        "title": "শিরোনাম",
+                        "tree": "ট্রি",
+                        "seo_settings": "SEO সেটিংস",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "keywords": "কীওয়ার্ড"
+                    },
+                    "form": {
+                        "edit_page_title": "পেজ সম্পাদনা",
+                        "default_use_as": "ডিফল্ট হিসেবে ব্যবহার",
+                        "body": "বডি"
+                    },
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "trash": "ট্র্যাশে পাঠান",
+                        "restore": "পুনরুদ্ধার",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "trashing": "ট্র্যাশে পাঠানো হচ্ছে..."
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "page": "পেজ",
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "is_published": "প্রকাশিত কিনা",
+                        "not_available": "প্রযোজ্য নয়",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "edit": "সম্পাদনা",
+                        "trash": "ট্র্যাশে পাঠান",
+                        "restore": "পুনরুদ্ধার",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "trashing": "ট্র্যাশে পাঠানো হচ্ছে...",
+                        "restoring": "পুনরুদ্ধার হচ্ছে...",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "search_placeholder": "পেজ অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "form": {
+                        "parent": "মূল"
+                    },
+                    "created": "তৈরি হয়েছে",
+                    "is_default": "ডিফল্ট কিনা",
+                    "news": {
+                        "index": {
+                            "actions": "কার্যক্রম"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "no_page_found": "কোনো পেজ পাওয়া যায়নি।",
+                    "trash_modal": {
+                        "title": "পেজ ট্র্যাশে পাঠান",
+                        "body": "পেজ পুনরুদ্ধার করে এই কাজটি ফিরিয়ে আনা যাবে।"
+                    },
+                    "restore_modal": {
+                        "title": "পেজ পুনরুদ্ধার করুন",
+                        "body": "পেজ ট্র্যাশে পাঠিয়ে এই কাজটি ফিরিয়ে নেওয়া যাবে।"
+                    },
+                    "delete_modal": {
+                        "title": "পেজ মুছুন",
+                        "body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                    }
+                }
+            },
+            "settings": {
+                "create": {
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    },
+                    "form": {
+                        "create_page_title": "সেটিং তৈরি",
+                        "validation": {
+                            "group_required": "গ্রুপ প্রদান করা আবশ্যক।",
+                            "label_required": "লেবেল প্রদান করা আবশ্যক।",
+                            "type_required": "ধরন নির্বাচন করা আবশ্যক।",
+                            "value_required": "মান প্রদান করা আবশ্যক।",
+                            "value_must_be_integer": "মানটি পূর্ণসংখ্যা হতে হবে।",
+                            "value_must_be_valid_number": "মানটি বৈধ সংখ্যা হতে হবে।",
+                            "value_must_be_valid_json_array": "মানটি বৈধ JSON array হতে হবে।",
+                            "value_must_be_valid_json": "মানটি বৈধ JSON হতে হবে।",
+                            "value_must_be_valid_url": "মানটি বৈধ URL হতে হবে।",
+                            "value_must_be_valid_color": "মানটি বৈধ color code হতে হবে।"
+                        },
+                        "invalid_setting_data": "সেটিং তথ্য সঠিক নয়",
+                        "invalid_setting_data_body": "সেটিং গ্রুপ এবং লেবেল আবশ্যক। অনুগ্রহ করে ফিরে গিয়ে একটি বৈধ সেটিং নির্বাচন করুন।",
+                        "json_placeholder": "উদাহরণ: {\"key\": \"value\"} অথবা [\"item1\", \"item2\"]",
+                        "url_placeholder": "https://example.com",
+                        "color_placeholder": "#000000"
+                    },
+                    "labels": {
+                        "settings": "সেটিংস",
+                        "basic_information": "মৌলিক তথ্য",
+                        "true": "সত্য",
+                        "false": "মিথ্যা"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "not_available": "প্রযোজ্য নয়",
+                        "true": "সত্য",
+                        "false": "মিথ্যা",
+                        "settings": "সেটিংস",
+                        "basic_information": "মৌলিক তথ্য",
+                        "group": "গ্রুপ",
+                        "label": "লেবেল",
+                        "type": "ধরন",
+                        "value": "মান",
+                        "system_information": "সিস্টেম তথ্য",
+                        "created_at": "তৈরির সময়",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "title": "সেটিং বিস্তারিত",
+                    "actions": {
+                        "edit": "সম্পাদনা"
+                    },
+                    "setting_image_alt": "সেটিং ছবি",
+                    "activity_logs": {
+                        "index": {
+                            "title": "কার্যক্রম লগ"
+                        }
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "settings": "সেটিংস",
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "group": "গ্রুপ",
+                        "label": "লেবেল",
+                        "not_available": "প্রযোজ্য নয়"
+                    },
+                    "page_title": "সেটিংস",
+                    "title": "সেটিংস",
+                    "search_placeholder": "সেটিং অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "created": "তৈরি হয়েছে",
+                    "news": {
+                        "index": {
+                            "actions": "কার্যক্রম"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "actions": {
+                        "edit": "সম্পাদনা"
+                    },
+                    "no_setting_found": "কোনো সেটিং পাওয়া যায়নি।"
+                }
+            },
+            "tags": {
+                "create": {
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    },
+                    "form": {
+                        "create_page_title": "ট্যাগ তৈরি",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "name_placeholder": "নাম লিখুন",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_settings": "SEO সেটিংস",
+                        "seo_title": "SEO শিরোনাম",
+                        "seo_title_placeholder": "SEO শিরোনাম লিখুন",
+                        "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
+                        "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
+                        "seo_keywords": "SEO কীওয়ার্ড",
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "language_is_required": "ভাষা নির্বাচন করা আবশ্যক।"
+                    },
+                    "labels": {
+                        "tags": "ট্যাগ",
+                        "basic_information": "মৌলিক তথ্য",
+                        "language": "ভাষা",
+                        "name": "নাম"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "tags": "ট্যাগ",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "language": "ভাষা",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "title": "শিরোনাম",
+                        "system_information": "সিস্টেম তথ্য",
+                        "created_at": "তৈরির সময়",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "title": "ট্যাগের বিস্তারিত",
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "form": {
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "seo_keywords": "SEO কীওয়ার্ড"
+                    },
+                    "trend_information": "ট্রেন্ড তথ্য",
+                    "is_trend": "ট্রেন্ড কিনা",
+                    "is_current_trend": "বর্তমান ট্রেন্ড কিনা",
+                    "seo": "SEO",
+                    "sitemap": "সাইটম্যাপ",
+                    "sitemap_url": "সাইটম্যাপ URL",
+                    "feeds_rss": "ফিড (RSS)",
+                    "feeds_atom": "ফিড (ATOM)",
+                    "activity_logs": {
+                        "index": {
+                            "title": "কার্যক্রম লগ"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "ট্যাগ মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "tags": "ট্যাগ",
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "language": "ভাষা",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "search_placeholder": "ট্যাগ অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "details": {
+                        "is_trend": "ট্রেন্ড কিনা"
+                    },
+                    "created": "তৈরি হয়েছে",
+                    "news": {
+                        "index": {
+                            "actions": "কার্যক্রম"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "no_tag_found": "কোনো ট্যাগ পাওয়া যায়নি।",
+                    "delete_modal": {
+                        "title": "ট্যাগ মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "trends": {
+                "create": {
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    },
+                    "form": {
+                        "create_page_title": "ট্রেন্ড তৈরি",
+                        "tag_placeholder": "ট্যাগ নির্বাচন করুন",
+                        "is_current": "বর্তমান কিনা"
+                    },
+                    "validation": {
+                        "tag_is_required": "ট্যাগ নির্বাচন করা আবশ্যক।"
+                    },
+                    "labels": {
+                        "trends": "ট্রেন্ড",
+                        "basic_information": "মৌলিক তথ্য",
+                        "tag": "ট্যাগ"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "trends": "ট্রেন্ড",
+                        "basic_information": "মৌলিক তথ্য",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "language": "ভাষা",
+                        "title": "শিরোনাম",
+                        "system_information": "সিস্টেম তথ্য",
+                        "created_at": "তৈরির সময়",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "title": "ট্রেন্ডের বিস্তারিত",
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "is_current_trend": "বর্তমান ট্রেন্ড কিনা",
+                    "tag_information": "ট্যাগ তথ্য",
+                    "tags": {
+                        "form": {
+                            "brief": "সংক্ষিপ্ত বিবরণ",
+                            "seo_keywords": "SEO কীওয়ার্ড"
+                        },
+                        "details": {
+                            "seo": "SEO",
+                            "sitemap": "সাইটম্যাপ",
+                            "sitemap_url": "সাইটম্যাপ URL",
+                            "feeds_rss": "ফিড (RSS)",
+                            "feeds_atom": "ফিড (ATOM)"
+                        }
+                    },
+                    "activity_logs": {
+                        "index": {
+                            "title": "কার্যক্রম লগ"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "ট্রেন্ড মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "trends": "ট্রেন্ড",
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "language": "ভাষা",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "search_placeholder": "ট্রেন্ড অনুসন্ধান করুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "created": "তৈরি হয়েছে",
+                    "news": {
+                        "index": {
+                            "actions": "কার্যক্রম"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "no_trend_found": "কোনো ট্রেন্ড পাওয়া যায়নি।",
+                    "delete_modal": {
+                        "title": "ট্রেন্ড মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "users": {
+                "create": {
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "select": "নির্বাচন করুন",
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ"
+                    },
+                    "form": {
+                        "create_page_title": "ব্যবহারকারী তৈরি",
+                        "name_placeholder": "নাম লিখুন",
+                        "email_placeholder": "ইমেইল লিখুন",
+                        "address_placeholder": "ঠিকানা লিখুন",
+                        "user_role": "ব্যবহারকারীর ভূমিকা",
+                        "set_as_verify_email": "ইমেইল যাচাইকৃত হিসেবে সেট করুন",
+                        "new_password_placeholder": "নতুন পাসওয়ার্ড লিখুন",
+                        "confirm_password_placeholder": "পাসওয়ার্ড নিশ্চিত করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম প্রদান করা আবশ্যক।",
+                        "email_is_required": "ইমেইল প্রদান করা আবশ্যক।",
+                        "gender_is_required": "লিঙ্গ নির্বাচন করা আবশ্যক।",
+                        "marital_status_is_required": "বৈবাহিক অবস্থা নির্বাচন করা আবশ্যক।",
+                        "religion_is_required": "ধর্ম নির্বাচন করা আবশ্যক।",
+                        "user_role_is_required": "ব্যবহারকারীর ভূমিকা নির্বাচন করা আবশ্যক।",
+                        "password_is_required": "পাসওয়ার্ড প্রদান করা আবশ্যক।",
+                        "password_confirmation_is_required": "পাসওয়ার্ড নিশ্চিতকরণ প্রদান করা আবশ্যক।"
+                    },
+                    "labels": {
+                        "users": "ব্যবহারকারী",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "email": "ইমেইল",
+                        "birth_date": "জন্ম তারিখ",
+                        "gender": "লিঙ্গ",
+                        "religion": "ধর্ম",
+                        "marital_status": "বৈবাহিক অবস্থা",
+                        "mobile": "মোবাইল",
+                        "address": "ঠিকানা"
+                    },
+                    "auth": {
+                        "account": {
+                            "change_password": "পাসওয়ার্ড পরিবর্তন",
+                            "new_password": "নতুন পাসওয়ার্ড",
+                            "hide_password": "পাসওয়ার্ড লুকান",
+                            "show_password": "পাসওয়ার্ড দেখান",
+                            "confirm_password": "পাসওয়ার্ড নিশ্চিত করুন",
+                            "hide_confirm_password": "নিশ্চিত পাসওয়ার্ড লুকান",
+                            "show_confirm_password": "নিশ্চিত পাসওয়ার্ড দেখান"
+                        }
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "users": "ব্যবহারকারী",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "email": "ইমেইল",
+                        "mobile": "মোবাইল",
+                        "birth_date": "জন্ম তারিখ",
+                        "gender": "লিঙ্গ",
+                        "age": "বয়স",
+                        "religion": "ধর্ম",
+                        "marital_status": "বৈবাহিক অবস্থা",
+                        "system_information": "সিস্টেম তথ্য",
+                        "created_at": "তৈরির সময়",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "হালনাগাদের সময়",
+                        "updated_by": "হালনাগাদ করেছেন"
+                    },
+                    "title": "ব্যবহারকারীর বিস্তারিত",
+                    "actions": {
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "buttons": {
+                        "inactivating": "নিষ্ক্রিয় করা হচ্ছে...",
+                        "inactive": "নিষ্ক্রিয়",
+                        "activating": "সক্রিয় করা হচ্ছে...",
+                        "active": "সক্রিয়"
+                    },
+                    "status": "স্ট্যাটাস",
+                    "auth": {
+                        "profile": {
+                            "profile_image_alt": "ব্যবহারকারীর প্রোফাইল ছবি"
+                        }
+                    },
+                    "form": {
+                        "user_role": "ব্যবহারকারীর ভূমিকা"
+                    },
+                    "activity_logs": {
+                        "index": {
+                            "title": "কার্যক্রম লগ"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "ব্যবহারকারী মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "users": "ব্যবহারকারী",
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "all": "সব",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়"
+                    },
+                    "actions": {
+                        "create": "নতুন তৈরি",
+                        "edit": "সম্পাদনা",
+                        "delete": "মুছুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "form": {
+                        "user_role": "ব্যবহারকারীর ভূমিকা"
+                    },
+                    "search_placeholder": "ব্যবহারকারী অনুসন্ধান করুন...",
+                    "buttons": {
+                        "active": "সক্রিয়",
+                        "inactive": "নিষ্ক্রিয়"
+                    },
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "role": "ভূমিকা",
+                    "created": "তৈরি হয়েছে",
+                    "news": {
+                        "index": {
+                            "actions": "কার্যক্রম"
+                        }
+                    },
+                    "table": {
+                        "menus": {
+                            "details": "বিস্তারিত"
+                        }
+                    },
+                    "no_user_found": "কোনো ব্যবহারকারী পাওয়া যায়নি।",
+                    "delete_modal": {
+                        "title": "ব্যবহারকারী মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                }
+            },
+            "category_news": {
+                "labels": {
+                    "category": "ক্যাটাগরি",
+                    "location": "অবস্থান"
+                },
+                "categories": {
+                    "details": {
+                        "category_image_alt": "ক্যাটাগরির ছবি"
+                    }
+                },
+                "locations": {
+                    "form": {
+                        "location_placeholder": "অবস্থান নির্বাচন করুন"
+                    }
+                },
+                "actions": {
+                    "searching": "অনুসন্ধান হচ্ছে...",
+                    "search": "অনুসন্ধান"
+                }
+            },
+            "contributor_news": {
+                "labels": {
+                    "contributor": "অবদানকারী"
+                },
+                "contributors": {
+                    "details": {
+                        "contributor_image_alt": "অবদানকারীর ছবি"
+                    }
+                }
+            },
+            "event_news": {
+                "labels": {
+                    "event": "ইভেন্ট"
+                },
+                "events": {
+                    "details": {
+                        "event_image_alt": "ইভেন্টের ছবি"
+                    }
+                }
+            },
+            "tag_news": {
+                "labels": {
+                    "tag": "ট্যাগ"
+                },
+                "tags": {
+                    "details": {
+                        "tag_image_alt": "ট্যাগের ছবি"
+                    }
+                }
+            },
+            "search": {
+                "labels": {
+                    "search": "অনুসন্ধান",
+                    "news_type": "সংবাদের ধরন",
+                    "category": "ক্যাটাগরি",
+                    "location": "অবস্থান",
+                    "event": "ইভেন্ট",
+                    "date": "তারিখ",
+                    "loading": "লোড হচ্ছে"
+                },
+                "news": {
+                    "index": {
+                        "search_placeholder": "সংবাদ অনুসন্ধান করুন..."
+                    }
+                },
+                "categories": {
+                    "index": {
+                        "apply_filter": "ফিল্টার প্রয়োগ করুন"
+                    }
+                }
+            },
+            "home": {
+                "labels": {
+                    "page": "পেজ"
+                },
+                "details": {
+                    "main_content": "প্রধান কনটেন্ট",
+                    "sidebar_content": "সাইডবার কনটেন্ট"
+                }
+            },
+            "latest": {
+                "labels": {
+                    "latest_news": "সর্বশেষ সংবাদ"
+                }
+            },
+            "layouts": {
+                "auth_layout": {
+                    "auth": {
+                        "account": {
+                            "not_verified": "যাচাই করা হয়নি"
+                        }
+                    },
+                    "footer": {
+                        "copyright": "©",
+                        "developed_by": "ডেভেলপ করেছেন",
+                        "developer_name": "Seikh Md Tahmid Farzan"
+                    }
+                },
+                "public_layout": {
+                    "labels": {
+                        "login": "লগইন"
+                    },
+                    "app": {
+                        "name": "নিউজ পোর্টাল",
+                        "breaking_news": "ব্রেকিং নিউজ"
+                    },
+                    "footer": {
+                        "copyright": "©",
+                        "developed_by": "ডেভেলপ করেছেন",
+                        "developer_name": "Seikh Md Tahmid Farzan"
+                    },
+                    "number": {
+                        "0": "০",
+                        "1": "১",
+                        "2": "২",
+                        "3": "৩",
+                        "4": "৪",
+                        "5": "৫",
+                        "6": "৬",
+                        "7": "৭",
+                        "8": "৮",
+                        "9": "৯"
+                    }
+                }
+            },
+            "location_news": {
+                "locations": {
+                    "details": {
+                        "view_location": "অবস্থান দেখুন",
+                        "location_image_alt": "অবস্থানের ছবি",
+                        "parent_location": "মূল অবস্থান"
+                    }
+                },
+                "labels": {
+                    "location": "অবস্থান"
+                }
+            },
+            "page": {
+                "labels": {
+                    "page": "পেজ"
+                }
+            }
         }
     }
 }

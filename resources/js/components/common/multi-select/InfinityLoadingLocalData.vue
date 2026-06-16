@@ -180,7 +180,7 @@ const handleScroll = e => {
 const translateNumerText = value => {
     return String(value)
         .split('')
-        .map(char => t(`number.${char}`))
+        .map(char => t(`components.common.multi_select.infinity_loading_local_data.number.${char}`))
         .join('')
 }
 
@@ -214,10 +214,10 @@ onMounted(() => {
             label="label" track-by="value" @search-change="onSearchDebounced" @open="onDropdownOpen">
             <template #afterList>
                 <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
-                    {{ t("labels.loading") }}
+                    {{ t("components.common.multi_select.infinity_loading_local_data.labels.loading") }}
                 </div>
                 <div v-else class="text-center py-1 text-xs text-gray-400">
-                    {{ t("labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
+                    {{ t("components.common.multi_select.infinity_loading_local_data.labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
                 </div>
             </template>
         </Multiselect>

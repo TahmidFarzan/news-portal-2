@@ -13,18 +13,18 @@ onMounted(async () => {
     await nextTick()
 
     window.dispatchEvent(new CustomEvent('set-breadcrumb', {
-        detail: [{ text: t('layout_menus.dashboard'), active: true }]
+        detail: [{ text: t('pages.auth_user.dashboard.navigation.dashboard'), active: true }]
     }))
 })
 </script>
 
 <template>
-    <Head :title="t('labels.dashboard')" />
+    <Head :title="t('pages.auth_user.dashboard.labels.dashboard')" />
 
     <div class="grid grid-cols-1 gap-4">
 
         <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            {{ t('labels.dashboard') }}
+            {{ t('pages.auth_user.dashboard.labels.dashboard') }}
         </div>
 
     </div>

@@ -143,12 +143,12 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('menus.menus'), href: route('back-office.menus.index') },
+                { text: t('pages.back_office.menus.menu_items.index.menus'), href: route('back-office.menus.index') },
                 {
-                    text: `${menu?.name} ${t('labels.details')}`,
+                    text: `${menu?.name} ${t('pages.back_office.menus.menu_items.index.labels.details')}`,
                     href: route('back-office.menus.details', { slug: menu?.slug }),
                 },
-                { text: t('menus.details.menu_items'), active: true },
+                { text: t('pages.back_office.menus.menu_items.index.details.menu_items'), active: true },
             ],
         })
     )
@@ -156,13 +156,13 @@ onMounted(async () => {
 </script>
 
 <template>
-    <Head :title="t('menu_items.index.title')" />
+    <Head :title="t('pages.back_office.menus.menu_items.index.title')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('menu_items.index.title') }}
+                {{ t('pages.back_office.menus.menu_items.index.title') }}
             </h2>
 
             <a
@@ -171,7 +171,7 @@ onMounted(async () => {
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition"
             >
                 <FontAwesomeIcon icon="plus" />
-                {{ t('buttons.create') }}
+                {{ t('pages.back_office.menus.menu_items.index.actions.create') }}
             </a>
         </div>
 
@@ -187,7 +187,7 @@ onMounted(async () => {
                     :selectedItem="filterForm.per_page"
                     :apiUrl="route('search.per-pages')"
                     :multiple="false"
-                    :placeholder="t('labels.per_page')"
+                    :placeholder="t('pages.back_office.menus.menu_items.index.labels.per_page')"
                 />
 
                 <MultiSelectInfinityLoadingApi
@@ -196,7 +196,7 @@ onMounted(async () => {
                     :selectedItem="filterForm.created_by_id"
                     :apiUrl="route('search.users')"
                     :multiple="false"
-                    :placeholder="t('labels.created_by')"
+                    :placeholder="t('pages.back_office.menus.menu_items.index.labels.created_by')"
                 />
 
                 <MultiSelectInfinityLoadingApi
@@ -205,7 +205,7 @@ onMounted(async () => {
                     :selectedItem="filterForm.language_id"
                     :apiUrl="route('search.languages')"
                     :multiple="false"
-                    :placeholder="t('labels.language')"
+                    :placeholder="t('pages.back_office.menus.menu_items.index.labels.language')"
                 />
 
                 <MultiSelectInfinityLoadingApi
@@ -214,7 +214,7 @@ onMounted(async () => {
                     :selectedItem="filterForm.model_type"
                     :apiUrl="route('search.menu-item-models')"
                     :multiple="false"
-                    :placeholder="t('menu_items.form.model')"
+                    :placeholder="t('pages.back_office.menus.menu_items.index.form.model')"
                 />
 
                 <input
@@ -226,7 +226,7 @@ onMounted(async () => {
                 <input
                     type="search"
                     v-model="filterForm.search"
-                    :placeholder="t('menu_items.index.search_placeholder')"
+                    :placeholder="t('pages.back_office.menus.menu_items.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
 
@@ -241,7 +241,7 @@ onMounted(async () => {
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ filterForm.processing ? t('menu_items.index.applying_filter') : t('menu_items.index.apply_filter') }}
+                    {{ filterForm.processing ? t('pages.back_office.menus.menu_items.index.applying_filter') : t('pages.back_office.menus.menu_items.index.apply_filter') }}
                 </button>
             </div>
         </form>
@@ -254,31 +254,31 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">
-                                {{ t('table.columns.sl') }}
+                                {{ t('pages.back_office.menus.menu_items.index.table.columns.sl') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('labels.name') }}
+                                {{ t('pages.back_office.menus.menu_items.index.labels.name') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('labels.language') }}
+                                {{ t('pages.back_office.menus.menu_items.index.labels.language') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('categories.form.parent') }}
+                                {{ t('pages.back_office.menus.menu_items.index.categories.form.parent') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('table.columns.position') }}
+                                {{ t('pages.back_office.menus.menu_items.index.table.columns.position') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('table.columns.created_at') }}
+                                {{ t('pages.back_office.menus.menu_items.index.table.columns.created_at') }}
                             </th>
 
                             <th class="px-4 py-3 text-right">
-                                {{ t('table.columns.action') }}
+                                {{ t('pages.back_office.menus.menu_items.index.table.columns.action') }}
                             </th>
                         </tr>
                     </thead>
@@ -294,23 +294,23 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 font-medium">
-                                {{ item.name || t('labels.not_available') }}
+                                {{ item.name || t('pages.back_office.menus.menu_items.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item?.language?.name || t('labels.not_available') }}
+                                {{ item?.language?.name || t('pages.back_office.menus.menu_items.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item?.parent?.name || t('labels.not_available') }}
+                                {{ item?.parent?.name || t('pages.back_office.menus.menu_items.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item?.position || t('labels.not_available') }}
+                                {{ item?.position || t('pages.back_office.menus.menu_items.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) : t('labels.not_available') }}
+                                {{ item.created_at ? formatDateTime(item.created_at) : t('pages.back_office.menus.menu_items.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -322,7 +322,7 @@ onMounted(async () => {
                                             menuItemSlug: item?.slug,
                                         })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('table.menus.details')"
+                                        :title="t('pages.back_office.menus.menu_items.index.table.menus.details')"
                                     >
                                         <FontAwesomeIcon icon="info" />
                                     </a>
@@ -334,7 +334,7 @@ onMounted(async () => {
                                             menuItemSlug: item?.slug,
                                         })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
-                                        :title="t('table.menus.edit')"
+                                        :title="t('pages.back_office.menus.menu_items.index.table.menus.edit')"
                                     >
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
@@ -343,7 +343,7 @@ onMounted(async () => {
                                         v-if="canDelete(item)"
                                         @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('buttons.delete')"
+                                        :title="t('pages.back_office.menus.menu_items.index.actions.delete')"
                                     >
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
@@ -354,7 +354,7 @@ onMounted(async () => {
 
                         <tr v-if="!menuItems?.data?.length">
                             <td colspan="7" class="px-4 py-6 text-center text-gray-500">
-                                {{ t('labels.no_record_found') }}
+                                {{ t('pages.back_office.menus.menu_items.index.labels.no_record_found') }}
                             </td>
                         </tr>
                     </tbody>
@@ -392,7 +392,7 @@ onMounted(async () => {
                             class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4"
                         >
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('menu_items.delete_modal.title') }}
+                                {{ t('pages.back_office.menus.menu_items.index.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -400,7 +400,7 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('delete_confirmation_modal.irreversible_body') }}
+                                {{ t('pages.back_office.menus.menu_items.index.modals.delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
@@ -408,7 +408,7 @@ onMounted(async () => {
                                     @click="closeDeleteModal"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm"
                                 >
-                                    {{ t('buttons.cancel') }}
+                                    {{ t('pages.back_office.menus.menu_items.index.actions.cancel') }}
                                 </button>
 
                                 <button
@@ -418,7 +418,7 @@ onMounted(async () => {
                                 >
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
 
-                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
+                                    {{ deleteProcessing ? t('pages.back_office.menus.menu_items.index.actions.deleting') : t('pages.back_office.menus.menu_items.index.actions.delete') }}
                                 </button>
                             </div>
                         </div>

@@ -120,25 +120,25 @@ onBeforeUnmount(() => {
                 <a :href="route('auth-user.profile.index')" @click="closeUserDropdown"
                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="user" class="text-gray-500" />
-                    <span>{{ t("layout_menus.profile") }}</span>
+                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.profile") }}</span>
                 </a>
 
                 <a :href="route('auth-user.account.index')" @click="closeUserDropdown"
                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="user-gear" class="text-gray-500" />
-                    <span>{{ t("layout_menus.account") }}</span>
+                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.account") }}</span>
                 </a>
 
                 <a v-if="canAccessActivityLogMenuComputed" :href="route('back-office.activity-logs.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
-                    <span>{{ t("layout_menus.activity_logs") }}</span>
+                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.activity_logs") }}</span>
                 </a>
 
                 <button type="button" @click="openLogoutModal"
                     class="flex items-center gap-2 w-full text-left px-3 py-2 text-red-500 hover:bg-gray-100">
                     <FontAwesomeIcon icon="right-from-bracket" />
-                    <span>{{ t("btn.logout") }}</span>
+                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.actions.logout") }}</span>
                 </button>
             </div>
         </Transition>
@@ -160,19 +160,19 @@ onBeforeUnmount(() => {
                         <div class="flex items-center gap-2 mb-3 text-red-500">
                             <FontAwesomeIcon icon="right-from-bracket" />
                             <span class="font-semibold text-gray-800">
-                                {{ t("logout_modal.title") }}
+                                {{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.modals.logout_modal.title") }}
                             </span>
                         </div>
 
                         <div class="mb-4 text-gray-600">
-                            {{ t("logout_modal.body") }}
+                            {{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.modals.logout_modal.body") }}
                         </div>
 
                         <div class="flex justify-end gap-2">
                             <button type="button" @click="closeLogoutModal" :disabled="logoutProcessing"
                                 class="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-70 disabled:cursor-not-allowed">
                                 <FontAwesomeIcon icon="xmark" />
-                                <span>{{ t("btn.logout") }}</span>
+                                <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.actions.logout") }}</span>
                             </button>
 
                             <button type="button" @click="handleLogout" :disabled="logoutProcessing"
@@ -182,7 +182,7 @@ onBeforeUnmount(() => {
                                 <FontAwesomeIcon v-else icon="spinner" spin />
 
                                 <span>
-                                    {{ logoutProcessing ? t("btn.logging_out") : t("btn.logout") }}
+                                    {{ logoutProcessing ? t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.actions.logging_out") : t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.actions.logout") }}
                                 </span>
                             </button>
                         </div>

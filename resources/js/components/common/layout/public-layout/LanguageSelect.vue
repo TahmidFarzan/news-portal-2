@@ -77,7 +77,7 @@ onMounted(async () => {
         <MultiSelectInfinityLoadingApi v-if="language" :key="language?.id" :selectedItem="language"
             fieldName="language_id" :form="languageChangeForm" :apiUrl="route('site.languages')"
             :error="languageChangeForm.errors.language_id" selectedLabelKey="name" selectedValueKey="id"
-            apiLabelKey="name" apiValueKey="id" :multiple="false" :placeholder="t('labels.language')" :compactDesign="true"
+            apiLabelKey="name" apiValueKey="id" :multiple="false" :placeholder="t('components.common.layout.public_layout.language_select.labels.language')" :compactDesign="true"
             :useDarkTheme="true" />
     </div>
 </template>

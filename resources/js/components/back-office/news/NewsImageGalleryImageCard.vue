@@ -192,7 +192,7 @@ const deleteGalleryImage = () => {
                     <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">
-                                {{ t("labels.update_gallery_image") }}
+                                {{ t("components.back_office.news.news_image_gallery_image_card.labels.update_gallery_image") }}
                             </h3>
 
                             <button type="button"
@@ -205,7 +205,7 @@ const deleteGalleryImage = () => {
                         <div class="mt-4 space-y-4">
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    {{ t("labels.caption") }}
+                                    {{ t("components.back_office.news.news_image_gallery_image_card.labels.caption") }}
                                 </label>
 
                                 <input v-model="updateForm.caption" type="text"
@@ -218,7 +218,7 @@ const deleteGalleryImage = () => {
 
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    {{ t("labels.alt_text") }}
+                                    {{ t("components.back_office.news.news_image_gallery_image_card.labels.alt_text") }}
                                 </label>
 
                                 <input v-model="updateForm.alt" type="text"
@@ -231,7 +231,7 @@ const deleteGalleryImage = () => {
 
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    {{ t("labels.order_column") }}
+                                    {{ t("components.back_office.news.news_image_gallery_image_card.labels.order_column") }}
                                 </label>
 
                                 <input v-model="updateForm.order_column" type="number" min="1"
@@ -247,7 +247,7 @@ const deleteGalleryImage = () => {
                             <button type="button"
                                 class="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
                                 :disabled="updateForm.processing" @click="closeUpdateModal">
-                                {{ t("buttons.cancel") }}
+                                {{ t("components.back_office.news.news_image_gallery_image_card.actions.cancel") }}
                             </button>
 
                             <button type="button"
@@ -255,7 +255,7 @@ const deleteGalleryImage = () => {
                                 :disabled="updateForm.processing" @click="updateGalleryImage">
                                 <FontAwesomeIcon v-if="updateForm.processing" :icon="faSpinner"
                                     class="mr-1 animate-spin" />
-                                {{ t("buttons.update") }}
+                                {{ t("components.back_office.news.news_image_gallery_image_card.actions.update") }}
                             </button>
                         </div>
                     </div>

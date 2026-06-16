@@ -24,8 +24,8 @@ const isUpdate = computed(() => !!breakingNews?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${breakingNews?.title} ${t('labels.edit')}`
-        : t('breaking_news.form.create_page_title')
+        ? `${breakingNews?.title} ${t('pages.back_office.breaking_news.create.labels.edit')}`
+        : t('pages.back_office.breaking_news.create.form.create_page_title')
 })
 
 const saveForm = useForm({
@@ -49,12 +49,12 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', t('form.validation_errors.language_is_required'))
+        saveForm.setError('language_id', t('pages.back_office.breaking_news.create.validation.language_is_required'))
         valid = false
     }
 
     if (!saveForm.title || saveForm.title.trim() === '') {
-        saveForm.setError('title', t('form.validation_errors.title_is_required'))
+        saveForm.setError('title', t('pages.back_office.breaking_news.create.validation.title_is_required'))
         valid = false
     }
 
@@ -107,7 +107,7 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 {
-                    text: t('layout_menus.breaking_news'),
+                    text: t('pages.back_office.breaking_news.create.navigation.breaking_news'),
                     href: route('back-office.breaking-news.index')
                 },
                 {
@@ -131,21 +131,21 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('labels.basic_information') }}
+                        {{ t('pages.back_office.breaking_news.create.labels.basic_information') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.language') }}
+                                {{ t('pages.back_office.breaking_news.create.labels.language') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="breakingNews?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
-                                :placeholder="t('breaking_news.form.language_placeholder')" />
+                                :placeholder="t('pages.back_office.breaking_news.create.form.language_placeholder')" />
 
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -154,14 +154,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.title') }}
+                                {{ t('pages.back_office.breaking_news.create.labels.title') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.title"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.title ? 'border-red-500' : 'border-gray-300'"
-                                :placeholder="t('breaking_news.form.title_placeholder')" />
+                                :placeholder="t('pages.back_office.breaking_news.create.form.title_placeholder')" />
 
                             <p v-if="saveForm.errors.title" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.title }}
@@ -173,21 +173,21 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('breaking_news.form.news_settings') }}
+                        {{ t('pages.back_office.breaking_news.create.form.news_settings') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('layout_menus.news') }}
+                                {{ t('pages.back_office.breaking_news.create.navigation.news') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="news_id"
                                 :selectedItem="saveForm.news_id ? breakingNews?.news : null" :apiUrl="newsApiUrl"
                                 :error="saveForm.errors.news_id" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
-                                :multiple="false" :placeholder="t('breaking_news.form.news_placeholder')" />
+                                :multiple="false" :placeholder="t('pages.back_office.breaking_news.create.form.news_placeholder')" />
 
                             <p v-if="saveForm.errors.news_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.news_id }}
@@ -199,14 +199,14 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('breaking_news.form.publish_settings') }}
+                        {{ t('pages.back_office.breaking_news.create.form.publish_settings') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('labels.published') }}
+                                {{ t('pages.back_office.breaking_news.create.labels.published') }}
                             </label>
 
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -219,7 +219,7 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.is_published ? t('labels.yes') : t('labels.no') }}
+                                    {{ saveForm.is_published ? t('pages.back_office.breaking_news.create.labels.yes') : t('pages.back_office.breaking_news.create.labels.no') }}
                                 </span>
                             </label>
 
@@ -239,8 +239,8 @@ onMounted(async () => {
 
                         {{
                             saveForm.processing
-                                ? t('buttons.saving')
-                                : t('buttons.save')
+                                ? t('pages.back_office.breaking_news.create.actions.saving')
+                                : t('pages.back_office.breaking_news.create.actions.save')
                         }}
                     </button>
                 </div>

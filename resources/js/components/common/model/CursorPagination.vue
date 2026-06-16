@@ -214,7 +214,7 @@ const loadLess = () => {
                 class="text-xs transition duration-300 group-hover:-translate-y-0.5" />
 
             <span>
-                {{ isLoadingLess ? t("buttons.loading") : t("buttons.load_less") }}
+                {{ isLoadingLess ? t("components.common.model.cursor_pagination.actions.loading") : t("components.common.model.cursor_pagination.actions.load_less") }}
             </span>
         </button>
 
@@ -222,7 +222,7 @@ const loadLess = () => {
             class="group inline-flex min-w-32 items-center justify-center gap-2 rounded-xl border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-200 transition duration-300 hover:-translate-y-0.5 hover:border-blue-700 hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             @click="loadMore">
             <span>
-                {{ isLoadingMore ? t("buttons.loading") : t("buttons.load_more") }}
+                {{ isLoadingMore ? t("components.common.model.cursor_pagination.actions.loading") : t("components.common.model.cursor_pagination.actions.load_more") }}
             </span>
 
             <FontAwesomeIcon v-if="isLoadingMore" :icon="faSpinner" class="animate-spin text-xs" />

@@ -41,8 +41,8 @@ const isUpdate = computed(() => !!news?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${news?.title} ${t('labels.edit')}`
-        : t('news.form.create_page_title')
+        ? `${news?.title} ${t('pages.back_office.news.create.labels.edit')}`
+        : t('pages.back_office.news.create.form.create_page_title')
 })
 
 const saveForm = useForm({
@@ -154,11 +154,11 @@ function validateForm() {
     let valid = true
 
     const requiredRules = [
-        ['news_type_id', t('news.form.validation.news_type_required')],
-        ['language_id', t('form.validation_errors.language_is_required')],
-        ['category_id', t('news.form.validation.category_required')],
-        ['title', t('form.validation_errors.title_is_required')],
-        ['brief', t('news.form.validation.brief_required')],
+        ['news_type_id', t('pages.back_office.news.create.form.validation.news_type_required')],
+        ['language_id', t('pages.back_office.news.create.validation.language_is_required')],
+        ['category_id', t('pages.back_office.news.create.form.validation.category_required')],
+        ['title', t('pages.back_office.news.create.validation.title_is_required')],
+        ['brief', t('pages.back_office.news.create.form.validation.brief_required')],
     ]
 
     requiredRules.forEach(([field, message]) => {
@@ -169,32 +169,32 @@ function validateForm() {
     })
 
     if (!saveForm.body && isStory.value) {
-        saveForm.setError('body', t('news.form.validation.body_required'))
+        saveForm.setError('body', t('pages.back_office.news.create.form.validation.body_required'))
         valid = false
     }
 
     if (!saveForm.video_url && isVideo.value) {
-        saveForm.setError('video_url', t('news.form.validation.video_url_required'))
+        saveForm.setError('video_url', t('pages.back_office.news.create.form.validation.video_url_required'))
         valid = false
     }
 
     if ((!saveForm.gallery_image_ids || saveForm.gallery_image_ids.length === 0) && !isUpdate.value && isImageGallery.value) {
-        saveForm.setError('gallery_image_ids', t('news.form.validation.gallery_image_required'))
+        saveForm.setError('gallery_image_ids', t('pages.back_office.news.create.form.validation.gallery_image_required'))
         valid = false
     }
 
     if (saveForm.upload_feature_image && saveForm.selected_feature_image_url) {
-        saveForm.setError('upload_feature_image', t('news.form.validation.use_one_feature_image'))
+        saveForm.setError('upload_feature_image', t('pages.back_office.news.create.form.validation.use_one_feature_image'))
         valid = false
     }
 
     if (saveForm.upload_feature_image_mobile && saveForm.selected_feature_image_mobile_url) {
-        saveForm.setError('upload_feature_image_mobile', t('news.form.validation.use_one_mobile_image'))
+        saveForm.setError('upload_feature_image_mobile', t('pages.back_office.news.create.form.validation.use_one_mobile_image'))
         valid = false
     }
 
     if (!saveForm.feature_image_caption) {
-        saveForm.setError('feature_image_caption', t('news.form.validation.feature_image_caption_required'))
+        saveForm.setError('feature_image_caption', t('pages.back_office.news.create.form.validation.feature_image_caption_required'))
         valid = false
     }
 
@@ -305,7 +305,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('labels.news') || 'News', href: route('back-office.news.index') },
+                { text: t('pages.back_office.news.create.labels.news') || 'News', href: route('back-office.news.index') },
                 { text: pageTitle.value, active: true },
             ],
         })
@@ -322,18 +322,18 @@ onMounted(async () => {
             <form @submit.prevent="handleSave" class="space-y-6">
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">{{ t('labels.basic_information') }}</h3>
+                    <h3 class="text-base font-semibold">{{ t('pages.back_office.news.create.labels.basic_information') }}</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.news_type') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.news.create.labels.news_type') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="news_type_id"
                                 :selectedItem="news?.news_type" :apiUrl="route('search.news-types')"
                                 :error="saveForm.errors.news_type_id" :multiple="false"
-                                :placeholder="t('news.form.news_type_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.news_type_placeholder')" />
 
                             <p v-if="saveForm.errors.news_type_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.news_type_id }}
@@ -342,13 +342,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.language') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.news.create.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="news?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
-                                :placeholder="t('news.form.language_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.language_placeholder')" />
 
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -357,14 +357,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.category') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.news.create.form.category') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="category_id"
                                 :selectedItem="saveForm.category_id ? news?.category : null" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.category_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
-                                :placeholder="t('news.form.category_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.category_placeholder')" />
 
                             <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.category_id }}
@@ -373,13 +373,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.event') }}
+                                {{ t('pages.back_office.news.create.form.event') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="event_id"
                                 :selectedItem="saveForm.event_id ? news?.event : null" :apiUrl="eventApiUrl"
                                 :error="saveForm.errors.event_id" :multiple="false"
-                                :placeholder="t('news.form.event_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.event_placeholder')" />
 
                             <p v-if="saveForm.errors.event_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.event_id }}
@@ -388,14 +388,14 @@ onMounted(async () => {
 
                         <div v-if="showLocation">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.location') }}
+                                {{ t('pages.back_office.news.create.form.location') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="location_id"
                                 :selectedItem="saveForm.location_id ? news?.location : null" :apiUrl="locationApiUrl"
                                 :error="saveForm.errors.location_id" :multiple="false"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
-                                apiValueKey="id" :placeholder="t('news.form.location_placeholder')" />
+                                apiValueKey="id" :placeholder="t('pages.back_office.news.create.form.location_placeholder')" />
 
                             <p v-if="saveForm.errors.location_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.location_id }}
@@ -404,10 +404,10 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.title') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.news.create.labels.title') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.title" :placeholder="t('news.form.title_placeholder')"
+                            <input v-model="saveForm.title" :placeholder="t('pages.back_office.news.create.form.title_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.title ? 'border-red-500' : 'border-gray-300'" />
 
@@ -418,31 +418,31 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.sub_title') }}
+                                {{ t('pages.back_office.news.create.form.sub_title') }}
                             </label>
 
-                            <input v-model="saveForm.sub_title" :placeholder="t('news.form.sub_title_placeholder')"
+                            <input v-model="saveForm.sub_title" :placeholder="t('pages.back_office.news.create.form.sub_title_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.sub_title ? 'border-red-500' : 'border-gray-300'" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.content_shoulder') }}
+                                {{ t('pages.back_office.news.create.form.content_shoulder') }}
                             </label>
 
                             <input v-model="saveForm.content_shoulder"
-                                :placeholder="t('news.form.content_shoulder_placeholder')"
+                                :placeholder="t('pages.back_office.news.create.form.content_shoulder_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.content_shoulder ? 'border-red-500' : 'border-gray-300'" />
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.brief') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.news.create.form.brief') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <textarea v-model="saveForm.brief" rows="4" :placeholder="t('news.form.brief_placeholder')"
+                            <textarea v-model="saveForm.brief" rows="4" :placeholder="t('pages.back_office.news.create.form.brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'" />
 
@@ -453,7 +453,7 @@ onMounted(async () => {
 
                         <div v-if="isStory" class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.body') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.news.create.form.body') }} <span class="text-red-500">*</span>
                             </label>
 
                             <TinyMCEEditor inputField="body" :form="saveForm" erroField="body" :isSimple="false"
@@ -466,10 +466,10 @@ onMounted(async () => {
 
                         <div v-if="isVideo" class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.video_url') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.news.create.form.video_url') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.video_url" :placeholder="t('news.form.video_url_placeholder')"
+                            <input v-model="saveForm.video_url" :placeholder="t('pages.back_office.news.create.form.video_url_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.video_url ? 'border-red-500' : 'border-gray-300'" />
 
@@ -485,7 +485,7 @@ onMounted(async () => {
 
                             <div v-else class="border border-gray-200 rounded-lg p-4 space-y-4">
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.gallery_images') }} <span class="text-red-500">*</span>
+                                    {{ t('pages.back_office.news.create.labels.gallery_images') }} <span class="text-red-500">*</span>
                                 </label>
 
                                 <NewsImageGalleryDraftGrid :form="saveForm" fieldName="gallery_image_ids" />
@@ -498,28 +498,28 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.tags') }}
+                                {{ t('pages.back_office.news.create.form.tags') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="tag_ids"
                                 :selectedItem="saveForm.tag_ids ? news?.tags : null" :apiUrl="tagApiUrl"
                                 :error="saveForm.errors.tag_ids" :multiple="true"
-                                :placeholder="t('news.form.tags_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.tags_placeholder')" />
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">{{ t('news.form.image_settings') }}</h3>
+                    <h3 class="text-base font-semibold">{{ t('pages.back_office.news.create.form.image_settings') }}</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <div class="flex items-center justify-between mb-1">
                                 <label class="block text-sm font-medium">
-                                    {{ t('news.form.feature_image') }} <span class="text-red-500">*</span>
+                                    {{ t('pages.back_office.news.create.form.feature_image') }} <span class="text-red-500">*</span>
                                 </label>
 
-                                <MediaSelectFromMediaLibery :galleryTitle="t('news.form.feature_image')"
+                                <MediaSelectFromMediaLibery :galleryTitle="t('pages.back_office.news.create.form.feature_image')"
                                     :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
                                     @media-selected="handleSelectedFeatureImage" />
                             </div>
@@ -533,7 +533,7 @@ onMounted(async () => {
                             <input v-model="saveForm.feature_image_caption"
                                 class="w-full border rounded-md px-3 py-2 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.feature_image_caption ? 'border-red-500' : 'border-gray-300'"
-                                :placeholder="t('news.form.caption_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.caption_placeholder')" />
 
                             <p v-if="saveForm.errors.upload_feature_image" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.upload_feature_image }}
@@ -550,10 +550,10 @@ onMounted(async () => {
                         <div>
                             <div class="flex items-center justify-between mb-1">
                                 <label class="block text-sm font-medium">
-                                    {{ t('news.form.feature_image_mobile') }}
+                                    {{ t('pages.back_office.news.create.form.feature_image_mobile') }}
                                 </label>
 
-                                <MediaSelectFromMediaLibery :galleryTitle="t('news.form.feature_image_mobile')"
+                                <MediaSelectFromMediaLibery :galleryTitle="t('pages.back_office.news.create.form.feature_image_mobile')"
                                     :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
                                     @media-selected="handleSelectedThumbnail" />
                             </div>
@@ -575,26 +575,26 @@ onMounted(async () => {
                 </div>
 
                 <div v-if="isStory" class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">{{ t('news.form.contributor_settings') }}</h3>
+                    <h3 class="text-base font-semibold">{{ t('pages.back_office.news.create.form.contributor_settings') }}</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.contributors') }}
+                                {{ t('pages.back_office.news.create.labels.contributors') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="contributor_ids"
                                 :selectedItem="saveForm.contributor_ids ? news?.contributors : null"
                                 :apiUrl="contributorApiUrl" :error="saveForm.errors.contributor_ids" :multiple="true"
-                                :placeholder="t('news.form.contributors_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.contributors_placeholder')" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.writer') }}
+                                {{ t('pages.back_office.news.create.form.writer') }}
                             </label>
 
-                            <input v-model="saveForm.writer" :placeholder="t('news.form.writer_placeholder')"
+                            <input v-model="saveForm.writer" :placeholder="t('pages.back_office.news.create.form.writer_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.writer ? 'border-red-500' : 'border-gray-300'" />
                         </div>
@@ -602,64 +602,64 @@ onMounted(async () => {
                 </div>
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">{{ t('news.form.extra_settings') }}</h3>
+                    <h3 class="text-base font-semibold">{{ t('pages.back_office.news.create.form.extra_settings') }}</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.relevant_news') }}
+                                {{ t('pages.back_office.news.create.labels.relevant_news') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="relevant_news_ids"
                                 :selectedItem="news?.relevant_news || null" :apiUrl="relevantOrRelatedNewsApiUrl"
                                 :error="saveForm.errors.relevant_news_ids" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
-                                :multiple="true" :placeholder="t('news.form.relevant_news_placeholder')" />
+                                :multiple="true" :placeholder="t('pages.back_office.news.create.form.relevant_news_placeholder')" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.related_news') }}
+                                {{ t('pages.back_office.news.create.labels.related_news') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="related_news_ids"
                                 :selectedItem="news?.related_news || null" :apiUrl="relevantOrRelatedNewsApiUrl"
                                 :error="saveForm.errors.related_news_ids" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
-                                :multiple="true" :placeholder="t('news.form.related_news_placeholder')" />
+                                :multiple="true" :placeholder="t('pages.back_office.news.create.form.related_news_placeholder')" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('app.breaking_news') }}
+                                {{ t('pages.back_office.news.create.app.breaking_news') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="breaking_news_id"
                                 :selectedItem="news?.breaking_news || null" :apiUrl="breakingNewsApiUrl"
                                 :error="saveForm.errors.breaking_news_id" selectedLabelKey="title" selectedValueKey="id"
                                 apiLabelKey="title" apiValueKey="id" :multiple="false"
-                                :placeholder="t('news.form.breaking_news_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.breaking_news_placeholder')" />
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">{{ t('news.form.publish_settings') }}</h3>
+                    <h3 class="text-base font-semibold">{{ t('pages.back_office.news.create.form.publish_settings') }}</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div v-if="isStory">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.source') }}
+                                {{ t('pages.back_office.news.create.labels.source') }}
                             </label>
 
-                            <input v-model="saveForm.source" :placeholder="t('news.form.source_placeholder')"
+                            <input v-model="saveForm.source" :placeholder="t('pages.back_office.news.create.form.source_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.source ? 'border-red-500' : 'border-gray-300'" />
                         </div>
 
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('labels.published') }}
+                                {{ t('pages.back_office.news.create.labels.published') }}
                             </label>
 
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -672,7 +672,7 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.is_published ? t('labels.yes') : t('labels.no') }}
+                                    {{ saveForm.is_published ? t('pages.back_office.news.create.labels.yes') : t('pages.back_office.news.create.labels.no') }}
                                 </span>
                             </label>
                         </div>
@@ -680,39 +680,39 @@ onMounted(async () => {
                 </div>
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-base font-semibold">{{ t('news.form.seo_settings') }}</h3>
+                    <h3 class="text-base font-semibold">{{ t('pages.back_office.news.create.form.seo_settings') }}</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.seo_title') }}
+                                {{ t('pages.back_office.news.create.form.seo_title') }}
                             </label>
 
                             <input v-model="saveForm.seo_title" type="text"
-                                :placeholder="t('news.form.seo_title_placeholder')"
+                                :placeholder="t('pages.back_office.news.create.form.seo_title_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.seo_brief') }}
+                                {{ t('pages.back_office.news.create.form.seo_brief') }}
                             </label>
 
                             <textarea v-model="saveForm.seo_brief" rows="3"
-                                :placeholder="t('news.form.seo_brief_placeholder')"
+                                :placeholder="t('pages.back_office.news.create.form.seo_brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'" />
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('news.form.seo_keywords') }}
+                                {{ t('pages.back_office.news.create.form.seo_keywords') }}
                             </label>
 
                             <MultiSelectTaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
-                                :placeholder="t('news.form.seo_keywords_placeholder')" />
+                                :placeholder="t('pages.back_office.news.create.form.seo_keywords_placeholder')" />
                         </div>
                     </div>
                 </div>
@@ -722,7 +722,7 @@ onMounted(async () => {
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.news.create.actions.saving') : t('pages.back_office.news.create.actions.save') }}
                     </button>
                 </div>
             </form>

@@ -34,31 +34,31 @@ function validateForm() {
     let valid = true
 
     if (!registerForm.name || registerForm.name.trim() === '') {
-        registerForm.setError('name', t('form.validation_errors.name_is_required'))
+        registerForm.setError('name', t('pages.auth.register.validation.name_is_required'))
         valid = false
     } else if (registerForm.name.length > 200) {
-        registerForm.setError('name', t('form.validation_errors.name_must_not_exceed_200_characters'))
+        registerForm.setError('name', t('pages.auth.register.validation.name_must_not_exceed_200_characters'))
         valid = false
     }
 
     if (!registerForm.email || registerForm.email.trim() === '') {
-        registerForm.setError('email', t('form.validation_errors.email_is_required'))
+        registerForm.setError('email', t('pages.auth.register.validation.email_is_required'))
         valid = false
     } else if (registerForm.email.length > 200) {
-        registerForm.setError('email', t('form.validation_errors.email_must_not_exceed_200_characters'))
+        registerForm.setError('email', t('pages.auth.register.validation.email_must_not_exceed_200_characters'))
         valid = false
     }
 
     if (!registerForm.password || registerForm.password.trim() === '') {
-        registerForm.setError('password', t('form.validation_errors.password_is_required'))
+        registerForm.setError('password', t('pages.auth.register.validation.password_is_required'))
         valid = false
     }
 
     if (!registerForm.password_confirmation || registerForm.password_confirmation.trim() === '') {
-        registerForm.setError('password_confirmation', t('form.validation_errors.password_confirmation_is_required'))
+        registerForm.setError('password_confirmation', t('pages.auth.register.validation.password_confirmation_is_required'))
         valid = false
     } else if (registerForm.password !== registerForm.password_confirmation) {
-        registerForm.setError('password_confirmation', t('form.validation_errors.password_confirmation_does_not_match'))
+        registerForm.setError('password_confirmation', t('pages.auth.register.validation.password_confirmation_does_not_match'))
         valid = false
     }
 
@@ -87,21 +87,21 @@ function handleRegister() {
 
 <template>
 
-    <Head :title="t('auth.register.page_title')" />
+    <Head :title="t('pages.auth.register.page_title')" />
 
     <div class="min-h-screen flex items-center justify-center px-4">
         <div class="w-full max-w-md bg-white shadow rounded-2xl p-6 border border-gray-200">
 
             <div class="text-center mb-6">
-                <img src="/uploads/icons/auth/register.png" :alt="t('auth.register.image_alt')"
+                <img :src="'/uploads/icons/auth/register.png'" :alt="t('pages.auth.register.image_alt')"
                     class="mx-auto mb-3 w-16 h-16 object-contain" />
 
                 <h2 class="text-xl font-semibold text-green-600">
-                    {{ t('auth.register.title') }}
+                    {{ t('pages.auth.register.title') }}
                 </h2>
 
                 <p class="text-sm text-gray-500">
-                    {{ t('auth.register.description') }}
+                    {{ t('pages.auth.register.description') }}
                 </p>
             </div>
 
@@ -109,7 +109,7 @@ function handleRegister() {
 
                 <div class="mb-4">
                     <input id="name" v-model="registerForm.name" type="text"
-                        :placeholder="t('auth.register.name_placeholder')" autofocus
+                        :placeholder="t('pages.auth.register.name_placeholder')" autofocus
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         :class="registerForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -120,7 +120,7 @@ function handleRegister() {
 
                 <div class="mb-4">
                     <input id="email" v-model="registerForm.email" type="email"
-                        :placeholder="t('auth.register.email_placeholder')"
+                        :placeholder="t('pages.auth.register.email_placeholder')"
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         :class="registerForm.errors.email ? 'border-red-500' : 'border-gray-300'" />
 
@@ -131,13 +131,13 @@ function handleRegister() {
 
                 <div class="mb-4 relative">
                     <input id="password" v-model="registerForm.password" :type="showPassword ? 'text' : 'password'"
-                        :placeholder="t('auth.register.password_placeholder')"
+                        :placeholder="t('pages.auth.register.password_placeholder')"
                         class="w-full px-3 py-2 border rounded-lg pr-10 focus:outline-none focus:ring-2 focus:ring-green-500"
                         :class="registerForm.errors.password ? 'border-red-500' : 'border-gray-300'" />
 
                     <button type="button" @click="togglePasswordVisibility"
                         class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                        :aria-label="showPassword ? t('auth.register.hide_password') : t('auth.register.show_password')">
+                        :aria-label="showPassword ? t('pages.auth.register.hide_password') : t('pages.auth.register.show_password')">
                         <FontAwesomeIcon :icon="showPassword ? 'eye-slash' : 'eye'" />
                     </button>
 
@@ -149,13 +149,13 @@ function handleRegister() {
                 <div class="mb-5 relative">
                     <input id="passwordConfirmation" v-model="registerForm.password_confirmation"
                         :type="showConfirmPassword ? 'text' : 'password'"
-                        :placeholder="t('auth.register.password_confirmation_placeholder')"
+                        :placeholder="t('pages.auth.register.password_confirmation_placeholder')"
                         class="w-full px-3 py-2 border rounded-lg pr-10 focus:outline-none focus:ring-2 focus:ring-green-500"
                         :class="registerForm.errors.password_confirmation ? 'border-red-500' : 'border-gray-300'" />
 
                     <button type="button" @click="toggleConfirmPasswordVisibility"
                         class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                        :aria-label="showConfirmPassword ? t('auth.register.hide_confirm_password') : t('auth.register.show_confirm_password')">
+                        :aria-label="showConfirmPassword ? t('pages.auth.register.hide_confirm_password') : t('pages.auth.register.show_confirm_password')">
                         <FontAwesomeIcon :icon="showConfirmPassword ? 'eye-slash' : 'eye'" />
                     </button>
 
@@ -170,18 +170,18 @@ function handleRegister() {
 
                     {{
                         registerForm.processing
-                            ? t('auth.register.registering_button')
-                            : t('auth.register.register_button')
+                            ? t('pages.auth.register.registering_button')
+                            : t('pages.auth.register.register_button')
                     }}
                 </button>
 
             </form>
 
             <div class="mt-4 text-center text-sm">
-                {{ t('auth.register.already_have_account') }}
+                {{ t('pages.auth.register.already_have_account') }}
 
                 <a :href="route('login')" class="text-blue-600 hover:underline ml-1">
-                    {{ t('auth.register.login_here') }}
+                    {{ t('pages.auth.register.login_here') }}
                 </a>
             </div>
 

@@ -17,7 +17,7 @@ const { page } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title ?? t('labels.page')
+    return page?.seo_title ?? page?.title ?? t('pages.home.labels.page')
 })
 
 const metaDescription = computed(() => {
@@ -50,13 +50,13 @@ const metaKeywords = computed(() => {
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
                 <div class="lg:col-span-9">
                     <div class="rounded-lg bg-white p-6 shadow">
-                        {{ t('pages.details.main_content') }}
+                        {{ t('pages.home.details.main_content') }}
                     </div>
                 </div>
 
                 <div class="lg:col-span-3">
                     <div class="rounded-lg bg-white p-6 shadow">
-                        {{ t('pages.details.sidebar_content') }}
+                        {{ t('pages.home.details.sidebar_content') }}
                     </div>
                 </div>
             </div>

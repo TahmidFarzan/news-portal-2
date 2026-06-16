@@ -43,7 +43,7 @@ const isNext = (label) => label.includes('&raquo;') || label.toLowerCase().inclu
 const translateNumerText = value => {
     return String(value)
         .split('')
-        .map(char => t(`number.${char}`))
+        .map(char => t(`components.common.model.pagination.number.${char}`))
         .join('')
 }
 </script>
@@ -54,14 +54,14 @@ const translateNumerText = value => {
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3 text-sm text-gray-600">
 
             <div v-if="hasPaginationInfo">
-                {{ t("labels.showing") }} <span class="font-medium">{{ translateNumerText(from) }}</span>
-                {{ t("labels.to") }} <span class="font-medium">{{ translateNumerText(to) }}</span>
-                {{ t("labels.of") }} <span class="font-medium">{{ translateNumerText(total) }}</span> {{ t("labels.entries") }}
+                {{ t("components.common.model.pagination.labels.showing") }} <span class="font-medium">{{ translateNumerText(from) }}</span>
+                {{ t("components.common.model.pagination.labels.to") }} <span class="font-medium">{{ translateNumerText(to) }}</span>
+                {{ t("components.common.model.pagination.labels.of") }} <span class="font-medium">{{ translateNumerText(total) }}</span> {{ t("components.common.model.pagination.labels.entries") }}
             </div>
 
             <div v-if="hasPaginationInfo">
-                {{ t("labels.page") }} <span class="font-medium">{{ translateNumerText(currentPage) }}</span>
-                {{ t("labels.of") }} <span class="font-medium">{{ translateNumerText(lastPage) }}</span>
+                {{ t("components.common.model.pagination.labels.page") }} <span class="font-medium">{{ translateNumerText(currentPage) }}</span>
+                {{ t("components.common.model.pagination.labels.of") }} <span class="font-medium">{{ translateNumerText(lastPage) }}</span>
             </div>
 
         </div>

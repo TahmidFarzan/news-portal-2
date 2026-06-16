@@ -30,7 +30,7 @@ const {
             <FontAwesomeIcon :icon="faAngleRight" class="text-red-600" />
 
             <h2 class="text-xl font-bold text-gray-950">
-                {{ t("labels.relevant_news") }}
+                {{ t("components.common.news.relevant_news_list.labels.relevant_news") }}
             </h2>
         </div>
 

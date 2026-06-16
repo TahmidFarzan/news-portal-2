@@ -24,7 +24,7 @@ const { news, page } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title ?? t('labels.latest_news')
+    return page?.seo_title ?? page?.title ?? t('pages.latest.labels.latest_news')
 })
 
 const metaDescription = computed(() => {

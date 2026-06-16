@@ -48,7 +48,7 @@ const contributorImage = computed(() => {
 
 <template>
 
-    <Head :title="contributor?.name || t('labels.contributor')">
+    <Head :title="contributor?.name || t('pages.contributor_news.labels.contributor')">
         <link v-if="contributor?.public_url" rel="canonical" :href="contributor.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
@@ -63,14 +63,14 @@ const contributorImage = computed(() => {
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
                     <img :src="contributorImage"
-                        :alt="contributor?.name || t('contributors.details.contributor_image_alt')"
+                        :alt="contributor?.name || t('pages.contributor_news.contributors.details.contributor_image_alt')"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    {{ t('labels.contributor') }}
+                    {{ t('pages.contributor_news.labels.contributor') }}
                 </p>
 
                 <h1 class="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">

@@ -132,7 +132,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('menus.menus'), active: true },
+                { text: t('pages.back_office.menus.index.menus'), active: true },
             ],
         })
     )
@@ -141,19 +141,19 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('menus.menus')" />
+    <Head :title="t('pages.back_office.menus.index.menus')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('menus.menus') }}
+                {{ t('pages.back_office.menus.index.menus') }}
             </h2>
 
             <a v-if="canCreate()" :href="route('back-office.menus.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
-                {{ t('buttons.create') }}
+                {{ t('pages.back_office.menus.index.actions.create') }}
             </a>
         </div>
 
@@ -162,20 +162,20 @@ onMounted(async () => {
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                    :placeholder="t('labels.per_page')" />
+                    :placeholder="t('pages.back_office.menus.index.labels.per_page')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    :placeholder="t('labels.created_by')" />
+                    :placeholder="t('pages.back_office.menus.index.labels.created_by')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
-                    :placeholder="t('labels.language')" />
+                    :placeholder="t('pages.back_office.menus.index.labels.language')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" :placeholder="t('menus.index.search_placeholder')"
+                <input type="search" v-model="filterForm.search" :placeholder="t('pages.back_office.menus.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -186,8 +186,8 @@ onMounted(async () => {
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ filterForm.processing ? t('menus.index.applying_filter') :
-                        t('menus.index.apply_filter') }}
+                    {{ filterForm.processing ? t('pages.back_office.menus.index.applying_filter') :
+                        t('pages.back_office.menus.index.apply_filter') }}
                 </button>
             </div>
         </form>
@@ -200,23 +200,23 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">
-                                {{ t('table.columns.sl') }}
+                                {{ t('pages.back_office.menus.index.table.columns.sl') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('labels.name') }}
+                                {{ t('pages.back_office.menus.index.labels.name') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('labels.language') }}
+                                {{ t('pages.back_office.menus.index.labels.language') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('table.columns.created_at') }}
+                                {{ t('pages.back_office.menus.index.table.columns.created_at') }}
                             </th>
 
                             <th class="px-4 py-3 text-right">
-                                {{ t('table.columns.action') }}
+                                {{ t('pages.back_office.menus.index.table.columns.action') }}
                             </th>
                         </tr>
                     </thead>
@@ -228,15 +228,15 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 font-medium">
-                                {{ item.name || t('labels.not_available') }}
+                                {{ item.name || t('pages.back_office.menus.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item?.language?.name || t('labels.not_available') }}
+                                {{ item?.language?.name || t('pages.back_office.menus.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) : t('labels.not_available') }}
+                                {{ item.created_at ? formatDateTime(item.created_at) : t('pages.back_office.menus.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -244,34 +244,34 @@ onMounted(async () => {
 
                                     <a :href="route('back-office.menus.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('table.menus.details')">
+                                        :title="t('pages.back_office.menus.index.table.menus.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canEdit(item)" :href="route('back-office.menus.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
-                                        :title="t('table.menus.edit')">
+                                        :title="t('pages.back_office.menus.index.table.menus.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
                                     <button v-if="canDelete(item)" @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('buttons.delete')">
+                                        :title="t('pages.back_office.menus.index.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
                                     <a :href="route('back-office.menus.menu-items.index', { slug: item.slug })"
                                         class="p-2 rounded-md text-gray-600 hover:bg-gray-50 border inline-flex items-center gap-1"
-                                        :title="t('menus.details.menu_items')">
+                                        :title="t('pages.back_office.menus.index.details.menu_items')">
                                         <FontAwesomeIcon icon="list" />
-                                        {{ t('menus.details.item') }}
+                                        {{ t('pages.back_office.menus.index.details.item') }}
                                     </a>
 
                                     <a :href="route('back-office.menus.menu-items.create', { slug: item.slug })"
                                         class="p-2 rounded-md text-green-600 hover:bg-green-50 border inline-flex items-center gap-1"
-                                        :title="t('menus.details.add_menu_item')">
+                                        :title="t('pages.back_office.menus.index.details.add_menu_item')">
                                         <FontAwesomeIcon icon="plus" />
-                                        {{ t('menus.details.item') }}
+                                        {{ t('pages.back_office.menus.index.details.item') }}
                                     </a>
                                 </div>
                             </td>
@@ -279,7 +279,7 @@ onMounted(async () => {
 
                         <tr v-if="!menus?.data?.length">
                             <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                                {{ t('labels.no_record_found') }}
+                                {{ t('pages.back_office.menus.index.labels.no_record_found') }}
                             </td>
                         </tr>
                     </tbody>
@@ -304,7 +304,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('menus.delete_modal.title') }}
+                                {{ t('pages.back_office.menus.index.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -312,20 +312,20 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('delete_confirmation_modal.irreversible_body') }}
+                                {{ t('pages.back_office.menus.index.modals.delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="closeDeleteModal"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('buttons.cancel') }}
+                                    {{ t('pages.back_office.menus.index.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
 
-                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
+                                    {{ deleteProcessing ? t('pages.back_office.menus.index.actions.deleting') : t('pages.back_office.menus.index.actions.delete') }}
                                 </button>
                             </div>
                         </div>

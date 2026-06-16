@@ -33,12 +33,12 @@ function handleResendVerification() {
 
 <template>
 
-    <Head :title="t('auth.email_verification.page_title')" />
+    <Head :title="t('pages.auth.email_verification.page_title')" />
 
     <div class="w-full min-h-[70vh] flex flex-col md:flex-row items-center justify-center gap-6 p-4">
 
         <div class="hidden md:flex items-center justify-center bg-blue-100 rounded-2xl p-6 w-full md:w-1/2">
-            <img src="/uploads/icons/auth/user-check.png" :alt="t('auth.email_verification.image_alt')"
+            <img :src="'/uploads/icons/auth/user-check.png'" :alt="t('pages.auth.email_verification.image_alt')"
                 class="w-3/4 max-w-xs object-contain" />
         </div>
 
@@ -46,11 +46,11 @@ function handleResendVerification() {
             <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 text-center">
 
                 <h2 class="text-xl font-semibold text-blue-600 mb-2">
-                    {{ t('auth.email_verification.title') }}
+                    {{ t('pages.auth.email_verification.title') }}
                 </h2>
 
                 <p class="text-gray-600 text-sm mb-4">
-                    {{ t('auth.email_verification.description') }}
+                    {{ t('pages.auth.email_verification.description') }}
                 </p>
 
                 <form @submit.prevent="handleResendVerification">
@@ -61,8 +61,8 @@ function handleResendVerification() {
 
                         {{
                             resending
-                                ? t('auth.email_verification.resending_button')
-                                : t('auth.email_verification.resend_button')
+                                ? t('pages.auth.email_verification.resending_button')
+                                : t('pages.auth.email_verification.resend_button')
                         }}
                     </button>
 

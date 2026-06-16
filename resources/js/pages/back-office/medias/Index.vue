@@ -105,7 +105,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('layout_menus.medias'), active: true },
+                { text: t('pages.back_office.medias.index.navigation.medias'), active: true },
             ],
         })
     )
@@ -114,13 +114,13 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('layout_menus.medias')" />
+    <Head :title="t('pages.back_office.medias.index.navigation.medias')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('layout_menus.medias') }}
+                {{ t('pages.back_office.medias.index.navigation.medias') }}
             </h2>
         </div>
 
@@ -130,17 +130,17 @@ onMounted(async () => {
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                    :placeholder="t('labels.per_page')" />
+                    :placeholder="t('pages.back_office.medias.index.labels.per_page')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     selectedLabelKey="name_with_user_role" selectedValueKey="id" apiLabelKey="name_with_user_role"
-                    apiValueKey="id" :placeholder="t('labels.created_by')" />
+                    apiValueKey="id" :placeholder="t('pages.back_office.medias.index.labels.created_by')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" :placeholder="t('medias.index.search_placeholder')"
+                <input type="search" v-model="filterForm.search" :placeholder="t('pages.back_office.medias.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -151,7 +151,7 @@ onMounted(async () => {
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ filterForm.processing ? t('medias.index.applying_filter') : t('medias.index.apply_filter') }}
+                    {{ filterForm.processing ? t('pages.back_office.medias.index.applying_filter') : t('pages.back_office.medias.index.apply_filter') }}
                 </button>
             </div>
         </form>
@@ -164,23 +164,23 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">
-                                {{ t('table.columns.sl') }}
+                                {{ t('pages.back_office.medias.index.table.columns.sl') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('labels.name') }}
+                                {{ t('pages.back_office.medias.index.labels.name') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('medias.details.collection_name') }}
+                                {{ t('pages.back_office.medias.index.details.collection_name') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('table.columns.created_at') }}
+                                {{ t('pages.back_office.medias.index.table.columns.created_at') }}
                             </th>
 
                             <th class="px-4 py-3 text-right">
-                                {{ t('table.columns.action') }}
+                                {{ t('pages.back_office.medias.index.table.columns.action') }}
                             </th>
                         </tr>
                     </thead>
@@ -192,15 +192,15 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 font-medium">
-                                {{ item.name ?? t('labels.not_available') }}
+                                {{ item.name ?? t('pages.back_office.medias.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item.collection_name ?? t('labels.not_available') }}
+                                {{ item.collection_name ?? t('pages.back_office.medias.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) : t('labels.not_available') }}
+                                {{ item.created_at ? formatDateTime(item.created_at) : t('pages.back_office.medias.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -208,13 +208,13 @@ onMounted(async () => {
 
                                     <a :href="route('back-office.medias.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('table.menus.details')">
+                                        :title="t('pages.back_office.medias.index.table.menus.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <button @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('buttons.delete')">
+                                        :title="t('pages.back_office.medias.index.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
@@ -224,7 +224,7 @@ onMounted(async () => {
 
                         <tr v-if="!medias?.data?.length">
                             <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                                {{ t('labels.no_record_found') }}
+                                {{ t('pages.back_office.medias.index.labels.no_record_found') }}
                             </td>
                         </tr>
                     </tbody>
@@ -250,7 +250,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('medias.delete_modal.title') }}
+                                {{ t('pages.back_office.medias.index.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -258,20 +258,20 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('delete_confirmation_modal.irreversible_body') }}
+                                {{ t('pages.back_office.medias.index.modals.delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="closeDeleteModal"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('buttons.cancel') }}
+                                    {{ t('pages.back_office.medias.index.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
 
-                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
+                                    {{ deleteProcessing ? t('pages.back_office.medias.index.actions.deleting') : t('pages.back_office.medias.index.actions.delete') }}
                                 </button>
                             </div>
                         </div>

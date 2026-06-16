@@ -31,8 +31,8 @@ const isUpdate = computed(() => !!location?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${location?.name} ${t('labels.edit')}`
-        : t('locations.form.create_page_title')
+        ? `${location?.name} ${t('pages.back_office.locations.create.labels.edit')}`
+        : t('pages.back_office.locations.create.form.create_page_title')
 })
 
 const saveForm = useForm({
@@ -82,17 +82,17 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('form.validation_errors.name_is_required'))
+        saveForm.setError('name', t('pages.back_office.locations.create.validation.name_is_required'))
         valid = false
     }
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', t('form.validation_errors.language_is_required'))
+        saveForm.setError('language_id', t('pages.back_office.locations.create.validation.language_is_required'))
         valid = false
     }
 
     if (saveForm.has_parent && !saveForm.parent_id) {
-        saveForm.setError('parent_id', t('form.validation_errors.parent_location_is_required'))
+        saveForm.setError('parent_id', t('pages.back_office.locations.create.validation.parent_location_is_required'))
         valid = false
     }
 
@@ -176,7 +176,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('layout_menus.locations'), href: route('back-office.locations.index') },
+                { text: t('pages.back_office.locations.create.navigation.locations'), href: route('back-office.locations.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -195,20 +195,20 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('labels.basic_information') }}
+                        {{ t('pages.back_office.locations.create.labels.basic_information') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.language') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.locations.create.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="location?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
-                                :placeholder="t('locations.form.language_placeholder')" />
+                                :placeholder="t('pages.back_office.locations.create.form.language_placeholder')" />
 
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -217,10 +217,10 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.name') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.locations.create.labels.name') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name" :placeholder="t('locations.form.name_placeholder')"
+                            <input v-model="saveForm.name" :placeholder="t('pages.back_office.locations.create.form.name_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -231,11 +231,11 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.brief') }}
+                                {{ t('pages.back_office.locations.create.form.brief') }}
                             </label>
 
                             <textarea v-model="saveForm.brief" rows="4"
-                                :placeholder="t('locations.form.brief_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -249,14 +249,14 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('locations.form.hierarchy') }}
+                        {{ t('pages.back_office.locations.create.form.hierarchy') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
 
                         <div>
                             <label class="block text-sm font-medium mb-2">
-                                {{ t('locations.form.has_parent') }}
+                                {{ t('pages.back_office.locations.create.form.has_parent') }}
                             </label>
 
                             <button type="button" @click="saveForm.has_parent = !saveForm.has_parent" :class="[
@@ -272,14 +272,14 @@ onMounted(async () => {
 
                         <div v-if="saveForm.has_parent">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.parent') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.locations.create.form.parent') }} <span class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :selectedItem="location?.parent" fieldName="parent_id"
                                 :form="saveForm" :apiUrl="locationApiUrl" :error="saveForm.errors.parent_id"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
                                 apiValueKey="id" :multiple="false"
-                                :placeholder="t('locations.form.parent_placeholder')" />
+                                :placeholder="t('pages.back_office.locations.create.form.parent_placeholder')" />
 
                             <p v-if="saveForm.errors.parent_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.parent_id }}
@@ -291,21 +291,21 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('locations.form.category') }}
+                        {{ t('pages.back_office.locations.create.form.category') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.category') }}
+                                {{ t('pages.back_office.locations.create.form.category') }}
                             </label>
 
                             <MultiSelectInfinityLoadingApi :selectedItem="location?.category" fieldName="category_id"
                                 :form="saveForm" :apiUrl="categoryApiUrl" :error="saveForm.errors.category_id"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
                                 apiValueKey="id" :multiple="false"
-                                :placeholder="t('locations.form.category_placeholder')" />
+                                :placeholder="t('pages.back_office.locations.create.form.category_placeholder')" />
 
                             <p v-if="saveForm.errors.category_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.category_id }}
@@ -317,18 +317,18 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('locations.form.map_information') }}
+                        {{ t('pages.back_office.locations.create.form.map_information') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.latitude') }}
+                                {{ t('pages.back_office.locations.create.form.latitude') }}
                             </label>
 
                             <input v-model="saveForm.latitude" type="number" step="any"
-                                :placeholder="t('locations.form.latitude_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.latitude_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.latitude ? 'border-red-500' : 'border-gray-300'" />
 
@@ -339,11 +339,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.longitude') }}
+                                {{ t('pages.back_office.locations.create.form.longitude') }}
                             </label>
 
                             <input v-model="saveForm.longitude" type="number" step="any"
-                                :placeholder="t('locations.form.longitude_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.longitude_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.longitude ? 'border-red-500' : 'border-gray-300'" />
 
@@ -354,11 +354,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.boundary_north') }}
+                                {{ t('pages.back_office.locations.create.form.boundary_north') }}
                             </label>
 
                             <input v-model="saveForm.boundary_north" type="number" step="any"
-                                :placeholder="t('locations.form.boundary_north_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.boundary_north_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.boundary_north ? 'border-red-500' : 'border-gray-300'" />
 
@@ -369,11 +369,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.boundary_south') }}
+                                {{ t('pages.back_office.locations.create.form.boundary_south') }}
                             </label>
 
                             <input v-model="saveForm.boundary_south" type="number" step="any"
-                                :placeholder="t('locations.form.boundary_south_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.boundary_south_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.boundary_south ? 'border-red-500' : 'border-gray-300'" />
 
@@ -384,11 +384,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.boundary_east') }}
+                                {{ t('pages.back_office.locations.create.form.boundary_east') }}
                             </label>
 
                             <input v-model="saveForm.boundary_east" type="number" step="any"
-                                :placeholder="t('locations.form.boundary_east_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.boundary_east_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.boundary_east ? 'border-red-500' : 'border-gray-300'" />
 
@@ -399,11 +399,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.boundary_west') }}
+                                {{ t('pages.back_office.locations.create.form.boundary_west') }}
                             </label>
 
                             <input v-model="saveForm.boundary_west" type="number" step="any"
-                                :placeholder="t('locations.form.boundary_west_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.boundary_west_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.boundary_west ? 'border-red-500' : 'border-gray-300'" />
 
@@ -414,11 +414,11 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.boundary_geojson') }}
+                                {{ t('pages.back_office.locations.create.form.boundary_geojson') }}
                             </label>
 
                             <textarea v-model="saveForm.boundary_geojson" rows="10"
-                                :placeholder="t('locations.form.boundary_geojson_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.boundary_geojson_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 font-mono text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.boundary_geojson ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -432,18 +432,18 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('locations.form.seo_settings') }}
+                        {{ t('pages.back_office.locations.create.form.seo_settings') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.seo_title') }}
+                                {{ t('pages.back_office.locations.create.form.seo_title') }}
                             </label>
 
                             <input v-model="saveForm.seo_title" type="text"
-                                :placeholder="t('locations.form.seo_title_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.seo_title_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
 
@@ -454,11 +454,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.seo_brief') }}
+                                {{ t('pages.back_office.locations.create.form.seo_brief') }}
                             </label>
 
                             <textarea v-model="saveForm.seo_brief" rows="3"
-                                :placeholder="t('locations.form.seo_brief_placeholder')"
+                                :placeholder="t('pages.back_office.locations.create.form.seo_brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -469,12 +469,12 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('locations.form.seo_keywords') }}
+                                {{ t('pages.back_office.locations.create.form.seo_keywords') }}
                             </label>
 
                             <MultiSelectTaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
-                                :placeholder="t('locations.form.seo_keywords_placeholder')" />
+                                :placeholder="t('pages.back_office.locations.create.form.seo_keywords_placeholder')" />
 
                             <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.seo_keywords }}
@@ -490,7 +490,7 @@ onMounted(async () => {
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
 
-                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.locations.create.actions.saving') : t('pages.back_office.locations.create.actions.save') }}
                     </button>
                 </div>
 

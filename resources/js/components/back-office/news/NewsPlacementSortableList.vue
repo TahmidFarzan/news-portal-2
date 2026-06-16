@@ -112,7 +112,7 @@ function isCurrentNewsItem(item) {
 
         <div v-if="!draggableItems.length"
             class="border border-dashed border-gray-300 rounded-xl p-6 text-center text-sm text-gray-500">
-            {{ t("labels.no_record_found") }}
+            {{ t("components.back_office.news.news_placement_sortable_list.labels.no_record_found") }}
         </div>
 
         <VueDraggable v-else v-model="draggableItems" handle=".drag-handle" ghost-class="drag-ghost"
@@ -149,7 +149,7 @@ function isCurrentNewsItem(item) {
 
                             <p v-if="isCurrentNewsItem(item)"
                                 class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
-                                {{ t("labels.create_news") }}
+                                {{ t("components.back_office.news.news_placement_sortable_list.labels.create_news") }}
                             </p>
 
                         </div>
@@ -183,11 +183,11 @@ function isCurrentNewsItem(item) {
 
                         <div class="space-y-2">
                             <h3 class="text-lg font-semibold text-gray-900">
-                                {{ t("delete_confirmation_modal.title") }}
+                                {{ t("components.back_office.news.news_placement_sortable_list.modals.delete_confirmation_modal.title") }}
                             </h3>
 
                             <p class="text-sm text-gray-500">
-                                {{ t("delete_confirmation_modal.body") }}
+                                {{ t("components.back_office.news.news_placement_sortable_list.modals.delete_confirmation_modal.body") }}
                             </p>
                         </div>
 
@@ -195,7 +195,7 @@ function isCurrentNewsItem(item) {
                             <button type="button"
                                 class="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50"
                                 :disabled="deleteProcessing" @click="closeDeleteModal">
-                                {{ t("button.cancel") }}
+                                {{ t("components.back_office.news.news_placement_sortable_list.actions.cancel") }}
                             </button>
 
                             <button type="button"
@@ -203,11 +203,11 @@ function isCurrentNewsItem(item) {
                                 :disabled="deleteProcessing" @click="handleDelete">
                                 <span v-if="deleteProcessing" class="inline-flex items-center gap-2">
                                     <FontAwesomeIcon icon="fa-solid fa-spinner" spin />
-                                    {{ t("button.deleting") }}
+                                    {{ t("components.back_office.news.news_placement_sortable_list.actions.deleting") }}
                                 </span>
 
                                 <span v-else>
-                                    {{ t("button.delete") }}
+                                    {{ t("components.back_office.news.news_placement_sortable_list.actions.delete") }}
                                 </span>
                             </button>
                         </div>

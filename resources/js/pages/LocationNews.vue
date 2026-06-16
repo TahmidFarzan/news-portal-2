@@ -202,7 +202,7 @@ const createAreaPopup = (item) => {
         <div class="location-popup">
             <p>${escapeHtml(item.name)}</p>
             ${item.public_url
-            ? `<a href="${escapeHtml(item.public_url)}">${escapeHtml(t('locations.details.view_location'))}</a>`
+            ? `<a href="${escapeHtml(item.public_url)}">${escapeHtml(t('pages.location_news.locations.details.view_location'))}</a>`
             : ''
         }
         </div>
@@ -343,7 +343,7 @@ onBeforeUnmount(() => {
 
 <template>
 
-    <Head :title="location?.name || t('labels.location')">
+    <Head :title="location?.name || t('pages.location_news.labels.location')">
         <link v-if="location?.public_url" rel="canonical" :href="location.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
@@ -358,7 +358,7 @@ onBeforeUnmount(() => {
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
                     <img :src="'/uploads/images/logo/location.png'"
-                        :alt="location?.name || t('locations.details.location_image_alt')"
+                        :alt="location?.name || t('pages.location_news.locations.details.location_image_alt')"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
@@ -375,12 +375,12 @@ onBeforeUnmount(() => {
                             : 'space-y-2',
                     ]">
                         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                            {{ t('labels.location') }}
+                            {{ t('pages.location_news.labels.location') }}
                         </p>
 
                         <div v-if="location?.parent"
                             class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                            <a :href="location.parent.public_url" :title="t('locations.details.parent_location')"
+                            <a :href="location.parent.public_url" :title="t('pages.location_news.locations.details.parent_location')"
                                 class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600">
                                 <FontAwesomeIcon icon="location-dot" class="shrink-0" />
 

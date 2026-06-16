@@ -96,7 +96,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('layout_menus.activity_logs'), active: true }
+                { text: t('pages.back_office.activity_logs.index.navigation.activity_logs'), active: true }
             ],
         })
     )
@@ -105,13 +105,13 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('activity_logs.index.page_title')" />
+    <Head :title="t('pages.back_office.activity_logs.index.page_title')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('activity_logs.index.title') }}
+                {{ t('pages.back_office.activity_logs.index.title') }}
             </h2>
         </div>
 
@@ -121,23 +121,23 @@ onMounted(async () => {
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                    :placeholder="t('labels.per_page')" />
+                    :placeholder="t('pages.back_office.activity_logs.index.labels.per_page')" />
 
                 <MultiSelectInfinityLoadingApi v-if="showSubjectType" :form="filterForm" fieldName="subject_type"
                     :selectedItem="filterForm.subject_type" :apiUrl="route('search.activity-log-subject-types')"
                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                    :placeholder="t('activity_logs.index.subject_placeholder')" />
+                    :placeholder="t('pages.back_office.activity_logs.index.subject_placeholder')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="causer_id"
                     :selectedItem="filterForm.causer_id" :apiUrl="route('search.users')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                    :placeholder="t('table.columns.causer')" />
+                    :placeholder="t('pages.back_office.activity_logs.index.table.columns.causer')" />
 
                 <input v-model="filterForm.date" type="date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
                 <input v-model="filterForm.search" type="search"
-                    :placeholder="t('activity_logs.index.search_placeholder')"
+                    :placeholder="t('pages.back_office.activity_logs.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none md:col-span-2" />
 
             </div>
@@ -150,8 +150,8 @@ onMounted(async () => {
 
                     {{
                         filterForm.processing
-                            ? t('activity_logs.index.applying_filter')
-                            : t('activity_logs.index.apply_filter')
+                            ? t('pages.back_office.activity_logs.index.applying_filter')
+                            : t('pages.back_office.activity_logs.index.apply_filter')
                     }}
                 </button>
             </div>
@@ -169,19 +169,19 @@ onMounted(async () => {
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('activity_logs.details.log_name') }}
+                                {{ t('pages.back_office.activity_logs.index.details.log_name') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('activity_logs.index.event') }}
+                                {{ t('pages.back_office.activity_logs.index.event') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('activity_logs.index.created') }}
+                                {{ t('pages.back_office.activity_logs.index.created') }}
                             </th>
 
                             <th class="px-4 py-3 text-right">
-                                {{ t('table.columns.action') }}
+                                {{ t('pages.back_office.activity_logs.index.table.columns.action') }}
                             </th>
                         </tr>
                     </thead>
@@ -210,13 +210,13 @@ onMounted(async () => {
 
                                     <a :href="route('back-office.activity-logs.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('table.menus.details')">
+                                        :title="t('pages.back_office.activity_logs.index.table.menus.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <button @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('buttons.delete')">
+                                        :title="t('pages.back_office.activity_logs.index.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
@@ -226,7 +226,7 @@ onMounted(async () => {
 
                         <tr v-if="!activityLogs?.data?.length">
                             <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                                {{ t('labels.no_record_found') }}
+                                {{ t('pages.back_office.activity_logs.index.labels.no_record_found') }}
                             </td>
                         </tr>
                     </tbody>
@@ -252,7 +252,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('activity_logs.delete_modal.title') }}
+                                {{ t('pages.back_office.activity_logs.index.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -260,13 +260,13 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('activity_logs.delete_modal.irreversible_body') }}
+                                {{ t('pages.back_office.activity_logs.index.delete_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('buttons.cancel') }}
+                                    {{ t('pages.back_office.activity_logs.index.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing || !deletingRow"
@@ -275,8 +275,8 @@ onMounted(async () => {
 
                                     {{
                                         deleteProcessing
-                                            ? t('buttons.deleting')
-                                            : t('buttons.delete')
+                                            ? t('pages.back_office.activity_logs.index.actions.deleting')
+                                            : t('pages.back_office.activity_logs.index.actions.delete')
                                     }}
                                 </button>
                             </div>

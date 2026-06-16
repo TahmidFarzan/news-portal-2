@@ -140,7 +140,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('layout_menus.locations'), active: true },
+                { text: t('pages.back_office.locations.index.navigation.locations'), active: true },
             ],
         })
     )
@@ -149,19 +149,19 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('layout_menus.locations')" />
+    <Head :title="t('pages.back_office.locations.index.navigation.locations')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('layout_menus.locations') }}
+                {{ t('pages.back_office.locations.index.navigation.locations') }}
             </h2>
 
             <a v-if="canCreate()" :href="route('back-office.locations.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
-                {{ t('buttons.create') }}
+                {{ t('pages.back_office.locations.index.actions.create') }}
             </a>
         </div>
 
@@ -170,30 +170,30 @@ onMounted(async () => {
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                    :placeholder="t('labels.per_page')" />
+                    :placeholder="t('pages.back_office.locations.index.labels.per_page')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    :placeholder="t('labels.created_by')" />
+                    :placeholder="t('pages.back_office.locations.index.labels.created_by')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
-                    :placeholder="t('labels.language')" />
+                    :placeholder="t('pages.back_office.locations.index.labels.language')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="parent_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.parent_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.location-tree')"
-                    :multiple="false" :placeholder="t('locations.index.parent_placeholder')" />
+                    :multiple="false" :placeholder="t('pages.back_office.locations.index.parent_placeholder')" />
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.category_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.category-tree')"
-                    :multiple="false" :placeholder="t('locations.index.category_placeholder')" />
+                    :multiple="false" :placeholder="t('pages.back_office.locations.index.category_placeholder')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" :placeholder="t('locations.index.search_placeholder')"
+                <input type="search" v-model="filterForm.search" :placeholder="t('pages.back_office.locations.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -204,7 +204,7 @@ onMounted(async () => {
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ filterForm.processing ? t('locations.index.applying_filter') : t('locations.index.apply_filter')
+                    {{ filterForm.processing ? t('pages.back_office.locations.index.applying_filter') : t('pages.back_office.locations.index.apply_filter')
                     }}
                 </button>
             </div>
@@ -218,10 +218,10 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">{{ t('table.columns.name') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('table.columns.parent') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('locations.index.created') }}</th>
-                            <th class="px-4 py-3 text-right">{{ t('table.columns.action') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.locations.index.table.columns.name') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.locations.index.table.columns.parent') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.locations.index.created') }}</th>
+                            <th class="px-4 py-3 text-right">{{ t('pages.back_office.locations.index.table.columns.action') }}</th>
                         </tr>
                     </thead>
 
@@ -235,11 +235,11 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item.parent ? item.parent.name : t('labels.not_available') }}
+                                {{ item.parent ? item.parent.name : t('pages.back_office.locations.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) : t('labels.not_available') }}
+                                {{ item.created_at ? formatDateTime(item.created_at) : t('pages.back_office.locations.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -247,20 +247,20 @@ onMounted(async () => {
 
                                     <a :href="route('back-office.locations.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('table.menus.details')">
+                                        :title="t('pages.back_office.locations.index.table.menus.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canEdit(item)"
                                         :href="route('back-office.locations.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
-                                        :title="t('table.menus.edit')">
+                                        :title="t('pages.back_office.locations.index.table.menus.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
                                     <button v-if="canDelete(item)" @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('buttons.delete')">
+                                        :title="t('pages.back_office.locations.index.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
@@ -270,7 +270,7 @@ onMounted(async () => {
 
                         <tr v-if="!locations?.data?.length">
                             <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                                {{ t('labels.no_record_found') }}
+                                {{ t('pages.back_office.locations.index.labels.no_record_found') }}
                             </td>
                         </tr>
                     </tbody>
@@ -296,7 +296,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('locations.delete_modal.title') }}
+                                {{ t('pages.back_office.locations.index.delete_modal.title') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -304,19 +304,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('delete_confirmation_modal.irreversible_body') }}
+                                {{ t('pages.back_office.locations.index.modals.delete_confirmation_modal.irreversible_body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('buttons.cancel') }}
+                                    {{ t('pages.back_office.locations.index.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('buttons.deleting') : t('buttons.delete') }}
+                                    {{ deleteProcessing ? t('pages.back_office.locations.index.actions.deleting') : t('pages.back_office.locations.index.actions.delete') }}
                                 </button>
                             </div>
                         </div>

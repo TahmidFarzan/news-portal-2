@@ -46,7 +46,7 @@ const hasBrief = computed(() => {
 
 <template>
 
-    <Head :title="event?.name || t('labels.event')">
+    <Head :title="event?.name || t('pages.event_news.labels.event')">
         <link v-if="event?.public_url" rel="canonical" :href="event.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
@@ -61,14 +61,14 @@ const hasBrief = computed(() => {
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
                     <img :src="'/uploads/images/logo/event.png'"
-                        :alt="event?.name || t('events.details.event_image_alt')" class="h-full w-full object-contain"
+                        :alt="event?.name || t('pages.event_news.events.details.event_image_alt')" class="h-full w-full object-contain"
                         loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    {{ t('labels.event') }}
+                    {{ t('pages.event_news.labels.event') }}
                 </p>
 
                 <h1 class="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">

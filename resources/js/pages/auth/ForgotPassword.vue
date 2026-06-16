@@ -24,10 +24,10 @@ function validateForm() {
     let valid = true
 
     if (!resetRequestForm.email || resetRequestForm.email.trim() === '') {
-        resetRequestForm.setError('email', t('form.validation_errors.email_is_required'))
+        resetRequestForm.setError('email', t('pages.auth.forgot_password.validation.email_is_required'))
         valid = false
     } else if (resetRequestForm.email.length > 200) {
-        resetRequestForm.setError('email', t('form.validation_errors.email_must_not_exceed_200_characters'))
+        resetRequestForm.setError('email', t('pages.auth.forgot_password.validation.email_must_not_exceed_200_characters'))
         valid = false
     }
 
@@ -56,21 +56,21 @@ function handleForgotPassword() {
 
 <template>
 
-    <Head :title="t('auth.forgot_password.page_title')" />
+    <Head :title="t('pages.auth.forgot_password.page_title')" />
 
     <div class="min-h-screen flex items-center justify-center px-4">
         <div class="w-full max-w-md bg-white shadow rounded-2xl p-6 border border-gray-200">
 
             <div class="text-center mb-6">
-                <img src="/uploads/icons/auth/forgot-password.png" :alt="t('auth.forgot_password.image_alt')"
+                <img :src="'/uploads/icons/auth/forgot-password.png'" :alt="t('pages.auth.forgot_password.image_alt')"
                     class="mx-auto mb-3 w-16 h-16 object-contain" />
 
                 <h2 class="text-xl font-semibold text-blue-600">
-                    {{ t('auth.forgot_password.title') }}
+                    {{ t('pages.auth.forgot_password.title') }}
                 </h2>
 
                 <p class="text-sm text-gray-500">
-                    {{ t('auth.forgot_password.description') }}
+                    {{ t('pages.auth.forgot_password.description') }}
                 </p>
             </div>
 
@@ -78,7 +78,7 @@ function handleForgotPassword() {
 
                 <div class="mb-4">
                     <input id="email" v-model="resetRequestForm.email" type="email"
-                        :placeholder="t('auth.forgot_password.email_placeholder')" autofocus
+                        :placeholder="t('pages.auth.forgot_password.email_placeholder')" autofocus
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :class="resetRequestForm.errors.email ? 'border-red-500' : 'border-gray-300'" />
 
@@ -93,18 +93,18 @@ function handleForgotPassword() {
 
                     {{
                         resetRequestForm.processing
-                            ? t('auth.forgot_password.sending_button')
-                            : t('auth.forgot_password.send_reset_link_button')
+                            ? t('pages.auth.forgot_password.sending_button')
+                            : t('pages.auth.forgot_password.send_reset_link_button')
                     }}
                 </button>
 
             </form>
 
             <div class="mt-4 text-center text-sm">
-                {{ t('auth.forgot_password.already_have_account') }}
+                {{ t('pages.auth.forgot_password.already_have_account') }}
 
                 <a :href="route('login')" class="text-blue-600 hover:underline ml-1">
-                    {{ t('auth.forgot_password.back_to_login') }}
+                    {{ t('pages.auth.forgot_password.back_to_login') }}
                 </a>
             </div>
 

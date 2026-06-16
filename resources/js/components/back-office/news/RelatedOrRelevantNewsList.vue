@@ -54,7 +54,7 @@ const { news } = defineProps({
                             <a :href="route('back-office.news.details', { slug: perNews?.slug })"
                                 class="inline-flex items-center gap-1 rounded border border-blue-500 px-2 py-1 text-xs text-blue-500 hover:bg-blue-50">
                                 <FontAwesomeIcon icon="info" />
-                                {{ t("layout_menus.details") }}
+                                {{ t("components.back_office.news.related_or_relevant_news_list.navigation.details") }}
                             </a>
                         </td>
                     </tr>

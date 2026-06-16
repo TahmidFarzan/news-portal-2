@@ -28,7 +28,7 @@ const props = defineProps({
 
         <audio v-else-if="media?.mime_type?.startsWith('audio/')" controls :class="mediaClass">
             <source :src="media?.media_url" />
-            {{ t("labels.iframe_not_support") }}
+            {{ t("components.common.media.media_renderer.labels.iframe_not_support") }}
         </audio>
 
         <iframe v-else-if="media?.mime_type === 'application/pdf'" :src="media?.media_url || media?.original_url"
@@ -40,12 +40,12 @@ const props = defineProps({
         <div v-else-if="['application/zip', 'application/x-rar-compressed'].includes(media?.mime_type)">
             <a :href="media?.media_url || media?.original_url" download
                 class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-                {{ t("btn.download") }}
+                {{ t("components.common.media.media_renderer.actions.download") }}
             </a>
         </div>
 
         <div v-else class="text-sm text-gray-500">
-            {{ t("labels.iframe_not_support") }}
+            {{ t("components.common.media.media_renderer.labels.iframe_not_support") }}
         </div>
     </div>
 </template>

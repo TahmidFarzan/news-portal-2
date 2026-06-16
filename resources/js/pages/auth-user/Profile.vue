@@ -46,22 +46,22 @@ function validateForm() {
     let valid = true
 
     if (!profileUpdateForm.name || profileUpdateForm.name.trim() === '') {
-        profileUpdateForm.setError('name', t('form.validation_errors.name_is_required'))
+        profileUpdateForm.setError('name', t('pages.auth_user.profile.validation.name_is_required'))
         valid = false
     }
 
     if (!profileUpdateForm.gender) {
-        profileUpdateForm.setError('gender', t('form.validation_errors.gender_is_required'))
+        profileUpdateForm.setError('gender', t('pages.auth_user.profile.validation.gender_is_required'))
         valid = false
     }
 
     if (!profileUpdateForm.marital_status) {
-        profileUpdateForm.setError('marital_status', t('form.validation_errors.marital_status_is_required'))
+        profileUpdateForm.setError('marital_status', t('pages.auth_user.profile.validation.marital_status_is_required'))
         valid = false
     }
 
     if (!profileUpdateForm.religion) {
-        profileUpdateForm.setError('religion', t('form.validation_errors.religion_is_required'))
+        profileUpdateForm.setError('religion', t('pages.auth_user.profile.validation.religion_is_required'))
         valid = false
     }
 
@@ -99,7 +99,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('layout_menus.profile'), active: true },
+                { text: t('pages.auth_user.profile.navigation.profile'), active: true },
             ],
         })
     )
@@ -108,7 +108,7 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('layout_menus.profile')" />
+    <Head :title="t('pages.auth_user.profile.navigation.profile')" />
 
     <div class="w-full">
 
@@ -119,19 +119,19 @@ onMounted(async () => {
                 <button @click="activeTab = 'info'" class="px-4 py-2 text-sm font-medium transition" :class="activeTab === 'info'
                     ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-500 hover:text-gray-700'">
-                    {{ t('auth.profile.tabs.profile') }}
+                    {{ t('pages.auth_user.profile.tabs.profile') }}
                 </button>
 
                 <button @click="activeTab = 'update'" class="px-4 py-2 text-sm font-medium transition" :class="activeTab === 'update'
                     ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-500 hover:text-gray-700'">
-                    {{ t('auth.profile.tabs.update') }}
+                    {{ t('pages.auth_user.profile.tabs.update') }}
                 </button>
 
                 <button @click="activeTab = 'logs'" class="px-4 py-2 text-sm font-medium transition" :class="activeTab === 'logs'
                     ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-500 hover:text-gray-700'">
-                    {{ t('auth.profile.tabs.activity_logs') }}
+                    {{ t('pages.auth_user.profile.tabs.activity_logs') }}
                 </button>
 
             </div>
@@ -147,58 +147,58 @@ onMounted(async () => {
                         <div class="w-32 h-32">
                             <MediaRenderer v-if="user?.profile_image" :media="user?.profile_image" />
 
-                            <img v-else src="/uploads/icons/auth/user.png" :alt="t('auth.profile.profile_image_alt')"
+                            <img v-else :src="'/uploads/icons/auth/user.png'" :alt="t('pages.auth_user.profile.profile_image_alt')"
                                 class="object-cover rounded-xl border border-gray-200" />
                         </div>
 
                         <div class="space-y-2 text-sm">
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.name') }}:
+                                    {{ t('pages.auth_user.profile.labels.name') }}:
                                 </span>
                                 {{ user?.name }}
                             </div>
 
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.gender') }}:
+                                    {{ t('pages.auth_user.profile.labels.gender') }}:
                                 </span>
-                                {{ user?.gender || t('labels.not_available') }}
+                                {{ user?.gender || t('pages.auth_user.profile.labels.not_available') }}
                             </div>
 
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.marital_status') }}:
+                                    {{ t('pages.auth_user.profile.labels.marital_status') }}:
                                 </span>
-                                {{ user?.marital_status || t('labels.not_available') }}
+                                {{ user?.marital_status || t('pages.auth_user.profile.labels.not_available') }}
                             </div>
 
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.mobile') }}:
+                                    {{ t('pages.auth_user.profile.labels.mobile') }}:
                                 </span>
-                                {{ user?.mobile || t('labels.not_available') }}
+                                {{ user?.mobile || t('pages.auth_user.profile.labels.not_available') }}
                             </div>
 
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.birth_date') }}:
+                                    {{ t('pages.auth_user.profile.labels.birth_date') }}:
                                 </span>
-                                {{ user?.birth_date || t('labels.not_available') }}
+                                {{ user?.birth_date || t('pages.auth_user.profile.labels.not_available') }}
                             </div>
 
                             <div v-if="user?.birth_date">
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.age') }}:
+                                    {{ t('pages.auth_user.profile.labels.age') }}:
                                 </span>
                                 {{ user?.age }}
                             </div>
 
                             <div>
                                 <span class="font-medium text-gray-600">
-                                    {{ t('labels.address') }}:
+                                    {{ t('pages.auth_user.profile.labels.address') }}:
                                 </span>
-                                {{ user?.address || t('labels.not_available') }}
+                                {{ user?.address || t('pages.auth_user.profile.labels.not_available') }}
                             </div>
                         </div>
 
@@ -214,13 +214,13 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.name') }}
+                                    {{ t('pages.auth_user.profile.labels.name') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
                                 <input v-model="profileUpdateForm.name" class="border rounded px-3 py-2 w-full"
                                     :class="profileUpdateForm.errors.name ? 'border-red-500' : 'border-gray-300'"
-                                    :placeholder="t('auth.profile.name_placeholder')" />
+                                    :placeholder="t('pages.auth_user.profile.name_placeholder')" />
 
                                 <p v-if="profileUpdateForm.errors.name" class="text-red-500 text-sm mt-1">
                                     {{ profileUpdateForm.errors.name }}
@@ -229,14 +229,14 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.gender') }}
+                                    {{ t('pages.auth_user.profile.labels.gender') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
                                 <MultiSelectInfinityLoadingApi :form="profileUpdateForm" fieldName="gender"
                                     :selectedItem="profileUpdateForm.gender" :apiUrl="route('search.genders')"
                                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
-                                    apiValueKey="id" :placeholder="t('auth.profile.gender_placeholder')"
+                                    apiValueKey="id" :placeholder="t('pages.auth_user.profile.gender_placeholder')"
                                     :error="profileUpdateForm.errors.gender" />
 
                                 <p v-if="profileUpdateForm.errors.gender" class="text-red-500 text-sm mt-1">
@@ -246,14 +246,14 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.religion') }}
+                                    {{ t('pages.auth_user.profile.labels.religion') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
                                 <MultiSelectInfinityLoadingApi :form="profileUpdateForm" fieldName="religion"
                                     :selectedItem="profileUpdateForm.religion" :apiUrl="route('search.religions')"
                                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
-                                    apiValueKey="id" :placeholder="t('auth.profile.religion_placeholder')"
+                                    apiValueKey="id" :placeholder="t('pages.auth_user.profile.religion_placeholder')"
                                     :error="profileUpdateForm.errors.religion" />
 
                                 <p v-if="profileUpdateForm.errors.religion" class="text-red-500 text-sm mt-1">
@@ -263,7 +263,7 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.marital_status') }}
+                                    {{ t('pages.auth_user.profile.labels.marital_status') }}
                                     <span class="text-red-500">*</span>
                                 </label>
 
@@ -271,7 +271,7 @@ onMounted(async () => {
                                     :selectedItem="profileUpdateForm.marital_status"
                                     :apiUrl="route('search.marital-statuses')" :multiple="false" selectedLabelKey="name"
                                     selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
-                                    :placeholder="t('auth.profile.marital_status_placeholder')"
+                                    :placeholder="t('pages.auth_user.profile.marital_status_placeholder')"
                                     :error="profileUpdateForm.errors.marital_status" />
 
                                 <p v-if="profileUpdateForm.errors.marital_status" class="text-red-500 text-sm mt-1">
@@ -281,7 +281,7 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.birth_date') }}
+                                    {{ t('pages.auth_user.profile.labels.birth_date') }}
                                 </label>
 
                                 <input v-model="profileUpdateForm.birth_date" type="date"
@@ -295,7 +295,7 @@ onMounted(async () => {
 
                             <div>
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.mobile') }}
+                                    {{ t('pages.auth_user.profile.labels.mobile') }}
                                 </label>
 
                                 <VueTelInput v-model="profileUpdateForm.mobile"
@@ -308,13 +308,13 @@ onMounted(async () => {
 
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.address') }}
+                                    {{ t('pages.auth_user.profile.labels.address') }}
                                 </label>
 
                                 <textarea v-model="profileUpdateForm.address" rows="3"
                                     class="border rounded px-3 py-2 w-full resize-none"
                                     :class="profileUpdateForm.errors.address ? 'border-red-500' : 'border-gray-300'"
-                                    :placeholder="t('auth.profile.address_placeholder')"></textarea>
+                                    :placeholder="t('pages.auth_user.profile.address_placeholder')"></textarea>
 
                                 <p v-if="profileUpdateForm.errors.address" class="text-red-500 text-sm mt-1">
                                     {{ profileUpdateForm.errors.address }}
@@ -323,7 +323,7 @@ onMounted(async () => {
 
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium mb-1">
-                                    {{ t('labels.profile_image') }}
+                                    {{ t('pages.auth_user.profile.labels.profile_image') }}
                                 </label>
 
                                 <input type="file" class="border rounded px-3 py-2 w-full"
@@ -343,8 +343,8 @@ onMounted(async () => {
 
                             {{
                                 profileUpdateForm.processing
-                                    ? t('buttons.updating')
-                                    : t('buttons.update')
+                                    ? t('pages.auth_user.profile.actions.updating')
+                                    : t('pages.auth_user.profile.actions.update')
                             }}
                         </button>
 

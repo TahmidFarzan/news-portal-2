@@ -27,8 +27,8 @@ const isUpdate = computed(() => !!language?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${language?.name} ${t('labels.edit')}`
-        : t('languages.form.create_page_title')
+        ? `${language?.name} ${t('pages.back_office.languages.create.labels.edit')}`
+        : t('pages.back_office.languages.create.form.create_page_title')
 })
 
 const saveForm = useForm({
@@ -44,17 +44,17 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('form.validation_errors.name_is_required'))
+        saveForm.setError('name', t('pages.back_office.languages.create.validation.name_is_required'))
         valid = false
     }
 
     if (!saveForm.code) {
-        saveForm.setError('code', t('form.validation_errors.code_is_required'))
+        saveForm.setError('code', t('pages.back_office.languages.create.validation.code_is_required'))
         valid = false
     }
 
     if (!saveForm.locale) {
-        saveForm.setError('locale', t('form.validation_errors.locale_is_required'))
+        saveForm.setError('locale', t('pages.back_office.languages.create.validation.locale_is_required'))
         valid = false
     }
 
@@ -102,7 +102,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('layout_menus.languages'), href: route('back-office.languages.index') },
+                { text: t('pages.back_office.languages.create.navigation.languages'), href: route('back-office.languages.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -121,17 +121,17 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('labels.basic_information') }}
+                        {{ t('pages.back_office.languages.create.labels.basic_information') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('labels.name') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.languages.create.labels.name') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name" :placeholder="t('languages.form.name_placeholder')"
+                            <input v-model="saveForm.name" :placeholder="t('pages.back_office.languages.create.form.name_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -142,11 +142,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('languages.form.code') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.languages.create.form.code') }} <span class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.code" type="text"
-                                :placeholder="t('languages.form.code_placeholder')"
+                                :placeholder="t('pages.back_office.languages.create.form.code_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.code ? 'border-red-500' : 'border-gray-300'" />
 
@@ -157,11 +157,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('languages.form.locale') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.languages.create.form.locale') }} <span class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.locale" type="text"
-                                :placeholder="t('languages.form.locale_placeholder')"
+                                :placeholder="t('pages.back_office.languages.create.form.locale_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.locale ? 'border-red-500' : 'border-gray-300'" />
 
@@ -172,11 +172,11 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('languages.form.brief') }}
+                                {{ t('pages.back_office.languages.create.form.brief') }}
                             </label>
 
                             <textarea v-model="saveForm.brief" rows="4"
-                                :placeholder="t('languages.form.brief_placeholder')"
+                                :placeholder="t('pages.back_office.languages.create.form.brief_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300"></textarea>
                         </div>
 
@@ -189,7 +189,7 @@ onMounted(async () => {
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
 
-                        {{ saveForm.processing ? t('buttons.saving') : t('buttons.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.languages.create.actions.saving') : t('pages.back_office.languages.create.actions.save') }}
                     </button>
                 </div>
 

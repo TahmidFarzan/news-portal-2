@@ -152,7 +152,7 @@ defineExpose({
         <button v-if="!disableOpenMediaButton" type="button"
             class="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-400 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-2"
             @click="openModal" :hidden="hideDefaultOpenButton">
-            {{ t("buttons.open_media_libery") }}
+            {{ t("components.common.media.media_select_from_media_libery.actions.open_media_library") }}
         </button>
 
         <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto" @click.self="showModal = false">
@@ -166,7 +166,7 @@ defineExpose({
                     <div class="px-6 py-4 border-b border-gray-200">
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-medium text-gray-900">
-                                {{ galleryTitle }} {{ t("labels.gallery") }}
+                                {{ galleryTitle }} {{ t("components.common.media.media_select_from_media_libery.labels.gallery") }}
                             </h3>
 
                             <button type="button" @click="showModal = false"
@@ -187,13 +187,13 @@ defineExpose({
                         </div>
 
                         <div v-if="loading && mediaList.length === 0" class="py-10 text-center text-gray-500">
-                            {{ t("labels.loading") }}
+                            {{ t("components.common.media.media_select_from_media_libery.labels.loading") }}
                         </div>
 
                         <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             <div v-if="!loading && mediaList.length === 0"
                                 class="col-span-full text-center text-gray-500 py-8">
-                                {{ t("labels.no_media_found") }}
+                                {{ t("components.common.media.media_select_from_media_libery.labels.no_media_found") }}
                             </div>
 
                             <div v-for="media in mediaList" :key="media.id" @click="toggleMedia(media)" :class="[
@@ -218,7 +218,7 @@ defineExpose({
                                     </path>
                                 </svg>
 
-                                {{ loading ? t("buttons.loading") : t("buttons.load_more") }}
+                                {{ loading ? t("components.common.media.media_select_from_media_libery.actions.loading") : t("components.common.media.media_select_from_media_libery.actions.load_more") }}
                             </button>
                         </div>
                     </div>
@@ -226,12 +226,12 @@ defineExpose({
                     <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-2">
                         <button type="button" @click="showModal = false"
                             class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            {{ t("buttons.close") }}
+                            {{ t("components.common.media.media_select_from_media_libery.actions.close") }}
                         </button>
 
                         <button type="button" @click="confirmSelection" :disabled="!hasSelection"
                             class="px-3 py-1 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                            {{ t("buttons.select") }}
+                            {{ t("components.common.media.media_select_from_media_libery.actions.select") }}
                         </button>
                     </div>
                 </div>

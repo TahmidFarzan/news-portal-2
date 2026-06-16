@@ -190,7 +190,7 @@ onBeforeUnmount(() => {
 
                 <div v-if="loading && !fullyLoaded"
                     class="shrink-0 whitespace-nowrap text-[11px] text-gray-500 sm:text-xs">
-                    {{ t('labels.loading') }}
+                    {{ t('components.common.layout.public_layout.breaking_news.labels.loading') }}
                 </div>
             </div>
         </div>

@@ -211,12 +211,12 @@ onBeforeUnmount(() => {
                         <HeaderMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
-                            {{ t("labels.loading") }}
+                            {{ t("components.common.layout.public_layout.header_menu_item.labels.loading") }}
                         </li>
 
                         <li v-if="childrenLoaded && !childrenLoading && !children.length"
                             class="px-3 py-2 text-sm text-gray-400">
-                            {{ t("labels.no_menu_found") }}
+                            {{ t("components.common.layout.public_layout.header_menu_item.labels.no_menu_found") }}
                         </li>
                     </ul>
                 </VerticalScroller>
