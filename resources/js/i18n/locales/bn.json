@@ -1,0 +1,151 @@
+{
+    "footer": {
+        "copyright": "©",
+        "developed_by": "ডেভেলপ করেছেন",
+        "developer_name": "শেখ মোঃ তাহমিদ ফারজান"
+    },
+
+    "number": {
+        "0": "০",
+        "1": "১",
+        "2": "২",
+        "3": "৩",
+        "4": "৪",
+        "5": "৫",
+        "6": "৬",
+        "7": "৭",
+        "8": "৮",
+        "9": "৯"
+    },
+    "labels": {
+        "login": "লগইন",
+        "language": "ভাষা",
+        "search": "সার্চ",
+        "menu": "মেনু",
+        "no_menu_found": "কোনো মেনু পাওয়া যায়নি",
+        "loading": "লোড হচ্ছে",
+        "profile": "প্রোফাইল",
+        "image_gallery": "ছবির গ্যালারি",
+        "iframe_not_support": "ব্রাউজার ফাইলটি প্রদর্শন করতে ব্যর্থ হয়েছে",
+        "gallery": "গ্যালারি",
+        "gallery_images": "গ্যালারির ছবি",
+        "no_media_found": "কোনো মিডিয়া পাওয়া যায়নি",
+        "entries": "এন্ট্রি",
+        "to": "থেকে",
+        "of": "মোট",
+        "page": "পৃষ্ঠা",
+        "showing": "দেখানো হচ্ছে",
+        "no_gallery_image_found": "কোনো গ্যালারির ছবি পাওয়া যায়নি",
+        "source": "সূত্র",
+        "share": "শেয়ার",
+        "copied": "কপি হয়েছে",
+        "copy": "কপি করুন",
+        "by": "লেখক",
+        "shpw_all": "সব দেখুন",
+        "add_image": "ছবি যোগ করুন",
+        "image": "ছবি",
+        "preview": "প্রিভিউ",
+        "caption": "ক্যাপশন",
+        "alt_text": "অল্ট টেক্সট",
+        "delete_image": "ছবি মুছুন",
+        "contributors": "অবদানকারী",
+        "recent_news": "সাম্প্রতিক সংবাদ",
+        "related_news": "সম্পর্কিত সংবাদ",
+        "relevant_news": "প্রাসঙ্গিক সংবাদ",
+        "no_record_found": "কোনো তথ্য পাওয়া যায়নি",
+        "edit_image": "ছবি সম্পাদনা করুন",
+        "order_column": "ক্রম কলাম",
+        "update_gallery_image": "গ্যালারির ছবি আপডেট করুন",
+        "create_news": "সংবাদ তৈরি করুন"
+    },
+    "app": {
+        "name": "নিউজ পোর্টাল",
+        "breaking_news": "ব্রেকিং নিউজ"
+    },
+    "menus": {
+        "profile": "প্রোফাইল",
+        "account": "অ্যাকাউন্ট",
+        "activity_logs": "কার্যকলাপ লগ",
+        "dashboard": "ড্যাশবোর্ড",
+        "medias": "মিডিয়া",
+        "news_attributes": "সংবাদের বৈশিষ্ট্য",
+        "languages": "ভাষাসমূহ",
+        "categories": "ক্যাটাগরি",
+        "tags": "ট্যাগ",
+        "trends": "ট্রেন্ড",
+        "locations": "অবস্থান",
+        "events": "ইভেন্ট",
+        "contributors": "অবদানকারী",
+        "news": "সংবাদ",
+        "breaking_news": "ব্রেকিং নিউজ",
+        "pages": "পেজ",
+        "menus": "মেনু",
+        "user_management": "ব্যবহারকারী ব্যবস্থাপনা",
+        "users": "ব্যবহারকারী",
+        "settings": "সেটিংস"
+    },
+    "buttons": {
+        "delete": "মুছুন",
+        "deleting": "মুছে ফেলা হচ্ছে",
+        "saving": "সংরক্ষণ করা হচ্ছে",
+        "updating": "আপডেট করা হচ্ছে",
+        "logout": "লগআউট",
+        "cancel": "বাতিল",
+        "save": "সংরক্ষণ করুন",
+        "update": "আপডেট করুন",
+        "logging_out": "লগআউট করা হচ্ছে",
+        "download": "ডাউনলোড",
+        "loading": "লোড হচ্ছে",
+        "load_more": "আরও দেখুন",
+        "load_less": "কম দেখুন",
+        "close": "বন্ধ করুন",
+        "select": "নির্বাচন করুন",
+        "add_image": "ছবি যোগ করুন",
+        "drag_&_Sequence": "ড্র্যাগ ও ক্রম নির্ধারণ",
+        "open_media_libery": "মিডিয়া লাইব্রেরি খুলুন"
+    },
+    "logout_modal": {
+        "title": "লগআউট নিশ্চিতকরণ",
+        "body": "আপনি কি নিশ্চিতভাবে লগআউট করতে চান?"
+    },
+    "delete_confirmation_modal": {
+        "title": "মুছে ফেলার নিশ্চিতকরণ",
+        "body": "আপনি কি নিশ্চিতভাবে এটি মুছে ফেলতে চান?"
+    },
+    "table": {
+        "columns": {
+            "sl": "ক্রম",
+            "name": "নাম",
+            "language": "ভাষা",
+            "position": "অবস্থান",
+            "parent": "অভিভাবক",
+            "description": "বিবরণ",
+            "causer": "কারণকারী",
+            "created_at": "তৈরির তারিখ",
+            "action": "অ্যাকশন",
+            "page": "পৃষ্ঠা",
+            "section": "সেকশন"
+        },
+        "menus": {
+            "details": "বিস্তারিত",
+            "edit": "সম্পাদনা"
+        }
+    },
+    "form": {
+        "validation_errors": {
+            "sequence_is_required": "ক্রম আবশ্যক",
+            "image_is_required": "ছবি আবশ্যক"
+        }
+    },
+    "api": {
+        "errors": {
+            "invalid_data": "অবৈধ তথ্য",
+            "image_save_failed": "ছবি সংরক্ষণ ব্যর্থ হয়েছে",
+            "invalid_image_response": "ছবি সংরক্ষিত হয়েছে কিন্তু অবৈধ মিডিয়া রেসপন্স পাওয়া গেছে",
+            "missing_slug": "Slug অনুপস্থিত। অনুগ্রহ করে backend response থেকে slug প্রদান করুন",
+            "fail_to_update_image": "ছবি আপডেট করতে ব্যর্থ হয়েছে",
+            "invalid_response_after_image_update": "ছবি আপডেট হয়েছে কিন্তু অবৈধ মিডিয়া রেসপন্স পাওয়া গেছে",
+            "fail_to_delete_image": "ছবি মুছে ফেলতে ব্যর্থ হয়েছে"
+        }
+    }
+}

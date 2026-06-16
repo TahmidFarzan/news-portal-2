@@ -1,6 +1,7 @@
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
+import { i18n } from './i18n'
 
 import './bootstrap'
 import '../css/app.css'
@@ -22,6 +23,7 @@ createInertiaApp({
         const app = createApp({ render: () => h(App, props) })
 
         app.use(plugin)
+        app.use(i18n)
 
         app.config.globalProperties.route = (name, params = {}, absolute = true) =>
             route(name, params, absolute, window.Ziggy)
