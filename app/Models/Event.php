@@ -29,6 +29,7 @@ use Spatie\Sluggable\SlugOptions;
         'name', 'brief', 'slug',
         'language_id', 'created_by_id',
         "seo_brief", 'seo_title', 'seo_keywords',
+        "is_current"
     ])]
 #[UsePolicy(EventPolicy::class)]
 #[ObservedBy([EventObserver::class])]

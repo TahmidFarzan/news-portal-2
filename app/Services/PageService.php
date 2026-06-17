@@ -874,7 +874,134 @@ class PageService
             ->where("is_published", true)
             ->orderByDesc('id')
             ->orderByDesc('created_at')
-            ->limit(25)
+            ->limit(15)
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $newsCacheKey,
+            $news,
+            CacheServerHelper::threeMinInSecond,
+            $newsCacheTags
+        );
+
+        return $news;
+    }
+
+    public function homeEvent()
+    {
+        $language = $this->language();
+
+        $eventCacheKey = "page:language:{$language->locale}:home:event";
+
+        $eventCacheTags = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:home",
+            "page:language:{$language->locale}:home:event",
+        ];
+
+        $eventCachedData = CacheServerHelper::getCachedData($eventCacheKey, $eventCacheTags);
+
+        if (($eventCachedData !== null) && ($eventCachedData instanceof CursorPaginator)) {
+            return $eventCachedData;
+        }
+
+        $events = Event::where("language_id", $language->id)->where("is_current", true)->get();
+
+        CacheServerHelper::cachedData(
+            $eventCacheKey,
+            $events,
+            CacheServerHelper::threeMinInSecond,
+            $eventCacheTags
+        );
+
+        return $events;
+    }
+
+    public function homeLeadSectionNews()
+    {
+        $language    = $this->language();
+        $page        = PageHelper::PAGE_HOME;
+        $pageSection = PageHelper::PAGE_SECTION_LEAD_NEWS;
+
+        $newsCacheKey = "page:language:{$language->locale}:home:lead-section:news";
+
+        $newsCacheTags = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:home",
+            "page:language:{$language->locale}:home:lead-section",
+        ];
+
+        $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
+
+        if (($newsCachedData !== null) && ($newsCachedData instanceof CursorPaginator)) {
+            return $newsCachedData;
+        }
+
+        $newsPlacementTable = (new NewsPlacement())->getTable();
+
+        $news = News::query()
+            ->with(["newsType", "category", "event", "location"])
+            ->withWhereHas('newsPlacements', function ($query) use ($page, $pageSection) {
+                $query->where('page', $page)
+                    ->where('page_section', $pageSection);
+            })
+            ->where("language_id", $language->id)
+            ->where('is_published', true)
+            ->orderBy(
+                NewsPlacement::query()
+                    ->select('position')
+                    ->where("language_id", $language->id)
+                    ->whereColumn("{$newsPlacementTable}.news_id", 'news.id')
+                    ->where('page', $page)
+                    ->where('page_section', $pageSection)
+                    ->limit(1),
+                'asc'
+            )
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $newsCacheKey,
+            $news,
+            CacheServerHelper::threeMinInSecond,
+            $newsCacheTags
+        );
+
+        return $news;
+    }
+
+    public function homeEventSectionNews(Event $event)
+    {
+        $language = $this->language();
+
+        $newsCacheKey = "page:language:{$language->locale}:home:event-section:event:{$event->slug}:news";
+
+        $newsCacheTags = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:home",
+            "page:language:{$language->locale}:home:event-section",
+            "page:language:{$language->locale}:home:event-section:event:{$event->slug}",
+            "page:language:{$language->locale}:home:event-section:event:{$event->slug}:news",
+        ];
+
+        $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
+
+        if (($newsCachedData !== null) && ($newsCachedData instanceof CursorPaginator)) {
+            return $newsCachedData;
+        }
+
+        $news = News::query()
+            ->with(["newsType", "category", "event", "location"])
+            ->where("event_id", $event->id)
+            ->where("language_id", $language->id)
+            ->where('is_published', true)
+            ->orderBy('create_at', 'desc')
+            ->orderBy("id", 'desc')
+            ->limit(10)
             ->get();
 
         CacheServerHelper::cachedData(
@@ -896,4 +1023,5 @@ class PageService
     {
         return Location::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
     }
+
 }

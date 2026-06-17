@@ -17,10 +17,14 @@ class PageController extends Controller
 
     public function home()
     {
-        $page = $this->pageService->homePage();
+        $page       = $this->pageService->homePage();
+        $leadNews   = $this->pageService->homeLeadSectionNews();
+        $recentNews = $this->pageService->recentNews();
 
         return Inertia::render('Home', [
-            'page' => $page,
+            'page'       => $page,
+            'leadNews'   => $leadNews,
+            "recentNews" => $recentNews,
         ]);
     }
 
