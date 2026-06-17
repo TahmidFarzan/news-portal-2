@@ -2820,60 +2820,6 @@
                 }
             }
         },
-        "category_news": {
-            "labels": {
-                "category": "Category",
-                "location": "Location"
-            },
-            "categories": {
-                "details": {
-                    "category_image_alt": "Category image"
-                }
-            },
-            "locations": {
-                "form": {
-                    "location_placeholder": "Select location"
-                }
-            },
-            "actions": {
-                "searching": "Searching...",
-                "search": "Search"
-            }
-        },
-        "contributor_news": {
-            "labels": {
-                "contributor": "Contributor"
-            },
-            "contributors": {
-                "details": {
-                    "contributor_image_alt": "Contributor image"
-                }
-            }
-        },
-        "event_news": {
-            "labels": {
-                "event": "Event"
-            },
-            "events": {
-                "details": {
-                    "event_image_alt": "Event image"
-                }
-            }
-        },
-        "home": {
-            "labels": {
-                "page": "Page"
-            },
-            "details": {
-                "main_content": "Main Content",
-                "sidebar_content": "Sidebar Content"
-            }
-        },
-        "latest": {
-            "labels": {
-                "latest_news": "Latest News"
-            }
-        },
         "layouts": {
             "auth_layout": {
                 "auth": {
@@ -2914,6 +2860,36 @@
                 }
             }
         },
+        "category_news": {
+            "labels": {
+                "category": "Category",
+                "location": "Location"
+            },
+            "categories": {
+                "details": {
+                    "category_image_alt": "Category image"
+                }
+            },
+            "locations": {
+                "form": {
+                    "location_placeholder": "Select location"
+                }
+            },
+            "actions": {
+                "searching": "Searching...",
+                "search": "Search"
+            }
+        },
+        "event_news": {
+            "labels": {
+                "event": "Event"
+            },
+            "events": {
+                "details": {
+                    "event_image_alt": "Event image"
+                }
+            }
+        },
         "location_news": {
             "locations": {
                 "details": {
@@ -2926,9 +2902,24 @@
                 "location": "Location"
             }
         },
-        "page": {
+        "tag_news": {
             "labels": {
-                "page": "Page"
+                "tag": "Tag"
+            },
+            "tags": {
+                "details": {
+                    "tag_image_alt": "Tag image"
+                }
+            }
+        },
+        "contributor_news": {
+            "labels": {
+                "contributor": "Contributor"
+            },
+            "contributors": {
+                "details": {
+                    "contributor_image_alt": "Contributor image"
+                }
             }
         },
         "search": {
@@ -2952,14 +2943,23 @@
                 }
             }
         },
-        "tag_news": {
+        "home": {
             "labels": {
-                "tag": "Tag"
+                "page": "Page"
             },
-            "tags": {
-                "details": {
-                    "tag_image_alt": "Tag image"
-                }
+            "details": {
+                "main_content": "Main Content",
+                "sidebar_content": "Sidebar Content"
+            }
+        },
+        "latest": {
+            "labels": {
+                "latest_news": "Latest News"
+            }
+        },
+        "page": {
+            "labels": {
+                "page": "Page"
             }
         }
     }

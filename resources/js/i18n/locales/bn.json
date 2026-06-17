@@ -2818,148 +2818,148 @@
                         }
                     }
                 }
-            },
-            "category_news": {
-                "labels": {
-                    "category": "ক্যাটাগরি",
-                    "location": "অবস্থান"
-                },
-                "categories": {
-                    "details": {
-                        "category_image_alt": "ক্যাটাগরির ছবি"
+            }
+        },
+        "layouts": {
+            "auth_layout": {
+                "auth": {
+                    "account": {
+                        "not_verified": "যাচাই করা হয়নি"
                     }
                 },
-                "locations": {
-                    "form": {
-                        "location_placeholder": "অবস্থান নির্বাচন করুন"
-                    }
-                },
-                "actions": {
-                    "searching": "অনুসন্ধান হচ্ছে...",
-                    "search": "অনুসন্ধান"
+                "footer": {
+                    "copyright": "©",
+                    "developed_by": "ডেভেলপ করেছেন",
+                    "developer_name": "শেখ মোঃ তাহমিদ ফারজান"
                 }
             },
-            "contributor_news": {
+            "public_layout": {
                 "labels": {
-                    "contributor": "অবদানকারী"
+                    "login": "লগইন"
                 },
-                "contributors": {
-                    "details": {
-                        "contributor_image_alt": "অবদানকারীর ছবি"
-                    }
+                "app": {
+                    "name": "নিউজ পোর্টাল",
+                    "breaking_news": "ব্রেকিং নিউজ"
+                },
+                "footer": {
+                    "copyright": "©",
+                    "developed_by": "ডেভেলপ করেছেন",
+                    "developer_name": "শেখ মোঃ তাহমিদ ফারজান"
+                },
+                "number": {
+                    "0": "০",
+                    "1": "১",
+                    "2": "২",
+                    "3": "৩",
+                    "4": "৪",
+                    "5": "৫",
+                    "6": "৬",
+                    "7": "৭",
+                    "8": "৮",
+                    "9": "৯"
                 }
+            }
+        },
+        "category_news": {
+            "labels": {
+                "category": "ক্যাটাগরি",
+                "location": "অবস্থান"
             },
-            "event_news": {
-                "labels": {
-                    "event": "ইভেন্ট"
-                },
-                "events": {
-                    "details": {
-                        "event_image_alt": "ইভেন্টের ছবি"
-                    }
-                }
-            },
-            "tag_news": {
-                "labels": {
-                    "tag": "ট্যাগ"
-                },
-                "tags": {
-                    "details": {
-                        "tag_image_alt": "ট্যাগের ছবি"
-                    }
-                }
-            },
-            "search": {
-                "labels": {
-                    "search": "অনুসন্ধান",
-                    "news_type": "সংবাদের ধরন",
-                    "category": "ক্যাটাগরি",
-                    "location": "অবস্থান",
-                    "event": "ইভেন্ট",
-                    "date": "তারিখ",
-                    "loading": "লোড হচ্ছে"
-                },
-                "news": {
-                    "index": {
-                        "search_placeholder": "সংবাদ অনুসন্ধান করুন..."
-                    }
-                },
-                "categories": {
-                    "index": {
-                        "apply_filter": "ফিল্টার প্রয়োগ করুন"
-                    }
-                }
-            },
-            "home": {
-                "labels": {
-                    "page": "পেজ"
-                },
+            "categories": {
                 "details": {
-                    "main_content": "প্রধান কনটেন্ট",
-                    "sidebar_content": "সাইডবার কনটেন্ট"
+                    "category_image_alt": "ক্যাটাগরির ছবি"
                 }
             },
-            "latest": {
-                "labels": {
-                    "latest_news": "সর্বশেষ সংবাদ"
+            "locations": {
+                "form": {
+                    "location_placeholder": "অবস্থান নির্বাচন করুন"
                 }
             },
-            "layouts": {
-                "auth_layout": {
-                    "auth": {
-                        "account": {
-                            "not_verified": "যাচাই করা হয়নি"
-                        }
-                    },
-                    "footer": {
-                        "copyright": "©",
-                        "developed_by": "ডেভেলপ করেছেন",
-                        "developer_name": "Seikh Md Tahmid Farzan"
-                    }
-                },
-                "public_layout": {
-                    "labels": {
-                        "login": "লগইন"
-                    },
-                    "app": {
-                        "name": "নিউজ পোর্টাল",
-                        "breaking_news": "ব্রেকিং নিউজ"
-                    },
-                    "footer": {
-                        "copyright": "©",
-                        "developed_by": "ডেভেলপ করেছেন",
-                        "developer_name": "Seikh Md Tahmid Farzan"
-                    },
-                    "number": {
-                        "0": "০",
-                        "1": "১",
-                        "2": "২",
-                        "3": "৩",
-                        "4": "৪",
-                        "5": "৫",
-                        "6": "৬",
-                        "7": "৭",
-                        "8": "৮",
-                        "9": "৯"
-                    }
+            "actions": {
+                "searching": "অনুসন্ধান হচ্ছে...",
+                "search": "অনুসন্ধান"
+            }
+        },
+        "event_news": {
+            "labels": {
+                "event": "ইভেন্ট"
+            },
+            "events": {
+                "details": {
+                    "event_image_alt": "ইভেন্টের ছবি"
+                }
+            }
+        },
+        "location_news": {
+            "locations": {
+                "details": {
+                    "view_location": "অবস্থান দেখুন",
+                    "location_image_alt": "অবস্থানের ছবি",
+                    "parent_location": "মূল অবস্থান"
                 }
             },
-            "location_news": {
-                "locations": {
-                    "details": {
-                        "view_location": "অবস্থান দেখুন",
-                        "location_image_alt": "অবস্থানের ছবি",
-                        "parent_location": "মূল অবস্থান"
-                    }
-                },
-                "labels": {
-                    "location": "অবস্থান"
+            "labels": {
+                "location": "অবস্থান"
+            }
+        },
+        "tag_news": {
+            "labels": {
+                "tag": "ট্যাগ"
+            },
+            "tags": {
+                "details": {
+                    "tag_image_alt": "ট্যাগের ছবি"
+                }
+            }
+        },
+        "contributor_news": {
+            "labels": {
+                "contributor": "অবদানকারী"
+            },
+            "contributors": {
+                "details": {
+                    "contributor_image_alt": "অবদানকারীর ছবি"
+                }
+            }
+        },
+        "search": {
+            "labels": {
+                "search": "অনুসন্ধান",
+                "news_type": "সংবাদের ধরন",
+                "category": "ক্যাটাগরি",
+                "location": "অবস্থান",
+                "event": "ইভেন্ট",
+                "date": "তারিখ",
+                "loading": "লোড হচ্ছে"
+            },
+            "news": {
+                "index": {
+                    "search_placeholder": "সংবাদ অনুসন্ধান করুন..."
                 }
             },
-            "page": {
-                "labels": {
-                    "page": "পেজ"
+            "categories": {
+                "index": {
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন"
                 }
+            }
+        },
+        "home": {
+            "labels": {
+                "page": "পেজ"
+            },
+            "details": {
+                "main_content": "প্রধান কনটেন্ট",
+                "sidebar_content": "সাইডবার কনটেন্ট"
+            }
+        },
+        "latest": {
+            "labels": {
+                "latest_news": "সর্বশেষ সংবাদ"
+            }
+        },
+        "page": {
+            "labels": {
+                "page": "পেজ"
             }
         }
     }
