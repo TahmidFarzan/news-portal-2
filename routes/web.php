@@ -88,6 +88,8 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('page-sections', [SearchController::class, 'pageSections'])->name('page-sections');
         Route::get('menu-item-models', [SearchController::class, 'menuItemModels'])->name('menu-item-models');
 
+        Route::get('event-positions', [SearchController::class, 'eventPositions'])->name('event-positions');
+
         Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
         Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
         Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');

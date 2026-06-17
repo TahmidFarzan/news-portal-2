@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\ActivityLogHelper;
+use App\Helpers\EventHelper;
 use App\Helpers\DatatableHelper;
 use App\Helpers\MediaHelper;
 use App\Helpers\MenuHelper;
@@ -213,6 +214,32 @@ class SearchService
     public function menuItemModels(Request $request): array
     {
         $options = MenuHelper::menuItemModels();
+
+        if ($request->filled('search')) {
+            $search  = $request->input('search');
+            $options = $options->filter(
+                fn($row) =>
+                stripos((string) $row->id, $search) !== false ||
+                stripos($row->name, $search) !== false
+            );
+        }
+
+        $items = $options->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+        ]);
+
+        return [
+            'items'        => $items,
+            'total'        => 1,
+            'current_page' => 1,
+            'last_page'    => 1,
+        ];
+    }
+
+    public function eventPositions(Request $request): array
+    {
+        $options = EventHelper::positions();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');
@@ -1181,7 +1208,7 @@ class SearchService
             $visited[] = $record->id;
 
             $list[] = [
-                'id'               => $record->id,
+                'id'                => $record->id,
                 'title'             => $record->title,
                 'title_tree'        => $record->title_tree,
                 'indentation_title' => $record->indentation_title,

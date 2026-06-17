@@ -64,6 +64,13 @@ class SearchController extends Controller
         );
     }
 
+    public function eventPositions(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->eventPositions($request)
+        );
+    }
+
     public function pageSections(Request $request): JsonResponse
     {
         return response()->json(

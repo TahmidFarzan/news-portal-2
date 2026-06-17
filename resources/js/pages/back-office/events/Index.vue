@@ -53,6 +53,7 @@ const filterForm = useForm({
     language_id: '',
     date: '',
     search: '',
+    position: '',
 })
 
 const applyFilter = () => {
@@ -100,6 +101,7 @@ onMounted(async () => {
     filterForm.language_id = urlParams.get('language_id') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
+    filterForm.posotion = urlParams.get('posotion') || ''
 
     if (filterForm.language_id) {
         const rLanguage = await fetchFromApi(
@@ -162,10 +164,15 @@ onMounted(async () => {
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
                     :placeholder="t('pages.back_office.events.index.labels.language')" />
 
+                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="position"
+                    :selectedItem="filterForm.position" :apiUrl="route('search.event-positions')" :multiple="false"
+                    :placeholder="t('pages.back_office.events.index.labels.position')" />
+
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" :placeholder="t('pages.back_office.events.index.search_placeholder')"
+                <input type="search" v-model="filterForm.search"
+                    :placeholder="t('pages.back_office.events.index.search_placeholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -176,7 +183,8 @@ onMounted(async () => {
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ filterForm.processing ? t('pages.back_office.events.index.applying_filter') : t('pages.back_office.events.index.apply_filter') }}
+                    {{ filterForm.processing ? t('pages.back_office.events.index.applying_filter') :
+                        t('pages.back_office.events.index.apply_filter') }}
                 </button>
             </div>
         </form>
@@ -189,9 +197,21 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.events.index.table.columns.name') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.events.index.created') }}</th>
-                            <th class="px-4 py-3 text-right">{{ t('pages.back_office.events.index.table.columns.action') }}</th>
+                            <th class="px-4 py-3 text-left">
+                                {{ t('pages.back_office.events.index.table.columns.name') }}
+                            </th>
+                            <th class="px-4 py-3 text-left">
+                                {{ t('pages.back_office.events.index.table.columns.position') }}
+                            </th>
+                            <th class="px-4 py-3 text-left">
+                                {{ t('pages.back_office.events.index.table.columns.is_current') }}
+                            </th>
+                            <th class="px-4 py-3 text-left">
+                                {{ t('pages.back_office.events.index.created') }}
+                            </th>
+                            <th class="px-4 py-3 text-right">
+                                {{ t('pages.back_office.events.index.table.columns.action') }}
+                            </th>
                         </tr>
                     </thead>
 
@@ -204,8 +224,18 @@ onMounted(async () => {
                                 {{ item.name }}
                             </td>
 
+                            <td class="px-4 py-3 font-medium">
+                                {{ item.position || t('pages.back_office.events.index.labels.not_available') }}
+                            </td>
+
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) : t('pages.back_office.events.index.labels.not_available') }}
+                                {{ item?.is_current ? t('pages.back_office.events.details.labels.yes') :
+                                    t('pages.back_office.events.details.labels.no') }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-500">
+                                {{ item.created_at ? formatDateTime(item.created_at) :
+                                    t('pages.back_office.events.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -270,7 +300,9 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.events.index.modals.delete_confirmation_modal.irreversible_body') }}
+                                {{
+                                    t('pages.back_office.events.index.modals.delete_confirmation_modal.irreversible_body')
+                                }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
@@ -282,7 +314,8 @@ onMounted(async () => {
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('pages.back_office.events.index.actions.deleting') : t('pages.back_office.events.index.actions.delete') }}
+                                    {{ deleteProcessing ? t('pages.back_office.events.index.actions.deleting') :
+                                        t('pages.back_office.events.index.actions.delete') }}
                                 </button>
                             </div>
                         </div>

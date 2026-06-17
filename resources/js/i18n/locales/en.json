@@ -1143,12 +1143,18 @@
                         "edit": "edit",
                         "basic_information": "Basic Information",
                         "language": "Language",
-                        "name": "Name"
+                        "name": "Name",
+                        "position": "Position",
+                        "is_current": "Is Current",
+                        "yes": "Yes",
+                        "no": "No"
                     },
                     "form": {
                         "create_page_title": "Event create",
                         "language_placeholder": "Select language",
                         "name_placeholder": "Enter name",
+                        "position_select": "Select position",
+                        "position_placeholder": "Select position",
                         "brief": "Brief",
                         "brief_placeholder": "Enter brief",
                         "banner_image_section": "Banner Image",
@@ -1160,7 +1166,8 @@
                         "seo_brief": "SEO Brief",
                         "seo_brief_placeholder": "Enter SEO brief",
                         "seo_keywords": "SEO Keywords",
-                        "seo_keywords_placeholder": "Add keywords"
+                        "seo_keywords_placeholder": "Add keywords",
+                        "is_current": "is Current"
                     },
                     "validation": {
                         "name_is_required": "Name is required.",
@@ -1179,12 +1186,16 @@
                         "details": "details",
                         "basic_information": "Basic Information",
                         "name": "Name",
+                        "position": "Position",
                         "not_available": "N/A",
                         "language": "Language",
                         "title": "Title",
                         "created_by": "Created By",
                         "updated_at": "Updated At",
-                        "updated_by": "Updated By"
+                        "updated_by": "Updated By",
+                        "is_current": "Is Current",
+                        "yes": "Yes",
+                        "no": "No"
                     },
                     "navigation": {
                         "events": "Events",
@@ -1240,11 +1251,15 @@
                         "deleting": "Deleting"
                     },
                     "labels": {
+                        "position": "Position",
                         "per_page": "Per page",
                         "created_by": "Created By",
                         "language": "Language",
                         "not_available": "N/A",
-                        "no_record_found": "No record found"
+                        "no_record_found": "No record found",
+                        "is_current": "Is Current",
+                        "yes": "Yes",
+                        "no": "No"
                     },
                     "search_placeholder": "Search event...",
                     "applying_filter": "Applying Filter...",
@@ -1252,6 +1267,10 @@
                     "table": {
                         "columns": {
                             "name": "Name",
+                            "position": "Position",
+                            "is_current": "Is Current",
+                            "yes": "Yes",
+                            "no": "No",
                             "action": "Action"
                         },
                         "menus": {

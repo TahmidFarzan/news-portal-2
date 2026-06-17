@@ -38,10 +38,12 @@ const pageTitle = computed(() => {
 
 const saveForm = useForm({
     name: event?.name || null,
+    position: event?.position || null,
     brief: event?.brief || null,
     language_id: event?.language_id || null,
     desktop_banner_image: null,
     mobile_banner_image: null,
+    is_current: event?.is_current || false,
     seo_brief: event?.seo_brief || null,
     seo_title: event?.seo_title || null,
     seo_keywords: event?.seo_keywords ? event.seo_keywords.split(',') : [],
@@ -132,7 +134,8 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.labels.language') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.events.create.labels.language') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
@@ -147,10 +150,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.labels.name') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.events.create.labels.name') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name" :placeholder="t('pages.back_office.events.create.form.name_placeholder')"
+                            <input v-model="saveForm.name"
+                                :placeholder="t('pages.back_office.events.create.form.name_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -171,6 +176,46 @@ onMounted(async () => {
 
                             <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.brief }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('pages.back_office.events.create.labels.position') }}
+                            </label>
+
+                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="position"
+                                :selectedItem="event?.position" :apiUrl="route('search.event-positions')"
+                                :error="saveForm.errors.position" :multiple="false"
+                                :placeholder="t('pages.back_office.events.create.form.position_placeholder')" />
+
+                            <p v-if="saveForm.errors.position" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.position }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="mb-1 block text-sm font-medium text-gray-700">
+                                {{ t('pages.back_office.events.create.labels.is_current') }}
+
+                            </label>
+                            <label class="inline-flex cursor-pointer items-center gap-3">
+                                <input v-model="saveForm.is_current" type="checkbox" class="peer sr-only" :checked="saveForm.is_current"/>
+
+                                <span class="relative h-7 w-14 rounded-full bg-gray-300 transition
+                                    after:absolute after:left-1 after:top-1 after:h-5 after:w-5
+                                    after:rounded-full after:bg-white after:transition-all after:content-['']
+                                    peer-checked:bg-green-600 peer-checked:after:translate-x-7">
+                                </span>
+
+                                <span class="text-sm text-gray-600">
+                                    {{ saveForm.is_current ? t('pages.back_office.events.create.labels.yes') :
+                                        t('pages.back_office.events.create.labels.no') }}
+                                </span>
+                            </label>
+
+                            <p v-if="saveForm.errors.is_current" class="mt-1 text-sm text-red-500">
+                                {{ saveForm.errors.is_current }}
                             </p>
                         </div>
 
@@ -287,7 +332,8 @@ onMounted(async () => {
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
 
-                        {{ saveForm.processing ? t('pages.back_office.events.create.actions.saving') : t('pages.back_office.events.create.actions.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.events.create.actions.saving') :
+                            t('pages.back_office.events.create.actions.save') }}
                     </button>
                 </div>
 

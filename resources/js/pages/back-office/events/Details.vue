@@ -103,9 +103,25 @@ onMounted(async () => {
                     </div>
 
                     <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('pages.back_office.events.details.labels.position') }}</span>
+                        <span class="font-medium">{{ event?.position || t('pages.back_office.events.details.labels.not_available') }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('pages.back_office.events.details.labels.language') }}</span>
                         <span class="font-medium">{{ event?.language?.name || t('pages.back_office.events.details.labels.not_available') }}</span>
                     </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('pages.back_office.events.details.labels.position') }}</span>
+                        <span class="font-medium">{{ event?.position ? t('pages.back_office.events.details.labels.yes') : t('pages.back_office.events.details.labels.no') }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('pages.back_office.events.details.labels.is_current') }}</span>
+                        <span class="font-medium">{{ event?.is_current ? t('pages.back_office.events.details.labels.yes') : t('pages.back_office.events.details.labels.no') }}</span>
+                    </div>
+
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">

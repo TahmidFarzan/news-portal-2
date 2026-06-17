@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Requests;
 
+use App\Helpers\EventHelper;
 use App\Models\Event;
 use App\Models\Language;
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,6 +23,8 @@ class EventRequest extends FormRequest
             "seo_title"            => ["nullable"],
             "seo_brief"            => ["nullable"],
             "seo_keywords"         => ["nullable"],
+
+            "position"              => ["nullable"],
 
             "desktop_banner_image" => ["nullable", "image", "mimetypes:image/*", "dimensions:width=1300,height=90"],
             "mobile_banner_image"  => ["nullable", "image", "mimetypes:image/*", "dimensions:width=400,height=90"],
@@ -76,6 +79,14 @@ class EventRequest extends FormRequest
                         __("form-requests.event.name.unique")
                     );
                 }
+            }
+
+            if (! empty($data["position"]) && !in_array($data["position"],[EventHelper::POSITION_TOP, EventHelper::POSITION_BOTTOM])) {
+
+                $validator->errors()->add(
+                        'position',
+                        __("form-requests.event.position.not_found")
+                    );
             }
         });
     }

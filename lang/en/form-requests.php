@@ -321,6 +321,10 @@ return [
             'unique'   => 'Name must be unique.',
         ],
 
+        'position'                 => [
+            "not_found" => 'Position is not exit.',
+        ],
+
         'desktop_banner_image' => [
             'image'      => 'Desktop banner image must be image.',
             'mimes'      => 'Desktop banner image must have valid mimes[image/*].',

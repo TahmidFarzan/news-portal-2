@@ -29,7 +29,7 @@ use Spatie\Sluggable\SlugOptions;
         'name', 'brief', 'slug',
         'language_id', 'created_by_id',
         "seo_brief", 'seo_title', 'seo_keywords',
-        "is_current"
+        "is_current","position"
     ])]
 #[UsePolicy(EventPolicy::class)]
 #[ObservedBy([EventObserver::class])]
@@ -47,6 +47,7 @@ class Event extends Model implements HasMedia
     protected function casts(): array
     {
         return [
+            'is_current' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -56,7 +57,7 @@ class Event extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'brief', 'slug',
+                'name', 'brief', 'slug',"is_current",
                 "seo_brief", 'seo_title', 'seo_keywords',
             ])
             ->useLogName('Event')

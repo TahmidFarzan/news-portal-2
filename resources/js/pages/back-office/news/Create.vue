@@ -663,7 +663,7 @@ onMounted(async () => {
                             </label>
 
                             <label class="inline-flex cursor-pointer items-center gap-3">
-                                <input v-model="saveForm.is_published" type="checkbox" class="peer sr-only" />
+                                <input v-model="saveForm.is_published" type="checkbox" class="peer sr-only" :checked="saveForm.is_published"/>
 
                                 <span class="relative h-7 w-14 rounded-full bg-gray-300 transition
                                     after:absolute after:left-1 after:top-1 after:h-5 after:w-5

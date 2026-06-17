@@ -54,6 +54,10 @@ class EventService
             $query->where('language_id', $request->input('language_id'));
         }
 
+        if ($request->filled('position')) {
+            $query->where('position', $request->input('position'));
+        }
+
         if ($request->filled('date')) {
             $date = $request->input('date');
             $date = is_string($date) ? new \DateTime($date) : $date;
@@ -91,9 +95,11 @@ class EventService
                     $seoKeywords = TagifyHelper::dataStringFormatFull($request->input('seo_keywords'));
                 }
 
+                $event->position    = $request->input('position');
                 $event->name        = $request->input('name');
                 $event->brief       = $request->input('brief');
                 $event->language_id = $request->input('language_id');
+                $event->is_current = $request->boolean('is_current') ? true : false;;
 
                 $event->seo_title     = $request->input('seo_title', $request->input('name'));
                 $event->seo_brief     = $request->input('seo_brief', $request->input('brief'));

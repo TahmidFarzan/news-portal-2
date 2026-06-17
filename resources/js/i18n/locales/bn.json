@@ -1143,12 +1143,18 @@
                         "edit": "সম্পাদনা",
                         "basic_information": "মৌলিক তথ্য",
                         "language": "ভাষা",
-                        "name": "নাম"
+                        "name": "নাম",
+                        "position": "অবস্থান",
+                        "is_current": "বর্তমান",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
                     },
                     "form": {
                         "create_page_title": "ইভেন্ট তৈরি",
                         "language_placeholder": "ভাষা নির্বাচন করুন",
                         "name_placeholder": "নাম লিখুন",
+                        "position_select": "অবস্থান নির্বাচন করুন",
+                        "position_placeholder": "অবস্থান নির্বাচন করুন",
                         "brief": "সংক্ষিপ্ত বিবরণ",
                         "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
                         "banner_image_section": "ব্যানার ছবি",
@@ -1160,7 +1166,8 @@
                         "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",
                         "seo_brief_placeholder": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
                         "seo_keywords": "SEO কীওয়ার্ড",
-                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন"
+                        "seo_keywords_placeholder": "কীওয়ার্ড যোগ করুন",
+                        "is_current": "বর্তমান"
                     },
                     "validation": {
                         "name_is_required": "নাম প্রদান করা আবশ্যক।",
@@ -1179,12 +1186,16 @@
                         "details": "বিস্তারিত",
                         "basic_information": "মৌলিক তথ্য",
                         "name": "নাম",
+                        "position": "অবস্থান",
                         "not_available": "প্রযোজ্য নয়",
                         "language": "ভাষা",
                         "title": "শিরোনাম",
                         "created_by": "তৈরি করেছেন",
                         "updated_at": "হালনাগাদের সময়",
-                        "updated_by": "হালনাগাদ করেছেন"
+                        "updated_by": "হালনাগাদ করেছেন",
+                        "is_current": "বর্তমান",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
                     },
                     "navigation": {
                         "events": "ইভেন্ট",
@@ -1240,11 +1251,15 @@
                         "deleting": "মুছে ফেলা হচ্ছে"
                     },
                     "labels": {
+                        "position": "অবস্থান",
                         "per_page": "প্রতি পৃষ্ঠা",
                         "created_by": "তৈরি করেছেন",
                         "language": "ভাষা",
                         "not_available": "প্রযোজ্য নয়",
-                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি",
+                        "is_current": "বর্তমান",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
                     },
                     "search_placeholder": "ইভেন্ট অনুসন্ধান করুন...",
                     "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
@@ -1252,6 +1267,10 @@
                     "table": {
                         "columns": {
                             "name": "নাম",
+                            "position": "অবস্থান",
+                            "is_current": "বর্তমান",
+                            "yes": "হ্যাঁ",
+                            "no": "না",
                             "action": "কার্যক্রম"
                         },
                         "menus": {
