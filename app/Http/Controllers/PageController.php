@@ -17,15 +17,27 @@ class PageController extends Controller
 
     public function home()
     {
-        $page       = $this->pageService->homePage();
-        $leadNews   = $this->pageService->homeLeadSectionNews();
-        $recentNews = $this->pageService->recentNews();
+        $page         = $this->pageService->homePage();
+        $leadNews     = $this->pageService->homeLeadNews();
+        $recentNews   = $this->pageService->recentNews();
+        $topEvents    = $this->pageService->homeTopEvents();
+        $bottomEvents = $this->pageService->homeBottomEvents();
 
         return Inertia::render('Home', [
-            'page'       => $page,
-            'leadNews'   => $leadNews,
-            "recentNews" => $recentNews,
+            'page'         => $page,
+            'leadNews'     => $leadNews,
+            "recentNews"   => $recentNews,
+            "topEvents"    => $topEvents,
+            "bottomEvents" => $bottomEvents,
         ]);
+    }
+
+    public function homeEventNew(string $slug)
+    {
+        $event = $this->pageService->event($slug);
+        $news  = $this->pageService->homeEventNews($event);
+
+        return response()->json($news);
     }
 
     public function latest(Request $request)

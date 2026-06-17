@@ -6,12 +6,13 @@ import Layout from '@/pages/layouts/PublicLayout.vue'
 import { useTranslate } from '@/composables/useTranslate'
 import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
+import EventBanners from '@/components/common/pages/EventBanners.vue'
 
 defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
 
-const { page, leadNews, recentNews } = defineProps({
+const { page, leadNews, recentNews, topEvents, bottomEvents } = defineProps({
     page: {
         type: Object,
         required: true,
@@ -21,6 +22,16 @@ const { page, leadNews, recentNews } = defineProps({
         required: true,
     },
     recentNews: {
+        type: Object,
+        required: true,
+    },
+
+    topEvents: {
+        type: Object,
+        required: true,
+    },
+
+    bottomEvents: {
         type: Object,
         required: true,
     },
@@ -62,6 +73,7 @@ const recentNewsItems = computed(() => {
     return recentNews?.data ?? []
 })
 
+
 const metaTitle = computed(() => {
     return page?.seo_title ?? page?.title ?? t('pages.home.labels.page')
 })
@@ -92,6 +104,10 @@ const metaKeywords = computed(() => {
     </Head>
 
     <section class="min-h-screen">
+        <div v-if="topEvents">
+            <EventBanners :events="topEvents" class="mb-4" />
+        </div>
+
         <div class="rounded-2xl border border-slate-100 p-2">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 <main class="lg:col-span-8">
@@ -145,6 +161,10 @@ const metaKeywords = computed(() => {
                     </div>
                 </aside>
             </div>
+        </div>
+
+        <div v-if="bottomEvents">
+            <EventBanners :events="bottomEvents" class="mb-4" />
         </div>
     </section>
 </template>

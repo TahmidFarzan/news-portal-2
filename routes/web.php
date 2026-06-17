@@ -406,5 +406,10 @@ Route::middleware(['response.cache:120,public,60,etag'])->group(function () {
     Route::get('categories/{slugTree}', [PageController::class, 'categoryNews'])->where('slugTree', '.*')->name('category.news');
     Route::get('locations/{slugTree}', [PageController::class, 'locationNews'])->where('slugTree', '.*')->name('location.news');
 
+
+    Route::prefix('home')->name('home.')->group(function () {
+        Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');
+    });
+
     Route::get('{slugTree}', [PageController::class, 'page'])->where('slugTree', '.*')->name('page');
 });

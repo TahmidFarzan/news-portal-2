@@ -464,6 +464,13 @@
                         "contributors": "অবদানকারী"
                     }
                 }
+            },
+            "pages": {
+                "event_banners": {
+                    "labels": {
+                        "read_more": "আরও পড়ুন"
+                    }
+                }
             }
         }
     },

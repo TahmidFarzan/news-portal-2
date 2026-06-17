@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
+use App\Helpers\EventHelper;
 use App\Helpers\PageHelper;
 use App\Models\Category;
 use App\Models\Contributor;
@@ -887,17 +888,18 @@ class PageService
         return $news;
     }
 
-    public function homeEvent()
+    public function homeTopEvents()
     {
         $language = $this->language();
 
-        $eventCacheKey = "page:language:{$language->locale}:home:event";
+        $eventCacheKey = "page:language:{$language->locale}:home:position:top:event";
 
         $eventCacheTags = [
             "page",
             "page:language:{$language->locale}",
             "page:language:{$language->locale}:home",
-            "page:language:{$language->locale}:home:event",
+            "page:language:{$language->locale}:home:position:top",
+            "page:language:{$language->locale}:home:position:top:event",
         ];
 
         $eventCachedData = CacheServerHelper::getCachedData($eventCacheKey, $eventCacheTags);
@@ -906,7 +908,38 @@ class PageService
             return $eventCachedData;
         }
 
-        $events = Event::where("language_id", $language->id)->where("is_current", true)->get();
+        $events = Event::where("language_id", $language->id)->where("position", EventHelper::POSITION_TOP)->where("is_current", true)->get();
+
+        CacheServerHelper::cachedData(
+            $eventCacheKey,
+            $events,
+            CacheServerHelper::threeMinInSecond,
+            $eventCacheTags
+        );
+
+        return $events;
+    }
+    public function homeBottomEvents()
+    {
+        $language = $this->language();
+
+        $eventCacheKey = "page:language:{$language->locale}:home:position:bottom:event";
+
+        $eventCacheTags = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:home",
+            "page:language:{$language->locale}:home:position:bottom",
+            "page:language:{$language->locale}:home:position:bottom:event",
+        ];
+
+        $eventCachedData = CacheServerHelper::getCachedData($eventCacheKey, $eventCacheTags);
+
+        if (($eventCachedData !== null) && ($eventCachedData instanceof CursorPaginator)) {
+            return $eventCachedData;
+        }
+
+        $events = Event::where("language_id", $language->id)->where("position", EventHelper::POSITION_BOTTOM)->where("is_current", true)->get();
 
         CacheServerHelper::cachedData(
             $eventCacheKey,
@@ -918,7 +951,7 @@ class PageService
         return $events;
     }
 
-    public function homeLeadSectionNews()
+    public function homeLeadNews()
     {
         $language    = $this->language();
         $page        = PageHelper::PAGE_HOME;
@@ -973,7 +1006,7 @@ class PageService
         return $news;
     }
 
-    public function homeEventSectionNews(Event $event)
+    public function homeEventNews(Event $event)
     {
         $language = $this->language();
 

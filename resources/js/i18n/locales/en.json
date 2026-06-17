@@ -464,6 +464,13 @@
                         "contributors": "Contributors"
                     }
                 }
+            },
+            "pages": {
+                "event_banners": {
+                    "labels": {
+                        "read_more": "Read more"
+                    }
+                }
             }
         }
     },

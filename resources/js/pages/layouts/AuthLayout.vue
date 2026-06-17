@@ -15,7 +15,6 @@ const appLogo = import.meta.env.VITE_APP_LOGO
 
 const page = usePage()
 
-// ✅ destructured props (clean pattern)
 const authUser = computed(() => page.props.auth?.user ?? null)
 const flashMessage = computed(() => page.props.flashMessage ?? null)
 
@@ -25,7 +24,6 @@ provide('authUser', authUser)
 <template>
     <div class="auth-layout flex flex-col min-h-screen">
 
-        <!-- HEADER -->
         <header class="fixed top-0 left-0 w-full bg-white shadow-sm z-50">
             <div class="px-4 py-2 flex items-center justify-between">
 
@@ -49,18 +47,15 @@ provide('authUser', authUser)
             </div>
         </header>
 
-        <!-- MAIN -->
         <main class="main flex-1 flex pt-16">
 
-            <!-- SIDEBAR -->
+
             <OffcanvasMenu mode="sidebar" :auth-user="authUser" />
 
             <div class="flex-1 p-4 min-w-0">
 
-                <!-- BREADCRUMB -->
                 <Breadcrumbs />
 
-                <!-- EMAIL VERIFY WARNING -->
                 <div v-if="authUser && !authUser.email_verified_at"
                     class="mb-4 p-3 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded">
                     {{ t('pages.layouts.auth_layout.auth.account.not_verified') }}
@@ -71,7 +66,6 @@ provide('authUser', authUser)
             </div>
         </main>
 
-        <!-- FOOTER -->
         <footer class="bg-white border-t border-gray-200 py-3 text-gray-500 text-sm">
 
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
@@ -93,7 +87,6 @@ provide('authUser', authUser)
             </div>
         </footer>
 
-        <!-- TOAST -->
         <ToasterMessage :flash-message="flashMessage" />
 
     </div>
