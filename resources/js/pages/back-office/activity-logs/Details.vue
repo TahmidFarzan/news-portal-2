@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import ModelPropertieAttributes from '@/components/back-office/activity-log/ModelPropertieAttributes.vue'
+import ModelPropertyAttributes from '@/components/back-office/activity-log/ModelPropertyAttributes.vue'
 
 import { ref, onMounted, nextTick } from 'vue'
 import { Head, router as inertiaJsRoute } from '@inertiajs/vue3'
@@ -133,7 +133,7 @@ onMounted(async () => {
                         {{ titleFormat(propertyIndex) }}
                     </div>
 
-                    <ModelPropertieAttributes :property="property" />
+                    <ModelPropertyAttributes :property="property" />
                 </div>
 
             </div>
@@ -153,7 +153,7 @@ onMounted(async () => {
                         {{ titleFormat(propertyIndex) }}
                     </div>
 
-                    <ModelPropertieAttributes :property="property" />
+                    <ModelPropertyAttributes :property="property" />
                 </div>
 
             </div>
