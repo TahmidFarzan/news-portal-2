@@ -38,6 +38,7 @@ const {
     enableSubTitleLineClamp = false,
     enableBriefLineClamp = false,
 
+    hideNewsType = false,
     hideSubtitle = false,
     hideBrief = false,
     hideCategory = false,
@@ -62,6 +63,11 @@ const {
     },
 
     enableBriefLineClamp: {
+        type: Boolean,
+        default: false,
+    },
+
+    hideNewsType: {
         type: Boolean,
         default: false,
     },
@@ -167,7 +173,7 @@ const hasNewsTypeIcons = computed(() => {
 <template>
     <article
         class="group relative flex h-full flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md sm:flex-row">
-        <a v-if="news?.public_url" :href="news.public_url" :aria-label="news?.title || 'Read news'"
+        <a v-if="news?.public_url" :href="news?.public_url" :aria-label="news?.title || 'Read news'"
             class="absolute inset-0 z-10 rounded-2xl"></a>
 
         <div v-if="shouldShowFeatureImage"
@@ -175,7 +181,7 @@ const hasNewsTypeIcons = computed(() => {
             <img :src="imageSrc" :alt="imageAlt"
                 class="h-full w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" />
 
-            <div v-if="hasNewsTypeIcons" class="absolute left-2 top-2 flex flex-wrap gap-1.5">
+            <div v-if="!hideNewsType && hasNewsTypeIcons" class="absolute left-2 top-2 flex flex-wrap gap-1.5">
                 <span v-for="item in newsTypeIcons" :key="item.key" :title="item.title" :aria-label="item.title"
                     class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-white shadow-sm backdrop-blur-sm">
                     <FontAwesomeIcon :icon="item.icon" class="text-xs" />
@@ -184,12 +190,6 @@ const hasNewsTypeIcons = computed(() => {
         </div>
 
         <div class="pointer-events-none relative z-20 min-w-0 flex flex-1 flex-col justify-center space-y-2">
-            <div v-if="!shouldShowFeatureImage && hasNewsTypeIcons" class="flex flex-wrap gap-1.5">
-                <span v-for="item in newsTypeIcons" :key="item.key" :title="item.title" :aria-label="item.title"
-                    class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-50 text-red-600">
-                    <FontAwesomeIcon :icon="item.icon" class="text-xs" />
-                </span>
-            </div>
 
             <div v-if="(news?.category && !hideCategory) || (news?.event && !hideEvent) || (news?.location && !hideLocation)"
                 class="pointer-events-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
@@ -248,6 +248,12 @@ const hasNewsTypeIcons = computed(() => {
             </p>
 
             <div class="flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-gray-500 mb-3">
+                <div v-if="!shouldShowFeatureImage && !hideNewsType && hasNewsTypeIcons" class="inline-flex items-center gap-1.5">
+                    <span v-for="item in newsTypeIcons" :key="item.key" :title="item.title" :aria-label="item.title"
+                        class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-50 text-red-600">
+                        <FontAwesomeIcon :icon="item.icon" class="text-xs" />
+                    </span>
+                </div>
                 <span class="inline-flex items-center gap-1.5">
                     <FontAwesomeIcon icon="clock" class="text-xs text-gray-400" />
                     {{ news?.published_at || formatDateTime(news?.created_at) }}
