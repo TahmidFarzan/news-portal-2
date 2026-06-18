@@ -273,6 +273,30 @@ onMounted(async () => {
                             </span>
                         </div>
 
+                        <div>
+                            {{ t('pages.back_office.menus.menu_items.create.form.video_url') }}:
+
+                            <code class="cursor-pointer bg-gray-100 px-2 py-1 rounded" @click="copyUrl('video')">
+                                {{ route('video') }}
+                            </code>
+
+                            <span v-if="copiedRoute === 'video'" class="text-green-600 ml-2">
+                                {{ t('pages.back_office.menus.menu_items.create.labels.copied') }}
+                            </span>
+                        </div>
+
+                        <div>
+                            {{ t('pages.back_office.menus.menu_items.create.form.image_gallery_url') }}:
+
+                            <code class="cursor-pointer bg-gray-100 px-2 py-1 rounded" @click="copyUrl('image-gallery')">
+                                {{ route('image-gallery') }}
+                            </code>
+
+                            <span v-if="copiedRoute === 'image-gallery'" class="text-green-600 ml-2">
+                                {{ t('pages.back_office.menus.menu_items.create.labels.copied') }}
+                            </span>
+                        </div>
+
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
