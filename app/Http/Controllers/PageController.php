@@ -32,7 +32,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function homeEventNew(string $slug)
+    public function homeEventNews(string $slug)
     {
         $event = $this->pageService->event($slug);
         $news  = $this->pageService->homeEventNews($event);
