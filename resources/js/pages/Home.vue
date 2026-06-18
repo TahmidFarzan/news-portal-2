@@ -25,12 +25,10 @@ const { page, leadNews, recentNews, topEvents, bottomEvents } = defineProps({
         type: Object,
         required: true,
     },
-
     topEvents: {
         type: Object,
         required: true,
     },
-
     bottomEvents: {
         type: Object,
         required: true,
@@ -73,7 +71,6 @@ const recentNewsItems = computed(() => {
     return recentNews?.data ?? []
 })
 
-
 const metaTitle = computed(() => {
     return page?.seo_title ?? page?.title ?? t('pages.home.labels.page')
 })
@@ -109,9 +106,9 @@ const metaKeywords = computed(() => {
         </div>
 
         <div class="rounded-2xl border border-slate-100 p-2">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">
                 <main class="lg:col-span-8">
-                    <div class="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12 gap-4">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-12 lg:grid-cols-12">
                         <div class="space-y-3 md:col-span-6 lg:col-span-6">
                             <GridCard v-if="primaryLeadNews" :news="primaryLeadNews" :hideCategory="true"
                                 :hideEvent="true" :hideLocation="true" :hideBrief="true" :isCompact="true"
@@ -133,7 +130,13 @@ const metaKeywords = computed(() => {
                     </div>
 
                     <div v-if="extraLeadNews.length" class="mt-4 border-t border-slate-100 pt-4">
-                        <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+                        <div class="grid grid-cols-1 gap-3 md:hidden">
+                            <ListCard v-for="(perNews, index) in extraLeadNews"
+                                :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideCategory="true"
+                                :hideEvent="true" :hideLocation="true" :hideBrief="true" :isCompact="true" />
+                        </div>
+
+                        <div class="hidden gap-3 md:grid md:grid-cols-2 lg:grid-cols-4">
                             <GridCard v-for="(perNews, index) in extraLeadNews"
                                 :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideCategory="true"
                                 :hideEvent="true" :hideLocation="true" :hideBrief="true" />
