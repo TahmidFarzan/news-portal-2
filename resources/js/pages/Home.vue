@@ -129,9 +129,6 @@ const metaKeywords = computed(() => {
                                 <ListCard v-for="(perNews, index) in secondaryLeadNews"
                                     :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideCategory="true"
                                     :hideEvent="true" :hideLocation="true" :hideBrief="true" :isCompact="true" />
-                                <!--
-                                    when hideFeatureImage = false when device smaller then sm
-                                -->
                             </div>
                         </div>
                     </div>
