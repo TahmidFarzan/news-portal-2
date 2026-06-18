@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch, inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -8,9 +8,12 @@ import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
 import EventBanners from '@/components/common/page/EventBanners.vue'
 
+import { fetchFromApi } from '@/composables/useSystemApi'
+
 defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
+const language = inject('language', null)
 
 const { page, leadNews, recentNews, topEvents, bottomEvents } = defineProps({
     page: {
@@ -86,6 +89,7 @@ const metaKeywords = computed(() => {
 
     return page?.seo_keywords ?? ''
 })
+
 </script>
 
 <template>
@@ -169,5 +173,7 @@ const metaKeywords = computed(() => {
         <div v-if="bottomEvents">
             <EventBanners :events="bottomEvents" class="mb-4" />
         </div>
+
+        <div class="rounded-2xl border border-slate-100 p-2"></div>
     </section>
 </template>
