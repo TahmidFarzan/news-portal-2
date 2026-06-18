@@ -6,7 +6,7 @@ import Layout from '@/pages/layouts/PublicLayout.vue'
 import { useTranslate } from '@/composables/useTranslate'
 import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
-import EventBanners from '@/components/common/page/EventBanners.vue'
+import EventNewsSection from '@/components/common/page/EventNewsSection.vue'
 
 defineOptions({ layout: Layout })
 
@@ -102,7 +102,7 @@ const metaKeywords = computed(() => {
 
     <section class="min-h-screen">
         <div v-if="topEvents">
-            <EventBanners :events="topEvents" class="mb-4" />
+            <EventNewsSection :events="topEvents" class="mb-4" />
         </div>
 
         <div class="rounded-2xl border border-slate-100 p-2">
@@ -167,7 +167,7 @@ const metaKeywords = computed(() => {
         </div>
 
         <div v-if="bottomEvents">
-            <EventBanners :events="bottomEvents" class="mb-4" />
+            <EventNewsSection :events="bottomEvents" class="mb-4" />
         </div>
     </section>
 </template>
