@@ -36,15 +36,17 @@ class PageService
 
     public function page(string $slugTree): Page
     {
+        $safeSlugTreeForCache = str_replace('/', '_', trim($slugTree, '/'));
+
         $language = $this->language();
 
-        $pageCacheKey = "page:language:{$language->locale}:page:{$slugTree}";
+        $pageCacheKey = "page:language:{$language->locale}:page:{$safeSlugTreeForCache}";
 
         $pageCacheTags = [
             'page',
             "page:language:{$language->locale}",
             "page:language:{$language->locale}:page",
-            "page:language:{$language->locale}:page:{$slugTree}",
+            "page:language:{$language->locale}:page:{$safeSlugTreeForCache}",
         ];
 
         $pageCachedData = CacheServerHelper::getCachedData($pageCacheKey, $pageCacheTags);
@@ -468,14 +470,16 @@ class PageService
 
     public function category(string $slugTree): Category
     {
+        $safeSlugTreeForCache = str_replace('/', '_', trim($slugTree, '/'));
+
         $language = $this->language();
 
-        $categoryCacheKey = "page:language:{$language->locale}:category:{$slugTree}";
+        $categoryCacheKey = "page:language:{$language->locale}:category:{$safeSlugTreeForCache}";
 
         $categoryCacheCategorys = [
             "page",
             "page:language:{$language->locale}",
-            "page:language:{$language->locale}:category:{$slugTree}",
+            "page:language:{$language->locale}:category:{$safeSlugTreeForCache}",
         ];
         $categoryCachedData = CacheServerHelper::getCachedData($categoryCacheKey, $categoryCacheCategorys);
 
@@ -665,12 +669,14 @@ class PageService
     {
         $language = $this->language();
 
-        $locationCacheKey = "page:language:{$language->locale}:location:{$slugTree}";
+        $safeSlugTreeForCache = str_replace('/', '_', trim($slugTree, '/'));
+
+        $locationCacheKey = "page:language:{$language->locale}:location:{$safeSlugTreeForCache}";
 
         $locationCacheLocations = [
             "page",
             "page:language:{$language->locale}",
-            "page:language:{$language->locale}:location:{$slugTree}",
+            "page:language:{$language->locale}:location:{$safeSlugTreeForCache}",
         ];
 
         $locationCachedData = CacheServerHelper::getCachedData($locationCacheKey, $locationCacheLocations);
@@ -1146,7 +1152,6 @@ class PageService
     {
         $language     = $this->language();
         $newsCacheKey = "page:home:language:{$language->locale}:news-type:{$newsType->slug}:news";
-
 
         $newsCacheTags = [
             "page",
