@@ -8,7 +8,7 @@ import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
-import { ref, computed, nextTick, onMounted, onBeforeUnmount, provide } from 'vue'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -44,7 +44,6 @@ const {
 const headerNavbar = ref(null)
 const isHeaderSticky = ref(false)
 const siteSettings = ref([])
-const language = ref(null)
 
 const year = new Date().getFullYear()
 
@@ -53,13 +52,6 @@ const appLogo = import.meta.env.VITE_APP_LOGO
 
 const authUser = computed(() => page.props.auth?.user ?? null)
 const flashMessage = computed(() => page.props.flashMessage)
-
-provide('authUser', authUser)
-provide('language', language)
-
-const handleLanguage = (selectedLanguage) => {
-    language.value = selectedLanguage
-}
 
 const translateNumerText = value => {
     return String(value)
@@ -144,6 +136,7 @@ onBeforeUnmount(() => {
 
     document.body.style.overflow = ''
 })
+
 </script>
 
 <template>
@@ -183,7 +176,7 @@ onBeforeUnmount(() => {
                         <AuthTopbarDropdownMenu :auth-user="authUser" />
                     </div>
 
-                    <LanguageSelect class="max-[450px]:flex-shrink-0" @language="handleLanguage" />
+                    <LanguageSelect class="max-[450px]:flex-shrink-0" />
                 </div>
             </div>
         </div>
@@ -199,6 +192,7 @@ onBeforeUnmount(() => {
                         {{ t('pages.layouts.public_layout.app.name') }}
                     </b>
                 </a>
+
 
                 <div class="flex-1 min-w-0 h-10 flex items-center">
                     <HeaderMenu class="hidden min-[401px]:inline" />
@@ -220,14 +214,12 @@ onBeforeUnmount(() => {
             <slot />
         </main>
 
-        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)"
-            :title="t('pages.layouts.public_layout.app.breaking_news')" />
+        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('pages.layouts.public_layout.app.breaking_news')" />
 
         <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
                 <span class="text-center md:text-left w-full md:w-auto flex-shrink-0">
-                    {{ t('pages.layouts.public_layout.footer.copyright') }} {{ translateNumerText(year) }} {{
-                        t('pages.layouts.public_layout.app.name') }}
+                    {{ t('pages.layouts.public_layout.footer.copyright') }} {{ translateNumerText(year) }} {{ t('pages.layouts.public_layout.app.name') }}
                 </span>
 
                 <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" />

@@ -1,14 +1,9 @@
 <script setup>
 import { ref, reactive, watch, nextTick, onMounted } from 'vue'
-
 import axios from 'axios'
-
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
-
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { setSelectedLanguage, useTranslate } from '@/composables/useTranslate'
-
-const emit = defineEmits(['language'])
 
 const language = ref(null)
 const isReady = ref(false)
@@ -30,8 +25,6 @@ const loadLanguage = async () => {
     setSelectedLanguage(language.value)
 
     languageChangeForm.language_id = language.value?.id ?? null
-
-    emit('language', language.value)
 
     await nextTick()
 
@@ -57,8 +50,9 @@ const languageChange = async () => {
 
             window.location.href = route('home')
         }
+
     } catch (error) {
-        languageChangeForm.errors.language_id =
+        setLanguageForm.errors.language_id =
             error?.response?.data?.errors?.language_id?.[0] ??
             error?.response?.data?.message ??
             'Unable to set language'
@@ -75,6 +69,7 @@ watch(
 onMounted(async () => {
     await loadLanguage()
 })
+
 </script>
 
 <template>
@@ -82,8 +77,7 @@ onMounted(async () => {
         <MultiSelectInfinityLoadingApi v-if="language" :key="language?.id" :selectedItem="language"
             fieldName="language_id" :form="languageChangeForm" :apiUrl="route('site.languages')"
             :error="languageChangeForm.errors.language_id" selectedLabelKey="name" selectedValueKey="id"
-            apiLabelKey="name" apiValueKey="id" :multiple="false"
-            :placeholder="t('components.common.layout.public_layout.language_select.labels.language')"
-            :compactDesign="true" :useDarkTheme="true" />
+            apiLabelKey="name" apiValueKey="id" :multiple="false" :placeholder="t('components.common.layout.public_layout.language_select.labels.language')" :compactDesign="true"
+            :useDarkTheme="true" />
     </div>
 </template>
