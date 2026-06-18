@@ -470,6 +470,20 @@
                     "labels": {
                         "read_more": "Read more"
                     }
+                },
+
+                "news_type_gallery_section": {
+                    "labels": {
+                        "video": "Video",
+                        "image_gallery": "Image gallery"
+                    }
+                },
+
+                "news_type_slider_section": {
+                    "labels": {
+                        "video": "Video",
+                        "image_gallery": "Image gallery"
+                    }
                 }
             }
         }
@@ -1810,6 +1824,8 @@
                             "create_page_title": "Menu item create",
                             "latest_url": "Latest URL",
                             "home_url": "Home URL",
+                            "video_url": "Video URL",
+                            "image_gallery_url": "Image gallery URL",
                             "language_placeholder": "Select language",
                             "name_placeholder": "Enter name",
                             "position_placeholder": "Enter position",

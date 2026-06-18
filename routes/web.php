@@ -394,10 +394,13 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-Route::middleware(['response.cache:120,public,60,etag'])->group(function () {
+Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::get('home', [PageController::class, 'home'])->name('home');
     Route::get('latest', [PageController::class, 'latest'])->name('latest');
     Route::get('search', [PageController::class, 'search'])->name('search');
+    Route::get('video', [PageController::class, 'video'])->name('video');
+    Route::get('image-gallery', [PageController::class, 'imageGallery'])->name('image-gallery');
+
     Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
     Route::get('tags/{slug}', [PageController::class, 'tagNews'])->name('tag.news');
     Route::get('contributors/{slug}', [PageController::class, 'contributorNews'])->name('contributor.news');
@@ -410,6 +413,7 @@ Route::middleware(['response.cache:120,public,60,etag'])->group(function () {
     Route::prefix('home')->name('home.')->group(function () {
         Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');
         Route::get('category/{slug}/news', [PageController::class, 'homeCategoryNews'])->name('category-news');
+        Route::get('news-type/{slug}/news', [PageController::class, 'homeNewsTypeNews'])->name('news-type-news');
     });
 
     Route::get('{slugTree}', [PageController::class, 'page'])->where('slugTree', '.*')->name('page');

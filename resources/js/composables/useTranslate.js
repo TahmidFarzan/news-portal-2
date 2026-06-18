@@ -13,3 +13,10 @@ export const useTranslate = () => {
 export const setSelectedLanguage = (language) => {
     i18n.global.locale.value = language?.code ?? 'en'
 }
+
+export const generateTranslationKey = (value) => {
+    return String(value ?? '')
+        .trim()
+        .toLowerCase()
+        .replaceAll(' ', '_')
+}

@@ -96,13 +96,13 @@ watch(
             <img :src="getEventImageUrl(event, 'desktop') || getEventImageUrl(event, 'mobile')" :alt="event?.name || ''"
                 class="hidden h-auto w-full rounded-2xl object-cover md:block" loading="lazy" />
 
-            <div v-if="eventNews[event.slug]?.length" class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+            <div v-if="eventNews[event.slug]?.length" class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-12">
+                <div class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 md:col-span-5">
                     <GridCard :news="eventNews[event.slug][0]" :hideCategory="true" :hideEvent="true"
                         :hideLocation="true" :hideBrief="true" :isCompact="false" :useFullHeight="true" />
                 </div>
 
-                <div v-if="eventNews[event.slug].length > 1">
+                <div v-if="eventNews[event.slug].length > 1" class="md:col-span-7">
                     <div class="grid grid-cols-1 gap-3 md:hidden">
                         <div v-for="(newsItem, newsIndex) in eventNews[event.slug].slice(1)"
                             :key="newsItem?.id || newsItem?.slug || newsIndex"

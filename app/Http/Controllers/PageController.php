@@ -40,6 +40,15 @@ class PageController extends Controller
         return response()->json($news);
     }
 
+    public function homeNewsTypeNews(string $slug)
+    {
+
+        $newsType = $this->pageService->newsType($slug);
+        $news     = $this->pageService->homeNewsTypeNews($newsType);
+
+        return response()->json($news);
+    }
+
     public function latest(Request $request)
     {
         $news = $this->pageService->newsSearch($request);

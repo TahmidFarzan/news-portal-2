@@ -470,6 +470,18 @@
                     "labels": {
                         "read_more": "আরও পড়ুন"
                     }
+                },
+                "news_type_gallery_section": {
+                    "labels": {
+                        "video": "ভিডিও",
+                        "image_gallery": "ছবির গ্যালারি"
+                    }
+                },
+                "news_type_slider_section": {
+                    "labels": {
+                        "video": "ভিডিও",
+                        "image_gallery": "ছবির গ্যালারি"
+                    }
                 }
             }
         }
@@ -1810,6 +1822,8 @@
                             "create_page_title": "মেনু আইটেম তৈরি",
                             "latest_url": "সর্বশেষ URL",
                             "home_url": "হোম URL",
+                            "video_url": "ভিডিও URL",
+                            "image_gallery_url": "ছবির গ্যালারি URL",
                             "language_placeholder": "ভাষা নির্বাচন করুন",
                             "name_placeholder": "নাম লিখুন",
                             "position_placeholder": "অবস্থান লিখুন",

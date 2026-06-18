@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import {
     isStory as checkIsStory,
@@ -53,64 +53,76 @@ const {
         type: Object,
         required: true,
     },
-
     enableTitleLineClamp: {
         type: Boolean,
         default: false,
     },
-
     enableSubTitleLineClamp: {
         type: Boolean,
         default: false,
     },
-
     enableBriefLineClamp: {
         type: Boolean,
         default: false,
     },
-
     hideBrief: {
         type: Boolean,
         default: false,
     },
-
     hideSubtitle: {
         type: Boolean,
         default: false,
     },
-
     hideFeatureImage: {
         type: Boolean,
         default: false,
     },
-
     hideCategory: {
         type: Boolean,
         default: false,
     },
-
     hideEvent: {
         type: Boolean,
         default: false,
     },
-
     hideLocation: {
         type: Boolean,
         default: false,
     },
-
     isCompact: {
         type: Boolean,
         default: false,
     },
-
     useFullHeight: {
         type: Boolean,
         default: true,
     },
 })
 
+const articleRef = ref(null)
+const windowWidth = ref(0)
+const articleWidth = ref(0)
+const resizeObserver = ref(null)
+
+const updateWindowWidth = () => {
+    windowWidth.value = window.innerWidth
+}
+
+const resolvedHideFeatureImage = computed(() => {
+    return hideFeatureImage || windowWidth.value < 300
+})
+
 const imageSrc = computed(() => {
+    if (articleWidth.value > 480) {
+        return (
+            news?.feature_image?.media_url ||
+            news?.feature_image?.original_url ||
+            news?.feature_image_mobile?.media_url ||
+            news?.feature_image_mobile?.original_url ||
+            ''
+        )
+    }
+
     return (
         news?.feature_image_mobile?.media_url ||
         news?.feature_image_mobile?.original_url ||
@@ -130,7 +142,7 @@ const imageAlt = computed(() => {
 })
 
 const shouldShowFeatureImage = computed(() => {
-    return !hideFeatureImage && imageSrc.value
+    return !resolvedHideFeatureImage.value && imageSrc.value
 })
 
 const newsType = computed(() => {
@@ -170,10 +182,32 @@ const newsTypeIcons = computed(() => {
 const hasNewsTypeIcons = computed(() => {
     return newsTypeIcons.value.length > 0
 })
+
+onMounted(() => {
+    updateWindowWidth()
+
+    window.addEventListener('resize', updateWindowWidth, { passive: true })
+
+    resizeObserver.value = new ResizeObserver((entries) => {
+        articleWidth.value = entries?.[0]?.contentRect?.width ?? 0
+    })
+
+    if (articleRef.value) {
+        resizeObserver.value.observe(articleRef.value)
+    }
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateWindowWidth)
+
+    if (resizeObserver.value) {
+        resizeObserver.value.disconnect()
+    }
+})
 </script>
 
 <template>
-    <article
+    <article ref="articleRef"
         class="group relative flex flex-col overflow-hidden border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-red-100 hover:shadow-lg"
         :class="[
             isCompact ? 'rounded-xl' : 'rounded-2xl',
@@ -186,9 +220,8 @@ const hasNewsTypeIcons = computed(() => {
             class="pointer-events-none relative z-20 w-full shrink-0 overflow-hidden bg-gray-100"
             :class="isCompact ? 'aspect-[16/9] rounded-t-xl' : 'aspect-[16/10] rounded-t-2xl'">
             <img :src="imageSrc" :alt="imageAlt"
-                class="w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" :class="[
-                    useFullHeight ? 'h-full' : '',
-                ]" />
+                class="w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy"
+                :class="[useFullHeight ? 'h-full' : '']" />
 
             <div v-if="hasNewsTypeIcons" class="absolute flex flex-wrap"
                 :class="isCompact ? 'left-2 top-2 gap-1' : 'left-3 top-3 gap-2'">

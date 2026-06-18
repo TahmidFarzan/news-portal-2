@@ -7,6 +7,10 @@ import { useTranslate } from '@/composables/useTranslate'
 import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
 import EventNewsSection from '@/components/common/page/EventNewsSection.vue'
+import NewsTypeSliderSection from '@/components/common/page/NewsTypeSliderSection.vue'
+import NewsTypeGallerySection from '@/components/common/page/NewsTypeGallerySection.vue'
+
+import { fetchFromApi } from '@/composables/useSystemApi'
 
 defineOptions({ layout: Layout })
 
@@ -125,6 +129,9 @@ const metaKeywords = computed(() => {
                                 <ListCard v-for="(perNews, index) in secondaryLeadNews"
                                     :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideCategory="true"
                                     :hideEvent="true" :hideLocation="true" :hideBrief="true" :isCompact="true" />
+                                <!--
+                                    when hideFeatureImage = false when device smaller then sm
+                                -->
                             </div>
                         </div>
                     </div>
@@ -169,5 +176,9 @@ const metaKeywords = computed(() => {
         <div v-if="bottomEvents">
             <EventNewsSection :events="bottomEvents" class="mb-4" />
         </div>
+
+        <NewsTypeSliderSection class="mt-4" />
+
+        <NewsTypeGallerySection class="mt-4" />
     </section>
 </template>
