@@ -6,7 +6,7 @@ import Layout from '@/pages/layouts/PublicLayout.vue'
 import { useTranslate } from '@/composables/useTranslate'
 import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
-import EventBanners from '@/components/common/pages/EventBanners.vue'
+import EventBanners from '@/components/common/page/EventBanners.vue'
 
 defineOptions({ layout: Layout })
 
