@@ -892,14 +892,14 @@ class PageService
     {
         $language = $this->language();
 
-        $eventCacheKey = "page:language:{$language->locale}:home:position:top:event";
+        $eventCacheKey = "page:home:language:{$language->locale}:position:top:event";
 
         $eventCacheTags = [
             "page",
-            "page:language:{$language->locale}",
-            "page:language:{$language->locale}:home",
-            "page:language:{$language->locale}:home:position:top",
-            "page:language:{$language->locale}:home:position:top:event",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:position:top",
+            "page:home:language:{$language->locale}:position:top:event",
         ];
 
         $eventCachedData = CacheServerHelper::getCachedData($eventCacheKey, $eventCacheTags);
@@ -919,18 +919,19 @@ class PageService
 
         return $events;
     }
+
     public function homeBottomEvents()
     {
         $language = $this->language();
 
-        $eventCacheKey = "page:language:{$language->locale}:home:position:bottom:event";
+        $eventCacheKey = "page:home:language:{$language->locale}:position:bottom:event";
 
         $eventCacheTags = [
             "page",
-            "page:language:{$language->locale}",
-            "page:language:{$language->locale}:home",
-            "page:language:{$language->locale}:home:position:bottom",
-            "page:language:{$language->locale}:home:position:bottom:event",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:position:bottom",
+            "page:home:language:{$language->locale}:position:bottom:event",
         ];
 
         $eventCachedData = CacheServerHelper::getCachedData($eventCacheKey, $eventCacheTags);
@@ -957,13 +958,13 @@ class PageService
         $page        = PageHelper::PAGE_HOME;
         $pageSection = PageHelper::PAGE_SECTION_LEAD_NEWS;
 
-        $newsCacheKey = "page:language:{$language->locale}:home:lead-section:news";
+        $newsCacheKey = "page:home:language:{$language->locale}:lead-section:news";
 
         $newsCacheTags = [
             "page",
-            "page:language:{$language->locale}",
-            "page:language:{$language->locale}:home",
-            "page:language:{$language->locale}:home:lead-section",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:lead-section",
         ];
 
         $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
@@ -1010,15 +1011,14 @@ class PageService
     {
         $language = $this->language();
 
-        $newsCacheKey = "page:language:{$language->locale}:home:event-section:event:{$event->slug}:news";
+        $newsCacheKey = "page:home:language:{$language->locale}:event-section:event:{$event->slug}:news";
 
         $newsCacheTags = [
             "page",
-            "page:language:{$language->locale}",
-            "page:language:{$language->locale}:home",
-            "page:language:{$language->locale}:home:event-section",
-            "page:language:{$language->locale}:home:event-section:event:{$event->slug}",
-            "page:language:{$language->locale}:home:event-section:event:{$event->slug}:news",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:event-section",
+            "page:home:language:{$language->locale}:event-section:event:{$event->slug}",
         ];
 
         $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
@@ -1034,6 +1034,68 @@ class PageService
             ->where('is_published', true)
             ->orderBy('create_at', 'desc')
             ->orderBy("id", 'desc')
+            ->limit(10)
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $newsCacheKey,
+            $news,
+            CacheServerHelper::threeMinInSecond,
+            $newsCacheTags
+        );
+
+        return $news;
+    }
+
+    public function homeCategoryNews(Category $category)
+    {
+        $page        = PageHelper::PAGE_HOME;
+        $pageSection = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
+
+        $categoryId         = $category->id;
+        $language           = $this->language();
+        $pageSectionSlugKey = Str::lower(Str::slug($pageSection));
+
+        $newsCacheKey = "page:home:language:{$language->locale}:category:{$category->slug}:page-section:{$pageSectionSlugKey}:news";
+
+        $newsCacheTags = [
+            "page",
+            "page:home",
+            "page:home:homelanguage:{$language->locale}",
+            "page:home:language:{$language->locale}:category:{$category->slug}",
+            "page:home:language:{$language->locale}:category:{$category->slug}:page-section:{$pageSectionSlugKey}",
+        ];
+
+        $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
+
+        if (($newsCachedData !== null) && ($newsCachedData instanceof CursorPaginator)) {
+            return $newsCachedData;
+        }
+
+        $newsPlacementTable = (new NewsPlacement())->getTable();
+
+        $news = News::query()
+            ->with(["newsType", "category", "event", "location"])
+            ->withWhereHas('newsPlacements', function ($query) use ($categoryId, $page, $pageSection) {
+                $query->where('category_id', $categoryId)
+                    ->where('page', $page)
+                    ->where('page_section', $pageSection);
+            })
+            ->where("language_id", $language->id)
+            ->where('category_id', $categoryId)
+            ->where('is_published', true)
+            ->orderBy(
+                NewsPlacement::query()
+                    ->select('position')
+                    ->where("language_id", $language->id)
+                    ->whereColumn("{$newsPlacementTable}.news_id", 'news.id')
+                    ->where('category_id', $categoryId)
+                    ->where('page', $page)
+                    ->where('page_section', $pageSection)
+                    ->limit(1),
+                'asc'
+            )
+            ->orderByDesc('id')
             ->limit(10)
             ->get();
 
