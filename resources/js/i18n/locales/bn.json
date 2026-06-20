@@ -2962,6 +2962,20 @@
                 }
             }
         },
+        "video_news": {
+            "labels": {
+                "videos": "ভিডিও",
+                "brief": "সর্বশেষ সব ভিডিও খবর এখানে।",
+                "key_words" : "সংবাদ, ভিডিও সংবাদ"
+            }
+        },
+        "image_gallery_news": {
+            "labels": {
+                "image_galleries": "ছবির গ্যালারি",
+                "brief": "সর্বশেষ সব ছবির গ্যালারি খবর এখানে।",
+                "key_words" : "সংবাদ, ছবির গ্যালারি সংবাদ"
+            }
+        },
         "search": {
             "labels": {
                 "search": "অনুসন্ধান",

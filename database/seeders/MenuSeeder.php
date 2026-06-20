@@ -83,7 +83,7 @@ class MenuSeeder extends Seeder
     private function topBarMenuItemSave(Menu $menu, Language $language): void
     {
         $pageNames = [
-            SeederHelper::LANGUAGE_EN_CODE  => [
+            SeederHelper::LANGUAGE_EN_CODE => [
                 "Contact",
                 "About",
             ],
@@ -106,6 +106,18 @@ class MenuSeeder extends Seeder
 
         $pages = Page::whereIn("default_use_as", [PageHelper::DAFAULT_USE_AS_HOME, PageHelper::DAFAULT_USE_AS_LATEST])->where("language_id", $language->id)->where("is_default", true)->where("is_published", true)->get();
 
+        $extraMenuNames = [
+            SeederHelper::LANGUAGE_EN_CODE => [
+                "Videos",
+                "Image Galleries",
+            ],
+
+            SeederHelper::LANGUAGE_BN_CODE => [
+                "ভিডিও",
+                "ছবির গ্যালারি",
+            ],
+        ];
+
         $categories = Category::query()
             ->where('language_id', $language->id)
             ->whereNull('parent_id')
@@ -119,10 +131,29 @@ class MenuSeeder extends Seeder
         foreach ($categories as $category) {
             $this->saveMenuItem($menu, null, $language, $category);
         }
+
+        foreach ($extraMenuNames[$language->code] as $extraMenuName) {
+            $this->saveMenuItem($menu, null, $language, $extraMenuName);
+        }
     }
 
     private function offcanvasMenuItemSave(Menu $menu, Language $language): void
     {
+        $extraMenuNames = [
+            SeederHelper::LANGUAGE_EN_CODE => [
+                "Videos",
+                "Image Galleries",
+            ],
+
+            SeederHelper::LANGUAGE_BN_CODE => [
+                "ভিডিও",
+                "ছবির গ্যালারি",
+            ],
+        ];
+        foreach ($extraMenuNames[$language->code] as $extraMenuName) {
+            $this->saveMenuItem($menu, null, $language, $extraMenuName);
+        }
+
         $categories = Category::inRandomOrder()->where("language_id", $language->id)->whereNull("parent_id")->get();
         foreach ($categories as $category) {
             $this->saveMenuItem($menu, null, $language, $category);
@@ -132,7 +163,7 @@ class MenuSeeder extends Seeder
     private function footerMenuItemSave(Menu $menu, Language $language): void
     {
         $pageNames = [
-            SeederHelper::LANGUAGE_EN_CODE  => [
+            SeederHelper::LANGUAGE_EN_CODE => [
                 "Contact",
                 "About",
                 "Privacy Policy",
@@ -165,8 +196,10 @@ class MenuSeeder extends Seeder
         };
 
         $url = match ($name) {
-            'Home', 'হোম'       => route('home'),
-            'Latest', 'সর্বশেষ' => route('latest'),
+            'Home', 'হোম'                      => route('home'),
+            'Latest', 'সর্বশেষ'                => route('latest'),
+            'Videos', 'ভিডিও'                  => route('videos'),
+            'Image Galleries', 'ছবির গ্যালারি' => route('image-galleries'),
             default => null,
         };
 

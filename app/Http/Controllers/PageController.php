@@ -137,6 +137,34 @@ class PageController extends Controller
         ]);
     }
 
+    public function videos(Request $request)
+    {
+        $newsType = $this->pageService->newsType("video");
+        $news     = $this->pageService->newsTypeNews($request, $newsType);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('VideoNews');
+    }
+
+    public function imageGalleries(Request $request)
+    {
+        $newsType = $this->pageService->newsType("image-gallery");
+        $news     = $this->pageService->newsTypeNews($request, $newsType);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('ImagesGalleryNews');
+    }
+
     public function eventNews(Request $request, string $slug)
     {
         $event = $this->pageService->event($slug);

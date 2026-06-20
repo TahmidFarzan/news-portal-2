@@ -398,8 +398,9 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::get('home', [PageController::class, 'home'])->name('home');
     Route::get('latest', [PageController::class, 'latest'])->name('latest');
     Route::get('search', [PageController::class, 'search'])->name('search');
-    Route::get('video', [PageController::class, 'video'])->name('video');
-    Route::get('image-gallery', [PageController::class, 'imageGallery'])->name('image-gallery');
+
+    Route::get('videos', [PageController::class, 'videos'])->name('videos');
+    Route::get('image-galleries', [PageController::class, 'imageGalleries'])->name('image-galleries');
 
     Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
     Route::get('tags/{slug}', [PageController::class, 'tagNews'])->name('tag.news');

@@ -922,6 +922,48 @@ class PageService
         return $newsType;
     }
 
+    public function newsTypeNews(Request $request, NewsType $newsType)
+    {
+        $perPage   = $request->input('per_page', 24);
+        $queryHash = md5(http_build_query($request->query()));
+
+        $language = $this->language();
+
+        $newsTypeNewsCacheKey = "page:language:{$language->locale}:news-type:{$newsType->slug}:news:per-page:{$perPage}:query:{$queryHash}";
+
+        $newsTypeNewsCacheTags = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:news-type:{$newsType->slug}",
+            "page:language:{$language->locale}:news-type:{$newsType->slug}:news",
+        ];
+
+        $newsTypeNewsCachedData = CacheServerHelper::getCachedData($newsTypeNewsCacheKey, $newsTypeNewsCacheTags);
+
+        if (($newsTypeNewsCachedData !== null) && ($newsTypeNewsCachedData instanceof CursorPaginator)) {
+            return $newsTypeNewsCachedData;
+        }
+
+        $newsTypeNews = News::query()
+            ->with(["newsType", "category", "event", "location"])
+            ->where("language_id", $language->id)
+            ->where("is_published", true)
+            ->where("news_type_id", $newsType->id)
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->cursorPaginate($perPage)
+            ->withQueryString();
+
+        CacheServerHelper::cachedData(
+            $newsTypeNewsCacheKey,
+            $newsTypeNews,
+            CacheServerHelper::threeMinInSecond,
+            $newsTypeNewsCacheTags
+        );
+
+        return $newsTypeNews;
+    }
+
     public function homeTopEvents()
     {
         $language = $this->language();
@@ -1146,7 +1188,6 @@ class PageService
     {
         $language     = $this->language();
         $newsCacheKey = "page:home:language:{$language->locale}:news-type:{$newsType->slug}:news";
-
 
         $newsCacheTags = [
             "page",

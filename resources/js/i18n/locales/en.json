@@ -2964,6 +2964,20 @@
                 }
             }
         },
+        "video_news": {
+            "labels": {
+                "videos": "Videos",
+                "brief": "All the latest video news is here.",
+                "key_words" : "News, Video News"
+            }
+        },
+        "image_gallery_news": {
+            "labels": {
+                "image_galleries": "Image gallery",
+                "brief": "All the latest image gallery news is here.",
+                "key_words" : "News, Imge Gallery News"
+            }
+        },
         "search": {
             "labels": {
                 "search": "Search",

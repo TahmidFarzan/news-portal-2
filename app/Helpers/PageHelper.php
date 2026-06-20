@@ -9,6 +9,8 @@ class PageHelper
     public const DAFAULT_USE_AS_HOME     = 'Home';
     public const DAFAULT_USE_AS_LATEST     = 'Latest';
     public const DAFAULT_USE_AS_SEARCH     = 'Search';
+    public const DAFAULT_USE_AS_VIDEO     = 'Video';
+    public const DAFAULT_USE_AS_IMAGE_GALLERY     = 'Image Gallery';
 
     public const PAGE_HOME     = 'Home';
     public const PAGE_CATEGORY = 'Category';
