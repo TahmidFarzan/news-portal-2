@@ -228,7 +228,8 @@
                         "navigation": {
                             "profile": "Profile",
                             "account": "Account",
-                            "activity_logs": "Activity Logs"
+                            "activity_logs": "Activity Logs",
+                            "log_viewer": "Log viewer"
                         },
                         "actions": {
                             "logout": "Logout",

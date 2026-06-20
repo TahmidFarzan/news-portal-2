@@ -228,7 +228,8 @@
                         "navigation": {
                             "profile": "প্রোফাইল",
                             "account": "অ্যাকাউন্ট",
-                            "activity_logs": "কার্যক্রম লগ"
+                            "activity_logs": "কার্যক্রম লগ",
+                            "log_viewer": "লগ ভিউয়ার"
                         },
                         "actions": {
                             "logout": "লগআউট",

@@ -449,6 +449,9 @@ export const canEditTheme = (authUser, theme) => {
 export const canAccessActivityLogMenu = (authUser) =>
     authUser && isAdmin(getUserRoleName(authUser))
 
+export const canAccessLogViewerMenu = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
 export const canAccessUserManagementMenu = (authUser) => {
     if (!authUser) return false
 

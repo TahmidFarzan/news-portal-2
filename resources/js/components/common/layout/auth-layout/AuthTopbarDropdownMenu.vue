@@ -13,7 +13,7 @@ import {
     faSpinner
 } from '@fortawesome/free-solid-svg-icons'
 
-import { canAccessActivityLogMenu } from '@/composables/useAuthUserAccessPermissions'
+import { canAccessActivityLogMenu, canAccessLogViewerMenu } from '@/composables/useAuthUserAccessPermissions'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -45,6 +45,11 @@ const logoutShowConfirmationModal = ref(false)
 
 const canAccessActivityLogMenuComputed = computed(() => {
     return canAccessActivityLogMenu(authUser)
+})
+
+
+const canAccessLogViewerMenuComputed = computed(() => {
+    return canAccessLogViewerMenu(authUser)
 })
 
 const toggleDropdown = (event) => {
@@ -133,6 +138,12 @@ onBeforeUnmount(() => {
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
                     <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.activity_logs") }}</span>
+                </a>
+
+                <a v-if="canAccessLogViewerMenuComputed" :href="route('log-viewer.index')"
+                    @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
+                    <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
+                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.log_viewer") }}</span>
                 </a>
 
                 <button type="button" @click="openLogoutModal"
