@@ -10,8 +10,8 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditSetting } from '@/composables/useAuthUserAccessPermissions'
-import { useSetting } from '@/composables/useSetting'
+import { canEditTheme } from '@/composables/useAuthUserAccessPermissions'
+import { useTheme } from '@/composables/useTheme'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faPen)
@@ -20,38 +20,38 @@ defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
 
-const { setting } = defineProps({
-    setting: Object,
+const { theme } = defineProps({
+    theme: Object,
 })
 
 const authUser = inject('authUser')
 
 const {
-    settingValueTypes,
+    themeValueTypes,
     hasValue,
-} = useSetting()
+} = useTheme()
 
-const pageTitle = computed(() => `${setting?.label} ${t('pages.back_office.settings.details.labels.details')}`)
+const pageTitle = computed(() => `${theme?.label} ${t('pages.back_office.themes.details.labels.details')}`)
 
-const canEdit = (setting) => canEditSetting(authUser?.value, setting)
+const canEdit = (theme) => canEditTheme(authUser?.value, theme)
 
 const formattedValue = computed(() => {
-    const type = setting?.type
-    const value = setting?.value
+    const type = theme?.type
+    const value = theme?.value
 
     if (!hasValue(value)) {
-        return t('pages.back_office.settings.details.labels.not_available')
+        return t('pages.back_office.themes.details.labels.not_available')
     }
 
-    if (type === settingValueTypes.BOOLEAN) {
+    if (type === themeValueTypes.BOOLEAN) {
         return value === true || value === 'true' || value === 1 || value === '1'
-            ? t('pages.back_office.settings.details.labels.true')
-            : t('pages.back_office.settings.details.labels.false')
+            ? t('pages.back_office.themes.details.labels.true')
+            : t('pages.back_office.themes.details.labels.false')
     }
 
     if (
-        type === settingValueTypes.JSON ||
-        type === settingValueTypes.ARRAY
+        type === themeValueTypes.JSON ||
+        type === themeValueTypes.ARRAY
     ) {
         try {
             const parsedValue = typeof value === 'string'
@@ -67,8 +67,8 @@ const formattedValue = computed(() => {
     return value
 })
 
-const isTrueValue = computed(() => formattedValue.value === t('pages.back_office.settings.details.labels.true'))
-const hasDisplayValue = computed(() => formattedValue.value !== t('pages.back_office.settings.details.labels.not_available'))
+const isTrueValue = computed(() => formattedValue.value === t('pages.back_office.themes.details.labels.true'))
+const hasDisplayValue = computed(() => formattedValue.value !== t('pages.back_office.themes.details.labels.not_available'))
 
 onMounted(async () => {
     await nextTick()
@@ -76,7 +76,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.settings.details.labels.settings'), href: route('back-office.settings.index') },
+                { text: t('pages.back_office.themes.details.labels.themes'), href: route('back-office.themes.index') },
                 { text: pageTitle.value, active: true },
             ],
         })
@@ -92,21 +92,21 @@ onMounted(async () => {
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.settings.details.title') }}
+                {{ t('pages.back_office.themes.details.title') }}
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(setting)" :href="route('back-office.settings.edit', { slug: setting?.slug })"
+                <a v-if="canEdit(theme)" :href="route('back-office.themes.edit', { slug: theme?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.settings.details.actions.edit') }}
+                    {{ t('pages.back_office.themes.details.actions.edit') }}
                 </a>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.settings.details.labels.basic_information') }}
+                {{ t('pages.back_office.themes.details.labels.basic_information') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -114,13 +114,13 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.settings.details.labels.group') }}</span>
-                        <span class="font-medium">{{ setting?.group || t('pages.back_office.settings.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.group') }}</span>
+                        <span class="font-medium">{{ theme?.group || t('pages.back_office.themes.details.labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.settings.details.labels.label') }}</span>
-                        <span class="font-medium">{{ setting?.label || t('pages.back_office.settings.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.label') }}</span>
+                        <span class="font-medium">{{ theme?.label || t('pages.back_office.themes.details.labels.not_available') }}</span>
                     </div>
 
                 </div>
@@ -128,33 +128,33 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.settings.details.labels.type') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.type') }}</span>
 
                         <span class="font-medium px-2 py-1 rounded-md text-xs bg-gray-100 text-gray-700">
-                            {{ setting?.type ?? t('pages.back_office.settings.details.labels.not_available') }}
+                            {{ theme?.type ?? t('pages.back_office.themes.details.labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between gap-4">
-                        <span class="text-gray-500">{{ t('pages.back_office.settings.details.labels.value') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.value') }}</span>
 
-                        <span v-if="setting?.type === settingValueTypes.BOOLEAN"
+                        <span v-if="theme?.type === themeValueTypes.BOOLEAN"
                             class="font-medium px-2 py-1 rounded-md text-xs" :class="isTrueValue
                                 ? 'bg-green-100 text-green-700'
                                 : 'bg-red-100 text-red-700'">
                             {{ formattedValue }}
                         </span>
 
-                        <a v-else-if="setting?.type === settingValueTypes.URL && hasDisplayValue" :href="formattedValue"
+                        <a v-else-if="theme?.type === themeValueTypes.URL && hasDisplayValue" :href="formattedValue"
                             target="_blank" class="font-medium text-blue-600 hover:underline break-all text-right">
                             {{ formattedValue }}
                         </a>
 
-                        <img v-else-if="setting?.type === settingValueTypes.IMAGE && hasDisplayValue"
-                            :src="formattedValue" :alt="t('pages.back_office.settings.details.setting_image_alt')"
+                        <img v-else-if="theme?.type === themeValueTypes.IMAGE && hasDisplayValue"
+                            :src="formattedValue" :alt="t('pages.back_office.themes.details.theme_image_alt')"
                             class="w-20 h-20 object-cover rounded-md border">
 
-                        <span v-else-if="setting?.type === settingValueTypes.COLOR && hasDisplayValue"
+                        <span v-else-if="theme?.type === themeValueTypes.COLOR && hasDisplayValue"
                             class="font-medium flex items-center gap-2">
                             <span class="w-5 h-5 rounded border" :style="{ backgroundColor: formattedValue }"></span>
 
@@ -162,8 +162,8 @@ onMounted(async () => {
                         </span>
 
                         <pre v-else-if="
-                            setting?.type === settingValueTypes.JSON ||
-                            setting?.type === settingValueTypes.ARRAY
+                            theme?.type === themeValueTypes.JSON ||
+                            theme?.type === themeValueTypes.ARRAY
                         "
                             class="font-medium bg-gray-50 border rounded-md p-2 text-xs overflow-x-auto max-w-full text-right">{{ formattedValue }}</pre>
 
@@ -179,32 +179,32 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.settings.details.labels.system_information') }}
+                {{ t('pages.back_office.themes.details.labels.system_information') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.settings.details.labels.created_at') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.created_at') }}</span>
                         <span class="font-medium">
-                            {{ setting?.created_at ? formatDateTime(setting.created_at) : t('pages.back_office.settings.details.labels.not_available') }}
+                            {{ theme?.created_at ? formatDateTime(theme.created_at) : t('pages.back_office.themes.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.settings.details.labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.updated_at') }}</span>
                         <span class="font-medium">
-                            {{ setting?.updated_at ? formatDateTime(setting.updated_at) : t('pages.back_office.settings.details.labels.not_available') }}
+                            {{ theme?.updated_at ? formatDateTime(theme.updated_at) : t('pages.back_office.themes.details.labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.settings.details.labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.updated_by') }}</span>
                         <span class="font-medium">
-                            {{ setting?.latest_activity_log?.causer?.name || t('pages.back_office.settings.details.labels.not_available') }}
+                            {{ theme?.latest_activity_log?.causer?.name || t('pages.back_office.themes.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
@@ -214,10 +214,10 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.settings.details.activity_logs.index.title') }}
+                {{ t('pages.back_office.themes.details.activity_logs.index.title') }}
             </h3>
 
-            <RecentActivities :model-slug="'setting'" :model="setting" />
+            <RecentActivities :model-slug="'theme'" :model="theme" />
         </div>
 
     </div>

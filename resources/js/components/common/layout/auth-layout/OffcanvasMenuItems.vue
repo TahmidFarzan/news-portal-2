@@ -55,7 +55,7 @@ import {
     canAccessBreakingNewsMenu,
     canAccessPageMenu,
     canAccessMenuMenu,
-    canAccessSetting,
+    canAccessTheme,
 } from '@/composables/useAuthUserAccessPermissions'
 
 const {
@@ -113,8 +113,8 @@ const canAccessMenuMenuComputed = computed(() => {
     return canAccessMenuMenu(authUser)
 })
 
-const canAccessSettingComputed = computed(() => {
-    return canAccessSetting(authUser)
+const canAccessThemeComputed = computed(() => {
+    return canAccessTheme(authUser)
 })
 
 const toggleShowSubMenu = (key) => {
@@ -289,11 +289,11 @@ const isSubMenuVisible = (key) => {
             </div>
         </Transition>
 
-        <a v-if="canAccessSettingComputed" :href="route('back-office.settings.index')"
+        <a v-if="canAccessThemeComputed" :href="route('back-office.themes.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/settings/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/auth-user/themes/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gears" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.settings") }}
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.themes") }}
         </a>
     </div>
 </template>

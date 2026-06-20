@@ -1,13 +1,13 @@
 <?php
 namespace Database\Factories;
 
-use App\Models\Setting;
+use App\Models\Theme;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Setting>
+ * @extends Factory<Theme>
  */
-class SettingFactory extends Factory
+class ThemeFactory extends Factory
 {
     /**
      * Define the model's default state.

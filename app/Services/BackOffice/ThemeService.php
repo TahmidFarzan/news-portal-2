@@ -1,28 +1,28 @@
 <?php
 namespace App\Services\BackOffice;
 
-use App\Http\Requests\SettingRequest;
-use App\Models\Setting;
+use App\Http\Requests\ThemeRequest;
+use App\Models\Theme;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class SettingService
+class ThemeService
 {
-    public function new (): Setting
+    public function new (): Theme
     {
-        return new Setting();
+        return new Theme();
     }
 
-    public function find(string $slug): Setting
+    public function find(string $slug): Theme
     {
-        return Setting::where('slug', $slug)->firstOrFail();
+        return Theme::where('slug', $slug)->firstOrFail();
     }
 
-    public function loadRelations(Setting $setting): Setting
+    public function loadRelations(Theme $theme): Theme
     {
-        $setting->load([
+        $theme->load([
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
 
@@ -30,14 +30,14 @@ class SettingService
             'latestActivityLog.causer',
         ]);
 
-        return $setting;
+        return $theme;
     }
 
     public function search(Request $request)
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Setting::query();
+        $query = Theme::query();
 
         if ($request->filled('date')) {
             $date = $request->input('date');
@@ -63,26 +63,26 @@ class SettingService
             ->appends($request->all());
     }
 
-    public function save(SettingRequest $request, Setting $setting): array
+    public function save(ThemeRequest $request, Theme $theme): array
     {
         try {
 
-            DB::transaction(function () use ($request, $setting) {
-                $setting->value = $request->input("value");
-                $setting->save();
+            DB::transaction(function () use ($request, $theme) {
+                $theme->value = $request->input("value");
+                $theme->save();
             });
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.setting.update.success"),
+                'message' => __("status-messages.theme.update.success"),
             ];
         } catch (Exception $exception) {
-            Log::error("Failed to update setting.", [
+            Log::error("Failed to update theme.", [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.setting.update.failed'),
+                'message' => __('status-messages.theme.update.failed'),
             ];
         }
     }

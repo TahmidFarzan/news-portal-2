@@ -259,7 +259,7 @@
                             "menus": "Menus",
                             "user_anagement": "User Anagement",
                             "users": "Users",
-                            "settings": "Settings"
+                            "themes": "Themes"
                         }
                     }
                 },
@@ -2369,7 +2369,7 @@
                     }
                 }
             },
-            "settings": {
+            "themes": {
                 "create": {
                     "actions": {
                         "edit": "Edit",
@@ -2377,7 +2377,7 @@
                         "save": "Save"
                     },
                     "form": {
-                        "create_page_title": "Setting create",
+                        "create_page_title": "Theme create",
                         "validation": {
                             "group_required": "Group is required.",
                             "label_required": "Label is required.",
@@ -2390,14 +2390,14 @@
                             "value_must_be_valid_url": "Value must be a valid URL.",
                             "value_must_be_valid_color": "Value must be a valid color code."
                         },
-                        "invalid_setting_data": "Invalid setting data",
-                        "invalid_setting_data_body": "Setting group and label are required. Please go back and select a valid setting.",
+                        "invalid_theme_data": "Invalid theme data",
+                        "invalid_theme_data_body": "Theme group and label are required. Please go back and select a valid theme.",
                         "json_placeholder": "Example: {\"key\": \"value\"} or [\"item1\", \"item2\"]",
                         "url_placeholder": "https://example.com",
                         "color_placeholder": "#000000"
                     },
                     "labels": {
-                        "settings": "Settings",
+                        "themes": "Themes",
                         "basic_information": "Basic Information",
                         "true": "True",
                         "false": "False"
@@ -2409,7 +2409,7 @@
                         "not_available": "N/A",
                         "true": "True",
                         "false": "False",
-                        "settings": "Settings",
+                        "themes": "Themes",
                         "basic_information": "Basic Information",
                         "group": "Group",
                         "label": "Label",
@@ -2420,11 +2420,11 @@
                         "updated_at": "Updated At",
                         "updated_by": "Updated By"
                     },
-                    "title": "Setting Details",
+                    "title": "Theme Details",
                     "actions": {
                         "edit": "Edit"
                     },
-                    "setting_image_alt": "Setting image",
+                    "theme_image_alt": "Theme image",
                     "activity_logs": {
                         "index": {
                             "title": "Activity Logs"
@@ -2433,15 +2433,15 @@
                 },
                 "index": {
                     "labels": {
-                        "settings": "Settings",
+                        "themes": "Themes",
                         "per_page": "Per page",
                         "group": "Group",
                         "label": "Label",
                         "not_available": "N/A"
                     },
-                    "page_title": "Settings",
-                    "title": "Settings",
-                    "search_placeholder": "Search setting...",
+                    "page_title": "Themes",
+                    "title": "Themes",
+                    "search_placeholder": "Search theme...",
                     "applying_filter": "Applying Filter...",
                     "apply_filter": "Apply Filter",
                     "created": "Created",
@@ -2458,7 +2458,7 @@
                     "actions": {
                         "edit": "Edit"
                     },
-                    "no_setting_found": "No setting found."
+                    "no_theme_found": "No theme found."
                 }
             },
             "tags": {

@@ -585,7 +585,7 @@ return [
 
     ],
 
-    'setting'       => [
+    'theme'       => [
         'group' => [
             'required' => 'Group is required.',
             'string'   => 'Group must be a string.',

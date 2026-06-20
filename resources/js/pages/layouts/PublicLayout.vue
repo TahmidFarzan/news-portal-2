@@ -20,7 +20,7 @@ import {
 import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { useSetting } from '@/composables/useSetting'
+import { useTheme } from '@/composables/useTheme'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
@@ -36,14 +36,14 @@ library.add(
 const page = usePage()
 
 const {
-    settingGroups,
-    settingOptions,
+    themeGroups,
+    themeOptions,
     isTruthyValue,
-} = useSetting()
+} = useTheme()
 
 const headerNavbar = ref(null)
 const isHeaderSticky = ref(false)
-const siteSettings = ref([])
+const siteThemes = ref([])
 
 const year = new Date().getFullYear()
 
@@ -68,63 +68,63 @@ const normalizeText = (value) => {
     return String(value ?? '').trim().toLowerCase()
 }
 
-const loadSiteSettings = async () => {
-    const response = await fetchFromApi(route('site.settings'))
+const loadSiteThemes = async () => {
+    const response = await fetchFromApi(route('site.themes'))
 
-    siteSettings.value = Array.isArray(response)
+    siteThemes.value = Array.isArray(response)
         ? response
         : response?.data ?? []
 }
 
-const getSetting = (field, group = null) => {
-    return siteSettings.value.find((setting) => {
+const getTheme = (field, group = null) => {
+    return siteThemes.value.find((theme) => {
         const matchedField =
-            normalizeText(setting?.key) === normalizeText(field) ||
-            normalizeText(setting?.label) === normalizeText(field)
+            normalizeText(theme?.key) === normalizeText(field) ||
+            normalizeText(theme?.label) === normalizeText(field)
 
         const matchedGroup =
-            !group || normalizeText(setting?.group) === normalizeText(group)
+            !group || normalizeText(theme?.group) === normalizeText(group)
 
         return matchedField && matchedGroup
     }) ?? null
 }
 
-const facebookSetting = computed(() => {
-    return getSetting(settingOptions.FB_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+const facebookTheme = computed(() => {
+    return getTheme(themeOptions.FB_SOCIAL_LINK, themeGroups.SOCIAL_LINK)
 })
 
-const youtubeSetting = computed(() => {
-    return getSetting(settingOptions.YOUTUBE_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+const youtubeTheme = computed(() => {
+    return getTheme(themeOptions.YOUTUBE_SOCIAL_LINK, themeGroups.SOCIAL_LINK)
 })
 
-const googleNewsSetting = computed(() => {
-    return getSetting(settingOptions.GOOGLE_NEWS_SOCIAL_LINK, settingGroups.SOCIAL_LINK)
+const googleNewsTheme = computed(() => {
+    return getTheme(themeOptions.GOOGLE_NEWS_SOCIAL_LINK, themeGroups.SOCIAL_LINK)
 })
 
 const showTopbarMenu = computed(() => {
-    return getSetting(settingOptions.SHOW_TOPBAR_MENU, settingGroups.MENU)
+    return getTheme(themeOptions.SHOW_TOPBAR_MENU, themeGroups.MENU)
 })
 
 const showFooterMenu = computed(() => {
-    return getSetting(settingOptions.SHOW_FOOTER_MENU, settingGroups.MENU)
+    return getTheme(themeOptions.SHOW_FOOTER_MENU, themeGroups.MENU)
 })
 
 const showNameOnHeaderMenu = computed(() => {
-    return getSetting(settingOptions.SHOW_NAME_ON_HEADER_MENU, settingGroups.App)
+    return getTheme(themeOptions.SHOW_NAME_ON_HEADER_MENU, themeGroups.App)
 })
 
 const showLogoOnHeaderMenu = computed(() => {
-    return getSetting(settingOptions.SHOW_LOGO_ON_HEADER_MENU, settingGroups.App)
+    return getTheme(themeOptions.SHOW_LOGO_ON_HEADER_MENU, themeGroups.App)
 })
 
 const showBreakingNews = computed(() => {
-    return getSetting(settingOptions.SHOW_BREAKING_NEWS, settingGroups.App)
+    return getTheme(themeOptions.SHOW_BREAKING_NEWS, themeGroups.App)
 })
 
 onMounted(async () => {
     await nextTick()
 
-    await loadSiteSettings()
+    await loadSiteThemes()
 
     handlePageScroll()
 
@@ -144,17 +144,17 @@ onBeforeUnmount(() => {
         <div class="bg-gray-900 text-white">
             <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center max-[450px]:gap-2">
                 <div class="flex space-x-3 max-[450px]:space-x-2 max-[450px]:flex-shrink-0">
-                    <a v-if="facebookSetting?.value" :href="facebookSetting.value" target="_blank"
+                    <a v-if="facebookTheme?.value" :href="facebookTheme.value" target="_blank"
                         rel="noopener noreferrer" aria-label="Facebook">
                         <FontAwesomeIcon :icon="['fab', 'facebook']" />
                     </a>
 
-                    <a v-if="youtubeSetting?.value" :href="youtubeSetting.value" target="_blank"
+                    <a v-if="youtubeTheme?.value" :href="youtubeTheme.value" target="_blank"
                         rel="noopener noreferrer" aria-label="Youtube">
                         <FontAwesomeIcon :icon="['fab', 'youtube']" />
                     </a>
 
-                    <a v-if="googleNewsSetting?.value" :href="googleNewsSetting.value" target="_blank"
+                    <a v-if="googleNewsTheme?.value" :href="googleNewsTheme.value" target="_blank"
                         rel="noopener noreferrer" aria-label="Google News">
                         <FontAwesomeIcon :icon="['fab', 'google']" />
                     </a>

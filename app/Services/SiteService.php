@@ -7,7 +7,7 @@ use App\Models\BreakingNews;
 use App\Models\Language;
 use App\Models\Menu;
 use App\Models\MenuItem;
-use App\Models\Setting;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -365,13 +365,13 @@ class SiteService
         return $data;
     }
 
-    public function settings()
+    public function themes()
     {
-        $cacheKey = 'site:settings';
+        $cacheKey = 'site:themes';
 
         $cacheTags = [
             'site',
-            'site:settings',
+            'site:themes',
         ];
 
         $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
@@ -380,7 +380,7 @@ class SiteService
             return $cachedData;
         }
 
-        $data = Setting::query()
+        $data = Theme::query()
             ->orderBy('id', 'asc')
             ->get();
 

@@ -1,4 +1,4 @@
-export const settingValueTypes = Object.freeze({
+export const themeValueTypes = Object.freeze({
     TEXT: 'Text',
     STRING: 'String',
     BOOLEAN: 'Boolean',
@@ -12,13 +12,13 @@ export const settingValueTypes = Object.freeze({
     COLOR: 'Color',
 })
 
-export const settingGroups = Object.freeze({
+export const themeGroups = Object.freeze({
     App: 'App',
     MENU: 'Menu',
     SOCIAL_LINK: 'Social Link',
 })
 
-export const settingOptions = Object.freeze({
+export const themeOptions = Object.freeze({
     SHOW_FOOTER_MENU: 'Show Footer Menu',
     SHOW_TOPBAR_MENU: 'Show Topbar Menu',
     FB_SOCIAL_LINK: 'Fb Social Link',
@@ -29,8 +29,8 @@ export const settingOptions = Object.freeze({
     SHOW_BREAKING_NEWS  : "Show Breaking News"
 })
 
-export function useSetting() {
-    const settingValueTypeOptions = Object.values(settingValueTypes)
+export function useTheme() {
+    const themeValueTypeOptions = Object.values(themeValueTypes)
 
     const isEmpty = (value) => {
         return value === null ||
@@ -52,19 +52,19 @@ export function useSetting() {
     }
 
     const getDefaultValueByType = (type) => {
-        if (type === settingValueTypes.BOOLEAN) {
+        if (type === themeValueTypes.BOOLEAN) {
             return false
         }
 
-        if (type === settingValueTypes.ARRAY) {
+        if (type === themeValueTypes.ARRAY) {
             return '[]'
         }
 
-        if (type === settingValueTypes.JSON) {
+        if (type === themeValueTypes.JSON) {
             return '{}'
         }
 
-        if (type === settingValueTypes.COLOR) {
+        if (type === themeValueTypes.COLOR) {
             return '#000000'
         }
 
@@ -72,10 +72,10 @@ export function useSetting() {
     }
 
     return {
-        settingValueTypes,
-        settingValueTypeOptions,
-        settingGroups,
-        settingOptions,
+        themeValueTypes,
+        themeValueTypeOptions,
+        themeGroups,
+        themeOptions,
         isEmpty,
         hasValue,
         isTruthyValue,

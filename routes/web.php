@@ -15,7 +15,7 @@ use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
 use App\Http\Controllers\BackOffice\PageController as BackOfficePageController;
-use App\Http\Controllers\BackOffice\SettingController;
+use App\Http\Controllers\BackOffice\ThemeController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
@@ -309,12 +309,12 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         });
     });
 
-    Route::prefix('settings')->name('settings.')->group(function () {
-        Route::get('/', [SettingController::class, 'index'])->name('index');
-        Route::get('edit/{slug}', [SettingController::class, 'edit'])->name('edit');
-        Route::get('details/{slug}', [SettingController::class, 'details'])->name('details');
+    Route::prefix('themes')->name('themes.')->group(function () {
+        Route::get('/', [ThemeController::class, 'index'])->name('index');
+        Route::get('edit/{slug}', [ThemeController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [ThemeController::class, 'details'])->name('details');
 
-        Route::patch('update/{slug}', [SettingController::class, 'update'])->name('update');
+        Route::patch('update/{slug}', [ThemeController::class, 'update'])->name('update');
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
@@ -385,7 +385,7 @@ Route::prefix('site')->name('site.')->group(function () {
         Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
     });
 
-    Route::get('settings', [SiteController::class, 'settings'])->name('settings');
+    Route::get('themes', [SiteController::class, 'themes'])->name('themes');
     Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
     Route::get('languages', [SiteController::class, 'languages'])->name('languages');
 });

@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\Setting;
+use App\Models\Theme;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,20 +12,20 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class DeleteSettingRelationsJob implements ShouldQueue, ShouldBeUnique
+class DeleteThemeRelationsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $settingId;
+    public int $themeId;
 
-    public function __construct(int $settingId)
+    public function __construct(int $themeId)
     {
-        $this->settingId = $settingId;
+        $this->themeId = $themeId;
     }
 
     public function uniqueId(): string
     {
-        return "delete-setting-{$this->settingId}-relations";
+        return "delete-theme-{$this->themeId}-relations";
     }
 
     public function retryAfter()
@@ -40,19 +40,19 @@ class DeleteSettingRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $setting = Setting::find($this->settingId);
+        $theme = Theme::find($this->themeId);
 
-        if ($setting && ($setting->activityLogs()->exists())) {
+        if ($theme && ($theme->activityLogs()->exists())) {
             try {
 
-                DB::transaction(function () use ($setting) {
-                    if ($setting->activityLogs()->exists()) {
-                        $setting->activityLogs()->delete();
+                DB::transaction(function () use ($theme) {
+                    if ($theme->activityLogs()->exists()) {
+                        $theme->activityLogs()->delete();
                     }
                 });
 
             } catch (Exception $ex) {
-                Log::error("Fail to delete setting relations.", [
+                Log::error("Fail to delete theme relations.", [
                     'exception' => $ex,
                 ]);
 

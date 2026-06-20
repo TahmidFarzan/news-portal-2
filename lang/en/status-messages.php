@@ -300,10 +300,10 @@ return [
         ],
     ],
 
-    'setting'       => [
+    'theme'       => [
         'update' => [
-            'success' => 'Setting updated successfully.',
-            'failed'  => 'Failed to update setting.',
+            'success' => 'Theme updated successfully.',
+            'failed'  => 'Failed to update theme.',
         ],
     ],
 

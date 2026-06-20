@@ -7,7 +7,6 @@ use Inertia\Inertia;
 
 class PageController extends Controller
 {
-
     protected PageService $pageService;
 
     public function __construct(PageService $pageService)

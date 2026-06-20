@@ -102,9 +102,9 @@ class MenuSeeder extends Seeder
 
     private function headerMenuItemSave(Menu $menu, Language $language): void
     {
-        $categoryNames = ['National', 'International', 'Business', 'Entertainment', 'Technology', 'Sports', 'জাতীয়', 'আন্তর্জাতিক', 'ব্যবসা', 'বিনোদন', 'প্রযুক্তি', 'খেলাধুলা'];
+        $categoryNames = ['National', 'International', 'Business', 'Entertainment', 'Sports', 'জাতীয়', 'আন্তর্জাতিক', 'ব্যবসা', 'বিনোদন', 'খেলাধুলা'];
 
-        $pages = Page::whereIn("default_use_as", [PageHelper::DAFAULT_USE_AS_HOME, PageHelper::DAFAULT_USE_AS_LATEST])->where("language_id", $language->id)->where("is_default", true)->where("is_published", true)->get();
+        $pages = Page::whereIn("default_use_as", [PageHelper::DAFAULT_USE_AS_LATEST])->where("language_id", $language->id)->where("is_default", true)->where("is_published", true)->get();
 
         $extraMenuNames = [
             SeederHelper::LANGUAGE_EN_CODE => [

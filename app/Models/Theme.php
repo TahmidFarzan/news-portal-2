@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Helpers\SettingHelper;
-use App\Observers\SettingObserver;
-use App\Policies\SettingPolicy;
+use App\Helpers\ThemeHelper;
+use App\Observers\ThemeObserver;
+use App\Policies\ThemePolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -22,7 +22,7 @@ use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[Table('settings')]
+#[Table('themes')]
 #[Fillable([
     'group',
     'label',
@@ -30,9 +30,9 @@ use Spatie\Sluggable\SlugOptions;
     'value',
     'slug',
 ])]
-#[UsePolicy(SettingPolicy::class)]
-#[ObservedBy([SettingObserver::class])]
-class Setting extends Model
+#[UsePolicy(ThemePolicy::class)]
+#[ObservedBy([ThemeObserver::class])]
+class Theme extends Model
 {
     use HasFactory, LogsActivity, HasSlug;
 
@@ -67,12 +67,12 @@ class Setting extends Model
         }
 
         return match ($type) {
-            SettingHelper::VALUE_TYPE_BOOLEAN => filter_var($value, FILTER_VALIDATE_BOOLEAN),
-            SettingHelper::VALUE_TYPE_INTEGER => (int) $value,
-            SettingHelper::VALUE_TYPE_FLOAT,
-            SettingHelper::VALUE_TYPE_DECIMAL => (float) $value,
-            SettingHelper::VALUE_TYPE_JSON,
-            SettingHelper::VALUE_TYPE_ARRAY => json_decode($value, true),
+            ThemeHelper::VALUE_TYPE_BOOLEAN => filter_var($value, FILTER_VALIDATE_BOOLEAN),
+            ThemeHelper::VALUE_TYPE_INTEGER => (int) $value,
+            ThemeHelper::VALUE_TYPE_FLOAT,
+            ThemeHelper::VALUE_TYPE_DECIMAL => (float) $value,
+            ThemeHelper::VALUE_TYPE_JSON,
+            ThemeHelper::VALUE_TYPE_ARRAY => json_decode($value, true),
             default => $value,
         };
     }
@@ -84,12 +84,12 @@ class Setting extends Model
         }
 
         return match ($type) {
-            SettingHelper::VALUE_TYPE_BOOLEAN => self::prepareBooleanValue($value),
-            SettingHelper::VALUE_TYPE_INTEGER => (string) ((int) $value),
-            SettingHelper::VALUE_TYPE_FLOAT,
-            SettingHelper::VALUE_TYPE_DECIMAL => (string) ((float) $value),
-            SettingHelper::VALUE_TYPE_JSON,
-            SettingHelper::VALUE_TYPE_ARRAY => self::prepareJsonValue($value),
+            ThemeHelper::VALUE_TYPE_BOOLEAN => self::prepareBooleanValue($value),
+            ThemeHelper::VALUE_TYPE_INTEGER => (string) ((int) $value),
+            ThemeHelper::VALUE_TYPE_FLOAT,
+            ThemeHelper::VALUE_TYPE_DECIMAL => (string) ((float) $value),
+            ThemeHelper::VALUE_TYPE_JSON,
+            ThemeHelper::VALUE_TYPE_ARRAY => self::prepareJsonValue($value),
             default => (string) $value,
         };
     }
@@ -136,7 +136,7 @@ class Setting extends Model
                 'value',
                 'slug',
             ])
-            ->useLogName('Setting')
+            ->useLogName('Theme')
             ->setDescriptionForEvent(fn (string $eventName) => "The record has been {$eventName}.")
             ->logOnlyDirty()
             ->logExcept([

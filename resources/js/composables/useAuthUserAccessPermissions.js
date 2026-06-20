@@ -428,13 +428,13 @@ export const canDeleteMenuItem = (authUser, menu) => {
 }
 
 
-// ================= SETTING =================
+// ================= THEME =================
 
-export const canCreateSetting = (authUser) =>
+export const canCreateTheme = (authUser) =>
     authUser && isAdmin(getUserRoleName(authUser))
 
-export const canEditSetting = (authUser, setting) => {
-    if (!authUser || !setting) return false
+export const canEditTheme = (authUser, theme) => {
+    if (!authUser || !theme) return false
 
     const role = getUserRoleName(authUser)
 
@@ -497,7 +497,7 @@ export const canAccessMenuMenu = (authUser) => {
     return isAdmin(role)
 }
 
-export const canAccessSetting = (authUser) => {
+export const canAccessTheme = (authUser) => {
     if (!authUser) return false
 
     const role = getUserRoleName(authUser)

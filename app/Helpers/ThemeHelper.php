@@ -3,7 +3,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Collection;
 
-class SettingHelper
+class ThemeHelper
 {
     public const GROUP_MENU  = "Menu";
     public const GROUP_SOCIAL_LINK  = "Social Link";

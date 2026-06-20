@@ -259,7 +259,7 @@
                             "menus": "মেনু",
                             "user_anagement": "ব্যবহারকারী ব্যবস্থাপনা",
                             "users": "ব্যবহারকারী",
-                            "settings": "সেটিংস"
+                            "themes": "থিম"
                         }
                     }
                 },
@@ -2367,7 +2367,7 @@
                     }
                 }
             },
-            "settings": {
+            "themes": {
                 "create": {
                     "actions": {
                         "edit": "সম্পাদনা",
@@ -2395,7 +2395,7 @@
                         "color_placeholder": "#000000"
                     },
                     "labels": {
-                        "settings": "সেটিংস",
+                        "themes": "থিম",
                         "basic_information": "মৌলিক তথ্য",
                         "true": "সত্য",
                         "false": "মিথ্যা"
@@ -2407,7 +2407,7 @@
                         "not_available": "প্রযোজ্য নয়",
                         "true": "সত্য",
                         "false": "মিথ্যা",
-                        "settings": "সেটিংস",
+                        "themes": "সেটিংস",
                         "basic_information": "মৌলিক তথ্য",
                         "group": "গ্রুপ",
                         "label": "লেবেল",
@@ -2418,11 +2418,11 @@
                         "updated_at": "হালনাগাদের সময়",
                         "updated_by": "হালনাগাদ করেছেন"
                     },
-                    "title": "সেটিং বিস্তারিত",
+                    "title": "থিম বিস্তারিত",
                     "actions": {
                         "edit": "সম্পাদনা"
                     },
-                    "setting_image_alt": "সেটিং ছবি",
+                    "theme_image_alt": "সেটিং ছবি",
                     "activity_logs": {
                         "index": {
                             "title": "কার্যক্রম লগ"
@@ -2431,14 +2431,14 @@
                 },
                 "index": {
                     "labels": {
-                        "settings": "সেটিংস",
+                        "themes": "থিম",
                         "per_page": "প্রতি পৃষ্ঠা",
                         "group": "গ্রুপ",
                         "label": "লেবেল",
                         "not_available": "প্রযোজ্য নয়"
                     },
-                    "page_title": "সেটিংস",
-                    "title": "সেটিংস",
+                    "page_title": "থিম",
+                    "title": "থিম",
                     "search_placeholder": "সেটিং অনুসন্ধান করুন...",
                     "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
                     "apply_filter": "ফিল্টার প্রয়োগ করুন",
@@ -2456,7 +2456,7 @@
                     "actions": {
                         "edit": "সম্পাদনা"
                     },
-                    "no_setting_found": "কোনো সেটিং পাওয়া যায়নি।"
+                    "no_theme_found": "কোনো সেটিং পাওয়া যায়নি।"
                 }
             },
             "tags": {
@@ -2472,7 +2472,7 @@
                         "name_placeholder": "নাম লিখুন",
                         "brief": "সংক্ষিপ্ত বিবরণ",
                         "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
-                        "seo_settings": "SEO সেটিংস",
+                        "seo_themes": "SEO সেটিংস",
                         "seo_title": "SEO শিরোনাম",
                         "seo_title_placeholder": "SEO শিরোনাম লিখুন",
                         "seo_brief": "SEO সংক্ষিপ্ত বিবরণ",

@@ -58,10 +58,10 @@ class SiteController extends Controller
         );
     }
 
-    public function settings(): JsonResponse
+    public function themes(): JsonResponse
     {
         return response()->json(
-            $this->siteService->settings()
+            $this->siteService->themes()
         );
     }
 
