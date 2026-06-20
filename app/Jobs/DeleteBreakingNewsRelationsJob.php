@@ -11,10 +11,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class DeleteBreakingNewsRelationsJob implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     public int $breakingNewsId;
 
@@ -42,7 +43,7 @@ class DeleteBreakingNewsRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $breakingNews = Tag::find($this->breakingNewsId);
 
-        if ($breakingNews && ($breakingNews->activityLogs()->exists()) ) {
+        if ($breakingNews && ($breakingNews->activityLogs()->exists())) {
 
             try {
 

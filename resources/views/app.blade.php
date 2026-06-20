@@ -15,7 +15,7 @@
             <link rel="canonical" href="{{ request()->fullUrl() }}">
         @endif
 
-        <title inertia>{{ config('app.name', 'News Portal 2') }}</title>
+        <title inertia>{{ config('app.name', 'News Portal') }}</title>
 
         <link href="{{ config('app.app_favicon') }}" rel="icon" loading="lazy">
 

@@ -446,6 +446,9 @@ export const canEditTheme = (authUser, theme) => {
 
 // ================= MENU =================
 
+export const canAccessQueueMonitorMenu = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
 export const canAccessActivityLogMenu = (authUser) =>
     authUser && isAdmin(getUserRoleName(authUser))
 

@@ -229,7 +229,8 @@
                             "profile": "প্রোফাইল",
                             "account": "অ্যাকাউন্ট",
                             "activity_logs": "কার্যক্রম লগ",
-                            "log_viewer": "লগ ভিউয়ার"
+                            "log_viewer": "লগ ভিউয়ার",
+                            "queue_monitor": "সারি মনিটর"
                         },
                         "actions": {
                             "logout": "লগআউট",

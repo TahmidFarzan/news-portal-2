@@ -1,193 +1,222 @@
-<table class="w-full rounded-md whitespace-no-wrap border dark:border-gray-600 border-separate border-spacing-0">
+@php
+    use romanzipp\QueueMonitor\Enums\MonitorStatus;
+@endphp
 
-    <thead class="rounded-t-md">
+<div class="w-full overflow-x-auto rounded-2xl border border-slate-800">
 
-        <tr>
-            <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600">@lang('Status')</th>
-            <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600">@lang('Job')</th>
-            <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600">@lang('Details')</th>
+    <table class="min-w-[1100px] w-full border-collapse text-sm">
 
-            @if(config('queue-monitor.ui.show_custom_data'))
-                <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600">@lang('Custom Data')</th>
-            @endif
-
-            <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600">@lang('Progress')</th>
-            <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600">@lang('Duration')</th>
-            <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600">@lang('Started')</th>
-            <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600">@lang('Error')</th>
-
-            @if(config('queue-monitor.ui.allow_deletion') || config('queue-monitor.ui.allow_retry'))
-                <th class="px-4 py-3 font-medium text-left text-xs text-gray-600 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-600"></th>
-            @endif
-        </tr>
-
-    </thead>
-
-    <tbody class="bg-gray-50 dark:bg-gray-700">
-
-        @forelse($jobs as $job)
-
-            <tr class="font-sm leading-relaxed">
-
-                <td class="p-4 text-gray-800 dark:text-gray-300 text-sm leading-5 border-b border-gray-200 dark:border-gray-600">
-                    @include('queue-monitor::partials.job-status', ['status' => $job->status])
-                </td>
-
-                <td class="p-4 text-gray-800 dark:text-gray-300 text-sm leading-5 font-medium border-b border-gray-200 dark:border-gray-600">
-
-                    {{ $job->getBaseName() }}
-
-                    <span class="ml-1 text-xs text-gray-600 dark:text-gray-400">
-                        #{{ $job->job_id }}
-                    </span>
-
-                </td>
-
-                <td class="p-4 text-gray-800 dark:text-gray-300 text-sm leading-5 border-b border-gray-200 dark:border-gray-600">
-
-                    <div class="text-xs">
-                        <span class="text-gray-600 dark:text-gray-400 font-medium">@lang('Queue'):</span>
-                        <span class="font-semibold">{{ $job->queue }}</span>
-                    </div>
-
-                    <div class="text-xs">
-                        <span class="text-gray-600 dark:text-gray-400 font-medium">@lang('Attempt'):</span>
-                        <span class="font-semibold">{{ $job->attempt }}</span>
-                    </div>
-
-                    @if($job->retried)
-                        <div class="text-xs py-2">
-                            <span class="bg-gray-300 font-medium p-1 rounded">@lang('Retried')</span>
-                        </div>
-                    @endif
-                </td>
-
-                @if(config('queue-monitor.ui.show_custom_data'))
-
-                    <td class="p-4 text-gray-800 dark:text-gray-300 text-sm leading-5 border-b border-gray-200 dark:border-gray-600">
-                        <textarea rows="4"
-                                  class="w-64 text-xs p-1 border rounded bg-gray-50 dark:bg-gray-700"
-                                  readonly>{{ json_encode($job->getData(), JSON_PRETTY_PRINT) }}
-                        </textarea>
-                    </td>
-
-                @endif
-
-                <td class="p-4 text-gray-800 dark:text-gray-300 text-sm leading-5 border-b border-gray-200 dark:border-gray-600">
-
-                    @if($job->progress !== null)
-
-                        <div class="w-32">
-
-                            <div class="flex items-stretch h-3 rounded-full bg-gray-300 overflow-hidden">
-                                <div class="h-full bg-green-500" style="width: {{ $job->progress }}%"></div>
-                            </div>
-
-                            <div class="flex justify-center mt-1 text-xs text-gray-800 dark:text-gray-300 font-semibold">
-                                {{ $job->progress }}%
-                            </div>
-
-                        </div>
-
-                    @else
-                        -
-                    @endif
-
-                </td>
-
-                <td class="p-4 text-gray-800 dark:text-gray-300 text-sm leading-5 border-b border-gray-200 dark:border-gray-600">
-                    {{ $job->getElapsedInterval()->format('%H:%I:%S') }}
-                </td>
-
-                <td class="p-4 text-gray-800 dark:text-gray-300 text-sm leading-5 border-b border-gray-200 dark:border-gray-600">
-                    {{ $job->started_at?->diffForHumans() }}
-                </td>
-
-                <td class="p-4 text-gray-800 dark:text-gray-300 text-sm leading-5 border-b border-gray-200 dark:border-gray-600">
-
-                    @if($job->status != \romanzipp\QueueMonitor\Enums\MonitorStatus::SUCCEEDED && $job->exception_message !== null)
-
-                        <textarea rows="4" class="w-64 text-xs p-1 border rounded" readonly>{{ $job->exception_message }}</textarea>
-
-                    @else
-                        -
-                    @endif
-
-                </td>
-
-                @if(config('queue-monitor.ui.allow_deletion') || config('queue-monitor.ui.allow_retry'))
-
-                    <td class="p-4 eading-5 border-b border-gray-200 dark:border-gray-600">
-                        @if(config('queue-monitor.ui.allow_retry') && $job->canBeRetried())
-                            <form action="{{ route('queue-monitor::retry', [$job]) }}" method="post">
-                                @csrf
-                                @method('patch')
-                                <button class="px-3 py-2 bg-blue-200 dark:hover:bg-blue-200  text-xs font-medium rounded transition-colors duration-150">
-                                    @lang('Retry')
-                                </button>
-                            </form>
-                        @endif
-                        @if(config('queue-monitor.ui.allow_deletion') && $job->isFinished())
-                            <form action="{{ route('queue-monitor::destroy', [$job]) }}" method="post">
-                                @csrf
-                                @method('delete')
-                                <button class="px-3 py-2 bg-transparent hover:bg-red-100 dark:hover:bg-red-800 text-red-800 dark:text-red-500 dark:hover:text-red-200 text-xs font-medium rounded transition-colors duration-150">
-                                    @lang('Delete')
-                                </button>
-                            </form>
-                        @endif
-                    </td>
-
-                @endif
-
-            </tr>
-
-        @empty
-
+        <thead>
             <tr>
-                <td colspan="100" class="">
-                    <div class="my-6">
-                        <div class="text-center">
-                            <div class="text-gray-500 text-lg">
-                                @lang('No Jobs')
+                <th
+                    class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-800">
+                    @lang('queue-monitor.status')
+                </th>
+
+                <th
+                    class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-800">
+                    @lang('queue-monitor.job')
+                </th>
+
+                <th
+                    class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-800">
+                    @lang('queue-monitor.details')
+                </th>
+
+                @if (config('queue-monitor.ui.show_custom_data'))
+                    <th
+                        class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-800">
+                        @lang('queue-monitor.custom_data')
+                    </th>
+                @endif
+
+                <th
+                    class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-800">
+                    @lang('queue-monitor.progress')
+                </th>
+
+                <th
+                    class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-800">
+                    @lang('queue-monitor.duration')
+                </th>
+
+                <th
+                    class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-800">
+                    @lang('queue-monitor.started')
+                </th>
+
+                <th
+                    class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-800">
+                    @lang('queue-monitor.error')
+                </th>
+
+                @if (config('queue-monitor.ui.allow_deletion') || config('queue-monitor.ui.allow_retry'))
+                    <th class="px-3 py-2 border-b border-slate-800"></th>
+                @endif
+            </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-800">
+
+            @forelse($jobs as $job)
+                <tr class="hover:bg-slate-900/70 transition">
+
+                    <td class="px-3 py-2 text-xs text-slate-300 align-top">
+                        @include('queue-monitor::partials.job-status', ['status' => $job->status])
+                    </td>
+
+                    <td class="px-3 py-2 text-xs text-slate-300 align-top font-medium">
+                        <div class="text-slate-100">
+                            {{ $job->getBaseName() }}
+                        </div>
+
+                        <div class="mt-1 text-[11px] text-slate-500">
+                            #{{ $job->job_id }}
+                        </div>
+                    </td>
+
+                    <td class="px-3 py-2 text-xs text-slate-300 align-top">
+                        <div>
+                            <span class="text-slate-500">@lang('queue-monitor.queue'):</span>
+                            <span class="font-semibold text-slate-200">{{ $job->queue }}</span>
+                        </div>
+
+                        <div class="mt-1">
+                            <span class="text-slate-500">@lang('queue-monitor.attempt'):</span>
+                            <span class="font-semibold text-slate-200">{{ $job->attempt }}</span>
+                        </div>
+
+                        @if ($job->retried)
+                            <div class="mt-2">
+                                <span class="rounded bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-300">
+                                    @lang('queue-monitor.retried')
+                                </span>
                             </div>
+                        @endif
+                    </td>
+
+                    @if (config('queue-monitor.ui.show_custom_data'))
+                        <td class="px-3 py-2 text-xs text-slate-300 align-top">
+                            <textarea rows="3" class="w-64 rounded-lg border border-slate-700 bg-slate-900 p-2 text-[11px] text-slate-300"
+                                readonly>{{ json_encode($job->getData(), JSON_PRETTY_PRINT) }}</textarea>
+                        </td>
+                    @endif
+
+                    <td class="px-3 py-2 text-xs text-slate-300 align-top">
+                        @if ($job->progress !== null)
+                            <div class="w-28">
+                                <div class="h-2 overflow-hidden rounded-full bg-slate-800">
+                                    <div class="h-full rounded-full bg-emerald-500"
+                                        style="width: {{ $job->progress }}%"></div>
+                                </div>
+
+                                <div class="mt-1 text-center text-[11px] font-semibold text-slate-300">
+                                    {{ $job->progress }}%
+                                </div>
+                            </div>
+                        @else
+                            <span class="text-slate-500">-</span>
+                        @endif
+                    </td>
+
+                    <td class="px-3 py-2 text-xs text-slate-300 align-top">
+                        {{ $job->getElapsedInterval()->format('%H:%I:%S') }}
+                    </td>
+
+                    <td class="px-3 py-2 text-xs text-slate-300 align-top">
+                        {{ $job->started_at?->diffForHumans() }}
+                    </td>
+
+                    <td class="px-3 py-2 text-xs text-slate-300 align-top">
+                        @if ($job->status != MonitorStatus::SUCCEEDED && $job->exception_message !== null)
+                            <textarea rows="3" class="w-64 rounded-lg border border-red-900/50 bg-red-950/30 p-2 text-[11px] text-red-300"
+                                readonly>{{ $job->exception_message }}</textarea>
+                        @else
+                            <span class="text-slate-500">-</span>
+                        @endif
+                    </td>
+
+                    @if (config('queue-monitor.ui.allow_deletion') || config('queue-monitor.ui.allow_retry'))
+                        <td class="px-3 py-2 text-xs align-top">
+                            <div class="flex gap-2">
+                                @if (config('queue-monitor.ui.allow_retry') && $job->canBeRetried())
+                                    <form action="{{ route('queue-monitor::retry', [$job]) }}" method="post">
+                                        @csrf
+                                        @method('patch')
+
+                                        <button
+                                            class="rounded-lg bg-indigo-600 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-indigo-500">
+                                            @lang('queue-monitor.retry')
+                                        </button>
+                                    </form>
+                                @endif
+
+                                @if (config('queue-monitor.ui.allow_deletion') && $job->isFinished())
+                                    <form action="{{ route('queue-monitor::destroy', [$job]) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+
+                                        <button
+                                            class="rounded-lg bg-red-500/10 px-3 py-1.5 text-[11px] font-semibold text-red-400 hover:bg-red-500/20">
+                                            @lang('queue-monitor.delete')
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        </td>
+                    @endif
+
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="100" class="px-3 py-10 text-center text-sm text-slate-500">
+                        @lang('queue-monitor.no_jobs')
+                    </td>
+                </tr>
+            @endforelse
+
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="100" class="px-3 py-4">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="text-xs">
+                            @lang('queue-monitor.showing')
+
+                            @if ($jobs->total() > 0)
+                                <span class="font-semibold">{{ $jobs->firstItem() }}</span>
+                                @lang('queue-monitor.to')
+                                <span class="font-semibold">{{ $jobs->lastItem() }}</span>
+                                @lang('queue-monitor.of')
+                            @endif
+
+                            <span class="font-semibold">{{ $jobs->total() }}</span>
+                            {{ trans_choice('queue-monitor.results', $jobs->total()) }}
+                        </div>
+
+                        <div class="flex gap-2">
+                            <a class="rounded-lg px-3 py-1.5 text-xs font-semibold
+                                @if (!$jobs->onFirstPage()) bg-slate-800 hover:bg-slate-700
+                                @else
+                                    cursor-not-allowed @endif rounded-2xl border border-slate-800"
+                                @if (!$jobs->onFirstPage()) href="{{ $jobs->previousPageUrl() }}" @endif>
+                                @lang('queue-monitor.previous')
+                            </a>
+
+                            <a class="rounded-lg px-3 py-1.5 text-xs font-semibold
+                                @if ($jobs->hasMorePages()) bg-slate-800 hover:bg-slate-700
+                                @else
+                                    cursor-not-allowed @endif rounded-2xl border border-slate-800"
+                                @if ($jobs->hasMorePages()) href="{{ $jobs->url($jobs->currentPage() + 1) }}" @endif>
+                                @lang('queue-monitor.next')
+                            </a>
                         </div>
                     </div>
                 </td>
             </tr>
+        </tfoot>
 
-        @endforelse
+    </table>
 
-    </tbody>
-
-    <tfoot class="bg-white dark:bg-transparent">
-
-        <tr>
-            <td colspan="100" class="px-2 py-4">
-                <div class="flex justify-between">
-                    <div class="pl-2 text-sm text-gray-600 dark:text-gray-400">
-                        @lang('Showing')
-                        @if($jobs->total() > 0)
-                            <span class="font-medium">{{ $jobs->firstItem() }}</span> @lang('to')
-                            <span class="font-medium">{{ $jobs->lastItem() }}</span> @lang('of')
-                        @endif
-                        <span class="font-medium">{{ $jobs->total() }}</span> @choice('result|results', $jobs->total())
-                    </div>
-
-                    <div>
-                        <a class="py-2 px-4 mx-1 text-xs font-medium @if(!$jobs->onFirstPage()) bg-gray-200 hover:bg-gray-300 cursor-pointer @else text-gray-600 bg-gray-100 cursor-not-allowed @endif rounded"
-                           @if(!$jobs->onFirstPage()) href="{{ $jobs->previousPageUrl() }}" @endif>
-                            @lang('Previous')
-                        </a>
-                        <a class="py-2 px-4 mx-1 text-xs font-medium @if($jobs->hasMorePages()) bg-gray-200 hover:bg-gray-300 cursor-pointer @else text-gray-600 bg-gray-100 cursor-not-allowed @endif rounded"
-                           @if($jobs->hasMorePages()) href="{{ $jobs->url($jobs->currentPage() + 1) }}" @endif>
-                            @lang('Next')
-                        </a>
-                    </div>
-                </div>
-            </td>
-        </tr>
-
-    </tfoot>
-
-</table>
+</div>

@@ -1,30 +1,32 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-//
 use App\Http\Controllers\BackOffice\ActivityLogController;
+
+// Backoffice
 use App\Http\Controllers\BackOffice\BreakingNewsController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
-
-// Backoffice
 use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
 use App\Http\Controllers\BackOffice\PageController as BackOfficePageController;
-use App\Http\Controllers\BackOffice\ThemeController;
 use App\Http\Controllers\BackOffice\TagController;
+use App\Http\Controllers\BackOffice\ThemeController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PageController;
+
+//
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
+use romanzipp\QueueMonitor\Controllers\ShowQueueMonitorController;
 
 Route::middleware('guest')->group(function () {
     Route::prefix('login')->group(function () {
@@ -326,6 +328,10 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [ActivityLogController::class, 'delete'])->name('delete');
     });
 
+    Route::prefix('queue-monitor')->name('queue-monitor.')->middleware('auth')->group(function () {
+        Route::get('/', ShowQueueMonitorController::class)->name('index');
+    });
+
 });
 
 Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->group(function () {
@@ -409,7 +415,6 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
 
     Route::get('categories/{slugTree}', [PageController::class, 'categoryNews'])->where('slugTree', '.*')->name('category.news');
     Route::get('locations/{slugTree}', [PageController::class, 'locationNews'])->where('slugTree', '.*')->name('location.news');
-
 
     Route::prefix('home')->name('home.')->group(function () {
         Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');

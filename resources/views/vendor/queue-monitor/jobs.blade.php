@@ -1,73 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    @if(config('queue-monitor.ui.refresh_interval'))
-        <meta http-equiv="refresh" content="{{ config('queue-monitor.ui.refresh_interval') }}">
-    @endif
-    <title>@lang('Queue Monitor')</title>
-    <link href="{{ asset('vendor/queue-monitor/app.css') }}" rel="stylesheet">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<body class="font-sans pb-64 bg-white dark:bg-gray-800 dark:text-white">
-
-    <nav class="flex items-center py-4 border-b border-gray-100 dark:border-gray-600">
-        <h1 class="px-4 w-full font-semibold text-lg">
-            @lang('Queue Monitor')
-        </h1>
-        @if (config('queue-monitor.ui.show_metrics'))
-            <div class="w-[24rem] px-4 text-sm text-gray-700 font-light">
-                Statistics
-            </div>
+        @if (config('queue-monitor.ui.refresh_interval'))
+            <meta http-equiv="refresh" content="{{ config('queue-monitor.ui.refresh_interval') }}">
         @endif
-    </nav>
 
-    <main class="flex">
+        <title>@lang('queue-monitor.queue_monitor')</title>
 
-        <article class="w-full p-4">
-            <h2 class="mb-4 text-gray-800 text-sm font-medium">
-                @lang('Filter')
-            </h2>
+        <link href="{{ config('app.app_favicon') }}" rel="icon" loading="lazy">
 
-            @include('queue-monitor::partials.filter', [
-                'filters' => $filters,
-            ])
+        @vite('resources/css/app.css')
+    </head>
 
-            <h2 class="mb-4 text-gray-800 text-sm font-medium">
-                @lang('Jobs')
-            </h2>
+    <body>
+        <div class="flex flex-col min-h-screen">
+            <header class="top-0 left-0 w-full bg-white shadow-sm z-50">
+                <div class="px-4 py-2 flex items-center justify-between">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 min-w-0">
+                        <span class="font-semibold truncate">
+                            {{ config('app.name') }}
+                        </span>
+                    </a>
 
-            @include('queue-monitor::partials.table', [
-                'jobs' => $jobs,
-            ])
+                    <div class="flex items-center gap-3">
+                        <a href="{{ route('auth-user.dashboard.index') }}" class="items-center gap-2 min-w-0">
+                            Dashboard
+                        </a>
 
-            @if(config('queue-monitor.ui.allow_purge'))
-                <div class="mt-12">
-                    <form action="{{ route('queue-monitor::purge') }}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="py-2 px-4 bg-red-50 dark:bg-red-200 hover:dark:bg-red-300 hover:bg-red-100 text-red-800 text-xs font-medium rounded-md transition-colors duration-150">
-                            @lang('Delete all entries')
-                        </button>
-                    </form>
+                        @if (config('queue-monitor.ui.show_metrics'))
+                            <div class="px-4 text-sm font-light">
+                                @lang('queue-monitor.statistics')
+                            </div>
+                        @endif
+                    </div>
                 </div>
-            @endif
-        </article>
+            </header>
 
-        @if (config('queue-monitor.ui.show_metrics'))
-            <aside class="flex flex-col gap-4 w-[24rem] p-4">
-                @foreach($metrics->all() as $metric)
-                    @include('queue-monitor::partials.metrics-card', [
-                        'metric' => $metric,
+            <main class="px-4 py-2">
+                <div class="p-4 border border-slate-800 rounded-2xl mb-2">
+                    @if (config('queue-monitor.ui.show_metrics'))
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            @foreach ($metrics->all() as $metric)
+                                @include('queue-monitor::partials.metrics-card', [
+                                    'metric' => $metric,
+                                ])
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
+                <div class="p-4 border border-slate-800 rounded-2xl mb-2">
+                    <h2 class="mb-4 text-gray-800 text-sm font-medium">
+                        @lang('queue-monitor.filter')
+                    </h2>
+
+                    @include('queue-monitor::partials.filter', [
+                        'filters' => $filters,
                     ])
-                @endforeach
-            </aside>
-        @endif
+                </div>
 
-    </main>
+                <div class="p-4 border border-slate-800 rounded-2xl">
+                    <h2 class="mb-4 text-gray-800 text-sm font-medium">
+                        @lang('queue-monitor.jobs')
+                    </h2>
 
-</body>
+                    @include('queue-monitor::partials.table', [
+                        'jobs' => $jobs,
+                    ])
+
+                    @if (config('queue-monitor.ui.allow_purge'))
+                        <div class="mt-12">
+                            <form action="{{ route('queue-monitor::purge') }}" method="post">
+                                @csrf
+                                @method('delete')
+
+                                <button
+                                    class="py-2 px-4 bg-red-50 dark:bg-red-200 hover:dark:bg-red-300 hover:bg-red-100 text-red-800 text-xs font-medium rounded-md transition-colors duration-150">
+                                    @lang('queue-monitor.delete_all_entries')
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
+            </main>
+        </div>
+
+
+    </body>
 
 </html>

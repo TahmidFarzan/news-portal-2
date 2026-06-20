@@ -11,10 +11,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class SyncPageSitemapJob implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     public function progressCooldown(): int
     {
@@ -43,8 +44,8 @@ class SyncPageSitemapJob implements ShouldQueue, ShouldBeUnique
         try {
             $filters = [];
 
-            $dbRecordCount     = $pageCacheService->dbCategoriesCount($filters);
-            $cachedRecordTotal = $pageCacheService->categoriesCount('sitemap', $filters);
+            $dbRecordCount     = $pageCacheService->dbPagesCount($filters);
+            $cachedRecordTotal = $pageCacheService->pagesCount('sitemap', $filters);
 
             $dbLastPageNo     = $pageCacheService->dbLastPageNo($filters);
             $cachedLastPageNo = $pageCacheService->lastPageNo('sitemap', $filters);
@@ -64,7 +65,7 @@ class SyncPageSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
 
                 foreach (range($pageStart, $pageEnd) as $page) {
-                    $pageCacheService->cachedCategories(
+                    $pageCacheService->cachedPages(
                         'sitemap',
                         array_merge($filters, [
                             'page' => $page,
@@ -73,7 +74,7 @@ class SyncPageSitemapJob implements ShouldQueue, ShouldBeUnique
                 }
             }
 
-            $pageCacheService->cachedCategoriesCount('sitemap', $filters);
+            $pageCacheService->cachedPagesCount('sitemap', $filters);
             $pageCacheService->cachedLastPageNo('sitemap', $filters);
         } catch (Exception $ex) {
             Log::error('Page sitemap sync job error: ' . $ex->getMessage());

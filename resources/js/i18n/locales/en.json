@@ -229,7 +229,8 @@
                             "profile": "Profile",
                             "account": "Account",
                             "activity_logs": "Activity Logs",
-                            "log_viewer": "Log viewer"
+                            "log_viewer": "Log viewer",
+                            "queue_monitor": "Queue monitor"
                         },
                         "actions": {
                             "logout": "Logout",
