@@ -502,6 +502,42 @@ class PageService
         return $category;
     }
 
+    public function categoryByIdOrSlug(string $idOrSlug): Category
+    {
+        $safeIdOrSlugForCache = str_replace('/', '_', trim($idOrSlug, '/'));
+
+        $language = $this->language();
+
+        $categoryCacheKey = "page:language:{$language->locale}:category:{$safeIdOrSlugForCache}";
+
+        $categoryCacheCategorys = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:category:{$safeIdOrSlugForCache}",
+        ];
+        $categoryCachedData = CacheServerHelper::getCachedData($categoryCacheKey, $categoryCacheCategorys);
+
+        if (($categoryCachedData !== null) && ($categoryCachedData instanceof Category)) {
+            return $categoryCachedData;
+        }
+
+        $category = Category::query()->with(["parent", "children"])
+            ->where("language_id", $language->id)
+            ->where('id', $idOrSlug)
+            ->orWhere('slug', $idOrSlug)
+            ->orWhere('slug_tree', $idOrSlug)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $categoryCacheKey,
+            $category,
+            CacheServerHelper::threeMinInSecond,
+            $categoryCacheCategorys
+        );
+
+        return $category;
+    }
+
     public function categoryLocationMaxDepthAndLevel(Category $category): object
     {
         $language = $this->language();
@@ -1128,8 +1164,10 @@ class PageService
         return $news;
     }
 
-    public function homeCategoryNews(Category $category)
+    public function homeCategoryNews(Request $request, Category $category)
     {
+        $limit   = $request->input('limit', 4);
+
         $page        = PageHelper::PAGE_HOME;
         $pageSection = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
 
@@ -1137,7 +1175,9 @@ class PageService
         $language           = $this->language();
         $pageSectionSlugKey = Str::lower(Str::slug($pageSection));
 
-        $newsCacheKey = "page:home:language:{$language->locale}:category:{$category->slug}:{$pageSectionSlugKey}:news";
+        $queryHash = md5(http_build_query($request->query()));
+
+        $newsCacheKey = "page:home:language:{$language->locale}:category:{$category->slug}:{$pageSectionSlugKey}:news:per-page:{$limit}:query:{$queryHash}";
 
         $newsCacheTags = [
             "page",
@@ -1177,7 +1217,7 @@ class PageService
                 'asc'
             )
             ->orderByDesc('id')
-            ->limit(10)
+            ->limit($limit)
             ->get();
 
         CacheServerHelper::cachedData(

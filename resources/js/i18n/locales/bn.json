@@ -467,7 +467,7 @@
                     }
                 }
             },
-            "pages": {
+            "page": {
                 "event_banners": {
                     "labels": {
                         "read_more": "আরও পড়ুন"
@@ -483,6 +483,11 @@
                     "labels": {
                         "video": "ভিডিও",
                         "image_gallery": "ছবির গ্যালারি"
+                    }
+                },
+                "category_section": {
+                    "labels": {
+                        "loading": "লোড হচ্ছে"
                     }
                 }
             }

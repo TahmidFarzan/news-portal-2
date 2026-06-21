@@ -9,8 +9,12 @@ import GridCard from '@/components/common/news/GridCard.vue'
 import EventNewsSection from '@/components/common/page/EventNewsSection.vue'
 import NewsTypeSliderSection from '@/components/common/page/NewsTypeSliderSection.vue'
 import NewsTypeGallerySection from '@/components/common/page/NewsTypeGallerySection.vue'
+import CategorySection from '@/components/common/page/CategorySection.vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
+import {
+    languages,
+} from '@/composables/useTranslate'
 
 defineOptions({ layout: Layout })
 
@@ -90,6 +94,8 @@ const metaKeywords = computed(() => {
 
     return page?.seo_keywords ?? ''
 })
+
+
 </script>
 
 <template>
@@ -174,8 +180,66 @@ const metaKeywords = computed(() => {
             <EventNewsSection :events="bottomEvents" class="mb-4" />
         </div>
 
+        <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4" categoryIdOrSlug="politics"
+            :language="page?.language" :style="1" :limit="4" />
+        <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="রাজনীতি"
+            :language="page?.language" :style="1" :limit="4" />
+
+        <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4" categoryIdOrSlug="sports"
+            :language="page?.language" :style="2" :limit="6" />
+        <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="খেলাধুলা"
+            :language="page?.language" :style="2" :limit="6" />
+
+        <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+            categoryIdOrSlug="entertainment" :language="page?.language" :style="2" :limit="6" />
+        <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+            categoryIdOrSlug="বিনোদন" :language="page?.language" :style="2" :limit="6" />
+
         <NewsTypeSliderSection class="mt-4" />
 
+        <div class="mt-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div class="space-y-3">
+                    <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+                        categoryIdOrSlug="international" :language="page?.language" :style="3" :limit="4" />
+                    <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+                        categoryIdOrSlug="আন্তর্জাতিক" :language="page?.language" :style="3" :limit="4" />
+                </div>
+
+                <div class="space-y-3">
+                    <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+                        categoryIdOrSlug="technology" :language="page?.language" :style="3" :limit="4" />
+                    <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+                        categoryIdOrSlug="প্রযুক্তি" :language="page?.language" :style="3" :limit="4" />
+                </div>
+            </div>
+        </div>
+
         <NewsTypeGallerySection class="mt-4" />
+
+        <div class="mt-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div class="space-y-3">
+                    <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+                        categoryIdOrSlug="health" :language="page?.language" :style="4" :limit="4" />
+                    <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+                        categoryIdOrSlug="স্বাস্থ্য" :language="page?.language" :style="4" :limit="4" />
+                </div>
+
+                <div class="space-y-3">
+                    <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+                        categoryIdOrSlug="education" :language="page?.language" :style="4" :limit="4" />
+                    <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+                        categoryIdOrSlug="শিক্ষা" :language="page?.language" :style="4" :limit="4" />
+                </div>
+
+                <div class="space-y-3">
+                    <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+                        categoryIdOrSlug="lifestyle" :language="page?.language" :style="4" :limit="4" />
+                    <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+                        categoryIdOrSlug="জীবনধারা" :language="page?.language" :style="4" :limit="4" />
+                </div>
+            </div>
+        </div>
     </section>
 </template>

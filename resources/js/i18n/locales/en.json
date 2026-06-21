@@ -467,7 +467,7 @@
                     }
                 }
             },
-            "pages": {
+            "page": {
                 "event_banners": {
                     "labels": {
                         "read_more": "Read more"
@@ -485,6 +485,12 @@
                     "labels": {
                         "video": "Video",
                         "image_gallery": "Image gallery"
+                    }
+                },
+
+                "category_section": {
+                    "labels": {
+                        "loading": "Loading"
                     }
                 }
             }

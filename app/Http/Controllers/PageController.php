@@ -41,11 +41,22 @@ class PageController extends Controller
 
     public function homeNewsTypeNews(string $slug)
     {
-
         $newsType = $this->pageService->newsType($slug);
         $news     = $this->pageService->homeNewsTypeNews($newsType);
-
         return response()->json($news);
+    }
+
+    public function homeCategoryNews(Request $request, int | string $idOrSlug)
+    {
+        $category = $this->pageService->categoryByIdOrSlug($idOrSlug);
+        $news     = $this->pageService->homeCategoryNews($request, $category);
+        return response()->json($news);
+    }
+
+    public function homeCategory(int | string $idOrSlug)
+    {
+        $category = $this->pageService->categoryByIdOrSlug($idOrSlug);
+        return response()->json($category);
     }
 
     public function latest(Request $request)
@@ -222,5 +233,4 @@ class PageController extends Controller
             'news'     => $news,
         ]);
     }
-
 }

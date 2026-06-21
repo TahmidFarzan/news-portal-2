@@ -129,7 +129,7 @@ watch(
                     <FontAwesomeIcon icon="right-long"
                         class="transition-transform duration-300 group-hover:translate-x-1" />
 
-                    {{ t('components.common.pages.event_banners.labels.read_more') }}
+                    {{ t('components.common.page.event_banners.labels.read_more') }}
                 </a>
             </div>
         </div>
