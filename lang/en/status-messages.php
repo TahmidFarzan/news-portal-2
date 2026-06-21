@@ -300,10 +300,67 @@ return [
         ],
     ],
 
-    'theme'       => [
+    'theme'         => [
         'update' => [
             'success' => 'Theme updated successfully.',
             'failed'  => 'Failed to update theme.',
+        ],
+    ],
+
+    'setting'       => [
+        'robots_txt'    => [
+            'success'                       => 'Robots.txt saved successfully.',
+            'failed'                        => 'Failed to save robots.txt.',
+            'failed_directory'              => 'Failed to create directory for robots.txt.',
+            'failed_directory_not_writable' => 'Directory is not writable.',
+        ],
+        'ads_txt'       => [
+            'success'                       => 'Ads.txt saved successfully.',
+            'failed'                        => 'Failed to save ads.txt.',
+            'failed_directory'              => 'Failed to create directory for ads.txt.',
+            'failed_directory_not_writable' => 'Directory is not writable.',
+        ],
+
+        'storage_link'  => [
+            'success' => 'Storage link successfully generate.',
+            'failed'  => 'Failed to generate storage link.',
+        ],
+
+        'setting'       => [
+            'success' => 'Setting successfully Update',
+            'failed'  => 'Failed toupdate setting.',
+        ],
+
+        'queue_monitor' => [
+            'stale'   => [
+                'success' => 'Queue monitor successfully stale.',
+                'failed'  => 'Failed to stale queue monitor.',
+            ],
+
+            'purge'   => [
+                'success' => 'Queue monitor successfully purge.',
+                'failed'  => 'Failed to purge queue monitor.',
+            ],
+
+            'flush'   => [
+                'success' => 'Queue monitor successfully flush.',
+                'failed'  => 'Failed to flush queue monitor.',
+            ],
+
+            'clear'   => [
+                'success' => 'Queue monitor successfully clear.',
+                'failed'  => 'Failed to clear queue monitor.',
+            ],
+
+            'restart' => [
+                'success' => 'Queue monitor successfully restart.',
+                'failed'  => 'Failed to restart queue monitor.',
+            ],
+
+            'start'   => [
+                'success' => 'Queue monitor successfully start.',
+                'failed'  => 'Failed to start queue monitor.',
+            ],
         ],
     ],
 
@@ -355,7 +412,7 @@ return [
     'site'          => [
         'language' => [
             'change' => [
-                "success"=> 'Language has been change.'
+                "success" => 'Language has been change.',
             ],
         ],
     ],

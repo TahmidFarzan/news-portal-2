@@ -163,7 +163,7 @@ const isSubMenuVisible = (key) => {
         <a :href="route('back-office.medias.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/medias/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="photo-film" />
-           {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.medias") }}
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.medias") }}
         </a>
 
         <button @click="toggleShowSubMenu('NewsAttributes')"
@@ -258,7 +258,7 @@ const isSubMenuVisible = (key) => {
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="users" />
-               {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.user_anagement") }}
+                {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.user_anagement") }}
             </span>
             <FontAwesomeIcon :icon="isSubMenuVisible('UserManagement') ? 'chevron-up' : 'chevron-down'" />
         </button>

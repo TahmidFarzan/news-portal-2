@@ -13,14 +13,15 @@ use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
 use App\Http\Controllers\BackOffice\PageController as BackOfficePageController;
+use App\Http\Controllers\BackOffice\SettingController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\ThemeController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
-use App\Http\Controllers\FeedController;
-use App\Http\Controllers\PageController;
 
 //
+use App\Http\Controllers\FeedController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SitemapController;
@@ -318,6 +319,37 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
 
     Route::prefix('queue-monitor')->name('queue-monitor.')->middleware('auth')->group(function () {
         Route::get('/', ShowQueueMonitorController::class)->name('index');
+    });
+
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/', [SettingController::class, 'index'])->name('index');
+
+        Route::prefix('queue')->name('queue.')->group(function () {
+            Route::get('start', [SettingController::class, 'queueStart'])->name('start');
+            Route::get('restarted', [SettingController::class, 'queueReStart'])->name('restart');
+            Route::get('clear', [SettingController::class, 'queueClear'])->name('clear');
+            Route::get('flush', [SettingController::class, 'queueFlush'])->name('flush');
+
+            Route::prefix('monitor')->name('monitor.')->group(function () {
+                Route::get('stale', [SettingController::class, 'queueMonitorStale'])->name('stale');
+                Route::get('purge', [SettingController::class, 'queueMonitorPurge'])->name('purge');
+            });
+        });
+
+        Route::prefix('schedule')->name('schedule.')->group(function () {
+            Route::get('start', [SettingController::class, 'scheduleStart'])->name('start');
+            Route::get('stop', [SettingController::class, 'scheduleStop'])->name('stop');
+        });
+
+        Route::prefix('robots-txt')->name('robots-txt.')->group(function () {
+            Route::get('edit', [SettingController::class, 'robotsTxtEdit'])->name('edit');
+            Route::post('save', [SettingController::class, 'robotsTxtSave'])->name('save');
+        });
+
+        Route::prefix('ads-txt')->name('ads-txt.')->group(function () {
+            Route::get('edit', [SettingController::class, 'adsTxtEdit'])->name('edit');
+            Route::post('save', [SettingController::class, 'adsTxtSave'])->name('save');
+        });
     });
 
 });

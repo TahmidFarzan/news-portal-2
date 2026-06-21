@@ -455,6 +455,9 @@ export const canAccessActivityLogMenu = (authUser) =>
 export const canAccessLogViewerMenu = (authUser) =>
     authUser && isAdmin(getUserRoleName(authUser))
 
+export const canAccessSettingMenu = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
 export const canAccessUserManagementMenu = (authUser) => {
     if (!authUser) return false
 

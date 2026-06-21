@@ -10,10 +10,11 @@ import {
     faUserGear,
     faChartLine,
     faRightFromBracket,
-    faSpinner
+    faSpinner,
+    faGears
 } from '@fortawesome/free-solid-svg-icons'
 
-import { canAccessActivityLogMenu, canAccessLogViewerMenu, canAccessQueueMonitorMenu } from '@/composables/useAuthUserAccessPermissions'
+import { canAccessActivityLogMenu, canAccessLogViewerMenu, canAccessQueueMonitorMenu, canAccessSettingMenu } from '@/composables/useAuthUserAccessPermissions'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -23,7 +24,8 @@ library.add(
     faUserGear,
     faChartLine,
     faRightFromBracket,
-    faSpinner
+    faSpinner,
+    faGears
 )
 
 const { t } = useTranslate()
@@ -53,6 +55,10 @@ const canAccessLogViewerMenuComputed = computed(() => {
 
 const canAccessQueueMonitorMenuComputed = computed(() => {
     return canAccessQueueMonitorMenu(authUser)
+})
+
+const canAccessSettingMenuComputed = computed(() => {
+    return canAccessSettingMenu(authUser)
 })
 
 const toggleDropdown = (event) => {
@@ -153,6 +159,12 @@ onBeforeUnmount(() => {
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
                     <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.queue_monitor") }}</span>
+                </a>
+
+                <a v-if="canAccessSettingMenuComputed" :href="route('back-office.settings.index')"
+                    @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
+                    <FontAwesomeIcon icon="gears" class="text-gray-500" />
+                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.settings") }}</span>
                 </a>
 
                 <button type="button" @click="openLogoutModal"

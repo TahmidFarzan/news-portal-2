@@ -230,7 +230,8 @@
                             "account": "Account",
                             "activity_logs": "Activity Logs",
                             "log_viewer": "Log viewer",
-                            "queue_monitor": "Queue monitor"
+                            "queue_monitor": "Queue monitor",
+                            "settings": "Settings"
                         },
                         "actions": {
                             "logout": "Logout",
@@ -473,21 +474,18 @@
                         "read_more": "Read more"
                     }
                 },
-
                 "news_type_gallery_section": {
                     "labels": {
                         "video": "Video",
                         "image_gallery": "Image gallery"
                     }
                 },
-
                 "news_type_slider_section": {
                     "labels": {
                         "video": "Video",
                         "image_gallery": "Image gallery"
                     }
                 },
-
                 "category_section": {
                     "labels": {
                         "loading": "Loading"
@@ -2868,6 +2866,119 @@
                         }
                     }
                 }
+            },
+            "settings": {
+                "index": {
+                    "labels": {
+                        "setting": "Setting",
+                        "sitemap_links": "Sitemap Links",
+                        "click_copy_sitemap_url": "Click copy button to copy sitemap URL.",
+                        "copy_enabled": "Copy enabled",
+                        "pattern_only": "Pattern only",
+                        "copied": "Copied",
+                        "copy": "Copy",
+                        "queue_settings_coming_soon": "Queue settings will be added later.",
+                        "schedule_settings_coming_soon": "Schedule settings will be added later.",
+                        "feeds_rss_settings_coming_soon": "Feeds and RSS settings will be added later.",
+                        "robots_txt_settings_coming_soon": "Robots.txt settings will be added later.",
+                        "ads_txt_settings_coming_soon": "Ads.txt settings will be added later.",
+                        "feeds_rss_links": "Feeds & RSS Links",
+                        "feeds_rss_patterns_are_dynamic": "These feed URLs are dynamic patterns. Replace placeholders with real values before using them.",
+                        "queue_actions": "Queue Actions",
+                        "queue_actions_description": "Run queue management actions from here.",
+                        "run": "Run",
+                        "schedule_actions": "Schedule Actions",
+                        "schedule_actions_description": "Run schedule management actions from here.",
+                        "edit": "Edit",
+                        "edit_robots_txt": "Edit Robots.txt",
+                        "edit_ads_txt": "Edit Ads.txt",
+                        "robots_txt_edit_description": "Edit your Robots.txt file from here.",
+                        "ads_txt_edit_description": "Edit your Ads.txt file from here."
+                    },
+                    "tabs": {
+                        "queue": "Queue",
+                        "schedule": "Schedule",
+                        "sitemap": "Sitemap",
+                        "feeds_rss": "Feeds & RSS",
+                        "robots_txt": "Robots.txt",
+                        "ads_txt": "Ads.txt"
+                    },
+                    "sitemap_links": {
+                        "sitemap_index": "Sitemap Index",
+                        "categories_sitemap": "Categories Sitemap",
+                        "tags_sitemap": "Tags Sitemap",
+                        "events_sitemap": "Events Sitemap",
+                        "contributors_sitemap": "Contributors Sitemap",
+                        "news_sitemap": "News Sitemap",
+                        "latest_news_sitemap": "Latest News Sitemap",
+                        "category_news_pattern": "Category News Sitemap Pattern",
+                        "location_news_pattern": "Location News Sitemap Pattern",
+                        "event_news_pattern": "Event News Sitemap Pattern",
+                        "tag_news_pattern": "Tag News Sitemap Pattern",
+                        "contributor_news_pattern": "Contributor News Sitemap Pattern"
+                    },
+                    "feed_links": {
+                        "rss_feeds": "RSS Feeds",
+                        "atom_feeds": "Atom Feeds",
+                        "news_feed_pattern": "News Feed Pattern",
+                        "latest_news_feed_pattern": "Latest News Feed Pattern",
+                        "category_news_feed_pattern": "Category News Feed Pattern",
+                        "location_news_feed_pattern": "Location News Feed Pattern",
+                        "event_news_feed_pattern": "Event News Feed Pattern",
+                        "tag_news_feed_pattern": "Tag News Feed Pattern",
+                        "contributor_news_feed_pattern": "Contributor News Feed Pattern"
+                    },
+                    "queue_actions": {
+                        "start_queue": "Start Queue",
+                        "restart_queue": "Restart Queue",
+                        "clear_queue": "Clear Queue",
+                        "flush_queue": "Flush Queue",
+                        "monitor_stale": "Monitor Stale Jobs",
+                        "monitor_purge": "Purge Monitor"
+                    },
+                    "schedule_actions": {
+                        "start_schedule": "Start Schedule",
+                        "stop_schedule": "Stop Schedule"
+                    }
+                },
+                "robots_txt": {
+                    "edit": {
+                        "labels": {
+                            "title": "Edit Robots.txt",
+                            "description": "Update your Robots.txt file content.",
+                            "back": "Back",
+                            "content": "Robots.txt Content",
+                            "content_description": "Write valid robots.txt rules here.",
+                            "placeholder": "User-agent: *\nAllow: /\n\nSitemap: https://example.com/sitemaps.xml",
+                            "save": "Save Robots.txt",
+                            "saving": "Saving...",
+                            "use_example": "Use Example",
+                            "reset": "Reset",
+                            "help_title": "Robots.txt Help",
+                            "help_description": "Robots.txt tells search engine crawlers which parts of your website they can access. Add sitemap URL to help crawlers discover your content.",
+                            "example_title": "Example Robots.txt"
+                        }
+                    }
+                },
+                "ads_txt": {
+                    "edit": {
+                        "labels": {
+                            "title": "Edit Ads.txt",
+                            "description": "Update your Ads.txt file content.",
+                            "back": "Back",
+                            "content": "Ads.txt Content",
+                            "content_description": "Write valid ads.txt seller records here.",
+                            "placeholder": "google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0",
+                            "save": "Save Ads.txt",
+                            "saving": "Saving...",
+                            "use_example": "Use Example",
+                            "reset": "Reset",
+                            "help_title": "Ads.txt Help",
+                            "help_description": "Ads.txt helps protect your ad inventory by listing authorized digital sellers. Add one seller record per line.",
+                            "example_title": "Example Ads.txt"
+                        }
+                    }
+                }
             }
         },
         "layouts": {
@@ -2976,14 +3087,14 @@
             "labels": {
                 "videos": "Videos",
                 "brief": "All the latest video news is here.",
-                "key_words" : "News, Video News"
+                "key_words": "News, Video News"
             }
         },
         "image_gallery_news": {
             "labels": {
                 "image_galleries": "Image gallery",
                 "brief": "All the latest image gallery news is here.",
-                "key_words" : "News, Imge Gallery News"
+                "key_words": "News, Imge Gallery News"
             }
         },
         "search": {

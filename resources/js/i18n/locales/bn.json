@@ -230,7 +230,8 @@
                             "account": "অ্যাকাউন্ট",
                             "activity_logs": "কার্যক্রম লগ",
                             "log_viewer": "লগ ভিউয়ার",
-                            "queue_monitor": "সারি মনিটর"
+                            "queue_monitor": "সারি মনিটর",
+                            "settings": "সেটিংস"
                         },
                         "actions": {
                             "logout": "লগআউট",
@@ -2865,6 +2866,121 @@
                         }
                     }
                 }
+            },
+            "settings": {
+                "index": {
+                    "labels": {
+                        "setting": "সেটিং",
+                        "sitemap_links": "সাইটম্যাপ লিংকসমূহ",
+                        "click_copy_sitemap_url": "সাইটম্যাপ URL কপি করতে কপি বাটনে ক্লিক করুন।",
+                        "copy_enabled": "কপি চালু আছে",
+                        "pattern_only": "শুধু প্যাটার্ন",
+                        "copied": "কপি হয়েছে",
+                        "copy": "কপি",
+                        "queue_settings_coming_soon": "কিউ সেটিং পরে যোগ করা হবে।",
+                        "schedule_settings_coming_soon": "সময়সূচী সেটিং পরে যোগ করা হবে।",
+                        "feeds_rss_settings_coming_soon": "ফিড এবং আরএসএস সেটিং পরে যোগ করা হবে।",
+                        "robots_txt_settings_coming_soon": "রোবট টেক্সট সেটিং পরে যোগ করা হবে।",
+                        "ads_txt_settings_coming_soon": "বিজ্ঞাপন টেক্সট সেটিং পরে যোগ করা হবে।",
+                        "feeds_rss_links": "ফিড এবং আরএসএস লিঙ্ক",
+                        "feeds_rss_patterns_are_dynamic": "এই ফিড ইউআরএলগুলো হলো ডাইনামিক প্যাটার্ন। ব্যবহারের আগে প্লেসহোল্ডারগুলোকে আসল মান দিয়ে প্রতিস্থাপন করুন।",
+                        "queue_actions": "সারি কার্যক্রম",
+                        "queue_actions_description": "এখান থেকে কিউ ম্যানেজমেন্ট অ্যাকশনগুলো চালান।",
+                        "run": "দৌড়",
+                        "schedule_actions": "কার্যক্রমসমূহ নির্ধারণ করুন",
+                        "schedule_actions_description": "এখান থেকে সময়সূচী ব্যবস্থাপনার কার্যক্রমগুলো চালান।",
+                        "edit": "সম্পাদনা করুন",
+                        "edit_robots_txt": "রোবট টেক্সট সম্পাদনা ফাইলটি সম্পাদনা করুন",
+                        "edit_ads_txt": "বিজ্ঞাপন টেক্সট সম্পাদনা করুন",
+                        "robots_txt_edit_description": "এখান থেকে আপনার রোবট টেক্সট ফাইলটি সম্পাদনা করুন।",
+                        "ads_txt_edit_description": "এখান থেকে আপনার বিজ্ঞাপন টেক্সট ফাইলটি সম্পাদনা করুন।"
+                    },
+                    "tabs": {
+                        "queue": "সারি",
+                        "schedule": "সময়সূচী",
+                        "sitemap": "সাইটম্যাপ",
+                        "feeds_rss": "ফিড এবং আরএসএস",
+                        "robots_txt": "রোবট টেক্সট",
+                        "ads_txt": "বিজ্ঞাপন টেক্সট"
+                    },
+                    "sitemap_links": {
+                        "sitemap_index": "সাইটম্যাপ ইনডেক্স",
+                        "categories_sitemap": "ক্যাটাগরি সাইটম্যাপ",
+                        "tags_sitemap": "ট্যাগ সাইটম্যাপ",
+                        "events_sitemap": "ইভেন্ট সাইটম্যাপ",
+                        "contributors_sitemap": "কন্ট্রিবিউটর সাইটম্যাপ",
+                        "news_sitemap": "নিউজ সাইটম্যাপ",
+                        "latest_news_sitemap": "লেটেস্ট নিউজ সাইটম্যাপ",
+                        "category_news_pattern": "ক্যাটাগরি নিউজ সাইটম্যাপ প্যাটার্ন",
+                        "location_news_pattern": "লোকেশন নিউজ সাইটম্যাপ প্যাটার্ন",
+                        "event_news_pattern": "ইভেন্ট নিউজ সাইটম্যাপ প্যাটার্ন",
+                        "tag_news_pattern": "ট্যাগ নিউজ সাইটম্যাপ প্যাটার্ন",
+                        "contributor_news_pattern": "কন্ট্রিবিউটর নিউজ সাইটম্যাপ প্যাটার্ন"
+                    },
+                    "feed_links": {
+                        "rss_feeds": "আরএসএস ফিড",
+                        "atom_feeds": "অ্যাটম ফিড",
+                        "news_feed_pattern": "নিউজ ফিড প্যাটার্ন",
+                        "latest_news_feed_pattern": "লেটেস্ট নিউজ ফিড প্যাটার্ন",
+                        "category_news_feed_pattern": "ক্যাটাগরি নিউজ ফিড প্যাটার্ন",
+                        "location_news_feed_pattern": "লোকেশন নিউজ ফিড প্যাটার্ন",
+                        "event_news_feed_pattern": "ইভেন্ট নিউজ ফিড প্যাটার্ন",
+                        "tag_news_feed_pattern": "ট্যাগ নিউজ ফিড প্যাটার্ন",
+                        "contributor_news_feed_pattern": "কন্ট্রিবিউটর নিউজ ফিড প্যাটার্ন"
+                    },
+                    "queue_actions": {
+                        "start_queue": "কিউ শুরু করুন",
+                        "restart_queue": "কিউ পুনরায় চালু করুন",
+                        "clear_queue": "কিউ খালি করুন",
+                        "flush_queue": "কিউ ফ্লাশ করুন",
+                        "monitor_stale": "বাসি জব মনিটর করুন",
+                        "monitor_purge": "মনিটর পার্জ করুন",
+                        "start_schedule": "শুরুর সময়সূচী",
+                        "stop_schedule": "সময়সূচী বন্ধ করুন"
+                    },
+                    "schedule_actions": {
+                        "start_schedule": "শুরুর সময়সূচী",
+                        "stop_schedule": "সময়সূচী বন্ধ করুন"
+                    }
+                },
+                "robots_txt": {
+                    "edit": {
+                        "labels": {
+                            "title": "রোবট টেক্সট এডিট করুন",
+                            "description": "আপনার রোবট টেক্সট ফাইলের কনটেন্ট আপডেট করুন।",
+                            "back": "ফিরে যান",
+                            "content": "রোবট টেক্সট কনটেন্ট",
+                            "content_description": "এখানে বৈধ রোবট টেক্সট নিয়ম লিখুন।",
+                            "placeholder": "User-agent: *\nAllow: /\n\nSitemap: https://example.com/sitemaps.xml",
+                            "save": "রোবট টেক্সট সেভ করুন",
+                            "saving": "সেভ হচ্ছে...",
+                            "use_example": "Example ব্যবহার করুন",
+                            "reset": "রিসেট",
+                            "help_title": "রোবট টেক্সট সাহায্য",
+                            "help_description": "রোবট টেক্সট সার্চ ইঞ্জিন ক্রলার-দের জানায় আপনার ওয়েবসাইটের কোন অংশ অ্যাক্সেস করা যাবে। সাইটম্যাপ ইউআরএল যোগ করলে ক্রলার সহজে আপনার বিষয়বস্তু খুঁজে পাবে।",
+                            "example_title": "উদাহরণ রোবট টেক্সট"
+                        }
+                    }
+                },
+                "ads_txt": {
+                    "edit": {
+                        "labels": {
+                            "title": "বিজ্ঞাপন টেক্সট এডিট করুন",
+                            "description": "আপনার বিজ্ঞাপন টেক্সট ফাইলের কনটেন্ট আপডেট করুন।",
+                            "back": "ফিরে যান",
+                            "content": "বিজ্ঞাপন টেক্সট কনটেন্ট",
+                            "content_description": "এখানে বৈধ বিজ্ঞাপন টেক্সট বিক্রেতার রেকর্ড লিখুন।",
+                            "placeholder": "google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0",
+                            "save": "বিজ্ঞাপন টেক্সট সেভ করুন",
+                            "saving": "সেভ হচ্ছে...",
+                            "use_example": "উদাহরণ ব্যবহার করুন",
+                            "reset": "রিসেট",
+                            "help_title": "বিজ্ঞাপন টেক্সট সাহায্য",
+                            "help_description": "বিজ্ঞাপন টেক্সট আপনার বিজ্ঞাপন ইনভেন্টরি সুরক্ষা করতে সাহায্য করে অনুমোদিত ডিজিটাল বিক্রেতাদের তালিকা করার মাধ্যমে। প্রতি লাইনে একটি বিক্রেতার রেকর্ড দিন।",
+                            "example_title": "উদাহরণ বিজ্ঞাপন টেক্সট"
+                        }
+                    }
+                }
             }
         },
         "layouts": {
@@ -2973,14 +3089,14 @@
             "labels": {
                 "videos": "ভিডিও",
                 "brief": "সর্বশেষ সব ভিডিও খবর এখানে।",
-                "key_words" : "সংবাদ, ভিডিও সংবাদ"
+                "key_words": "সংবাদ, ভিডিও সংবাদ"
             }
         },
         "image_gallery_news": {
             "labels": {
                 "image_galleries": "ছবির গ্যালারি",
                 "brief": "সর্বশেষ সব ছবির গ্যালারি খবর এখানে।",
-                "key_words" : "সংবাদ, ছবির গ্যালারি সংবাদ"
+                "key_words": "সংবাদ, ছবির গ্যালারি সংবাদ"
             }
         },
         "search": {
