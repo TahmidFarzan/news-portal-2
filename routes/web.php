@@ -8,7 +8,6 @@ use App\Http\Controllers\BackOffice\BreakingNewsController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
-use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
 use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\MenuController;
@@ -155,17 +154,6 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [UserController::class, 'delete'])->name('delete');
         Route::patch('active/{slug}', [UserController::class, 'active'])->name('active');
         Route::patch('inactive/{slug}', [UserController::class, 'inactive'])->name('inactive');
-    });
-
-    Route::prefix('languages')->name('languages.')->group(function () {
-        Route::get('/', [LanguageController::class, 'index'])->name('index');
-        Route::get('create', [LanguageController::class, 'create'])->name('create');
-        Route::get('edit/{slug}', [LanguageController::class, 'edit'])->name('edit');
-        Route::get('details/{slug}', [LanguageController::class, 'details'])->name('details');
-
-        Route::post('save', [LanguageController::class, 'save'])->name('save');
-        Route::patch('update/{slug}', [LanguageController::class, 'update'])->name('update');
-        Route::delete('delete/{slug}', [LanguageController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('categories')->name('categories.')->group(function () {

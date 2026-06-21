@@ -14,7 +14,6 @@ import {
     faGauge,
     faPhotoFilm,
     faNewspaper,
-    faLanguage,
     faLayerGroup,
     faTags,
     faStar,
@@ -36,7 +35,6 @@ library.add(
     faGauge,
     faPhotoFilm,
     faNewspaper,
-    faLanguage,
     faLayerGroup,
     faTags,
     faStar,
@@ -80,7 +78,6 @@ const subMenus = ref({
 const routeMap = {
     UserManagement: ['/back-office/users/*'],
     NewsAttributes: [
-        '/back-office/languages/*',
         '/back-office/categories/*',
         '/back-office/tags/*',
         '/back-office/trends/*',
@@ -183,13 +180,6 @@ const isSubMenuVisible = (key) => {
             leave-from-class="opacity-100 max-h-40" leave-to-class="opacity-0 max-h-0">
             <div v-if="isSubMenuVisible('NewsAttributes') && canAccessNewsAttributesMenuComputed"
                 class="ml-4 flex flex-col space-y-1 overflow-hidden">
-
-                <a :href="route('back-office.languages.index')"
-                    class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-                    :class="isCurrentPage('/back-office/languages/*') ? 'bg-gray-200 font-medium' : ''">
-                    <FontAwesomeIcon icon="language" />
-                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.languages") }}
-                </a>
 
                 <a :href="route('back-office.categories.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"

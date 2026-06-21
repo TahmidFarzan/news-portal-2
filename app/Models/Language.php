@@ -1,12 +1,8 @@
 <?php
 namespace App\Models;
 
-use App\Observers\LanguageObserver;
-use App\Policies\LanguagePolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
-use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,8 +21,6 @@ use Spatie\Sluggable\SlugOptions;
         'name', 'code', "locale",'slug',
         'detail', 'created_by_id',"is_default"
     ])]
-#[UsePolicy(LanguagePolicy::class)]
-#[ObservedBy([LanguageObserver::class])]
 class Language extends Model
 {
     use HasFactory, LogsActivity, HasSlug;
