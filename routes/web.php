@@ -435,11 +435,13 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
 
     Route::get('categories/{slugTree}', [PageController::class, 'categoryNews'])->where('slugTree', '.*')->name('category.news');
     Route::get('locations/{slugTree}', [PageController::class, 'locationNews'])->where('slugTree', '.*')->name('location.news');
+    Route::get('category/{slugTree}/location-max-depth-and-level', [PageController::class, 'categoryLocationMaxDepthAndLevel'])->where('slugTree', '.*')->name('category.location-max-depth-and-level');
 
     Route::prefix('home')->name('home.')->group(function () {
         Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');
         Route::get('category/{idOrSlug}', [PageController::class, 'homeCategory'])->name('category');
         Route::get('category/{idOrSlug}/news', [PageController::class, 'homeCategoryNews'])->name('category-news');
+        Route::get('news-type/{slug}/news', [PageController::class, 'homeNewsTypeNews'])->name('news-type-news');
         Route::get('news-type/{slug}/news', [PageController::class, 'homeNewsTypeNews'])->name('news-type-news');
     });
 

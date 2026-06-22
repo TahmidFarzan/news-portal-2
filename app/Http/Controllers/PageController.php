@@ -200,8 +200,6 @@ class PageController extends Controller
         $pageSectionNews = $this->pageService->categoryNewsPlacement($category);
         $recentNews      = $this->pageService->recentNews();
 
-        $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
-
         if ($request->expectsJson()) {
             return response()->json([
                 'news' => $news,
@@ -212,8 +210,7 @@ class PageController extends Controller
             'category'                         => $category,
             'news'                             => $news,
             "recentNews"                       => $recentNews,
-            "pageSectionNews"                  => $pageSectionNews,
-            'categoryLocationMaxDepthAndLevel' => $categoryLocationMaxDepthAndLevel,
+            "pageSectionNews"                  => $pageSectionNews
         ]);
     }
 
@@ -232,5 +229,11 @@ class PageController extends Controller
             'location' => $location,
             'news'     => $news,
         ]);
+    }
+
+    public function categoryLocationMaxDepthAndLevel(string $slugTree){
+        $category = $this->pageService->category($slugTree);
+        $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
+        return response()->json($categoryLocationMaxDepthAndLevel);
     }
 }

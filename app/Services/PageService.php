@@ -487,7 +487,7 @@ class PageService
             return $categoryCachedData;
         }
 
-        $category = Category::query()->with(["parent", "children"])
+        $category = Category::query()->with(["parent", "children",])
             ->where("language_id", $language->id)
             ->where('slug_tree', $slugTree)
             ->firstOrFail();

@@ -1,14 +1,13 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
-import { Head, router, useForm } from '@inertiajs/vue3'
+import { computed } from 'vue'
+import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
 import RecentNewsList from '@/components/common/news/RecentNewsList.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import CategoryHasLocationSection from '@/components/common/page/CategoryHasLocationSection.vue'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -16,14 +15,10 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 
 import {
     faFolder,
-    faLocationDot,
-    faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons'
 
 FontAwesomeLibrary.add(
     faFolder,
-    faLocationDot,
-    faMagnifyingGlass,
 )
 
 defineOptions({ layout: Layout })
@@ -35,7 +30,6 @@ const {
     news,
     recentNews,
     pageSectionNews,
-    categoryLocationMaxDepthAndLevel,
 } = defineProps({
     category: {
         type: Object,
@@ -53,43 +47,7 @@ const {
         type: [Array, Object],
         required: true,
     },
-    categoryLocationMaxDepthAndLevel: {
-        type: Object,
-        required: true,
-    },
 })
-
-const getLocationFieldName = (index) => {
-    return `location_level_${index + 1}`
-}
-
-const locationMaxDepth = computed(() => {
-    return categoryLocationMaxDepthAndLevel?.max_depth
-        ?? categoryLocationMaxDepthAndLevel?.depth
-        ?? null
-})
-
-const locationMaxLevel = computed(() => {
-    return Number(
-        categoryLocationMaxDepthAndLevel?.max_level
-        ?? categoryLocationMaxDepthAndLevel?.level
-        ?? 0
-    )
-})
-
-const getInitialLocationFields = () => {
-    const fields = {}
-
-    for (let index = 0; index < locationMaxLevel.value; index++) {
-        fields[getLocationFieldName(index)] = null
-    }
-
-    return fields
-}
-
-const searchLocationForm = useForm(getInitialLocationFields())
-
-const isSearchingLocation = ref(false)
 
 const metaTitle = computed(() => {
     return category?.seo_title || category?.name || ''
@@ -109,22 +67,6 @@ const metaKeywords = computed(() => {
 
 const hasBrief = computed(() => {
     return Boolean(category?.brief)
-})
-
-const hasLocationFilter = computed(() => {
-    return Boolean(
-        category?.has_location
-        && locationMaxDepth.value !== null
-        && locationMaxLevel.value > 0
-    )
-})
-
-const locationLevels = computed(() => {
-    if (!hasLocationFilter.value) {
-        return []
-    }
-
-    return Array.from({ length: locationMaxLevel.value }, (_, index) => index)
 })
 
 const pageSectionNewsItems = computed(() => {
@@ -172,152 +114,6 @@ const getSecondGridColumnClass = (index) => {
 
     return 'col-span-1 sm:col-span-1 md:col-span-4'
 }
-
-const baseLocationsApiUrl = computed(() => {
-    const params = new URLSearchParams()
-
-    if (category?.id) {
-        params.append('category_id', category.id)
-    }
-
-    if (category?.language_id) {
-        params.append('language_id', category.language_id)
-    }
-
-    const queryString = params.toString()
-
-    return queryString
-        ? `${route('search.locations')}?${queryString}`
-        : route('search.locations')
-})
-
-const appendQueryParam = (url, key, value) => {
-    const separator = url.includes('?') ? '&' : '?'
-
-    return `${url}${separator}${key}=${encodeURIComponent(value)}`
-}
-
-const getSelectedLocationId = (index) => {
-    const fieldName = getLocationFieldName(index)
-    const selectedLocation = searchLocationForm[fieldName]
-
-    if (!selectedLocation) {
-        return null
-    }
-
-    if (Array.isArray(selectedLocation)) {
-        const firstSelectedLocation = selectedLocation[0]
-
-        if (!firstSelectedLocation) {
-            return null
-        }
-
-        if (typeof firstSelectedLocation === 'object') {
-            return firstSelectedLocation.id
-                ?? firstSelectedLocation.value
-                ?? firstSelectedLocation.slug
-                ?? null
-        }
-
-        return firstSelectedLocation
-    }
-
-    if (typeof selectedLocation === 'object') {
-        return selectedLocation.id
-            ?? selectedLocation.value
-            ?? selectedLocation.slug
-            ?? null
-    }
-
-    return selectedLocation
-}
-
-const getLocationApiUrl = (index) => {
-    if (index === 0) {
-        return appendQueryParam(baseLocationsApiUrl.value, 'only_main', true)
-    }
-
-    const parentId = getSelectedLocationId(index - 1)
-
-    if (!parentId) {
-        return ''
-    }
-
-    return appendQueryParam(baseLocationsApiUrl.value, 'parent_id', parentId)
-}
-
-const selectedLastLoopLocationItem = computed(() => {
-    for (let index = locationMaxLevel.value - 1; index >= 0; index--) {
-        const selectedLocationId = getSelectedLocationId(index)
-
-        if (selectedLocationId) {
-            return selectedLocationId
-        }
-    }
-
-    return null
-})
-
-const canSearchLocation = computed(() => {
-    return Boolean(selectedLastLoopLocationItem.value) && !isSearchingLocation.value
-})
-
-const searchByLocation = async () => {
-    if (!selectedLastLoopLocationItem.value) {
-        return
-    }
-
-    isSearchingLocation.value = true
-
-    try {
-        const response = await fetchFromApi(
-            route('search.location', {
-                slugOrId: selectedLastLoopLocationItem.value,
-            })
-        )
-
-        const location = response?.data ?? response
-
-        if (!location?.public_url) {
-            return
-        }
-
-        router.visit(location.public_url)
-    } finally {
-        isSearchingLocation.value = false
-    }
-}
-
-watch(
-    () => locationMaxLevel.value,
-    (level) => {
-        for (let index = 0; index < level; index++) {
-            const fieldName = getLocationFieldName(index)
-
-            if (!(fieldName in searchLocationForm)) {
-                searchLocationForm[fieldName] = null
-            }
-        }
-    },
-    { immediate: true }
-)
-
-watch(
-    () => locationLevels.value.map((index) => getSelectedLocationId(index)),
-    (newValues, oldValues = []) => {
-        const changedIndex = newValues.findIndex((value, index) => {
-            return value !== oldValues[index]
-        })
-
-        if (changedIndex === -1) {
-            return
-        }
-
-        for (let index = changedIndex + 1; index < locationMaxLevel.value; index++) {
-            searchLocationForm[getLocationFieldName(index)] = null
-        }
-    }
-)
 </script>
 
 <template>
@@ -326,7 +122,9 @@ watch(
         <link v-if="category?.public_url" rel="canonical" :href="category.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
+
         <meta v-if="metaDescription" name="description" :content="metaDescription" />
+
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
@@ -403,36 +201,10 @@ watch(
                 </section>
             </div>
 
-            <div class="md:col-span-3 lg:col-span-3">
-                <div v-if="hasLocationFilter"
-                    class="space-y-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
-                    <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-700">
-                        <FontAwesomeIcon icon="location-dot" class="text-blue-600" />
+            <div class="space-y-2 md:col-span-3 lg:col-span-3">
+                <CategoryHasLocationSection :category="category" />
 
-                        <span>{{ t('pages.category_news.labels.location') }}</span>
-                    </div>
-
-                    <div v-for="levelIndex in locationLevels" :key="levelIndex" class="space-y-1">
-                        <MultiSelectInfinityLoadingApi v-if="levelIndex === 0 || getSelectedLocationId(levelIndex - 1)"
-                            :form="searchLocationForm" :fieldName="getLocationFieldName(levelIndex)"
-                            :selectedItem="searchLocationForm[getLocationFieldName(levelIndex)]"
-                            :apiUrl="getLocationApiUrl(levelIndex)"
-                            :error="searchLocationForm.errors?.[getLocationFieldName(levelIndex)]" :multiple="false"
-                            :placeholder="t('pages.category_news.locations.form.location_placeholder')" />
-                    </div>
-
-                    <button type="button"
-                        class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-                        :disabled="!canSearchLocation" @click="searchByLocation">
-                        <FontAwesomeIcon icon="magnifying-glass" />
-
-                        <span>
-                            {{ isSearchingLocation ? t('pages.category_news.actions.searching') : t('pages.category_news.actions.search') }}
-                        </span>
-                    </button>
-                </div>
-
-                <RecentNewsList :news="recentNews" :class="{ 'mt-2': hasLocationFilter }" />
+                <RecentNewsList :news="recentNews" />
             </div>
         </section>
 

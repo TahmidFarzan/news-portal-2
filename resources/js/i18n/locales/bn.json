@@ -491,7 +491,19 @@
                         "loading": "লোড হচ্ছে"
                     }
                 }
-            }
+            },
+            "category_has_location_section": {
+                    "labels": {
+                        "location": "অবস্থান"
+                    },
+                    "form": {
+                        "location_placeholder": "একটি অবস্থান নির্বাচন করুন"
+                    },
+                    "actions":{
+                        "searching": "অনুসন্ধান চলছে",
+                        "search": "অনুসন্ধান করুন"
+                    }
+                }
         }
     },
     "pages": {

@@ -490,6 +490,18 @@
                     "labels": {
                         "loading": "Loading"
                     }
+                },
+                "category_has_location_section": {
+                    "labels": {
+                        "location": "Location"
+                    },
+                    "form": {
+                        "location_placeholder": "Select a location"
+                    },
+                    "actions":{
+                        "searching": "Searching",
+                        "search": "Search"
+                    }
                 }
             }
         }
