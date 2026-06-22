@@ -2402,6 +2402,7 @@
                             "type_required": "ধরন নির্বাচন করা আবশ্যক।",
                             "value_required": "মান প্রদান করা আবশ্যক।",
                             "value_must_be_integer": "মানটি পূর্ণসংখ্যা হতে হবে।",
+                            "value_must_be_text": "মানটি টেক্সট হতে হবে।",
                             "value_must_be_valid_number": "মানটি বৈধ সংখ্যা হতে হবে।",
                             "value_must_be_valid_json_array": "মানটি বৈধ JSON array হতে হবে।",
                             "value_must_be_valid_json": "মানটি বৈধ JSON হতে হবে।",

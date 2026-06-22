@@ -26,7 +26,11 @@ export const themeOptions = Object.freeze({
     GOOGLE_NEWS_SOCIAL_LINK: 'Google News Link',
     SHOW_LOGO_ON_HEADER_MENU: 'Show Logo On Header Menu',
     SHOW_NAME_ON_HEADER_MENU: 'Show Name On Header Menu',
-    SHOW_BREAKING_NEWS  : "Show Breaking News"
+    SHOW_BREAKING_NEWS  : "Show Breaking News",
+    GOOGLE_SEARCH_CONSOLE_HEADER  : "Google Search Console Header",
+    GOOGLE_ANALYTIC_HEADER  : "Google Analytic Header",
+    GOOGLE_TAG_MANAGER_HEADER  : "Google Tag Manager Header",
+    GOOGLE_TAG_MANAGER_BODY  : "Google Tag Manager Body"
 })
 
 export function useTheme() {

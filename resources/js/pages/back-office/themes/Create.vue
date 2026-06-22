@@ -105,20 +105,21 @@ function validateForm() {
         }
     }
 
-    if (
-        hasValue(saveForm.value) &&
-        [themeValueTypes.FLOAT, themeValueTypes.DECIMAL].includes(saveForm.type)
-    ) {
+    if (hasValue(saveForm.value) && saveForm.type === themeValueTypes.TEXT) {
+        if (saveForm.value) {
+            saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_text'))
+            valid = false
+        }
+    }
+
+    if (hasValue(saveForm.value) && [themeValueTypes.FLOAT, themeValueTypes.DECIMAL].includes(saveForm.type)) {
         if (Number.isNaN(Number(saveForm.value))) {
             saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_valid_number'))
             valid = false
         }
     }
 
-    if (
-        hasValue(saveForm.value) &&
-        [themeValueTypes.JSON, themeValueTypes.ARRAY].includes(saveForm.type)
-    ) {
+    if (hasValue(saveForm.value) && [themeValueTypes.JSON, themeValueTypes.ARRAY].includes(saveForm.type)) {
         try {
             const parsedValue = JSON.parse(saveForm.value)
 
@@ -253,12 +254,13 @@ onMounted(async () => {
                             <textarea v-else-if="
                                 saveForm.type === themeValueTypes.JSON ||
                                 saveForm.type === themeValueTypes.ARRAY
-                            " v-model="saveForm.value" rows="6" :placeholder="t('pages.back_office.themes.create.form.json_placeholder')"
+                            " v-model="saveForm.value" rows="6"
+                                :placeholder="t('pages.back_office.themes.create.form.json_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'"></textarea>
 
-                            <input v-else-if="saveForm.type === themeValueTypes.URL" v-model="saveForm.value"
-                                type="url" :placeholder="t('pages.back_office.themes.create.form.url_placeholder')"
+                            <input v-else-if="saveForm.type === themeValueTypes.URL" v-model="saveForm.value" type="url"
+                                :placeholder="t('pages.back_office.themes.create.form.url_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
@@ -295,7 +297,8 @@ onMounted(async () => {
                             : 'bg-gray-400 cursor-not-allowed'">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('pages.back_office.themes.create.actions.saving') : t('pages.back_office.themes.create.actions.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.themes.create.actions.saving') :
+                            t('pages.back_office.themes.create.actions.save') }}
                     </button>
                 </div>
             </form>

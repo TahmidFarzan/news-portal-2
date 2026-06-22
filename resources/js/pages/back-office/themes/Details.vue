@@ -162,6 +162,7 @@ onMounted(async () => {
                         </span>
 
                         <pre v-else-if="
+                            theme?.type === themeValueTypes.TEXT ||
                             theme?.type === themeValueTypes.JSON ||
                             theme?.type === themeValueTypes.ARRAY
                         "

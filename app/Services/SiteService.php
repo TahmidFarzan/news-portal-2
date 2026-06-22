@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
 use App\Helpers\MenuHelper;
+use App\Helpers\ThemeHelper;
 use App\Models\BreakingNews;
 use App\Models\Language;
 use App\Models\Menu;
@@ -383,6 +384,71 @@ class SiteService
         $data = Theme::query()
             ->orderBy('id', 'asc')
             ->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function themeHeader()
+    {
+        $cacheKey = 'site:theme:header';
+
+        $cacheTags = [
+            'site',
+            'site:theme',
+            'site:theme:header',
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+        $labels = [
+            ThemeHelper::OPTION_GOOGLE_SEARCH_CONSOLE_HEADER,
+            ThemeHelper::OPTION_GOOGLE_ANALYTIC_HEADER,
+            ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_HEADER,
+        ];
+
+        $data = Theme::query()->where('group', ThemeHelper::GROUP_APP)->whereIn('label', $labels)->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function themeBody()
+    {
+        $cacheKey = 'site:theme:body';
+
+        $cacheTags = [
+            'site',
+            'site:theme',
+            'site:theme:body',
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $labels = [
+            ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY
+        ];
+
+        $data = Theme::query()->where('group', ThemeHelper::GROUP_APP)->whereIn('label', $labels)->get();
 
         CacheServerHelper::cachedData(
             $cacheKey,

@@ -2402,6 +2402,7 @@
                             "type_required": "Type is required.",
                             "value_required": "Value is required.",
                             "value_must_be_integer": "Value must be an integer.",
+                            "value_must_be_text": "Value must be an text.",
                             "value_must_be_valid_number": "Value must be a valid number.",
                             "value_must_be_valid_json_array": "Value must be a valid JSON array.",
                             "value_must_be_valid_json": "Value must be valid JSON.",

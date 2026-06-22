@@ -85,5 +85,33 @@ class ThemeSeeder extends Seeder
             'value' => "https://news.google.com",
         ])->create();
 
+        Theme::factory()->state([
+            'group' => ThemeHelper::GROUP_APP,
+            'label' => ThemeHelper::OPTION_GOOGLE_SEARCH_CONSOLE_HEADER,
+            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
+            'value' => null,
+        ])->create();
+
+        Theme::factory()->state([
+            'group' => ThemeHelper::GROUP_APP,
+            'label' => ThemeHelper::OPTION_GOOGLE_ANALYTIC_HEADER,
+            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
+            'value' => null,
+        ])->create();
+
+        Theme::factory()->state([
+            'group' => ThemeHelper::GROUP_APP,
+            'label' => ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_HEADER,
+            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
+            'value' => null,
+        ])->create();
+
+        Theme::factory()->state([
+            'group' => ThemeHelper::GROUP_APP,
+            'label' => ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY,
+            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
+            'value' => null,
+        ])->create();
+
     }
 }
