@@ -185,6 +185,11 @@ const metaKeywords = computed(() => {
         <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="রাজনীতি"
             :language="page?.language" :style="1" :limit="4" />
 
+        <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4" categoryIdOrSlug="national"
+            :language="page?.language" :style="1" :limit="4" />
+        <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="জাতীয়"
+            :language="page?.language" :style="1" :limit="4" />
+
         <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4" categoryIdOrSlug="sports"
             :language="page?.language" :style="2" :limit="6" />
         <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="খেলাধুলা"

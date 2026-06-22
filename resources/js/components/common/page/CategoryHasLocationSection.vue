@@ -22,10 +22,15 @@ FontAwesomeLibrary.add(
 
 const {
     category,
+    isOnSidebar,
 } = defineProps({
     category: {
         type: Object,
         required: true,
+    },
+    isOnSidebar: {
+        type: Boolean,
+        default: true,
     },
 })
 
@@ -153,6 +158,12 @@ const getSelectedLocationId = (index) => {
 
     return selectedLocation
 }
+
+const locationGridClass = computed(() => {
+    return isOnSidebar
+        ? 'grid-cols-1 md:grid-cols-1 lg:grid-cols-1'
+        : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+})
 
 const selectedLocationIds = computed(() => {
     return locationLevels.value.map((index) => {
@@ -380,11 +391,13 @@ watch(
             </span>
         </div>
 
-        <div v-for="levelIndex in visibleLocationLevels" :key="levelIndex" class="space-y-1">
-            <MultiSelectInfinityLoadingApi :key="getLocationSelectKey(levelIndex)" :form="searchLocationForm"
-                :fieldName="getLocationFieldName(levelIndex)" :apiUrl="getLocationApiUrl(levelIndex)"
-                :error="searchLocationForm.errors?.[getLocationFieldName(levelIndex)]" :multiple="false"
-                :placeholder="t('components.common.page.category_has_location_section.form.location_placeholder')" />
+        <div class="grid gap-3" :class="locationGridClass">
+            <div v-for="levelIndex in visibleLocationLevels" :key="levelIndex" class="min-w-0">
+                <MultiSelectInfinityLoadingApi :key="getLocationSelectKey(levelIndex)" :form="searchLocationForm"
+                    :fieldName="getLocationFieldName(levelIndex)" :apiUrl="getLocationApiUrl(levelIndex)"
+                    :error="searchLocationForm.errors?.[getLocationFieldName(levelIndex)]" :multiple="false"
+                    :placeholder="t('components.common.page.category_has_location_section.form.location_placeholder')" />
+            </div>
         </div>
 
         <button type="button"

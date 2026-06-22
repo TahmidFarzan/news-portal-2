@@ -6,6 +6,7 @@ import { fetchFromApi } from '@/composables/useSystemApi'
 
 import GridCard from '@/components/common/news/GridCard.vue'
 import ListCard from '@/components/common/news/ListCard.vue'
+import CategoryHasLocationSection from '@/components/common/page/CategoryHasLocationSection.vue'
 
 const { t } = useTranslate()
 
@@ -22,7 +23,6 @@ const { categoryIdOrSlug, language, style, limit } = defineProps({
         type: [String, Number],
         default: 1,
     },
-
     limit: {
         type: [String, Number],
         default: 4,
@@ -113,6 +113,8 @@ watch(
         </div>
 
         <template v-else>
+            <CategoryHasLocationSection v-if="category" :category="category" :isOnSidebar="false" class="mb-3" />
+
             <div v-if="sectionStyle === 1">
                 <div class="hidden gap-3 lg:grid lg:grid-cols-4">
                     <GridCard v-for="(perNews, index) in newsItems" :key="perNews?.id || perNews?.slug || index"
