@@ -56,7 +56,7 @@ class GoogleAdsenceSeeder extends Seeder
 
         GoogleAdsence::factory()->state([
             'name'      => "Sidebar Top",
-            'type'      => GoogleAdsenceHelper::TYPE_SECTION,
+            'type'      => GoogleAdsenceHelper::TYPE_SIDEBAR,
             'position'  => GoogleAdsenceHelper::POSITION_TOP,
             'slot_id'   => config("util.google-ad.test_ad_slot"),
             'client_id' => config("util.google-ad.test_client_id"),
@@ -64,7 +64,15 @@ class GoogleAdsenceSeeder extends Seeder
 
         GoogleAdsence::factory()->state([
             'name'      => "Sidebar Bottom",
-            'type'      => GoogleAdsenceHelper::TYPE_SECTION,
+            'type'      => GoogleAdsenceHelper::TYPE_SIDEBAR,
+            'position'  => GoogleAdsenceHelper::POSITION_BETWEEN,
+            'slot_id'   => config("util.google-ad.test_ad_slot"),
+            'client_id' => config("util.google-ad.test_client_id"),
+        ])->create();
+
+        GoogleAdsence::factory()->state([
+            'name'      => "Sidebar Bottom",
+            'type'      => GoogleAdsenceHelper::TYPE_SIDEBAR,
             'position'  => GoogleAdsenceHelper::POSITION_BOTTOM,
             'slot_id'   => config("util.google-ad.test_ad_slot"),
             'client_id' => config("util.google-ad.test_client_id"),
