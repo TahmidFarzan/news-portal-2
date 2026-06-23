@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
+import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -79,6 +80,8 @@ const hasBrief = computed(() => {
         </section>
 
         <div class="border-t border-gray-200"></div>
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <List :news="news" pagination-type="Cursor" />
     </div>

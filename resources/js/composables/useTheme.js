@@ -27,10 +27,12 @@ export const themeOptions = Object.freeze({
     SHOW_LOGO_ON_HEADER_MENU: 'Show Logo On Header Menu',
     SHOW_NAME_ON_HEADER_MENU: 'Show Name On Header Menu',
     SHOW_BREAKING_NEWS  : "Show Breaking News",
+    SHOW_GOOGLE_AD  : "Show Google Ad",
     GOOGLE_SEARCH_CONSOLE_HEADER  : "Google Search Console Header",
     GOOGLE_ANALYTIC_HEADER  : "Google Analytic Header",
     GOOGLE_TAG_MANAGER_HEADER  : "Google Tag Manager Header",
-    GOOGLE_TAG_MANAGER_BODY  : "Google Tag Manager Body"
+    GOOGLE_TAG_MANAGER_BODY  : "Google Tag Manager Body",
+    GOOGLE_ADSENCE_CLIENT_ID: "Google GoogleAdsence Client Id"
 })
 
 export function useTheme() {

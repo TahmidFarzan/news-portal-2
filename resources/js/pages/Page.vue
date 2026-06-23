@@ -3,7 +3,11 @@ import { computed } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
+import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
+import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+
 import { useTranslate } from '@/composables/useTranslate'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 defineOptions({ layout: Layout })
 
@@ -44,6 +48,10 @@ const metaKeywords = computed(() => {
     </Head>
 
     <div class="space-y-6">
+        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.TOP" />
+
         <div v-if="page?.body" class="prose max-w-none" v-html="page.body" />
+
+        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </div>
 </template>

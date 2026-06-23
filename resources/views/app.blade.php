@@ -1,9 +1,14 @@
 @php
     $isPublicPage = !request()->is('back-office/*') && !request()->is('auth-user/*');
+    $googleAdsClientId = config('util.test_client_id');
 
     $renderRawHtml = function ($value) {
         return html_entity_decode((string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     };
+
+    if ($themeGoogleAdCLientId && $themeGoogleAdCLientId->value) {
+        $googleAdsClientId = $themeGoogleAdCLientId->value;
+    }
 @endphp
 
 <!DOCTYPE html>
@@ -34,6 +39,9 @@
             @foreach ($themeHeader ?? [] as $perHeaderMeta)
                 {!! $renderRawHtml($perHeaderMeta->value) !!}
             @endforeach
+
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $googleAdsClientId }}"
+                crossorigin="anonymous"></script>
         @endif
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])

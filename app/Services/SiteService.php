@@ -3,9 +3,11 @@ namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
 use App\Helpers\MenuHelper;
+use App\Helpers\GoogleAdsenceHelper;
 use App\Helpers\ThemeHelper;
 use App\Models\BreakingNews;
 use App\Models\Language;
+use App\Models\GoogleAdsence;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\Theme;
@@ -460,6 +462,35 @@ class SiteService
         return $data;
     }
 
+    public function themeGoogleAdCLientId()
+    {
+        $cacheKey = 'site:theme:google:ad-client-id';
+
+        $cacheTags = [
+            'site',
+            'site:theme',
+            'site:theme:google',
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+
+        $data = Theme::query()->where('group', ThemeHelper::GROUP_APP)->where('label', ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID)->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
     public function breakingNews(Request $request)
     {
         $perPage = 15;
@@ -578,5 +609,38 @@ class SiteService
             'message' => __('status-messages.site.language.change.success'),
             'data'    => $language,
         ];
+    }
+
+    public function getGoogleAdsence(Request $request)
+    {
+        $type     = $request->input("type", GoogleAdsenceHelper::TYPE_SECTION);
+        $position = $request->input("position", GoogleAdsenceHelper::POSITION_TOP);
+
+        $typeCacheKey = Str::lower($type);
+        $positionCacheKey = Str::lower($position);
+
+        $cacheKey = "site:google-adsence:type:{$typeCacheKey}:position:{$positionCacheKey}";
+
+        $cacheTags = [
+            'site',
+            'site:google-adsence',
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $data = GoogleAdsence::query()->where('type', $type)->where('position', $position)->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
     }
 }

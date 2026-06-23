@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PageSeeder::class);
         $this->call(MenuSeeder::class);
 
+        $this->call(GoogleAdsenceSeeder::class);
+
         $this->call(NewsSeeder::class);
         $this->call(NewsPlacementSeeder::class);
         $this->call(BreakingNewsSeeder::class);

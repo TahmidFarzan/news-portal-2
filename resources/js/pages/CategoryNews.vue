@@ -7,6 +7,7 @@ import List from '@/components/common/news/List.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
 import RecentNewsList from '@/components/common/news/RecentNewsList.vue'
 import CategoryHasLocationSection from '@/components/common/page/CategoryHasLocationSection.vue'
+import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -179,6 +180,8 @@ const getSecondGridColumnClass = (index) => {
             </div>
         </section>
 
+        <GoogleAdsence v-if="showGoogleAd" />
+
         <section class="grid grid-cols-1 items-start gap-5 md:grid-cols-12">
             <div class="space-y-4 md:col-span-9 lg:col-span-9">
                 <section v-if="hasPageSectionNews" class="space-y-4">
@@ -209,6 +212,8 @@ const getSecondGridColumnClass = (index) => {
         </section>
 
         <div class="border-t border-gray-200"></div>
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <List :news="news" pagination-type="Cursor" />
     </div>

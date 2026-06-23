@@ -30,10 +30,12 @@ class ThemeHelper
     public const OPTION_SHOW_NAME_ON_HEADER_MENU = "Show Name On Header Menu";
 
     public const OPTION_SHOW_BREAKING_NEWS = "Show Breaking News";
+    public const OPTION_SHOW_GOOGLE_AD = "Show Google Ad";
 
     public const OPTION_GOOGLE_SEARCH_CONSOLE_HEADER = "Google Search Console Header";
     public const OPTION_GOOGLE_ANALYTIC_HEADER       = "Google Analytic Header";
     public const OPTION_GOOGLE_TAG_MANAGER_HEADER            = "Google Tag Manager Header";
     public const OPTION_GOOGLE_TAG_MANAGER_BODY              = "Google Tag Manager Body";
+    public const OPTION_GOOGLE_ADSENCE_CLIENT_ID              = "Google GoogleAdsence Client Id";
 
 }

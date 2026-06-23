@@ -1,11 +1,11 @@
 <?php
 
 return [
-    "api"           => [
+    "api"            => [
         'timeout' => 'Api responce timeout.',
     ],
 
-    'auth'          => [
+    'auth'           => [
         'login'           => [
             'email'    => [
                 'required' => 'Please enter your email address.',
@@ -117,7 +117,7 @@ return [
         ],
     ],
 
-    'media_quick'   => [
+    'media_quick'    => [
         'alt'     => [
             'string' => 'Alt must be string.',
         ],
@@ -131,7 +131,7 @@ return [
         ],
     ],
 
-    'user'          => [
+    'user'           => [
         'name'                  => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -189,7 +189,7 @@ return [
         ],
     ],
 
-    'language'      => [
+    'language'       => [
         'name'   => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -211,7 +211,7 @@ return [
         ],
     ],
 
-    'category'      => [
+    'category'       => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -230,7 +230,7 @@ return [
         ],
     ],
 
-    'tag'           => [
+    'tag'            => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -244,7 +244,7 @@ return [
         ],
     ],
 
-    'trend'         => [
+    'trend'          => [
         'tag_id'   => [
             'required'  => 'Tag is required.',
             "not_found" => 'Tag is not exit.',
@@ -256,7 +256,7 @@ return [
         ],
     ],
 
-    'location'      => [
+    'location'       => [
         'name'             => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -313,7 +313,7 @@ return [
         ],
     ],
 
-    'event'         => [
+    'event'          => [
         'name'                 => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -321,7 +321,7 @@ return [
             'unique'   => 'Name must be unique.',
         ],
 
-        'position'                 => [
+        'position'             => [
             "not_found" => 'Position is not exit.',
         ],
 
@@ -343,7 +343,7 @@ return [
         ],
     ],
 
-    'contributor'   => [
+    'contributor'    => [
         'name'          => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -359,7 +359,7 @@ return [
 
     ],
 
-    'news'          => [
+    'news'           => [
         'title'                             => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -482,7 +482,7 @@ return [
 
     ],
 
-    'breaking_news' => [
+    'breaking_news'  => [
         'title'       => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -501,7 +501,7 @@ return [
         ],
     ],
 
-    'page'          => [
+    'page'           => [
         'title'          => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -529,7 +529,7 @@ return [
 
     ],
 
-    'menu'          => [
+    'menu'           => [
         'name'         => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -548,7 +548,7 @@ return [
         ],
     ],
 
-    'menu_item'     => [
+    'menu_item'      => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -585,7 +585,7 @@ return [
 
     ],
 
-    'theme'       => [
+    'theme'          => [
         'group' => [
             'required' => 'Group is required.',
             'string'   => 'Group must be a string.',
@@ -613,6 +613,34 @@ return [
             'string'       => 'Value must be a string.',
             'max'          => 'Value may not be greater than :max characters.',
             'invalid_type' => 'Value does not match the selected setting type.',
+        ],
+    ],
+
+    'google_adsence' => [
+        'name'     => [
+            'required' => 'Group is required.',
+            'string'   => 'Group must be a string.',
+            'max'      => 'Group may not be greater than :max characters.',
+        ],
+
+        'slot_id'  => [
+            'required' => 'Label is required.',
+            'string'   => 'Label must be a string.',
+            'max'      => 'Label may not be greater than :max characters.',
+        ],
+
+        'type'     => [
+            'required' => 'Type is required.',
+            'string'   => 'Type must be a string.',
+            'max'      => 'Type may not be greater than :max characters.',
+            'not_exit' => 'Selected type does not exist.',
+        ],
+
+        'position' => [
+            'required' => 'Position is required.',
+            'string'   => 'Position must be a string.',
+            'max'      => 'Position may not be greater than :max characters.',
+            'not_exit' => 'Selected position does not exist.',
         ],
     ],
 ];

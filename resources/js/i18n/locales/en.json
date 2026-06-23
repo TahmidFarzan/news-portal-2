@@ -262,7 +262,8 @@
                             "menus": "Menus",
                             "user_anagement": "User Anagement",
                             "users": "Users",
-                            "themes": "Themes"
+                            "themes": "Themes",
+                            "google_adsences": "Google adsences"
                         }
                     }
                 },
@@ -498,7 +499,7 @@
                     "form": {
                         "location_placeholder": "Select a location"
                     },
-                    "actions":{
+                    "actions": {
                         "searching": "Searching",
                         "search": "Search"
                     }
@@ -2989,6 +2990,136 @@
                             "help_title": "Ads.txt Help",
                             "help_description": "Ads.txt helps protect your ad inventory by listing authorized digital sellers. Add one seller record per line.",
                             "example_title": "Example Ads.txt"
+                        }
+                    }
+                }
+            },
+            "google_adsences": {
+                "create": {
+                    "labels": {
+                        "edit": "edit",
+                        "basic_information": "Basic Information",
+                        "type": "Type",
+                        "slot_id": "Slot id",
+                        "name": "Name",
+                        "use_full_width_responsive": "Use full width responsive",
+                        "position": "Position",
+                        "yes": "Yes",
+                        "no": "No"
+                    },
+                    "form": {
+                        "create_page_title": "Google adsence create",
+                        "slot_id_placeholder": "Enter slot id",
+                        "name_placeholder": "Enter name",
+                        "type_placeholder": "Select type",
+                        "type_select": "Select type",
+                        "position_select": "Select position",
+                        "position_placeholder": "Select position"
+                    },
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "slot_id_is_required": "Slot id is required.",
+                        "type_is_required": "Type is required.",
+                        "position_is_required": "Position is required."
+                    },
+                    "navigation": {
+                        "google_adsences": "Google adsences"
+                    },
+                    "actions": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "details",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "position": "Position",
+                        "not_available": "N/A",
+                        "type": "Type",
+                        "slot_id": "Slot id",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By",
+                        "client_id": "Client id",
+                        "yes": "Yes",
+                        "no": "No",
+                        "use_full_width_responsive" : "Use full width responsive"
+                    },
+                    "navigation": {
+                        "google_adsences": "Google adsences",
+                        "activity_logs": "Activity Logs"
+                    },
+                    "title": "Google adsence Details",
+                    "table": {
+                        "menus": {
+                            "edit": "Edit"
+                        },
+                        "columns": {
+                            "created_at": "Created at"
+                        }
+                    },
+                    "actions": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "System Information"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "Delete google adsence"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "google_adsences": "Google adsences"
+                    },
+                    "actions": {
+                        "create": "Create",
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    },
+                    "labels": {
+                        "position": "Position",
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "type": "Type",
+                        "not_available": "N/A",
+                        "no_record_found": "No record found"
+                    },
+                    "search_placeholder": "Search google adsence...",
+                    "applying_filter": "Applying Filter...",
+                    "apply_filter": "Apply Filter",
+                    "table": {
+                        "columns": {
+                            "name": "Name",
+                            "position": "Position",
+                            "type": "type",
+                            "slot_id": "Slot id",
+                            "action": "Action"
+                        },
+                        "menus": {
+                            "details": "Details",
+                            "edit": "Edit"
+                        }
+                    },
+                    "created": "Created",
+                    "delete_modal": {
+                        "title": "Delete google adsence"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "This action cannot be undone."
                         }
                     }
                 }

@@ -85,4 +85,10 @@ class SiteController extends Controller
 
         return response()->json($result);
     }
+
+    public function getGoogleAdsence(Request $request): JsonResponse
+    {
+        $GoogleAdsences = $this->siteService->getGoogleAdsence($request);
+        return response()->json($GoogleAdsences);
+    }
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -10,13 +10,16 @@ import EventNewsSection from '@/components/common/page/EventNewsSection.vue'
 import NewsTypeSliderSection from '@/components/common/page/NewsTypeSliderSection.vue'
 import NewsTypeGallerySection from '@/components/common/page/NewsTypeGallerySection.vue'
 import CategorySection from '@/components/common/page/CategorySection.vue'
+import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
 import {
     languages,
 } from '@/composables/useTranslate'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 defineOptions({ layout: Layout })
+
 
 const { t } = useTranslate()
 
@@ -42,6 +45,8 @@ const { page, leadNews, recentNews, topEvents, bottomEvents } = defineProps({
         required: true,
     },
 })
+
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
 const leadNewsItems = computed(() => {
     if (Array.isArray(leadNews)) {
@@ -171,10 +176,13 @@ const metaKeywords = computed(() => {
                                     :hideFeatureImage="true" :isCompact="true" />
                             </div>
                         </div>
+                        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" />
                     </div>
                 </aside>
             </div>
         </div>
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <div v-if="bottomEvents">
             <EventNewsSection :events="bottomEvents" class="mb-4" />
@@ -190,6 +198,8 @@ const metaKeywords = computed(() => {
         <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="জাতীয়"
             :language="page?.language" :style="1" :limit="4" />
 
+        <GoogleAdsence v-if="showGoogleAd" />
+
         <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4" categoryIdOrSlug="sports"
             :language="page?.language" :style="2" :limit="6" />
         <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="খেলাধুলা"
@@ -197,8 +207,10 @@ const metaKeywords = computed(() => {
 
         <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4"
             categoryIdOrSlug="entertainment" :language="page?.language" :style="2" :limit="6" />
-        <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
-            categoryIdOrSlug="বিনোদন" :language="page?.language" :style="2" :limit="6" />
+        <CategorySection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="বিনোদন"
+            :language="page?.language" :style="2" :limit="6" />
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <NewsTypeSliderSection class="mt-4" />
 
@@ -221,6 +233,8 @@ const metaKeywords = computed(() => {
         </div>
 
         <NewsTypeGallerySection class="mt-4" />
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -246,5 +260,7 @@ const metaKeywords = computed(() => {
                 </div>
             </div>
         </div>
+
+        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </section>
 </template>

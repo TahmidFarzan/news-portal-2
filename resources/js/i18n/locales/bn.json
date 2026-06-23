@@ -262,7 +262,8 @@
                             "menus": "মেনু",
                             "user_anagement": "ব্যবহারকারী ব্যবস্থাপনা",
                             "users": "ব্যবহারকারী",
-                            "themes": "থিম"
+                            "themes": "থিম",
+                            "google_adsences": "গুগল অ্যাডসেন্স"
                         }
                     }
                 },
@@ -493,17 +494,17 @@
                 }
             },
             "category_has_location_section": {
-                    "labels": {
-                        "location": "অবস্থান"
-                    },
-                    "form": {
-                        "location_placeholder": "একটি অবস্থান নির্বাচন করুন"
-                    },
-                    "actions":{
-                        "searching": "অনুসন্ধান চলছে",
-                        "search": "অনুসন্ধান করুন"
-                    }
+                "labels": {
+                    "location": "অবস্থান"
+                },
+                "form": {
+                    "location_placeholder": "একটি অবস্থান নির্বাচন করুন"
+                },
+                "actions": {
+                    "searching": "অনুসন্ধান চলছে",
+                    "search": "অনুসন্ধান করুন"
                 }
+            }
         }
     },
     "pages": {
@@ -2991,6 +2992,136 @@
                             "help_title": "বিজ্ঞাপন টেক্সট সাহায্য",
                             "help_description": "বিজ্ঞাপন টেক্সট আপনার বিজ্ঞাপন ইনভেন্টরি সুরক্ষা করতে সাহায্য করে অনুমোদিত ডিজিটাল বিক্রেতাদের তালিকা করার মাধ্যমে। প্রতি লাইনে একটি বিক্রেতার রেকর্ড দিন।",
                             "example_title": "উদাহরণ বিজ্ঞাপন টেক্সট"
+                        }
+                    }
+                }
+            },
+            "google_adsences": {
+                "create": {
+                    "labels": {
+                        "edit": "সম্পাদনা",
+                        "basic_information": "প্রাথমিক তথ্য",
+                        "type": "ধরন",
+                        "slot_id": "স্লট আইডি",
+                        "name": "নাম",
+                        "use_full_width_responsive": "পূর্ণ প্রস্থ রেসপনসিভ ব্যবহার করুন",
+                        "position": "অবস্থান",
+                        "yes": "হ্যাঁ",
+                        "no": "না"
+                    },
+                    "form": {
+                        "create_page_title": "গুগল অ্যাডসেন্স তৈরি",
+                        "slot_id_placeholder": "স্লট আইডি লিখুন",
+                        "name_placeholder": "নাম লিখুন",
+                        "type_placeholder": "ধরন নির্বাচন করুন",
+                        "type_select": "ধরন নির্বাচন করুন",
+                        "position_select": "অবস্থান নির্বাচন করুন",
+                        "position_placeholder": "অবস্থান নির্বাচন করুন"
+                    },
+                    "validation": {
+                        "name_is_required": "নাম আবশ্যক।",
+                        "slot_id_is_required": "স্লট আইডি আবশ্যক।",
+                        "type_is_required": "ধরন আবশ্যক।",
+                        "position_is_required": "অবস্থান আবশ্যক।"
+                    },
+                    "navigation": {
+                        "google_adsences": "গুগল অ্যাডসেন্স"
+                    },
+                    "actions": {
+                        "saving": "সংরক্ষণ হচ্ছে",
+                        "save": "সংরক্ষণ করুন"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "details": "বিস্তারিত",
+                        "basic_information": "প্রাথমিক তথ্য",
+                        "name": "নাম",
+                        "position": "অবস্থান",
+                        "not_available": "প্রযোজ্য নয়",
+                        "type": "ধরন",
+                        "slot_id": "স্লট আইডি",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "আপডেটের সময়",
+                        "updated_by": "আপডেট করেছেন",
+                        "client_id": "ক্লায়েন্ট আইডি",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "use_full_width_responsive" : "সম্পূর্ণ প্রস্থে প্রতিক্রিয়াশীল ব্যবহার করুন"
+                    },
+                    "navigation": {
+                        "google_adsences": "গুগল অ্যাডসেন্স",
+                        "activity_logs": "কার্যকলাপ লগ"
+                    },
+                    "title": "গুগল অ্যাডসেন্স বিস্তারিত",
+                    "table": {
+                        "menus": {
+                            "edit": "সম্পাদনা"
+                        },
+                        "columns": {
+                            "created_at": "তৈরির সময়"
+                        }
+                    },
+                    "actions": {
+                        "delete": "মুছে ফেলুন",
+                        "cancel": "বাতিল করুন",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "activity_logs": {
+                        "details": {
+                            "system_information": "সিস্টেম তথ্য"
+                        }
+                    },
+                    "delete_modal": {
+                        "title": "গুগল অ্যাডসেন্স মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
+                        }
+                    }
+                },
+                "index": {
+                    "navigation": {
+                        "google_adsences": "গুগল অ্যাডসেন্স"
+                    },
+                    "actions": {
+                        "create": "তৈরি করুন",
+                        "delete": "মুছে ফেলুন",
+                        "cancel": "বাতিল করুন",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    },
+                    "labels": {
+                        "position": "অবস্থান",
+                        "per_page": "প্রতি পৃষ্ঠা",
+                        "created_by": "তৈরি করেছেন",
+                        "type": "ধরন",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no_record_found": "কোনো রেকর্ড পাওয়া যায়নি"
+                    },
+                    "search_placeholder": "গুগল অ্যাডসেন্স খুঁজুন...",
+                    "applying_filter": "ফিল্টার প্রয়োগ হচ্ছে...",
+                    "apply_filter": "ফিল্টার প্রয়োগ করুন",
+                    "table": {
+                        "columns": {
+                            "name": "নাম",
+                            "position": "অবস্থান",
+                            "type": "ধরন",
+                            "slot_id": "স্লট আইডি",
+                            "action": "অ্যাকশন"
+                        },
+                        "menus": {
+                            "details": "বিস্তারিত",
+                            "edit": "সম্পাদনা"
+                        }
+                    },
+                    "created": "তৈরি হয়েছে",
+                    "delete_modal": {
+                        "title": "গুগল অ্যাডসেন্স মুছুন"
+                    },
+                    "modals": {
+                        "delete_confirmation_modal": {
+                            "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
                         }
                     }
                 }

@@ -71,6 +71,20 @@ class SearchController extends Controller
         );
     }
 
+    public function googleAdsenceTypes(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->googleAdsenceTypes($request)
+        );
+    }
+
+    public function googleAdsencePositions(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->googleAdsencePositions($request)
+        );
+    }
+
     public function pageSections(Request $request): JsonResponse
     {
         return response()->json(

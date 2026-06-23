@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\ActivityLogHelper;
+use App\Helpers\GoogleAdsenceHelper;
 use App\Helpers\EventHelper;
 use App\Helpers\DatatableHelper;
 use App\Helpers\MediaHelper;
@@ -240,6 +241,58 @@ class SearchService
     public function eventPositions(Request $request): array
     {
         $options = EventHelper::positions();
+
+        if ($request->filled('search')) {
+            $search  = $request->input('search');
+            $options = $options->filter(
+                fn($row) =>
+                stripos((string) $row->id, $search) !== false ||
+                stripos($row->name, $search) !== false
+            );
+        }
+
+        $items = $options->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+        ]);
+
+        return [
+            'items'        => $items,
+            'total'        => 1,
+            'current_page' => 1,
+            'last_page'    => 1,
+        ];
+    }
+
+    public function googleAdsenceTypes(Request $request): array
+    {
+        $options = GoogleAdsenceHelper::types();
+
+        if ($request->filled('search')) {
+            $search  = $request->input('search');
+            $options = $options->filter(
+                fn($row) =>
+                stripos((string) $row->id, $search) !== false ||
+                stripos($row->name, $search) !== false
+            );
+        }
+
+        $items = $options->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+        ]);
+
+        return [
+            'items'        => $items,
+            'total'        => 1,
+            'current_page' => 1,
+            'last_page'    => 1,
+        ];
+    }
+
+    public function googleAdsencePositions(Request $request): array
+    {
+        $options = GoogleAdsenceHelper::positions();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');

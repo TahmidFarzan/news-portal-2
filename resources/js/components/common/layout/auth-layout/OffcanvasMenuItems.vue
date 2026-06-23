@@ -21,7 +21,8 @@ import {
     faGlobe,
     faEllipsisVertical,
     faGears,
-    faFile
+    faFile,
+    faBullhorn
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
@@ -42,7 +43,8 @@ library.add(
     faGlobe,
     faEllipsisVertical,
     faGears,
-    faFile
+    faFile,
+    faBullhorn
 )
 const { t } = useTranslate()
 
@@ -54,6 +56,7 @@ import {
     canAccessPageMenu,
     canAccessMenuMenu,
     canAccessTheme,
+    canAccessGoogleAdsence
 } from '@/composables/useAuthUserAccessPermissions'
 
 const {
@@ -112,6 +115,9 @@ const canAccessMenuMenuComputed = computed(() => {
 
 const canAccessThemeComputed = computed(() => {
     return canAccessTheme(authUser)
+})
+const canAccessGoogleAdsenceComputed = computed(() => {
+    return canAccessGoogleAdsence(authUser)
 })
 
 const toggleShowSubMenu = (key) => {
@@ -284,6 +290,13 @@ const isSubMenuVisible = (key) => {
             :class="isCurrentPage('/auth-user/themes/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gears" />
             {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.themes") }}
+        </a>
+
+        <a v-if="canAccessGoogleAdsenceComputed" :href="route('back-office.google-adsences.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/auth-user/google-adsences/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="bullhorn" />
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.google_adsences") }}
         </a>
     </div>
 </template>

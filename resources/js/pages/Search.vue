@@ -5,6 +5,7 @@ import { Head, useForm, router as inertiaRouter } from '@inertiajs/vue3'
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useSystemApi'
@@ -224,6 +225,8 @@ onMounted(async () => {
                 </button>
             </div>
         </form>
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <List :news="news" pagination-type="Cursor" />
     </div>

@@ -18,6 +18,7 @@ use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\ThemeController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
+use App\Http\Controllers\BackOffice\GoogleAdsenceController;
 
 //
 use App\Http\Controllers\FeedController;
@@ -95,6 +96,9 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
         Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
         Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
+
+        Route::get('google-adsence-types', [SearchController::class, 'googleAdsenceTypes'])->name('google-adsence-types');
+        Route::get('google-adsence-positions', [SearchController::class, 'googleAdsencePositions'])->name('google-adsence-positions');
     });
 
     Route::middleware(['response.cache:60,public,30,etag'])->group(function () {
@@ -308,6 +312,17 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::patch('update/{slug}', [ThemeController::class, 'update'])->name('update');
     });
 
+    Route::prefix('google-adsences')->name('google-adsences.')->group(function () {
+        Route::get('/', [GoogleAdsenceController::class, 'index'])->name('index');
+        Route::get('create', [GoogleAdsenceController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [GoogleAdsenceController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [GoogleAdsenceController::class, 'details'])->name('details');
+
+        Route::post('save', [GoogleAdsenceController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [GoogleAdsenceController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [GoogleAdsenceController::class, 'delete'])->name('delete');
+    });
+
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
         Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
@@ -414,6 +429,8 @@ Route::prefix('site')->name('site.')->group(function () {
     Route::get('themes', [SiteController::class, 'themes'])->name('themes');
     Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
     Route::get('languages', [SiteController::class, 'languages'])->name('languages');
+
+    Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
 });
 
 Route::get('/', function () {

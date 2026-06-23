@@ -20,6 +20,11 @@ class ThemeService
         return Theme::where('slug', $slug)->firstOrFail();
     }
 
+    public function findByGroupAndLabel(string $group, string $label): Theme
+    {
+        return Theme::where('group', $group)->where('label', $label)->firstOrFail();
+    }
+
     public function loadRelations(Theme $theme): Theme
     {
         $theme->load([

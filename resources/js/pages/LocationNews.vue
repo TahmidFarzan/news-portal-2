@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
+import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -380,7 +381,8 @@ onBeforeUnmount(() => {
 
                         <div v-if="location?.parent"
                             class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                            <a :href="location.parent.public_url" :title="t('pages.location_news.locations.details.parent_location')"
+                            <a :href="location.parent.public_url"
+                                :title="t('pages.location_news.locations.details.parent_location')"
                                 class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600">
                                 <FontAwesomeIcon icon="location-dot" class="shrink-0" />
 
@@ -442,6 +444,8 @@ onBeforeUnmount(() => {
         </section>
 
         <div class="border-t border-gray-200"></div>
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <List :news="news" pagination-type="Cursor" />
     </div>

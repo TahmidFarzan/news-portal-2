@@ -8,6 +8,7 @@ import WriterConstributer from '@/components/common/news/WriterConstributer.vue'
 import TitleSubtitleContentShoulder from '@/components/common/news/TitleSubtitleContentShoulder.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 import NewsBody from '@/components/common/news/NewsBody.vue'
+import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { computed } from 'vue'
 import { formatDateTime } from '@/composables/useDateTime'
@@ -68,6 +69,8 @@ const { news } = defineProps({
         </figure>
 
         <NewsBody v-if="news?.body" class="prose prose-lg max-w-none" :news="news"/>
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <TagTrend :news="news" />
 

@@ -15,6 +15,8 @@ import {
     faClock,
 } from '@fortawesome/free-solid-svg-icons'
 
+import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+
 FontAwesomeLibrary.add(
     faClock
 )
@@ -93,6 +95,8 @@ const isEmbedVideo = computed(() => {
                 <SocialShare :news="news" />
             </div>
         </header>
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <TagTrend :news="news" />
 

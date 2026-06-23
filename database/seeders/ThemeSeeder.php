@@ -5,7 +5,6 @@ use App\Helpers\ThemeHelper;
 use App\Models\Theme;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class ThemeSeeder extends Seeder
 {
@@ -42,7 +41,6 @@ class ThemeSeeder extends Seeder
             'value' => true,
         ])->create();
 
-
         Theme::factory()->state([
             'group' => ThemeHelper::GROUP_APP,
             'label' => ThemeHelper::OPTION_SHOW_BREAKING_NEWS,
@@ -60,6 +58,13 @@ class ThemeSeeder extends Seeder
         Theme::factory()->state([
             'group' => ThemeHelper::GROUP_MENU,
             'label' => ThemeHelper::OPTION_SHOW_FOOTER_MENU,
+            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
+            'value' => true,
+        ])->create();
+
+        Theme::factory()->state([
+            'group' => ThemeHelper::GROUP_APP,
+            'label' => ThemeHelper::OPTION_SHOW_GOOGLE_AD,
             'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
             'value' => true,
         ])->create();
@@ -111,6 +116,13 @@ class ThemeSeeder extends Seeder
             'label' => ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY,
             'type'  => ThemeHelper::VALUE_TYPE_TEXT,
             'value' => null,
+        ])->create();
+
+        Theme::factory()->state([
+            'group' => ThemeHelper::GROUP_APP,
+            'label' => ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID,
+            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
+            'value' => "ca-pub-3940256099942544",
         ])->create();
 
     }

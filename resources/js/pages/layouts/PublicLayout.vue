@@ -8,7 +8,7 @@ import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
-import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount, provide } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -21,6 +21,7 @@ import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-ic
 
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTheme } from '@/composables/useTheme'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
@@ -120,6 +121,14 @@ const showLogoOnHeaderMenu = computed(() => {
 const showBreakingNews = computed(() => {
     return getTheme(themeOptions.SHOW_BREAKING_NEWS, themeGroups.App)
 })
+
+const showGoogleAd = computed(() => {
+    const theme = getTheme(themeOptions.SHOW_GOOGLE_AD, themeGroups.App)
+
+    return isTruthyValue(theme?.value)
+})
+
+provide('showGoogleAd', showGoogleAd)
 
 onMounted(async () => {
     await nextTick()

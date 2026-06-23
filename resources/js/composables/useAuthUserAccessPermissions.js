@@ -443,6 +443,31 @@ export const canEditTheme = (authUser, theme) => {
     return false
 }
 
+// ================= GOOGLEADSENCE =================
+
+export const canCreateGoogleAdsence = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
+export const canEditGoogleAdsence = (authUser, googleAdsence) => {
+    if (!authUser || !googleAdsence) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return false
+}
+
+export const canDeleteGoogleAdsence = (authUser, googleAdsence) => {
+    if (!authUser || !googleAdsence) return false
+
+    const role = getUserRoleName(authUser)
+
+    if (isAdmin(role)) return true
+
+    return false
+}
+
 
 // ================= MENU =================
 
@@ -456,6 +481,9 @@ export const canAccessLogViewerMenu = (authUser) =>
     authUser && isAdmin(getUserRoleName(authUser))
 
 export const canAccessSettingMenu = (authUser) =>
+    authUser && isAdmin(getUserRoleName(authUser))
+
+export const canAccessGoogleAdsence = (authUser) =>
     authUser && isAdmin(getUserRoleName(authUser))
 
 export const canAccessUserManagementMenu = (authUser) => {
