@@ -43,6 +43,8 @@ class Page extends Model
     protected function casts(): array
     {
         return [
+            'is_default' => 'boolean',
+            'is_published' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
