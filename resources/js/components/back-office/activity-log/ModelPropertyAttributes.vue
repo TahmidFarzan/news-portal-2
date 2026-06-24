@@ -1,5 +1,5 @@
 <script setup>
-import ModelPropertieAttributes from '@/components/back-office/activity-log/ModelPropertieAttributes.vue'
+import ModelPropertyAttributes from '@/components/back-office/activity-log/ModelPropertyAttributes.vue'
 
 import { ref, computed } from 'vue'
 
@@ -77,7 +77,7 @@ function formatValue(key, value) {
 
                     <template v-if="isObject(value)">
                         <div class="ml-4 mt-2 border-l-2 border-gray-200 pl-3">
-                            <ModelPropertieAttributes :property="value" />
+                            <ModelPropertyAttributes :property="value" />
                         </div>
                     </template>
 
@@ -87,7 +87,7 @@ function formatValue(key, value) {
 
                                 <template v-if="isObject(item)">
                                     <div class="border border-gray-200 rounded p-2 bg-white">
-                                        <ModelPropertieAttributes :property="item" />
+                                        <ModelPropertyAttributes :property="item" />
                                     </div>
                                 </template>
 
