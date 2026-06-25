@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import ModelPagination from '@/components/common/model/Pagination.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -149,15 +149,15 @@ onMounted(async () => {
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
                     :placeholder="t('pages.back_office.trends.index.labels.per_page')" />
 
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     :placeholder="t('pages.back_office.trends.index.labels.created_by')" />
 
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
                     :placeholder="t('pages.back_office.trends.index.labels.language')" />
 

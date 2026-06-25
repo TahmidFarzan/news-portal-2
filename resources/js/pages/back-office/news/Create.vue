@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
-import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
 import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
 import NewsImageGalleryGrid from '@/components/back-office/news/NewsImageGalleryGrid.vue'
@@ -330,7 +330,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.labels.news_type') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="news_type_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="news_type_id"
                                 :selectedItem="news?.news_type" :apiUrl="route('search.news-types')"
                                 :error="saveForm.errors.news_type_id" :multiple="false"
                                 :placeholder="t('pages.back_office.news.create.form.news_type_placeholder')" />
@@ -345,7 +345,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="news?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('pages.back_office.news.create.form.language_placeholder')" />
@@ -360,7 +360,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.form.category') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="category_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="category_id"
                                 :selectedItem="saveForm.category_id ? news?.category : null" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.category_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
@@ -376,7 +376,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.form.event') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="event_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="event_id"
                                 :selectedItem="saveForm.event_id ? news?.event : null" :apiUrl="eventApiUrl"
                                 :error="saveForm.errors.event_id" :multiple="false"
                                 :placeholder="t('pages.back_office.news.create.form.event_placeholder')" />
@@ -391,7 +391,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.form.location') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="location_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="location_id"
                                 :selectedItem="saveForm.location_id ? news?.location : null" :apiUrl="locationApiUrl"
                                 :error="saveForm.errors.location_id" :multiple="false"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
@@ -501,7 +501,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.form.tags') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="tag_ids"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="tag_ids"
                                 :selectedItem="saveForm.tag_ids ? news?.tags : null" :apiUrl="tagApiUrl"
                                 :error="saveForm.errors.tag_ids" :multiple="true"
                                 :placeholder="t('pages.back_office.news.create.form.tags_placeholder')" />
@@ -583,7 +583,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.labels.contributors') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="contributor_ids"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="contributor_ids"
                                 :selectedItem="saveForm.contributor_ids ? news?.contributors : null"
                                 :apiUrl="contributorApiUrl" :error="saveForm.errors.contributor_ids" :multiple="true"
                                 :placeholder="t('pages.back_office.news.create.form.contributors_placeholder')" />
@@ -610,7 +610,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.labels.relevant_news') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="relevant_news_ids"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="relevant_news_ids"
                                 :selectedItem="news?.relevant_news || null" :apiUrl="relevantOrRelatedNewsApiUrl"
                                 :error="saveForm.errors.relevant_news_ids" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
@@ -622,7 +622,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.labels.related_news') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="related_news_ids"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="related_news_ids"
                                 :selectedItem="news?.related_news || null" :apiUrl="relevantOrRelatedNewsApiUrl"
                                 :error="saveForm.errors.related_news_ids" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
@@ -634,7 +634,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.app.breaking_news') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="breaking_news_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="breaking_news_id"
                                 :selectedItem="news?.breaking_news || null" :apiUrl="breakingNewsApiUrl"
                                 :error="saveForm.errors.breaking_news_id" selectedLabelKey="title" selectedValueKey="id"
                                 apiLabelKey="title" apiValueKey="id" :multiple="false"
@@ -710,7 +710,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.form.seo_keywords') }}
                             </label>
 
-                            <MultiSelectTaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
+                            <SelectTaggable :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
                                 :placeholder="t('pages.back_office.news.create.form.seo_keywords_placeholder')" />
                         </div>

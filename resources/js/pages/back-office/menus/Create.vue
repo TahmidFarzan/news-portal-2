@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 
 import { computed, onMounted, nextTick } from 'vue'
 import { Head, useForm, router as inertiaJsRouter } from '@inertiajs/vue3'
@@ -135,7 +135,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="menu?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('pages.back_office.menus.create.form.language_placeholder')" />
@@ -167,7 +167,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="menu_type_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="menu_type_id"
                                 :selectedItem="menu?.menu_type" :apiUrl="route('search.menu-types')"
                                 :error="saveForm.errors.menu_type_id" :multiple="false"
                                 :placeholder="t('pages.back_office.menus.create.form.menu_type_placeholder')" />

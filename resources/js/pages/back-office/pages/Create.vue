@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
-import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
 import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
 
 import { computed, onMounted, nextTick, watch, ref } from 'vue'
@@ -170,7 +170,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.pages.create.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="page?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('pages.back_office.pages.create.form.language_placeholder')" />
@@ -250,7 +250,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.pages.create.form.parent') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :selectedItem="page?.parent" fieldName="parent_id"
+                            <SelectInfinityLoadingApi :selectedItem="page?.parent" fieldName="parent_id"
                                 :form="saveForm" :apiUrl="pageApiUrl" :error="saveForm.errors.parent_id"
                                 selectedLabelKey="indentation_title" selectedValueKey="id"
                                 apiLabelKey="indentation_title" apiValueKey="id" :multiple="false"
@@ -336,7 +336,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.pages.create.form.seo_keywords') }}
                             </label>
 
-                            <MultiSelectTaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
+                            <SelectTaggable :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
                                 :placeholder="t('pages.back_office.pages.create.form.seo_keywords_placeholder')" />
 

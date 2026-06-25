@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
-import MultiSelectTaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { computed, onMounted, nextTick, ref } from 'vue'
@@ -174,7 +174,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.google_adsences.create.labels.position') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="position"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="position"
                                 :selectedItem="googleAdsence?.position" :apiUrl="route('search.google-adsence-positions')"
                                 :error="saveForm.errors.position" :multiple="false"
                                 :placeholder="t('pages.back_office.google_adsences.create.form.position_placeholder')" />
@@ -189,7 +189,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.google_adsences.create.labels.type') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="type"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="type"
                                 :selectedItem="googleAdsence?.type" :apiUrl="route('search.google-adsence-types')"
                                 :error="saveForm.errors.type" :multiple="false"
                                 :placeholder="t('pages.back_office.google_adsences.create.form.type_placeholder')" />

@@ -4,7 +4,7 @@ import { Head, useForm, router as inertiaRouter } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
@@ -189,21 +189,21 @@ onMounted(async () => {
     <div class="space-y-6">
         <form class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4" @submit.prevent="applyFilter">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id || null" :apiUrl="newsTypesApiUrl" :multiple="false"
                     :placeholder="t('pages.search.labels.news_type')" />
 
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.category_id || null" apiLabelKey="indentation_name" apiValueKey="id"
                     :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('pages.search.labels.category')" />
 
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.location_id || null" apiLabelKey="indentation_name" apiValueKey="id"
                     :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('pages.search.labels.location')" />
 
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id || null" :apiUrl="eventApiUrl" :multiple="false"
                     :placeholder="t('pages.search.labels.event')" />
 

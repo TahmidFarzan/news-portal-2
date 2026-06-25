@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import ModelPagination from '@/components/common/model/Pagination.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
@@ -126,17 +126,17 @@ onMounted(async () => {
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('pages.back_office.activity_logs.index.labels.per_page')" />
 
-                <MultiSelectInfinityLoadingApi v-if="showSubjectType" :form="filterForm" fieldName="subject_type"
+                <SelectInfinityLoadingApi v-if="showSubjectType" :form="filterForm" fieldName="subject_type"
                     :selectedItem="filterForm.subject_type" :apiUrl="route('search.activity-log-subject-types')"
                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('pages.back_office.activity_logs.index.subject_placeholder')" />
 
-                <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="causer_id"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="causer_id"
                     :selectedItem="filterForm.causer_id" :apiUrl="route('search.users')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('pages.back_office.activity_logs.index.table.columns.causer')" />

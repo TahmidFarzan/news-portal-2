@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 
 import { computed, onMounted, nextTick } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -117,7 +117,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.trends.create.labels.tag') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi
+                            <SelectInfinityLoadingApi
                                 :form="saveForm"
                                 fieldName="tag_id"
                                 :selectedItem="trend?.tag"

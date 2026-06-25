@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 
 import { computed, onMounted, nextTick, ref, watch } from 'vue'
 import { Head, useForm, router as inertiaJsRouter } from '@inertiajs/vue3'
@@ -307,7 +307,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="menuItem?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('pages.back_office.menus.menu_items.create.form.language_placeholder')" />
@@ -380,7 +380,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :key="modelTypeKey" :form="saveForm" fieldName="model_type"
+                            <SelectInfinityLoadingApi :key="modelTypeKey" :form="saveForm" fieldName="model_type"
                                 :selectedItem="saveForm?.model_type" :apiUrl="route('search.menu-item-models')"
                                 :error="saveForm.errors.model_type" :multiple="false"
                                 :placeholder="t('pages.back_office.menus.menu_items.create.form.model_placeholder')" />
@@ -396,20 +396,20 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi v-if="saveForm?.model_type == 'Tag'"
+                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == 'Tag'"
                                 :key="`tag-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="saveForm?.model_id" :apiUrl="tagApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                                 :multiple="false" :placeholder="t('pages.back_office.menus.menu_items.create.form.tag_placeholder')" />
 
-                            <MultiSelectInfinityLoadingApi v-if="saveForm?.model_type == 'Category'"
+                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == 'Category'"
                                 :key="`category-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="menuItem?.model" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.model_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
                                 :placeholder="t('pages.back_office.menus.menu_items.create.form.category_placeholder')" />
 
-                            <MultiSelectInfinityLoadingApi v-if="saveForm?.model_type == 'Page'"
+                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == 'Page'"
                                 :key="`page-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="menuItem?.model" :apiUrl="pageApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="indentation_title" selectedValueKey="id"
@@ -470,7 +470,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :key="parentKey" :selectedItem="menuItem?.parent"
+                            <SelectInfinityLoadingApi :key="parentKey" :selectedItem="menuItem?.parent"
                                 fieldName="parent_id" :form="saveForm" :apiUrl="menuItemApiUrl"
                                 :error="saveForm.errors.parent_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"

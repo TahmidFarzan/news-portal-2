@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, watch, nextTick, onMounted } from 'vue'
 import axios from 'axios'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { setSelectedLanguage, useTranslate } from '@/composables/useTranslate'
 
@@ -74,7 +74,7 @@ onMounted(async () => {
 
 <template>
     <div class="w-40 max-[450px]:w-32">
-        <MultiSelectInfinityLoadingApi v-if="language" :key="language?.id" :selectedItem="language"
+        <SelectInfinityLoadingApi v-if="language" :key="language?.id" :selectedItem="language"
             fieldName="language_id" :form="languageChangeForm" :apiUrl="route('site.languages')"
             :error="languageChangeForm.errors.language_id" selectedLabelKey="name" selectedValueKey="id"
             apiLabelKey="name" apiValueKey="id" :multiple="false" :placeholder="t('components.common.layout.public_layout.language_select.labels.language')" :compactDesign="true"

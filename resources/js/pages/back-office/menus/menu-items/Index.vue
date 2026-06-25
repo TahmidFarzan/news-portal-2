@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import ModelPagination from '@/components/common/model/Pagination.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRouter } from '@inertiajs/vue3'
@@ -181,7 +181,7 @@ onMounted(async () => {
         >
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <MultiSelectInfinityLoadingApi
+                <SelectInfinityLoadingApi
                     :form="filterForm"
                     fieldName="per_page"
                     :selectedItem="filterForm.per_page"
@@ -190,7 +190,7 @@ onMounted(async () => {
                     :placeholder="t('pages.back_office.menus.menu_items.index.labels.per_page')"
                 />
 
-                <MultiSelectInfinityLoadingApi
+                <SelectInfinityLoadingApi
                     :form="filterForm"
                     fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id"
@@ -199,7 +199,7 @@ onMounted(async () => {
                     :placeholder="t('pages.back_office.menus.menu_items.index.labels.created_by')"
                 />
 
-                <MultiSelectInfinityLoadingApi
+                <SelectInfinityLoadingApi
                     :form="filterForm"
                     fieldName="language_id"
                     :selectedItem="filterForm.language_id"
@@ -208,7 +208,7 @@ onMounted(async () => {
                     :placeholder="t('pages.back_office.menus.menu_items.index.labels.language')"
                 />
 
-                <MultiSelectInfinityLoadingApi
+                <SelectInfinityLoadingApi
                     :form="filterForm"
                     fieldName="model_type"
                     :selectedItem="filterForm.model_type"

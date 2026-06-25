@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { ref, onMounted, nextTick } from 'vue'
@@ -233,7 +233,7 @@ onMounted(async () => {
                                     <span class="text-red-500">*</span>
                                 </label>
 
-                                <MultiSelectInfinityLoadingApi :form="profileUpdateForm" fieldName="gender"
+                                <SelectInfinityLoadingApi :form="profileUpdateForm" fieldName="gender"
                                     :selectedItem="profileUpdateForm.gender" :apiUrl="route('search.genders')"
                                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
                                     apiValueKey="id" :placeholder="t('pages.auth_user.profile.gender_placeholder')"
@@ -250,7 +250,7 @@ onMounted(async () => {
                                     <span class="text-red-500">*</span>
                                 </label>
 
-                                <MultiSelectInfinityLoadingApi :form="profileUpdateForm" fieldName="religion"
+                                <SelectInfinityLoadingApi :form="profileUpdateForm" fieldName="religion"
                                     :selectedItem="profileUpdateForm.religion" :apiUrl="route('search.religions')"
                                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
                                     apiValueKey="id" :placeholder="t('pages.auth_user.profile.religion_placeholder')"
@@ -267,7 +267,7 @@ onMounted(async () => {
                                     <span class="text-red-500">*</span>
                                 </label>
 
-                                <MultiSelectInfinityLoadingApi :form="profileUpdateForm" fieldName="marital_status"
+                                <SelectInfinityLoadingApi :form="profileUpdateForm" fieldName="marital_status"
                                     :selectedItem="profileUpdateForm.marital_status"
                                     :apiUrl="route('search.marital-statuses')" :multiple="false" selectedLabelKey="name"
                                     selectedValueKey="id" apiLabelKey="name" apiValueKey="id"

@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { router, useForm } from '@inertiajs/vue3'
 
-import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
@@ -393,7 +393,7 @@ watch(
 
         <div class="grid gap-3" :class="locationGridClass">
             <div v-for="levelIndex in visibleLocationLevels" :key="levelIndex" class="min-w-0">
-                <MultiSelectInfinityLoadingApi :key="getLocationSelectKey(levelIndex)" :form="searchLocationForm"
+                <SelectInfinityLoadingApi :key="getLocationSelectKey(levelIndex)" :form="searchLocationForm"
                     :fieldName="getLocationFieldName(levelIndex)" :apiUrl="getLocationApiUrl(levelIndex)"
                     :error="searchLocationForm.errors?.[getLocationFieldName(levelIndex)]" :multiple="false"
                     :placeholder="t('components.common.page.category_has_location_section.form.location_placeholder')" />
