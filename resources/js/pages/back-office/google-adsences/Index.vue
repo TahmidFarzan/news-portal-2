@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateGoogleAdsence, canEditGoogleAdsence, canDeleteGoogleAdsence } from '@/composables/useAuthUserAccessPermissions'
+import { canCreateGoogleAdsence, canEditGoogleAdsence, canDeleteGoogleAdsence } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)

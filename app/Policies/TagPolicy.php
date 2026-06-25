@@ -1,36 +1,52 @@
 <?php
-
 namespace App\Policies;
 
-use App\Models\User;
+use App\Helpers\UserPermissionHelper;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Auth\Access\Response;
-use App\Helpers\UserHelper;
 
 class TagPolicy
 {
+    public function before(User $authUser, string $ability): bool | null
+    {
+        if ($authUser->is_super_admin) {
+            return true;
+        }
+
+        return null;
+    }
+
     public function viewAny(User $authUser): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_TAG;
+        $access = UserPermissionHelper::ACCESS_VIEW_ANY;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function view(User $authUser, Tag $tag): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_TAG;
+        $access = UserPermissionHelper::ACCESS_VIEW;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function create(User $authUser): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_TAG;
+        $access = UserPermissionHelper::ACCESS_CREATE;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function update(User $authUser, Tag $tag): Response
     {
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
-            return Response::allow();
-        }
+        $module = UserPermissionHelper::MODULE_TAG;
+        $access = UserPermissionHelper::ACCESS_UPDATE;
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $tag->created_by_id)) {
+        if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }
 
@@ -40,11 +56,10 @@ class TagPolicy
     public function delete(User $authUser, Tag $tag): Response
     {
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
-            return Response::allow();
-        }
+        $module = UserPermissionHelper::MODULE_TAG;
+        $access = UserPermissionHelper::ACCESS_DELETE;
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $tag->created_by_id)) {
+        if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }
 

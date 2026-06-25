@@ -3,14 +3,12 @@ namespace Database\Factories;
 
 use App\Helpers\NewsHelper;
 use App\Helpers\SeederHelper;
-use App\Helpers\UserHelper;
 use App\Models\Category;
 use App\Models\Event;
 use App\Models\Language;
 use App\Models\Location;
 use App\Models\News;
 use App\Models\User;
-use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,10 +23,9 @@ class NewsFactory extends Factory
      */
     public function definition(): array
     {
-        $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
-        $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
-        $language      = Language::where("code", SeederHelper::LANGUAGE_EN_CODE)->first() ?? null;
-        $newsType      = Language::where("name", NewsHelper::NEWS_TYPE_STORY)->first() ?? null;
+        $user     = User::where("is_super_admin", true)->inRandomOrder()->first();
+        $language = Language::where("code", SeederHelper::LANGUAGE_EN_CODE)->first() ?? null;
+        $newsType = Language::where("name", NewsHelper::NEWS_TYPE_STORY)->first() ?? null;
 
         $category = $this->getRandomCategory($language);
         $location = $this->getRandomLocation($language, $category);
@@ -81,9 +78,9 @@ class NewsFactory extends Factory
         }
 
         $allowed = match ($language->code) {
-            SeederHelper::LANGUAGE_EN_CODE     => "National",
+            SeederHelper::LANGUAGE_EN_CODE => "National",
             SeederHelper::LANGUAGE_BN_CODE => "জাতীয়",
-            default                                 => null,
+            default                        => null,
         };
 
         if ($category->name !== $allowed) {

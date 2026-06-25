@@ -134,7 +134,7 @@ onMounted(async () => {
 
                 <MultiSelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    selectedLabelKey="name_with_user_role" selectedValueKey="id" apiLabelKey="name_with_user_role"
+                    selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
                     apiValueKey="id" :placeholder="t('pages.back_office.medias.index.labels.created_by')" />
 
                 <input type="date" v-model="filterForm.date"

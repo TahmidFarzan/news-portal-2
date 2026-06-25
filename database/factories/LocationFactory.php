@@ -2,11 +2,9 @@
 namespace Database\Factories;
 
 use App\Helpers\SeederHelper;
-use App\Helpers\UserHelper;
 use App\Models\Language;
 use App\Models\Location;
 use App\Models\User;
-use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -22,9 +20,8 @@ class LocationFactory extends Factory
      */
     public function definition(): array
     {
-        $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
-        $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
-        $language      = Language::where("code", SeederHelper::LANGUAGE_EN_CODE)->first() ?? null;
+        $user     = User::where("is_super_admin", true)->inRandomOrder()->first();
+        $language = Language::where("code", SeederHelper::LANGUAGE_EN_CODE)->first() ?? null;
 
         $name  = $this->faker->name();
         $brief = $this->faker->sentence();

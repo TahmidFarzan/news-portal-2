@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -31,14 +32,13 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('users')]
 #[Fillable([
-    'name', 'email', 'slug', 'password', 'is_default',
-    'user_role_id', 'marital_status',
-    'religion', 'gender', 'mobile', 'birth_date',
-    'address', 'created_by_id',
-])]
+        'name', 'email', 'slug', 'password', 'is_default',
+        'marital_status', 'religion', 'gender', 'mobile', 'birth_date',
+        'address', 'created_by_id', 'is_super_admin',
+    ])]
 #[Hidden([
-    'password', 'remember_token', 'is_default',
-])]
+        'password', 'remember_token', 'is_default',
+    ])]
 #[UsePolicy(UserPolicy::class)]
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements MustVerifyEmail, HasMedia
@@ -52,6 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     protected function casts(): array
     {
         return [
+            'is_super_admin'    => 'boolean',
             'email_verified_at' => 'datetime',
             'birth_date'        => 'date',
             'created_at'        => 'datetime',
@@ -77,6 +78,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
                 'religion',
                 'address',
                 'marital_status',
+                'is_super_admin',
             ])
             ->useLogName('User')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
@@ -97,7 +99,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
             ->generateSlugsFrom("name")
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
+            ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string
@@ -136,9 +138,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     public function getProfileImageAttribute(): ?Media
     {
-        $image          = null;
-        $collectionName = $this->media_collection_name;
-        $mediaRoleParameters  = ["role" => MediaHelper::ROLE_PROFILE_IMAGE];
+        $image               = null;
+        $collectionName      = $this->media_collection_name;
+        $mediaRoleParameters = ["role" => MediaHelper::ROLE_PROFILE_IMAGE];
 
         if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
             $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
@@ -172,9 +174,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         return $this->hasMany(User::class, 'created_by_id');
     }
 
-    public function userRole(): BelongsTo
+    public function userPermissions(): BelongsToMany
     {
-        return $this->belongsTo(UserRole::class);
+        return $this->belongsToMany(UserPermission::class, 'user_user_permission');
     }
 
     public function latestActivityLog(): MorphOne
@@ -182,17 +184,11 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function hasUserRole($userRoles): bool
+    public function hasUserPermission(string $module, string $access): bool
     {
-        if (! $this->userRole) {
-            return false;
-        }
-
-        $userRoles = (array) $userRoles;
-
-        return in_array(
-            Str::lower(Str::snake($this->userRole->name)),
-            array_map('strtolower', $userRoles)
-        );
+        return $this->userPermissions()
+            ->where('module', $module)
+            ->where('access', $access)
+            ->exists();
     }
 }

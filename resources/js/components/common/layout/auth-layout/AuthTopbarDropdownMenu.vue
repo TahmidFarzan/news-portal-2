@@ -14,7 +14,7 @@ import {
     faGears
 } from '@fortawesome/free-solid-svg-icons'
 
-import { canAccessActivityLogMenu, canAccessLogViewerMenu, canAccessQueueMonitorMenu, canAccessSettingMenu } from '@/composables/useAuthUserAccessPermissions'
+import { canAccessActivityLog, canAccessLogViewer, canAccessQueueMonitor, canAccessSetting } from '@/composables/useUserPermissions'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -45,20 +45,20 @@ const dropdownRef = ref(null)
 const logoutProcessing = ref(false)
 const logoutShowConfirmationModal = ref(false)
 
-const canAccessActivityLogMenuComputed = computed(() => {
-    return canAccessActivityLogMenu(authUser)
+const canAccessActivityLogComputed = computed(() => {
+    return canAccessActivityLog(authUser)
 })
 
-const canAccessLogViewerMenuComputed = computed(() => {
-    return canAccessLogViewerMenu(authUser)
+const canAccessLogViewerComputed = computed(() => {
+    return canAccessLogViewer(authUser)
 })
 
-const canAccessQueueMonitorMenuComputed = computed(() => {
-    return canAccessQueueMonitorMenu(authUser)
+const canAccessQueueMonitorComputed = computed(() => {
+    return canAccessQueueMonitor(authUser)
 })
 
-const canAccessSettingMenuComputed = computed(() => {
-    return canAccessSettingMenu(authUser)
+const canAccessSettingComputed = computed(() => {
+    return canAccessSetting(authUser)
 })
 
 const toggleDropdown = (event) => {
@@ -125,10 +125,6 @@ onBeforeUnmount(() => {
                     <div class="font-medium">
                         {{ authUser?.name }}
                     </div>
-
-                    <div class="text-sm text-gray-500">
-                        {{ authUser?.user_role?.name }}
-                    </div>
                 </div>
 
                 <a :href="route('auth-user.profile.index')" @click="closeUserDropdown"
@@ -143,25 +139,25 @@ onBeforeUnmount(() => {
                     <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.account") }}</span>
                 </a>
 
-                <a v-if="canAccessActivityLogMenuComputed" :href="route('back-office.activity-logs.index')"
+                <a v-if="canAccessActivityLogComputed" :href="route('back-office.activity-logs.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
                     <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.activity_logs") }}</span>
                 </a>
 
-                <a v-if="canAccessLogViewerMenuComputed" :href="route('log-viewer.index')"
+                <a v-if="canAccessLogViewerComputed" :href="route('log-viewer.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
                     <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.log_viewer") }}</span>
                 </a>
 
-                <a v-if="canAccessQueueMonitorMenuComputed" :href="route('back-office.queue-monitor.index')"
+                <a v-if="canAccessQueueMonitorComputed" :href="route('back-office.queue-monitor.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
                     <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.queue_monitor") }}</span>
                 </a>
 
-                <a v-if="canAccessSettingMenuComputed" :href="route('back-office.settings.index')"
+                <a v-if="canAccessSettingComputed" :href="route('back-office.settings.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="gears" class="text-gray-500" />
                     <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.settings") }}</span>

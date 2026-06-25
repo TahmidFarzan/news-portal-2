@@ -2,7 +2,7 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import ModelPropertyAttributes from '@/components/back-office/activity-log/ModelPropertyAttributes.vue'
 
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as inertiaJsRoute } from '@inertiajs/vue3'
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -13,9 +13,15 @@ import { faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { titleFormat } from '@/composables/useUtil'
 import { formatDateTime } from '@/composables/useDateTime'
 
+import {
+    canDeleteActivityLog,
+} from '@/composables/useUserPermissions'
+
 FontAwesomeLibrary.add(faTrash, faSpinner)
 
 defineOptions({ layout: Layout })
+
+const authUser = inject('authUser')
 
 const { t } = useTranslate()
 
@@ -25,6 +31,8 @@ const { activityLog } = defineProps({
 
 const deleting = ref(false)
 const showDeleteModal = ref(false)
+
+const canDelete = (activityLog) => canDeleteBreakingNews(authUser?.value, activityLog)
 
 function handleDelete() {
     if (deleting.value) return
@@ -70,7 +78,7 @@ onMounted(async () => {
                 {{ t('pages.back_office.activity_logs.details.title') }}
             </h2>
 
-            <button @click="showDeleteModal = true"
+            <button v-if="canDelete(activityLog)" @click="showDeleteModal = true"
                 class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="trash" />
                 {{ t('pages.back_office.activity_logs.details.actions.delete') }}

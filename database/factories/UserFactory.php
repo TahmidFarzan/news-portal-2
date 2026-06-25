@@ -1,9 +1,7 @@
 <?php
 namespace Database\Factories;
 
-use App\Helpers\UserHelper;
 use App\Models\User;
-use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -22,10 +20,7 @@ class UserFactory extends Factory
 
     public function definition(): array
     {
-        $newsDeskUserRole = UserRole::where("name", UserHelper::USER_ROLE_NEWS_DESK)->first();
-        $adminUserRole    = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
-
-        $user = User::query()->inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
+        $user = User::where("is_super_admin", true)->inRandomOrder()->first();
 
         return [
             'name'              => $this->faker->name(),
@@ -42,8 +37,8 @@ class UserFactory extends Factory
             'mobile'            => "+8801" . $this->faker->numberBetween(3, 9) . $this->faker->numberBetween(10000000, 99999999),
 
             "created_by_id"     => $user?->id ?? "1",
-            'user_role_id'      => $newsDeskUserRole?->id,
             'is_default'        => false,
+            "is_super_admin"    => false,
         ];
     }
 

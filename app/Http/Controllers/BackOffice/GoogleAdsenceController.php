@@ -17,7 +17,6 @@ class GoogleAdsenceController extends Controller
     public function __construct(GoogleAdsenceService $googleAdsenceService)
     {
         $this->googleAdsenceService = $googleAdsenceService;
-        $this->middleware(['auth', 'verified', 'user.role.check:admin']);
     }
 
     public function index(Request $request)

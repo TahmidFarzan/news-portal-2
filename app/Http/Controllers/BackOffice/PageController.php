@@ -15,7 +15,6 @@ class PageController extends Controller
     public function __construct(PageService $pageService)
     {
         $this->pageService = $pageService;
-        $this->middleware(['auth', 'verified', 'user.role.check:admin']);
     }
 
     public function index(Request $request)

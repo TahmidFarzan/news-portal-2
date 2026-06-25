@@ -1,42 +1,44 @@
 <?php
-
 namespace App\Policies;
 
-use App\Models\User;
+use App\Helpers\UserPermissionHelper;
 use App\Models\Theme;
+use App\Models\User;
 use Illuminate\Auth\Access\Response;
-use App\Helpers\UserHelper;
 
 class ThemePolicy
 {
+    public function before(User $authUser, string $ability): bool | null
+    {
+        if ($authUser->is_super_admin) {
+            return true;
+        }
+
+        return null;
+    }
+
     public function viewAny(User $authUser): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_THEME;
+        $access = UserPermissionHelper::ACCESS_VIEW_ANY;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function view(User $authUser, Theme $theme): Response
     {
-        return Response::allow();
-    }
+        $module = UserPermissionHelper::MODULE_THEME;
+        $access = UserPermissionHelper::ACCESS_VIEW;
 
-    public function create(User $authUser): Response
-    {
-        return Response::allow();
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function update(User $authUser, Theme $theme): Response
     {
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
-            return Response::allow();
-        }
+        $module = UserPermissionHelper::MODULE_THEME;
+        $access = UserPermissionHelper::ACCESS_UPDATE;
 
-        return Response::deny();
-    }
-
-    public function delete(User $authUser, Theme $theme): Response
-    {
-
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
+        if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }
 

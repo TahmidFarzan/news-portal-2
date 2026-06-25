@@ -2737,8 +2737,9 @@
                         "name_placeholder": "Enter name",
                         "email_placeholder": "Enter email",
                         "address_placeholder": "Enter address",
-                        "user_role": "User Role",
+                        "user_permission": "User Permisssion",
                         "set_as_verify_email": "Set as verify email",
+                        "send_verify_email": "Send verify email",
                         "new_password_placeholder": "Enter new password",
                         "confirm_password_placeholder": "Confirm password"
                     },
@@ -2748,7 +2749,7 @@
                         "gender_is_required": "Gender is required.",
                         "marital_status_is_required": "Marital status is required.",
                         "religion_is_required": "Religion is required.",
-                        "user_role_is_required": "User role is required.",
+                        "user_permission_is_required": "User permisssion is required.",
                         "password_is_required": "Password is required.",
                         "password_confirmation_is_required": "Password confirmation is required."
                     },
@@ -2762,7 +2763,11 @@
                         "religion": "Religion",
                         "marital_status": "Marital Status",
                         "mobile": "Mobile",
-                        "address": "Address"
+                        "address": "Address",
+                        "no": "No",
+                        "yes": "Yes",
+                        "is_super_admin" : "Is super admin",
+                        "super_admin_create_notice" : "Only a super admin can create a super admin"
                     },
                     "auth": {
                         "account": {
@@ -2794,7 +2799,10 @@
                         "created_at": "Created At",
                         "created_by": "Created By",
                         "updated_at": "Updated At",
-                        "updated_by": "Updated By"
+                        "updated_by": "Updated By",
+                        "yes": "Yes",
+                        "no": "No",
+                        "is_super_admin" : "Is super admin"
                     },
                     "title": "User Details",
                     "actions": {
@@ -2816,7 +2824,7 @@
                         }
                     },
                     "form": {
-                        "user_role": "User Role"
+                        "user_permission": "User Permisssion"
                     },
                     "activity_logs": {
                         "index": {
@@ -2849,7 +2857,7 @@
                         "deleting": "Deleting"
                     },
                     "form": {
-                        "user_role": "User Role"
+                        "user_permission": "User Permisssion"
                     },
                     "search_placeholder": "Search user...",
                     "buttons": {

@@ -15,7 +15,6 @@ class ContributorController extends Controller
     public function __construct(ContributorService $contributorService)
     {
         $this->contributorService = $contributorService;
-        $this->middleware(['auth', 'verified', 'user.role.check:admin,news_desk']);
     }
 
     public function index(Request $request)

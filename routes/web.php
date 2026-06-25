@@ -94,7 +94,8 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('event-positions', [SearchController::class, 'eventPositions'])->name('event-positions');
 
         Route::get('news-types', [SearchController::class, 'newsTypes'])->name('news-types');
-        Route::get('user-roles', [SearchController::class, 'userRoles'])->name('user-roles');
+        Route::get('user-permissions', [SearchController::class, 'userPermissions'])->name('user-permissions');
+        Route::get('user-permissions-by-group', [SearchController::class, 'userPermissionsByGroup'])->name('user-permissions-by-group');
         Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
 
         Route::get('google-adsence-types', [SearchController::class, 'googleAdsenceTypes'])->name('google-adsence-types');
@@ -122,7 +123,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('news', [SearchController::class, 'news'])->name('news');
         Route::get('breaking-news', [SearchController::class, 'breakingNews'])->name('breaking-news');
 
-        Route::get('user-role/{slugOrId}', [SearchController::class, 'userRole'])->name('user-role');
+        Route::get('user-permission/{slugOrId}', [SearchController::class, 'userPermission'])->name('user-permission');
         Route::get('news-type/{slugOrId}', [SearchController::class, 'newsType'])->name('news-type');
         Route::get('language/{slugOrId}', [SearchController::class, 'language'])->name('language');
         Route::get('category/{slugOrId}', [SearchController::class, 'category'])->name('category');
@@ -136,7 +137,7 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::middleware(['response.cache:60,private,300,etag'])->get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
 });
 
-Route::prefix('back-office')->name('back-office.')->group(function () {
+Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('medias')->name('medias.')->group(function () {
         Route::get('/', [MediaController::class, 'index'])->name('index');
@@ -332,11 +333,11 @@ Route::prefix('back-office')->name('back-office.')->group(function () {
         Route::delete('delete/{slug}', [ActivityLogController::class, 'delete'])->name('delete');
     });
 
-    Route::prefix('queue-monitor')->name('queue-monitor.')->middleware('auth')->group(function () {
+    Route::prefix('queue-monitor')->name('queue-monitor.')->middleware(['is.super.admin'])->group(function () {
         Route::get('/', ShowQueueMonitorController::class)->name('index');
     });
 
-    Route::prefix('settings')->name('settings.')->group(function () {
+    Route::prefix('settings')->name('settings.')->middleware(['is.super.admin'])->group(function () {
         Route::get('/', [SettingController::class, 'index'])->name('index');
 
         Route::prefix('queue')->name('queue.')->group(function () {

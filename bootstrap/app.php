@@ -2,8 +2,8 @@
 
 use App\Http\Middleware\FeedResponse;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\IsSuperAdmin;
 use App\Http\Middleware\ResponseCache;
-use App\Http\Middleware\UserRoleCheck;
 use App\Http\Middleware\XmlResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'handle.inertia.middleware' => HandleInertiaRequests::class,
-            'user.role.check'           => UserRoleCheck::class,
+            'is.super.admin'            => IsSuperAdmin::class,
             'response.cache'            => ResponseCache::class,
             'xml.response'              => XmlResponse::class,
             'feed.response'             => FeedResponse::class,

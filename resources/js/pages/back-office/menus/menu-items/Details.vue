@@ -11,7 +11,7 @@ import { faTrash, faPen, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { extractModelName } from '@/composables/useStringFormat'
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditMenuItem, canDeleteMenuItem } from '@/composables/useAuthUserAccessPermissions'
+import { canEditMenuItem, canDeleteMenuItem } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faSpinner)

@@ -18,7 +18,7 @@ import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
 
-import { canCreateTrend, canEditTrend, canDeleteTrend } from '@/composables/useAuthUserAccessPermissions'
+import { canCreateTrend, canEditTrend, canDeleteTrend } from '@/composables/useUserPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 

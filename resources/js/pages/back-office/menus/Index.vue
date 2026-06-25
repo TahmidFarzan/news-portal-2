@@ -21,7 +21,7 @@ import {
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { canCreateMenu, canEditMenu, canDeleteMenu } from '@/composables/useAuthUserAccessPermissions'
+import { canCreateMenu, canEditMenu, canDeleteMenu, canAccessMenuItem, canCreateMenuItem } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faSpinner, faList)
@@ -87,6 +87,8 @@ const closeDeleteModal = () => {
 const canCreate = () => canCreateMenu(authUser?.value)
 const canEdit = (menu) => canEditMenu(authUser?.value, menu)
 const canDelete = (menu) => canDeleteMenu(authUser?.value, menu)
+const canAccessMenuItem = () => canAccessMenuItem(authUser?.value)
+const canCreateMenuItem = () => canCreateMenuItem(authUser?.value)
 
 const handleDelete = (menu) => {
     if (!menu || deleteProcessing.value) return
@@ -260,14 +262,14 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
-                                    <a :href="route('back-office.menus.menu-items.index', { slug: item.slug })"
+                                    <a v-if="canAccessMenuItem()" :href="route('back-office.menus.menu-items.index', { slug: item.slug })"
                                         class="p-2 rounded-md text-gray-600 hover:bg-gray-50 border inline-flex items-center gap-1"
                                         :title="t('pages.back_office.menus.index.details.menu_items')">
                                         <FontAwesomeIcon icon="list" />
                                         {{ t('pages.back_office.menus.index.details.item') }}
                                     </a>
 
-                                    <a :href="route('back-office.menus.menu-items.create', { slug: item.slug })"
+                                    <a v-if="canCreateMenuItem()" :href="route('back-office.menus.menu-items.create', { slug: item.slug })"
                                         class="p-2 rounded-md text-green-600 hover:bg-green-50 border inline-flex items-center gap-1"
                                         :title="t('pages.back_office.menus.index.details.add_menu_item')">
                                         <FontAwesomeIcon icon="plus" />

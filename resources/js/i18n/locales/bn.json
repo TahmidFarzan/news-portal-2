@@ -2737,8 +2737,9 @@
                         "name_placeholder": "নাম লিখুন",
                         "email_placeholder": "ইমেইল লিখুন",
                         "address_placeholder": "ঠিকানা লিখুন",
-                        "user_role": "ব্যবহারকারীর ভূমিকা",
+                        "user_permission": "ব্যবহারকারীর অনুমতি",
                         "set_as_verify_email": "ইমেইল যাচাইকৃত হিসেবে সেট করুন",
+                        "send_verify_email": "যাচাই ইমেল পাঠান",
                         "new_password_placeholder": "নতুন পাসওয়ার্ড লিখুন",
                         "confirm_password_placeholder": "পাসওয়ার্ড নিশ্চিত করুন"
                     },
@@ -2748,7 +2749,7 @@
                         "gender_is_required": "লিঙ্গ নির্বাচন করা আবশ্যক।",
                         "marital_status_is_required": "বৈবাহিক অবস্থা নির্বাচন করা আবশ্যক।",
                         "religion_is_required": "ধর্ম নির্বাচন করা আবশ্যক।",
-                        "user_role_is_required": "ব্যবহারকারীর ভূমিকা নির্বাচন করা আবশ্যক।",
+                        "user_permission_is_required": "ব্যবহারকারীর অনুমতি নির্বাচন করা আবশ্যক।",
                         "password_is_required": "পাসওয়ার্ড প্রদান করা আবশ্যক।",
                         "password_confirmation_is_required": "পাসওয়ার্ড নিশ্চিতকরণ প্রদান করা আবশ্যক।"
                     },
@@ -2762,7 +2763,11 @@
                         "religion": "ধর্ম",
                         "marital_status": "বৈবাহিক অবস্থা",
                         "mobile": "মোবাইল",
-                        "address": "ঠিকানা"
+                        "address": "ঠিকানা",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "is_super_admin" : "সুপার অ্যাডমিন",
+                        "super_admin_create_notice" : "শুধুমাত্র একজন সুপার অ্যাডমিনই আরেকজন সুপার অ্যাডমিন তৈরি করতে পারেন।"
                     },
                     "auth": {
                         "account": {
@@ -2794,7 +2799,10 @@
                         "created_at": "তৈরির সময়",
                         "created_by": "তৈরি করেছেন",
                         "updated_at": "হালনাগাদের সময়",
-                        "updated_by": "হালনাগাদ করেছেন"
+                        "updated_by": "হালনাগাদ করেছেন",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "is_super_admin" : "সুপার অ্যাডমিন"
                     },
                     "title": "ব্যবহারকারীর বিস্তারিত",
                     "actions": {
@@ -2816,7 +2824,7 @@
                         }
                     },
                     "form": {
-                        "user_role": "ব্যবহারকারীর ভূমিকা"
+                        "user_permission": "ব্যবহারকারীর অনুমতি"
                     },
                     "activity_logs": {
                         "index": {
@@ -2849,7 +2857,7 @@
                         "deleting": "মুছে ফেলা হচ্ছে"
                     },
                     "form": {
-                        "user_role": "ব্যবহারকারীর ভূমিকা"
+                        "user_permission": "ব্যবহারকারীর অনুমতি"
                     },
                     "search_placeholder": "ব্যবহারকারী অনুসন্ধান করুন...",
                     "buttons": {

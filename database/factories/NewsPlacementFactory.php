@@ -1,13 +1,10 @@
 <?php
 namespace Database\Factories;
 
-use App\Helpers\NewsHelper;
 use App\Helpers\PageHelper;
-use App\Helpers\UserHelper;
 use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\User;
-use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 
@@ -23,8 +20,7 @@ class NewsPlacementFactory extends Factory
      */
     public function definition(): array
     {
-        $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
-        $user          = User::inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
+        $user = User::where("is_super_admin", true)->inRandomOrder()->first();
 
         $pages        = [PageHelper::PAGE_HOME, PageHelper::PAGE_CATEGORY];
         $pageSections = [PageHelper::PAGE_SECTION_LEAD_NEWS];
@@ -34,7 +30,6 @@ class NewsPlacementFactory extends Factory
 
         $skipPageSection = ($page == PageHelper::PAGE_CATEGORY) && ($pageSection == PageHelper::PAGE_SECTION_CATEGORY_NEWS);
         $skipCategory    = ($page == PageHelper::PAGE_HOME) && ($pageSection == PageHelper::PAGE_SECTION_LEAD_NEWS);
-
 
         $news = News::query()
             ->whereDoesntHave('newsPlacements', function ($newsPlacementQuery) use (
@@ -69,7 +64,6 @@ class NewsPlacementFactory extends Factory
                 $query->where('category_id', $news?->category_id);
             })
             ->max('position');
-
 
         return [
             "news_id"       => $news?->id,

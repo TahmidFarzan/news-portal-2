@@ -1,36 +1,52 @@
 <?php
-
 namespace App\Policies;
 
-use App\Models\User;
+use App\Helpers\UserPermissionHelper;
 use App\Models\Trend;
+use App\Models\User;
 use Illuminate\Auth\Access\Response;
-use App\Helpers\UserHelper;
 
 class TrendPolicy
 {
+    public function before(User $authUser, string $ability): bool | null
+    {
+        if ($authUser->is_super_admin) {
+            return true;
+        }
+
+        return null;
+    }
+
     public function viewAny(User $authUser): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_TREND;
+        $access = UserPermissionHelper::ACCESS_VIEW_ANY;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function view(User $authUser, Trend $trend): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_TREND;
+        $access = UserPermissionHelper::ACCESS_VIEW;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function create(User $authUser): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_TREND;
+        $access = UserPermissionHelper::ACCESS_CREATE;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function update(User $authUser, Trend $trend): Response
     {
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
-            return Response::allow();
-        }
+        $module = UserPermissionHelper::MODULE_TREND;
+        $access = UserPermissionHelper::ACCESS_UPDATE;
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $trend->created_by_id)) {
+        if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }
 
@@ -39,11 +55,11 @@ class TrendPolicy
 
     public function delete(User $authUser, Trend $trend): Response
     {
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
-            return Response::allow();
-        }
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $trend->created_by_id)) {
+        $module = UserPermissionHelper::MODULE_TREND;
+        $access = UserPermissionHelper::ACCESS_DELETE;
+
+        if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }
 

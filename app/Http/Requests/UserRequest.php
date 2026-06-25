@@ -2,10 +2,9 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use App\Models\UserRole;
+use App\Models\UserPermission;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Helpers\UserHelper;
 
 class UserRequest extends FormRequest
 {
@@ -32,7 +31,7 @@ class UserRequest extends FormRequest
             "set_as_verify_email"   => ["required", "boolean"],
             "change_password"       => ["required", "boolean"],
 
-            'user_role_id'          => ["required"],
+            'user_permission_ids'   => ["nullable"],
 
             "password"              => ["nullable", "string", "min:8", "confirmed"],
             "password_confirmation" => ["nullable", "string"],
@@ -72,7 +71,7 @@ class UserRequest extends FormRequest
             'password.min'                 => __('form-requests.user.password.min'),
             'password.confirmed'           => __('form-requests.user.password.confirmed'),
 
-            'user_role_id.required'        => __('form-requests.user.user_role_id.required'),
+            'user_permission_id.required'  => __('form-requests.user.user_permission_id.required'),
 
             'profile_image.image'          => __('form-requests.user.profile_image.image'),
             'profile_image.mimes'          => __('form-requests.user.profile_image.mimes'),
@@ -91,19 +90,28 @@ class UserRequest extends FormRequest
         $validator->after(function ($validator) use ($user, $authUser) {
             $aVData = $validator->getData();
 
-            if (isset($aVData["user_role_id"])) {
-                $userRole = UserRole::where("id", $aVData["user_role_id"])->first();
-                if (! $userRole) {
+            if (! $aVData['is_super_admin']){
+
+                if (! array_key_exists(
+                    'user_permission_ids',
+                    $aVData
+                )) {
                     $validator->errors()->add(
-                        'user_role_id', __("form-requests.user.user_role_id.not_found"),
+                        'user_permission_ids',
+                        __('form-requests.user.user_permission_ids.required')
                     );
                 }
+            }
 
-                if ($userRole) {
-                    if (! $authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
-                        $validator->errors()->add(
-                            'user_role_id', __("form-requests.user.user_role_id.do_not_have_permission"),
-                        );
+            if (array_key_exists('user_permission_ids', $aVData)){
+                $permissionIds = array_filter( (array) ( $aVData[ 'user_permission_ids'] ?? []) );
+
+                if (count($permissionIds)) {
+
+                    $count = UserPermission::whereIn('id', $permissionIds)->count();
+
+                    if ($count !== count($permissionIds)) {
+                        $validator ->errors()->add('user_permission_ids',__('form-requests.user.user_permission_ids.not_found'));
                     }
                 }
             }

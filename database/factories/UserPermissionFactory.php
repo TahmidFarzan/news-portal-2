@@ -1,13 +1,14 @@
 <?php
+
 namespace Database\Factories;
 
-use App\Models\UserRole;
+use App\Models\UserPermission;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<UserRole>
+ * @extends Factory<UserPermission>
  */
-class UserRoleFactory extends Factory
+class UserPermissionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +18,8 @@ class UserRoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'module' => $this->faker->name(),
+            'access' => $this->faker->name(),
         ];
     }
 }

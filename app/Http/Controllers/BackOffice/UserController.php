@@ -16,7 +16,6 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        $this->middleware(['auth', 'verified', 'user.role.check:admin,news_desk']);
     }
 
     public function index(Request $request)
@@ -33,7 +32,7 @@ class UserController extends Controller
 
     public function details(string $slug)
     {
-        $user = $this->userService->findBySlug($slug);
+        $user = $this->userService->findWithTrashedBySlug($slug);
         $user = $this->userService->loadRelations($user);
 
         Gate::authorize('create', $user);
@@ -55,7 +54,7 @@ class UserController extends Controller
 
     public function edit(string $slug)
     {
-        $user = $this->userService->findBySlug($slug);
+        $user = $this->userService->findWithTrashedBySlug($slug);
         $user = $this->userService->loadRelations($user);
 
         Gate::authorize('update', $user);
@@ -80,7 +79,7 @@ class UserController extends Controller
 
     public function update(UserRequest $request, string $slug)
     {
-        $user = $this->userService->findBySlug($slug);
+        $user = $this->userService->findWithTrashedBySlug($slug);
 
         Gate::authorize('update', $user);
 
@@ -112,7 +111,7 @@ class UserController extends Controller
 
         Gate::authorize('delete', $user);
 
-        $result = $this->userService->deactivate($user);
+        $result = $this->userService->inactive($user);
 
         return to_route('back-office.users.index')->with('flash_message', [
             'message' => $result['message'],

@@ -33,15 +33,15 @@ class HandleInertiaRequests extends Middleware
             $requestUser = Auth::user();
         }
 
-
-
         $requestData = array_merge(parent::share($request), [
 
             'auth'         => [
                 'user' => $requestUser
                     ? [
                     'name'              => $requestUser->name,
-                    'user_role'         => $requestUser->userRole,
+                    // 'user_permissions'         => $requestUser->userPermissions,
+
+                    'is_super_admin'    => $requestUser->is_super_admin,
 
                     'email'             => $requestUser->email,
                     'email_verified_at' => $requestUser->email_verified_at,

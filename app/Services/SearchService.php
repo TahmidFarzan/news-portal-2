@@ -2,9 +2,9 @@
 namespace App\Services;
 
 use App\Helpers\ActivityLogHelper;
-use App\Helpers\GoogleAdsenceHelper;
-use App\Helpers\EventHelper;
 use App\Helpers\DatatableHelper;
+use App\Helpers\EventHelper;
+use App\Helpers\GoogleAdsenceHelper;
 use App\Helpers\MediaHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\PageHelper;
@@ -22,7 +22,7 @@ use App\Models\NewsType;
 use App\Models\Page;
 use App\Models\Tag;
 use App\Models\User;
-use App\Models\UserRole;
+use App\Models\UserPermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -338,10 +338,10 @@ class SearchService
             ->paginate($request->input('per_page', 25));
 
         $items = $records->map(fn($user) => [
-            'id'                  => $user->id,
-            'name'                => $user->name,
-            'slug'                => $user->slug,
-            'name_with_user_role' => $user->name_with_user_role,
+            'id'   => $user->id,
+            'name' => $user->name,
+            'slug' => $user->slug,
+
         ]);
 
         return [
@@ -352,14 +352,15 @@ class SearchService
         ];
     }
 
-    public function userRoles(Request $request): array
+    public function userPermissions(Request $request): array
     {
-        $query = UserRole::query();
+        $query = UserPermission::query();
 
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
+                $q->where('module', 'like', "%{$search}%")
+                    ->orWhere('access', 'like', "%{$search}%");
             });
         }
 
@@ -372,8 +373,10 @@ class SearchService
             ->paginate($request->input('per_page', 25));
 
         $items = $records->map(fn($user) => [
-            'id'   => $user->id,
-            'name' => $user->name,
+            'id'     => $user->id,
+            'module' => $user->module,
+            'access' => $user->access,
+            'name'   => $user->name,
         ]);
 
         return [
@@ -382,6 +385,31 @@ class SearchService
             'current_page' => $records->currentPage(),
             'last_page'    => $records->lastPage(),
         ];
+    }
+
+    public function userPermissionsByGroup(Request $request): array
+    {
+        $query = UserPermission::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('module', 'like', "%{$search}%")
+                    ->orWhere('access', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('except_id')) {
+            $query->whereKeyNot($request->input('except_id'));
+        }
+
+        return $query
+            ->orderBy('module')
+            ->orderBy('access')
+            ->get()
+            ->groupBy('module')
+            ->toArray();
     }
 
     public function newsTypes(Request $request): array
@@ -1019,14 +1047,12 @@ class SearchService
 
     public function user(int | string $slugOrId): User
     {
-        return User::where('id', $slugOrId)
-            ->orWhere('slug', $slugOrId)
-            ->firstOrFail();
+        return User::with("userPermission")->where('id', $slugOrId)->orWhere('slug', $slugOrId)->firstOrFail();
     }
 
-    public function userRole(int | string $slugOrId): UserRole
+    public function userPermission(int | string $slugOrId): UserPermission
     {
-        return UserRole::where('id', $slugOrId)->firstOrFail();
+        return UserPermission::where('id', $slugOrId)->firstOrFail();
     }
 
     public function newsType(int | string $slugOrId): NewsType

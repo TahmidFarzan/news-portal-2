@@ -15,7 +15,6 @@ class BreakingNewsController extends Controller
     public function __construct(BreakingNewsService $breakingNewsService)
     {
         $this->breakingNewsService = $breakingNewsService;
-        $this->middleware(['auth', 'verified', 'user.role.check:admin,news_desk']);
     }
 
     public function index(Request $request)

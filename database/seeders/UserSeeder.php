@@ -3,12 +3,11 @@ namespace Database\Seeders;
 
 use App\Helpers\MediaHelper;
 use App\Models\User;
-use App\Models\UserRole;
+use App\Models\UserPermission;
 use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Helpers\UserHelper;
 
 class UserSeeder extends Seeder
 {
@@ -32,13 +31,12 @@ class UserSeeder extends Seeder
         }
 
         // Seeder
-        $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->first();
-        User::factory()->state([
+        $adminUser =User::factory()->state([
             'name'              => "Default Admin",
             'email'             => "admin@gmail.com",
             'email_verified_at' => now(),
             "is_default"        => true,
-            "user_role_id"      => $adminUserRole?->id,
+            "is_super_admin"    => true,
             "created_by_id"     => null,
             'gender'            => 'Male',
             'religion'          => 'Islam',
@@ -47,6 +45,12 @@ class UserSeeder extends Seeder
 
         for ($i = 0; $i < 25; $i++) {
             User::factory()->create();
+        }
+
+        $users = User::orderBy("id", "desc")->whereNot("id", $adminUser->id)->get();
+        foreach ($users as $user) {
+            $userPermissionIds = UserPermission::pluck("id");
+            $user->userPermissions()->sync($userPermissionIds);
         }
 
         $profileImageUrl = MediaHelper::defaultAuthImage("1:1", "user");

@@ -10,7 +10,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditTheme } from '@/composables/useAuthUserAccessPermissions'
+import { canEditTheme } from '@/composables/useUserPermissions'
 import { useTheme } from '@/composables/useTheme'
 import { useTranslate } from '@/composables/useTranslate'
 

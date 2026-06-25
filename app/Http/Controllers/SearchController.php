@@ -106,10 +106,17 @@ class SearchController extends Controller
         );
     }
 
-    public function userRoles(Request $request): JsonResponse
+    public function userPermissions(Request $request): JsonResponse
     {
         return response()->json(
-            $this->searchService->userRoles($request)
+            $this->searchService->userPermissions($request)
+        );
+    }
+
+    public function userPermissionsByGroup(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->userPermissionsByGroup($request)
         );
     }
 
@@ -232,10 +239,10 @@ class SearchController extends Controller
         );
     }
 
-    public function userRole(string | int $slugOrId): JsonResponse
+    public function userPermission(string | int $slugOrId): JsonResponse
     {
         return response()->json(
-            $this->searchService->userRole($slugOrId)
+            $this->searchService->userPermission($slugOrId)
         );
     }
 

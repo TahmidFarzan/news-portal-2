@@ -24,7 +24,7 @@ import {
     canTrashPage,
     canRestorePage,
     canDeletePage
-} from '@/composables/useAuthUserAccessPermissions'
+} from '@/composables/useUserPermissions'
 
 FontAwesomeLibrary.add(faTrash, faTrashCan, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 

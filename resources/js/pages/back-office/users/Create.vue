@@ -1,8 +1,9 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
+import MultiSelectByGroup from '@/components/common/multi-select/MultiSelectByGroup.vue'
 
-import { computed, onMounted, nextTick } from 'vue'
+import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
@@ -22,11 +23,14 @@ import { useTranslate } from '@/composables/useTranslate'
 
 import 'vue-tel-input/vue-tel-input.css'
 
+import { fetchFromApi } from '@/composables/useSystemApi'
+
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
 defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
+const authUser = inject('authUser')
 
 const { user } = defineProps({
     user: Object,
@@ -49,12 +53,14 @@ const saveForm = useForm({
     marital_status: user?.marital_status || null,
     mobile: user?.mobile || '',
     address: user?.address || '',
-    user_role_id: user?.user_role_id || null,
+    user_permission_ids: user?.user_permissions?.map(item => item.id) || [],
+    is_super_admin: user?.is_super_admin || false,
 
     password: '',
     password_confirmation: '',
     change_password: false,
     set_as_verify_email: false,
+    send_verify_email: false,
 })
 
 function validateForm() {
@@ -87,8 +93,8 @@ function validateForm() {
         valid = false
     }
 
-    if (!saveForm.user_role_id) {
-        saveForm.setError('user_role_id', t('pages.back_office.users.create.validation.user_role_is_required'))
+    if (!saveForm.user_permission_ids && !saveForm?.is_super_admin) {
+        saveForm.setError('user_permission_ids', t('pages.back_office.users.create.validation.user_permission_is_required'))
         valid = false
     }
 
@@ -163,9 +169,13 @@ onMounted(async () => {
     <div class="w-full">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
 
-            <form @submit.prevent="handleSave" class="space-y-6">
-
-                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+            <form @submit.prevent="handleSave" class="space-y-6 mt-3">
+                <ul class="list-disc pl-5">
+                    <li class="text-base font-semibold text-blue-700">
+                        {{ t('pages.back_office.users.create.labels.super_admin_create_notice') }}
+                    </li>
+                </ul>
+                <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4 mt-3">
                     <h3 class="text-base font-semibold">
                         {{ t('pages.back_office.users.create.labels.basic_information') }}
                     </h3>
@@ -174,10 +184,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.name') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.name') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name" :placeholder="t('pages.back_office.users.create.form.name_placeholder')"
+                            <input v-model="saveForm.name"
+                                :placeholder="t('pages.back_office.users.create.form.name_placeholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -188,7 +200,8 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.email') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.email') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.email" type="email"
@@ -212,12 +225,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.gender') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.gender') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="gender"
                                 :selectedItem="saveForm.gender" :apiUrl="route('search.genders')" :multiple="false"
-                                :placeholder="t('pages.back_office.users.create.actions.select')" :error="saveForm.errors.gender" />
+                                :placeholder="t('pages.back_office.users.create.actions.select')"
+                                :error="saveForm.errors.gender" />
 
                             <p v-if="saveForm.errors.gender" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.gender }}
@@ -226,12 +241,14 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.religion') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.religion') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="religion"
                                 :selectedItem="saveForm.religion" :apiUrl="route('search.religions')" :multiple="false"
-                                :placeholder="t('pages.back_office.users.create.actions.select')" :error="saveForm.errors.religion" />
+                                :placeholder="t('pages.back_office.users.create.actions.select')"
+                                :error="saveForm.errors.religion" />
 
                             <p v-if="saveForm.errors.religion" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.religion }}
@@ -240,7 +257,8 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.marital_status') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.labels.marital_status') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
                             <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="marital_status"
@@ -276,30 +294,59 @@ onMounted(async () => {
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300"></textarea>
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.form.user_role') }} <span class="text-red-500">*</span>
+                        <div v-if="authUser?.is_super_admin">
+                            <label class="mb-1 block text-sm font-medium text-gray-700">
+                                {{ t('pages.back_office.users.create.labels.is_super_admin') }}
                             </label>
 
-                            <MultiSelectInfinityLoadingApi :form="saveForm" fieldName="user_role_id"
-                                :selectedItem="user?.user_role" :apiUrl="route('search.user-roles')" :multiple="false"
-                                :placeholder="t('pages.back_office.users.create.actions.select')" :error="saveForm.errors.user_role_id" />
+                            <label class="inline-flex cursor-pointer items-center gap-3">
+                                <input v-model="saveForm.is_super_admin" type="checkbox" class="peer sr-only"
+                                    :checked="saveForm.is_super_admin" />
 
-                            <p v-if="saveForm.errors.user_role_id" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.user_role_id }}
-                            </p>
+                                <span class="relative h-7 w-14 rounded-full bg-gray-300 transition
+                                    after:absolute after:left-1 after:top-1 after:h-5 after:w-5
+                                    after:rounded-full after:bg-white after:transition-all after:content-['']
+                                    peer-checked:bg-green-600 peer-checked:after:translate-x-7">
+                                </span>
+
+                                <span class="text-sm text-gray-600">
+                                    {{ saveForm.is_super_admin ? t('pages.back_office.users.create.labels.yes') :
+                                        t('pages.back_office.users.create.labels.no') }}
+                                </span>
+                            </label>
                         </div>
+                    </div>
 
+                    <div v-if="!saveForm.is_super_admin">
+                        <MultiSelectByGroup :selectedItem="saveForm.user_permission_ids" fieldName="user_permission_ids"
+                            :form="saveForm" :apiUrl="route('search.user-permissions-by-group')" apiLabelKey="access"
+                            apiValueKey="id" :isRequired="!saveForm?.is_super_admin"
+                            :defaultLabel="t('pages.back_office.users.create.form.user_permission')" />
+
+                        <p v-if="saveForm.errors.user_permission_ids" class="text-red-500 text-sm mt-1">
+                            {{ saveForm.errors.user_permission_ids }}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="md:col-span-2 flex gap-6 items-center pt-2">
 
                             <label class="flex items-center gap-2">
                                 <input type="checkbox" v-model="saveForm.set_as_verify_email" />
-                                <span class="text-sm">{{ t('pages.back_office.users.create.form.set_as_verify_email') }}</span>
+                                <span class="text-sm">{{ t('pages.back_office.users.create.form.set_as_verify_email')
+                                }}</span>
+                            </label>
+
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" v-model="saveForm.send_verify_email" />
+                                <span class="text-sm">{{ t('pages.back_office.users.create.form.send_verify_email')
+                                }}</span>
                             </label>
 
                             <label class="flex items-center gap-2">
                                 <input type="checkbox" v-model="saveForm.change_password" />
-                                <span class="text-sm">{{ t('pages.back_office.users.create.auth.account.change_password') }}</span>
+                                <span class="text-sm">{{
+                                    t('pages.back_office.users.create.auth.account.change_password') }}</span>
                             </label>
 
                         </div>
@@ -316,7 +363,8 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.auth.account.new_password') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.auth.account.new_password') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
                             <div class="relative">
@@ -337,7 +385,8 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.auth.account.confirm_password') }} <span class="text-red-500">*</span>
+                                {{ t('pages.back_office.users.create.auth.account.confirm_password') }} <span
+                                    class="text-red-500">*</span>
                             </label>
 
                             <div class="relative">
@@ -366,7 +415,8 @@ onMounted(async () => {
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('pages.back_office.users.create.actions.saving') : t('pages.back_office.users.create.actions.save') }}
+                        {{ saveForm.processing ? t('pages.back_office.users.create.actions.saving') :
+                            t('pages.back_office.users.create.actions.save') }}
                     </button>
                 </div>
 

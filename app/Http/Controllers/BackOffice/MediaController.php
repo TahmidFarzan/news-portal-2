@@ -14,7 +14,6 @@ class MediaController extends Controller
     public function __construct(MediaService $mediaService)
     {
         $this->mediaService = $mediaService;
-        $this->middleware(['auth', 'verified']);
     }
 
     public function index(Request $request)

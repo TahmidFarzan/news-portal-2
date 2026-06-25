@@ -15,7 +15,6 @@ class ThemeController extends Controller
     public function __construct(ThemeService $themeService)
     {
         $this->themeService = $themeService;
-        $this->middleware(['auth', 'verified', 'user.role.check:admin']);
     }
 
     public function index(Request $request)

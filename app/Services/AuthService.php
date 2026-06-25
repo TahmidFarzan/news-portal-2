@@ -72,14 +72,15 @@ class AuthService
     {
         try {
             $user = User::create([
-                'name'          => $request->name,
-                'email'         => $request->email,
-                'password'      => Hash::make($request->password),
-                'created_by_id' => null,
+                'name'           => $request->name,
+                'email'          => $request->email,
+                'password'       => Hash::make($request->password),
+                'created_by_id'  => null,
 
-                'is_default'    => false,
-                'created_at'    => now(),
-                'updated_at'    => null,
+                'is_super_admin' => false,
+                'is_default'     => false,
+                'created_at'     => now(),
+                'updated_at'     => null,
             ]);
 
             event(new Registered($user));

@@ -14,7 +14,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faSpinner, faFire } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditNews, canDeleteNews, canRestoreNews } from '@/composables/useAuthUserAccessPermissions'
+import { canEditNews, canDeleteNews, canRestoreNews } from '@/composables/useUserPermissions'
 import { isStory as checkIsStory, isVideo as checkIsVideo, isImageGallery as checkIsImageGallery } from '@/composables/useNews'
 import { useTranslate } from '@/composables/useTranslate'
 

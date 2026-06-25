@@ -18,7 +18,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { useTranslate } from '@/composables/useTranslate'
 
-import { canCreateTheme, canEditTheme } from '@/composables/useAuthUserAccessPermissions'
+import {  canEditTheme } from '@/composables/useUserPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner, faList)
 
@@ -57,7 +57,6 @@ const applyFilter = () => {
     })
 }
 
-const canCreate = () => canCreateTheme(authUser?.value)
 const canEdit = (theme) => canEditTheme(authUser?.value, theme)
 
 onMounted(async () => {

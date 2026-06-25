@@ -12,7 +12,7 @@ import { faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
 import { extractModelName, titleFormat } from '@/composables/useStringFormat'
-import { canDeleteMedia } from '@/composables/useAuthUserAccessPermissions'
+
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faSpinner)
@@ -32,7 +32,6 @@ const { media } = defineProps({
     },
 })
 
-const canDelete = (media) => canDeleteMedia(authUser?.value, media)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
@@ -204,7 +203,7 @@ onMounted(async () => {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex justify-end gap-2">
-            <button v-if="canDelete(media)" @click="showDeleteModal = true"
+            <button @click="showDeleteModal = true"
                 class="px-4 py-2 border border-red-500 text-red-600 rounded hover:bg-red-50 flex items-center gap-2">
                 <FontAwesomeIcon icon="trash" />
                 {{ t('pages.back_office.medias.details.actions.delete') }}

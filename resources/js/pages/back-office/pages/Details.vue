@@ -14,7 +14,7 @@ import {
     canTrashPage,
     canRestorePage,
     canDeletePage
-} from '@/composables/useAuthUserAccessPermissions'
+} from '@/composables/useUserPermissions'
 
 import { useTranslate } from '@/composables/useTranslate'
 

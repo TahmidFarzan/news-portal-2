@@ -6,9 +6,6 @@ use Illuminate\Support\Collection;
 
 class UserHelper
 {
-    public const USER_ROLE_ADMIN     = 'Admin';
-    public const USER_ROLE_NEWS_DESK = 'News Desk';
-
     private const USER_GENDER_MALE   = 'Male';
     private const USER_GENDER_FEMALE = 'Female';
     private const USER_GENDER_OTHER  = 'Other';
@@ -24,13 +21,6 @@ class UserHelper
     private const USER_MARITAL_SEPARATED = 'Separated';
     private const USER_MARITAL_OTHER     = 'Other';
 
-    public static function userRoles(): Collection
-    {
-        return SystemHelper::toOptions([
-            self::USER_ROLE_ADMIN,
-            self::USER_ROLE_NEWS_DESK,
-        ]);
-    }
 
     public static function genders(): Collection
     {

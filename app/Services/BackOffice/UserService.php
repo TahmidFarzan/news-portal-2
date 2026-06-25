@@ -36,7 +36,7 @@ class UserService
     public function loadRelations(User $user): User
     {
         $user->load([
-            'userRole',
+            'userPermissions',
             'createdBy',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
@@ -56,7 +56,7 @@ class UserService
 
         $perPage = $request->input('per_page', 10);
 
-        $query = User::withTrashed()->with("userRole");
+        $query = User::withTrashed();
 
         if ($request->filled('is_active') && $request->boolean('is_active') == true) {
             $query->whereNull('deleted_at');
@@ -70,8 +70,16 @@ class UserService
             $query->where('created_by_id', $request->input('created_by_id'));
         }
 
-        if ($request->filled('user_role_id')) {
-            $query->where('user_role_id', $request->input('user_role_id'));
+        if ($request->filled('user_permission_id')) {
+            $query->whereHas(
+                'userPermissions',
+                function ($userPermissionQuery) use ($request) {
+                    $userPermissionQuery->where(
+                        'user_permissions.id',
+                        $request->input('user_permission_id')
+                    );
+                }
+            );
         }
 
         if ($request->filled('date')) {
@@ -113,20 +121,27 @@ class UserService
                 $user->birth_date     = $request->input('birth_date');
                 $user->marital_status = $request->input('marital_status');
 
-                $user->is_default   = false;
-                $user->user_role_id = $request->input('user_role_id');
+                if (Auth::user()->is_super_admin) {
+                    $user->is_super_admin = $request->boolean('is_super_admin') ? true : false;
+                }
+
+                $user->is_default = false;
 
                 $user->password          = Hash::make($request->password);
                 $user->created_by_id     = $isNew ? Auth::id() : $user->created_by_id;
-                $user->email_verified_at = $request->boolean('set_as_verify_email') ? now() : null;
+                $user->email_verified_at = $request->boolean('set_as_verify_email') ? now() : $user->email_verified_at;
 
                 $user->save();
+
+                if ($user->is_super_admin == false) {
+                    self::syncUserPermission($request, $user);
+                }
                 self::saveProfileImage($request, $user);
 
                 return $user;
             });
 
-            if (! $request->boolean('set_as_verify_email') && ! $user->hasVerifiedEmail()) {
+            if (! $user->hasVerifiedEmail() || $request->boolean('send_verify_email')) {
                 $user->sendEmailVerificationNotification();
             }
 
@@ -171,7 +186,7 @@ class UserService
         }
     }
 
-    public function deactivate(User $user): array
+    public function inactive(User $user): array
     {
         try {
             DB::transaction(function () use ($user) {
@@ -221,7 +236,7 @@ class UserService
         }
     }
 
-    private static function saveProfileImage(UserRequest $request, User $user)
+    private static function saveProfileImage(UserRequest $request, User $user): void
     {
         if (! $request->hasFile('profile_image')) {
             return;
@@ -249,6 +264,18 @@ class UserService
                     'role'    => MediaHelper::ROLE_PROFILE_IMAGE,
                 ])
                 ->toMediaCollection($user->media_collection_name);
+        }
+    }
+
+    private static function syncUserPermission(UserRequest $request, User $user): void
+    {
+        if ($request->has('user_permission_ids')) {
+            $user->userPermissions()->sync(
+                (array) $request->input(
+                    'user_permission_ids',
+                    []
+                )
+            );
         }
     }
 }

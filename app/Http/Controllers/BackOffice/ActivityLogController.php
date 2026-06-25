@@ -15,7 +15,6 @@ class ActivityLogController extends Controller
     public function __construct(ActivityLogService $activityLogService)
     {
         $this->activityLogService = $activityLogService;
-        $this->middleware(['auth', 'verified', 'user.role.check:admin']);
     }
 
     public function index(Request $request)

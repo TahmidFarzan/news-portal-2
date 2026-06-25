@@ -16,7 +16,7 @@ import {
     canDeleteBreakingNews,
     canTrashBreakingNews,
     canRestoreBreakingNews
-} from '@/composables/useAuthUserAccessPermissions'
+} from '@/composables/useUserPermissions'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
 

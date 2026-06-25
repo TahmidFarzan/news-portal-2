@@ -176,10 +176,10 @@ return [
             'confirmed' => 'Password confirmation does not match.',
         ],
 
-        'user_role_id'          => [
-            'required'               => 'Please select user role.',
-            "not_found"              => 'Selected user role does not exit.',
-            "do_not_have_permission" => 'Please select another user role. You can not create user using this user role.',
+        'user_permission_ids'          => [
+            'required'               => 'Please select user permission.',
+            "not_found"              => 'Selected user permission does not exit.',
+            "do_not_have_permission" => 'Please select another user permission. You can not create user using this user permission.',
         ],
 
         'profile_image'         => [

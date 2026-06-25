@@ -32,3 +32,13 @@ export async function fetchUser(userSlugOrId) {
         return null
     }
 }
+
+export async function postToApi(url, data = {}, config = {}) {
+    try {
+        const res = await axios.post(url, data, config)
+        return res.data || null
+    } catch (error) {
+        console.error(`Failed to post to ${url}.`, error)
+        return null
+    }
+}

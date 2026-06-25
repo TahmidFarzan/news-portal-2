@@ -3,7 +3,7 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import ModelPagination from '@/components/common/model/Pagination.vue'
 import MultiSelectInfinityLoadingApi from '@/components/common/multi-select/InfinityLoadingApi.vue'
 
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -15,11 +15,17 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
+import {
+    canDeleteActivityLog,
+} from '@/composables/useUserPermissions'
+
 library.add(faTrash, faFilter, faInfo, faSpinner)
 
 defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
+
+const authUser = inject('authUser')
 
 const { activityLogs, showSubjectType } = defineProps({
     activityLogs: Object,
@@ -57,6 +63,8 @@ const applyFilter = () => {
         preserveState: true,
     })
 }
+
+const canDelete = (activityLog) => canDeleteActivityLog(authUser?.value, activityLog)
 
 const confirmDelete = (activityLog) => {
     deletingRow.value = activityLog
@@ -214,7 +222,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <button @click="confirmDelete(item)"
+                                    <button v-if="canDelete(item)" @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
                                         :title="t('pages.back_office.activity_logs.index.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />

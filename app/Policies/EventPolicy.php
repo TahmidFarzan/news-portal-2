@@ -1,36 +1,52 @@
 <?php
-
 namespace App\Policies;
 
-use App\Models\User;
+use App\Helpers\UserPermissionHelper;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Auth\Access\Response;
-use App\Helpers\UserHelper;
 
 class EventPolicy
 {
+    public function before(User $authUser, string $ability): bool | null
+    {
+        if ($authUser->is_super_admin) {
+            return true;
+        }
+
+        return null;
+    }
+
     public function viewAny(User $authUser): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_EVENT;
+        $access = UserPermissionHelper::ACCESS_VIEW_ANY;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function view(User $authUser, Event $event): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_EVENT;
+        $access = UserPermissionHelper::ACCESS_VIEW;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function create(User $authUser): Response
     {
-        return Response::allow();
+        $module = UserPermissionHelper::MODULE_EVENT;
+        $access = UserPermissionHelper::ACCESS_CREATE;
+
+        return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
     }
 
     public function update(User $authUser, Event $event): Response
     {
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
-            return Response::allow();
-        }
+        $module = UserPermissionHelper::MODULE_EVENT;
+        $access = UserPermissionHelper::ACCESS_UPDATE;
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $event->created_by_id)) {
+        if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }
 
@@ -40,11 +56,10 @@ class EventPolicy
     public function delete(User $authUser, Event $event): Response
     {
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_ADMIN)) {
-            return Response::allow();
-        }
+        $module = UserPermissionHelper::MODULE_EVENT;
+        $access = UserPermissionHelper::ACCESS_DELETE;
 
-        if ($authUser->hasUserRole(UserHelper::USER_ROLE_NEWS_DESK) && ($authUser->id === $event->created_by_id)) {
+        if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }
 

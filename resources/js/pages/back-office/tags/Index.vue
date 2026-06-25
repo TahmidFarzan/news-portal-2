@@ -18,7 +18,7 @@ import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
 
-import { canCreateTag, canEditTag, canDeleteTag } from '@/composables/useAuthUserAccessPermissions'
+import { canCreateTag, canEditTag, canDeleteTag } from '@/composables/useUserPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 

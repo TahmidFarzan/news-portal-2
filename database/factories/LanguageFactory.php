@@ -1,10 +1,8 @@
 <?php
 namespace Database\Factories;
 
-use App\Helpers\UserHelper;
-use App\Models\User;
 use App\Models\Language;
-use App\Models\UserRole;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -13,20 +11,19 @@ use Illuminate\Support\Str;
  */
 class LanguageFactory extends Factory
 {
-        /**
+    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
-        $adminUserRole = UserRole::where("name", UserHelper::USER_ROLE_ADMIN)->inRandomOrder()->first();
-        $user          = User::query()->inRandomOrder()->where("user_role_id", $adminUserRole->id)->first() ?? null;
+        $user = User::where("is_super_admin", true)->inRandomOrder()->first();
 
         return [
             'name'          => $this->faker->name(),
             'code'          => Str::snake(Str::lower($this->faker->unique()->lexify('??'))),
-            'locale'          => Str::snake(Str::lower($this->faker->unique()->lexify('??'))),
+            'locale'        => Str::snake(Str::lower($this->faker->unique()->lexify('??'))),
             'brief'         => $this->faker->sentence(),
             "created_by_id" => $user?->id ?? "1",
         ];
