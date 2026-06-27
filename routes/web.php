@@ -431,6 +431,7 @@ Route::prefix('site')->name('site.')->group(function () {
     Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
     Route::get('languages', [SiteController::class, 'languages'])->name('languages');
 
+    Route::get('trends', [SiteController::class, 'trends'])->name('trends');
     Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
 });
 

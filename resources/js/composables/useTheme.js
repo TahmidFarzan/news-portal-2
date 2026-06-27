@@ -28,6 +28,7 @@ export const themeOptions = Object.freeze({
     SHOW_NAME_ON_HEADER_MENU: 'Show Name On Header Menu',
     SHOW_BREAKING_NEWS  : "Show Breaking News",
     SHOW_GOOGLE_AD  : "Show Google Ad",
+    SHOW_TRENDS : "Show Trends",
     GOOGLE_SEARCH_CONSOLE_HEADER  : "Google Search Console Header",
     GOOGLE_ANALYTIC_HEADER  : "Google Analytic Header",
     GOOGLE_TAG_MANAGER_HEADER  : "Google Tag Manager Header",

@@ -152,11 +152,11 @@ class Theme extends Model
         return SlugOptions::create()
             ->saveSlugsTo('slug')
             ->generateSlugsFrom(function ($model) {
-                return "{$model->group}-{$model->label}-{$model->label}";
+                return "{$model->group}-{$model->label}";
             })
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
+            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)) . '-' . now()->format('HisdmY'));
     }
 
     public function getRouteKeyName(): string

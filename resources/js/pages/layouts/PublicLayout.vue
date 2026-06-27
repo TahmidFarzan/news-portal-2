@@ -124,11 +124,15 @@ const showBreakingNews = computed(() => {
 
 const showGoogleAd = computed(() => {
     const theme = getTheme(themeOptions.SHOW_GOOGLE_AD, themeGroups.App)
-
     return isTruthyValue(theme?.value)
 })
 
+const showTrends = computed(() => {
+    const theme = getTheme(themeOptions.SHOW_TRENDS, themeGroups.App)
+    return isTruthyValue(theme?.value)
+})
 provide('showGoogleAd', showGoogleAd)
+provide('showTrends', showTrends)
 
 onMounted(async () => {
     await nextTick()

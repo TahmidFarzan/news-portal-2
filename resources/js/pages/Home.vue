@@ -11,6 +11,7 @@ import NewsTypeSliderSection from '@/components/common/page/NewsTypeSliderSectio
 import NewsTypeGallerySection from '@/components/common/page/NewsTypeGallerySection.vue'
 import CategorySection from '@/components/common/page/CategorySection.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import Trends from '@/components/common/util/Trends.vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
 import {
@@ -47,6 +48,7 @@ const { page, leadNews, recentNews, topEvents, bottomEvents } = defineProps({
 })
 
 const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const showTrends = inject('showTrends', computed(() => false))
 
 const leadNewsItems = computed(() => {
     if (Array.isArray(leadNews)) {
@@ -100,7 +102,6 @@ const metaKeywords = computed(() => {
     return page?.seo_keywords ?? ''
 })
 
-
 </script>
 
 <template>
@@ -119,6 +120,8 @@ const metaKeywords = computed(() => {
         <div v-if="topEvents">
             <EventNewsSection :events="topEvents" class="mb-4" />
         </div>
+
+        <Trends v-if="showTrends"/>
 
         <div class="rounded-2xl border border-slate-100 p-2">
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">

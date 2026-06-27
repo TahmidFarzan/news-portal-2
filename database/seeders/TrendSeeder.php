@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use App\Models\Language;
 use App\Models\Tag;
 use App\Models\Trend;
 use Illuminate\Database\Seeder;
@@ -29,12 +30,18 @@ class TrendSeeder extends Seeder
         }
 
         // Seeder
-        $tags = Tag::orderBy('id', 'desc')->limit(15)->get();
-        foreach ($tags as $tag) {
-            Trend::factory()->state([
-                'tag_id'        => $tag->id,
-                'is_current'    => true,
-            ])->create();
+
+        $languages = Language::orderBy("id", "asc")->get();
+
+        foreach ($languages as $language) {
+            $tags = Tag::orderBy('id', 'desc')->where("language_id", $language->id)->limit(15)->get();
+            foreach ($tags as $tag) {
+                Trend::factory()->state([
+                    'tag_id'     => $tag->id,
+                    'is_current' => true,
+                ])->create();
+            }
         }
+
     }
 }

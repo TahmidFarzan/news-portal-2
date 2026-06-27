@@ -125,5 +125,12 @@ class ThemeSeeder extends Seeder
             'value' => "ca-pub-3940256099942544",
         ])->create();
 
+        Theme::factory()->state([
+            'group' => ThemeHelper::GROUP_APP,
+            'label' => ThemeHelper::OPTION_SHOW_TRENDS,
+            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
+            'value' => true,
+        ])->create();
+
     }
 }

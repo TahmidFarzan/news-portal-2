@@ -2,15 +2,16 @@
 namespace App\Services;
 
 use App\Helpers\CacheServerHelper;
-use App\Helpers\MenuHelper;
 use App\Helpers\GoogleAdsenceHelper;
+use App\Helpers\MenuHelper;
 use App\Helpers\ThemeHelper;
 use App\Models\BreakingNews;
-use App\Models\Language;
 use App\Models\GoogleAdsence;
+use App\Models\Language;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\Theme;
+use App\Models\Trend;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -447,7 +448,7 @@ class SiteService
         }
 
         $labels = [
-            ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY
+            ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY,
         ];
 
         $data = Theme::query()->where('group', ThemeHelper::GROUP_APP)->whereIn('label', $labels)->get();
@@ -477,7 +478,6 @@ class SiteService
         if ($cachedData !== null) {
             return $cachedData;
         }
-
 
         $data = Theme::query()->where('group', ThemeHelper::GROUP_APP)->where('label', ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID)->firstOrFail();
 
@@ -616,7 +616,7 @@ class SiteService
         $type     = $request->input("type", GoogleAdsenceHelper::TYPE_SECTION);
         $position = $request->input("position", GoogleAdsenceHelper::POSITION_TOP);
 
-        $typeCacheKey = Str::lower($type);
+        $typeCacheKey     = Str::lower($type);
         $positionCacheKey = Str::lower($position);
 
         $cacheKey = "site:google-adsence:type:{$typeCacheKey}:position:{$positionCacheKey}";
@@ -633,6 +633,43 @@ class SiteService
         }
 
         $data = GoogleAdsence::query()->where('type', $type)->where('position', $position)->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function trends()
+    {
+        $language = $this->language();
+
+        $cacheKey = "site:language:{$language->locale}:trends";
+
+        $cacheTags = [
+            "site",
+            "site:language:{$language->locale}",
+            "site:language:{$language->locale}:trends",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $data = Trend::query()
+            ->with("tag")
+            ->where("is_current", true)
+            ->whereRelation('tag', 'language_id', $language->id)
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit(15)
+            ->get();
 
         CacheServerHelper::cachedData(
             $cacheKey,

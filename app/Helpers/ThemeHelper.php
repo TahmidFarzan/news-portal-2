@@ -31,6 +31,7 @@ class ThemeHelper
 
     public const OPTION_SHOW_BREAKING_NEWS = "Show Breaking News";
     public const OPTION_SHOW_GOOGLE_AD = "Show Google Ad";
+    public const OPTION_SHOW_TRENDS = "Show Trends";
 
     public const OPTION_GOOGLE_SEARCH_CONSOLE_HEADER = "Google Search Console Header";
     public const OPTION_GOOGLE_ANALYTIC_HEADER       = "Google Analytic Header";

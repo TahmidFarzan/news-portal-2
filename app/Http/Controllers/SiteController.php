@@ -91,4 +91,11 @@ class SiteController extends Controller
         $GoogleAdsences = $this->siteService->getGoogleAdsence($request);
         return response()->json($GoogleAdsences);
     }
+
+    public function trends(): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->trends()
+        );
+    }
 }
