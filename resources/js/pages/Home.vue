@@ -180,8 +180,9 @@ const metaKeywords = computed(() => {
                                     :hideFeatureImage="true" :isCompact="true" />
                             </div>
                         </div>
-                        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" />
                     </div>
+
+                    <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM"  class="mt-4"/>
                 </aside>
             </div>
         </div>
