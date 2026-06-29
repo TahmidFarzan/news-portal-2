@@ -21,7 +21,7 @@ import {
     faList
 } from '@fortawesome/free-solid-svg-icons'
 
-import { formatDateTime } from '@/composables/useDateTime'
+import { formatDate,formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
@@ -321,7 +321,9 @@ onMounted(async () => {
                                 {{ t('pages.back_office.surveys.index.labels.language') }}
                             </th>
                             <th class="px-4 py-3 text-left">{{ t('pages.back_office.surveys.index.labels.name') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.surveys.index.labels.created_by') }}
+                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.surveys.index.labels.date') }}
+                            </th>
+                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.surveys.index.labels.created_at') }}
                             </th>
                             <th class="px-4 py-3 text-left">{{ t('pages.back_office.surveys.index.labels.is_active') }}
                             </th>
@@ -344,7 +346,12 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) :
+                                {{ item.date ? formatDate(item.date) :
+                                    t('pages.back_office.surveys.index.labels.not_available') }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-500">
+                                {{ item.date ? formatDateTime(item.date) :
                                     t('pages.back_office.surveys.index.labels.not_available') }}
                             </td>
 

@@ -43,13 +43,17 @@ class DeleteSurveyQuestionRelationsJob implements ShouldQueue, ShouldBeUnique
     {
         $surveyQuestion = SurveyQuestion::find($this->surveyQuestionId);
 
-        if ($surveyQuestion && ($surveyQuestion->activityLogs()->exists()) ) {
+        if ($surveyQuestion && ($surveyQuestion->activityLogs()->exists()) ($surveyQuestion->surveyQuestionResult()->exists())) {
 
             try {
 
                 DB::transaction(function () use ($surveyQuestion) {
                     if ($surveyQuestion->activityLogs()->exists()) {
                         $surveyQuestion->activityLogs()->delete();
+                    }
+
+                    if ($surveyQuestion->surveyQuestionResult()->exists()) {
+                        $surveyQuestion->surveyQuestionResult()->delete();
                     }
                 });
 

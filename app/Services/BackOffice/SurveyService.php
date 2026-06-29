@@ -56,7 +56,8 @@ class SurveyService
         if ($request->filled('date')) {
             $date = $request->input('date');
             $date = is_string($date) ? new \DateTime($date) : $date;
-            $query->whereDate('date', '<=', $date);
+            $query->whereDate('date', '<=', $date)
+                ->orWhereDate('created_at', '<=', $date);
         }
 
         if ($request->filled('search')) {

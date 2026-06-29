@@ -3251,6 +3251,8 @@
                         "surveys": "জরিপসমূহ",
                         "per_page": "প্রতি পৃষ্ঠায়",
                         "created_by": "তৈরি করেছেন",
+                        "date": "তারিখ",
+                        "created_at": "তৈরি করা হয়েছে",
                         "all": "সব",
                         "name": "নাম",
                         "not_available": "প্রযোজ্য নয়",
@@ -3320,7 +3322,12 @@
                         "updated_at": "সর্বশেষ হালনাগাদ",
                         "updated_by": "হালনাগাদ করেছেন",
                         "activity_logs_title": "কার্যক্রমের লগ",
-                        "survey_questions": "জরিপের প্রশ্নসমূহ"
+                        "survey_questions": "জরিপের প্রশ্নসমূহ",
+                        "survey_question_result": "জরিপের প্রশ্নের ফলাফল",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "no_comment": "কোনো মন্তব্য নেই",
+                        "participate_count" : "অংশগ্রহণের সংখ্যা"
                     },
                     "links": {
                         "edit": "সম্পাদনা করুন"

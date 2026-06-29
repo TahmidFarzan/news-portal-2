@@ -62,8 +62,8 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 { text: t('pages.back_office.surveys.create.labels.surveys'), href: route('back-office.surveys.index') },
-                { text: `${survey?.name} ${t('pages.back_office.surveys.details.labels.details')}`, href: route('back-office.surveys.details',{slug : survey?.slug}) },
-                { text: t('pages.back_office.survey_questions.details.labels.survey_questions'),  href: route('back-office.surveys.survey-questions.index',{slug : survey?.slug}) ,active: false },
+                { text: `${survey?.name} ${t('pages.back_office.surveys.details.labels.details')}`, href: route('back-office.surveys.details', { slug: survey?.slug }) },
+                { text: t('pages.back_office.survey_questions.details.labels.survey_questions'), href: route('back-office.surveys.survey-questions.index', { slug: survey?.slug }), active: false },
                 {
                     text: `${surveyQuestion?.question} ${t('pages.back_office.survey_questions.details.labels.details')}`,
                     active: true
@@ -76,7 +76,8 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${surveyQuestion?.question} ${t('pages.back_office.survey_questions.details.labels.survey_question')}`" />
+    <Head
+        :title="`${surveyQuestion?.question} ${t('pages.back_office.survey_questions.details.labels.survey_question')}`" />
 
     <div class="w-full space-y-6">
 
@@ -109,11 +110,49 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.question') }}</span>
-                        <span class="font-medium">{{ surveyQuestion?.question || t('pages.back_office.survey_questions.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.question')
+                            }}</span>
+                        <span class="font-medium">{{ surveyQuestion?.question ||
+                            t('pages.back_office.survey_questions.details.labels.not_available') }}</span>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('pages.back_office.survey_questions.details.labels.survey_question_result') }}
+            </h3>
+
+            <div class="flex justify-between">
+                <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.yes') }}</span>
+                <span class="font-medium">
+                    {{ surveyQuestion?.survey_question_result?.yes || 0 }}
+                </span>
+            </div>
+
+
+            <div class="flex justify-between">
+                <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.no') }}</span>
+                <span class="font-medium">
+                    {{ surveyQuestion?.survey_question_result?.no || 0 }}
+                </span>
+            </div>
+
+            <div class="flex justify-between">
+                <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.no_comment') }}</span>
+                <span class="font-medium">
+                    {{ surveyQuestion?.survey_question_result?.no_comment || 0 }}
+                </span>
+            </div>
+
+            <div class="flex justify-between">
+                <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.participate_count') }}</span>
+                <span class="font-medium">
+                    {{ surveyQuestion?.survey_question_result?.participate_count || 0 }}
+                </span>
+            </div>
+
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
@@ -125,7 +164,8 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.created_at') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.created_at')
+                            }}</span>
 
                         <span class="font-medium">
                             {{
@@ -137,16 +177,19 @@ onMounted(async () => {
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.created_by') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.created_by')
+                            }}</span>
                         <span class="font-medium">
-                            {{ surveyQuestion?.created_by?.name || t('pages.back_office.survey_questions.details.labels.not_available') }}
+                            {{ surveyQuestion?.created_by?.name ||
+                                t('pages.back_office.survey_questions.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.updated_at')
+                            }}</span>
 
                         <span class="font-medium">
                             {{
@@ -158,9 +201,11 @@ onMounted(async () => {
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.updated_by')
+                            }}</span>
                         <span class="font-medium">
-                            {{ surveyQuestion?.latest_activity_log?.causer?.name || t('pages.back_office.survey_questions.details.labels.not_available') }}
+                            {{ surveyQuestion?.latest_activity_log?.causer?.name ||
+                                t('pages.back_office.survey_questions.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
