@@ -15,22 +15,23 @@ class UserPermissionHelper
     public const ACCESS_RESTORE      = 'Restore';
     public const ACCESS_FORCE_DELETE = 'Force delete';
 
-    public const MODULE_BREAKING_NEWS  = 'Breaking news';
-    public const MODULE_CATEGORY       = 'Category';
-    public const MODULE_CONTRIBUTOR    = 'Contributor';
-    public const MODULE_EVENT          = 'Event';
-    public const MODULE_GOOGLE_ADSENCE = 'Google adsence';
-    public const MODULE_LOCATION       = 'Location';
-    public const MODULE_MENU           = 'Menu';
-    public const MODULE_MENU_ITEM      = 'Menu item';
-    public const MODULE_NEWS           = 'News';
-    public const MODULE_PAGE           = 'Page';
-    public const MODULE_TAG            = 'Tag';
-    public const MODULE_THEME          = 'Theme';
-    public const MODULE_TREND          = 'Trend';
-    public const MODULE_USER           = 'User';
-    public const MODULE_ACTIVITY_LOG = 'Activity log';
-
+    public const MODULE_BREAKING_NEWS   = 'Breaking news';
+    public const MODULE_CATEGORY        = 'Category';
+    public const MODULE_CONTRIBUTOR     = 'Contributor';
+    public const MODULE_EVENT           = 'Event';
+    public const MODULE_GOOGLE_ADSENCE  = 'Google adsence';
+    public const MODULE_LOCATION        = 'Location';
+    public const MODULE_MENU            = 'Menu';
+    public const MODULE_MENU_ITEM       = 'Menu item';
+    public const MODULE_NEWS            = 'News';
+    public const MODULE_PAGE            = 'Page';
+    public const MODULE_TAG             = 'Tag';
+    public const MODULE_THEME           = 'Theme';
+    public const MODULE_TREND           = 'Trend';
+    public const MODULE_USER            = 'User';
+    public const MODULE_ACTIVITY_LOG    = 'Activity log';
+    public const MODULE_SURVEY          = 'Survey';
+    public const MODULE_SURVEY_QUESTION = 'Survey question';
 
     public static function modules(): Collection
     {
@@ -50,6 +51,8 @@ class UserPermissionHelper
             self::MODULE_TREND,
             self::MODULE_USER,
             self::MODULE_ACTIVITY_LOG,
+            self::MODULE_SURVEY,
+            self::MODULE_SURVEY_QUESTION,
         ]);
     }
 
@@ -60,6 +63,7 @@ class UserPermissionHelper
             self::MODULE_NEWS,
             self::MODULE_PAGE,
             self::MODULE_USER,
+            self::MODULE_SURVEY,
         ];
 
         if (in_array($moduleName, $fullPermissionModules, true)) {

@@ -10,9 +10,15 @@ use App\Models\GoogleAdsence;
 use App\Models\Language;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\Survey;
+use App\Models\SurveyQuestion;
+use App\Models\SurveyQuestionResult;
 use App\Models\Theme;
 use App\Models\Trend;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class SiteService
@@ -680,4 +686,146 @@ class SiteService
 
         return $data;
     }
+
+    public function surveys()
+    {
+        $language = $this->language();
+
+        $cacheKey = "site:language:{$language->locale}:trends";
+
+        $cacheTags = [
+            "site",
+            "site:language:{$language->locale}",
+            "site:language:{$language->locale}:trends",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $data = Survey::query()
+            ->with(["surveyQuestions", "surveyQuestions.surveyQuestionResult"])
+            ->where("is_active", true)
+            ->where('language_id', $language->id)
+            ->whereDate('date', now()->toDateString())
+            ->orderBy('id', 'desc')
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function survey(string $slug): Survey
+    {
+        return Survey::where('slug', $slug)->firstOrFail();
+    }
+
+    public function surveyQuestion(Survey $survey, string $slug): SurveyQuestion
+    {
+        return SurveyQuestion::where('survey_id', $survey->id)->where('slug', $slug)->firstOrFail();
+    }
+
+    public function surveySurveyQuestionSubmit(Request $request, Survey $survey, SurveyQuestion $surveyQuestion): array
+    {
+        $yes       = $request->boolean('yes');
+        $no        = $request->boolean('no');
+        $noComment = $request->boolean('no_comment');
+
+        if (! $yes && ! $no && ! $noComment) {
+            return [
+                'status'  => 'warning',
+                'message' => __(
+                    'status-messages.site.survey.survey-question.no_answer_selected_warning'
+                ),
+                'data'    => null,
+            ];
+        }
+
+        $answer = null;
+
+        if ($yes) {
+            $answer = 'yes';
+        } elseif ($no) {
+            $answer = 'no';
+        } else {
+            $answer = 'no_comment';
+        }
+
+        $sessionKey = "survey.{$survey->id}.question.{$surveyQuestion->id}";
+
+        $previousData = session()->get($sessionKey);
+
+        try {
+
+            DB::transaction(function () use ($surveyQuestion, $answer, $previousData, $sessionKey, $survey) {
+
+                $surveyQuestionResult = SurveyQuestionResult::query()->firstOrCreate(
+                    [
+                        'survey_question_id' => $surveyQuestion->id,
+                    ],
+                    [
+                        'yes'               => 0,
+                        'no'                => 0,
+                        'no_comment'        => 0,
+                    ]);
+
+                $previousAnswer = $previousData['answer'] ?? null;
+
+                if ($previousAnswer && $previousAnswer !== $answer) {
+
+                    if ($previousAnswer === 'yes' && $surveyQuestionResult->yes > 0) {
+                        $surveyQuestionResult->decrement('yes');
+                    }
+
+                    if ($previousAnswer === 'no' && $surveyQuestionResult->no > 0) {
+                        $surveyQuestionResult->decrement('no');
+                    }
+
+                    if ($previousAnswer === 'no_comment' && $surveyQuestionResult->no_comment > 0) {
+                        $surveyQuestionResult->decrement('no_comment');
+                    }
+                }
+
+                if ($previousAnswer !== $answer) {
+                    $surveyQuestionResult->increment($answer);
+                }
+
+                session()->put(
+                    $sessionKey,
+                    [
+                        'survey_id'          => $survey->id,
+                        'survey_question_id' => $surveyQuestion->id,
+                        'answer'             => $answer,
+                        'expired_at'         => now()->addHours(6)->timestamp,
+                    ]
+                );
+            });
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.site.survey.survey-question.success'),
+                'data'    => session()->get($sessionKey),
+            ];
+
+        } catch (Exception $exception) {
+
+            Log::error('Failed to submit survey question.', ['exception' => $exception]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.site.survey.survey-question.fail'),
+                'data'    => null,
+            ];
+        }
+
+    }
+
 }

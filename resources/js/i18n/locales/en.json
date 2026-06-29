@@ -219,6 +219,23 @@
                         "details": "Details"
                     }
                 }
+            },
+            "survey_question": {
+                "recent_survey_questions": {
+                    "labels": {
+                        "sl": "sl",
+                        "language": "Language",
+                        "question": "Question",
+                        "created_at": "Created At",
+                        "actions": "Actions",
+                        "show_all": "Show all",
+                        "no_record_found": "No record found"
+                    },
+                    "links": {
+                        "details": "Details",
+                        "show_all": "Show All"
+                    }
+                }
             }
         },
         "common": {
@@ -263,7 +280,8 @@
                             "user_anagement": "User Anagement",
                             "users": "Users",
                             "themes": "Themes",
-                            "google_adsences": "Google adsences"
+                            "google_adsences": "Google adsences",
+                            "surveys": "Surveys"
                         }
                     }
                 },
@@ -502,6 +520,33 @@
                     "actions": {
                         "searching": "Searching",
                         "search": "Search"
+                    }
+                }
+            },
+            "util": {
+                "surveys": {
+                    "labels": {
+                        "surveys": "Surveys",
+                        "no_survey_question_added": "No question added",
+                        "no_survey_added": "No survey added"
+                    }
+                },
+                "survey_question": {
+                    "labels": {
+                        "selected": "Selected",
+                        "yes": "Yes",
+                        "no": "No",
+                        "no_comment": "No Comment",
+                        "no_participate_found": "No participate found"
+                    },
+                    "buttons": {
+                        "change_answer": "Change answer",
+                        "selected": "Selected",
+                        "submit": "Submit"
+                    },
+                    "api":{
+                        "submit_fail": "Submit fail",
+                        "submit_success": "Survey question has been sumited"
                     }
                 }
             }
@@ -2766,8 +2811,8 @@
                         "address": "Address",
                         "no": "No",
                         "yes": "Yes",
-                        "is_super_admin" : "Is super admin",
-                        "super_admin_create_notice" : "Only a super admin can create a super admin"
+                        "is_super_admin": "Is super admin",
+                        "super_admin_create_notice": "Only a super admin can create a super admin"
                     },
                     "auth": {
                         "account": {
@@ -2802,7 +2847,7 @@
                         "updated_by": "Updated By",
                         "yes": "Yes",
                         "no": "No",
-                        "is_super_admin" : "Is super admin"
+                        "is_super_admin": "Is super admin"
                     },
                     "title": "User Details",
                     "actions": {
@@ -3053,7 +3098,7 @@
                         "client_id": "Client id",
                         "yes": "Yes",
                         "no": "No",
-                        "use_full_width_responsive" : "Use full width responsive"
+                        "use_full_width_responsive": "Use full width responsive"
                     },
                     "navigation": {
                         "google_adsences": "Google adsences",
@@ -3129,6 +3174,199 @@
                         "delete_confirmation_modal": {
                             "irreversible_body": "This action cannot be undone."
                         }
+                    }
+                }
+            },
+            "surveys": {
+                "create": {
+                    "validation": {
+                        "name_is_required": "Name is required.",
+                        "date_is_required": "date is required.",
+                        "language_is_required": "Language is required."
+                    },
+                    "labels": {
+                        "create_survey": "Create survey",
+                        "survey_create": "Survey create",
+                        "name_placeholder": "Enter name",
+                        "brief_placeholder": "Enter brief",
+                        "language_placeholder": "Select language",
+                        "surveys": "Surveys",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "brief": "Brief",
+                        "date": "Date",
+                        "language": "Language",
+                        "is_active": "Is active",
+                        "no": "No",
+                        "yes": "Yes",
+                        "actions": "Actions"
+                    },
+                    "links": {
+                        "details": "details"
+                    },
+                    "buttons": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "surveys": "Surveys",
+                        "details": "details",
+                        "survey_details": "Survey details",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "date": "Date",
+                        "brief": "Brief",
+                        "system_information": "System Information",
+                        "created_at": "Created At",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By",
+                        "yes": "Yes",
+                        "no": "No",
+                        "language": "Language",
+                        "is_active": "Is active",
+                        "status": "Status",
+                        "activity_logs_title": "Activity logs",
+                        "active": "Active",
+                        "survey_questions": "Survey questions"
+                    },
+                    "links": {
+                        "edit": "Edit",
+                        "survey_question_create": "Create question",
+                        "survey_question_list": "Questions"
+                    },
+                    "buttons": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting",
+                        "inactivating": "Inactivating...",
+                        "inactive": "Inactive",
+                        "activating": "Activating...",
+                        "active": "Active"
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "surveys": "Surveys",
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "all": "All",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "is_active": "Is active",
+                        "no": "No",
+                        "yes": "Yes",
+                        "actions": "Actions",
+                        "search_placeholder": "Search survey...",
+                        "active": "Active",
+                        "inactive": "Inactive",
+                        "no_survey_found": "No survey found.",
+                        "delete_modal_title": "Delete Survey",
+                        "language": "Language",
+                        "delete_modal_tbody": "This action cannot be undone."
+                    },
+                    "buttons": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting",
+                        "active": "Active",
+                        "inactive": "Inactive",
+                        "applying_filter": "Applying Filter...",
+                        "apply_filter": "Apply Filter"
+                    },
+                    "links": {
+                        "create": "Create",
+                        "edit": "Edit",
+                        "details": "Details",
+                        "survey_question_create": "Create question",
+                        "survey_question_list": "Questions"
+                    }
+                }
+            },
+            "survey_questions": {
+                "create": {
+                    "validation": {
+                        "question_is_required": "Question is required."
+                    },
+                    "labels": {
+                        "edit": "Edit",
+                        "create": "Create",
+                        "survey_question_create": "Survey question create",
+                        "question_placeholder": "Enter question",
+                        "surveys": "Surveys",
+                        "basic_information": "Basic Information",
+                        "question": "Question",
+                        "actions": "Actions"
+                    },
+                    "buttons": {
+                        "saving": "Saving",
+                        "save": "Save"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "survey_question": "Survey question",
+                        "surveys": "Surveys",
+                        "details": "details",
+                        "survey_question_details": "Survey question details",
+                        "basic_information": "Basic Information",
+                        "name": "Name",
+                        "not_available": "N/A",
+                        "question": "Question",
+                        "system_information": "System Information",
+                        "created_at": "Created At",
+                        "created_by": "Created By",
+                        "updated_at": "Updated At",
+                        "updated_by": "Updated By",
+                        "activity_logs_title": "Activity logs",
+                        "survey_questions": "Survey questions"
+                    },
+                    "links": {
+                        "edit": "Edit"
+                    },
+                    "buttons": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting"
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "survey": "Survey",
+                        "survey_questions": "Survey questions",
+                        "per_page": "Per page",
+                        "created_by": "Created By",
+                        "date": "Date",
+                        "question": "question",
+                        "not_available": "N/A",
+                        "no": "No",
+                        "yes": "Yes",
+                        "actions": "Actions",
+                        "search_placeholder": "Search survey...",
+                        "active": "Active",
+                        "inactive": "Inactive",
+                        "no_survey_question_found": "No survey_question found.",
+                        "delete_modal_title": "Delete Survey question",
+                        "delete_modal_body": "This action cannot be undone."
+                    },
+                    "buttons": {
+                        "delete": "Delete",
+                        "cancel": "Cancel",
+                        "deleting": "Deleting",
+                        "active": "Active",
+                        "inactive": "Inactive",
+                        "applying_filter": "Applying Filter...",
+                        "apply_filter": "Apply Filter"
+                    },
+                    "links": {
+                        "create": "Create",
+                        "edit": "Edit",
+                        "details": "Details",
+                        "survey_question_create": "Create question",
+                        "survey_question_list": "Questions"
                     }
                 }
             }

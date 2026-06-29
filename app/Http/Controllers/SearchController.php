@@ -190,6 +190,13 @@ class SearchController extends Controller
         );
     }
 
+    public function surveys(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->surveys($request)
+        );
+    }
+
     public function medias(Request $request): JsonResponse
     {
         return response()->json(
@@ -306,6 +313,13 @@ class SearchController extends Controller
     {
         return response()->json(
             $this->searchService->page($slugOrId)
+        );
+    }
+
+    public function survey(string | int $slugOrId): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->survey($slugOrId)
         );
     }
 }

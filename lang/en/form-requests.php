@@ -1,11 +1,11 @@
 <?php
 
 return [
-    "api"            => [
+    "api"             => [
         'timeout' => 'Api responce timeout.',
     ],
 
-    'auth'           => [
+    'auth'            => [
         'login'           => [
             'email'    => [
                 'required' => 'Please enter your email address.',
@@ -117,7 +117,7 @@ return [
         ],
     ],
 
-    'media_quick'    => [
+    'media_quick'     => [
         'alt'     => [
             'string' => 'Alt must be string.',
         ],
@@ -131,7 +131,7 @@ return [
         ],
     ],
 
-    'user'           => [
+    'user'            => [
         'name'                  => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -176,7 +176,7 @@ return [
             'confirmed' => 'Password confirmation does not match.',
         ],
 
-        'user_permission_ids'          => [
+        'user_permission_ids'   => [
             'required'               => 'Please select user permission.',
             "not_found"              => 'Selected user permission does not exit.',
             "do_not_have_permission" => 'Please select another user permission. You can not create user using this user permission.',
@@ -189,7 +189,7 @@ return [
         ],
     ],
 
-    'language'       => [
+    'language'        => [
         'name'   => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -211,7 +211,7 @@ return [
         ],
     ],
 
-    'category'       => [
+    'category'        => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -230,7 +230,7 @@ return [
         ],
     ],
 
-    'tag'            => [
+    'tag'             => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -244,7 +244,7 @@ return [
         ],
     ],
 
-    'trend'          => [
+    'trend'           => [
         'tag_id'   => [
             'required'  => 'Tag is required.',
             "not_found" => 'Tag is not exit.',
@@ -256,7 +256,7 @@ return [
         ],
     ],
 
-    'location'       => [
+    'location'        => [
         'name'             => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -313,7 +313,7 @@ return [
         ],
     ],
 
-    'event'          => [
+    'event'           => [
         'name'                 => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -343,7 +343,7 @@ return [
         ],
     ],
 
-    'contributor'    => [
+    'contributor'     => [
         'name'          => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -359,7 +359,7 @@ return [
 
     ],
 
-    'news'           => [
+    'news'            => [
         'title'                             => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -482,7 +482,7 @@ return [
 
     ],
 
-    'breaking_news'  => [
+    'breaking_news'   => [
         'title'       => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -501,7 +501,7 @@ return [
         ],
     ],
 
-    'page'           => [
+    'page'            => [
         'title'          => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -529,7 +529,7 @@ return [
 
     ],
 
-    'menu'           => [
+    'menu'            => [
         'name'         => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -548,7 +548,7 @@ return [
         ],
     ],
 
-    'menu_item'      => [
+    'menu_item'       => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -585,7 +585,7 @@ return [
 
     ],
 
-    'theme'          => [
+    'theme'           => [
         'group' => [
             'required' => 'Group is required.',
             'string'   => 'Group must be a string.',
@@ -616,7 +616,7 @@ return [
         ],
     ],
 
-    'google_adsence' => [
+    'google_adsence'  => [
         'name'     => [
             'required' => 'Group is required.',
             'string'   => 'Group must be a string.',
@@ -641,6 +641,25 @@ return [
             'string'   => 'Position must be a string.',
             'max'      => 'Position may not be greater than :max characters.',
             'not_exit' => 'Selected position does not exist.',
+        ],
+    ],
+
+    'survey'          => [
+        'name' => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be a string.',
+            'max'      => 'Name may not be greater than :max characters.',
+        ],
+        'language_id' => [
+            'required'  => 'Language is required.',
+            "not_found" => 'Language does not exit.',
+        ],
+    ],
+
+    'survey_question' => [
+        'question'    => [
+            'required' => 'Question is required.',
+            'string'   => 'Question must be a string.',
         ],
     ],
 ];

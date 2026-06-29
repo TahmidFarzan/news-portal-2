@@ -17,6 +17,7 @@ use App\Models\Language;
 use App\Models\Location;
 use App\Models\MenuItem;
 use App\Models\MenuType;
+use App\Models\Survey;
 use App\Models\News;
 use App\Models\NewsType;
 use App\Models\Page;
@@ -905,6 +906,38 @@ class SearchService
         ];
     }
 
+    public function surveys(Request $request): array
+    {
+        $query = Survey::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('except_id')) {
+            $query->whereNot("id", $request->input('except_id'));
+        }
+
+        $records = $query
+            ->orderByDesc('id')
+            ->paginate($request->input('per_page', 25));
+
+        $items = $records->map(fn($user) => [
+            'id'   => $user->id,
+            'name' => $user->name,
+        ]);
+
+        return [
+            'items'        => $items,
+            'total'        => $records->total(),
+            'current_page' => $records->currentPage(),
+            'last_page'    => $records->lastPage(),
+        ];
+    }
+
     public function categoryTree(Request $request): array
     {
         $query = Category::whereNull('parent_id');
@@ -1112,6 +1145,13 @@ class SearchService
     public function page(int | string $slugOrId): Page
     {
         return Page::where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
+    }
+
+    public function survey(int | string $slugOrId): Page
+    {
+        return Survey::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)
             ->firstOrFail();
     }

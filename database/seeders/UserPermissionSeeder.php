@@ -3,6 +3,7 @@ namespace Database\Seeders;
 
 use App\Helpers\UserPermissionHelper;
 use App\Models\UserPermission;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -34,6 +35,18 @@ class UserPermissionSeeder extends Seeder
                     'access' => $modulePermission->id,
                 ])->create();
             }
+        }
+
+        $userPermissions = UserPermission::orderBy("id", "desc")->get();
+
+        foreach ($userPermissions as $userPermission) {
+            $userPermission->users()->detach();
+        }
+
+        $users = User::orderBy("id", "desc")->where("is_super_admin", false)->get();
+        foreach ($users as $user) {
+            $userPermissionIds = UserPermission::pluck("id");
+            $user->userPermissions()->sync($userPermissionIds);
         }
     }
 }

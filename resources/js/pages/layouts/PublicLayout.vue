@@ -131,8 +131,15 @@ const showTrends = computed(() => {
     const theme = getTheme(themeOptions.SHOW_TRENDS, themeGroups.App)
     return isTruthyValue(theme?.value)
 })
+
+const showSurveys = computed(() => {
+    const theme = getTheme(themeOptions.SHOW_SURVEYS, themeGroups.App)
+    return isTruthyValue(theme?.value)
+})
+
 provide('showGoogleAd', showGoogleAd)
 provide('showTrends', showTrends)
+provide('showSurveys', showSurveys)
 
 onMounted(async () => {
     await nextTick()

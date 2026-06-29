@@ -219,6 +219,23 @@
                         "details": "বিস্তারিত"
                     }
                 }
+            },
+            "survey_question": {
+                "recent_survey_questions": {
+                    "labels": {
+                        "sl": "ক্রমিক",
+                        "language": "ভাষা",
+                        "question": "প্রশ্ন",
+                        "created_at": "তৈরি করা হয়েছে",
+                        "actions": "অ্যাকশন",
+                        "show_all": "সব দেখুন",
+                        "no_record_found": "কোনো তথ্য পাওয়া যায়নি"
+                    },
+                    "links": {
+                        "details": "বিস্তারিত",
+                        "show_all": "সব দেখুন"
+                    }
+                }
             }
         },
         "common": {
@@ -263,7 +280,8 @@
                             "user_anagement": "ব্যবহারকারী ব্যবস্থাপনা",
                             "users": "ব্যবহারকারী",
                             "themes": "থিম",
-                            "google_adsences": "গুগল অ্যাডসেন্স"
+                            "google_adsences": "গুগল অ্যাডসেন্স",
+                            "surveys": "জরিপ"
                         }
                     }
                 },
@@ -503,6 +521,29 @@
                 "actions": {
                     "searching": "অনুসন্ধান চলছে",
                     "search": "অনুসন্ধান করুন"
+                }
+            },
+            "util": {
+                "surveys": {
+                    "labels": {
+                        "surveys": "সার্ভে",
+                        "no_survey_question_added": "কোনো প্রশ্ন যোগ করা হয়নি",
+                        "no_survey_added": "কোনো সার্ভে যোগ করা হয়নি"
+                    }
+                },
+                "survey_question": {
+                    "labels": {
+                        "selected": "নির্বাচিত",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "no_comment": "মন্তব্য নেই",
+                        "no_participate_found": "কোনো অংশগ্রহণকারী পাওয়া যায়নি"
+                    },
+                    "buttons": {
+                        "change_answer": "উত্তর পরিবর্তন করুন",
+                        "selected": "নির্বাচিত",
+                        "submit": "জমা দিন"
+                    }
                 }
             }
         }
@@ -2766,8 +2807,8 @@
                         "address": "ঠিকানা",
                         "yes": "হ্যাঁ",
                         "no": "না",
-                        "is_super_admin" : "সুপার অ্যাডমিন",
-                        "super_admin_create_notice" : "শুধুমাত্র একজন সুপার অ্যাডমিনই আরেকজন সুপার অ্যাডমিন তৈরি করতে পারেন।"
+                        "is_super_admin": "সুপার অ্যাডমিন",
+                        "super_admin_create_notice": "শুধুমাত্র একজন সুপার অ্যাডমিনই আরেকজন সুপার অ্যাডমিন তৈরি করতে পারেন।"
                     },
                     "auth": {
                         "account": {
@@ -2802,7 +2843,7 @@
                         "updated_by": "হালনাগাদ করেছেন",
                         "yes": "হ্যাঁ",
                         "no": "না",
-                        "is_super_admin" : "সুপার অ্যাডমিন"
+                        "is_super_admin": "সুপার অ্যাডমিন"
                     },
                     "title": "ব্যবহারকারীর বিস্তারিত",
                     "actions": {
@@ -3055,7 +3096,7 @@
                         "client_id": "ক্লায়েন্ট আইডি",
                         "yes": "হ্যাঁ",
                         "no": "না",
-                        "use_full_width_responsive" : "সম্পূর্ণ প্রস্থে প্রতিক্রিয়াশীল ব্যবহার করুন"
+                        "use_full_width_responsive": "সম্পূর্ণ প্রস্থে প্রতিক্রিয়াশীল ব্যবহার করুন"
                     },
                     "navigation": {
                         "google_adsences": "গুগল অ্যাডসেন্স",
@@ -3131,6 +3172,199 @@
                         "delete_confirmation_modal": {
                             "irreversible_body": "এই কাজটি আর ফিরিয়ে আনা যাবে না।"
                         }
+                    }
+                }
+            },
+            "surveys": {
+                "create": {
+                    "validation": {
+                        "name_is_required": "নাম আবশ্যক।",
+                        "date_is_required": "তারিখ আবশ্যক।",
+                        "language_is_required": "ভাষা আবশ্যক।"
+                    },
+                    "labels": {
+                        "create_survey": "জরিপ তৈরি করুন",
+                        "survey_create": "জরিপ তৈরি",
+                        "name_placeholder": "নাম লিখুন",
+                        "brief_placeholder": "সংক্ষিপ্ত বিবরণ লিখুন",
+                        "language_placeholder": "ভাষা নির্বাচন করুন",
+                        "surveys": "জরিপসমূহ",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "date": "তারিখ",
+                        "language": "ভাষা",
+                        "is_active": "সক্রিয়",
+                        "no": "না",
+                        "yes": "হ্যাঁ",
+                        "actions": "অ্যাকশন"
+                    },
+                    "links": {
+                        "details": "বিস্তারিত"
+                    },
+                    "buttons": {
+                        "saving": "সংরক্ষণ করা হচ্ছে",
+                        "save": "সংরক্ষণ করুন"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "surveys": "জরিপসমূহ",
+                        "details": "বিস্তারিত",
+                        "survey_details": "জরিপের বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "date": "তারিখ",
+                        "brief": "সংক্ষিপ্ত বিবরণ",
+                        "system_information": "সিস্টেম তথ্য",
+                        "created_at": "তৈরি করা হয়েছে",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "সর্বশেষ হালনাগাদ",
+                        "updated_by": "হালনাগাদ করেছেন",
+                        "yes": "হ্যাঁ",
+                        "no": "না",
+                        "language": "ভাষা",
+                        "is_active": "সক্রিয়",
+                        "status": "স্থিতি",
+                        "activity_logs_title": "কার্যক্রমের লগ",
+                        "active": "সক্রিয়",
+                        "survey_questions": "জরিপের প্রশ্নসমূহ"
+                    },
+                    "links": {
+                        "edit": "সম্পাদনা করুন",
+                        "survey_question_create": "প্রশ্ন তৈরি করুন",
+                        "survey_question_list": "প্রশ্নসমূহ"
+                    },
+                    "buttons": {
+                        "delete": "মুছে ফেলুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে",
+                        "inactivating": "নিষ্ক্রিয় করা হচ্ছে...",
+                        "inactive": "নিষ্ক্রিয়",
+                        "activating": "সক্রিয় করা হচ্ছে...",
+                        "active": "সক্রিয়"
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "surveys": "জরিপসমূহ",
+                        "per_page": "প্রতি পৃষ্ঠায়",
+                        "created_by": "তৈরি করেছেন",
+                        "all": "সব",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "is_active": "সক্রিয়",
+                        "no": "না",
+                        "yes": "হ্যাঁ",
+                        "actions": "অ্যাকশন",
+                        "search_placeholder": "জরিপ খুঁজুন...",
+                        "active": "সক্রিয়",
+                        "inactive": "নিষ্ক্রিয়",
+                        "no_survey_found": "কোনো জরিপ পাওয়া যায়নি।",
+                        "delete_modal_title": "জরিপ মুছে ফেলুন",
+                        "language": "ভাষা",
+                        "delete_modal_tbody": "এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না।"
+                    },
+                    "buttons": {
+                        "delete": "মুছে ফেলুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে",
+                        "active": "সক্রিয়",
+                        "inactive": "নিষ্ক্রিয়",
+                        "applying_filter": "ফিল্টার প্রয়োগ করা হচ্ছে...",
+                        "apply_filter": "ফিল্টার প্রয়োগ করুন"
+                    },
+                    "links": {
+                        "create": "তৈরি করুন",
+                        "edit": "সম্পাদনা করুন",
+                        "details": "বিস্তারিত",
+                        "survey_question_create": "প্রশ্ন তৈরি করুন",
+                        "survey_question_list": "প্রশ্নসমূহ"
+                    }
+                }
+            },
+            "survey_questions": {
+                "create": {
+                    "validation": {
+                        "question_is_required": "প্রশ্ন আবশ্যক।"
+                    },
+                    "labels": {
+                        "edit": "সম্পাদনা করুন",
+                        "create": "তৈরি করুন",
+                        "survey_question_create": "জরিপ প্রশ্ন তৈরি",
+                        "question_placeholder": "প্রশ্ন লিখুন",
+                        "surveys": "জরিপসমূহ",
+                        "basic_information": "মৌলিক তথ্য",
+                        "question": "প্রশ্ন",
+                        "actions": "অ্যাকশন"
+                    },
+                    "buttons": {
+                        "saving": "সংরক্ষণ করা হচ্ছে",
+                        "save": "সংরক্ষণ করুন"
+                    }
+                },
+                "details": {
+                    "labels": {
+                        "survey_question": "জরিপ প্রশ্ন",
+                        "surveys": "জরিপসমূহ",
+                        "details": "বিস্তারিত",
+                        "survey_question_details": "জরিপ প্রশ্নের বিস্তারিত",
+                        "basic_information": "মৌলিক তথ্য",
+                        "name": "নাম",
+                        "not_available": "প্রযোজ্য নয়",
+                        "question": "প্রশ্ন",
+                        "system_information": "সিস্টেম তথ্য",
+                        "created_at": "তৈরি করা হয়েছে",
+                        "created_by": "তৈরি করেছেন",
+                        "updated_at": "সর্বশেষ হালনাগাদ",
+                        "updated_by": "হালনাগাদ করেছেন",
+                        "activity_logs_title": "কার্যক্রমের লগ",
+                        "survey_questions": "জরিপের প্রশ্নসমূহ"
+                    },
+                    "links": {
+                        "edit": "সম্পাদনা করুন"
+                    },
+                    "buttons": {
+                        "delete": "মুছে ফেলুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে"
+                    }
+                },
+                "index": {
+                    "labels": {
+                        "survey": "জরিপ",
+                        "survey_questions": "জরিপের প্রশ্নসমূহ",
+                        "per_page": "প্রতি পৃষ্ঠায়",
+                        "created_by": "তৈরি করেছেন",
+                        "date": "তারিখ",
+                        "question": "প্রশ্ন",
+                        "not_available": "প্রযোজ্য নয়",
+                        "no": "না",
+                        "yes": "হ্যাঁ",
+                        "actions": "অ্যাকশন",
+                        "search_placeholder": "জরিপ খুঁজুন...",
+                        "active": "সক্রিয়",
+                        "inactive": "নিষ্ক্রিয়",
+                        "no_survey_question_found": "কোনো জরিপ প্রশ্ন পাওয়া যায়নি।",
+                        "delete_modal_title": "জরিপ প্রশ্ন মুছে ফেলুন",
+                        "delete_modal_body": "এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না।"
+                    },
+                    "buttons": {
+                        "delete": "মুছে ফেলুন",
+                        "cancel": "বাতিল",
+                        "deleting": "মুছে ফেলা হচ্ছে",
+                        "active": "সক্রিয়",
+                        "inactive": "নিষ্ক্রিয়",
+                        "applying_filter": "ফিল্টার প্রয়োগ করা হচ্ছে...",
+                        "apply_filter": "ফিল্টার প্রয়োগ করুন"
+                    },
+                    "links": {
+                        "create": "তৈরি করুন",
+                        "edit": "সম্পাদনা করুন",
+                        "details": "বিস্তারিত",
+                        "survey_question_create": "প্রশ্ন তৈরি করুন",
+                        "survey_question_list": "প্রশ্নসমূহ"
                     }
                 }
             }

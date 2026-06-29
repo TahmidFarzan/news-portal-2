@@ -2,14 +2,14 @@
 
 return [
 
-    'activity_log'   => [
+    'activity_log'    => [
         'delete' => [
             'success' => 'Activity log deleted successfully.',
             'failed'  => 'Failed to delete activity log.',
         ],
     ],
 
-    'media'          => [
+    'media'           => [
         'delete' => [
             'success' => 'Media deleted successfully.',
             'failed'  => 'Failed to media user.',
@@ -25,7 +25,7 @@ return [
         ],
     ],
 
-    'user'           => [
+    'user'            => [
         'save'     => [
             'success' => 'User saved successfully.',
             'failed'  => 'Failed to save user.',
@@ -44,7 +44,7 @@ return [
         ],
     ],
 
-    'language'       => [
+    'language'        => [
         'save'   => [
             'success' => 'Language saved successfully.',
             'failed'  => 'Failed to save language.',
@@ -59,7 +59,7 @@ return [
         ],
     ],
 
-    'category'       => [
+    'category'        => [
         'save'   => [
             'success' => 'Category saved successfully.',
             'failed'  => 'Failed to save category.',
@@ -74,7 +74,7 @@ return [
         ],
     ],
 
-    'tag'            => [
+    'tag'             => [
         'save'   => [
             'success' => 'Tag saved successfully.',
             'failed'  => 'Failed to save tag.',
@@ -89,7 +89,7 @@ return [
         ],
     ],
 
-    'trend'          => [
+    'trend'           => [
         'save'   => [
             'success' => 'Trend saved successfully.',
             'failed'  => 'Failed to save trend.',
@@ -104,7 +104,7 @@ return [
         ],
     ],
 
-    'location'       => [
+    'location'        => [
         'save'   => [
             'success' => 'Location saved successfully.',
             'failed'  => 'Failed to save location.',
@@ -119,7 +119,7 @@ return [
         ],
     ],
 
-    'event'          => [
+    'event'           => [
         'save'   => [
             'success' => 'Event saved successfully.',
             'failed'  => 'Failed to save event.',
@@ -134,7 +134,7 @@ return [
         ],
     ],
 
-    'contributor'    => [
+    'contributor'     => [
         'save'   => [
             'success' => 'Contributor saved successfully.',
             'failed'  => 'Failed to save contributor.',
@@ -149,7 +149,7 @@ return [
         ],
     ],
 
-    'news'           => [
+    'news'            => [
         'save'           => [
             'success' => 'News saved successfully.',
             'failed'  => 'Failed to save news.',
@@ -216,7 +216,7 @@ return [
         ],
     ],
 
-    'breaking_news'  => [
+    'breaking_news'   => [
         'save'    => [
             'success' => 'Breaking news saved successfully.',
             'failed'  => 'Failed to save breaking news.',
@@ -243,7 +243,7 @@ return [
         ],
     ],
 
-    'page'           => [
+    'page'            => [
         'save'    => [
             'success' => 'Page saved successfully.',
             'failed'  => 'Failed to save page.',
@@ -270,7 +270,7 @@ return [
         ],
     ],
 
-    'menu'           => [
+    'menu'            => [
         'save'   => [
             'success' => 'Menu saved successfully.',
             'failed'  => 'Failed to save menu.',
@@ -285,7 +285,7 @@ return [
         ],
     ],
 
-    'menu_item'      => [
+    'menu_item'       => [
         'save'   => [
             'success' => 'Menu item saved successfully.',
             'failed'  => 'Failed to save menu item.',
@@ -300,14 +300,14 @@ return [
         ],
     ],
 
-    'theme'          => [
+    'theme'           => [
         'update' => [
             'success' => 'Theme updated successfully.',
             'failed'  => 'Failed to update theme.',
         ],
     ],
 
-    'setting'        => [
+    'setting'         => [
         'robots_txt'    => [
             'success'                       => 'Robots.txt saved successfully.',
             'failed'                        => 'Failed to save robots.txt.',
@@ -364,7 +364,7 @@ return [
         ],
     ],
 
-    'google-adsence' => [
+    'google-adsence'  => [
         'save'   => [
             'success' => 'Google adsence saved successfully.',
             'failed'  => 'Failed to save google adsence.',
@@ -381,8 +381,52 @@ return [
         ],
     ],
 
+    'survey'          => [
+        'save'     => [
+            'success' => 'Survey saved successfully.',
+            'failed'  => 'Failed to save survey.',
+        ],
+
+        'update'   => [
+            'success' => 'Survey update successfully.',
+            'failed'  => 'Failed to save update',
+        ],
+
+        'delete'   => [
+            'success' => 'Survey deleted successfully.',
+            'failed'  => 'Failed to delete survey.',
+        ],
+
+        'active'   => [
+            'success' => 'Survey active successfully.',
+            'failed'  => 'Failed to active survey.',
+        ],
+
+        'inactive' => [
+            'success' => 'Survey inactive successfully.',
+            'failed'  => 'Failed to inactive survey.',
+        ],
+    ],
+
+    'survey-question' => [
+        'save'   => [
+            'success' => 'Survey question saved successfully.',
+            'failed'  => 'Failed to save survey question.',
+        ],
+
+        'update' => [
+            'success' => 'Survey question update successfully.',
+            'failed'  => 'Failed to save update',
+        ],
+
+        'delete' => [
+            'success' => 'Survey question deleted successfully.',
+            'failed'  => 'Failed to delete survey question.',
+        ],
+    ],
+
     // Auth
-    'auth'           => [
+    'auth'            => [
         'login'              => [
             'success'         => 'Logged in successfully.',
             'fail'            => 'Login failed.',
@@ -426,10 +470,18 @@ return [
     ],
 
     // Site
-    'site'           => [
+    'site'            => [
         'language' => [
             'change' => [
                 "success" => 'Language has been change.',
+            ],
+        ],
+
+        'survey' => [
+            'survey-question' => [
+                "success" => 'Survey question has been sumited.',
+                "failed" => 'Fail to submit survey question.',
+                "no_answer_selected_warning" => 'No answer selected warning.',
             ],
         ],
     ],

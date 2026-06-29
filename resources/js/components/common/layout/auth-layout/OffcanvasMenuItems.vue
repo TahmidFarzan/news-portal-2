@@ -22,7 +22,8 @@ import {
     faEllipsisVertical,
     faGears,
     faFile,
-    faBullhorn
+    faBullhorn,
+    faSquarePollHorizontal
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
@@ -44,7 +45,8 @@ library.add(
     faEllipsisVertical,
     faGears,
     faFile,
-    faBullhorn
+    faBullhorn,
+    faSquarePollHorizontal
 )
 const { t } = useTranslate()
 
@@ -62,7 +64,8 @@ import {
     canAccessTrend,
     canAccessEvent,
     canAccessLocation,
-    canAccessContributor
+    canAccessContributor,
+    canAccessSurvey
 } from '@/composables/useUserPermissions'
 
 const {
@@ -129,7 +132,6 @@ const canAccessContributorComputed = computed(() => {
     return canAccessContributor(authUser)
 })
 
-
 const canAccessNewsComputed = computed(() => {
     return canAccessNews(authUser)
 })
@@ -149,6 +151,10 @@ const canAccessThemeComputed = computed(() => {
 })
 const canAccessGoogleAdsenceComputed = computed(() => {
     return canAccessGoogleAdsence(authUser)
+})
+
+const canAccessSurveyComputed = computed(() => {
+    return canAccessSurvey(authUser)
 })
 
 const toggleShowSubMenu = (key) => {
@@ -328,6 +334,13 @@ const isSubMenuVisible = (key) => {
             :class="isCurrentPage('/auth-user/google-adsences/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="bullhorn" />
             {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.google_adsences") }}
+        </a>
+
+        <a v-if="canAccessSurveyComputed" :href="route('back-office.surveys.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/auth-user/surveys/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="square-poll-horizontal" />
+            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.surveys") }}
         </a>
     </div>
 </template>

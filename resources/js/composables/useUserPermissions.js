@@ -21,6 +21,8 @@ export const groups = {
     Trend: 'Trend',
     User: 'User',
     ActivityLog: 'Activity log',
+    Survey: 'Survey',
+    SurveyQuestion: 'Survey question',
 }
 
 export const access = {
@@ -201,6 +203,18 @@ export const canAccessGoogleAdsence = async (authUser) => hasPermission(authUser
 export const canCreateGoogleAdsence = async (authUser) => hasPermission(authUser, groups.GoogleAdsence, access.Create)
 export const canEditGoogleAdsence = async (authUser, googleAdsence) => hasPermission(authUser, groups.GoogleAdsence, access.Update)
 export const canDeleteGoogleAdsence = async (authUser, googleAdsence) => hasPermission(authUser, groups.GoogleAdsence, access.Delete)
+
+export const canAccessSurvey = async (authUser) => hasPermission(authUser, groups.Survey, access.ViewAny)
+export const canCreateSurvey = async (authUser) => hasPermission(authUser, groups.Survey, access.Create)
+export const canEditSurvey = async (authUser, survey) => hasPermission(authUser, groups.Survey, access.Update)
+export const canInactiveSurvey = async (authUser, survey) => hasPermission(authUser, groups.Survey, access.Delete)
+export const canActiveSurvey = async (authUser, survey) => hasPermission(authUser, groups.Survey, access.Restore)
+export const canDeleteSurvey = async (authUser, survey) => hasPermission(authUser, groups.Survey, access.ForceDelete)
+
+export const canAccessSurveyQuestion = async (authUser) => hasPermission(authUser, groups.SurveyQuestion, access.ViewAny)
+export const canCreateSurveyQuestion = async (authUser) => hasPermission(authUser, groups.SurveyQuestion, access.Create)
+export const canEditSurveyQuestion = async (authUser, surveyQuestion) => hasPermission(authUser, groups.SurveyQuestion, access.Update)
+export const canDeleteSurveyQuestion = async (authUser, surveyQuestion) => hasPermission(authUser, groups.SurveyQuestion, access.Delete)
 
 export const canAccessActivityLog = async (authUser) => hasPermission(authUser, groups.ActivityLog, access.ViewAny)
 

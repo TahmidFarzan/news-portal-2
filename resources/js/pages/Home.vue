@@ -12,6 +12,7 @@ import NewsTypeGallerySection from '@/components/common/page/NewsTypeGallerySect
 import CategorySection from '@/components/common/page/CategorySection.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 import Trends from '@/components/common/util/Trends.vue'
+import Surveys from '@/components/common/util/Surveys.vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
 import {
@@ -49,6 +50,7 @@ const { page, leadNews, recentNews, topEvents, bottomEvents } = defineProps({
 
 const showGoogleAd = inject('showGoogleAd', computed(() => false))
 const showTrends = inject('showTrends', computed(() => false))
+const showSurveys = inject('showSurveys', computed(() => false))
 
 const leadNewsItems = computed(() => {
     if (Array.isArray(leadNews)) {
@@ -101,7 +103,6 @@ const metaKeywords = computed(() => {
 
     return page?.seo_keywords ?? ''
 })
-
 </script>
 
 <template>
@@ -185,11 +186,13 @@ const metaKeywords = computed(() => {
             </div>
         </div>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <Surveys v-if="showSurveys" class="mt-4"/>
 
         <div v-if="bottomEvents">
-            <EventNewsSection :events="bottomEvents" class="mb-4" />
+            <EventNewsSection :events="bottomEvents" class="mt-4" />
         </div>
+
+        <GoogleAdsence v-if="showGoogleAd" />
 
         <CategorySection v-if="page?.language?.code == languages.English.Code" class="mt-4" categoryIdOrSlug="politics"
             :language="page?.language" :style="1" :limit="4" />

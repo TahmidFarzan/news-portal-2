@@ -8,17 +8,18 @@ use App\Http\Controllers\BackOffice\BreakingNewsController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
+use App\Http\Controllers\BackOffice\GoogleAdsenceController;
 use App\Http\Controllers\BackOffice\LocationController;
 use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\MenuController;
 use App\Http\Controllers\BackOffice\NewsController;
 use App\Http\Controllers\BackOffice\PageController as BackOfficePageController;
 use App\Http\Controllers\BackOffice\SettingController;
+use App\Http\Controllers\BackOffice\SurveyController;
 use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\ThemeController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
-use App\Http\Controllers\BackOffice\GoogleAdsenceController;
 
 //
 use App\Http\Controllers\FeedController;
@@ -122,6 +123,7 @@ Route::prefix('search')->name('search.')->group(function () {
 
         Route::get('news', [SearchController::class, 'news'])->name('news');
         Route::get('breaking-news', [SearchController::class, 'breakingNews'])->name('breaking-news');
+        Route::get('surveys', [SearchController::class, 'surveys'])->name('surveys');
 
         Route::get('user-permission/{slugOrId}', [SearchController::class, 'userPermission'])->name('user-permission');
         Route::get('news-type/{slugOrId}', [SearchController::class, 'newsType'])->name('news-type');
@@ -132,6 +134,7 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('event/{slugOrId}', [SearchController::class, 'event'])->name('event');
         Route::get('contributor/{slugOrId}', [SearchController::class, 'contributor'])->name('contributor');
         Route::get('menu-item/{slugOrId}', [SearchController::class, 'menuItem'])->name('menu-item');
+        Route::get('survey/{slugOrId}', [SearchController::class, 'survey'])->name('survey');
     });
 
     Route::middleware(['response.cache:60,private,300,etag'])->get('user/{slugOrId}', [SearchController::class, 'user'])->name('user');
@@ -244,7 +247,6 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
             Route::patch('update-sequence', [NewsController::class, 'galleryImageUpdateSequence'])->name('update-sequence');
             Route::patch('update/{mediaSlug}', [NewsController::class, 'galleryImageUpdate'])->name('update');
             Route::delete('delete/{mediaSlug}', [NewsController::class, 'galleryImageDelete'])->name('delete');
-
         });
 
         Route::prefix('{slug}/news-placements')->name('news-placements.')->group(function () {
@@ -324,6 +326,30 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
         Route::delete('delete/{slug}', [GoogleAdsenceController::class, 'delete'])->name('delete');
     });
 
+    Route::prefix('surveys')->name('surveys.')->group(function () {
+        Route::get('/', [SurveyController::class, 'index'])->name('index');
+        Route::get('create', [SurveyController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [SurveyController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [SurveyController::class, 'details'])->name('details');
+
+        Route::post('save', [SurveyController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [SurveyController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [SurveyController::class, 'delete'])->name('delete');
+        Route::patch('inactive/{slug}', [SurveyController::class, 'inactive'])->name('inactive');
+        Route::patch('active/{slug}', [SurveyController::class, 'active'])->name('active');
+
+        Route::prefix('{slug}/survey-questions')->name('survey-questions.')->group(function () {
+            Route::get('/', [SurveyController::class, 'surveyQuestionIndex'])->name('index');
+            Route::get('create', [SurveyController::class, 'surveyQuestionCreate'])->name('create');
+            Route::get('edit/{surveyQuestionSlug}', [SurveyController::class, 'surveyQuestionEdit'])->name('edit');
+            Route::get('details/{surveyQuestionSlug}', [SurveyController::class, 'surveyQuestionDetails'])->name('details');
+
+            Route::post('save', [SurveyController::class, 'surveyQuestionSave'])->name('save');
+            Route::patch('update/{surveyQuestionSlug}', [SurveyController::class, 'surveyQuestionUpdate'])->name('update');
+            Route::delete('delete/{surveyQuestionSlug}', [SurveyController::class, 'surveyQuestiondDelete'])->name('delete');
+        });
+    });
+
     Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
         Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
@@ -367,7 +393,6 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
             Route::post('save', [SettingController::class, 'adsTxtSave'])->name('save');
         });
     });
-
 });
 
 Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->group(function () {
@@ -432,7 +457,10 @@ Route::prefix('site')->name('site.')->group(function () {
     Route::get('languages', [SiteController::class, 'languages'])->name('languages');
 
     Route::get('trends', [SiteController::class, 'trends'])->name('trends');
+    Route::get('surveys', [SiteController::class, 'surveys'])->name('surveys');
     Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
+
+    Route::post('surveys/{slug}/survey-questions/{surveyQuestionSlug}/submit', [SiteController::class, 'surveySurveyQuestionSubmit'])->name('surveys-survey-questions-submit');
 });
 
 Route::get('/', function () {
