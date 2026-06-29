@@ -26,6 +26,7 @@ class SurveyQuestionService
     {
         $surveyQuestion->load([
             'survey',
+            'surveyQuestionResult',
 
             'createdBy',
 
