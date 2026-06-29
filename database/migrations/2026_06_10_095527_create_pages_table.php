@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('parent_id')->nullable()->constrained('pages')->cascadeOnDelete();
             $table->string('title', 255);
 
             $table->text('brief')->nullable();
