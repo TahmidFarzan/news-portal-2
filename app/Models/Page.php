@@ -91,6 +91,10 @@ class Page extends Model
 
     public function getPublicUrlAttribute(): ?string
     {
+        if (! $this->slug_tree || ! $this->slug) {
+            return null;
+        }
+
         if (! $this->is_default) {
             return route('page', ['slugTree' => $this->slug_tree]);
         }
