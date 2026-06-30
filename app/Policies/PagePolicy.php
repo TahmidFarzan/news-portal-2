@@ -91,6 +91,10 @@ class PagePolicy
         $module = UserPermissionHelper::MODULE_PAGE;
         $access = UserPermissionHelper::ACCESS_FORCE_DELETE;
 
+        if ($page->is_published) {
+            return Response::deny();
+        }
+
         if ($page->is_default) {
             return Response::deny();
         }

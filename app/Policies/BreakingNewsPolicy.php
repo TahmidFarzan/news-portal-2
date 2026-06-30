@@ -87,6 +87,10 @@ class BreakingNewsPolicy
             return Response::allow();
         }
 
+        if ($breakingNews->is_published) {
+            return Response::deny();
+        }
+
         return Response::deny();
     }
 }

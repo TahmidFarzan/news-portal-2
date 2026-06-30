@@ -131,7 +131,7 @@ onMounted(async () => {
                     {{ t('pages.back_office.pages.details.actions.restore') }}
                 </button>
 
-                <button v-if="canDelete(page)" @click="showDeleteModal = true"
+                <button v-if="page.is_published && canDelete(page)" @click="showDeleteModal = true"
                     class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash-can" />
                     {{ t('pages.back_office.pages.details.actions.delete') }}

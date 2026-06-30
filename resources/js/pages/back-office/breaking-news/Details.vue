@@ -134,7 +134,7 @@ onMounted(async () => {
                     {{ t('pages.back_office.breaking_news.details.actions.restore') }}
                 </button>
 
-                <button v-if="canTrash(breakingNews)" @click="showTrashModal = true"
+                <button v-if="!breakingNews.is_published && canTrash(breakingNews)" @click="showTrashModal = true"
                     class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="eye-slash" />
                     {{ t('pages.back_office.breaking_news.details.actions.trash') }}

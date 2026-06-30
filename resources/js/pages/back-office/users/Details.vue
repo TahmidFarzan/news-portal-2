@@ -206,7 +206,7 @@ onMounted(
                         t('pages.back_office.users.details.buttons.active') }}
                 </button>
 
-                <button v-if="canDelete(user)" type="button" @click="showDeleteModal = true"
+                <button v-if="!user?.is_active && canDelete(user)" type="button" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
                     {{ t('pages.back_office.users.details.actions.delete') }}

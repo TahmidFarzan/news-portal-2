@@ -239,8 +239,8 @@ onMounted(async () => {
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
-                    :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page" :selectedItem="filterForm.per_page"
+                    :apiUrl="route('search.per-pages')" :multiple="false"
                     :placeholder="t('pages.back_office.breaking_news.index.labels.per_page')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
@@ -255,18 +255,18 @@ onMounted(async () => {
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
                     :placeholder="t('pages.back_office.breaking_news.index.labels.language')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
-                    selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.category_id"
-                    apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.category-tree')"
-                    :multiple="false" :placeholder="t('pages.back_office.breaking_news.index.navigation.categories')" />
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id" selectedLabelKey="indentation_name"
+                    selectedValueKey="id" :selectedItem="filterForm.category_id" apiLabelKey="indentation_name"
+                    apiValueKey="id" :apiUrl="route('search.category-tree')" :multiple="false"
+                    :placeholder="t('pages.back_office.breaking_news.index.navigation.categories')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
-                    selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.location_id"
-                    apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.location-tree')"
-                    :multiple="false" :placeholder="t('pages.back_office.breaking_news.index.navigation.locations')" />
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="location_id" selectedLabelKey="indentation_name"
+                    selectedValueKey="id" :selectedItem="filterForm.location_id" apiLabelKey="indentation_name"
+                    apiValueKey="id" :apiUrl="route('search.location-tree')" :multiple="false"
+                    :placeholder="t('pages.back_office.breaking_news.index.navigation.locations')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
-                    :selectedItem="filterForm.event_id" :apiUrl="route('search.events')" :multiple="false"
+                <SelectInfinityLoadingApi :form="filterForm" fieldName="event_id" :selectedItem="filterForm.event_id"
+                    :apiUrl="route('search.events')" :multiple="false"
                     :placeholder="t('pages.back_office.breaking_news.index.navigation.events')" />
 
                 <input v-model="filterForm.date" type="date"
@@ -338,7 +338,8 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item.language ? item.language.name : t('pages.back_office.breaking_news.index.labels.not_available') }}
+                                {{ item.language ? item.language.name :
+                                    t('pages.back_office.breaking_news.index.labels.not_available') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
@@ -346,7 +347,8 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item.is_published ? t('pages.back_office.breaking_news.index.labels.yes') : t('pages.back_office.breaking_news.index.labels.no') }}
+                                {{ item.is_published ? t('pages.back_office.breaking_news.index.labels.yes') :
+                                    t('pages.back_office.breaking_news.index.labels.no') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -365,12 +367,6 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
-                                    <button v-if="canDelete(item)" @click="confirmDelete(item)"
-                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('pages.back_office.breaking_news.index.actions.delete')">
-                                        <FontAwesomeIcon icon="trash" />
-                                    </button>
-
                                     <button v-if="canRestore(item)" @click="confirmRestore(item)"
                                         class="p-2 rounded-md text-green-600 hover:bg-green-50 border"
                                         :title="t('pages.back_office.breaking_news.index.actions.restore')">
@@ -381,6 +377,12 @@ onMounted(async () => {
                                         class="p-2 rounded-md text-orange-600 hover:bg-orange-50 border"
                                         :title="t('pages.back_office.breaking_news.index.actions.trash')">
                                         <FontAwesomeIcon icon="eye-slash" />
+                                    </button>
+
+                                    <button v-if="!item.is_published && canDelete(item)" @click="confirmDelete(item)"
+                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
+                                        :title="t('pages.back_office.breaking_news.index.actions.delete')">
+                                        <FontAwesomeIcon icon="trash" />
                                     </button>
 
                                 </div>
@@ -423,7 +425,9 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.breaking_news.index.modals.delete_confirmation_modal.irreversible_body') }}
+                                {{
+                                    t('pages.back_office.breaking_news.index.modals.delete_confirmation_modal.irreversible_body')
+                                }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">

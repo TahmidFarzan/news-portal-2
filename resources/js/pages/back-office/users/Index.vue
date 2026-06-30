@@ -364,7 +364,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon v-else icon="eye" />
                                     </button>
 
-                                    <button v-if="canDelete(item)" type="button" @click="confirmDelete(item)"
+                                    <button v-if="!item.is_active && canDelete(item)" type="button" @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
                                         :title="t('pages.back_office.users.index.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />

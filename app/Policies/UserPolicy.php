@@ -93,6 +93,10 @@ class UserPolicy
             return Response::deny();
         }
 
+        if ($user->is_active) {
+            return Response::deny();
+        }
+
         if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }

@@ -70,6 +70,10 @@ class NewsPolicy
         $module = UserPermissionHelper::MODULE_NEWS;
         $access = UserPermissionHelper::ACCESS_RESTORE;
 
+        if ($news->is_published) {
+            return Response::deny();
+        }
+
         if ($authUser->hasUserPermission($module, $access)) {
             return Response::allow();
         }
