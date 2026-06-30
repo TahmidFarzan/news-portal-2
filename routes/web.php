@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::middleware('auth')->prefix('auth-user')->name('auth-user.')->group(function () {
+Route::prefix('auth-user')->name('auth-user.')->middleware('auth')->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('index', [AuthController::class, 'dashboard'])->name('index');
     });
