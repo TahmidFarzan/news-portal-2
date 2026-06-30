@@ -2,7 +2,7 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
-import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
+import Editor from '@/components/common/tinymce/Editor.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { computed, onMounted, nextTick, ref } from 'vue'
@@ -180,7 +180,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.contributors.details.form.profile_details') }}
                             </label>
 
-                            <TinyMCEEditor inputField="profile_details" :form="saveForm" erroField="profile_details"
+                            <Editor inputField="profile_details" :form="saveForm" erroField="profile_details"
                                 :isSimple="true" :enableMediaUpload="false" :enableSelectFormMediaLibery="false" />
 
                             <p v-if="saveForm.errors.profile_details" class="text-red-500 text-sm mt-1">

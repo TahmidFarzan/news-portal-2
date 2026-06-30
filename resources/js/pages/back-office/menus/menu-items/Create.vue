@@ -11,6 +11,7 @@ import { faSave, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { extractModelName } from '@/composables/useStringFormat'
 import { useTranslate } from '@/composables/useTranslate'
+import { menuModels } from '@/composables/useMenu'
 
 FontAwesomeLibrary.add(faSave, faSpinner)
 
@@ -396,20 +397,20 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == 'Tag'"
+                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == menuModels.TAG"
                                 :key="`tag-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="saveForm?.model_id" :apiUrl="tagApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                                 :multiple="false" :placeholder="t('pages.back_office.menus.menu_items.create.form.tag_placeholder')" />
 
-                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == 'Category'"
+                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == menuModels.CATEGORY"
                                 :key="`category-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="menuItem?.model" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.model_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
                                 :placeholder="t('pages.back_office.menus.menu_items.create.form.category_placeholder')" />
 
-                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == 'Page'"
+                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == menuModels.PAGE"
                                 :key="`page-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="menuItem?.model" :apiUrl="pageApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="indentation_title" selectedValueKey="id"

@@ -2,7 +2,7 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
-import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
+import Editor from '@/components/common/tinymce/Editor.vue'
 
 import { computed, onMounted, nextTick, watch, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -213,7 +213,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.pages.create.form.body') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <TinyMCEEditor inputField="body" :form="saveForm" erroField="body" :isSimple="false"
+                            <Editor inputField="body" :form="saveForm" erroField="body" :isSimple="false"
                                 :enableMediaUpload="false" :enableSelectFormMediaLibery="false" />
 
                             <p v-if="saveForm.errors.body" class="text-red-500 text-sm mt-1">

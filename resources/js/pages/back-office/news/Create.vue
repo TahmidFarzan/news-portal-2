@@ -2,7 +2,7 @@
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
-import TinyMCEEditor from '@/components/common/tinymce/TinyMCEEditor.vue'
+import Editor from '@/components/common/tinymce/Editor.vue'
 import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
 import NewsImageGalleryGrid from '@/components/back-office/news/NewsImageGalleryGrid.vue'
 import NewsImageGalleryDraftGrid from '@/components/back-office/news/NewsImageGalleryDraftGrid.vue'
@@ -456,7 +456,7 @@ onMounted(async () => {
                                 {{ t('pages.back_office.news.create.form.body') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <TinyMCEEditor inputField="body" :form="saveForm" erroField="body" :isSimple="false"
+                            <Editor inputField="body" :form="saveForm" erroField="body" :isSimple="false"
                                 :enableMediaUpload="true" :enableSelectFormMediaLibery="true" />
 
                             <p v-if="saveForm.errors.body" class="text-red-500 text-sm mt-1">
