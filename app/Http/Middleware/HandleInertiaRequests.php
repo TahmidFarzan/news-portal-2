@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $requestUser
                     ? [
                     'name'              => $requestUser->name,
-                    // 'user_permissions'         => $requestUser->userPermissions,
+                    'user_permissions'  => $requestUser->userPermissions,
 
                     'is_super_admin'    => $requestUser->is_super_admin,
 
