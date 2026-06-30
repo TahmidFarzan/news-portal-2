@@ -71,8 +71,6 @@ class UserRequest extends FormRequest
             'password.min'                 => __('form-requests.user.password.min'),
             'password.confirmed'           => __('form-requests.user.password.confirmed'),
 
-            'user_permission_id.required'  => __('form-requests.user.user_permission_id.required'),
-
             'profile_image.image'          => __('form-requests.user.profile_image.image'),
             'profile_image.mimes'          => __('form-requests.user.profile_image.mimes'),
             'profile_image.dimensions'     => __('form-requests.user.profile_image.dimensions'),
