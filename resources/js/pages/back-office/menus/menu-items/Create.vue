@@ -412,7 +412,7 @@ onMounted(async () => {
 
                             <SelectInfinityLoadingApi v-if="saveForm?.model_type == menuModels.PAGE"
                                 :key="`page-${modelIdKey}`" :form="saveForm" fieldName="model_id"
-                                :selectedItem="menuItem?.model" :apiUrl="pageApiUrl" :error="saveForm.errors.model_id"
+                                :selectedItem="menuItem?.menu_model" :apiUrl="pageApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="indentation_title" selectedValueKey="id"
                                 apiLabelKey="indentation_title" apiValueKey="id" :multiple="false"
                                 :placeholder="t('pages.back_office.menus.menu_items.create.form.page_placeholder')" />
