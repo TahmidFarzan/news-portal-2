@@ -20,7 +20,6 @@ export const groups = {
     Theme: 'Theme',
     Trend: 'Trend',
     User: 'User',
-    ActivityLog: 'Activity log',
     Survey: 'Survey',
     SurveyQuestion: 'Survey question',
 }
@@ -216,8 +215,6 @@ export const canCreateSurveyQuestion = async (authUser) => hasPermission(authUse
 export const canEditSurveyQuestion = async (authUser, surveyQuestion) => hasPermission(authUser, groups.SurveyQuestion, access.Update)
 export const canDeleteSurveyQuestion = async (authUser, surveyQuestion) => hasPermission(authUser, groups.SurveyQuestion, access.Delete)
 
-export const canAccessActivityLog = async (authUser) => hasPermission(authUser, groups.ActivityLog, access.ViewAny)
-
 export const canAccessNewsAttributes = async (authUser) =>
     (
         await Promise.all([
@@ -229,6 +226,8 @@ export const canAccessNewsAttributes = async (authUser) =>
             canAccessContributor(authUser),
         ])
     ).some(Boolean)
+
+export const canAccessActivityLog = async (authUser) => authUser?.is_super_admin
 
 export const canAccessQueueMonitor = (authUser) => authUser?.is_super_admin
 

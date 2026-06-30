@@ -29,7 +29,6 @@ class UserPermissionHelper
     public const MODULE_THEME           = 'Theme';
     public const MODULE_TREND           = 'Trend';
     public const MODULE_USER            = 'User';
-    public const MODULE_ACTIVITY_LOG    = 'Activity log';
     public const MODULE_SURVEY          = 'Survey';
     public const MODULE_SURVEY_QUESTION = 'Survey question';
 
@@ -50,7 +49,6 @@ class UserPermissionHelper
             self::MODULE_THEME,
             self::MODULE_TREND,
             self::MODULE_USER,
-            self::MODULE_ACTIVITY_LOG,
             self::MODULE_SURVEY,
             self::MODULE_SURVEY_QUESTION,
         ]);
@@ -83,12 +81,6 @@ class UserPermissionHelper
                 self::ACCESS_VIEW_ANY,
                 self::ACCESS_VIEW,
                 self::ACCESS_UPDATE,
-            ]);
-        }
-
-        if ($moduleName == self::MODULE_ACTIVITY_LOG) {
-            return SystemHelper::toOptions([
-                self::ACCESS_VIEW_ANY,
             ]);
         }
 

@@ -350,7 +350,7 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
         });
     });
 
-    Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
+    Route::prefix('activity-logs')->name('activity-logs.')->middleware(['is.super.admin'])->group(function () {
         Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
         Route::get('details/{slug}', [ActivityLogController::class, 'details'])->name('details');
