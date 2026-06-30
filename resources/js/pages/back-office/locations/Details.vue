@@ -10,7 +10,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditLocation, canDeleteLocation } from '@/composables/useUserPermissions'
+import { canUpdateLocation, canDeleteLocation } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner, faCopy, faCheck)
@@ -46,7 +46,7 @@ const boundaryGeoJsonText = computed(() => {
     return JSON.stringify(location.boundary_geojson, null, 2)
 })
 
-const canEdit = (location) => canEditLocation(authUser?.value, location)
+const canUpdate = (location) => canUpdateLocation(authUser?.value, location)
 const canDelete = (location) => canDeleteLocation(authUser?.value, location)
 
 const handleDelete = () => {
@@ -114,7 +114,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(location)" :href="route('back-office.locations.edit', { slug: location?.slug })"
+                <a v-if="canUpdate(location)" :href="route('back-office.locations.edit', { slug: location?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.locations.details.table.menus.edit') }}

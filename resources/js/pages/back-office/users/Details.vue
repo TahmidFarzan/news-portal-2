@@ -20,7 +20,7 @@ import {
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
 
-import { canEditUser, canDeleteUser, canActiveInactiveUser } from '@/composables/useUserPermissions'
+import { canUpdateUser, canDeleteUser, canActiveInactiveUser } from '@/composables/useUserPermissions'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -76,7 +76,7 @@ const groupedPermissions = computed(() => {
     )
 })
 
-const canEdit = (user) => canEditUser(authUser?.value, user)
+const canUpdate = (user) => canUpdateUser(authUser?.value, user)
 const canDelete = (user) => canDeleteUser(authUser?.value, user)
 const canActiveInactive = (user) => canActiveInactiveUser(authUser?.value, user)
 
@@ -182,7 +182,7 @@ onMounted(
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(user)" :href="route('back-office.users.edit', { slug: user?.slug })"
+                <a v-if="canUpdate(user)" :href="route('back-office.users.edit', { slug: user?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.users.details.actions.edit') }}

@@ -12,7 +12,7 @@ import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-
 
 import { formatDateTime } from '@/composables/useDateTime'
 import {
-    canEditBreakingNews,
+    canUpdateBreakingNews,
     canDeleteBreakingNews,
     canTrashBreakingNews,
     canRestoreBreakingNews
@@ -39,7 +39,7 @@ const { breakingNews } = defineProps({
     breakingNews: Object,
 })
 
-const canEdit = (breakingNews) => canEditBreakingNews(authUser?.value, breakingNews)
+const canUpdate = (breakingNews) => canUpdateBreakingNews(authUser?.value, breakingNews)
 const canDelete = (breakingNews) => canDeleteBreakingNews(authUser?.value, breakingNews)
 const canRestore = (breakingNews) => canRestoreBreakingNews(authUser?.value, breakingNews)
 const canTrash = (breakingNews) => canTrashBreakingNews(authUser?.value, breakingNews)
@@ -115,7 +115,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(breakingNews)"
+                <a v-if="canUpdate(breakingNews)"
                     :href="route('back-office.breaking-news.edit', { slug: breakingNews?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />

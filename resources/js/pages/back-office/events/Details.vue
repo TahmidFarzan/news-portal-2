@@ -11,7 +11,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditEvent, canDeleteEvent } from '@/composables/useUserPermissions'
+import { canUpdateEvent, canDeleteEvent } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
@@ -34,7 +34,7 @@ const { event } = defineProps({
 
 const pageTitle = computed(() => `${event?.name} ${t('pages.back_office.events.details.labels.details')}`)
 
-const canEdit = (event) => canEditEvent(authUser?.value, event)
+const canUpdate = (event) => canUpdateEvent(authUser?.value, event)
 const canDelete = (event) => canDeleteEvent(authUser?.value, event)
 
 const handleDelete = () => {
@@ -75,7 +75,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(event)" :href="route('back-office.events.edit', { slug: event?.slug })"
+                <a v-if="canUpdate(event)" :href="route('back-office.events.edit', { slug: event?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.events.details.table.menus.edit') }}

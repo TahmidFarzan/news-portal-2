@@ -20,7 +20,7 @@ import { useTranslate } from '@/composables/useTranslate'
 
 import {
     canCreatePage,
-    canEditPage,
+    canUpdatePage,
     canTrashPage,
     canRestorePage,
     canDeletePage
@@ -109,7 +109,7 @@ const closeDeleteModal = () => {
 }
 
 const canCreate = () => canCreatePage(authUser?.value)
-const canEdit = (page) => canEditPage(authUser?.value, page)
+const canUpdate = (page) => canUpdatePage(authUser?.value, page)
 const canTrash = (page) => canTrashPage(authUser?.value, page)
 const canRestore = (page) => canRestorePage(authUser?.value, page)
 const canDelete = (page) => canDeletePage(authUser?.value, page)
@@ -306,7 +306,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)" :href="route('back-office.pages.edit', { slug: item.slug })"
+                                    <a v-if="canUpdate(item)" :href="route('back-office.pages.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.pages.index.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />

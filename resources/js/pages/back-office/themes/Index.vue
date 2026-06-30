@@ -18,7 +18,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { useTranslate } from '@/composables/useTranslate'
 
-import {  canEditTheme } from '@/composables/useUserPermissions'
+import {  canUpdateTheme } from '@/composables/useUserPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner, faList)
 
@@ -57,7 +57,7 @@ const applyFilter = () => {
     })
 }
 
-const canEdit = (theme) => canEditTheme(authUser?.value, theme)
+const canUpdate = (theme) => canUpdateTheme(authUser?.value, theme)
 
 onMounted(async () => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -155,7 +155,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
+                                    <a v-if="canUpdate(item)"
                                         :href="route('back-office.themes.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.themes.index.actions.edit')">

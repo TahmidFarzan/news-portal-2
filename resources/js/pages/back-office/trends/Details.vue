@@ -10,7 +10,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditTrend, canDeleteTrend } from '@/composables/useUserPermissions'
+import { canUpdateTrend, canDeleteTrend } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
@@ -30,7 +30,7 @@ const { trend } = defineProps({
 
 const pageTitle = computed(() => `${trend?.tag?.name} ${t('pages.back_office.trends.details.labels.details')}`)
 
-const canEdit = (trend) => canEditTrend(authUser?.value, trend)
+const canUpdate = (trend) => canUpdateTrend(authUser?.value, trend)
 const canDelete = (trend) => canDeleteTrend(authUser?.value, trend)
 
 const closeDeleteModal = () => {
@@ -76,7 +76,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(trend)" :href="route('back-office.trends.edit', { slug: trend?.slug })"
+                <a v-if="canUpdate(trend)" :href="route('back-office.trends.edit', { slug: trend?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.trends.details.actions.edit') }}

@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateEvent, canEditEvent, canDeleteEvent } from '@/composables/useUserPermissions'
+import { canCreateEvent, canUpdateEvent, canDeleteEvent } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
@@ -74,7 +74,7 @@ const confirmDelete = (event) => {
 }
 
 const canCreate = () => canCreateEvent(authUser?.value)
-const canEdit = (event) => canEditEvent(authUser?.value, event)
+const canUpdate = (event) => canUpdateEvent(authUser?.value, event)
 const canDelete = (event) => canDeleteEvent(authUser?.value, event)
 
 const handleDelete = (event) => {
@@ -245,7 +245,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
+                                    <a v-if="canUpdate(item)"
                                         :href="route('back-office.events.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.events.index.table.menus.edit')">

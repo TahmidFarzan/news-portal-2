@@ -20,7 +20,7 @@ import {
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { canCreateMenuItem, canEditMenuItem, canDeleteMenuItem } from '@/composables/useUserPermissions'
+import { canCreateMenuItem, canUpdateMenuItem, canDeleteMenuItem } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faSpinner)
@@ -89,7 +89,7 @@ const closeDeleteModal = () => {
 }
 
 const canCreate = () => canCreateMenuItem(authUser?.value)
-const canEdit = (menuItem) => canEditMenuItem(authUser?.value, menuItem)
+const canUpdate = (menuItem) => canUpdateMenuItem(authUser?.value, menuItem)
 const canDelete = (menuItem) => canDeleteMenuItem(authUser?.value, menuItem)
 
 const handleDelete = (menuItem) => {
@@ -328,7 +328,7 @@ onMounted(async () => {
                                     </a>
 
                                     <a
-                                        v-if="canEdit(item)"
+                                        v-if="canUpdate(item)"
                                         :href="route('back-office.menus.menu-items.edit', {
                                             slug: menu?.slug,
                                             menuItemSlug: item?.slug,

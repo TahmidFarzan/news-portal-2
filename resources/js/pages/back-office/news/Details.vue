@@ -14,7 +14,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faSpinner, faFire } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditNews, canDeleteNews, canRestoreNews } from '@/composables/useUserPermissions'
+import { canUpdateNews, canDeleteNews, canRestoreNews } from '@/composables/useUserPermissions'
 import { isStory as checkIsStory, isVideo as checkIsVideo, isImageGallery as checkIsImageGallery } from '@/composables/useNews'
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -43,7 +43,7 @@ const notAvailable = computed(() => t('pages.back_office.news.details.labels.not
 
 const pageTitle = computed(() => `${news?.title} ${t('pages.back_office.news.details.labels.details')}`)
 
-const canEdit = news => canEditNews(authUser?.value, news)
+const canUpdate = news => canUpdateNews(authUser?.value, news)
 const canDelete = news => canDeleteNews(authUser?.value, news)
 const canRestore = news => canRestoreNews(authUser?.value, news)
 
@@ -92,7 +92,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(news)" :href="route('back-office.news.edit', { slug: news?.slug })"
+                <a v-if="canUpdate(news)" :href="route('back-office.news.edit', { slug: news?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.news.details.actions.edit') }}

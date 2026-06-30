@@ -11,7 +11,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditCategory, canDeleteCategory } from '@/composables/useUserPermissions'
+import { canUpdateCategory, canDeleteCategory } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
@@ -34,7 +34,7 @@ const { category } = defineProps({
 
 const pageTitle = computed(() => `${category?.name} ${t('pages.back_office.categories.details.labels.details')}`)
 
-const canEdit = (category) => canEditCategory(authUser?.value, category)
+const canUpdate = (category) => canUpdateCategory(authUser?.value, category)
 const canDelete = (category) => canDeleteCategory(authUser?.value, category)
 
 const handleDelete = () => {
@@ -73,7 +73,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(category)" :href="route('back-office.categories.edit', { slug: category?.slug })"
+                <a v-if="canUpdate(category)" :href="route('back-office.categories.edit', { slug: category?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.categories.details.table.menus.edit') }}

@@ -10,7 +10,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditTheme } from '@/composables/useUserPermissions'
+import { canUpdateTheme } from '@/composables/useUserPermissions'
 import { useTheme } from '@/composables/useTheme'
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -33,7 +33,7 @@ const {
 
 const pageTitle = computed(() => `${theme?.label} ${t('pages.back_office.themes.details.labels.details')}`)
 
-const canEdit = (theme) => canEditTheme(authUser?.value, theme)
+const canUpdate = (theme) => canUpdateTheme(authUser?.value, theme)
 
 const formattedValue = computed(() => {
     const type = theme?.type
@@ -96,7 +96,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(theme)" :href="route('back-office.themes.edit', { slug: theme?.slug })"
+                <a v-if="canUpdate(theme)" :href="route('back-office.themes.edit', { slug: theme?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.themes.details.actions.edit') }}

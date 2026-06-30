@@ -20,7 +20,7 @@ import { fetchFromApi } from '@/composables/useSystemApi'
 
 import {
     canCreateSurveyQuestion,
-    canEditSurveyQuestion,
+    canUpdateSurveyQuestion,
     canDeleteSurveyQuestion,
 } from '@/composables/useUserPermissions'
 
@@ -74,7 +74,7 @@ const confirmDelete = (surveyQuestion) => {
 }
 
 const canCreate = () => canCreateSurveyQuestion(authUser?.value)
-const canEdit = (surveyQuestion) => canEditSurveyQuestion(authUser?.value, surveyQuestion)
+const canUpdate = (surveyQuestion) => canUpdateSurveyQuestion(authUser?.value, surveyQuestion)
 const canDelete = (surveyQuestion) => canDeleteSurveyQuestion(authUser?.value, surveyQuestion)
 
 const handleDelete = (surveyQuestion) => {
@@ -226,7 +226,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
+                                    <a v-if="canUpdate(item)"
                                         :href="route('back-office.surveys.survey-questions.edit', { slug: survey.slug, surveyQuestionSlug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.survey_questions.index.links.edit')">

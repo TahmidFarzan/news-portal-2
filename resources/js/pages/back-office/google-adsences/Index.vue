@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateGoogleAdsence, canEditGoogleAdsence, canDeleteGoogleAdsence } from '@/composables/useUserPermissions'
+import { canCreateGoogleAdsence, canUpdateGoogleAdsence, canDeleteGoogleAdsence } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
@@ -74,7 +74,7 @@ const confirmDelete = (googleAdsence) => {
 }
 
 const canCreate = () => canCreateGoogleAdsence(authUser?.value)
-const canEdit = (googleAdsence) => canEditGoogleAdsence(authUser?.value, googleAdsence)
+const canUpdate = (googleAdsence) => canUpdateGoogleAdsence(authUser?.value, googleAdsence)
 const canDelete = (googleAdsence) => canDeleteGoogleAdsence(authUser?.value, googleAdsence)
 
 const handleDelete = (googleAdsence) => {
@@ -243,7 +243,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
+                                    <a v-if="canUpdate(item)"
                                         :href="route('back-office.google-adsences.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.google_adsences.index.table.menus.edit')">

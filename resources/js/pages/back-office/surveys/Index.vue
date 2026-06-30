@@ -27,7 +27,7 @@ import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
 
 import {
-    canEditSurvey,
+    canUpdateSurvey,
     canDeleteSurvey,
     canActiveSurvey,
     canInactiveSurvey,
@@ -131,7 +131,7 @@ const closeStatusModal = () => {
     showStatusModal.value = false
 }
 
-const canEdit = (survey) => canEditSurvey(authUser?.value, survey)
+const canUpdate = (survey) => canUpdateSurvey(authUser?.value, survey)
 const canDelete = (survey) => canDeleteSurvey(authUser?.value, survey)
 const canActive = (survey) => canActiveSurvey(authUser?.value, survey)
 const canInactive = (survey) => canInactiveSurvey(authUser?.value, survey)
@@ -372,7 +372,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
+                                    <a v-if="canUpdate(item)"
                                         :href="route('back-office.surveys.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.surveys.index.links.edit')">

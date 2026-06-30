@@ -20,7 +20,7 @@ import { fetchFromApi } from '@/composables/useSystemApi'
 
 import {
     canCreateBreakingNews,
-    canEditBreakingNews,
+    canUpdateBreakingNews,
     canDeleteBreakingNews,
     canTrashBreakingNews,
     canRestoreBreakingNews
@@ -98,7 +98,7 @@ const confirmTrash = (breakingNews) => {
 }
 
 const canCreate = () => canCreateBreakingNews(authUser?.value)
-const canEdit = (breakingNews) => canEditBreakingNews(authUser?.value, breakingNews)
+const canUpdate = (breakingNews) => canUpdateBreakingNews(authUser?.value, breakingNews)
 const canDelete = (breakingNews) => canDeleteBreakingNews(authUser?.value, breakingNews)
 const canTrash = (breakingNews) => canTrashBreakingNews(authUser?.value, breakingNews)
 const canRestore = (breakingNews) => canRestoreBreakingNews(authUser?.value, breakingNews)
@@ -358,7 +358,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
+                                    <a v-if="canUpdate(item)"
                                         :href="route('back-office.breaking-news.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.breaking_news.index.table.menus.edit')">

@@ -12,7 +12,7 @@ import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-
 
 import { formatDateTime } from '@/composables/useDateTime'
 import {
-    canEditSurveyQuestion,
+    canUpdateSurveyQuestion,
     canDeleteSurveyQuestion
 } from '@/composables/useUserPermissions'
 
@@ -39,7 +39,7 @@ const { survey, surveyQuestion } = defineProps({
 })
 
 
-const canEdit = (surveyQuestion) => canEditSurveyQuestion(authUser?.value, surveyQuestion)
+const canUpdate = (surveyQuestion) => canUpdateSurveyQuestion(authUser?.value, surveyQuestion)
 const canDelete = (surveyQuestion) => canDeleteSurveyQuestion(authUser?.value, surveyQuestion)
 
 const handleDelete = () => {
@@ -87,7 +87,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(surveyQuestion)"
+                <a v-if="canUpdate(surveyQuestion)"
                     :href="route('back-office.surveys.survey-questions.edit', { slug: survey?.slug, surveyQuestionSlug: surveyQuestion?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />

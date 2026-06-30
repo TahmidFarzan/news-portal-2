@@ -24,7 +24,7 @@ import {
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
 
 import {
-    canEditSurvey,
+    canUpdateSurvey,
     canDeleteSurvey,
     canActiveSurvey,
     canInactiveSurvey,
@@ -66,7 +66,7 @@ const { survey } = defineProps({
 
 const pageTitle = computed(() => `${survey?.name} ${t('pages.back_office.surveys.details.labels.details')}`)
 
-const canEdit = (survey) => canEditSurvey(authUser?.value, survey)
+const canUpdate = (survey) => canUpdateSurvey(authUser?.value, survey)
 const canDelete = (survey) => canDeleteSurvey(authUser?.value, survey)
 const canActive = (survey) => canActiveSurvey(authUser?.value, survey)
 const canInactive = (survey) => canInactiveSurvey(authUser?.value, survey)
@@ -176,7 +176,7 @@ onMounted(
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(survey)" :href="route('back-office.surveys.edit', { slug: survey?.slug })"
+                <a v-if="canUpdate(survey)" :href="route('back-office.surveys.edit', { slug: survey?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.surveys.details.links.edit') }}

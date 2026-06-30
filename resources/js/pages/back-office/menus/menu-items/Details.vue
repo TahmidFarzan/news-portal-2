@@ -11,7 +11,7 @@ import { faTrash, faPen, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { extractModelName } from '@/composables/useStringFormat'
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditMenuItem, canDeleteMenuItem } from '@/composables/useUserPermissions'
+import { canUpdateMenuItem, canDeleteMenuItem } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faSpinner)
@@ -35,7 +35,7 @@ const { menu, menuItem } = defineProps({
     },
 })
 
-const canEdit = (menuItem) => canEditMenuItem(authUser?.value, menuItem)
+const canUpdate = (menuItem) => canUpdateMenuItem(authUser?.value, menuItem)
 const canDelete = (menuItem) => canDeleteMenuItem(authUser?.value, menuItem)
 
 const handleDelete = () => {
@@ -90,7 +90,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(menuItem)" :href="route('back-office.menus.menu-items.edit', {
+                <a v-if="canUpdate(menuItem)" :href="route('back-office.menus.menu-items.edit', {
                     slug: menu?.slug,
                     menuItemSlug: menuItem?.slug,
                 })"

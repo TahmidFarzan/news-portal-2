@@ -18,7 +18,7 @@ import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
 
-import { canCreateTag, canEditTag, canDeleteTag } from '@/composables/useUserPermissions'
+import { canCreateTag, canUpdateTag, canDeleteTag } from '@/composables/useUserPermissions'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
 
@@ -75,7 +75,7 @@ const closeDeleteModal = () => {
 }
 
 const canCreate = () => canCreateTag(authUser?.value)
-const canEdit = (tag) => canEditTag(authUser?.value, tag)
+const canUpdate = (tag) => canUpdateTag(authUser?.value, tag)
 const canDelete = (tag) => canDeleteTag(authUser?.value, tag)
 
 const handleDelete = (tag) => {
@@ -219,7 +219,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)" :href="route('back-office.tags.edit', { slug: item.slug })"
+                                    <a v-if="canUpdate(item)" :href="route('back-office.tags.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.tags.index.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />

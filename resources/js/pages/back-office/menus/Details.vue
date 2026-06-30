@@ -11,7 +11,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faSpinner, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditMenu, canDeleteMenu } from '@/composables/useUserPermissions'
+import { canUpdateMenu, canDeleteMenu } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faSpinner, faPlus)
@@ -31,7 +31,7 @@ const { menu } = defineProps({
     },
 })
 
-const canEdit = (menu) => canEditMenu(authUser?.value, menu)
+const canUpdate = (menu) => canUpdateMenu(authUser?.value, menu)
 const canDelete = (menu) => canDeleteMenu(authUser?.value, menu)
 
 const handleDelete = () => {
@@ -70,7 +70,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(menu)" :href="route('back-office.menus.edit', { slug: menu?.slug })"
+                <a v-if="canUpdate(menu)" :href="route('back-office.menus.edit', { slug: menu?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.menus.details.actions.edit') }}

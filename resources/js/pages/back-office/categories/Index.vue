@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateCategory, canEditCategory, canDeleteCategory } from '@/composables/useUserPermissions'
+import { canCreateCategory, canUpdateCategory, canDeleteCategory } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
@@ -74,7 +74,7 @@ const confirmDelete = (category) => {
 }
 
 const canCreate = () => canCreateCategory(authUser?.value)
-const canEdit = (category) => canEditCategory(authUser?.value, category)
+const canUpdate = (category) => canUpdateCategory(authUser?.value, category)
 const canDelete = (category) => canDeleteCategory(authUser?.value, category)
 
 const handleDelete = (category) => {
@@ -236,7 +236,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
+                                    <a v-if="canUpdate(item)"
                                         :href="route('back-office.categories.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.categories.index.table.menus.edit')">

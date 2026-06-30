@@ -11,7 +11,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canEditGoogleAdsence, canDeleteGoogleAdsence } from '@/composables/useUserPermissions'
+import { canUpdateGoogleAdsence, canDeleteGoogleAdsence } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
@@ -34,7 +34,7 @@ const { googleAdsence } = defineProps({
 
 const pageTitle = computed(() => `${googleAdsence?.name} ${t('pages.back_office.google_adsences.details.labels.details')}`)
 
-const canEdit = (googleAdsence) => canEditGoogleAdsence(authUser?.value, googleAdsence)
+const canUpdate = (googleAdsence) => canUpdateGoogleAdsence(authUser?.value, googleAdsence)
 const canDelete = (googleAdsence) => canDeleteGoogleAdsence(authUser?.value, googleAdsence)
 
 const handleDelete = () => {
@@ -75,7 +75,7 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canEdit(googleAdsence)" :href="route('back-office.google-adsences.edit', { slug: googleAdsence?.slug })"
+                <a v-if="canUpdate(googleAdsence)" :href="route('back-office.google-adsences.edit', { slug: googleAdsence?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('pages.back_office.google_adsences.details.table.menus.edit') }}

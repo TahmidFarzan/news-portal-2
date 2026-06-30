@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
 
-import { canCreateLocation, canEditLocation, canDeleteLocation } from '@/composables/useUserPermissions'
+import { canCreateLocation, canUpdateLocation, canDeleteLocation } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
@@ -75,7 +75,7 @@ const confirmDelete = (location) => {
 }
 
 const canCreate = () => canCreateLocation(authUser?.value)
-const canEdit = (location) => canEditLocation(authUser?.value, location)
+const canUpdate = (location) => canUpdateLocation(authUser?.value, location)
 const canDelete = (location) => canDeleteLocation(authUser?.value, location)
 
 const handleDelete = (location) => {
@@ -251,7 +251,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)"
+                                    <a v-if="canUpdate(item)"
                                         :href="route('back-office.locations.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.locations.index.table.menus.edit')">

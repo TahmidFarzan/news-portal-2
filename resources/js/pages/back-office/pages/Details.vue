@@ -10,7 +10,7 @@ import { faTrash, faTrashCan, faPen, faEye, faSpinner } from '@fortawesome/free-
 
 import { formatDateTime } from '@/composables/useDateTime'
 import {
-    canEditPage,
+    canUpdatePage,
     canTrashPage,
     canRestorePage,
     canDeletePage
@@ -39,7 +39,7 @@ const { page } = defineProps({
     page: Object,
 })
 
-const canEdit = (page) => canEditPage(authUser?.value, page)
+const canUpdate = (page) => canUpdatePage(authUser?.value, page)
 const canTrash = (page) => canTrashPage(authUser?.value, page)
 const canRestore = (page) => canRestorePage(authUser?.value, page)
 const canDelete = (page) => canDeletePage(authUser?.value, page)
@@ -112,7 +112,7 @@ onMounted(async () => {
 
             <div class="flex gap-2">
 
-                <a v-if="canEdit(page)"
+                <a v-if="canUpdate(page)"
                     :href="route('back-office.pages.edit', { slug: page?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />

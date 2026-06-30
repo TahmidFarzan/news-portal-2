@@ -21,7 +21,7 @@ import {
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { canCreateMenu, canEditMenu, canDeleteMenu, canAccessMenuItem, canCreateMenuItem } from '@/composables/useUserPermissions'
+import { canCreateMenu, canUpdateMenu, canDeleteMenu, canAccessMenuItem, canCreateMenuItem } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faSpinner, faList)
@@ -85,7 +85,7 @@ const closeDeleteModal = () => {
 }
 
 const canCreate = () => canCreateMenu(authUser?.value)
-const canEdit = (menu) => canEditMenu(authUser?.value, menu)
+const canUpdate = (menu) => canUpdateMenu(authUser?.value, menu)
 const canDelete = (menu) => canDeleteMenu(authUser?.value, menu)
 const canAccessMenuMenuItem = () => canAccessMenuItem(authUser?.value)
 const canCreateMenuMenuItem = () => canCreateMenuItem(authUser?.value)
@@ -250,7 +250,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)" :href="route('back-office.menus.edit', { slug: item.slug })"
+                                    <a v-if="canUpdate(item)" :href="route('back-office.menus.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.menus.index.table.menus.edit')">
                                         <FontAwesomeIcon icon="pen" />

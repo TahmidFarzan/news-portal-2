@@ -25,7 +25,7 @@ import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
 
 import {
-    canEditUser,
+    canUpdateUser,
     canDeleteUser,
     canActiveInactiveUser
 } from '@/composables/useUserPermissions'
@@ -124,7 +124,7 @@ const closeStatusModal = () => {
     showStatusModal.value = false
 }
 
-const canEdit = (user) => canEditUser(authUser?.value, user)
+const canUpdate = (user) => canUpdateUser(authUser?.value, user)
 const canDelete = (user) => canDeleteUser(authUser?.value, user)
 const canActiveInactive = (user) => canActiveInactiveUser(authUser?.value, user)
 
@@ -340,7 +340,7 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canEdit(item)" :href="route('back-office.users.edit', { slug: item.slug })"
+                                    <a v-if="canUpdate(item)" :href="route('back-office.users.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('pages.back_office.users.index.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />
