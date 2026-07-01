@@ -116,49 +116,60 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.name') }}</span>
-                        <span class="font-medium">{{ menuItem?.name || t('pages.back_office.menus.menu_items.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.name')
+                            }}</span>
+                        <span class="font-medium">{{ menuItem?.name ||
+                            t('pages.back_office.menus.menu_items.details.labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.language') }}</span>
-                        <span class="font-medium">{{ menuItem?.language?.name || t('pages.back_office.menus.menu_items.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.language')
+                            }}</span>
+                        <span class="font-medium">{{ menuItem?.language?.name ||
+                            t('pages.back_office.menus.menu_items.details.labels.not_available') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.menus.menu_items.details.categories.form.parent') }}</div>
-                        <div class="text-gray-700">{{ menuItem?.parent?.name || t('pages.back_office.menus.menu_items.details.labels.not_available') }}</div>
+                        <div class="text-gray-500 mb-1">{{
+                            t('pages.back_office.menus.menu_items.details.categories.form.parent') }}</div>
+                        <div class="text-gray-700">{{ menuItem?.parent?.name ||
+                            t('pages.back_office.menus.menu_items.details.labels.not_available') }}</div>
                     </div>
 
                     <div class="flex justify-between">
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.menus.menu_items.details.table.columns.position') }}</div>
-                        <div class="text-gray-700">{{ menuItem?.position || t('pages.back_office.menus.menu_items.details.labels.not_available') }}</div>
+                        <div class="text-gray-500 mb-1">{{
+                            t('pages.back_office.menus.menu_items.details.table.columns.position') }}</div>
+                        <div class="text-gray-700">{{ menuItem?.position ||
+                            t('pages.back_office.menus.menu_items.details.labels.not_available') }}</div>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
-                    <div class="flex justify-between">
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.menus.menu_items.details.form.model') }}</div>
+                    <div v-if="!menuItem?.is_custom && menuItem?.menu_model" class="flex justify-between">
+                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.menus.menu_items.details.form.model') }}
+                        </div>
 
                         <div class="text-gray-700">
-                            {{ menuItem?.model_type ? extractModelName(menuItem.model_type) : t('pages.back_office.menus.menu_items.details.labels.not_available')
-                            }}
+                            {{ menuItem?.model_type ? extractModelName(menuItem.model_type) :
+                                t('pages.back_office.menus.menu_items.details.labels.not_available') }}
 
-                            <span v-if="menuItem?.model?.name">
-                                - {{ menuItem?.model?.name }}
+                            <span v-if="menuItem?.menu_model">
+                                - {{ menuItem?.menu_model?.name }}
                             </span>
                         </div>
                     </div>
 
-                    <div class="flex justify-between">
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.menus.menu_items.details.labels.url') }}</div>
-                        <div class="text-gray-700">{{ menuItem?.url || t('pages.back_office.menus.menu_items.details.labels.not_available') }}</div>
+                    <div v-else>
+                        <strong>Is Custom</strong>:
+                        {{ menuItem?.is_custom ? "Yes" : "No" }}
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500 mb-1">{{ t('pages.back_office.menus.menu_items.details.public_url') }}</span>
-                        <span class="font-medium">{{ menuItem?.public_url || t('pages.back_office.menus.menu_items.details.labels.not_available') }}</span>
+                        <span class="text-gray-500 mb-1">{{ t('pages.back_office.menus.menu_items.details.public_url')
+                            }}</span>
+                        <span class="font-medium">{{ menuItem?.public_url ||
+                            t('pages.back_office.menus.menu_items.details.labels.not_available') }}</span>
                     </div>
                 </div>
 
@@ -174,32 +185,40 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.table.columns.created_at') }}</span>
+                        <span class="text-gray-500">{{
+                            t('pages.back_office.menus.menu_items.details.table.columns.created_at') }}</span>
                         <span class="font-medium">
-                            {{ menuItem?.created_at ? formatDateTime(menuItem.created_at) : t('pages.back_office.menus.menu_items.details.labels.not_available') }}
+                            {{ menuItem?.created_at ? formatDateTime(menuItem.created_at) :
+                                t('pages.back_office.menus.menu_items.details.labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.created_by') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.created_by')
+                            }}</span>
                         <span class="font-medium">
-                            {{ menuItem?.created_by?.name || t('pages.back_office.menus.menu_items.details.labels.not_available') }}
+                            {{ menuItem?.created_by?.name ||
+                                t('pages.back_office.menus.menu_items.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.updated_at')
+                            }}</span>
                         <span class="font-medium">
-                            {{ menuItem?.updated_at ? formatDateTime(menuItem.updated_at) : t('pages.back_office.menus.menu_items.details.labels.not_available') }}
+                            {{ menuItem?.updated_at ? formatDateTime(menuItem.updated_at) :
+                                t('pages.back_office.menus.menu_items.details.labels.not_available') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('pages.back_office.menus.menu_items.details.labels.updated_by')
+                            }}</span>
                         <span class="font-medium">
-                            {{ menuItem?.latest_activity_log?.causer?.name || t('pages.back_office.menus.menu_items.details.labels.not_available') }}
+                            {{ menuItem?.latest_activity_log?.causer?.name ||
+                                t('pages.back_office.menus.menu_items.details.labels.not_available') }}
                         </span>
                     </div>
                 </div>
@@ -238,7 +257,9 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.menus.menu_items.details.modals.delete_confirmation_modal.irreversible_body') }}
+                                {{
+                                    t('pages.back_office.menus.menu_items.details.modals.delete_confirmation_modal.irreversible_body')
+                                }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
@@ -251,7 +272,9 @@ onMounted(async () => {
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
 
-                                    {{ deleteProcessing ? t('pages.back_office.menus.menu_items.details.actions.deleting') : t('pages.back_office.menus.menu_items.details.actions.delete') }}
+                                    {{ deleteProcessing ?
+                                        t('pages.back_office.menus.menu_items.details.actions.deleting') :
+                                    t('pages.back_office.menus.menu_items.details.actions.delete') }}
                                 </button>
                             </div>
                         </div>

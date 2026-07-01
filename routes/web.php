@@ -282,7 +282,7 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
 
         Route::patch('trash/{slug}', [BackOfficePageController::class, 'trash'])->name('trash');
         Route::patch('restore/{slug}', [BackOfficePageController::class, 'restore'])->name('restore');
-        Route::patch('delete/{slug}', [BackOfficePageController::class, 'delete'])->name('delete');
+        Route::delete('delete/{slug}', [BackOfficePageController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('menus')->name('menus.')->group(function () {
