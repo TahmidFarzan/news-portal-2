@@ -265,7 +265,7 @@ onMounted(
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 flex items-center justify-center">
-                    <img :src="user?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
+                    <img :src="user?.profile_image?.preview_url || '/uploads/icons/auth/user.png'"
                         :alt="t('pages.back_office.users.details.auth.profile.profile_image_alt')"
                         class="w-40 h-40 object-cover rounded-xl border" />
                 </div>

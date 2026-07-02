@@ -242,9 +242,8 @@ class UserService
             return;
         }
 
-        $existing = $user->profileImage();
-        if ($existing) {
-            $existing->delete();
+        if ($user->profileImage) {
+            $user->profileImage?->delete();
         }
 
         $uploaded = $request->file('profile_image');

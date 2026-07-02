@@ -165,7 +165,7 @@ const deleteGalleryImage = () => {
                             <FontAwesomeIcon :icon="faXmark" class="text-2xl" />
                         </button>
 
-                        <img :src="selectedGalleryImage.original_url || selectedGalleryImage.media_url"
+                        <img :src="selectedGalleryImage.original_url || selectedGalleryImage.preview_url"
                             :alt="selectedGalleryImage.custom_properties?.alt || selectedGalleryImage.name"
                             class="max-h-[85vh] w-full rounded-lg object-contain">
 

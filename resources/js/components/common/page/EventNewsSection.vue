@@ -38,7 +38,7 @@ const getEventImageUrl = (event, type = 'desktop') => {
         ? event?.mobile_banner_image
         : event?.desktop_banner_image
 
-    return image?.media_url ?? image?.original_url ?? null
+    return image?.preview_url ?? image?.original_url ?? null
 }
 
 const eventItems = computed(() => {

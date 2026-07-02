@@ -25,8 +25,8 @@ class MediaUpload extends Model implements HasMedia
     public function registerMediaConversions($spatieMedia = null): void
     {
         $this->addMediaConversion(MediaHelper::DEFAULT_CONVERSION)
-            ->format(MediaHelper::DEFAULT_CONVERSION)
-            ->quality(80)
+            ->format(MediaHelper::DEFAULT_CONVERSION_FORMAT)
+            ->quality(100)
             ->performOnCollections("MediaUpload")
             ->queued();
     }

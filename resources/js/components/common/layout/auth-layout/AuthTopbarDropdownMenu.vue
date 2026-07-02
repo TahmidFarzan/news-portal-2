@@ -111,7 +111,7 @@ onBeforeUnmount(() => {
 <template>
     <div ref="dropdownRef" class="relative">
         <button type="button" @click="toggleDropdown" class="flex items-center gap-2" aria-label="User menu">
-            <img :src="authUser?.profile_image?.media_url || '/uploads/icons/auth/user.png'"
+            <img :src="authUser?.profile_image?.preview_url || '/uploads/icons/auth/user.png'"
                 class="w-8 h-8 rounded-full object-cover" :alt="authUser?.name || 'User'">
         </button>
 

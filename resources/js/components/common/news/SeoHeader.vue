@@ -54,8 +54,8 @@ const canonicalUrl = computed(() => {
 
 const imageUrl = computed(() => {
     return (
-        news?.feature_image_mobile?.media_url ||
-        news?.feature_image?.media_url ||
+        news?.feature_image_mobile?.preview_url ||
+        news?.feature_image?.preview_url ||
         news?.feature_image_mobile?.original_url ||
         news?.feature_image?.original_url ||
         ''

@@ -134,7 +134,7 @@ const breakingNewsApiUrl = computed(() => {
 })
 
 function handleSelectedFeatureImage(media) {
-    saveForm.selected_feature_image_url = media?.media_url || media?.original_url || media?.url || null
+    saveForm.selected_feature_image_url = media?.preview_url || media?.original_url || null
     saveForm.upload_feature_image = null
 
     saveForm.feature_image_caption =
@@ -144,7 +144,7 @@ function handleSelectedFeatureImage(media) {
 }
 
 function handleSelectedThumbnail(media) {
-    saveForm.selected_feature_image_mobile_url = media?.media_url || media?.original_url || media?.url || null
+    saveForm.selected_feature_image_mobile_url = media?.preview_url || media?.original_url || null
     saveForm.upload_feature_image_mobile = null
 }
 
@@ -543,7 +543,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.feature_image_caption }}
                             </p>
 
-                            <img :src="saveForm.selected_feature_image_url || news?.feature_image?.media_url || '/uploads/images/news/story-feature-image.png'"
+                            <img :src="saveForm.selected_feature_image_url || news?.feature_image?.preview_url || '/uploads/images/news/story-feature-image.png'"
                                 class="w-75 object-contain rounded-xl border border-gray-200 mt-2" />
                         </div>
 
@@ -568,7 +568,7 @@ onMounted(async () => {
                                 {{ saveForm.errors.upload_feature_image_mobile }}
                             </p>
 
-                            <img :src="saveForm.selected_feature_image_mobile_url || news?.feature_image_mobile?.media_url || '/uploads/images/news/story-feature-image.png'"
+                            <img :src="saveForm.selected_feature_image_mobile_url || news?.feature_image_mobile?.preview_url || '/uploads/images/news/story-feature-image.png'"
                                 class="w-75 object-contain rounded-xl border border-gray-200 mt-2" />
                         </div>
                     </div>

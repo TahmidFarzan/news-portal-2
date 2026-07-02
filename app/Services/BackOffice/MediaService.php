@@ -33,8 +33,6 @@ class MediaService
         $media->load([
             'model',
         ]);
-        $media->media_url     = $media->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_CONVERSION) : $media->getUrl();
-        $media->media_srcset  = $media->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $media->getSrcset();
         $media->activity_logs = $this->activityLogs($media);
         $media                = $media->toArray();
         return $media;
@@ -124,12 +122,7 @@ class MediaService
                     'alt'               => $media?->getCustomProperty('alt') ?? $media?->model?->name ?? $media?->model?->title ?? '',
                     'media_type'        => $media?->getTypeFromMime(),
                     'original_url'      => $media?->original_url,
-                    'media_url'         => $media?->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION)
-                        ? $media?->getUrl(MediaHelper::DEFAULT_CONVERSION)
-                        : $media?->getUrl(),
-                    'media_srcset'      => $media?->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION)
-                        ? $media?->getSrcset(MediaHelper::DEFAULT_CONVERSION)
-                        : $media?->getSrcset(),
+                    'preview_url'       => $media?->preview_url,
                 ],
             ];
         } catch (Exception $exception) {
@@ -176,8 +169,8 @@ class MediaService
                     'alt'               => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
                     'media_type'        => $media->getTypeFromMime(),
                     'original_url'      => $media->original_url,
-                    'media_url'         => $media->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $media->getUrl(MediaHelper::DEFAULT_CONVERSION) : $media->getUrl(),
-                    'media_srcset'      => $media->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $media->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $media->getSrcset(),
+                    'preview_url'         => $media->preview_url,
+
                 ],
             ];
         } catch (Exception $ex) {

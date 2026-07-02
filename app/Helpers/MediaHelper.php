@@ -7,7 +7,8 @@ use Illuminate\Support\Str;
 
 class MediaHelper
 {
-    public const DEFAULT_CONVERSION = 'webp';
+    public const DEFAULT_CONVERSION = 'preview';
+    public const DEFAULT_CONVERSION_FORMAT = 'webp';
 
     public const ROLE_DEFAULT           = 'Default';
     public const ROLE_PROFILE_IMAGE     = 'Profile Image';

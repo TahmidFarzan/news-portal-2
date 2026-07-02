@@ -213,6 +213,10 @@ class PageService
 
                 'contributors',
 
+                "featureImage",
+                "featureImageMobile",
+                "galleryImages",
+
                 'relevantNews' => fn($query) => $query
                     ->orderByDesc('news.created_at')
                     ->limit(4),
@@ -296,7 +300,14 @@ class PageService
         }
 
         $tagNews = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with([
+                "newsType",
+                "category",
+                "event",
+                "location",
+                "featureImage",
+                "featureImageMobile",
+            ])
             ->where("language_id", $language->id)
             ->where("is_published", true)
             ->whereHas('tags', function ($tagQuery) use ($tag) {
@@ -372,7 +383,7 @@ class PageService
         }
 
         $contributorNews = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->where("language_id", $language->id)
             ->where("is_published", true)
             ->whereHas('contributors', function ($contributorQuery) use ($contributor) {
@@ -411,6 +422,7 @@ class PageService
         }
 
         $event = Event::query()
+            ->with(["desktopBannerImage", "mobileBannerImage"])
             ->where('language_id', $language->id)
             ->where('slug', $slug)
             ->firstOrFail();
@@ -487,7 +499,7 @@ class PageService
             return $categoryCachedData;
         }
 
-        $category = Category::query()->with(["parent", "children",])
+        $category = Category::query()->with(["parent", "children"])
             ->where("language_id", $language->id)
             ->where('slug_tree', $slugTree)
             ->firstOrFail();
@@ -617,7 +629,7 @@ class PageService
         $newsPlacementTable = (new NewsPlacement())->getTable();
 
         $news = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->withWhereHas('newsPlacements', function ($query) use ($categoryId, $page, $pageSection) {
                 $query->where('category_id', $categoryId)
                     ->where('page', $page)
@@ -682,7 +694,7 @@ class PageService
         }
 
         $categoryNews = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->where("language_id", $language->id)
             ->where("is_published", true)
             ->whereIn("category_id", $categoryIds)
@@ -767,7 +779,7 @@ class PageService
         }
 
         $locationNews = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->where("location_id", $language->id)
             ->where("is_published", true)
             ->whereIn("location_id", $locationIds)
@@ -809,7 +821,7 @@ class PageService
             return $newsCachedData;
         }
 
-        $news = News::query()->with(["newsType", "category", "event", "location"])
+        $news = News::query()->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->where('language_id', $language->id)
             ->where("is_published", true);
 
@@ -917,7 +929,7 @@ class PageService
             return $newsCachedData;
         }
 
-        $news = News::query()->with(["newsType", "category", "event", "location"])
+        $news = News::query()->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->where('language_id', $language->id)
             ->where("is_published", true)
             ->orderByDesc('id')
@@ -987,7 +999,7 @@ class PageService
         }
 
         $newsTypeNews = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->where("language_id", $language->id)
             ->where("is_published", true)
             ->where("news_type_id", $newsType->id)
@@ -1026,7 +1038,7 @@ class PageService
             return $eventCachedData;
         }
 
-        $events = Event::where("language_id", $language->id)->where("position", EventHelper::POSITION_TOP)->where("is_current", true)->get();
+        $events = Event::with(["desktopBannerImage","mobileBannerImage"])->where("language_id", $language->id)->where("position", EventHelper::POSITION_TOP)->where("is_current", true)->get();
 
         CacheServerHelper::cachedData(
             $eventCacheKey,
@@ -1058,7 +1070,7 @@ class PageService
             return $eventCachedData;
         }
 
-        $events = Event::where("language_id", $language->id)->where("position", EventHelper::POSITION_BOTTOM)->where("is_current", true)->get();
+        $events = Event::with(["desktopBannerImage","mobileBannerImage"])->where("language_id", $language->id)->where("position", EventHelper::POSITION_BOTTOM)->where("is_current", true)->get();
 
         CacheServerHelper::cachedData(
             $eventCacheKey,
@@ -1094,7 +1106,7 @@ class PageService
         $newsPlacementTable = (new NewsPlacement())->getTable();
 
         $news = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->withWhereHas('newsPlacements', function ($query) use ($page, $pageSection) {
                 $query->where('page', $page)
                     ->where('page_section', $pageSection);
@@ -1145,7 +1157,7 @@ class PageService
         }
 
         $news = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->where("event_id", $event->id)
             ->where("language_id", $language->id)
             ->where('is_published', true)
@@ -1166,7 +1178,7 @@ class PageService
 
     public function homeCategoryNews(Request $request, Category $category)
     {
-        $limit   = $request->input('limit', 4);
+        $limit = $request->input('limit', 4);
 
         $page        = PageHelper::PAGE_HOME;
         $pageSection = PageHelper::PAGE_SECTION_CATEGORY_NEWS;
@@ -1196,7 +1208,7 @@ class PageService
         $newsPlacementTable = (new NewsPlacement())->getTable();
 
         $news = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->withWhereHas('newsPlacements', function ($query) use ($categoryId, $page, $pageSection) {
                 $query->where('category_id', $categoryId)
                     ->where('page', $page)
@@ -1249,7 +1261,7 @@ class PageService
         }
 
         $news = News::query()
-            ->with(["newsType", "category", "event", "location"])
+            ->with(["newsType", "category", "event", "location","featureImage", "featureImageMobile",])
             ->where("language_id", $language->id)
             ->where('news_type_id', $newsType->id)
             ->where('is_published', true)

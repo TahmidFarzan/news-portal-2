@@ -39,7 +39,7 @@ class Contributor extends Model implements HasMedia
     protected $appends = [
         'public_url', 'is_recent_created',
         "feeds_rss_url", "feeds_atom_url", "sitemap_url",
-        'media_collection_name', 'profile_image',
+        'media_collection_name',
     ];
 
     protected function casts(): array
@@ -91,8 +91,8 @@ class Contributor extends Model implements HasMedia
     public function registerMediaConversions($spatieMedia = null): void
     {
         $this->addMediaConversion(MediaHelper::DEFAULT_CONVERSION)
-            ->format(MediaHelper::DEFAULT_CONVERSION)
-            ->quality(80)
+            ->format(MediaHelper::DEFAULT_CONVERSION_FORMAT)
+            ->quality(100)
             ->performOnCollections($this->media_collection_name)
             ->queued();
     }
@@ -154,28 +154,6 @@ class Contributor extends Model implements HasMedia
         return $intervalInHours < 72;
     }
 
-    public function getProfileImageAttribute(): ?Media
-    {
-        $image          = null;
-        $collectionName = $this->media_collection_name;
-        $roleParameter  = ["role" => MediaHelper::ROLE_PROFILE_IMAGE];
-
-        if ($this->hasMedia($collectionName, $roleParameter)) {
-            $imageMedia = $this->getMedia($collectionName, $roleParameter)
-                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
-                ->first();
-
-            if (isset($imageMedia)) {
-
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
-
-                $image = $imageMedia;
-            }
-        }
-
-        return $image;
-    }
 
     public function activityLogs(): MorphMany
     {
@@ -192,6 +170,7 @@ class Contributor extends Model implements HasMedia
         return $this->belongsTo(Language::class, 'language_id');
     }
 
+
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
@@ -200,6 +179,13 @@ class Contributor extends Model implements HasMedia
     public function news(): HasMany
     {
         return $this->hasMany(News::class,'contributor_news' );
+    }
+
+    public function profileImage(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('collection_name', $this->media_collection_name)
+            ->whereJsonContains('custom_properties->role', MediaHelper::ROLE_PROFILE_IMAGE);
     }
 
     public function navBreadcrumbs(): array

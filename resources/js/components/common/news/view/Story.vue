@@ -59,7 +59,7 @@ const { news } = defineProps({
         </header>
 
         <figure v-if="news?.feature_image" class="mx-auto max-w-3xl space-y-2">
-            <img :src="news?.feature_image?.media_url || news?.feature_image?.original_url || ''"
+            <img :src="news?.feature_image?.preview_url || news?.feature_image?.original_url || ''"
                 :alt="news?.feature_image?.custom_properties?.alt || news?.title"
                 class="h-auto w-full rounded-2xl object-contain" />
 

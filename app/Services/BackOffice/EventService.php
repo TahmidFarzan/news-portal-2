@@ -35,6 +35,9 @@ class EventService
 
             'latestActivityLog',
             'latestActivityLog.causer',
+
+            "desktopBannerImage",
+            "mobileBannerImage"
         ]);
 
         return $event;
@@ -161,9 +164,8 @@ class EventService
             return;
         }
 
-        $existing = $event->getDesktopBannerImageAttribute();
-        if ($existing) {
-            $existing->delete();
+        if ($event->desktopBannerImage) {
+            $event->desktopBannerImage?->delete();
         }
 
         $uploaded = $request->file('desktop_banner_image');
@@ -192,9 +194,8 @@ class EventService
             return;
         }
 
-        $existing = $event->getMobileBannerImageAttribute();
-        if ($existing) {
-            $existing->delete();
+        if ($event->mobileBannerImage) {
+            $event->mobileBannerImage?->delete();
         }
 
         $uploaded = $request->file('mobile_banner_image');

@@ -71,8 +71,8 @@ const normalizedImage = computed(() => {
     return {
         uid,
         id: image?.id || image?.uuid,
-        src: image?.media_url || image?.original_url || '',
-        thumb: image?.media_url || image?.original_url || '',
+        src: image?.preview_url || image?.original_url || '',
+        thumb: image?.preview_url || image?.original_url || '',
         alt: image?.custom_properties?.alt || image?.name || 'Gallery image',
         caption: image?.custom_properties?.caption || image?.name || '',
     }

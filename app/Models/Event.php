@@ -29,7 +29,7 @@ use Spatie\Sluggable\SlugOptions;
         'name', 'brief', 'slug',
         'language_id', 'created_by_id',
         "seo_brief", 'seo_title', 'seo_keywords',
-        "is_current","position"
+        "is_current", "position",
     ])]
 #[UsePolicy(EventPolicy::class)]
 #[ObservedBy([EventObserver::class])]
@@ -41,7 +41,6 @@ class Event extends Model implements HasMedia
         'public_url', 'is_recent_created',
         "feeds_rss_url", "feeds_atom_url", "sitemap_url",
         'media_collection_name',
-        'desktop_banner_image', 'mobile_banner_image',
     ];
 
     protected function casts(): array
@@ -57,7 +56,7 @@ class Event extends Model implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'brief', 'slug',"is_current",
+                'name', 'brief', 'slug', "is_current",
                 "seo_brief", 'seo_title', 'seo_keywords',
             ])
             ->useLogName('Event')
@@ -78,7 +77,7 @@ class Event extends Model implements HasMedia
             ->generateSlugsFrom("name")
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
+            ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string
@@ -94,8 +93,8 @@ class Event extends Model implements HasMedia
     public function registerMediaConversions($spatieMedia = null): void
     {
         $this->addMediaConversion(MediaHelper::DEFAULT_CONVERSION)
-            ->format(MediaHelper::DEFAULT_CONVERSION)
-            ->quality(80)
+            ->format(MediaHelper::DEFAULT_CONVERSION_FORMAT)
+            ->quality(100)
             ->performOnCollections($this->media_collection_name)
             ->queued();
     }
@@ -109,7 +108,7 @@ class Event extends Model implements HasMedia
     {
         $url = null;
 
-        if($this->slug){
+        if ($this->slug) {
             $url = route("event.news", ['slug' => $this->slug]);
         }
 
@@ -158,52 +157,6 @@ class Event extends Model implements HasMedia
         return $intervalInHours < 72;
     }
 
-    public function getDesktopBannerImageAttribute(): ?Media
-    {
-        $image               = null;
-        $collectionName      = $this->media_collection_name;
-        $mediaRoleParameters = ["role" => MediaHelper::ROLE_EVENT_BANNER_IMAGE_DESKTOP];
-
-        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
-            $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
-                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
-                ->first();
-
-            if (isset($imageMedia)) {
-
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
-
-                $image = $imageMedia;
-            }
-        }
-
-        return $image;
-    }
-
-    public function getMobileBannerImageAttribute(): ?Media
-    {
-        $image               = null;
-        $collectionName      = $this->media_collection_name;
-        $mediaRoleParameters = ["role" => MediaHelper::ROLE_EVENT_BANNER_IMAGE_MOBILE];
-
-        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
-            $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
-                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
-                ->first();
-
-            if (isset($imageMedia)) {
-
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
-
-                $image = $imageMedia;
-            }
-        }
-
-        return $image;
-    }
-
     public function activityLogs(): MorphMany
     {
         return $this->morphMany(Activity::class, 'subject');
@@ -214,6 +167,13 @@ class Event extends Model implements HasMedia
         return $this->belongsTo(User::class, 'created_by_id');
     }
 
+    public function desktopBannerImage(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('collection_name', $this->media_collection_name)
+            ->whereJsonContains('custom_properties->role', MediaHelper::ROLE_EVENT_BANNER_IMAGE_DESKTOP);
+    }
+
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class, 'language_id');
@@ -222,6 +182,13 @@ class Event extends Model implements HasMedia
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
+    }
+
+    public function mobileBannerImage(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('collection_name', $this->media_collection_name)
+            ->whereJsonContains('custom_properties->role', MediaHelper::ROLE_EVENT_BANNER_IMAGE_MOBILE);
     }
 
     public function news(): HasMany

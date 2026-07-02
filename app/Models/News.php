@@ -45,7 +45,6 @@ class News extends Model implements HasMedia
         'public_url',
         "published_at", "title_with_published_at",
         'is_recent_created',
-        'feature_image', 'feature_image_mobile', 'gallery_images',
     ];
 
     protected function casts(): array
@@ -85,7 +84,7 @@ class News extends Model implements HasMedia
             ->generateSlugsFrom("title")
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)) . '-' . now()->format('HisdmY'));
+            ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)) . '-' . now()->format('HisdmY'));
     }
 
     public function getRouteKeyName(): string
@@ -102,8 +101,8 @@ class News extends Model implements HasMedia
     {
 
         $this->addMediaConversion(MediaHelper::DEFAULT_CONVERSION)
-            ->format(MediaHelper::DEFAULT_CONVERSION)
-            ->quality(80)
+            ->format(MediaHelper::DEFAULT_CONVERSION_FORMAT)
+            ->quality(100)
             ->performOnCollections($this->media_collection_name)
             ->queued();
     }
@@ -158,84 +157,6 @@ class News extends Model implements HasMedia
         return "{$this->title} ({$this->published_at})";
     }
 
-    public function getFeatureImageMobileAttribute(): ?Media
-    {
-        $image               = null;
-        $collectionName      = $this->media_collection_name;
-        $mediaRoleParameters = ["role" => MediaHelper::ROLE_NEWS_FEATURE_IMAGE_MOBILE];
-
-        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
-            $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
-                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
-                ->first();
-
-            if (isset($imageMedia)) {
-
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
-
-                $image = $imageMedia;
-            }
-        }
-
-        return $image;
-    }
-
-    public function getFeatureImageAttribute(): ?Media
-    {
-        $image               = null;
-        $collectionName      = $this->media_collection_name;
-        $mediaRoleParameters = ["role" => MediaHelper::ROLE_NEWS_FEATURE_IMAGE];
-
-        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
-            $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
-                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
-                ->first();
-
-            if (isset($imageMedia)) {
-
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
-
-                $image = $imageMedia;
-            }
-        }
-
-        return $image;
-    }
-
-    public function getGalleryImagesAttribute(): ?MediaCollection
-    {
-        $images              = null;
-        $mediaRoleParameters = ["role" => MediaHelper::ROLE_NEWS_GALLERY_IMAGE];
-        $collectionName      = $this->media_collection_name;
-
-        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
-            $images = $this->getMedia($collectionName, $mediaRoleParameters)
-                ->filter(function ($mediaItem) {
-                    return stripos($mediaItem->mime_type, 'image/') === 0;
-                })
-                ->sortBy([
-                    ['order_column', 'asc'],
-                    ['id', 'asc'],
-                ])
-                ->map(function ($mediaItem) {
-                    $mediaItem->media_url = $mediaItem->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION)
-                        ? $mediaItem->getUrl(MediaHelper::DEFAULT_CONVERSION)
-                        : $mediaItem->getUrl();
-
-                    $mediaItem->media_srcset = $mediaItem->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION)
-                        ? $mediaItem->getSrcset(MediaHelper::DEFAULT_CONVERSION)
-                        : $mediaItem->getSrcset();
-
-                    return $mediaItem;
-                });
-
-        }
-
-        return $images;
-    }
-
     public function activityLogs(): MorphMany
     {
         return $this->morphMany(Activity::class, 'subject');
@@ -264,6 +185,30 @@ class News extends Model implements HasMedia
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function featureImage(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('collection_name', $this->media_collection_name)
+            ->whereJsonContains('custom_properties->role', MediaHelper::ROLE_NEWS_FEATURE_IMAGE);
+    }
+
+    public function featureImageMobile(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('collection_name', $this->media_collection_name)
+            ->whereJsonContains('custom_properties->role', MediaHelper::ROLE_NEWS_FEATURE_IMAGE_MOBILE);
+    }
+
+    public function galleryImages(): MorphMany
+    {
+
+        return $this->morphMany(Media::class, 'model')
+            ->where('collection_name', $this->media_collection_name)
+            ->where('custom_properties->role', MediaHelper::ROLE_NEWS_GALLERY_IMAGE)
+            ->orderBy('order_column')
+            ->orderBy('id');
     }
 
     public function language(): BelongsTo

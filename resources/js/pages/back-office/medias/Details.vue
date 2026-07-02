@@ -155,8 +155,13 @@ onMounted(async () => {
             <div class="grid md:grid-cols-1 gap-4 mt-4">
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.media_url') }}:</span>
-                        {{ media?.media_url || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.original_url') }}:</span>
+                        {{ media?.original_url || t('pages.back_office.medias.details.labels.not_available') }}
+                    </div>
+
+                    <div>
+                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.preview_url') }}:</span>
+                        {{ media?.preview_url || t('pages.back_office.medias.details.labels.not_available') }}
                     </div>
 
                     <div>

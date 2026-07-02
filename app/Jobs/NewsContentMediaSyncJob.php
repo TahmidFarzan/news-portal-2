@@ -97,8 +97,8 @@ class NewsContentMediaSyncJob implements ShouldQueue, ShouldBeUnique
                     'new' => $newMedia->original_url ?? null,
                 ],
                 [
-                    'old' => $oldMedia->media_url ?? null,
-                    'new' => $newMedia->media_url ?? null,
+                    'old' => $oldMedia->preview_url ?? null,
+                    'new' => $newMedia->preview_url ?? null,
                 ],
                 [
                     'old' => $oldMedia->media_srcset ?? null,

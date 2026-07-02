@@ -1681,7 +1681,8 @@
                     "custom_properties": "কাস্টম প্রোপার্টিজ",
                     "not_available": "তথ্য পাওয়া যায়নি।",
                     "generated_conversions": "জেনারেটেড কনভার্সন",
-                    "media_url": "মিডিয়া URL",
+                    "preview_url": "প্রিভিউ ইউআরএল",
+                    "original_url" : "আসল_ইউআরএল",
                     "system_information": "সিস্টেম তথ্য",
                     "table": {
                         "columns": {

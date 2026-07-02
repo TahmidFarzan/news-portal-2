@@ -41,7 +41,7 @@ const metaKeywords = computed(() => {
 })
 
 const contributorImage = computed(() => {
-    return contributor?.profile_image?.media_url
+    return contributor?.profile_image?.preview_url
         || contributor?.profile_image?.original_url
         || '/uploads/images/logo/contributor.png'
 })

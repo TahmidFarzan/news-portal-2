@@ -85,6 +85,10 @@ class NewsService
 
             'latestActivityLog',
             'latestActivityLog.causer',
+
+            "featureImage",
+            "featureImageMobile",
+            "galleryImages",
         ]);
 
         return $news;
@@ -959,17 +963,15 @@ class NewsService
 
     private function featureImageDeleteExting(News $news): void
     {
-        $extingFeatureImage = $news->feature_image;
-        if ($extingFeatureImage) {
-            $extingFeatureImage->delete();
+        if ($news->featureImage) {
+            $news->featureImage?->delete();
         }
     }
 
     private function featureImageDeleteExtingMobile(News $news): void
     {
-        $extingFeatureImageMobile = $news->feature_image_mobile;
-        if ($extingFeatureImageMobile) {
-            $extingFeatureImageMobile->delete();
+        if ($news->featureImageMobile) {
+            $news->featureImageMobile?->delete();
         }
     }
 

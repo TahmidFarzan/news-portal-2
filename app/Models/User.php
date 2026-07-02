@@ -46,7 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     use HasFactory, Notifiable, SoftDeletes, LogsActivity, HasSlug, InteractsWithMedia;
 
     protected $appends = [
-        'age', 'is_active', 'media_collection_name', 'profile_image',
+        'age', 'is_active', 'media_collection_name',
     ];
 
     protected function casts(): array
@@ -115,8 +115,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     public function registerMediaConversions($spatieMedia = null): void
     {
         $this->addMediaConversion(MediaHelper::DEFAULT_CONVERSION)
-            ->format(MediaHelper::DEFAULT_CONVERSION)
-            ->quality(80)
+            ->format(MediaHelper::DEFAULT_CONVERSION_FORMAT)
+            ->quality(100)
             ->performOnCollections($this->media_collection_name)
             ->queued();
     }
@@ -134,29 +134,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     public function getIsActiveAttribute(): bool
     {
         return ($this->deleted_at == null) ? true : false;
-    }
-
-    public function getProfileImageAttribute(): ?Media
-    {
-        $image               = null;
-        $collectionName      = $this->media_collection_name;
-        $mediaRoleParameters = ["role" => MediaHelper::ROLE_PROFILE_IMAGE];
-
-        if ($this->hasMedia($collectionName, $mediaRoleParameters)) {
-            $imageMedia = $this->getMedia($collectionName, $mediaRoleParameters)
-                ->filter(fn($mediaItem) => stripos($mediaItem->mime_type, 'image/') === 0)
-                ->first();
-
-            if (isset($imageMedia)) {
-
-                $imageMedia->media_url    = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getUrl(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getUrl();
-                $imageMedia->media_srcset = $imageMedia->hasGeneratedConversion(MediaHelper::DEFAULT_CONVERSION) ? $imageMedia->getSrcset(MediaHelper::DEFAULT_CONVERSION) : $imageMedia->getSrcset();
-
-                $image = $imageMedia;
-            }
-        }
-
-        return $image;
     }
 
     public function activityLogs(): MorphMany
@@ -182,6 +159,13 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
+    }
+
+    public function profileImage(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('collection_name', $this->media_collection_name)
+            ->whereJsonContains('custom_properties->role', MediaHelper::ROLE_PROFILE_IMAGE);
     }
 
     public function hasUserPermission(string $module, string $access): bool

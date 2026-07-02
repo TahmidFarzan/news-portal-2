@@ -1685,7 +1685,8 @@
                     "custom_properties": "Custom properties",
                     "not_available": "Not available.",
                     "generated_conversions": "Generated conversions",
-                    "media_url": "Media URL",
+                    "preview_url": "Preview url",
+                    "original_url" : "Original url",
                     "system_information": "System Information",
                     "table": {
                         "columns": {

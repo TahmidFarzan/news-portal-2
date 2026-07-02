@@ -144,7 +144,7 @@ const editorInit = computed(() => {
                                         headers: { 'Content-Type': 'multipart/form-data' },
                                     })
                                     const media = response.data?.media || {}
-                                    const mediaUrl = media?.media_url || media?.url || ''
+                                    const mediaUrl = media?.preview_url || media?.url || ''
                                     const id = media?.id || ''
                                     let html = ''
 
@@ -215,7 +215,7 @@ const handleMediaSelected = (selected) => {
     selectedArray.forEach((media) => {
         const type = media.media_type || media.type || media.mime_type?.split('/')[0] || 'file'
         const id = media.id
-        const url = media.url || media.media_url
+        const url = media.preview_url || media.original_url
         const caption = media.caption || media.alt || ''
         let html = ''
 

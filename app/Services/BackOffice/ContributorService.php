@@ -35,6 +35,8 @@ class ContributorService
 
             'latestActivityLog',
             'latestActivityLog.causer',
+
+            'profileImage',
         ]);
 
         return $contributor;
@@ -150,9 +152,8 @@ class ContributorService
             return;
         }
 
-        $existing = $contributor->getProfileImageAttribute();
-        if ($existing) {
-            $existing->delete();
+        if ($contributor->profileImage) {
+            $contributor->profileImage?->delete();
         }
 
         $uploaded = $request->file('profile_image');

@@ -65,11 +65,11 @@ const editForm = ref({
 })
 
 const imageUrl = computed(() => {
-    return image?.media_url || image?.original_url || ''
+    return image?.preview_url || image?.original_url || ''
 })
 
 const fullImageUrl = computed(() => {
-    return image?.original_url || image?.media_url || ''
+    return image?.original_url || image?.preview_url || ''
 })
 
 const caption = computed(() => {
