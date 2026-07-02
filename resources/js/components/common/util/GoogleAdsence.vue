@@ -37,9 +37,10 @@ const {
 const ads = ref([])
 const adRefs = ref([])
 const wrapperRef = ref(null)
-const screenWidth = ref(window.innerWidth)
+const containerWidth = ref(0)
 
 let observer = null
+let resizeObserver = null
 let adsLoaded = false
 
 const hasAds = computed(() => {
@@ -63,22 +64,32 @@ const getAdKey = (ad) => {
     return ad?.id ?? `${ad?.client_id}-${ad?.slot_id}`
 }
 
+const updateContainerWidth = () => {
+    if (!wrapperRef.value) return
+
+    containerWidth.value = wrapperRef.value.clientWidth
+}
+
 const getAdStyle = (ad) => {
     if (isFullWidthResponsive(ad)) {
         return 'display:block'
     }
 
-    const width = screenWidth.value
+    const width = containerWidth.value
 
-    if (width < 576) {
-        return 'display:inline-block;width:320px;height:100px'
+    if (width >= 728) {
+        return 'display:inline-block;width:728px;height:90px'
     }
 
-    if (width < 992) {
+    if (width >= 468) {
         return 'display:inline-block;width:468px;height:60px'
     }
 
-    return 'display:inline-block;width:728px;height:90px'
+    if (width >= 320) {
+        return 'display:inline-block;width:320px;height:100px'
+    }
+
+    return `display:inline-block;width:${Math.max(width, 200)}px;height:100px`
 }
 
 const normalizeRows = (response) => {
@@ -104,6 +115,7 @@ const fetchAds = async () => {
 
     await nextTick()
 
+    updateContainerWidth()
     observeAds()
 }
 
@@ -147,10 +159,6 @@ const observeAds = () => {
     observer.observe(wrapperRef.value)
 }
 
-const resizeHandler = () => {
-    screenWidth.value = window.innerWidth
-}
-
 watch(
     [type, position],
     async () => {
@@ -159,17 +167,30 @@ watch(
 )
 
 onMounted(async () => {
-    window.addEventListener('resize', resizeHandler)
-
     await fetchAds()
+
+    await nextTick()
+
+    updateContainerWidth()
+
+    resizeObserver = new ResizeObserver(() => {
+        updateContainerWidth()
+    })
+
+    if (wrapperRef.value) {
+        resizeObserver.observe(wrapperRef.value)
+    }
 })
 
 onBeforeUnmount(() => {
-    window.removeEventListener('resize', resizeHandler)
-
     if (observer) {
         observer.disconnect()
         observer = null
+    }
+
+    if (resizeObserver) {
+        resizeObserver.disconnect()
+        resizeObserver = null
     }
 })
 </script>
@@ -181,11 +202,12 @@ onBeforeUnmount(() => {
             {{ label }}
         </span>
 
-        <div class="flex w-full flex-col items-center justify-center gap-4">
-            <ins v-for="ad in ads" :key="getAdKey(ad)" ref="adRefs" class="adsbygoogle mx-auto" :style="getAdStyle(ad)"
-                :data-ad-client="ad.client_id" :data-ad-slot="ad.slot_id"
-                :data-ad-format="isFullWidthResponsive(ad) ? 'auto' : null"
-                :data-full-width-responsive="isFullWidthResponsive(ad) ? 'true' : null"></ins>
+        <div class="flex w-full flex-col items-center gap-4">
+            <div v-for="ad in ads" :key="getAdKey(ad)" class="flex w-full justify-center overflow-hidden">
+                <ins ref="adRefs" class="adsbygoogle" :style="getAdStyle(ad)" :data-ad-client="ad.client_id"
+                    :data-ad-slot="ad.slot_id" :data-ad-format="isFullWidthResponsive(ad) ? 'auto' : null"
+                    :data-full-width-responsive="isFullWidthResponsive(ad) ? 'true' : null"></ins>
+            </div>
         </div>
     </section>
 </template>

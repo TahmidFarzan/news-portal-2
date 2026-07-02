@@ -23,7 +23,7 @@ use Spatie\Sluggable\SlugOptions;
 #[Table('survey_questions')]
 #[Fillable([
         'question', 'survey_id', 'slug',
-        'language_id', 'created_by_id',
+        'created_by_id',
     ])]
 #[UsePolicy(SurveyQuestionPolicy::class)]
 #[ObservedBy([SurveyQuestionObserver::class])]
