@@ -28,31 +28,47 @@ class SiteService
         $languageId = session('selected_language_id');
 
         if ($languageId) {
-            return Language::query()
+            return Language::select([
+                'id',
+                'name',
+                'code',
+                "locale",
+                'slug',
+            ])
                 ->where('id', $languageId)
                 ->firstOrFail();
         }
 
-        return Language::query()
+        return Language::select([
+            'id',
+            'name',
+            'code',
+            "locale",
+            'slug',
+        ])
             ->oldest('id')
             ->firstOrFail();
     }
 
     public function menuItem(string $slug): MenuItem
     {
-        return MenuItem::where('slug', $slug)->firstOrFail();
-    }
-
-    public function menuItemRelationLoad(MenuItem $menuItem): MenuItem
-    {
-        $menuItem->load([
-            "parent",
-
-            'model',
-            'language',
-        ]);
-
-        return $menuItem;
+        return MenuItem::select([
+            'id',
+            'name',
+            'slug',
+            'language_id',
+            'model_type',
+            'model_id',
+            'menu_id',
+        ])
+            ->with([
+                'model:id,slug',
+                'language:id,name,code,locale,slug',
+                'menu:id,name,language_id,slug,menu_type_id',
+                'menu.menuType:id,name,slug',
+            ])
+            ->where('slug', $slug)
+            ->firstOrFail();
     }
 
     public function menuHeaderMenuMenuItems(Request $request): array
@@ -79,12 +95,19 @@ class SiteService
             return $cachedData;
         }
 
-        $menu = Menu::where("language_id", $language->id)->whereRelation('menuType', 'name', $headerMenuCode)->firstOrFail();
+        $menu = Menu::with(['menuType'])->select(["id", "name", 'slug', "language_id"])->where("language_id", $language->id)->whereRelation('menuType', 'name', $headerMenuCode)->firstOrFail();
 
         $query = MenuItem::query()
             ->with([
-                'children',
                 'model',
+            ])
+            ->select([
+                'id',
+                'name',
+                "slug",
+                "model_type",
+                "model_id",
+                'position',
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
@@ -142,12 +165,19 @@ class SiteService
         if ($cachedData !== null) {
             return $cachedData;
         }
-        $menu = Menu::where("language_id", $language->id)->whereRelation('menuType', 'name', $offcanvasMenuCode)->firstOrFail();
+        $menu = Menu::with(['menuType'])->select(["id", "name", 'slug', "language_id"])->where("language_id", $language->id)->whereRelation('menuType', 'name', $offcanvasMenuCode)->firstOrFail();
 
         $query = MenuItem::query()
             ->with([
-                'children',
                 'model',
+            ])
+            ->select([
+                'id',
+                'name',
+                "slug",
+                "model_type",
+                "model_id",
+                'position',
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
@@ -206,12 +236,19 @@ class SiteService
             return $cachedData;
         }
 
-        $menu = Menu::where("language_id", $language->id)->whereRelation('menuType', 'name', $topbarMenuCode)->firstOrFail();
+        $menu = Menu::with(['menuType'])->select(["id", "name", 'slug', "language_id"])->where("language_id", $language->id)->whereRelation('menuType', 'name', $topbarMenuCode)->firstOrFail();
 
         $query = MenuItem::query()
             ->with([
-                'children',
                 'model',
+            ])
+            ->select([
+                'id',
+                'name',
+                "slug",
+                "model_type",
+                "model_id",
+                'position',
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
@@ -270,14 +307,22 @@ class SiteService
             return $cachedData;
         }
 
-        $menu = Menu::where("language_id", $language->id)->whereRelation('menuType', 'name', $footerMenuCode)->firstOrFail();
+        $menu = Menu::with(['menuType'])->select(["id", "name", 'slug', "language_id"])->where("language_id", $language->id)->whereRelation('menuType', 'name', $footerMenuCode)->firstOrFail();
 
         $query = MenuItem::query()
             ->with([
-                'children',
                 'model',
             ])
+            ->select([
+                'id',
+                'name',
+                "slug",
+                "model_type",
+                "model_id",
+                'position',
+            ])
             ->whereNull("parent_id")
+            ->where('menu_id', $menu->id)
             ->whereRelation('menu.language', 'id', $language->id)
             ->whereRelation('menu.menuType', 'name', $footerMenuCode)
             ->orderBy('position', 'asc')
@@ -340,7 +385,15 @@ class SiteService
 
         $records = MenuItem::query()
             ->with([
-                'children',
+                'model',
+            ])
+            ->select([
+                'id',
+                'name',
+                "slug",
+                "model_type",
+                "model_id",
+                'position',
             ])
             ->where('parent_id', $menuItem->id)
             ->where('language_id', $menuItem->language_id)
@@ -390,7 +443,13 @@ class SiteService
             return $cachedData;
         }
 
-        $data = Theme::query()
+        $data = Theme::select([
+            'group',
+            'label',
+            'type',
+            'value',
+            'slug',
+        ])
             ->orderBy('id', 'asc')
             ->get();
 
@@ -425,7 +484,13 @@ class SiteService
             ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_HEADER,
         ];
 
-        $data = Theme::query()->where('group', ThemeHelper::GROUP_APP)->whereIn('label', $labels)->get();
+        $data = Theme::select([
+            'group',
+            'label',
+            'type',
+            'value',
+            'slug',
+        ])->where('group', ThemeHelper::GROUP_APP)->whereIn('label', $labels)->get();
 
         CacheServerHelper::cachedData(
             $cacheKey,
@@ -457,7 +522,13 @@ class SiteService
             ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY,
         ];
 
-        $data = Theme::query()->where('group', ThemeHelper::GROUP_APP)->whereIn('label', $labels)->get();
+        $data = Theme::select([
+            'group',
+            'label',
+            'type',
+            'value',
+            'slug',
+        ])->where('group', ThemeHelper::GROUP_APP)->whereIn('label', $labels)->get();
 
         CacheServerHelper::cachedData(
             $cacheKey,
@@ -485,7 +556,13 @@ class SiteService
             return $cachedData;
         }
 
-        $data = Theme::query()->where('group', ThemeHelper::GROUP_APP)->where('label', ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID)->firstOrFail();
+        $data = Theme::select([
+            'group',
+            'label',
+            'type',
+            'value',
+            'slug',
+        ])->where('group', ThemeHelper::GROUP_APP)->where('label', ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID)->firstOrFail();
 
         CacheServerHelper::cachedData(
             $cacheKey,
@@ -499,7 +576,7 @@ class SiteService
 
     public function breakingNews(Request $request)
     {
-        $perPage = 15;
+        $perPage = 10;
 
         $cursor    = $request->input('cursor');
         $cursorKey = $cursor ? md5($cursor) : 'first';
@@ -521,15 +598,21 @@ class SiteService
             return $cachedData;
         }
 
-        $query = BreakingNews::query()
-            ->with([
-                'news',
-                'language',
-                'news.language',
-            ])
+        $query = BreakingNews::
+            select([
+            "id",
+            "title",
+            "slug",
+            "language_id",
+            "news_id",
+        ])
+            ->with(
+                "news:id,title,slug,language_id,category_id,news_type_id,created_at,updated_at",
+                "news.category:id,name,name_tree,slug,slug_tree",
+            )
             ->where('is_published', true)
-            ->whereRelation('language', 'id', $language->id)
-            ->whereRelation('news.language', 'id', $language->id)
+            ->where('language_id', $language->id)
+            ->whereRelation('news', 'language_id', $language->id)
             ->orderByDesc('created_at')
             ->orderByDesc('updated_at')
             ->orderByDesc('id')
@@ -638,7 +721,15 @@ class SiteService
             return $cachedData;
         }
 
-        $data = GoogleAdsence::query()->where('type', $type)->where('position', $position)->get();
+        $data = GoogleAdsence::select([
+            "id",
+            'name',
+            'slug',
+            "slot_id",
+            "client_id",
+            "type",
+            "position",
+        ])->where('type', $type)->where('position', $position)->get();
 
         CacheServerHelper::cachedData(
             $cacheKey,
@@ -668,8 +759,12 @@ class SiteService
             return $cachedData;
         }
 
-        $data = Trend::query()
-            ->with("tag")
+        $data = Trend::select([
+            "id", 'tag_id', 'is_current',
+        ])
+            ->with([
+                "tag:id,name,slug,language_id",
+            ])
             ->where("is_current", true)
             ->whereRelation('tag', 'language_id', $language->id)
             ->orderBy('position', 'asc')
@@ -705,8 +800,11 @@ class SiteService
             return $cachedData;
         }
 
-        $data = Survey::query()
-            ->with(["surveyQuestions", "surveyQuestions.surveyQuestionResult"])
+        $data = Survey::select(["id","name","slug",'date',])
+            ->with([
+                "surveyQuestions:id,survey_id,question,slug",
+                "surveyQuestions.surveyQuestionResult:id,survey_question_id,yes,no,no_comment",
+            ])
             ->where("is_active", true)
             ->where('language_id', $language->id)
             ->whereDate('date', now()->toDateString())
@@ -725,12 +823,13 @@ class SiteService
 
     public function survey(string $slug): Survey
     {
-        return Survey::where('slug', $slug)->firstOrFail();
+        return Survey::select(["id", 'name', 'brief', 'slug', 'date', "language_id"])->where('slug', $slug)->firstOrFail();
     }
 
     public function surveyQuestion(Survey $survey, string $slug): SurveyQuestion
     {
-        return SurveyQuestion::where('survey_id', $survey->id)->where('slug', $slug)->firstOrFail();
+        return SurveyQuestion::select(["id", 'question', 'survey_id', 'slug',])
+            ->where('survey_id', $survey->id)->where('slug', $slug)->firstOrFail();
     }
 
     public function surveySurveyQuestionSubmit(Request $request, Survey $survey, SurveyQuestion $surveyQuestion): array
@@ -772,9 +871,9 @@ class SiteService
                         'survey_question_id' => $surveyQuestion->id,
                     ],
                     [
-                        'yes'               => 0,
-                        'no'                => 0,
-                        'no_comment'        => 0,
+                        'yes'        => 0,
+                        'no'         => 0,
+                        'no_comment' => 0,
                     ]);
 
                 $previousAnswer = $previousData['answer'] ?? null;

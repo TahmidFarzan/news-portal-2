@@ -52,7 +52,7 @@ class SiteController extends Controller
     public function menuItemSubMenuItems(Request $request, string $slug): JsonResponse
     {
         $menuItem = $this->siteService->menuItem($slug);
-        $menuItem = $this->siteService->menuItemRelationLoad($menuItem);
+
         return response()->json(
             $this->siteService->menuItemSubMenuItems($request, $menuItem)
         );
