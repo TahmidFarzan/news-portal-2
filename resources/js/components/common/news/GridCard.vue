@@ -208,8 +208,9 @@ onBeforeUnmount(() => {
 
 <template>
     <article ref="articleRef"
-        class="group relative flex flex-col overflow-hidden border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-red-100 hover:shadow-lg"
+        class="news-grid-card group relative flex flex-col overflow-hidden border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-red-100 hover:shadow-lg"
         :class="[
+            isCompact ? 'is-compact' : 'is-regular',
             isCompact ? 'rounded-xl' : 'rounded-2xl',
             useFullHeight ? 'h-full' : '',
         ]">
@@ -289,7 +290,6 @@ onBeforeUnmount(() => {
 
             <h3 class="break-words font-bold leading-snug text-gray-950 transition duration-300 group-hover:text-red-600"
                 :class="[
-                    isCompact ? 'text-sm' : 'text-base',
                     { 'line-clamp-2': enableTitleLineClamp },
                 ]">
                 <b v-if="news?.content_shoulder" class="mr-1 font-semibold text-red-600"
@@ -319,3 +319,40 @@ onBeforeUnmount(() => {
         </div>
     </article>
 </template>
+
+<style scoped>
+.news-grid-card {
+    border-color: var(--news-border);
+    border-radius: var(--news-radius);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.news-grid-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: var(--news-shadow-inset);
+}
+
+.news-grid-card:hover {
+    border-color: var(--news-border-primary-hover);
+    box-shadow: var(--news-shadow);
+}
+
+.news-grid-card h3 {
+    letter-spacing: 0;
+    font-size: var(--news-grid-title-size);
+    line-height: 1.35;
+}
+
+.news-grid-card img {
+    min-height: 100%;
+}
+
+.news-grid-card.is-compact h3 {
+    font-size: var(--news-grid-title-compact-size);
+}
+</style>

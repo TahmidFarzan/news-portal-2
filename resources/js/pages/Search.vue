@@ -188,8 +188,13 @@ onMounted(async () => {
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <div class="space-y-6">
-        <form class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4" @submit.prevent="applyFilter">
+    <div class="search-page space-y-6">
+        <section class="page-hero">
+            <p>{{ t('pages.search.labels.search') }}</p>
+            <h1>{{ t('pages.search.labels.search') }}</h1>
+        </section>
+
+        <form class="search-filter rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4" @submit.prevent="applyFilter">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id || null" :apiUrl="newsTypesApiUrl" :multiple="false"
@@ -233,3 +238,36 @@ onMounted(async () => {
         <List :news="news" pagination-type="Cursor" />
     </div>
 </template>
+
+<style scoped>
+.page-hero,
+.search-filter {
+    border-color: var(--news-border);
+    border-radius: var(--news-radius);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.page-hero {
+    background: var(--news-hero-info-gradient);
+    padding: var(--news-hero-padding);
+}
+
+.page-hero p {
+    color: var(--news-primary);
+    font-size: var(--news-page-kicker-size);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.page-hero h1 {
+    margin-top: 0.35rem;
+    font-size: var(--news-page-title-size);
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.search-filter input {
+    min-height: 2.75rem;
+    border-radius: var(--news-radius-sm);
+}
+</style>

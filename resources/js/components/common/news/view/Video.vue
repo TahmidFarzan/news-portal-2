@@ -66,8 +66,8 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 </script>
 
 <template>
-    <article class="mx-auto w-full max-w-5xl space-y-6 px-4 py-6">
-        <section v-if="videoUrl" class="overflow-hidden rounded-2xl bg-black">
+    <article class="news-detail-article mx-auto w-full max-w-5xl space-y-6 px-4 py-6">
+        <section v-if="videoUrl" class="video-frame overflow-hidden rounded-2xl bg-black">
             <iframe v-if="isEmbedVideo" :src="videoUrl" class="aspect-video w-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen />
@@ -75,7 +75,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
             <video v-else :src="videoUrl" controls class="aspect-video w-full" />
         </section>
 
-        <header class="space-y-3">
+        <header class="article-header space-y-3">
             <CategoryLocationEvent :news="news" />
 
             <TitleSubtitleContentShoulder :news="news" />
@@ -106,3 +106,21 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </div>
     </article>
 </template>
+
+<style scoped>
+.news-detail-article {
+    border: var(--news-border-default);
+    border-radius: var(--news-radius);
+    background: var(--news-surface);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.video-frame {
+    box-shadow: var(--news-shadow-video);
+}
+
+.article-header {
+    border-bottom: var(--news-border-default);
+    padding-bottom: 1rem;
+}
+</style>

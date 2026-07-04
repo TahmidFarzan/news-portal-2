@@ -38,13 +38,13 @@ onMounted(
 
 <template>
 
-    <section v-if="surveys.length">
+    <section v-if="surveys.length" class="surveys-section">
         <Swiper v-if="useSwiper" :modules="[Navigation]"
             :navigation="{ prevEl: '.survey-prev', nextEl: '.survey-next' }">
             <SwiperSlide v-for="survey in surveys" :key="survey.id">
-                <div class="border rounded-xl p-2">
+                <div class="survey-card border rounded-xl p-2">
 
-                    <h2 class="font-bold mb-4">
+                    <h2 class="survey-title font-bold mb-4">
                         {{ survey.name }}
                     </h2>
 
@@ -63,8 +63,8 @@ onMounted(
         </Swiper>
 
         <div v-else class="space-y-2">
-            <div v-for="survey in surveys" :key="survey.id" class="border border-gray-100 rounded-xl p-2">
-                <h2 class="font-bold mb-4">
+            <div v-for="survey in surveys" :key="survey.id" class="survey-card border border-gray-100 rounded-xl p-2">
+                <h2 class="survey-title font-bold mb-4">
                     {{ survey.name }}
                 </h2>
                 <div v-if="survey.survey_questions?.length" class="grid grid-cols-12 gap-2">
@@ -83,3 +83,22 @@ onMounted(
     </section>
 
 </template>
+
+<style scoped>
+.surveys-section {
+    border-radius: var(--news-radius);
+    background: var(--news-survey-gradient);
+}
+
+.survey-card {
+    border-color: var(--news-border);
+    padding: clamp(1rem, 2vw, 1.5rem);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.survey-title {
+    color: var(--news-ink);
+    font-size: var(--news-survey-title-size);
+    line-height: 1.25;
+}
+</style>

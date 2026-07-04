@@ -155,7 +155,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div v-if="news?.body" class="space-y-8">
+    <div v-if="news?.body" class="news-body space-y-8">
 
         <section
             v-if="splitNewsBody.beforeHtml"
@@ -175,3 +175,24 @@ onBeforeUnmount(() => {
         />
     </div>
 </template>
+
+<style scoped>
+.news-body {
+    color: var(--news-ink-soft);
+    font-size: var(--news-body-size);
+    line-height: 1.85;
+}
+
+.news-body :deep(p) {
+    margin-block: 1.1rem;
+}
+
+.news-body :deep(img) {
+    border-radius: var(--news-radius-sm);
+}
+
+.news-body :deep(a) {
+    color: var(--news-primary);
+    font-weight: 700;
+}
+</style>

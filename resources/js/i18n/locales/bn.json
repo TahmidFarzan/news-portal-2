@@ -446,6 +446,11 @@
                 }
             },
             "news": {
+                "list": {
+                    "labels": {
+                        "no_news_found": "কোনো সংবাদ পাওয়া যায়নি"
+                    }
+                },
                 "recent_news_list": {
                     "labels": {
                         "recent_news": "সাম্প্রতিক সংবাদ"

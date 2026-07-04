@@ -28,7 +28,7 @@ export const useTranslate = () => {
 
 export const setSelectedLanguage = (language) => {
     i18n.global.locale.value =
-        language?.code ?? languages.English.Code
+        language?.code ?? language?.Code ?? languages.English.Code
 }
 
 export const getSelectedLanguage = () => {

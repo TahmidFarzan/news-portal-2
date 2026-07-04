@@ -90,14 +90,14 @@ watch(
 </script>
 
 <template>
-    <section v-if="loading || newsItems.length || category" class="mt-4">
-        <div v-if="category" class="mb-3 flex items-center justify-between border-b border-slate-100 pb-2">
+    <section v-if="loading || newsItems.length || category" class="category-section mt-4">
+        <div v-if="category" class="category-heading mb-3 flex items-center justify-between border-b border-slate-100 pb-2">
             <h2 class="text-xl font-bold text-gray-950">
                 {{ sectionTitle }}
             </h2>
         </div>
 
-        <div v-if="loading" class="rounded-2xl border border-slate-100 p-4 text-sm text-gray-500">
+        <div v-if="loading" class="category-loading rounded-2xl border border-slate-100 p-4 text-sm text-gray-500">
             {{ t("components.common.page.category_section.labels.loading") }}
         </div>
 
@@ -170,3 +170,34 @@ watch(
         </template>
     </section>
 </template>
+
+<style scoped>
+.category-section {
+    border-radius: var(--news-radius);
+    background: transparent;
+}
+
+.category-heading {
+    position: relative;
+    border-color: var(--news-border);
+}
+
+.category-heading::before {
+    content: '';
+    width: 0.35rem;
+    height: 1.6rem;
+    border-radius: 999px;
+    background: var(--news-primary);
+}
+
+.category-heading h2 {
+    flex: 1;
+    margin-inline-start: 0.65rem;
+    letter-spacing: 0;
+}
+
+.category-loading {
+    border-color: var(--news-border);
+    background: var(--news-surface);
+}
+</style>

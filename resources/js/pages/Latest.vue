@@ -57,9 +57,40 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <div class="space-y-6">
+    <div class="latest-page space-y-6">
+        <section class="page-hero">
+            <p>{{ t('pages.latest.labels.latest_news') }}</p>
+            <h1>{{ t('pages.latest.labels.latest_news') }}</h1>
+        </section>
+
         <List :news="news" pagination-type="Cursor" />
     </div>
 
     <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
 </template>
+
+<style scoped>
+.page-hero {
+    border: var(--news-border-default);
+    border-radius: var(--news-radius);
+    background: var(--news-hero-danger-gradient);
+    padding: var(--news-hero-padding);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.page-hero p {
+    color: var(--news-primary);
+    font-size: var(--news-page-kicker-size);
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.page-hero h1 {
+    margin-top: 0.35rem;
+    color: var(--news-ink);
+    font-size: var(--news-page-title-size);
+    font-weight: 800;
+    line-height: 1.15;
+}
+</style>

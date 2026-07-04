@@ -158,8 +158,8 @@ const progressColor = value => {
 
 <template>
 
-    <div class="grid grid-cols-1 md:grid-cols-[1.15fr_.85fr] gap-2">
-        <div class="rounded-lg border border-gray-300 bg-white p-3 space-y-2">
+    <div class="survey-question grid grid-cols-1 md:grid-cols-[1.15fr_.85fr] gap-3">
+        <div class="survey-panel rounded-lg border border-gray-300 bg-white p-3 space-y-3">
             <div>
                 <h4 class="text-sm font-semibold leading-5">
                     {{ surveyQuestion.question }}
@@ -182,16 +182,16 @@ const progressColor = value => {
                 </div>
 
                 <div v-else>
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
                         <button v-for="option in options" :key="option.value" @click=" selectedAnswer = option.value"
-                            class="h-10 rounded-md border text-xs font-medium transition-all duration-300 active:scale-95"
-                            :class="selectedAnswer === option.value ? 'bg-indigo-600 border-indigo-600 text-white scale-[0.98]' : 'border-gray-300 hover:border-indigo-300 hover:bg-indigo-50'">
+                            class="survey-option h-10 rounded-md border text-xs font-medium transition-all duration-300 active:scale-95"
+                            :class="selectedAnswer === option.value ? 'is-selected scale-[0.98]' : 'border-gray-300 hover:border-red-200 hover:bg-red-50'">
                             {{ option.label }}
                         </button>
                     </div>
 
                     <button
-                        class="mt-2 w-full h-10 rounded-md bg-indigo-600 text-white text-sm font-medium transition-all duration-300 hover:brightness-110 disabled:opacity-50"
+                        class="survey-submit mt-2 w-full h-10 rounded-md text-white text-sm font-medium transition-all duration-300 hover:brightness-110 disabled:opacity-50"
                         @click="submit" :disabled="loading || !selectedAnswer">
                         {{ loading ? '...' : t('components.common.util.survey_question.buttons.submit') }}
                     </button>
@@ -209,7 +209,7 @@ const progressColor = value => {
             </div>
         </div>
 
-        <div class="rounded-lg border border-gray-300 bg-white p-3">
+        <div class="survey-panel rounded-lg border border-gray-300 bg-white p-3">
             <div class="flex justify-between items-center mb-2">
                 <div class="text-[11px] text-gray-500">
                     {{ translateNumerText(total) }}
@@ -249,3 +249,29 @@ const progressColor = value => {
     </div>
 
 </template>
+
+<style scoped>
+.survey-panel {
+    border-color: var(--news-border);
+    border-radius: var(--news-radius-sm);
+}
+
+.survey-question h4 {
+    color: var(--news-ink);
+}
+
+.survey-option {
+    border-color: var(--news-border-strong);
+    color: var(--news-muted-strong);
+}
+
+.survey-option.is-selected {
+    border-color: var(--news-primary);
+    background: var(--news-primary);
+    color: var(--news-white);
+}
+
+.survey-submit {
+    background: var(--news-button-primary-gradient);
+}
+</style>

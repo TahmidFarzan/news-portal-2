@@ -130,6 +130,16 @@ const escapeHtml = (value) => {
         .replaceAll("'", '&#039;')
 }
 
+const getCssToken = (name, fallback) => {
+    if (typeof window === 'undefined') {
+        return fallback
+    }
+
+    return getComputedStyle(document.documentElement)
+        .getPropertyValue(name)
+        .trim() || fallback
+}
+
 const childAreaItems = computed(() => {
     return displayChildren.value
         .map((child, index) => {
@@ -223,7 +233,7 @@ const renderAreas = () => {
     areaItems.value.forEach((item) => {
         const boundary = L.geoJSON(item.boundary_geojson, {
             style: {
-                color: '#ffffff',
+                color: getCssToken('--news-white', '#ffffff'),
                 weight: 1,
                 opacity: 1,
                 fillColor: item.color,
@@ -235,14 +245,14 @@ const renderAreas = () => {
                 layer.on({
                     mouseover: () => {
                         layer.setStyle({
-                            color: '#111827',
+                            color: getCssToken('--news-ink', '#111827'),
                             weight: 1.5,
                             fillOpacity: 0.95,
                         })
                     },
                     mouseout: () => {
                         layer.setStyle({
-                            color: '#ffffff',
+                            color: getCssToken('--news-white', '#ffffff'),
                             weight: 1,
                             fillOpacity: 0.82,
                         })
@@ -355,7 +365,7 @@ onBeforeUnmount(() => {
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <div class="space-y-6 location-container">
+    <div class="entity-page location-container space-y-6">
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
@@ -453,46 +463,54 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.entity-page > section:first-child {
+    border: var(--news-border-default);
+    border-radius: var(--news-radius);
+    background: var(--news-hero-info-gradient);
+    padding: var(--news-hero-padding);
+    box-shadow: var(--news-shadow-soft);
+}
+
 .location-container :deep(.leaflet-container) {
     z-index: 0;
     font-family: inherit;
-    background: #eef3f7;
+    background: var(--news-map-bg);
 }
 
 .location-container :deep(.leaflet-control-zoom) {
     overflow: hidden;
-    border: 1px solid rgb(229 231 235);
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgb(15 23 42 / 12%);
+    border: var(--news-border-default);
+    border-radius: var(--news-radius-sm);
+    box-shadow: var(--news-shadow-map-control);
 }
 
 .location-container :deep(.leaflet-control-zoom a) {
     border: 0;
-    color: #111827;
+    color: var(--news-ink);
 }
 
 .location-container :deep(.leaflet-control-zoom a:hover) {
-    background: #f3f4f6;
-    color: #dc2626;
+    background: var(--news-soft-hover);
+    color: var(--news-danger);
 }
 
 .location-container :deep(.leaflet-popup-content-wrapper) {
-    border-radius: 12px;
+    border-radius: var(--news-radius-sm);
 }
 
 .location-container :deep(.leaflet-popup-content) {
     margin: 10px 12px;
-    font-size: 12px;
+    font-size: var(--news-popup-text-size);
 }
 
 .location-container :deep(.leaflet-popup-content a) {
-    color: #2563eb;
+    color: var(--news-link);
     font-weight: 600;
 }
 
 .location-container :deep(.location-popup p) {
     margin: 0 0 4px;
     font-weight: 700;
-    color: #111827;
+    color: var(--news-ink);
 }
 </style>

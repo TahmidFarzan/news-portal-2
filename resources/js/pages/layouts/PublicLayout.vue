@@ -22,7 +22,7 @@ import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-ic
 import { fetchFromApi } from '@/composables/useSystemApi'
 import { useTheme } from '@/composables/useTheme'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
-import { useTranslate } from '@/composables/useTranslate'
+import { getSelectedLanguageCode, useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
 
@@ -137,6 +137,8 @@ const showSurveys = computed(() => {
     return isTruthyValue(theme?.value)
 })
 
+const selectedLanguageCode = computed(() => getSelectedLanguageCode())
+
 provide('showGoogleAd', showGoogleAd)
 provide('showTrends', showTrends)
 provide('showSurveys', showSurveys)
@@ -160,22 +162,22 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="guest-layout flex flex-col min-h-screen">
-        <div class="bg-gray-900 text-white">
+    <div class="guest-layout flex flex-col min-h-screen" :data-lang="selectedLanguageCode">
+        <div class="public-topbar text-white">
             <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center max-[450px]:gap-2">
                 <div class="flex space-x-3 max-[450px]:space-x-2 max-[450px]:flex-shrink-0">
                     <a v-if="facebookTheme?.value" :href="facebookTheme.value" target="_blank"
-                        rel="noopener noreferrer" aria-label="Facebook">
+                        rel="noopener noreferrer" aria-label="Facebook" class="topbar-icon">
                         <FontAwesomeIcon :icon="['fab', 'facebook']" />
                     </a>
 
                     <a v-if="youtubeTheme?.value" :href="youtubeTheme.value" target="_blank"
-                        rel="noopener noreferrer" aria-label="Youtube">
+                        rel="noopener noreferrer" aria-label="Youtube" class="topbar-icon">
                         <FontAwesomeIcon :icon="['fab', 'youtube']" />
                     </a>
 
                     <a v-if="googleNewsTheme?.value" :href="googleNewsTheme.value" target="_blank"
-                        rel="noopener noreferrer" aria-label="Google News">
+                        rel="noopener noreferrer" aria-label="Google News" class="topbar-icon">
                         <FontAwesomeIcon :icon="['fab', 'google']" />
                     </a>
                 </div>
@@ -201,11 +203,11 @@ onBeforeUnmount(() => {
             </div>
         </div>
 
-        <div ref="headerNavbar" class="bg-gray-900 text-white transition-shadow"
-            :class="{ 'shadow-md sticky top-0 z-50': isHeaderSticky }">
+        <div ref="headerNavbar" class="public-header text-white transition-shadow"
+            :class="{ 'is-sticky sticky top-0 z-50': isHeaderSticky }">
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
                 <a :href="route('home')"
-                    class="h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
+                    class="brand-link h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
                     <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
                         class="h-10 max-w-40 object-contain">
                     <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)" class="hidden sm:inline">
@@ -220,7 +222,7 @@ onBeforeUnmount(() => {
 
                 <div class="h-10 flex items-center gap-2 flex-shrink-0">
                     <a :href="route('search')"
-                        class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
+                        class="header-action w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
                         aria-label="Search">
                         <FontAwesomeIcon icon="magnifying-glass" />
                     </a>
@@ -230,13 +232,13 @@ onBeforeUnmount(() => {
             </div>
         </div>
 
-        <main class="main mx-auto w-full max-w-7xl px-4 py-6">
+        <main class="main public-main mx-auto w-full max-w-7xl px-4 py-6">
             <slot />
         </main>
 
         <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('pages.layouts.public_layout.app.breaking_news')" />
 
-        <footer class="bg-gray-100 py-3 mt-2 text-gray-600 text-sm">
+        <footer class="public-footer py-4 mt-2 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
                 <span class="text-center md:text-left w-full md:w-auto flex-shrink-0">
                     {{ t('pages.layouts.public_layout.footer.copyright') }} {{ translateNumerText(year) }} {{ t('pages.layouts.public_layout.app.name') }}
@@ -257,3 +259,92 @@ onBeforeUnmount(() => {
         <ToasterMessage :flash-message="flashMessage" />
     </div>
 </template>
+
+<style scoped>
+.guest-layout {
+    font-family: var(--font-en);
+    background: var(--news-body-gradient);
+    color: var(--news-ink);
+    text-rendering: optimizeLegibility;
+}
+
+.guest-layout[data-lang="bn"] {
+    font-family: var(--font-bn);
+}
+
+.guest-layout ::selection {
+    background: var(--news-selection-bg);
+    color: var(--news-selection-color);
+}
+
+.guest-layout :deep(a:focus-visible),
+.guest-layout :deep(button:focus-visible),
+.guest-layout :deep(input:focus-visible),
+.guest-layout :deep(select:focus-visible),
+.guest-layout :deep(textarea:focus-visible) {
+    outline: 0;
+    box-shadow: var(--news-focus-ring);
+}
+
+.public-topbar {
+    background: var(--news-topbar-gradient);
+    border-bottom: var(--news-border-white-subtle-line);
+    font-size: var(--news-topbar-font-size);
+}
+
+.topbar-icon {
+    display: inline-flex;
+    height: 1.75rem;
+    width: 1.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: var(--news-text-inverse-muted);
+    transition: transform var(--news-transition), background-color var(--news-transition), color var(--news-transition);
+}
+
+.topbar-icon:hover {
+    transform: translateY(-1px);
+    background: var(--news-border-white-muted);
+    color: var(--news-white);
+}
+
+.public-header {
+    background: var(--news-header-gradient);
+    border-bottom: var(--news-border-white-subtle-line);
+}
+
+.public-header.is-sticky {
+    box-shadow: var(--news-shadow-sticky);
+    backdrop-filter: blur(18px);
+}
+
+.brand-link {
+    border-right: 1px solid var(--news-border-white-muted);
+}
+
+.header-action {
+    transition: background-color var(--news-transition), transform var(--news-transition);
+}
+
+.header-action:hover {
+    transform: translateY(-1px);
+}
+
+.public-main {
+    flex: 1;
+}
+
+.public-footer {
+    border-top: var(--news-border-default);
+    background: var(--news-surface);
+    color: var(--news-muted);
+}
+
+@media (max-width: 640px) {
+    .public-main {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+}
+</style>

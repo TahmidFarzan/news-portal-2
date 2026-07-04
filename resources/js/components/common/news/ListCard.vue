@@ -182,8 +182,10 @@ onBeforeUnmount(() => {
 
 <template>
     <article
-        class="group relative flex flex-row overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-red-100 hover:shadow-lg"
-        :class="isCompact ? 'gap-1 p-1' : 'gap-2 p-2 sm:gap-3 sm:p-3'">
+        class="news-list-card group relative flex flex-row overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-red-100 hover:shadow-lg"
+        :class="[
+            isCompact ? 'is-compact gap-1 p-1' : 'is-regular gap-2 p-2 sm:gap-3 sm:p-3',
+        ]">
         <a v-if="news?.public_url" :href="news?.public_url" :aria-label="news?.title"
             class="absolute inset-0 z-10 rounded-2xl"></a>
 
@@ -257,9 +259,6 @@ onBeforeUnmount(() => {
 
             <h3 class="break-words font-bold leading-snug text-gray-950 transition duration-300 group-hover:text-red-600"
                 :class="[
-                    isCompact
-                        ? 'text-xs min-[330px]:text-sm'
-                        : 'text-xs min-[330px]:text-sm sm:text-base',
                     { 'line-clamp-2': enableTitleLineClamp },
                 ]">
                 <b v-if="news?.content_shoulder" class="mr-1 font-semibold text-red-600" :class="isCompact
@@ -306,3 +305,32 @@ onBeforeUnmount(() => {
         </div>
     </article>
 </template>
+
+<style scoped>
+.news-list-card {
+    border-color: var(--news-border);
+    border-radius: var(--news-radius);
+    box-shadow: var(--news-shadow-list);
+}
+
+.news-list-card:hover {
+    border-color: var(--news-border-primary-hover);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.news-list-card h3 {
+    letter-spacing: 0;
+    font-size: var(--news-list-title-size);
+    line-height: 1.35;
+}
+
+.news-list-card.is-compact h3 {
+    font-size: var(--news-list-title-compact-size);
+}
+
+@media (max-width: 360px) {
+    .news-list-card {
+        border-radius: var(--news-radius-sm);
+    }
+}
+</style>

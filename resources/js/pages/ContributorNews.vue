@@ -60,7 +60,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <div class="space-y-6">
+    <div class="entity-page contributor-page space-y-6">
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
@@ -96,3 +96,17 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         <List :news="news" pagination-type="Cursor" />
     </div>
 </template>
+
+<style scoped>
+.entity-page > section:first-child {
+    border: var(--news-border-default);
+    border-radius: var(--news-radius);
+    background: var(--news-hero-info-gradient);
+    padding: var(--news-hero-padding);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.entity-page :deep([v-html]) {
+    color: var(--news-muted);
+}
+</style>

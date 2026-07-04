@@ -446,6 +446,11 @@
                 }
             },
             "news": {
+                "list": {
+                    "labels": {
+                        "no_news_found": "No news found"
+                    }
+                },
                 "recent_news_list": {
                     "labels": {
                         "recent_news": "Recent News"

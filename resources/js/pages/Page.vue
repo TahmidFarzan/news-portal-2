@@ -48,11 +48,34 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <div class="space-y-6">
+    <div class="static-page space-y-6">
         <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.TOP" />
 
-        <div v-if="page?.body" class="prose max-w-none" v-html="page.body" />
+        <article v-if="page?.body" class="page-content prose max-w-none" v-html="page.body" />
 
         <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </div>
 </template>
+
+<style scoped>
+.page-content {
+    border: var(--news-border-default);
+    border-radius: var(--news-radius);
+    background: var(--news-surface);
+    padding: var(--news-content-padding);
+    box-shadow: var(--news-shadow-soft);
+    color: var(--news-muted-strong);
+}
+
+.page-content :deep(h1),
+.page-content :deep(h2),
+.page-content :deep(h3) {
+    color: var(--news-ink);
+    letter-spacing: 0;
+}
+
+.page-content :deep(a) {
+    color: var(--news-primary);
+    font-weight: 700;
+}
+</style>

@@ -91,3 +91,33 @@ provide('authUser', authUser)
 
     </div>
 </template>
+
+<style scoped>
+.auth-layout {
+    background: var(--news-soft);
+    color: var(--news-ink);
+    font-family: var(--font-en);
+}
+
+.auth-layout :deep(a:focus-visible),
+.auth-layout :deep(button:focus-visible),
+.auth-layout :deep(input:focus-visible),
+.auth-layout :deep(select:focus-visible),
+.auth-layout :deep(textarea:focus-visible) {
+    outline: 0;
+    box-shadow: var(--news-focus-ring);
+}
+
+.auth-layout header {
+    border-bottom: var(--news-border-default);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.auth-layout main > div:last-child {
+    background: var(--news-soft);
+}
+
+.auth-layout footer {
+    color: var(--news-muted);
+}
+</style>

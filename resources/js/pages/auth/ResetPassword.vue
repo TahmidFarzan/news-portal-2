@@ -77,8 +77,8 @@ function handleResetPassword() {
 
     <Head :title="t('pages.auth.reset_password.page_title')" />
 
-    <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-        <div class="w-full max-w-md bg-white shadow-md rounded-2xl p-6 border border-gray-200">
+    <div class="auth-entry min-h-screen flex items-center justify-center bg-gray-100 px-4">
+        <div class="auth-card w-full max-w-md bg-white shadow-md rounded-2xl p-6 border border-gray-200">
 
             <div class="text-center mb-6">
                 <img :src="'/uploads/icons/auth/forgot-password.png'" :alt="t('pages.auth.reset_password.image_alt')"
@@ -157,3 +157,19 @@ function handleResetPassword() {
         </div>
     </div>
 </template>
+
+<style scoped>
+.auth-entry {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 56%, #dbeafe 140%);
+}
+
+.auth-card {
+    border-color: var(--news-border);
+    box-shadow: var(--news-shadow);
+}
+
+.auth-card input {
+    min-height: 2.75rem;
+    border-radius: var(--news-radius-sm);
+}
+</style>

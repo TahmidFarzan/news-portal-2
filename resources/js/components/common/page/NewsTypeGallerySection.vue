@@ -55,8 +55,8 @@ onMounted(async () => {
 </script>
 
 <template>
-    <section v-if="newsItems.length" class="rounded-2xl border border-slate-100 bg-white p-3">
-        <div class="mb-4 flex items-center justify-between gap-3">
+    <section v-if="newsItems.length" class="gallery-section rounded-2xl border border-slate-100 bg-white p-3">
+        <div class="section-heading mb-4 flex items-center justify-between gap-3">
             <h2 class="text-xl font-bold text-gray-950">
                 {{ t(`components.common.page.news_type_gallery_section.labels.${translationKey}`) }}
             </h2>
@@ -147,3 +147,20 @@ onMounted(async () => {
         </div>
     </section>
 </template>
+
+<style scoped>
+.gallery-section {
+    border-color: var(--news-border-soft);
+    background: var(--news-gallery-gradient);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.section-heading {
+    border-bottom: var(--news-border-default);
+    padding-bottom: 0.75rem;
+}
+
+.section-heading h2 {
+    letter-spacing: 0;
+}
+</style>

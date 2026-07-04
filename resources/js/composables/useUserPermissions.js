@@ -228,6 +228,7 @@ export const canAccessNewsAttributes = async (authUser) =>
     ).some(Boolean)
 
 export const canAccessActivityLog = async (authUser) => authUser?.is_super_admin
+export const canDeleteActivityLog = async (authUser) => authUser?.is_super_admin
 
 export const canAccessQueueMonitor = (authUser) => authUser?.is_super_admin
 

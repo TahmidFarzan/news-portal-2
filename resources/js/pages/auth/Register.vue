@@ -89,8 +89,8 @@ function handleRegister() {
 
     <Head :title="t('pages.auth.register.page_title')" />
 
-    <div class="min-h-screen flex items-center justify-center px-4">
-        <div class="w-full max-w-md bg-white shadow rounded-2xl p-6 border border-gray-200">
+    <div class="auth-entry min-h-screen flex items-center justify-center px-4">
+        <div class="auth-card w-full max-w-md bg-white shadow rounded-2xl p-6 border border-gray-200">
 
             <div class="text-center mb-6">
                 <img :src="'/uploads/icons/auth/register.png'" :alt="t('pages.auth.register.image_alt')"
@@ -188,3 +188,19 @@ function handleRegister() {
         </div>
     </div>
 </template>
+
+<style scoped>
+.auth-entry {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 56%, #dcfce7 140%);
+}
+
+.auth-card {
+    border-color: var(--news-border);
+    box-shadow: var(--news-shadow);
+}
+
+.auth-card input {
+    min-height: 2.75rem;
+    border-radius: var(--news-radius-sm);
+}
+</style>

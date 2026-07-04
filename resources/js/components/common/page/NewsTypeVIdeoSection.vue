@@ -61,8 +61,8 @@ onMounted(async () => {
 </script>
 
 <template>
-    <section v-if="newsItems.length" class="rounded-2xl border border-slate-100 bg-white p-3">
-        <div class="mb-4 flex items-center justify-between gap-3">
+    <section v-if="newsItems.length" class="video-section rounded-2xl border border-slate-100 bg-white p-3">
+        <div class="section-heading mb-4 flex items-center justify-between gap-3">
             <h2 class="text-xl font-bold text-gray-950">
                 {{ t(`components.common.page.news_type_gallery_section.labels.${generateTranslationKey(title)}`) }}
             </h2>
@@ -115,3 +115,21 @@ onMounted(async () => {
         </Swiper>
     </section>
 </template>
+
+<style scoped>
+.video-section {
+    border-color: var(--news-border-soft);
+    background: var(--news-video-gradient);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.section-heading h2 {
+    color: var(--news-white);
+}
+
+@media (max-width: 767px) {
+    .video-section {
+        background: var(--news-video-gradient-mobile);
+    }
+}
+</style>

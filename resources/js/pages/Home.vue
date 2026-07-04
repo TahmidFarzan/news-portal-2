@@ -118,19 +118,19 @@ const metaKeywords = computed(() => {
         <meta v-if="metaKeywords" name="keywords" :content="metaKeywords" />
     </Head>
 
-    <section class="min-h-screen">
-        <div v-if="topEvents">
+    <section class="home-page min-h-screen">
+        <div v-if="topEvents" class="home-top-events">
             <EventNewsSection :events="topEvents" class="mb-4" />
         </div>
 
-        <Trends v-if="showTrends"/>
+        <Trends v-if="showTrends" class="home-trends" />
 
-        <div class="rounded-2xl border border-slate-100 p-2">
+        <div class="home-lead-shell rounded-2xl border border-slate-100 p-2">
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">
                 <main class="lg:col-span-8">
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-12 lg:grid-cols-12">
                         <div class="space-y-3 md:col-span-6 lg:col-span-6">
-                            <GridCard v-if="primaryLeadNews" :news="primaryLeadNews" :hideCategory="true"
+                            <GridCard v-if="primaryLeadNews" class="home-primary-lead-card" :news="primaryLeadNews" :hideCategory="true"
                                 :hideEvent="true" :hideLocation="true" :hideBrief="true" :isCompact="true"
                                 :useFullHeight="false" />
 
@@ -148,25 +148,11 @@ const metaKeywords = computed(() => {
                             </div>
                         </div>
                     </div>
-
-                    <div v-if="extraLeadNews.length" class="mt-4 border-t border-slate-100 pt-4">
-                        <div class="grid grid-cols-1 gap-3 md:hidden">
-                            <ListCard v-for="(perNews, index) in extraLeadNews"
-                                :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideCategory="true"
-                                :hideEvent="true" :hideLocation="true" :hideBrief="true" :isCompact="true" />
-                        </div>
-
-                        <div class="hidden gap-3 md:grid md:grid-cols-2 lg:grid-cols-4">
-                            <GridCard v-for="(perNews, index) in extraLeadNews"
-                                :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideCategory="true"
-                                :hideEvent="true" :hideLocation="true" :hideBrief="true" />
-                        </div>
-                    </div>
                 </main>
 
                 <aside class="lg:col-span-4">
                     <div v-if="recentNewsItems.length"
-                        class="flex h-[500px] flex-col rounded-2xl border border-gray-200 p-2">
+                        class="home-recent-rail flex h-[500px] flex-col rounded-2xl border border-gray-200 p-2">
                         <div class="recent-news flex shrink-0 items-center gap-2">
                             <h2 class="text-xl font-bold text-gray-950">
                                 {{ t('components.common.news.recent_news_list.labels.recent_news') }}
@@ -181,16 +167,31 @@ const metaKeywords = computed(() => {
                                     :hideFeatureImage="true" :isCompact="true" />
                             </div>
                         </RecentNewsScroller>
+
+                        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM"
+                            class="mt-4" />
                     </div>
 
-                    <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM"  class="mt-4"/>
                 </aside>
+            </div>
+
+            <div v-if="extraLeadNews.length" class="home-extra-news mt-4 border-t border-slate-100 pt-4">
+                <div class="grid grid-cols-1 gap-3 md:hidden">
+                    <ListCard v-for="(perNews, index) in extraLeadNews" :key="perNews?.id || perNews?.slug || index"
+                        :news="perNews" :hideCategory="true" :hideEvent="true" :hideLocation="true" :hideBrief="true"
+                        :isCompact="true" />
+                </div>
+
+                <div class="hidden gap-3 md:grid md:grid-cols-2 lg:grid-cols-4">
+                    <GridCard v-for="(perNews, index) in extraLeadNews" :key="perNews?.id || perNews?.slug || index"
+                        :news="perNews" :hideCategory="true" :hideEvent="true" :hideLocation="true" :hideBrief="true" />
+                </div>
             </div>
         </div>
 
-        <Surveys v-if="showSurveys" class="mt-4"/>
+        <Surveys v-if="showSurveys" class="home-surveys mt-4" />
 
-        <div v-if="bottomEvents">
+        <div v-if="bottomEvents" class="home-bottom-events">
             <EventNewsSection :events="bottomEvents" class="mt-4" />
         </div>
 
@@ -272,3 +273,80 @@ const metaKeywords = computed(() => {
         <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </section>
 </template>
+
+<style scoped>
+.home-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--news-section-gap);
+}
+
+.home-lead-shell {
+    border-color: var(--news-border-soft);
+    background: var(--news-lead-gradient);
+    box-shadow: var(--news-shadow);
+}
+
+.home-primary-lead-card :deep(h3) {
+    font-size: var(--news-lead-title-size);
+    line-height: 1.25;
+}
+
+.home-extra-news {
+    border-color: var(--news-border);
+}
+
+.home-recent-rail {
+    border-color: var(--news-border-primary-soft);
+    background: var(--news-recent-gradient);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.home-recent-rail .recent-news {
+    border-bottom: var(--news-border-default);
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.5rem 0.75rem;
+}
+
+.home-recent-rail .recent-news h2 {
+    position: relative;
+    padding-inline-start: 0.75rem;
+    font-size: var(--news-section-heading-size);
+}
+
+.home-recent-rail .recent-news h2::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.25rem;
+    inset-inline-start: 0;
+    width: 0.25rem;
+    border-radius: 999px;
+    background: var(--news-primary);
+}
+
+.home-top-events :deep(.event-news-section) {
+    background: var(--news-event-top-gradient);
+}
+
+.home-bottom-events :deep(.event-news-section) {
+    background: var(--news-event-bottom-gradient);
+}
+
+.home-surveys {
+    display: block;
+}
+
+@media (max-width: 1023px) {
+    .home-recent-rail {
+        height: auto;
+        max-height: 34rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .home-lead-shell {
+        border-radius: var(--news-radius-sm);
+        padding: 0.5rem;
+    }
+}
+</style>

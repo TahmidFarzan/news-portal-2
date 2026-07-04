@@ -59,7 +59,7 @@ const openTrend = (item) => {
 </script>
 
 <template>
-    <section v-if="visible" class="relative w-full py-2">
+    <section v-if="visible" class="trends-section relative w-full py-3">
         <Swiper :modules="[
             Navigation,
             Autoplay,
@@ -71,9 +71,7 @@ const openTrend = (item) => {
                 disableOnInteraction: false,
             }" class="group">
             <SwiperSlide v-for="item in trends" :key="item.id" class="!w-auto">
-                <button type="button" @click="openTrend(item)" class="flex items-center gap-2 rounded-full px-5 py-3
-                    bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 text-white shadow-lg shadow-indigo-500/20
-                    transition hover:-translate-y-1 hover:shadow-2xl cursor-pointer">
+                <button type="button" @click="openTrend(item)" class="trend-chip flex items-center gap-2 rounded-full px-5 py-3 text-white transition hover:-translate-y-1 cursor-pointer">
                     <FontAwesomeIcon :icon="[
                         'fas',
                         'folder',
@@ -105,3 +103,18 @@ const openTrend = (item) => {
         </Swiper>
     </section>
 </template>
+
+<style scoped>
+.trends-section {
+    border-block: var(--news-trends-border);
+}
+
+.trend-chip {
+    background: var(--news-trend-gradient);
+    box-shadow: var(--news-shadow-trend);
+}
+
+.trend-chip:hover {
+    box-shadow: var(--news-shadow-trend-hover);
+}
+</style>

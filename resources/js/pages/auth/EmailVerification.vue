@@ -35,7 +35,7 @@ function handleResendVerification() {
 
     <Head :title="t('pages.auth.email_verification.page_title')" />
 
-    <div class="w-full min-h-[70vh] flex flex-col md:flex-row items-center justify-center gap-6 p-4">
+    <div class="email-verification-page w-full min-h-[70vh] flex flex-col md:flex-row items-center justify-center gap-6 p-4">
 
         <div class="hidden md:flex items-center justify-center bg-blue-100 rounded-2xl p-6 w-full md:w-1/2">
             <img :src="'/uploads/icons/auth/user-check.png'" :alt="t('pages.auth.email_verification.image_alt')"
@@ -43,7 +43,7 @@ function handleResendVerification() {
         </div>
 
         <div class="w-full md:w-1/2">
-            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 text-center">
+            <div class="verification-card bg-white border border-gray-200 rounded-2xl shadow-sm p-6 text-center">
 
                 <h2 class="text-xl font-semibold text-blue-600 mb-2">
                     {{ t('pages.auth.email_verification.title') }}
@@ -73,3 +73,14 @@ function handleResendVerification() {
 
     </div>
 </template>
+
+<style scoped>
+.email-verification-page {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 70%, #dbeafe 140%);
+}
+
+.verification-card {
+    border-color: var(--news-border);
+    box-shadow: var(--news-shadow-soft);
+}
+</style>

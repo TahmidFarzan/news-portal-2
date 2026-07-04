@@ -36,8 +36,8 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 </script>
 
 <template>
-    <article class="space-y-6">
-        <header class="space-y-3 border-b border-gray-200">
+    <article class="news-detail-article space-y-6">
+        <header class="article-header space-y-3 border-b border-gray-200">
             <CategoryLocationEvent :news="news" />
 
             <TitleSubtitleContentShoulder :news="news"/>
@@ -58,7 +58,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
             </div>
         </header>
 
-        <section v-if="news?.gallery_images" class="flex flex-col gap-8">
+        <section v-if="news?.gallery_images" class="gallery-strip flex flex-col gap-8">
             <ImageWithLightBox v-for="image in news?.gallery_images" :key="image?.id || image?.uuid" :image="image"  :is-image-gallery-item="true" :show-image-galery-counter="true"/>
         </section>
 
@@ -75,3 +75,22 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </div>
     </article>
 </template>
+
+<style scoped>
+.news-detail-article {
+    border: var(--news-border-default);
+    border-radius: var(--news-radius);
+    background: var(--news-surface);
+    padding: var(--news-article-padding);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.article-header {
+    border-color: var(--news-border);
+    padding-bottom: 1rem;
+}
+
+.gallery-strip {
+    border-radius: var(--news-radius);
+}
+</style>

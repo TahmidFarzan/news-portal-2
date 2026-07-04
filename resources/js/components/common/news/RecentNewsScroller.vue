@@ -7,7 +7,7 @@
 <style scoped>
 .thin-modern-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: rgb(156 163 175 / 0.55) transparent;
+    scrollbar-color: var(--news-scrollbar-thumb) transparent;
 }
 
 .thin-modern-scrollbar::-webkit-scrollbar {
@@ -19,11 +19,11 @@
 }
 
 .thin-modern-scrollbar::-webkit-scrollbar-thumb {
-    background: rgb(156 163 175 / 0.45);
+    background: var(--news-scrollbar-thumb-soft);
     border-radius: 999px;
 }
 
 .thin-modern-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgb(107 114 128 / 0.75);
+    background: var(--news-scrollbar-thumb-hover);
 }
 </style>

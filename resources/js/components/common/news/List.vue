@@ -4,6 +4,9 @@ import { computed, ref, watch } from 'vue'
 import ListCard from '@/Components/common/news/ListCard.vue'
 import ModelPagination from '@/components/common/model/Pagination.vue'
 import CursorPagination from '@/components/common/model/CursorPagination.vue'
+import { useTranslate } from '@/composables/useTranslate'
+
+const { t } = useTranslate()
 
 const {
     news,
@@ -157,7 +160,7 @@ const replaceCursorData = (pagination) => {
 </script>
 
 <template>
-    <section v-if="hasNews" class="space-y-4 p-2">
+    <section v-if="hasNews" class="news-list space-y-4 p-2">
         <div class="grid grid-cols-1 gap-3 lg:grid-cols-1">
             <ListCard v-for="(perNews, index) in newsItems" :key="getUniqueKey(perNews, index)" :news="perNews" />
         </div>
@@ -167,4 +170,24 @@ const replaceCursorData = (pagination) => {
         <CursorPagination v-if="shouldShowCursorPagination" :pagination="cursorPayload" :prop-name="cursorPropName"
             @append="appendCursorData" @remove-last="removeLastCursorData" @replace="replaceCursorData" />
     </section>
+    <section v-else class="news-empty-state">
+        <p>{{ t('components.common.news.list.labels.no_news_found') }}</p>
+    </section>
 </template>
+
+<style scoped>
+.news-list {
+    border-radius: var(--news-radius);
+}
+
+.news-empty-state {
+    display: grid;
+    min-height: 12rem;
+    place-items: center;
+    border: var(--news-border-dashed);
+    border-radius: var(--news-radius);
+    background: var(--news-surface);
+    color: var(--news-muted);
+    font-size: var(--news-list-title-size);
+}
+</style>

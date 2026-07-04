@@ -38,8 +38,8 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 </script>
 
 <template>
-    <article class="mx-auto w-full max-w-5xl space-y-6 px-4 py-6">
-        <header class="space-y-3">
+    <article class="news-detail-article mx-auto w-full max-w-5xl space-y-6 px-4 py-6">
+        <header class="article-header space-y-3">
             <CategoryLocationEvent :news="news" />
 
             <TitleSubtitleContentShoulder :news="news"/>
@@ -59,7 +59,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
             </div>
         </header>
 
-        <figure v-if="news?.feature_image" class="mx-auto max-w-3xl space-y-2">
+        <figure v-if="news?.feature_image" class="feature-figure mx-auto max-w-3xl space-y-2">
             <img :src="news?.feature_image?.preview_url || news?.feature_image?.original_url || ''"
                 :alt="news?.feature_image?.custom_properties?.alt || news?.title"
                 class="h-auto w-full rounded-2xl object-contain" />
@@ -85,3 +85,22 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </div>
     </article>
 </template>
+
+<style scoped>
+.news-detail-article {
+    border: var(--news-border-default);
+    border-radius: var(--news-radius);
+    background: var(--news-surface);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.article-header {
+    border-bottom: var(--news-border-default);
+    padding-bottom: 1rem;
+}
+
+.feature-figure img {
+    border: var(--news-border-default);
+    box-shadow: var(--news-shadow-soft);
+}
+</style>
