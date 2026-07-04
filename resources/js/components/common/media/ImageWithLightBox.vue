@@ -1,17 +1,12 @@
 <script setup>
 import {
-    computed,
-    getCurrentInstance,
-    nextTick,
-    onBeforeUnmount,
-    onMounted,
-    ref,
-    watch,
+    computed, getCurrentInstance, nextTick, onBeforeUnmount, onMounted, ref, watch,
 } from 'vue'
 
 import { useLightboxRegistry } from '@/composables/useLightboxRegistry'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import {
     faMagnifyingGlassPlus,
     faMagnifyingGlassMinus,
@@ -21,7 +16,7 @@ import {
     faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons'
 
-library.add(
+FontAwesomeLibrary.add(
     faMagnifyingGlassPlus,
     faMagnifyingGlassMinus,
     faXmark,
@@ -343,8 +338,8 @@ onBeforeUnmount(() => {
                                 <img v-if="activeImage" :key="activeImage.src" :src="activeImage.src"
                                     :alt="activeImage.alt"
                                     class="select-none object-contain transition-transform duration-300" :class="isZoomed
-                                            ? 'h-auto w-auto max-h-none max-w-none cursor-zoom-out'
-                                            : 'h-full w-full cursor-zoom-in'
+                                        ? 'h-auto w-auto max-h-none max-w-none cursor-zoom-out'
+                                        : 'h-full w-full cursor-zoom-in'
                                         " @click.stop="toggleZoom" />
                             </Transition>
 
@@ -360,8 +355,8 @@ onBeforeUnmount(() => {
                             <button v-for="(thumbImage, thumbIndex) in groupImages"
                                 :key="`thumb-${thumbImage?.id || thumbImage?.src || thumbIndex}`" type="button"
                                 class="h-16 w-20 shrink-0 overflow-hidden rounded-lg border transition sm:w-24" :class="activeIndex === thumbIndex
-                                        ? 'border-white opacity-100'
-                                        : 'border-transparent opacity-60 hover:opacity-100'
+                                    ? 'border-white opacity-100'
+                                    : 'border-transparent opacity-60 hover:opacity-100'
                                     " @click.stop="openLightboxAt(thumbIndex)">
                                 <img :src="thumbImage.thumb" :alt="thumbImage.alt" class="h-full w-full object-contain"
                                     loading="lazy" />
@@ -373,4 +368,3 @@ onBeforeUnmount(() => {
         </Teleport>
     </figure>
 </template>
-

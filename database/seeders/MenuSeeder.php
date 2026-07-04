@@ -151,6 +151,7 @@ class MenuSeeder extends Seeder
             ],
         ];
         foreach ($extraMenuNames[$language->code] as $extraMenuName) {
+            
             $this->saveMenuItem($menu, null, $language, $extraMenuName);
         }
 

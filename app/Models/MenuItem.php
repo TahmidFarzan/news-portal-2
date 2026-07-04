@@ -117,12 +117,12 @@ class MenuItem extends Model
     {
         $url = $this->url;
 
-        if ($this->model) {
+        if (!$this->is_custom_url && $this->model) {
             $url = $this->model?->public_url;
         }
 
-        if(!$this->url && !$this->model && $this->slug_tree){
-            $url = route("page",["slugTree" => $this->slug_tree]);
+        if($this->is_custom_url && !$this->model && !$this->url ){
+            $url = $this->url;
         }
 
         return $url ?? null;

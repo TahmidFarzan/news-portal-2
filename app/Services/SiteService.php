@@ -56,6 +56,7 @@ class SiteService
             'id',
             'name',
             'slug',
+            'url',
             'language_id',
             'model_type',
             'model_id',
@@ -97,17 +98,17 @@ class SiteService
 
         $menu = Menu::with(['menuType'])->select(["id", "name", 'slug', "language_id"])->where("language_id", $language->id)->whereRelation('menuType', 'name', $headerMenuCode)->firstOrFail();
 
-        $query = MenuItem::query()
+        $query = MenuItem::select([
+            'id',
+            'name',
+            "slug",
+            'url',
+            "model_type",
+            "model_id",
+            'position',
+        ])
             ->with([
                 'model',
-            ])
-            ->select([
-                'id',
-                'name',
-                "slug",
-                "model_type",
-                "model_id",
-                'position',
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
@@ -167,17 +168,17 @@ class SiteService
         }
         $menu = Menu::with(['menuType'])->select(["id", "name", 'slug', "language_id"])->where("language_id", $language->id)->whereRelation('menuType', 'name', $offcanvasMenuCode)->firstOrFail();
 
-        $query = MenuItem::query()
+        $query = MenuItem::select([
+            'id',
+            'name',
+            "slug",
+            'url',
+            "model_type",
+            "model_id",
+            'position',
+        ])
             ->with([
                 'model',
-            ])
-            ->select([
-                'id',
-                'name',
-                "slug",
-                "model_type",
-                "model_id",
-                'position',
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
@@ -238,17 +239,17 @@ class SiteService
 
         $menu = Menu::with(['menuType'])->select(["id", "name", 'slug', "language_id"])->where("language_id", $language->id)->whereRelation('menuType', 'name', $topbarMenuCode)->firstOrFail();
 
-        $query = MenuItem::query()
+        $query = MenuItem::select([
+            'id',
+            'name',
+            "slug",
+            'url',
+            "model_type",
+            "model_id",
+            'position',
+        ])
             ->with([
                 'model',
-            ])
-            ->select([
-                'id',
-                'name',
-                "slug",
-                "model_type",
-                "model_id",
-                'position',
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
@@ -309,17 +310,17 @@ class SiteService
 
         $menu = Menu::with(['menuType'])->select(["id", "name", 'slug', "language_id"])->where("language_id", $language->id)->whereRelation('menuType', 'name', $footerMenuCode)->firstOrFail();
 
-        $query = MenuItem::query()
-            ->with([
-                'model',
-            ])
-            ->select([
+        $query = MenuItem::select([
                 'id',
+                "url",
                 'name',
                 "slug",
                 "model_type",
                 "model_id",
                 'position',
+            ])
+            ->with([
+                'model',
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
@@ -800,7 +801,7 @@ class SiteService
             return $cachedData;
         }
 
-        $data = Survey::select(["id","name","slug",'date',])
+        $data = Survey::select(["id", "name", "slug", 'date'])
             ->with([
                 "surveyQuestions:id,survey_id,question,slug",
                 "surveyQuestions.surveyQuestionResult:id,survey_question_id,yes,no,no_comment",
@@ -828,7 +829,7 @@ class SiteService
 
     public function surveyQuestion(Survey $survey, string $slug): SurveyQuestion
     {
-        return SurveyQuestion::select(["id", 'question', 'survey_id', 'slug',])
+        return SurveyQuestion::select(["id", 'question', 'survey_id', 'slug'])
             ->where('survey_id', $survey->id)->where('slug', $slug)->firstOrFail();
     }
 
