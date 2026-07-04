@@ -95,6 +95,40 @@ class PageController extends Controller
         ]);
     }
 
+    public function videos(Request $request)
+    {
+        $newsType = $this->pageService->newsType("video");
+        $news     = $this->pageService->newsTypeNews($request, $newsType);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('VideoNews', [
+            'newsTypes' => $newsType,
+            'news'      => $news,
+        ]);
+    }
+
+    public function imageGalleries(Request $request)
+    {
+        $newsType = $this->pageService->newsType("image-gallery");
+        $news     = $this->pageService->newsTypeNews($request, $newsType);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'news' => $news,
+            ]);
+        }
+
+        return Inertia::render('ImagesGalleryNews', [
+            'newsTypes' => $newsType,
+            'news'      => $news,
+        ]);
+    }
+
     public function page(string $slugTree)
     {
         $page = $this->pageService->page($slugTree);
@@ -107,7 +141,6 @@ class PageController extends Controller
     public function newsDetails(string $slug)
     {
         $news = $this->pageService->news($slug);
-
         return Inertia::render('NewsDetails', [
             'news' => $news,
         ]);
@@ -147,34 +180,6 @@ class PageController extends Controller
         ]);
     }
 
-    public function videos(Request $request)
-    {
-        $newsType = $this->pageService->newsType("video");
-        $news     = $this->pageService->newsTypeNews($request, $newsType);
-
-        if ($request->expectsJson()) {
-            return response()->json([
-                'news' => $news,
-            ]);
-        }
-
-        return Inertia::render('VideoNews');
-    }
-
-    public function imageGalleries(Request $request)
-    {
-        $newsType = $this->pageService->newsType("image-gallery");
-        $news     = $this->pageService->newsTypeNews($request, $newsType);
-
-        if ($request->expectsJson()) {
-            return response()->json([
-                'news' => $news,
-            ]);
-        }
-
-        return Inertia::render('ImagesGalleryNews');
-    }
-
     public function eventNews(Request $request, string $slug)
     {
         $event = $this->pageService->event($slug);
@@ -207,15 +212,16 @@ class PageController extends Controller
         }
 
         return Inertia::render('CategoryNews', [
-            'category'                         => $category,
-            'news'                             => $news,
-            "recentNews"                       => $recentNews,
-            "pageSectionNews"                  => $pageSectionNews
+            'category'        => $category,
+            'news'            => $news,
+            "recentNews"      => $recentNews,
+            "pageSectionNews" => $pageSectionNews,
         ]);
     }
 
     public function locationNews(Request $request, string $slugTree)
     {
+
         $location = $this->pageService->location($slugTree);
         $news     = $this->pageService->locationNews($request, $location);
 
@@ -231,8 +237,9 @@ class PageController extends Controller
         ]);
     }
 
-    public function categoryLocationMaxDepthAndLevel(string $slugTree){
-        $category = $this->pageService->category($slugTree);
+    public function categoryLocationMaxDepthAndLevel(string $slugTree)
+    {
+        $category                         = $this->pageService->category($slugTree);
         $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
         return response()->json($categoryLocationMaxDepthAndLevel);
     }

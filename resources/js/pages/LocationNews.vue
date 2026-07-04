@@ -382,13 +382,13 @@ onBeforeUnmount(() => {
 
                         <div v-if="location?.parent"
                             class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                            <a :href="location.parent.public_url"
+                            <a :href="location?.parent?.public_url"
                                 :title="t('pages.location_news.locations.details.parent_location')"
                                 class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600">
                                 <FontAwesomeIcon icon="location-dot" class="shrink-0" />
 
                                 <span class="truncate">
-                                    {{ location.parent.name }}
+                                    {{ location?.parent?.name }}
                                 </span>
                             </a>
                         </div>

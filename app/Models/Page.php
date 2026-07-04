@@ -23,7 +23,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('pages')]
 #[Fillable([
-        'title', 'brief', 'slug',
+        'title', 'brief', 'slug','body',
         'language_id', 'created_by_id', "parent_id",
         "seo_brief", 'seo_title', 'seo_keywords',
         'default_use_as', 'is_default', 'is_published',

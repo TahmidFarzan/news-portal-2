@@ -42,7 +42,7 @@ class NewsSeeder extends Seeder
             ])->where('language_id', $language->id)->whereNull("parent_id")->get();
 
             foreach ($mainCategories as $mainCategory) {
-                $randomDemoNews = $this->getNewsByLanguageFromStaticData($language, 15);
+                $randomDemoNews = $this->getNewsByLanguageFromStaticData($language, 3);
 
                 foreach ($randomDemoNews as $perRandomDemoNews) {
 
@@ -89,52 +89,52 @@ class NewsSeeder extends Seeder
             }
         }
 
-        foreach ($languages as $language) {
-            $categoryies = Category::query()->where('language_id', $language->id)->whereNotNull("parent_id")->get();
+        // foreach ($languages as $language) {
+        //     $categoryies = Category::query()->where('language_id', $language->id)->whereNotNull("parent_id")->get();
 
-            foreach ($categoryies as $category) {
-                $randomDemoNews = $this->getNewsByLanguageFromStaticData($language, 15);
+        //     foreach ($categoryies as $category) {
+        //         $randomDemoNews = $this->getNewsByLanguageFromStaticData($language, 3);
 
-                foreach ($randomDemoNews as $perRandomDemoNews) {
+        //         foreach ($randomDemoNews as $perRandomDemoNews) {
 
-                    $newsType = $newsTypes->random();
-                    $event    = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
+        //             $newsType = $newsTypes->random();
+        //             $event    = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
 
-                    $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
-                    $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
+        //             $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
+        //             $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
 
-                    News::factory()->state([
-                        'news_type_id'     => $newsType?->id ?? null,
-                        'language_id'      => $language?->id ?? null,
-                        'category_id'      => $category?->id ?? null,
-                        'event_id'         => $event?->id ?? null,
-                        'location_id'      =>  null,
+        //             News::factory()->state([
+        //                 'news_type_id'     => $newsType?->id ?? null,
+        //                 'language_id'      => $language?->id ?? null,
+        //                 'category_id'      => $category?->id ?? null,
+        //                 'event_id'         => $event?->id ?? null,
+        //                 'location_id'      =>  null,
 
-                        'title'            => $perRandomDemoNews->title,
-                        'sub_title'        => $perRandomDemoNews->sub_title,
-                        'content_shoulder' => $perRandomDemoNews->content_shoulder,
-                        'brief'            => $perRandomDemoNews->brief,
+        //                 'title'            => $perRandomDemoNews->title,
+        //                 'sub_title'        => $perRandomDemoNews->sub_title,
+        //                 'content_shoulder' => $perRandomDemoNews->content_shoulder,
+        //                 'brief'            => $perRandomDemoNews->brief,
 
-                        'body'             => $isStory ? $perRandomDemoNews->body : null,
-                        'video_url'        => $isVideo ? $perRandomDemoNews->video_url : null,
+        //                 'body'             => $isStory ? $perRandomDemoNews->body : null,
+        //                 'video_url'        => $isVideo ? $perRandomDemoNews->video_url : null,
 
-                        'writer'           => $isStory ? 'News Desk' : null,
-                        'source'           => null,
+        //                 'writer'           => $isStory ? 'News Desk' : null,
+        //                 'source'           => null,
 
-                        'seo_title'        => $perRandomDemoNews->title,
-                        'seo_brief'        => $perRandomDemoNews->brief,
-                        'seo_keywords'     => $perRandomDemoNews->seo_keywords,
+        //                 'seo_title'        => $perRandomDemoNews->title,
+        //                 'seo_brief'        => $perRandomDemoNews->brief,
+        //                 'seo_keywords'     => $perRandomDemoNews->seo_keywords,
 
-                        'is_published'     => true,
+        //                 'is_published'     => true,
 
-                        'created_at'       => $perRandomDemoNews->published_at,
-                        'updated_at'       => $perRandomDemoNews->published_at,
-                    ])->create();
+        //                 'created_at'       => $perRandomDemoNews->published_at,
+        //                 'updated_at'       => $perRandomDemoNews->published_at,
+        //             ])->create();
 
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
     }
 
     private function getNewsByLanguageFromStaticData(Language $language, int $limit = 10)

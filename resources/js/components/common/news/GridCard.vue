@@ -272,7 +272,7 @@ onBeforeUnmount(() => {
                     |
                 </span>
 
-                <a v-if="news?.location && !hideLocation" :href="news.location.public_url" title="Location"
+                <a v-if="news?.location && !hideLocation" :href="news?.location?.public_url" title="Location"
                     class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600"
                     @click.stop>
                     <FontAwesomeIcon icon="location-dot" class="shrink-0" />
