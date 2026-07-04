@@ -6,6 +6,7 @@ import Layout from '@/pages/layouts/PublicLayout.vue'
 import { useTranslate } from '@/composables/useTranslate'
 import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
+import RecentNewsScroller from '@/components/common/news/RecentNewsScroller.vue'
 import EventNewsSection from '@/components/common/page/EventNewsSection.vue'
 import NewsTypeSliderSection from '@/components/common/page/NewsTypeSliderSection.vue'
 import NewsTypeGallerySection from '@/components/common/page/NewsTypeGallerySection.vue'
@@ -172,14 +173,14 @@ const metaKeywords = computed(() => {
                             </h2>
                         </div>
 
-                        <div class="thin-modern-scrollbar mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
+                        <RecentNewsScroller>
                             <div class="grid grid-cols-1 gap-3">
                                 <ListCard v-for="(perNews, index) in recentNewsItems"
                                     :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideSubtitle="true"
                                     :hideBrief="true" :hideCategory="true" :hideEvent="true" :hideLocation="true"
                                     :hideFeatureImage="true" :isCompact="true" />
                             </div>
-                        </div>
+                        </RecentNewsScroller>
                     </div>
 
                     <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM"  class="mt-4"/>

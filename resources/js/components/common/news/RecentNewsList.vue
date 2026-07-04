@@ -1,5 +1,6 @@
 <script setup>
 import ListCard from '@/Components/common/news/ListCard.vue'
+import RecentNewsScroller from '@/components/common/news/RecentNewsScroller.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 const { t } = useTranslate()
@@ -22,12 +23,12 @@ const {
             </h2>
         </div>
 
-        <div class="mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain p-2 thin-modern-scrollbar">
+        <RecentNewsScroller>
             <div class="grid grid-cols-1 gap-3 lg:grid-cols-1">
                 <ListCard v-for="(perNews, index) in news" :key="perNews?.id || perNews?.slug || index" :news="perNews"
                     :hideSubtitle="true" :hideBrief="true" :hideCategory="true" :hideEvent="true" :hideLocation="true"
                     :hideFeatureImage="true" />
             </div>
-        </div>
+        </RecentNewsScroller>
     </section>
 </template>

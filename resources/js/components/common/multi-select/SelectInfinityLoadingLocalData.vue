@@ -327,4 +327,9 @@ onMounted(() => {
 .multi-select-dark :deep(.multiselect__spinner) {
     background: #111827;
 }
+
+:deep(.multiselect__content-wrapper) {
+    max-height: 250px;
+    overflow-y: auto;
+}
 </style>

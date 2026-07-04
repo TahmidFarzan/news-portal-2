@@ -451,3 +451,48 @@ onBeforeUnmount(() => {
         <List :news="news" pagination-type="Cursor" />
     </div>
 </template>
+
+<style scoped>
+.location-container :deep(.leaflet-container) {
+    z-index: 0;
+    font-family: inherit;
+    background: #eef3f7;
+}
+
+.location-container :deep(.leaflet-control-zoom) {
+    overflow: hidden;
+    border: 1px solid rgb(229 231 235);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgb(15 23 42 / 12%);
+}
+
+.location-container :deep(.leaflet-control-zoom a) {
+    border: 0;
+    color: #111827;
+}
+
+.location-container :deep(.leaflet-control-zoom a:hover) {
+    background: #f3f4f6;
+    color: #dc2626;
+}
+
+.location-container :deep(.leaflet-popup-content-wrapper) {
+    border-radius: 12px;
+}
+
+.location-container :deep(.leaflet-popup-content) {
+    margin: 10px 12px;
+    font-size: 12px;
+}
+
+.location-container :deep(.leaflet-popup-content a) {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.location-container :deep(.location-popup p) {
+    margin: 0 0 4px;
+    font-weight: 700;
+    color: #111827;
+}
+</style>

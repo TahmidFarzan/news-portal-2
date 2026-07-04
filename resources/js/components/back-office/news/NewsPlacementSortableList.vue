@@ -218,3 +218,13 @@ function isCurrentNewsItem(item) {
         </Transition>
     </Teleport>
 </template>
+
+<style scoped>
+.drag-ghost {
+    opacity: 0.5;
+}
+
+.drag-chosen {
+    box-shadow: 0 0 0 2px rgb(191 219 254);
+}
+</style>

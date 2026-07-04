@@ -368,3 +368,41 @@ onBeforeUnmount(() => {
         </Teleport>
     </figure>
 </template>
+
+<style scoped>
+.lightbox-fade-enter-active,
+.lightbox-fade-leave-active {
+    transition: opacity 220ms ease;
+}
+
+.lightbox-fade-enter-from,
+.lightbox-fade-leave-to {
+    opacity: 0;
+}
+
+.lightbox-fade-enter-active .lightbox-panel,
+.lightbox-fade-leave-active .lightbox-panel {
+    transition:
+        transform 220ms ease,
+        opacity 220ms ease;
+}
+
+.lightbox-fade-enter-from .lightbox-panel,
+.lightbox-fade-leave-to .lightbox-panel {
+    transform: scale(0.96);
+    opacity: 0;
+}
+
+.image-slide-enter-active,
+.image-slide-leave-active {
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+}
+
+.image-slide-enter-from,
+.image-slide-leave-to {
+    opacity: 0;
+    transform: scale(0.98);
+}
+</style>

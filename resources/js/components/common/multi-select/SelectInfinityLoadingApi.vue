@@ -410,6 +410,11 @@ onMounted(async () => {
     background: #111827;
 }
 
+:deep(.multiselect__content-wrapper) {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
 :deep(.multiselect__option::after) {
     display: none !important;
     content: none !important;
