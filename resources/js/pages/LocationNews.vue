@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch,inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -197,6 +197,7 @@ const mapCenter = computed(() => {
 
     return [23.685, 90.3563]
 })
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
 const createAreaPopup = (item) => {
     return `

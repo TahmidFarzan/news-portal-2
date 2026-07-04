@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed,inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -45,6 +45,7 @@ const contributorImage = computed(() => {
         || contributor?.profile_image?.original_url
         || '/uploads/images/logo/contributor.png'
 })
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 </script>
 
 <template>

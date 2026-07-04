@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed,inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -41,6 +41,8 @@ const metaKeywords = computed(() => {
 
     return page?.seo_keywords ?? ''
 })
+
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 </script>
 
 <template>
@@ -58,6 +60,6 @@ const metaKeywords = computed(() => {
     <div class="space-y-6">
         <List :news="news" pagination-type="Cursor" />
     </div>
-    
+
     <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
 </template>

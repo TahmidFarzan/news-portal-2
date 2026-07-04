@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed,inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -91,6 +91,8 @@ const firstGridPageSectionNews = computed(() => {
 const secondGridPageSectionNews = computed(() => {
     return pageSectionNewsItems.value.slice(2, 5)
 })
+
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
 const getFirstGridColumnClass = (index) => {
     if (firstGridPageSectionNews.value.length === 1) {

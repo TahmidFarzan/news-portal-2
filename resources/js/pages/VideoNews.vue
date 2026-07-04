@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed,inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -30,6 +30,7 @@ const metaDescription = computed(() => {
 const metaKeywords = computed(() => {
     return t("pages.video_news.labels.key_words") || ''
 })
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
 </script>
 

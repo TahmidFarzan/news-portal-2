@@ -10,7 +10,7 @@ import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 import NewsBody from '@/components/common/news/NewsBody.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
-import { computed } from 'vue'
+import { computed,inject } from 'vue'
 import { formatDateTime } from '@/composables/useDateTime'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -33,6 +33,7 @@ const { news } = defineProps({
         required: true,
     },
 })
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
 </script>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed,inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -35,6 +35,7 @@ const metaKeywords = computed(() => {
 
     return page?.seo_keywords ?? ''
 })
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 </script>
 
 <template>

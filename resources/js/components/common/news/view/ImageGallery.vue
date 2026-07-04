@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch,inject } from 'vue'
 
 import CategoryLocationEvent from '@/components/common/news/CategoryLocationEvent.vue'
 import TagTrend from '@/components/common/news/TagTrend.vue'
@@ -31,6 +31,7 @@ const { news } = defineProps({
         required: true,
     },
 })
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
 </script>
 

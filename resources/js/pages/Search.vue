@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick,inject } from 'vue'
 import { Head, useForm, router as inertiaRouter } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -57,6 +57,7 @@ const makeLanguageUrl = (routeName) => {
 
     return route(routeName) + `?language_id=${language.id}`
 }
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
 const newsTypesApiUrl = computed(() => makeLanguageUrl('search.news-types'))
 const categoryApiUrl = computed(() => makeLanguageUrl('search.category-tree'))
@@ -172,6 +173,7 @@ onMounted(async () => {
 
     await nextTick()
 })
+
 </script>
 
 <template>

@@ -6,7 +6,7 @@ import SocialShare from '@/components/common/news/SocialShare.vue'
 import TitleSubtitleContentShoulder from '@/components/common/news/TitleSubtitleContentShoulder.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 
-import { computed } from 'vue'
+import { computed,inject } from 'vue'
 import { formatDateTime } from '@/composables/useDateTime'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -62,6 +62,7 @@ const videoUrl = computed(() => {
 const isEmbedVideo = computed(() => {
     return /youtube\.com|youtu\.be|vimeo\.com/i.test(videoUrl.value)
 })
+const showGoogleAd = inject('showGoogleAd', computed(() => false))
 </script>
 
 <template>
