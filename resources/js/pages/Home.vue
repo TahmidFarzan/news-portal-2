@@ -8,7 +8,7 @@ import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
 import RecentNewsScroller from '@/components/common/news/RecentNewsScroller.vue'
 import EventNewsSection from '@/components/common/page/EventNewsSection.vue'
-import NewsTypeSliderSection from '@/components/common/page/NewsTypeSliderSection.vue'
+import NewsTypeVIdeoSection from '@/components/common/page/NewsTypeVIdeoSection.vue'
 import NewsTypeGallerySection from '@/components/common/page/NewsTypeGallerySection.vue'
 import CategorySection from '@/components/common/page/CategorySection.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
@@ -220,7 +220,7 @@ const metaKeywords = computed(() => {
 
         <GoogleAdsence v-if="showGoogleAd" />
 
-        <NewsTypeSliderSection class="mt-4" />
+        <NewsTypeVIdeoSection class="mt-4" />
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">

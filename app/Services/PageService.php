@@ -56,10 +56,10 @@ class PageService
         }
 
         $page = Page::select([
-            "id", 'title', 'brief', 'slug', 'body',
+            "id", 'title', 'brief', 'slug', 'body', "language_id",
             "seo_brief", 'seo_title', 'seo_keywords',
         ])
-            ->with("language")
+            ->with(["language:id,name,code,locale,slug"])
             ->where("language_id", $language->id)
             ->where("slug_tree", $slugTree)
             ->where("is_default", false)
@@ -96,10 +96,10 @@ class PageService
         }
 
         $page = Page::select([
-            "id", 'title', 'brief', 'slug', 'body',
+            "id", 'title', 'brief', 'slug', 'body', "language_id",
             "seo_brief", 'seo_title', 'seo_keywords',
         ])
-            ->with("language")
+            ->with(["language:id,name,code,locale,slug"])
             ->where("language_id", $language->id)
             ->where("default_use_as", PageHelper::DAFAULT_USE_AS_HOME)
             ->where("is_default", true)
@@ -136,10 +136,10 @@ class PageService
         }
 
         $page = Page::select([
-            "id", 'title', 'brief', 'slug', 'body',
+            "id", 'title', 'brief', 'slug', 'body', "language_id",
             "seo_brief", 'seo_title', 'seo_keywords',
         ])
-            ->with("language")
+            ->with(["language:id,name,code,locale,slug"])
             ->where("language_id", $language->id)
             ->where("default_use_as", PageHelper::DAFAULT_USE_AS_LATEST)
             ->where("is_default", true)
@@ -176,10 +176,10 @@ class PageService
         }
 
         $page = Page::select([
-            "id", 'title', 'brief', 'slug', 'body',
+            "id", 'title', 'brief', 'slug', 'body', "language_id",
             "seo_brief", 'seo_title', 'seo_keywords',
         ])
-            ->with("language")
+            ->with(["language:id,name,code,locale,slug"])
             ->where("language_id", $language->id)
             ->where("default_use_as", PageHelper::DAFAULT_USE_AS_SEARCH)
             ->where("is_default", true)

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useSystemApi'
@@ -45,18 +45,9 @@ const firstTwoNews = computed(() => newsItems.value.slice(0, 2))
 const afterTwoNews = computed(() => newsItems.value.slice(2))
 
 const normalizeResponseData = (response) => {
-    if (Array.isArray(response)) {
-        return response
-    }
-
-    if (Array.isArray(response?.data)) {
-        return response.data
-    }
-
-    if (Array.isArray(response?.records)) {
-        return response.records
-    }
-
+    if (Array.isArray(response)) return response
+    if (Array.isArray(response?.data)) return response.data
+    if (Array.isArray(response?.records)) return response.records
     return []
 }
 
@@ -83,8 +74,6 @@ const loadCategorySection = async () => {
 
         newsItems.value = normalizeResponseData(newsResponse)
     } catch (error) {
-        console.error('Category section load failed:', error)
-
         category.value = null
         newsItems.value = []
     } finally {
