@@ -32,7 +32,7 @@ const { activityLog } = defineProps({
 const deleting = ref(false)
 const showDeleteModal = ref(false)
 
-const canDelete = (activityLog) => canDeleteBreakingNews(authUser?.value, activityLog)
+const canDelete = (activityLog) => canDeleteActivityLog(authUser?.value, activityLog)
 
 function handleDelete() {
     if (deleting.value) return
