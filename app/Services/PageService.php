@@ -1285,6 +1285,53 @@ class PageService
         return $news;
     }
 
+    public function homeCategoryByIdOrSlug(string $idOrSlug): Category
+    {
+        $safeIdOrSlugForCache = str_replace('/', '_', trim($idOrSlug, '/'));
+
+        $language = $this->language();
+
+        $categoryCacheKey = "page:home:language:{$language->locale}:category:{$safeIdOrSlugForCache}";
+
+        $categoryCacheCategorys = [
+            "page",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:category:{$safeIdOrSlugForCache}",
+        ];
+        $categoryCachedData = CacheServerHelper::getCachedData($categoryCacheKey, $categoryCacheCategorys);
+
+        if (($categoryCachedData !== null) && ($categoryCachedData instanceof Category)) {
+            return $categoryCachedData;
+        }
+
+        $category = Category::select([
+            "id", 'name', 'brief', 'parent_id', 'slug',
+            'language_id', 'name_tree', "slug", "slug_tree",
+            "seo_brief", 'seo_title', 'seo_keywords',
+        ])
+
+            ->with([
+                "language:id,name,code,locale,slug",
+                "parent:id,name,name_tree,slug,slug_tree",
+                "children:id,name,name_tree,slug,slug_tree,depth,level",
+            ])
+            ->where("language_id", $language->id)
+            ->where('id', $idOrSlug)
+            ->orWhere('slug', $idOrSlug)
+            ->orWhere('slug_tree', $idOrSlug)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $categoryCacheKey,
+            $category,
+            CacheServerHelper::threeMinInSecond,
+            $categoryCacheCategorys
+        );
+
+        return $category;
+    }
+
     public function homeTopEvents()
     {
         $language = $this->language();
@@ -1392,6 +1439,64 @@ class PageService
             )
             ->orderByDesc('id')
             ->limit(10)
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $newsCacheKey,
+            $news,
+            CacheServerHelper::threeMinInSecond,
+            $newsCacheTags
+        );
+
+        return $news;
+    }
+
+    public function homeRecentNews()
+    {
+        $language = $this->language();
+
+        $newsCacheKey = "page:home:language:{$language->locale}:recent-news";
+
+        $newsCacheTags = [
+            "page",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:recent-news",
+        ];
+
+        $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
+
+        if (($newsCachedData !== null) && ($newsCachedData instanceof CursorPaginator)) {
+            return $newsCachedData;
+        }
+
+        $news = News::select([
+            "id", 'news_type_id', 'language_id', 'category_id', 'event_id', 'location_id',
+            'title', 'sub_title', "content_shoulder",
+            "seo_brief", 'seo_title', 'seo_keywords',
+            'slug', "created_at", "updated_at",
+        ])
+            ->with([
+                "language:id,name,code,locale,slug",
+                'newsType:id,name,slug',
+                'category:id,name,name_tree,slug,slug_tree',
+
+                'event:id,name,slug',
+                'location:id,name,slug,slug_tree',
+
+                'tags:id,name,slug',
+                'tags.trend:id,name,slug',
+
+                'contributors:id,name,slug',
+
+                "featureImage:id,name,slug,custom_properties,model_type,model_id,file_name,mime_type,disk,conversions_disk,manipulations,generated_conversions,responsive_images,order_column",
+                "featureImageMobile:id,name,slug,custom_properties,model_type,model_id,file_name,mime_type,disk,conversions_disk,manipulations,generated_conversions,responsive_images,order_column",
+            ])
+            ->where('language_id', $language->id)
+            ->where("is_published", true)
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->limit(15)
             ->get();
 
         CacheServerHelper::cachedData(

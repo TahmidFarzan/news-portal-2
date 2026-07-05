@@ -91,7 +91,8 @@ watch(
 
 <template>
     <section v-if="loading || newsItems.length || category" class="category-section mt-4">
-        <div v-if="category" class="category-heading mb-3 flex items-center justify-between border-b border-slate-100 pb-2">
+        <div v-if="category"
+            class="category-heading mb-3 flex items-center justify-between border-b border-slate-100 pb-2">
             <h2 class="text-xl font-bold text-gray-950">
                 {{ sectionTitle }}
             </h2>

@@ -18,7 +18,7 @@ class PageController extends Controller
     {
         $page         = $this->pageService->homePage();
         $leadNews     = $this->pageService->homeLeadNews();
-        $recentNews   = $this->pageService->recentNews();
+        $recentNews   = $this->pageService->homeRecentNews();
         $topEvents    = $this->pageService->homeTopEvents();
         $bottomEvents = $this->pageService->homeBottomEvents();
 
@@ -48,14 +48,14 @@ class PageController extends Controller
 
     public function homeCategoryNews(Request $request, int | string $idOrSlug)
     {
-        $category = $this->pageService->categoryByIdOrSlug($idOrSlug);
+        $category = $this->pageService->homeCategoryByIdOrSlug($idOrSlug);
         $news     = $this->pageService->homeCategoryNews($request, $category);
         return response()->json($news);
     }
 
     public function homeCategory(int | string $idOrSlug)
     {
-        $category = $this->pageService->categoryByIdOrSlug($idOrSlug);
+        $category = $this->pageService->homeCategoryByIdOrSlug($idOrSlug);
         return response()->json($category);
     }
 
