@@ -197,15 +197,15 @@
 
                         <div class="flex gap-2">
                             <a class="rounded-lg px-3 py-1.5 text-xs font-semibold
-                                @if (!$jobs->onFirstPage()) bg-slate-800 hover:bg-slate-700
+                                @if (!$jobs->onFirstPage()) text-white bg-slate-800 hover:bg-slate-700
                                 @else
                                     cursor-not-allowed @endif rounded-2xl border border-slate-800"
                                 @if (!$jobs->onFirstPage()) href="{{ $jobs->previousPageUrl() }}" @endif>
                                 @lang('queue-monitor.previous')
                             </a>
 
-                            <a class="rounded-lg px-3 py-1.5 text-xs font-semibold
-                                @if ($jobs->hasMorePages()) bg-slate-800 hover:bg-slate-700
+                            <a class="rounded-lg px-3 py-1.5 text-xs  font-semibold
+                                @if ($jobs->hasMorePages()) text-white bg-slate-800 hover:bg-slate-700
                                 @else
                                     cursor-not-allowed @endif rounded-2xl border border-slate-800"
                                 @if ($jobs->hasMorePages()) href="{{ $jobs->url($jobs->currentPage() + 1) }}" @endif>
