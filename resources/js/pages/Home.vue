@@ -172,11 +172,10 @@ const metaKeywords = computed(() => {
                             </div>
                         </RecentNewsScroller>
 
-
                     </div>
 
                     <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM"
-                        class="mt-2" />
+                        class="mt-4" />
                 </aside>
             </div>
 
