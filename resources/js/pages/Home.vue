@@ -201,60 +201,60 @@ const metaKeywords = computed(() => {
 
         <GoogleAdsence v-if="showGoogleAd" />
 
-        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-politics-section mt-4"
             categoryIdOrSlug="politics" :language="page?.language" :style="1" :limit="4" />
-        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-politics-section mt-4"
             categoryIdOrSlug="রাজনীতি" :language="page?.language" :style="1" :limit="4" />
 
-        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-national-section mt-4"
             categoryIdOrSlug="national" :language="page?.language" :style="1" :limit="4" />
-        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="জাতীয়"
+        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-national-section mt-4" categoryIdOrSlug="জাতীয়"
             :language="page?.language" :style="1" :limit="4" />
 
         <GoogleAdsence v-if="showGoogleAd" />
 
-        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-sports-section mt-4"
             categoryIdOrSlug="sports" :language="page?.language" :style="2" :limit="6" />
-        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-sports-section mt-4"
             categoryIdOrSlug="খেলাধুলা" :language="page?.language" :style="2" :limit="6" />
 
-        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-entertainment-section mt-4"
             categoryIdOrSlug="entertainment" :language="page?.language" :style="2" :limit="6" />
-        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4" categoryIdOrSlug="বিনোদন"
+        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-entertainment-section mt-4" categoryIdOrSlug="বিনোদন"
             :language="page?.language" :style="2" :limit="6" />
 
         <GoogleAdsence v-if="showGoogleAd" />
 
-        <VideoNewsSection class="mt-4" />
+        <VideoNewsSection class="home-video-news-section mt-4" />
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div class="space-y-3">
-                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-international-section mt-4"
                         categoryIdOrSlug="international" :language="page?.language" :style="3" :limit="4" />
-                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-international-section mt-4"
                         categoryIdOrSlug="আন্তর্জাতিক" :language="page?.language" :style="3" :limit="4" />
                 </div>
 
                 <div class="space-y-3">
-                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-technology-section mt-4"
                         categoryIdOrSlug="technology" :language="page?.language" :style="3" :limit="4" />
-                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-technology-section mt-4"
                         categoryIdOrSlug="প্রযুক্তি" :language="page?.language" :style="3" :limit="4" />
                 </div>
             </div>
         </div>
 
-        <ImageGalleryNewsSection class="mt-4" />
+        <ImageGalleryNewsSection class="home-gallery-news-section mt-4" />
 
         <GoogleAdsence v-if="showGoogleAd" />
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div class="space-y-3">
-                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="mt-4"
+                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-health-section mt-4"
                         categoryIdOrSlug="health" :language="page?.language" :style="4" :limit="4" />
-                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
+                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-health-section mt-4"
                         categoryIdOrSlug="স্বাস্থ্য" :language="page?.language" :style="4" :limit="4" />
                 </div>
 
@@ -338,6 +338,306 @@ const metaKeywords = computed(() => {
 
 .home-surveys {
     display: block;
+}
+
+.home-politics-section,
+.home-national-section,
+.home-international-section,
+.home-technology-section,
+.home-health-section,
+.home-sports-section,
+.home-entertainment-section,
+.home-video-news-section,
+.home-gallery-news-section {
+    overflow: hidden;
+}
+
+.home-politics-section,
+.home-national-section,
+.home-international-section,
+.home-technology-section,
+.home-health-section,
+.home-sports-section,
+.home-entertainment-section {
+    padding: clamp(0.7rem, 1.6vw, 1rem);
+    border: 1px solid var(--news-border-soft);
+    border-radius: var(--news-radius);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.home-politics-section :deep(.category-heading),
+.home-national-section :deep(.category-heading),
+.home-international-section :deep(.category-heading),
+.home-technology-section :deep(.category-heading),
+.home-health-section :deep(.category-heading) {
+    margin-bottom: 1rem;
+}
+
+.home-politics-section :deep(.news-grid-card),
+.home-politics-section :deep(.news-list-card),
+.home-national-section :deep(.news-grid-card),
+.home-national-section :deep(.news-list-card),
+.home-international-section :deep(.news-grid-card),
+.home-international-section :deep(.news-list-card),
+.home-technology-section :deep(.news-grid-card),
+.home-technology-section :deep(.news-list-card),
+.home-health-section :deep(.news-grid-card),
+.home-health-section :deep(.news-list-card) {
+    transition:
+        border-color var(--news-transition),
+        box-shadow var(--news-transition);
+}
+
+.home-politics-section {
+    background:
+        linear-gradient(90deg, rgb(15 23 42 / 4%), transparent 36%),
+        linear-gradient(180deg, rgb(248 250 252 / 96%) 0%, #ffffff 100%);
+    border-color: rgb(15 23 42 / 10%);
+}
+
+.home-politics-section :deep(.category-heading) {
+    border-color: rgb(15 23 42 / 16%);
+}
+
+.home-politics-section :deep(.category-heading::before) {
+    background: linear-gradient(180deg, #111827, var(--news-primary-dark));
+}
+
+.home-politics-section :deep(.news-grid-card),
+.home-politics-section :deep(.news-list-card) {
+    border-color: rgb(15 23 42 / 12%);
+    box-shadow: var(--news-shadow-list);
+}
+
+.home-politics-section :deep(.news-grid-card:hover),
+.home-politics-section :deep(.news-list-card:hover) {
+    border-color: rgb(15 23 42 / 22%);
+}
+
+.home-national-section {
+    background:
+        linear-gradient(90deg, rgb(185 28 28 / 3%), transparent 32%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border-color: var(--news-border-soft);
+}
+
+.home-national-section :deep(.category-heading) {
+    border-color: var(--news-border);
+}
+
+.home-national-section :deep(.category-heading::before) {
+    background: var(--news-primary);
+}
+
+.home-national-section :deep(.news-grid-card),
+.home-national-section :deep(.news-list-card) {
+    border-color: rgb(15 23 42 / 9%);
+}
+
+.home-national-section :deep(.news-grid-card:hover),
+.home-national-section :deep(.news-list-card:hover) {
+    border-color: var(--news-border-primary-hover);
+}
+
+.home-international-section {
+    background:
+        linear-gradient(135deg, rgb(224 242 254 / 34%) 0%, transparent 42%),
+        linear-gradient(90deg, rgb(37 99 235 / 4%) 0 1px, transparent 1px 100%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    background-size: auto, 4rem 100%, auto;
+    border-color: rgb(37 99 235 / 12%);
+}
+
+.home-international-section :deep(.category-heading) {
+    border-color: rgb(37 99 235 / 16%);
+}
+
+.home-international-section :deep(.category-heading::before) {
+    background: linear-gradient(180deg, var(--news-link), #0f766e);
+}
+
+.home-international-section :deep(.news-grid-card),
+.home-international-section :deep(.news-list-card) {
+    border-color: rgb(37 99 235 / 13%);
+}
+
+.home-international-section :deep(.news-grid-card:hover),
+.home-international-section :deep(.news-list-card:hover) {
+    border-color: rgb(37 99 235 / 25%);
+}
+
+.home-technology-section {
+    background:
+        linear-gradient(135deg, rgb(240 253 250 / 74%) 0%, transparent 40%),
+        linear-gradient(115deg, transparent 0%, rgb(224 242 254 / 34%) 56%, transparent 86%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border-color: rgb(15 118 110 / 14%);
+}
+
+.home-technology-section :deep(.category-heading) {
+    border-color: rgb(15 118 110 / 18%);
+}
+
+.home-technology-section :deep(.category-heading::before) {
+    background: linear-gradient(180deg, #0891b2, var(--news-accent));
+}
+
+.home-technology-section :deep(.news-grid-card),
+.home-technology-section :deep(.news-list-card) {
+    border-color: rgb(15 118 110 / 15%);
+    box-shadow: var(--news-shadow-list);
+}
+
+.home-technology-section :deep(.news-grid-card:hover),
+.home-technology-section :deep(.news-list-card:hover) {
+    border-color: rgb(15 118 110 / 28%);
+}
+
+.home-health-section {
+    background:
+        linear-gradient(135deg, rgb(220 252 231 / 42%) 0%, transparent 42%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border-color: rgb(22 163 74 / 12%);
+}
+
+.home-health-section :deep(.category-heading) {
+    border-color: rgb(22 163 74 / 14%);
+}
+
+.home-health-section :deep(.category-heading::before) {
+    background: linear-gradient(180deg, #16a34a, var(--news-accent));
+}
+
+.home-health-section :deep(.news-grid-card),
+.home-health-section :deep(.news-list-card) {
+    border-color: rgb(22 163 74 / 12%);
+    box-shadow: var(--news-shadow-list);
+}
+
+.home-health-section :deep(.news-grid-card:hover),
+.home-health-section :deep(.news-list-card:hover) {
+    border-color: rgb(22 163 74 / 22%);
+}
+
+.home-sports-section {
+    background:
+        linear-gradient(135deg, rgb(15 118 110 / 8%) 0%, transparent 32%),
+        linear-gradient(105deg, transparent 0%, transparent 58%, rgb(185 28 28 / 4%) 58.5%, transparent 74%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.home-sports-section :deep(.category-heading) {
+    border-color: rgb(15 118 110 / 18%);
+}
+
+.home-sports-section :deep(.category-heading::before) {
+    background: linear-gradient(180deg, var(--news-accent), var(--news-primary));
+}
+
+.home-sports-section :deep(.news-grid-card),
+.home-sports-section :deep(.news-list-card) {
+    border-color: rgb(15 118 110 / 16%);
+}
+
+.home-sports-section :deep(.news-grid-card:hover),
+.home-sports-section :deep(.news-list-card:hover) {
+    border-color: rgb(15 118 110 / 30%);
+}
+
+.home-entertainment-section {
+    background:
+        linear-gradient(135deg, rgb(255 247 237 / 72%) 0%, transparent 40%),
+        linear-gradient(100deg, transparent 0%, rgb(254 226 226 / 24%) 48%, transparent 78%),
+        linear-gradient(180deg, #ffffff 0%, #fffafa 100%);
+}
+
+.home-entertainment-section :deep(.category-heading) {
+    border-color: rgb(185 28 28 / 13%);
+}
+
+.home-entertainment-section :deep(.category-heading::before) {
+    background: linear-gradient(180deg, #f59e0b, var(--news-primary));
+}
+
+.home-entertainment-section :deep(.news-grid-card),
+.home-entertainment-section :deep(.news-list-card) {
+    border-color: rgb(185 28 28 / 12%);
+}
+
+.home-entertainment-section :deep(.news-grid-card:hover),
+.home-entertainment-section :deep(.news-list-card:hover) {
+    border-color: rgb(185 28 28 / 24%);
+}
+
+.home-video-news-section {
+    position: relative;
+    border-color: rgb(255 255 255 / 10%);
+    background:
+        linear-gradient(135deg, #111827 0%, #1f2937 58%, #450a0a 140%);
+    box-shadow: 0 18px 38px rgb(15 23 42 / 14%);
+}
+
+.home-video-news-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgb(255 255 255 / 8%), transparent 30%);
+}
+
+.home-video-news-section :deep(.section-heading),
+.home-video-news-section :deep(.news-type-slider) {
+    position: relative;
+}
+
+.home-video-news-section :deep(.section-heading) {
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.home-video-news-section :deep(.section-heading h2) {
+    text-shadow: 0 2px 10px rgb(0 0 0 / 22%);
+}
+
+.home-video-news-section :deep(.news-grid-card) {
+    border-color: rgb(255 255 255 / 12%);
+    box-shadow: 0 12px 28px rgb(0 0 0 / 14%);
+}
+
+.home-video-news-section :deep(.news-grid-card img) {
+    filter: contrast(1.02) saturate(1.02);
+}
+
+.home-gallery-news-section {
+    position: relative;
+    padding: clamp(0.7rem, 1.6vw, 1rem);
+    border-color: rgb(15 23 42 / 10%);
+    background:
+        linear-gradient(90deg, rgb(15 118 110 / 4%), transparent 34%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.home-gallery-news-section :deep(.section-heading) {
+    border-color: rgb(15 23 42 / 10%);
+}
+
+.home-gallery-news-section :deep(.section-heading h2) {
+    color: var(--news-ink);
+}
+
+.home-gallery-news-section :deep(.news-grid-card) {
+    border-color: rgb(15 23 42 / 10%);
+    box-shadow: var(--news-shadow-soft);
+}
+
+.home-gallery-news-section :deep(.news-grid-card img) {
+    filter: saturate(1.03) contrast(1.01);
+}
+
+.home-gallery-news-section :deep(.news-list-card) {
+    border-color: rgb(15 23 42 / 10%);
 }
 
 @media (max-width: 1023px) {
