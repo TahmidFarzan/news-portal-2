@@ -144,7 +144,7 @@ const editorInit = computed(() => {
                                         headers: { 'Content-Type': 'multipart/form-data' },
                                     })
                                     const media = response.data?.media || {}
-                                    const mediaUrl = media?.preview_url || media?.url || ''
+                                    const mediaUrl = media?.preview_url || media?.original_url || ''
                                     const id = media?.id || ''
                                     let html = ''
 
