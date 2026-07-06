@@ -813,6 +813,69 @@ class PageService
         return $news;
     }
 
+    public function popularNews()
+    {
+        $language = $this->language();
+
+        $newsCacheKey = "page:language:{$language->locale}:popular-news";
+
+        $newsCacheTags = [
+            "page",
+            "page:language:{$language->locale}",
+            "page:language:{$language->locale}:popular-news",
+        ];
+
+        $newsCachedData = CacheServerHelper::getCachedData($newsCacheKey, $newsCacheTags);
+
+        if (($newsCachedData !== null) && ($newsCachedData instanceof CursorPaginator)) {
+            return $newsCachedData;
+        }
+
+        $news = News::select([
+            "id", 'news_type_id', 'language_id', 'category_id', 'event_id', 'location_id',
+            'title', 'sub_title', "content_shoulder",
+            "seo_brief", 'seo_title', 'seo_keywords',
+            'slug', "created_at", "updated_at",
+        ])
+            ->with([
+                "language:id,name,code,locale,slug",
+                'newsType:id,name,slug',
+                'category:id,name,name_tree,slug,slug_tree',
+
+                'event:id,name,slug',
+                'location:id,name,slug,slug_tree',
+
+                'tags:id,name,slug',
+                'tags.trend:id,name,slug',
+
+                'contributors:id,name,slug',
+
+                "featureImage:id,name,slug,custom_properties,model_type,model_id,file_name,mime_type,disk,conversions_disk,manipulations,generated_conversions,responsive_images,order_column",
+                "featureImageMobile:id,name,slug,custom_properties,model_type,model_id,file_name,mime_type,disk,conversions_disk,manipulations,generated_conversions,responsive_images,order_column",
+            ])
+            ->where('language_id', $language->id)
+            // ->whereBetween('created_at', [
+            //     now()->subDays(7),
+            //     now(),
+            // ])
+            ->where("hit_count", ">", 0)
+            ->where("is_published", true)
+            ->orderByDesc('hit_count')
+            ->orderByDesc('id')
+            ->orderByDesc('created_at')
+            ->limit(15)
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $newsCacheKey,
+            $news,
+            CacheServerHelper::threeMinInSecond,
+            $newsCacheTags
+        );
+
+        return $news;
+    }
+
     public function newsTypeNews(Request $request, NewsType $newsType)
     {
         $perPage   = $request->input('per_page', 24);
@@ -1948,5 +2011,32 @@ class PageService
             ];
         }
 
+    }
+
+    public function newsHitCounterCalculate(News $news): void
+    {
+        $sessionId = session()->getId();
+
+        $cacheKey = "page:news:{$news->slug}:session:{$sessionId}";
+
+        $cacheTags = [
+            'page',
+            'page:news',
+            "page:news:{$news->id}",
+            "page:news:{$news->id}:news-hit-counter",
+        ];
+
+        if (! CacheServerHelper::getCachedData($cacheKey, $cacheTags)) {
+            $lifetime = CacheServerHelper::oneHourInSecond;
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                true,
+                $lifetime,
+                $cacheTags
+            );
+
+            $news->increment('hit_count');
+        }
     }
 }

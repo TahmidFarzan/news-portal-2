@@ -453,7 +453,12 @@
                 },
                 "recent_news_list": {
                     "labels": {
-                        "recent_news": "সাম্প্রতিক সংবাদ"
+                        "recent_news": "জনপ্রিয় সংবাদ"
+                    }
+                },
+                "popular_news_list": {
+                    "labels": {
+                        "popular_news": "Recent News"
                     }
                 },
                 "related_news_grid": {

@@ -33,7 +33,7 @@ use Spatie\Sluggable\SlugOptions;
         'title', 'sub_title', "content_shoulder", 'brief',
         "body", "video_url", 'writer', 'source',
         "seo_brief", 'seo_title', 'seo_keywords',
-        'created_by_id', 'slug', 'is_published',
+        'created_by_id', 'slug', 'is_published','hit_count'
     ])]
 #[UsePolicy(NewsPolicy::class)]
 #[ObservedBy([NewsObserver::class])]
@@ -64,7 +64,7 @@ class News extends Model implements HasMedia
                 'title', 'sub_title', "content_shoulder", 'brief',
                 "body", "video_url", 'writer', 'source',
                 "seo_brief", 'seo_title', 'seo_keywords',
-                'slug', 'is_published',
+                'slug', 'is_published','hit_count'
             ])
             ->useLogName('News')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")

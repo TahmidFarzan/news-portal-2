@@ -7,6 +7,7 @@ import List from '@/components/common/news/List.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 defineOptions({ layout: Layout })
 
@@ -62,7 +63,8 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" paginationType="Cursor" />
     </div>

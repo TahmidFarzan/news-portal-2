@@ -17,6 +17,8 @@ import {
 
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
+
 FontAwesomeLibrary.add(
     faClock
 )
@@ -97,7 +99,8 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
             </div>
         </header>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

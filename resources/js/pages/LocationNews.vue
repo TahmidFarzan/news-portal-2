@@ -7,6 +7,7 @@ import List from '@/components/common/news/List.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -456,7 +457,7 @@ onBeforeUnmount(() => {
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

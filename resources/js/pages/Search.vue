@@ -15,6 +15,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faFilter, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
+
 FontAwesomeLibrary.add(faFilter, faSpinner)
 
 defineOptions({ layout: Layout })
@@ -233,7 +235,7 @@ onMounted(async () => {
             </div>
         </form>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

@@ -1,15 +1,16 @@
 <script setup>
-import { computed,inject } from 'vue'
+import { computed, inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
+import PageSidebar from '@/components/common/page/PageSidebar.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
-import RecentNewsList from '@/components/common/news/RecentNewsList.vue'
 import CategoryHasLocationSection from '@/components/common/page/CategoryHasLocationSection.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -30,6 +31,7 @@ const {
     category,
     news,
     recentNews,
+    popularNews,
     pageSectionNews,
 } = defineProps({
     category: {
@@ -41,6 +43,10 @@ const {
         required: true,
     },
     recentNews: {
+        type: Object,
+        required: true,
+    },
+    popularNews: {
         type: Object,
         required: true,
     },
@@ -182,10 +188,10 @@ const getSecondGridColumnClass = (index) => {
             </div>
         </section>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <section class="grid grid-cols-1 items-start gap-5 md:grid-cols-12">
-            <div class="space-y-4 md:col-span-9 lg:col-span-9">
+            <div class="space-y-4 md:col-span-8 lg:col-span-8">
                 <section v-if="hasPageSectionNews" class="space-y-4">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-12">
                         <div v-for="(perPageSectionNews, index) in firstGridPageSectionNews"
@@ -206,23 +212,26 @@ const getSecondGridColumnClass = (index) => {
                 </section>
             </div>
 
-            <div class="space-y-2 md:col-span-3 lg:col-span-3">
+            <div class="space-y-2 md:col-span-4 lg:col-span-4">
                 <CategoryHasLocationSection :category="category" />
 
-                <RecentNewsList :news="recentNews" />
+                <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
+
+                <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM"
+                    class="mt-4" />
             </div>
         </section>
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>
 </template>
 
 <style scoped>
-.entity-page > section:first-child {
+.entity-page>section:first-child {
     border: var(--news-border-default);
     border-radius: var(--news-radius);
     background: var(--news-hero-danger-gradient);
@@ -230,7 +239,7 @@ const getSecondGridColumnClass = (index) => {
     box-shadow: var(--news-shadow-soft);
 }
 
-.category-page > section:nth-of-type(2) {
+.category-page>section:nth-of-type(2) {
     align-items: stretch;
 }
 </style>

@@ -456,6 +456,11 @@
                         "recent_news": "Recent News"
                     }
                 },
+                "popular_news_list": {
+                    "labels": {
+                        "popular_news": "Recent News"
+                    }
+                },
                 "related_news_grid": {
                     "labels": {
                         "related_news": "Related news"

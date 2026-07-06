@@ -11,8 +11,10 @@ use Throwable;
 class CacheServerHelper
 {
     const oneDayInSecond   = 86400;
+    const oneHourInSecond   = 3600;
     const sixHoursInSecond = 21600;
     const threeMinInSecond = 180;
+
 
     protected static function driver(): string
     {

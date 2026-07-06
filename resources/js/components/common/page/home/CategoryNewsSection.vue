@@ -6,7 +6,7 @@ import { fetchFromApi } from '@/composables/useSystemApi'
 
 import GridCard from '@/components/common/news/GridCard.vue'
 import ListCard from '@/components/common/news/ListCard.vue'
-import CategoryHasLocationSection from '@/components/common/page/home/CategoryHasLocationSection.vue'
+import CategoryHasLocationSection from '@/components/common/page/CategoryHasLocationSection.vue'
 
 const { t } = useTranslate()
 

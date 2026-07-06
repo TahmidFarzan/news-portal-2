@@ -19,6 +19,7 @@ class PageController extends Controller
         $page         = $this->pageService->homePage();
         $leadNews     = $this->pageService->homeLeadNews();
         $recentNews   = $this->pageService->recentNews();
+        $popularNews  = $this->pageService->popularNews();
         $topEvents    = $this->pageService->homeTopEvents();
         $bottomEvents = $this->pageService->homeBottomEvents();
         $trends       = $this->pageService->homeTrends();
@@ -28,6 +29,7 @@ class PageController extends Controller
             'page'         => $page,
             'leadNews'     => $leadNews,
             "recentNews"   => $recentNews,
+            "popularNews"  => $popularNews,
             "topEvents"    => $topEvents,
             "bottomEvents" => $bottomEvents,
             "trends"       => $trends,
@@ -151,6 +153,7 @@ class PageController extends Controller
     public function newsDetails(string $slug)
     {
         $news = $this->pageService->news($slug);
+        $this->pageService->newsHitCounterCalculate($news);
         return Inertia::render('NewsDetails', [
             'news' => $news,
         ]);
@@ -214,6 +217,7 @@ class PageController extends Controller
 
         $pageSectionNews = $this->pageService->categoryNewsPlacement($category);
         $recentNews      = $this->pageService->recentNews();
+        $popularNews     = $this->pageService->popularNews();
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -225,6 +229,7 @@ class PageController extends Controller
             'category'        => $category,
             'news'            => $news,
             "recentNews"      => $recentNews,
+            "popularNews"     => $popularNews,
             "pageSectionNews" => $pageSectionNews,
         ]);
     }

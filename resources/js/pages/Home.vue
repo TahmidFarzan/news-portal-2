@@ -6,7 +6,7 @@ import Layout from '@/pages/layouts/PublicLayout.vue'
 import { useTranslate } from '@/composables/useTranslate'
 import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
-import RecentNewsScroller from '@/components/common/news/RecentNewsScroller.vue'
+import PageSidebar from '@/components/common/page/PageSidebar.vue'
 import EventNewsSection from '@/components/common/page/home/EventNewsSection.vue'
 import VideoNewsSection from '@/components/common/page/home/VideoNewsSection.vue'
 import ImageGalleryNewsSection from '@/components/common/page/home/ImageGalleryNewsSection.vue'
@@ -26,7 +26,7 @@ defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
 
-const { page, leadNews, recentNews, topEvents, bottomEvents, trends, surveys } = defineProps({
+const { page, leadNews, recentNews, popularNews, topEvents, bottomEvents, trends, surveys } = defineProps({
     page: {
         type: Object,
         required: true,
@@ -36,6 +36,10 @@ const { page, leadNews, recentNews, topEvents, bottomEvents, trends, surveys } =
         required: true,
     },
     recentNews: {
+        type: Object,
+        required: true,
+    },
+    popularNews: {
         type: Object,
         required: true,
     },
@@ -89,14 +93,6 @@ const secondaryLeadNews = computed(() => {
 
 const extraLeadNews = computed(() => {
     return leadNewsItems.value.slice(6, 10)
-})
-
-const recentNewsItems = computed(() => {
-    if (Array.isArray(recentNews)) {
-        return recentNews
-    }
-
-    return recentNews?.data ?? []
 })
 
 const metaTitle = computed(() => {
@@ -165,24 +161,7 @@ const metaKeywords = computed(() => {
                 </main>
 
                 <aside class="lg:col-span-4">
-                    <div v-if="recentNewsItems.length"
-                        class="home-recent-rail flex h-[400px] flex-col rounded-2xl border border-gray-200 p-2">
-                        <div class="recent-news flex shrink-0 items-center gap-2">
-                            <h2 class="text-xl font-bold text-gray-950">
-                                {{ t('components.common.news.recent_news_list.labels.recent_news') }}
-                            </h2>
-                        </div>
-
-                        <RecentNewsScroller>
-                            <div class="grid grid-cols-1 gap-3">
-                                <ListCard v-for="(perNews, index) in recentNewsItems"
-                                    :key="perNews?.id || perNews?.slug || index" :news="perNews" :hideSubtitle="true"
-                                    :hideBrief="true" :hideCategory="true" :hideEvent="true" :hideLocation="true"
-                                    :hideFeatureImage="true" :isCompact="true" />
-                            </div>
-                        </RecentNewsScroller>
-
-                    </div>
+                    <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
 
                     <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM"
                         class="mt-4" />
@@ -209,7 +188,7 @@ const metaKeywords = computed(() => {
             <EventNewsSection :events="bottomEvents" class="mt-4" />
         </div>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-politics-section mt-4"
             categoryIdOrSlug="politics" :language="page?.language" :style="1" :limit="4" />
@@ -218,54 +197,62 @@ const metaKeywords = computed(() => {
 
         <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-national-section mt-4"
             categoryIdOrSlug="national" :language="page?.language" :style="1" :limit="4" />
-        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-national-section mt-4" categoryIdOrSlug="জাতীয়"
-            :language="page?.language" :style="1" :limit="4" />
+        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-national-section mt-4"
+            categoryIdOrSlug="জাতীয়" :language="page?.language" :style="1" :limit="4" />
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-sports-section mt-4"
             categoryIdOrSlug="sports" :language="page?.language" :style="2" :limit="6" />
         <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-sports-section mt-4"
             categoryIdOrSlug="খেলাধুলা" :language="page?.language" :style="2" :limit="6" />
 
-        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-entertainment-section mt-4"
-            categoryIdOrSlug="entertainment" :language="page?.language" :style="2" :limit="6" />
-        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-entertainment-section mt-4" categoryIdOrSlug="বিনোদন"
-            :language="page?.language" :style="2" :limit="6" />
+        <CategoryNewsSection v-if="page?.language?.code == languages.English.Code"
+            class="home-entertainment-section mt-4" categoryIdOrSlug="entertainment" :language="page?.language"
+            :style="2" :limit="6" />
+        <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code"
+            class="home-entertainment-section mt-4" categoryIdOrSlug="বিনোদন" :language="page?.language" :style="2"
+            :limit="6" />
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <VideoNewsSection class="home-video-news-section mt-4" />
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div class="space-y-3">
-                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-international-section mt-4"
-                        categoryIdOrSlug="international" :language="page?.language" :style="3" :limit="4" />
-                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-international-section mt-4"
-                        categoryIdOrSlug="আন্তর্জাতিক" :language="page?.language" :style="3" :limit="4" />
+                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code"
+                        class="home-international-section mt-4" categoryIdOrSlug="international"
+                        :language="page?.language" :style="3" :limit="4" />
+                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code"
+                        class="home-international-section mt-4" categoryIdOrSlug="আন্তর্জাতিক"
+                        :language="page?.language" :style="3" :limit="4" />
                 </div>
 
                 <div class="space-y-3">
-                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-technology-section mt-4"
-                        categoryIdOrSlug="technology" :language="page?.language" :style="3" :limit="4" />
-                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-technology-section mt-4"
-                        categoryIdOrSlug="প্রযুক্তি" :language="page?.language" :style="3" :limit="4" />
+                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code"
+                        class="home-technology-section mt-4" categoryIdOrSlug="technology" :language="page?.language"
+                        :style="3" :limit="4" />
+                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code"
+                        class="home-technology-section mt-4" categoryIdOrSlug="প্রযুক্তি" :language="page?.language"
+                        :style="3" :limit="4" />
                 </div>
             </div>
         </div>
 
         <ImageGalleryNewsSection class="home-gallery-news-section mt-4" />
 
-        <GoogleAdsence v-if="showGoogleAd" />
+        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div class="space-y-3">
-                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code" class="home-health-section mt-4"
-                        categoryIdOrSlug="health" :language="page?.language" :style="4" :limit="4" />
-                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code" class="home-health-section mt-4"
-                        categoryIdOrSlug="স্বাস্থ্য" :language="page?.language" :style="4" :limit="4" />
+                    <CategoryNewsSection v-if="page?.language?.code == languages.English.Code"
+                        class="home-health-section mt-4" categoryIdOrSlug="health" :language="page?.language" :style="4"
+                        :limit="4" />
+                    <CategoryNewsSection v-if="page?.language?.code == languages.Bangla.Code"
+                        class="home-health-section mt-4" categoryIdOrSlug="স্বাস্থ্য" :language="page?.language"
+                        :style="4" :limit="4" />
                 </div>
 
                 <div class="space-y-3">

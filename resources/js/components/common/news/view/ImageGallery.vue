@@ -18,6 +18,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 FontAwesomeLibrary.add(
     faClock
@@ -66,7 +67,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
             {{ t("components.common.news.view.image_gallery.labels.no_gallery_image_found") }}
         </div>
 
-        <GoogleAdsence v-if="showGoogleAd" />
+       <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 
