@@ -74,7 +74,7 @@ const submit = async () => {
         const response = await postToApi(
 
             route(
-                'home.surveys-survey-questions-submit',
+                'home.surveys.survey-questions-submit',
                 {
                     slug:
                         survey?.slug,

@@ -26,7 +26,7 @@ const surveys = ref([...initialSurveys])
 
 const load = async () => {
     try {
-        const response = await fetchFromApi(route('home.surveys'))
+        const response = await fetchFromApi(route('home.surveys.get'))
         surveys.value = Array.isArray(response)
             ? [...response]
             : []
