@@ -18,7 +18,7 @@ class PageController extends Controller
     {
         $page         = $this->pageService->homePage();
         $leadNews     = $this->pageService->homeLeadNews();
-        $recentNews   = $this->pageService->homeRecentNews();
+        $recentNews   = $this->pageService->recentNews();
         $topEvents    = $this->pageService->homeTopEvents();
         $bottomEvents = $this->pageService->homeBottomEvents();
         $trends       = $this->pageService->homeTrends();
