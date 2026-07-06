@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 import { fetchFromApi, postToApi } from '@/composables/useSystemApi'
 import { useTranslate } from '@/composables/useTranslate'
@@ -74,7 +74,7 @@ const submit = async () => {
         const response = await postToApi(
 
             route(
-                'site.surveys-survey-questions-submit',
+                'home.surveys-survey-questions-submit',
                 {
                     slug:
                         survey?.slug,
@@ -101,9 +101,7 @@ const submit = async () => {
             editing.value = false
             message.value = t('components.common.util.survey_question.api.submit_success')
 
-            setTimeout(() => { emit('updated') },
-                200
-            )
+            await emit('updated')
 
             return
         }
@@ -154,6 +152,20 @@ const progressColor = value => {
 
     return 'bg-sky-500'
 }
+
+watch(
+    () => surveyQuestion,
+    value => {
+        submittedAnswer.value =
+            value?.selected_answer ??
+            sessionStorage.getItem(cacheKey.value) ??
+            null
+
+        selectedAnswer.value = submittedAnswer.value
+    },
+    { deep: true }
+)
+
 </script>
 
 <template>

@@ -456,11 +456,10 @@ Route::prefix('site')->name('site.')->group(function () {
     Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
     Route::get('languages', [SiteController::class, 'languages'])->name('languages');
 
-    Route::get('trends', [SiteController::class, 'trends'])->name('trends');
-    Route::get('surveys', [SiteController::class, 'surveys'])->name('surveys');
+
     Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
 
-    Route::post('surveys/{slug}/survey-questions/{surveyQuestionSlug}/submit', [SiteController::class, 'surveySurveyQuestionSubmit'])->name('surveys-survey-questions-submit');
+
 });
 
 Route::get('/', function () {
@@ -474,6 +473,10 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
         Route::get('category/{idOrSlug}', [PageController::class, 'homeCategory'])->name('category');
         Route::get('category/{idOrSlug}/news', [PageController::class, 'homeCategoryNews'])->name('category-news');
         Route::get('news-type/{slug}/news', [PageController::class, 'homeNewsTypeNews'])->name('news-type-news');
+
+        Route::get('surveys', [PageController::class, 'homeSurveys'])->name('surveys');
+
+        Route::post('surveys/{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'homeSurveySurveyQuestionSubmit'])->name('surveys-survey-questions-submit');
     });
 
     Route::get('latest', [PageController::class, 'latest'])->name('latest');

@@ -21,6 +21,8 @@ class PageController extends Controller
         $recentNews   = $this->pageService->homeRecentNews();
         $topEvents    = $this->pageService->homeTopEvents();
         $bottomEvents = $this->pageService->homeBottomEvents();
+        $trends       = $this->pageService->homeTrends();
+        $surveys      = $this->pageService->homeSurveys();
 
         return Inertia::render('Home', [
             'page'         => $page,
@@ -28,6 +30,8 @@ class PageController extends Controller
             "recentNews"   => $recentNews,
             "topEvents"    => $topEvents,
             "bottomEvents" => $bottomEvents,
+            "trends"       => $trends,
+            "surveys"      => $surveys,
         ]);
     }
 
@@ -56,6 +60,12 @@ class PageController extends Controller
     public function homeCategory(int | string $idOrSlug)
     {
         $category = $this->pageService->homeCategoryByIdOrSlug($idOrSlug);
+        return response()->json($category);
+    }
+
+    public function homeSurveys()
+    {
+        $category = $this->pageService->homeSurveys();
         return response()->json($category);
     }
 
@@ -242,5 +252,14 @@ class PageController extends Controller
         $category                         = $this->pageService->category($slugTree);
         $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
         return response()->json($categoryLocationMaxDepthAndLevel);
+    }
+
+    public function homeSurveySurveyQuestionSubmit(Request $request, string $slug, string $surveyQuestionSlug)
+    {
+        $survey         = $this->pageService->homeSurvey($slug);
+        $surveyQuestion = $this->pageService->homeSurveyQuestion($survey, $surveyQuestionSlug);
+        $result         = $this->pageService->homeSurveySurveyQuestionSubmit($request, $survey, $surveyQuestion);
+
+        return response()->json($result);
     }
 }

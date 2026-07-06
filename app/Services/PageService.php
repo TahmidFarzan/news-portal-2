@@ -13,11 +13,18 @@ use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\NewsType;
 use App\Models\Page;
+use App\Models\Survey;
+use App\Models\SurveyQuestion;
+use App\Models\SurveyQuestionResult;
 use App\Models\Tag;
+use App\Models\Trend;
 use App\Services\SiteService;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PageService
@@ -1692,6 +1699,268 @@ class PageService
         return $news;
     }
 
+
+    public function homeTrends()
+    {
+        $language = $this->language();
+
+        $cacheKey = "page:home:language:{$language->locale}:trends";
+
+        $cacheTags = [
+            "page",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:trends",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $data = Trend::select([
+            "id", 'tag_id', 'is_current',
+        ])
+            ->with([
+                "tag:id,name,slug,language_id",
+            ])
+            ->where("is_current", true)
+            ->whereRelation('tag', 'language_id', $language->id)
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit(15)
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function homeSurveys()
+    {
+        $language = $this->language();
+
+        $cacheKey = "page:home:language:{$language->locale}:trends";
+
+        $cacheTags = [
+            "page",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:trends",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $data = Survey::select(["id", "name", "slug", 'date'])
+            ->with([
+                "surveyQuestions:id,survey_id,question,slug",
+                "surveyQuestions.surveyQuestionResult:id,survey_question_id,yes,no,no_comment",
+            ])
+            ->where("is_active", true)
+            ->where('language_id', $language->id)
+            ->whereDate('date', now()->toDateString())
+            ->orderBy('id', 'desc')
+            ->get();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function homeSurvey(string $slug): Survey
+    {
+        $language = $this->language();
+
+        $cacheKey = "page:home:language:{$language->locale}:survey:{$slug}";
+
+        $cacheTags = [
+            "page",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:survey",
+            "page:home:language:{$language->locale}:survey:{$slug}",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $data = Survey::select([
+            "id",
+            "name",
+            "brief",
+            "slug",
+            "date",
+            "language_id",
+        ])
+            ->where("language_id", $language->id)
+            ->where("slug", $slug)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function homeSurveyQuestion(Survey $survey, string $slug): SurveyQuestion
+    {
+        $language = $this->language();
+
+        $cacheKey = "page:home:language:{$language->locale}:survey:{$survey->slug}:question:{$slug}";
+
+        $cacheTags = [
+            "page",
+            "page:home",
+            "page:home:language:{$language->locale}",
+            "page:home:language:{$language->locale}:survey",
+            "page:home:language:{$language->locale}:survey:{$survey->slug}",
+            "page:home:language:{$language->locale}:survey:{$survey->slug}:question",
+            "page:home:language:{$language->locale}:survey:{$survey->slug}:question:{$slug}",
+        ];
+
+        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
+
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $data = SurveyQuestion::select([
+            "id",
+            "question",
+            "survey_id",
+            "slug",
+        ])
+            ->where("survey_id", $survey->id)
+            ->where("slug", $slug)
+            ->firstOrFail();
+
+        CacheServerHelper::cachedData(
+            $cacheKey,
+            $data,
+            CacheServerHelper::sixHoursInSecond,
+            $cacheTags
+        );
+
+        return $data;
+    }
+
+    public function homeSurveySurveyQuestionSubmit(Request $request, Survey $survey, SurveyQuestion $surveyQuestion): array
+    {
+        $yes       = $request->boolean('yes');
+        $no        = $request->boolean('no');
+        $noComment = $request->boolean('no_comment');
+
+        if (! $yes && ! $no && ! $noComment) {
+            return [
+                'status'  => 'warning',
+                'message' => __(
+                    'status-messages.site.survey.survey-question.no_answer_selected_warning'
+                ),
+                'data'    => null,
+            ];
+        }
+
+        $answer = null;
+
+        if ($yes) {
+            $answer = 'yes';
+        } elseif ($no) {
+            $answer = 'no';
+        } else {
+            $answer = 'no_comment';
+        }
+
+        $sessionKey = "survey.{$survey->id}.question.{$surveyQuestion->id}";
+
+        $previousData = session()->get($sessionKey);
+
+        try {
+
+            DB::transaction(function () use ($surveyQuestion, $answer, $previousData, $sessionKey, $survey) {
+
+                $surveyQuestionResult = SurveyQuestionResult::query()->firstOrCreate(
+                    [
+                        'survey_question_id' => $surveyQuestion->id,
+                    ],
+                    [
+                        'yes'        => 0,
+                        'no'         => 0,
+                        'no_comment' => 0,
+                    ]);
+
+                $previousAnswer = $previousData['answer'] ?? null;
+
+                if ($previousAnswer && $previousAnswer !== $answer) {
+
+                    if ($previousAnswer === 'yes' && $surveyQuestionResult->yes > 0) {
+                        $surveyQuestionResult->decrement('yes');
+                    }
+
+                    if ($previousAnswer === 'no' && $surveyQuestionResult->no > 0) {
+                        $surveyQuestionResult->decrement('no');
+                    }
+
+                    if ($previousAnswer === 'no_comment' && $surveyQuestionResult->no_comment > 0) {
+                        $surveyQuestionResult->decrement('no_comment');
+                    }
+                }
+
+                if ($previousAnswer !== $answer) {
+                    $surveyQuestionResult->increment($answer);
+                }
+
+                session()->put(
+                    $sessionKey,
+                    [
+                        'survey_id'          => $survey->id,
+                        'survey_question_id' => $surveyQuestion->id,
+                        'answer'             => $answer,
+                        'expired_at'         => now()->addHours(6)->timestamp,
+                    ]
+                );
+            });
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.site.survey.survey-question.success'),
+                'data'    => session()->get($sessionKey),
+            ];
+
+        } catch (Exception $exception) {
+
+            Log::error('Failed to submit survey question.', ['exception' => $exception]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.site.survey.survey-question.fail'),
+                'data'    => null,
+            ];
+        }
+
+    }
+
     private function categoryById(string | int $slugOrId): Category
     {
         return Category::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
@@ -1701,5 +1970,6 @@ class PageService
     {
         return Location::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
     }
+
 
 }

@@ -91,27 +91,4 @@ class SiteController extends Controller
         $GoogleAdsences = $this->siteService->getGoogleAdsence($request);
         return response()->json($GoogleAdsences);
     }
-
-    public function trends(): JsonResponse
-    {
-        return response()->json(
-            $this->siteService->trends()
-        );
-    }
-
-    public function surveys(): JsonResponse
-    {
-        return response()->json(
-            $this->siteService->surveys()
-        );
-    }
-
-    public function surveySurveyQuestionSubmit(Request $request, string $slug, string $surveyQuestionSlug): JsonResponse
-    {
-        $survey         = $this->siteService->survey($slug);
-        $surveyQuestion = $this->siteService->surveyQuestion($survey, $surveyQuestionSlug);
-        $result         = $this->siteService->surveySurveyQuestionSubmit($request, $survey, $surveyQuestion);
-
-        return response()->json($result);
-    }
 }

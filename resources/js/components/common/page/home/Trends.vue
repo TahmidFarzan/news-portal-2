@@ -1,13 +1,11 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { computed } from 'vue'
 
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation, Autoplay } from 'swiper/modules'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
-
-import { fetchFromApi } from '@/composables/useSystemApi'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -24,36 +22,21 @@ FontAwesomeLibrary.add(
     faChevronRight,
 )
 
-const trends = ref([])
-
-const loadTrends = async () => {
-    try {
-        const response = await fetchFromApi(
-            route('site.trends')
-        )
-
-        trends.value = Array.isArray(response)
-            ? response
-            : []
-
-    } catch {
-        trends.value = []
-    }
-}
-
-onMounted(() => {
-    loadTrends()
+const { trends } = defineProps({
+    trends: {
+        type: [Array, Object],
+        default: () => [],
+    },
 })
 
-const visible = computed(() => ( trends.value.length > 0))
+const visible = computed(() => Array.isArray(trends) && trends.length > 0)
 
 const openTrend = (item) => {
     if (
         item?.public_url &&
         item.public_url.trim()
     ) {
-        window.location.href =
-            item.public_url
+        window.location.href = item.public_url
     }
 }
 </script>
@@ -71,7 +54,8 @@ const openTrend = (item) => {
                 disableOnInteraction: false,
             }" class="group">
             <SwiperSlide v-for="item in trends" :key="item.id" class="!w-auto">
-                <button type="button" @click="openTrend(item)" class="trend-chip flex items-center gap-2 rounded-full px-5 py-3 text-white transition hover:-translate-y-1 cursor-pointer">
+                <button type="button" @click="openTrend(item)"
+                    class="trend-chip flex items-center gap-2 rounded-full px-5 py-3 text-white transition hover:-translate-y-1 cursor-pointer">
                     <FontAwesomeIcon :icon="[
                         'fas',
                         'folder',

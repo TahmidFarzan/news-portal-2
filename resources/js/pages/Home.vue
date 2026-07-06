@@ -7,13 +7,13 @@ import { useTranslate } from '@/composables/useTranslate'
 import ListCard from '@/components/common/news/ListCard.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
 import RecentNewsScroller from '@/components/common/news/RecentNewsScroller.vue'
-import EventNewsSection from '@/components/common/page/EventNewsSection.vue'
-import VideoNewsSection from '@/components/common/page/VideoNewsSection.vue'
-import ImageGalleryNewsSection from '@/components/common/page/ImageGalleryNewsSection.vue'
-import CategoryNewsSection from '@/components/common/page/CategoryNewsSection.vue'
+import EventNewsSection from '@/components/common/page/home/EventNewsSection.vue'
+import VideoNewsSection from '@/components/common/page/home/VideoNewsSection.vue'
+import ImageGalleryNewsSection from '@/components/common/page/home/ImageGalleryNewsSection.vue'
+import CategoryNewsSection from '@/components/common/page/home/CategoryNewsSection.vue'
+import Trends from '@/components/common/page/home/Trends.vue'
+import Surveys from '@/components/common/page/home/Surveys.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
-import Trends from '@/components/common/util/Trends.vue'
-import Surveys from '@/components/common/util/Surveys.vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
 import {
@@ -26,7 +26,7 @@ defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
 
-const { page, leadNews, recentNews, topEvents, bottomEvents } = defineProps({
+const { page, leadNews, recentNews, topEvents, bottomEvents, trends, surveys } = defineProps({
     page: {
         type: Object,
         required: true,
@@ -44,6 +44,16 @@ const { page, leadNews, recentNews, topEvents, bottomEvents } = defineProps({
         required: true,
     },
     bottomEvents: {
+        type: Object,
+        required: true,
+    },
+
+    trends: {
+        type: Object,
+        required: true,
+    },
+
+    surveys: {
         type: Object,
         required: true,
     },
@@ -123,7 +133,7 @@ const metaKeywords = computed(() => {
             <EventNewsSection :events="topEvents" class="mb-4" />
         </div>
 
-        <Trends v-if="showTrends" class="home-trends" />
+        <Trends v-if="showTrends" class="home-trends" :trends="trends" />
 
         <div class="home-lead-shell rounded-2xl border border-slate-100 p-2">
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">
@@ -193,7 +203,7 @@ const metaKeywords = computed(() => {
             </div>
         </div>
 
-        <Surveys v-if="showSurveys" class="home-surveys mt-4" />
+        <Surveys v-if="showSurveys" class="home-surveys mt-4" :surveys="surveys" />
 
         <div v-if="bottomEvents" class="home-bottom-events">
             <EventNewsSection :events="bottomEvents" class="mt-4" />
