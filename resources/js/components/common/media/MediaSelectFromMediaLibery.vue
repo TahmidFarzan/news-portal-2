@@ -1,7 +1,8 @@
 <script setup>
 import MediaRenderer from './MediaRenderer.vue'
 import { ref, watch, computed } from 'vue'
-import axios from 'axios'
+import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
@@ -31,6 +32,14 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    cacheKey: {
+        type: String,
+        default: null,
+    },
+    cacheTtl: {
+        type: Number,
+        default: null,
+    },
 })
 
 const emit = defineEmits(['media-selected'])
@@ -47,6 +56,8 @@ const loading = ref(false)
 let loadedPages = new Set()
 
 const hasSelection = computed(() => selectedMediaList.value.length > 0)
+const resolvedCacheKey = computed(() => props.cacheKey || smartCacheKey.DEFAULT)
+const resolvedCacheTtl = computed(() => props.cacheTtl ?? smartCacheTTL.DEFAULT)
 
 const openModal = () => {
     showModal.value = true
@@ -105,14 +116,20 @@ const loadMedia = async (clear = false) => {
     loading.value = true
 
     try {
-        const { data } = await axios.get(props.fetchUrl, {
-            params: {
-                page: page.value,
-                per_page: perPage,
-                search: search.value,
-                media_type: props.mediaType,
-            },
-        })
+        const params = {
+            page: page.value,
+            per_page: perPage,
+            search: search.value,
+            media_type: props.mediaType,
+        }
+        const data = await fetchFromApi(
+            props.fetchUrl,
+            params,
+            {
+                key: `${resolvedCacheKey.value}:${props.fetchUrl}`,
+                ttl: resolvedCacheTtl.value,
+            }
+        )
 
         if (clear) {
             mediaList.value = []

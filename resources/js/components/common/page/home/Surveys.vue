@@ -10,6 +10,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
@@ -26,7 +27,17 @@ const surveys = ref([...initialSurveys])
 
 const load = async () => {
     try {
-        const response = await fetchFromApi(route('home.surveys.get'))
+        const apiUrl = route('home.surveys.get')
+
+        const response = await fetchFromApi(
+            apiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_HOME_PAGE}:${apiUrl}`,
+                ttl: smartCacheTTL.HOME_PAGE,
+            }
+        )
+
         surveys.value = Array.isArray(response)
             ? [...response]
             : []

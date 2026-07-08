@@ -7,6 +7,7 @@ import { faRightLong } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 
 import GridCard from '@/components/common/news/GridCard.vue'
 import ListCard from '@/components/common/news/ListCard.vue'
@@ -63,9 +64,18 @@ const loadEventNews = async (event) => {
     loadingEvents.value[event.slug] = true
 
     try {
-        const response = await fetchFromApi(route('home.event-news', {
+        const apiUrl = route('home.event-news', {
             slug: event.slug,
-        }))
+        })
+
+        const response = await fetchFromApi(
+            apiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_HOME_PAGE}:${apiUrl}`,
+                ttl: smartCacheTTL.HOME_PAGE,
+            }
+        )
 
         eventNews.value[event.slug] = getNewsItems(response).slice(0, 5)
     } catch (error) {

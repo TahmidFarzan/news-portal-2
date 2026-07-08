@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from "vue"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
@@ -49,11 +50,17 @@ const loadChildren = async (page = 1) => {
     try {
         childrenLoading.value = true
 
+        const apiUrl = route('site.menu-items.sub-menu-items', {
+            slug: item.slug,
+            page,
+        })
         const response = await fetchFromApi(
-            route('site.menu-items.sub-menu-items', {
-                slug: item.slug,
-                page,
-            })
+            apiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_LAYOUT_OFFCANVAS_MENU}:${apiUrl}`,
+                ttl: smartCacheTTL.LAYOUT_OFFCANVAS_MENU,
+            }
         )
 
         const items = normalizeMenuItems(response?.items ?? [])

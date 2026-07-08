@@ -2,6 +2,7 @@
 import { reactive, computed, onMounted } from 'vue'
 import FooterMenuItem from '@/components/common/layout/public-layout/FooterMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -40,8 +41,14 @@ const getFooterMenuItems = async (pageNumber = 1) => {
         footerMenu.loading = true
         footerMenu.error = null
 
+        const apiUrl = route('site.menus.footer-menu-items', { page: pageNumber })
         const response = await fetchFromApi(
-            route('site.menus.footer-menu-items', { page: pageNumber })
+            apiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_LAYOUT_FOOTER_MENU}:${apiUrl}`,
+                ttl: smartCacheTTL.LAYOUT_FOOTER_MENU,
+            }
         )
 
         const items = normalizeMenuItems(response?.items ?? [])

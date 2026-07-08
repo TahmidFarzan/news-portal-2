@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 const props = defineProps({
@@ -102,12 +103,29 @@ const normalizeRows = (response) => {
     })
 }
 
+const getCacheParamsKey = (params = {}) => {
+    return new URLSearchParams(
+        Object.entries(params)
+            .filter(([, value]) => value !== undefined && value !== null)
+            .sort(([a], [b]) => a.localeCompare(b))
+    ).toString()
+}
+
 const fetchAds = async () => {
+    const apiUrl = route('site.google-adsences')
+    const params = {
+        type: type.value,
+        position: position.value,
+    }
+    const cacheParamsKey = getCacheParamsKey(params)
+
     const response = await fetchFromApi(
-        route('site.google-adsences', {
-            type: type.value,
-            position: position.value,
-        })
+        apiUrl,
+        params,
+        {
+            key: `${smartCacheKey.API_SITE_GOOGLE_ADSENCE}:${apiUrl}:${cacheParamsKey}`,
+            ttl: smartCacheTTL.GOOGLE_ADSENCE,
+        }
     )
 
     ads.value = normalizeRows(response)

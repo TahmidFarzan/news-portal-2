@@ -1,9 +1,8 @@
 
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL, useSmartCache } from '@/composables/useSmartCache'
 
-const CACHE_DURATION = 5 * 60 * 1000
-
-const permissionCache = new Map()
+const { clearByPrefix } = useSmartCache()
 
 export const groups = {
     BreakingNews: 'Breaking news',
@@ -39,32 +38,32 @@ export const getPermissions = async (authUser) => {
         return []
     }
 
-    const cached = permissionCache.get(authUser.id)
-
-    if (cached && ((Date.now() - cached.timestamp) < CACHE_DURATION)) {
-        return cached.permissions
-    }
-
     let permissions = authUser.user_permissions
 
     if (!Array.isArray(permissions)) {
-        const user = await fetchFromApi(route('search.user', { slugOrId: authUser.id, }))
+        const apiUrl = route('search.user', { slugOrId: authUser.id, })
+        const user = await fetchFromApi(
+            apiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_USER}:${authUser.id}`,
+                ttl: smartCacheTTL.API_USER,
+            }
+        )
 
         permissions = user?.user_permissions || []
     }
-
-    permissionCache.set(authUser.id, { permissions, timestamp: Date.now(), })
 
     return permissions
 }
 
 export const clearPermissionCache = (userId) => {
     if (userId) {
-        permissionCache.delete(userId)
+        clearByPrefix(`${smartCacheKey.API_USER}:${userId}`)
         return
     }
 
-    permissionCache.clear()
+    clearByPrefix(`${smartCacheKey.API_USER}:`)
 }
 
 export const hasPermission = async (authUser, module, permissionAccess) => {

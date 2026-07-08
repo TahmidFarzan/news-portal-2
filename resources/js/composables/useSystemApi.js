@@ -1,9 +1,24 @@
 import axios from 'axios'
+import { smartCacheKey, smartCacheTTL, useSmartCache } from '@/composables/useSmartCache'
 
-export async function fetchFromApi(url, params = {}) {
+const { remember, rememberProps, remove } = useSmartCache()
+
+const fetchJson = async (url, params = {}) => {
+    const res = await axios.get(url, { params })
+    return res.data || []
+}
+
+export async function fetchFromApi(url, params = {}, options = {}) {
     try {
-        const res = await axios.get(url, { params });
-        return res.data || [];
+        return await rememberProps(
+            options.props || { url, params },
+            () => fetchJson(url, params),
+            {
+                key: options.key ||  smartCacheKey.Default,
+                ttl: options.ttl ?? smartCacheTTL.SYSTEM_SHORT,
+                force: options.force ?? false,
+            }
+        )
     } catch (error) {
         console.error(`Failed to fetch from ${url}.`, error);
         return [];
@@ -13,22 +28,23 @@ export async function fetchFromApi(url, params = {}) {
 export async function fetchUser(userSlugOrId) {
     if (!userSlugOrId) return null
 
-    const cachedUser = getUserCache(userSlugOrId)
-    const expiredUserCache = checkExpiredUserCache(userSlugOrId)
-    if (!expiredUserCache && cachedUser) return cachedUser
+    const cacheKey = `${smartCacheKey.API_USER}:${userSlugOrId}`
 
     try {
-        const response = await axios.get(route('search.user', { slugOrId: userSlugOrId }))
-        const user = response.data || null
-        if (user) {
-            saveUserCache(userSlugOrId, user)
-        }
-
-        return user
+        return await remember(
+            cacheKey,
+            async () => {
+                const response = await axios.get(route('search.user', { slugOrId: userSlugOrId }))
+                return response.data || null
+            },
+            {
+                ttl: smartCacheTTL.SYSTEM_SHORT,
+            }
+        )
     }
     catch (error) {
         console.error(`Failed to fetch user ${userSlugOrId}.`, error)
-        deleteUserCache(userSlugOrId)
+        remove(cacheKey)
         return null
     }
 }

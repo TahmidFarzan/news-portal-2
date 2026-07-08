@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -73,7 +74,15 @@ const loadBreakingNews = async (url = null) => {
     loading.value = true
 
     try {
-        const response = await fetchFromApi(url ?? route('site.breaking-news'))
+        const apiUrl = url ?? route('site.breaking-news')
+        const response = await fetchFromApi(
+            apiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_CURSOR_PAGINATION}:${apiUrl}`,
+                ttl: smartCacheTTL.SYSTEM_SHORT,
+            }
+        )
         const result = normalizeResponse(response)
 
         appendUniqueNews(result.data)

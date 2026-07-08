@@ -1,9 +1,10 @@
 <script setup>
 import { ref, computed, onMounted, nextTick, watch } from "vue"
-import axios from "axios"
 import Multiselect from "vue-multiselect"
 import "vue-multiselect/dist/vue-multiselect.css"
 
+import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 import { useTranslate } from '@/composables/useTranslate'
 const { t } = useTranslate()
 
@@ -51,6 +52,31 @@ const vselectRef = ref(null)
 const proxyModel = ref(multiple ? [] : null)
 
 let searchTimeout = null
+const getCacheParamsKey = (params = {}) => {
+    return new URLSearchParams(
+        Object.entries(params)
+            .map(([key, value]) => {
+                const resolvedValue = typeof value === 'function'
+                    ? value()
+                    : value
+
+                return [key, resolvedValue]
+            })
+            .filter(([, value]) => value !== undefined && value !== null)
+            .sort(([a], [b]) => a.localeCompare(b))
+    ).toString()
+}
+
+const getMultiSelectCacheOptions = (params = {}) => {
+    const cacheParamsKey = getCacheParamsKey(params)
+
+    return {
+        key: cacheParamsKey
+            ? `${smartCacheKey.API_MULTI_SELECT}:${apiUrl}:${cacheParamsKey}`
+            : `${smartCacheKey.API_MULTI_SELECT}:${apiUrl}`,
+        ttl: smartCacheTTL.API_MULTI_SELECT,
+    }
+}
 
 const getLabel = item => item?.[apiLabelKey] ?? defaultLabel
 const getValue = item => item?.[apiValueKey] ?? null
@@ -108,13 +134,12 @@ const fetchItemByValue = async value => {
     let totalPages = 1
 
     do {
-        const res = await axios.get(apiUrl, {
-            params: { search: value, page: p },
-        })
+        const params = { search: value, page: p }
+        const data = await fetchFromApi(apiUrl, params, getMultiSelectCacheOptions(params))
 
-        const items = normalizeItems(res.data?.items)
+        const items = normalizeItems(data?.items)
 
-        totalPages = res.data?.last_page || 1
+        totalPages = data?.last_page || 1
         found = items.find(i => i?.[apiValueKey] == value)
 
         if (found) break
@@ -143,18 +168,17 @@ const fetchPage = async (pageNumber = 1, reset = false) => {
     reset ? loading.value = true : loadingMore.value = true
 
     try {
-        const res = await axios.get(apiUrl, {
-            params: {
-                search: searchQuery.value,
-                page: pageNumber,
-            },
-        })
+        const params = {
+            search: searchQuery.value,
+            page: pageNumber,
+        }
+        const data = await fetchFromApi(apiUrl, params, getMultiSelectCacheOptions(params))
 
-        const data = normalizeItems(res.data?.items)
+        const items = normalizeItems(data?.items)
 
-        lastPage.value = res.data?.last_page || 1
+        lastPage.value = data?.last_page || 1
 
-        options.value = reset ? data : [...options.value, ...data]
+        options.value = reset ? items : [...options.value, ...items]
     } finally {
         loading.value = false
         loadingMore.value = false

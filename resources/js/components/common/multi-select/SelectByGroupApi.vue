@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 
 const {
     selectedItem,
@@ -104,7 +105,12 @@ async function loadData() {
     try {
         const response =
             await fetchFromApi(
-                apiUrl
+                apiUrl,
+                {},
+                {
+                    key: `${smartCacheKey.API_MULTI_SELECT}:${apiUrl}`,
+                    ttl: smartCacheTTL.API_MULTI_SELECT,
+                }
             )
 
         groupedItems.value =

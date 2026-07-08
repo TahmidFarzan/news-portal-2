@@ -20,6 +20,7 @@ import {
 import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 import { useTheme } from '@/composables/useTheme'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 import { getSelectedLanguageCode, useTranslate } from '@/composables/useTranslate'
@@ -70,7 +71,15 @@ const normalizeText = (value) => {
 }
 
 const loadSiteThemes = async () => {
-    const response = await fetchFromApi(route('site.themes'))
+    const apiUrl = route('site.themes')
+    const response = await fetchFromApi(
+        apiUrl,
+        {},
+        {
+            key: `${smartCacheKey.API_LAYOUT_THEME}:${apiUrl}`,
+            ttl: smartCacheTTL.SYSTEM_LONG,
+        }
+    )
 
     siteThemes.value = Array.isArray(response)
         ? response

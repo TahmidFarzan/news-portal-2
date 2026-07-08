@@ -3,6 +3,7 @@ import { computed, ref, watch, onMounted } from 'vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 
 import GridCard from '@/components/common/news/GridCard.vue'
 import ListCard from '@/components/common/news/ListCard.vue'
@@ -57,19 +58,33 @@ const loadCategorySection = async () => {
     loading.value = true
 
     try {
+        const categoryApiUrl = route('home.category', {
+            idOrSlug: categoryIdOrSlug,
+        })
+
         const categoryResponse = await fetchFromApi(
-            route('home.category', {
-                idOrSlug: categoryIdOrSlug,
-            }),
+            categoryApiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_HOME_PAGE}:${categoryApiUrl}`,
+                ttl: smartCacheTTL.HOME_PAGE,
+            }
         )
 
         category.value = categoryResponse?.data ?? categoryResponse
 
+        const newsApiUrl = route('home.category-news', {
+            idOrSlug: categoryIdOrSlug,
+            limit,
+        })
+
         const newsResponse = await fetchFromApi(
-            route('home.category-news', {
-                idOrSlug: categoryIdOrSlug,
-                limit,
-            }),
+            newsApiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_HOME_PAGE}:${newsApiUrl}`,
+                ttl: smartCacheTTL.HOME_PAGE,
+            }
         )
 
         newsItems.value = normalizeResponseData(newsResponse)

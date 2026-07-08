@@ -3,6 +3,7 @@ import { reactive, computed, onMounted } from 'vue'
 import HorizontalScroller from '@/components/common/layout/HorizontalScroller.vue'
 import TopbarMenuItem from '@/components/common/layout/public-layout/TopbarMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -43,8 +44,14 @@ const getTopbarMenuItems = async (pageNumber = 1) => {
         topbarMenu.loading = true
         topbarMenu.error = null
 
+        const apiUrl = route('site.menus.topbar-menu-items', { page: pageNumber })
         const response = await fetchFromApi(
-            route('site.menus.topbar-menu-items', { page: pageNumber })
+            apiUrl,
+            {},
+            {
+                key: `${smartCacheKey.API_LAYOUT_TOPBAR_MENU}:${apiUrl}`,
+                ttl: smartCacheTTL.LAYOUT_TOPBAR,
+            }
         )
 
         const items = normalizeMenuItems(response?.items ?? [])

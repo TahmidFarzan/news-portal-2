@@ -15,6 +15,7 @@ import ListCard from '@/components/common/news/ListCard.vue'
 
 import { newsTypes } from '@/composables/useNews'
 import { fetchFromApi } from '@/composables/useSystemApi'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
 import { useTranslate, generateTranslationKey } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faLeftLong, faRightLong, faImages)
@@ -40,9 +41,18 @@ const nextButtonClass = computed(() => `news-type-gallery-next-${slug.value}`)
 const loadNews = async () => {
     if (!slug.value) return
 
-    const response = await fetchFromApi(route('home.news-type-news', {
+    const apiUrl = route('home.news-type-news', {
         slug: slug.value,
-    }))
+    })
+
+    const response = await fetchFromApi(
+        apiUrl,
+        {},
+        {
+            key: `${smartCacheKey.API_HOME_PAGE}:${apiUrl}`,
+            ttl: smartCacheTTL.HOME_PAGE,
+        }
+    )
 
     newsItems.value = Array.isArray(response)
         ? response
