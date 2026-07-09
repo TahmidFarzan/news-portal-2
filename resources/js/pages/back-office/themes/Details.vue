@@ -31,7 +31,7 @@ const {
     hasValue,
 } = useTheme()
 
-const pageTitle = computed(() => `${theme?.label} ${t('pages.back_office.themes.details.labels.details')}`)
+const pageTitle = computed(() => `${theme?.label} ${t('common.actions.details')}`)
 
 const canUpdate = (theme) => canUpdateTheme(authUser?.value, theme)
 
@@ -40,13 +40,13 @@ const formattedValue = computed(() => {
     const value = theme?.value
 
     if (!hasValue(value)) {
-        return t('pages.back_office.themes.details.labels.not_available')
+        return t('common.labels.notAvailable')
     }
 
     if (type === themeValueTypes.BOOLEAN) {
         return value === true || value === 'true' || value === 1 || value === '1'
-            ? t('pages.back_office.themes.details.labels.true')
-            : t('pages.back_office.themes.details.labels.false')
+            ? t('common.labels.true')
+            : t('common.labels.false')
     }
 
     if (
@@ -67,8 +67,8 @@ const formattedValue = computed(() => {
     return value
 })
 
-const isTrueValue = computed(() => formattedValue.value === t('pages.back_office.themes.details.labels.true'))
-const hasDisplayValue = computed(() => formattedValue.value !== t('pages.back_office.themes.details.labels.not_available'))
+const isTrueValue = computed(() => formattedValue.value === t('common.labels.true'))
+const hasDisplayValue = computed(() => formattedValue.value !== t('common.labels.notAvailable'))
 
 onMounted(async () => {
     await nextTick()
@@ -76,7 +76,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.themes.details.labels.themes'), href: route('back-office.themes.index') },
+                { text: t('common.labels.themes'), href: route('back-office.themes.index') },
                 { text: pageTitle.value, active: true },
             ],
         })
@@ -92,21 +92,21 @@ onMounted(async () => {
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.themes.details.title') }}
+                {{ t('admin.themes.details.title') }}
             </h2>
 
             <div class="flex gap-2">
                 <a v-if="canUpdate(theme)" :href="route('back-office.themes.edit', { slug: theme?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.themes.details.actions.edit') }}
+                    {{ t('common.actions.edit') }}
                 </a>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.themes.details.labels.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -114,13 +114,13 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.group') }}</span>
-                        <span class="font-medium">{{ theme?.group || t('pages.back_office.themes.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.group') }}</span>
+                        <span class="font-medium">{{ theme?.group || t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.label') }}</span>
-                        <span class="font-medium">{{ theme?.label || t('pages.back_office.themes.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.label') }}</span>
+                        <span class="font-medium">{{ theme?.label || t('common.labels.notAvailable') }}</span>
                     </div>
 
                 </div>
@@ -128,15 +128,15 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.type') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.type') }}</span>
 
                         <span class="font-medium px-2 py-1 rounded-md text-xs bg-gray-100 text-gray-700">
-                            {{ theme?.type ?? t('pages.back_office.themes.details.labels.not_available') }}
+                            {{ theme?.type ?? t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between gap-4">
-                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.value') }}</span>
+                        <span class="text-gray-500">{{ t('admin.themes.details.labels.value') }}</span>
 
                         <span v-if="theme?.type === themeValueTypes.BOOLEAN"
                             class="font-medium px-2 py-1 rounded-md text-xs" :class="isTrueValue
@@ -151,7 +151,7 @@ onMounted(async () => {
                         </a>
 
                         <img v-else-if="theme?.type === themeValueTypes.IMAGE && hasDisplayValue"
-                            :src="formattedValue" :alt="t('pages.back_office.themes.details.theme_image_alt')"
+                            :src="formattedValue" :alt="t('admin.themes.details.themeImageAlt')"
                             class="w-20 h-20 object-cover rounded-md border">
 
                         <span v-else-if="theme?.type === themeValueTypes.COLOR && hasDisplayValue"
@@ -180,32 +180,32 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.themes.details.labels.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.created_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdAt') }}</span>
                         <span class="font-medium">
-                            {{ theme?.created_at ? formatDateTime(theme.created_at) : t('pages.back_office.themes.details.labels.not_available') }}
+                            {{ theme?.created_at ? formatDateTime(theme.created_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedAt') }}</span>
                         <span class="font-medium">
-                            {{ theme?.updated_at ? formatDateTime(theme.updated_at) : t('pages.back_office.themes.details.labels.not_available') }}
+                            {{ theme?.updated_at ? formatDateTime(theme.updated_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.themes.details.labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedBy') }}</span>
                         <span class="font-medium">
-                            {{ theme?.latest_activity_log?.causer?.name || t('pages.back_office.themes.details.labels.not_available') }}
+                            {{ theme?.latest_activity_log?.causer?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -215,7 +215,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.themes.details.activity_logs.index.title') }}
+                {{ t('common.labels.activityLogs') }}
             </h3>
 
             <RecentActivities :model-slug="'theme'" :model="theme" />

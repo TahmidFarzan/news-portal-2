@@ -121,7 +121,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.tags.index.labels.tags'), active: true },
+                { text: t('common.labels.tags'), active: true },
             ],
         })
     )
@@ -130,19 +130,19 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('pages.back_office.tags.index.labels.tags')" />
+    <Head :title="t('common.labels.tags')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.tags.index.labels.tags') }}
+                {{ t('common.labels.tags') }}
             </h2>
 
             <a v-if="canCreate()" :href="route('back-office.tags.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
-                {{ t('pages.back_office.tags.index.actions.create') }}
+                {{ t('common.actions.create') }}
             </a>
         </div>
 
@@ -151,20 +151,20 @@ onMounted(async () => {
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                    :placeholder="t('pages.back_office.tags.index.labels.per_page')" />
+                    :placeholder="t('common.labels.perPage')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    :placeholder="t('pages.back_office.tags.index.labels.created_by')" />
+                    :placeholder="t('common.labels.createdBy')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
-                    :placeholder="t('pages.back_office.tags.index.labels.language')" />
+                    :placeholder="t('common.labels.language')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" :placeholder="t('pages.back_office.tags.index.search_placeholder')"
+                <input type="search" v-model="filterForm.search" :placeholder="t('admin.tags.index.searchPlaceholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -174,7 +174,7 @@ onMounted(async () => {
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed">
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon icon="filter" />
-                    {{ filterForm.processing ? t('pages.back_office.tags.index.applying_filter') : t('pages.back_office.tags.index.apply_filter') }}
+                    {{ filterForm.processing ? t('common.actions.applyingFilter') : t('common.actions.applyFilter') }}
                 </button>
             </div>
         </form>
@@ -187,10 +187,10 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.tags.index.labels.name') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.tags.index.details.is_trend') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.tags.index.created') }}</th>
-                            <th class="px-4 py-3 text-right">{{ t('pages.back_office.tags.index.news.index.actions') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('common.labels.name') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('common.messages.isTrend') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('common.labels.createdAt') }}</th>
+                            <th class="px-4 py-3 text-right">{{ t('common.labels.actions') }}</th>
                         </tr>
                     </thead>
 
@@ -199,15 +199,15 @@ onMounted(async () => {
                             <td class="px-4 py-3">{{ index + 1 }}</td>
 
                             <td class="px-4 py-3 font-medium">
-                                {{ item.name || t('pages.back_office.tags.index.labels.not_available') }}
+                                {{ item.name || t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item?.trend ? t('pages.back_office.tags.index.labels.yes') : t('pages.back_office.tags.index.labels.no') }}
+                                {{ item?.trend ? t('common.boolean.yes') : t('common.boolean.no') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) : t('pages.back_office.tags.index.labels.not_available') }}
+                                {{ item.created_at ? formatDateTime(item.created_at) : t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -215,19 +215,19 @@ onMounted(async () => {
 
                                     <a :href="route('back-office.tags.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('pages.back_office.tags.index.table.menus.details')">
+                                        :title="t('common.actions.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canUpdate(item)" :href="route('back-office.tags.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
-                                        :title="t('pages.back_office.tags.index.actions.edit')">
+                                        :title="t('common.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
                                     <button v-if="canDelete(item)" type="button" @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('pages.back_office.tags.index.actions.delete')">
+                                        :title="t('common.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
@@ -237,7 +237,7 @@ onMounted(async () => {
 
                         <tr v-if="!tags?.data?.length">
                             <td colspan="5" class="px-4 py-8 text-center text-gray-500">
-                                {{ t('pages.back_office.tags.index.no_tag_found') }}
+                                {{ t('admin.tags.index.noTagFound') }}
                             </td>
                         </tr>
                     </tbody>
@@ -263,7 +263,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.tags.index.delete_modal.title') }}
+                                {{ t('common.modals.deleteTag') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -271,19 +271,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.tags.index.modals.delete_confirmation_modal.irreversible_body') }}
+                                {{ t('common.modals.thisActionCannotBeUndone') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button type="button" @click="closeDeleteModal"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.tags.index.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button type="button" @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('pages.back_office.tags.index.actions.deleting') : t('pages.back_office.tags.index.actions.delete') }}
+                                    {{ deleteProcessing ? t('common.actions.deleting') : t('common.actions.delete') }}
                                 </button>
                             </div>
                         </div>

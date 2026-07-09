@@ -50,8 +50,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.menus.details.menus'), href: route('back-office.menus.index') },
-                { text: `${menu?.name} ${t('pages.back_office.menus.details.labels.details')}`, active: true },
+                { text: t('common.labels.menus'), href: route('back-office.menus.index') },
+                { text: `${menu?.name} ${t('common.actions.details')}`, active: true },
             ],
         })
     )
@@ -60,57 +60,57 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${menu?.name} ${t('pages.back_office.menus.details.labels.details')}`" />
+    <Head :title="`${menu?.name} ${t('common.actions.details')}`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.menus.details.title') }}
+                {{ t('admin.menus.details.title') }}
             </h2>
 
             <div class="flex gap-2">
                 <a v-if="canUpdate(menu)" :href="route('back-office.menus.edit', { slug: menu?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.menus.details.actions.edit') }}
+                    {{ t('common.actions.edit') }}
                 </a>
 
                 <button v-if="canDelete(menu)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    {{ t('pages.back_office.menus.details.actions.delete') }}
+                    {{ t('common.actions.delete') }}
                 </button>
 
                 <a :href="route('back-office.menus.menu-items.create', { slug: menu?.slug })"
                     class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="plus" />
-                    {{ t('pages.back_office.menus.details.add_menu_item') }}
+                    {{ t('common.messages.addMenuItem') }}
                 </a>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.menus.details.labels.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.details.labels.name') }}</span>
-                        <span class="font-medium">{{ menu?.name || t('pages.back_office.menus.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.name') }}</span>
+                        <span class="font-medium">{{ menu?.name || t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.details.labels.language') }}</span>
-                        <span class="font-medium">{{ menu?.language?.name || t('pages.back_office.menus.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.language') }}</span>
+                        <span class="font-medium">{{ menu?.language?.name || t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.details.form.menu_type') }}</span>
-                        <span class="font-medium">{{ menu?.menu_type?.name || t('pages.back_office.menus.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.menuType') }}</span>
+                        <span class="font-medium">{{ menu?.menu_type?.name || t('common.labels.notAvailable') }}</span>
                     </div>
                 </div>
 
@@ -118,14 +118,14 @@ onMounted(async () => {
 
             <div class="grid grid-cols-1 md:grid-cols-1 gap-4 text-sm">
                 <h3 class="text-base font-semibold border-b pb-2">
-                    {{ t('pages.back_office.menus.details.menu_items') }}
+                    {{ t('common.messages.menuItems') }}
                 </h3>
 
                 <div>
                     <a :href="route('back-office.menus.menu-items.create', { slug: menu?.slug })"
                         class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md inline-flex items-center gap-2 transition">
                         <FontAwesomeIcon icon="plus" />
-                        {{ t('pages.back_office.menus.details.add_menu_item') }}
+                        {{ t('common.messages.addMenuItem') }}
                     </a>
                 </div>
 
@@ -135,39 +135,39 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.menus.details.medias.details.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.details.table.columns.created_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdAt') }}</span>
                         <span class="font-medium">
-                            {{ menu?.created_at ? formatDateTime(menu.created_at) : t('pages.back_office.menus.details.labels.not_available') }}
+                            {{ menu?.created_at ? formatDateTime(menu.created_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.details.labels.created_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdBy') }}</span>
                         <span class="font-medium">
-                            {{ menu?.created_by?.name || t('pages.back_office.menus.details.labels.not_available') }}
+                            {{ menu?.created_by?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.details.labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedAt') }}</span>
                         <span class="font-medium">
-                            {{ menu?.updated_at ? formatDateTime(menu.updated_at) : t('pages.back_office.menus.details.labels.not_available') }}
+                            {{ menu?.updated_at ? formatDateTime(menu.updated_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.menus.details.labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedBy') }}</span>
                         <span class="font-medium">
-                            {{ menu?.latest_activity_log?.causer?.name || t('pages.back_office.menus.details.labels.not_available') }}
+                            {{ menu?.latest_activity_log?.causer?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -177,7 +177,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.menus.details.activity_logs.index.title') }}
+                {{ t('common.labels.activityLogs') }}
             </h3>
 
             <RecentActivities :model-slug="'menu'" :model="menu" />
@@ -198,7 +198,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.menus.details.delete_modal.title') }}
+                                {{ t('common.modals.deleteMenu') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -206,20 +206,20 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.menus.details.modals.delete_confirmation_modal.irreversible_body') }}
+                                {{ t('common.modals.thisActionCannotBeUndone') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.menus.details.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
 
-                                    {{ deleteProcessing ? t('pages.back_office.menus.details.actions.deleting') : t('pages.back_office.menus.details.actions.delete') }}
+                                    {{ deleteProcessing ? t('common.actions.deleting') : t('common.actions.delete') }}
                                 </button>
                             </div>
                         </div>

@@ -27,7 +27,7 @@ const { news, page } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title ?? t('pages.latest.labels.latest_news')
+    return page?.seo_title ?? page?.title ?? t('pages.latest.labels.latestNews')
 })
 
 const metaDescription = computed(() => {
@@ -59,8 +59,8 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
     <div class="latest-page space-y-6">
         <section class="page-hero">
-            <p>{{ t('pages.latest.labels.latest_news') }}</p>
-            <h1>{{ t('pages.latest.labels.latest_news') }}</h1>
+            <p>{{ t('pages.latest.labels.latestNews') }}</p>
+            <h1>{{ t('pages.latest.labels.latestNews') }}</h1>
         </section>
 
         <List :news="news" pagination-type="Cursor" />

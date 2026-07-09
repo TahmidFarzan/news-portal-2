@@ -21,7 +21,7 @@ const { page } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title ?? t('pages.page.labels.page')
+    return page?.seo_title ?? page?.title ?? t('common.labels.page')
 })
 
 const metaDescription = computed(() => {

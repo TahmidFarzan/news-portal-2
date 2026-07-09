@@ -64,7 +64,7 @@ const { survey } = defineProps({
     survey: Object
 })
 
-const pageTitle = computed(() => `${survey?.name} ${t('pages.back_office.surveys.details.labels.details')}`)
+const pageTitle = computed(() => `${survey?.name} ${t('common.actions.details')}`)
 
 const canUpdate = (survey) => canUpdateSurvey(authUser?.value, survey)
 const canDelete = (survey) => canDeleteSurvey(authUser?.value, survey)
@@ -147,7 +147,7 @@ onMounted(
                     detail:
                         [
                             {
-                                text: t('pages.back_office.surveys.details.labels.surveys'),
+                                text: t('common.labels.surveys'),
                                 href: route('back-office.surveys.index')
                             },
                             {
@@ -172,14 +172,14 @@ onMounted(
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.surveys.details.labels.survey_details') }}
+                {{ t('admin.surveys.details.labels.surveyDetails') }}
             </h2>
 
             <div class="flex gap-2">
                 <a v-if="canUpdate(survey)" :href="route('back-office.surveys.edit', { slug: survey?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.surveys.details.links.edit') }}
+                    {{ t('common.actions.edit') }}
                 </a>
 
                 <button v-if="survey?.is_active && canInactive(survey)" type="button"
@@ -187,8 +187,8 @@ onMounted(
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 disabled:opacity-60">
                     <FontAwesomeIcon v-if="inactiveProcessing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="eye-slash" /> {{ inactiveProcessing ?
-                        t('pages.back_office.surveys.details.buttons.inactivating') :
-                        t('pages.back_office.surveys.details.buttons.inactive') }}
+                        t('common.actions.inactivating') :
+                        t('common.actions.inactive') }}
                 </button>
 
                 <button v-if="!survey?.is_active && canActive(survey)" type="button" @click="openStatusModal('active')"
@@ -196,70 +196,70 @@ onMounted(
                     class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md flex items-center gap-2 disabled:opacity-60">
                     <FontAwesomeIcon v-if="activeProcessing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="eye" /> {{ activeProcessing ?
-                        t('pages.back_office.surveys.details.buttons.activating') :
-                        t('pages.back_office.surveys.details.buttons.active') }}
+                        t('common.actions.activating') :
+                        t('common.actions.active') }}
                 </button>
 
                 <button v-if="canDelete(survey)" type="button" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    {{ t('pages.back_office.surveys.details.buttons.delete') }}
+                    {{ t('common.actions.delete') }}
                 </button>
 
                 <a v-if="canAccessQuestion(survey)" :href="route('back-office.surveys.survey-questions.index', { slug: survey?.slug })"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="list" />
-                    {{ t('pages.back_office.surveys.details.links.survey_question_list') }}
+                    {{ t('common.messages.questions') }}
                 </a>
 
                 <a v-if="canCreateQuestion(survey)" :href="route('back-office.surveys.survey-questions.create', { slug: survey?.slug })"
                     class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="add" />
-                    {{ t('pages.back_office.surveys.details.links.survey_question_create') }}
+                    {{ t('common.messages.createQuestion') }}
                 </a>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.surveys.details.labels.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.language') }}</span>
-                        <span class="font-medium">{{ survey?.language?.name || t('pages.back_office.surveys.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.language') }}</span>
+                        <span class="font-medium">{{ survey?.language?.name || t('common.labels.notAvailable') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.name') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.name') }}</span>
                         <span class="font-medium">{{ survey?.name ||
-                            t('pages.back_office.surveys.details.labels.not_available') }}</span>
+                            t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.brief') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.brief') }}</span>
                         <span class="font-medium">
                             {{ survey?.brief ||
-                                t('pages.back_office.surveys.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.date') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.date') }}</span>
                         <span class="font-medium">
-                            {{ survey?.date || t('pages.back_office.surveys.details.labels.not_available') }}
+                            {{ survey?.date || t('common.labels.notAvailable') }}
 
                         </span>
                     </div>
 
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.status') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.status') }}</span>
                         <span :class="survey?.is_active ? 'text-green-600' : 'text-red-500'" class="font-medium">
-                            {{ survey?.is_active ? t('pages.back_office.surveys.details.labels.active') :
-                                t('pages.back_office.surveys.details.labels.inactive') }}
+                            {{ survey?.is_active ? t('common.actions.active') :
+                                t('common.actions.inactive') }}
                         </span>
                     </div>
                 </div>
@@ -269,26 +269,26 @@ onMounted(
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.surveys.details.labels.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.created_at')
+                        <span class="text-gray-500">{{ t('common.labels.createdAt')
                             }}</span>
                         <span class="font-medium">
                             {{ survey?.created_at ? formatDateTime(survey.created_at) :
-                                t('pages.back_office.surveys.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.created_by')
+                        <span class="text-gray-500">{{ t('common.labels.createdBy')
                             }}</span>
                         <span class="font-medium">
-                            {{ survey?.created_by?.name || t('pages.back_office.surveys.details.labels.not_available')
+                            {{ survey?.created_by?.name || t('common.labels.notAvailable')
                             }}
                         </span>
                     </div>
@@ -296,20 +296,20 @@ onMounted(
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.updated_at')
+                        <span class="text-gray-500">{{ t('common.labels.updatedAt')
                             }}</span>
                         <span class="font-medium">
                             {{ survey?.updated_at ? formatDateTime(survey.updated_at) :
-                                t('pages.back_office.surveys.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.surveys.details.labels.updated_by')
+                        <span class="text-gray-500">{{ t('common.labels.updatedBy')
                             }}</span>
                         <span class="font-medium">
                             {{ survey?.latest_activity_log?.casurvey?.name ||
-                                t('pages.back_office.surveys.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -319,7 +319,7 @@ onMounted(
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.surveys.details.labels.activity_logs_title') }}
+                {{ t('common.labels.activityLogs') }}
             </h3>
 
             <RecentActivities :model-slug="'survey'" :model="survey" />
@@ -327,7 +327,7 @@ onMounted(
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.surveys.details.labels.survey_questions') }}
+                {{ t('common.labels.surveyQuestions') }}
             </h3>
 
             <RecentSurveyQuestions :survey="survey" />
@@ -349,7 +349,7 @@ onMounted(
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.surveys.details.labels.delete_modal_title') }}
+                                {{ t('common.modals.deleteConfirmation') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -358,21 +358,21 @@ onMounted(
 
                             <p class="text-sm text-gray-500">
                                 {{
-                                    t('pages.back_office.surveys.details.labels.delete_modal_title')
+                                    t('common.modals.deleteConfirmation')
                                 }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button type="button" @click="closeDeleteModal"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.surveys.details.buttons.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button type="button" @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('pages.back_office.surveys.details.buttons.deleting') :
-                                        t('pages.back_office.surveys.details.buttons.delete') }}
+                                    {{ deleteProcessing ? t('common.actions.deleting') :
+                                        t('common.actions.delete') }}
                                 </button>
                             </div>
                         </div>
@@ -395,8 +395,8 @@ onMounted(
 
                             {{
                                 statusAction === 'inactive'
-                                    ? t('pages.back_office.surveys.details.labels.inactive')
-                                    : t('pages.back_office.surveys.details.labels.active')
+                                    ? t('common.actions.inactive')
+                                    : t('common.actions.active')
                             }}
 
                         </h3>
@@ -419,7 +419,7 @@ onMounted(
 
                             <button @click="closeStatusModal" class="px-4 py-2 bg-gray-100 rounded-md">
                                 {{
-                                    t('pages.back_office.surveys.details.buttons.cancel')
+                                    t('common.actions.cancel')
                                 }}
                             </button>
 
@@ -438,12 +438,12 @@ onMounted(
                                         ? (
                                             inactiveProcessing
                                                 ? 'Inactivating...'
-                                                : t('pages.back_office.surveys.details.buttons.inactive')
+                                                : t('common.actions.inactive')
                                         )
                                         : (
                                             activeProcessing
                                                 ? 'Activating...'
-                                                : t('pages.back_office.surveys.details.buttons.active')
+                                                : t('common.actions.active')
                                         )
                                 }}
 

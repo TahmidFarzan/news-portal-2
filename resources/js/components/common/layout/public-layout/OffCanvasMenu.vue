@@ -154,13 +154,13 @@ onMounted(() => {
                             </template>
 
                             <li v-else class="px-3 py-2 text-sm text-gray-400">
-                                {{ t("components.common.layout.public_layout.off_canvas_menu.labels.no_menu_found") }}
+                                {{ t("common.labels.noMenuFound") }}
                             </li>
 
                             <li v-if="offCanvasMenu.loading && hasOffCanvasMenu"
                                 class="px-3 py-2 text-sm text-gray-400">
                                 <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
-                                {{ t("components.common.layout.public_layout.off_canvas_menu.labels.loading") }}
+                                {{ t("common.labels.loading") }}
                             </li>
                         </ul>
                     </VerticalScroller>

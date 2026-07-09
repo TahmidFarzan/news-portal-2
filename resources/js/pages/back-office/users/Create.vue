@@ -40,8 +40,8 @@ const isUpdate = computed(() => !!user?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${user?.name} ${t('pages.back_office.users.create.actions.edit')}`
-        : t('pages.back_office.users.create.form.create_page_title')
+        ? `${user?.name} ${t('common.actions.edit')}`
+        : t('admin.users.create.form.createPageTitle')
 })
 
 const saveForm = useForm({
@@ -69,43 +69,43 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('pages.back_office.users.create.validation.name_is_required'))
+        saveForm.setError('name', t('common.validation.nameIsRequired'))
         valid = false
     }
 
     if (!saveForm.email) {
-        saveForm.setError('email', t('pages.back_office.users.create.validation.email_is_required'))
+        saveForm.setError('email', t('common.validation.emailIsRequired'))
         valid = false
     }
 
     if (!saveForm.gender) {
-        saveForm.setError('gender', t('pages.back_office.users.create.validation.gender_is_required'))
+        saveForm.setError('gender', t('common.validation.genderIsRequired'))
         valid = false
     }
 
     if (!saveForm.marital_status) {
-        saveForm.setError('marital_status', t('pages.back_office.users.create.validation.marital_status_is_required'))
+        saveForm.setError('marital_status', t('common.validation.maritalStatusIsRequired'))
         valid = false
     }
 
     if (!saveForm.religion) {
-        saveForm.setError('religion', t('pages.back_office.users.create.validation.religion_is_required'))
+        saveForm.setError('religion', t('common.validation.religionIsRequired'))
         valid = false
     }
 
     if (!saveForm.user_permission_ids && !saveForm?.is_super_admin) {
-        saveForm.setError('user_permission_ids', t('pages.back_office.users.create.validation.user_permission_is_required'))
+        saveForm.setError('user_permission_ids', t('admin.users.create.validation.userPermissionIsRequired'))
         valid = false
     }
 
     if (saveForm.change_password) {
         if (!saveForm.password) {
-            saveForm.setError('password', t('pages.back_office.users.create.validation.password_is_required'))
+            saveForm.setError('password', t('common.validation.passwordIsRequired'))
             valid = false
         }
 
         if (!saveForm.password_confirmation) {
-            saveForm.setError('password_confirmation', t('pages.back_office.users.create.validation.password_confirmation_is_required'))
+            saveForm.setError('password_confirmation', t('common.validation.passwordConfirmationIsRequired'))
             valid = false
         }
     }
@@ -154,7 +154,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.users.create.labels.users'), href: route('back-office.users.index') },
+                { text: t('common.labels.users'), href: route('back-office.users.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -172,24 +172,24 @@ onMounted(async () => {
             <form @submit.prevent="handleSave" class="space-y-6 mt-3">
                 <ul class="list-disc pl-5">
                     <li class="text-base font-semibold text-blue-700">
-                        {{ t('pages.back_office.users.create.labels.super_admin_create_notice') }}
+                        {{ t('admin.users.create.labels.superAdminCreateNotice') }}
                     </li>
                 </ul>
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4 mt-3">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.users.create.labels.basic_information') }}
+                        {{ t('common.labels.basicInformation') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.name') }} <span
+                                {{ t('common.labels.name') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.name"
-                                :placeholder="t('pages.back_office.users.create.form.name_placeholder')"
+                                :placeholder="t('common.placeholders.enterName')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -200,12 +200,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.email') }} <span
+                                {{ t('common.labels.email') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.email" type="email"
-                                :placeholder="t('pages.back_office.users.create.form.email_placeholder')"
+                                :placeholder="t('admin.users.create.form.emailPlaceholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.email ? 'border-red-500' : 'border-gray-300'" />
 
@@ -216,7 +216,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.birth_date') }}
+                                {{ t('common.labels.birthDate') }}
                             </label>
 
                             <input type="date" v-model="saveForm.birth_date"
@@ -225,13 +225,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.gender') }} <span
+                                {{ t('common.labels.gender') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="gender"
                                 :selectedItem="saveForm.gender" :apiUrl="route('search.genders')" :multiple="false"
-                                :placeholder="t('pages.back_office.users.create.actions.select')"
+                                :placeholder="t('common.actions.select')"
                                 :error="saveForm.errors.gender" />
 
                             <p v-if="saveForm.errors.gender" class="text-red-500 text-sm mt-1">
@@ -241,13 +241,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.religion') }} <span
+                                {{ t('common.labels.religion') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="religion"
                                 :selectedItem="saveForm.religion" :apiUrl="route('search.religions')" :multiple="false"
-                                :placeholder="t('pages.back_office.users.create.actions.select')"
+                                :placeholder="t('common.actions.select')"
                                 :error="saveForm.errors.religion" />
 
                             <p v-if="saveForm.errors.religion" class="text-red-500 text-sm mt-1">
@@ -257,13 +257,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.marital_status') }} <span
+                                {{ t('common.labels.maritalStatus') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="marital_status"
                                 :selectedItem="saveForm.marital_status" :apiUrl="route('search.marital-statuses')"
-                                :multiple="false" :placeholder="t('pages.back_office.users.create.actions.select')"
+                                :multiple="false" :placeholder="t('common.actions.select')"
                                 :error="saveForm.errors.marital_status" />
 
                             <p v-if="saveForm.errors.marital_status" class="text-red-500 text-sm mt-1">
@@ -273,7 +273,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.mobile') }}
+                                {{ t('common.labels.mobile') }}
                             </label>
 
                             <VueTelInput v-model="saveForm.mobile" class="w-full border rounded-md px-2 py-1"
@@ -286,17 +286,17 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.labels.address') }}
+                                {{ t('common.labels.address') }}
                             </label>
 
                             <textarea v-model="saveForm.address" rows="3"
-                                :placeholder="t('pages.back_office.users.create.form.address_placeholder')"
+                                :placeholder="t('common.placeholders.enterAddress')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300"></textarea>
                         </div>
 
                         <div v-if="authUser?.is_super_admin">
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('pages.back_office.users.create.labels.is_super_admin') }}
+                                {{ t('common.labels.isSuperAdmin') }}
                             </label>
 
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -310,8 +310,8 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.is_super_admin ? t('pages.back_office.users.create.labels.yes') :
-                                        t('pages.back_office.users.create.labels.no') }}
+                                    {{ saveForm.is_super_admin ? t('common.boolean.yes') :
+                                        t('common.boolean.no') }}
                                 </span>
                             </label>
                         </div>
@@ -321,7 +321,7 @@ onMounted(async () => {
                         <SelectByGroupApi :selectedItem="saveForm.user_permission_ids" fieldName="user_permission_ids"
                             :form="saveForm" :apiUrl="route('search.user-permissions-by-group')" apiLabelKey="access"
                             apiValueKey="id" :isRequired="!saveForm?.is_super_admin"
-                            :defaultLabel="t('pages.back_office.users.create.form.user_permission')" />
+                            :defaultLabel="t('common.labels.userPermisssion')" />
 
                         <p v-if="saveForm.errors.user_permission_ids" class="text-red-500 text-sm mt-1">
                             {{ saveForm.errors.user_permission_ids }}
@@ -333,20 +333,20 @@ onMounted(async () => {
 
                             <label class="flex items-center gap-2">
                                 <input type="checkbox" v-model="saveForm.set_as_verify_email" />
-                                <span class="text-sm">{{ t('pages.back_office.users.create.form.set_as_verify_email')
+                                <span class="text-sm">{{ t('admin.users.create.form.setAsVerifyEmail')
                                 }}</span>
                             </label>
 
                             <label class="flex items-center gap-2">
                                 <input type="checkbox" v-model="saveForm.send_verify_email" />
-                                <span class="text-sm">{{ t('pages.back_office.users.create.form.send_verify_email')
+                                <span class="text-sm">{{ t('admin.users.create.form.sendVerifyEmail')
                                 }}</span>
                             </label>
 
                             <label class="flex items-center gap-2">
                                 <input type="checkbox" v-model="saveForm.change_password" />
                                 <span class="text-sm">{{
-                                    t('pages.back_office.users.create.auth.account.change_password') }}</span>
+                                    t('common.messages.changePassword') }}</span>
                             </label>
 
                         </div>
@@ -356,24 +356,24 @@ onMounted(async () => {
 
                 <div v-if="saveForm.change_password" class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.users.create.auth.account.change_password') }}
+                        {{ t('common.messages.changePassword') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.auth.account.new_password') }} <span
+                                {{ t('common.messages.newPassword') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <div class="relative">
                                 <input :type="showPassword ? 'text' : 'password'" v-model="saveForm.password"
-                                    :placeholder="t('pages.back_office.users.create.form.new_password_placeholder')"
+                                    :placeholder="t('common.placeholders.enterNewPassword')"
                                     class="w-full border rounded-md px-3 py-2 text-sm pr-10 focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
 
                                 <button type="button" @click="togglePasswordVisibility" class="absolute right-2 top-2"
-                                    :title="showPassword ? t('pages.back_office.users.create.auth.account.hide_password') : t('pages.back_office.users.create.auth.account.show_password')">
+                                    :title="showPassword ? t('common.messages.hidePassword') : t('common.messages.showPassword')">
                                     <FontAwesomeIcon :icon="showPassword ? 'eye-slash' : 'eye'" />
                                 </button>
                             </div>
@@ -385,19 +385,19 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.users.create.auth.account.confirm_password') }} <span
+                                {{ t('common.messages.confirmPassword') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <div class="relative">
                                 <input :type="showConfirmPassword ? 'text' : 'password'"
                                     v-model="saveForm.password_confirmation"
-                                    :placeholder="t('pages.back_office.users.create.form.confirm_password_placeholder')"
+                                    :placeholder="t('common.placeholders.confirmPassword')"
                                     class="w-full border rounded-md px-3 py-2 text-sm pr-10 focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
 
                                 <button type="button" @click="toggleConfirmPasswordVisibility"
                                     class="absolute right-2 top-2"
-                                    :title="showConfirmPassword ? t('pages.back_office.users.create.auth.account.hide_confirm_password') : t('pages.back_office.users.create.auth.account.show_confirm_password')">
+                                    :title="showConfirmPassword ? t('common.messages.hideConfirmPassword') : t('common.messages.showConfirmPassword')">
                                     <FontAwesomeIcon :icon="showConfirmPassword ? 'eye-slash' : 'eye'" />
                                 </button>
                             </div>
@@ -415,8 +415,8 @@ onMounted(async () => {
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('pages.back_office.users.create.actions.saving') :
-                            t('pages.back_office.users.create.actions.save') }}
+                        {{ saveForm.processing ? t('common.actions.saving') :
+                            t('common.actions.save') }}
                     </button>
                 </div>
 

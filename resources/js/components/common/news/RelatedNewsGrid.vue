@@ -29,7 +29,7 @@ const { news } = defineProps({
             <FontAwesomeIcon :icon="faAngleRight" class="text-red-600" />
 
             <h2 class="text-xl font-bold text-gray-950">
-                {{ t("components.common.news.related_news_grid.labels.related_news") }}
+                {{ t("common.labels.relatedNews") }}
             </h2>
         </div>
 

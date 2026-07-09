@@ -39,9 +39,9 @@ const { news = {} } = defineProps({
     },
 })
 
-const notAvailable = computed(() => t('pages.back_office.news.details.labels.not_available'))
+const notAvailable = computed(() => t('common.labels.notAvailable'))
 
-const pageTitle = computed(() => `${news?.title} ${t('pages.back_office.news.details.labels.details')}`)
+const pageTitle = computed(() => `${news?.title} ${t('common.actions.details')}`)
 
 const canUpdate = news => canUpdateNews(authUser?.value, news)
 const canDelete = news => canDeleteNews(authUser?.value, news)
@@ -73,7 +73,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.news.details.labels.news'), href: route('back-office.news.index') },
+                { text: t('common.labels.news'), href: route('back-office.news.index') },
                 { text: pageTitle.value, active: true },
             ],
         })
@@ -88,67 +88,67 @@ onMounted(async () => {
     <div class="w-full space-y-6">
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.news.details.page_title') }}
+                {{ t('admin.news.details.pageTitle') }}
             </h2>
 
             <div class="flex gap-2">
                 <a v-if="canUpdate(news)" :href="route('back-office.news.edit', { slug: news?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.news.details.actions.edit') }}
+                    {{ t('common.actions.edit') }}
                 </a>
 
                 <button v-if="canDelete(news)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    {{ t('pages.back_office.news.details.actions.delete') }}
+                    {{ t('common.actions.delete') }}
                 </button>
 
                 <button v-if="canRestore(news)" @click="showRestoreModal = true"
                     class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="eye" />
-                    {{ t('pages.back_office.news.details.actions.restore') }}
+                    {{ t('common.actions.restore') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.news.details.labels.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.news_type') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.newsType') }}</span>
                         <span class="font-medium">{{ news?.news_type?.name || notAvailable }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.language') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.language') }}</span>
                         <span class="font-medium">{{ news?.language?.name || notAvailable }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.form.category') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.category') }}</span>
                         <span class="font-medium">{{ news?.category?.name || notAvailable }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.form.location') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.location') }}</span>
                         <span class="font-medium">{{ news?.location?.name || notAvailable }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.form.event') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.event') }}</span>
                         <span class="font-medium">{{ news?.event?.name || notAvailable }}</span>
                     </div>
                 </div>
@@ -157,24 +157,24 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.title') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.title') }}</span>
                         <span class="font-medium">{{ news?.title || notAvailable }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.form.sub_title') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.subtitle') }}</span>
                         <span class="font-medium">{{ news?.sub_title || notAvailable }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.form.content_shoulder') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.contentShoulder') }}</span>
                         <span class="font-medium">{{ news?.content_shoulder || notAvailable }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.news.details.form.brief') }}</div>
+                        <div class="text-gray-500 mb-1">{{ t('common.labels.brief') }}</div>
                         <div class="text-gray-700">{{ news?.brief || notAvailable }}</div>
                     </div>
                 </div>
@@ -183,7 +183,7 @@ onMounted(async () => {
             <div v-if="checkIsStory(news?.news_type)" class="grid grid-cols-1 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.news.details.form.body') }}</div>
+                        <div class="text-gray-500 mb-1">{{ t('common.labels.body') }}</div>
                         <div class="text-gray-700">
                             <div v-html="news?.body || notAvailable"></div>
                         </div>
@@ -194,7 +194,7 @@ onMounted(async () => {
             <div v-if="checkIsVideo(news?.news_type)" class="grid grid-cols-1 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.news.details.form.video_url') }}</div>
+                        <div class="text-gray-500 mb-1">{{ t('common.labels.videoUrl') }}</div>
                         <div class="text-gray-700">
                             {{ news?.video_url || notAvailable }}
                         </div>
@@ -211,7 +211,7 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.form.tags') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.tags') }}</span>
 
                         <div class="flex flex-wrap gap-2">
                             <template v-if="news?.tags && news.tags.length">
@@ -223,7 +223,7 @@ onMounted(async () => {
                             </template>
 
                             <span v-else class="text-sm text-gray-400 italic">
-                                {{ t('pages.back_office.news.details.no_tag_added') }}
+                                {{ t('admin.news.details.noTagAdded') }}
                             </span>
                         </div>
                     </div>
@@ -231,7 +231,7 @@ onMounted(async () => {
 
                 <div v-if="checkIsStory(news?.news_type)" class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.contributors') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.contributors') }}</span>
 
                         <div class="flex flex-wrap gap-2">
                             <template v-if="news?.contributors && news.contributors.length">
@@ -243,7 +243,7 @@ onMounted(async () => {
                             </template>
 
                             <span v-else class="text-sm text-gray-400 italic">
-                                {{ t('pages.back_office.news.details.no_contributor_added') }}
+                                {{ t('admin.news.details.noContributorAdded') }}
                             </span>
                         </div>
                     </div>
@@ -253,7 +253,7 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.news.details.form.feature_image') }}</div>
+                        <div class="text-gray-500 mb-1">{{ t('common.labels.featureImage') }}</div>
 
                         <div class="text-gray-700 w-100">
                             <MediaRenderer v-if="news?.feature_image" :media="news?.feature_image" />
@@ -278,7 +278,7 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div>
-                        <div class="text-gray-500 mb-1">{{ t('pages.back_office.news.details.form.feature_image_mobile') }}</div>
+                        <div class="text-gray-500 mb-1">{{ t('common.labels.mobileFeatureImage') }}</div>
 
                         <div class="text-gray-700 w-100">
                             <MediaRenderer v-if="news?.feature_image_mobile" :media="news?.feature_image_mobile" />
@@ -302,25 +302,25 @@ onMounted(async () => {
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="text-gray-500 mb-2">{{ t('pages.back_office.news.details.form.seo_settings') }}</div>
+                    <div class="text-gray-500 mb-2">{{ t('common.labels.seoSettings') }}</div>
 
                     <div class="space-y-3 text-sm">
                         <div>
-                            <div class="text-gray-500 mb-1">{{ t('pages.back_office.news.details.labels.title') }}</div>
+                            <div class="text-gray-500 mb-1">{{ t('common.labels.title') }}</div>
                             <div class="font-medium text-gray-700">
                                 {{ news?.seo_title || notAvailable }}
                             </div>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">{{ t('pages.back_office.news.details.form.brief') }}</div>
+                            <div class="text-gray-500 mb-1">{{ t('common.labels.brief') }}</div>
                             <div class="font-medium text-gray-700">
                                 {{ news?.seo_brief || notAvailable }}
                             </div>
                         </div>
 
                         <div>
-                            <div class="text-gray-500 mb-1">{{ t('pages.back_office.news.details.form.seo_keywords') }}</div>
+                            <div class="text-gray-500 mb-1">{{ t('common.labels.seoKeywords') }}</div>
                             <div class="font-medium text-gray-700">
                                 {{ news?.seo_keywords || notAvailable }}
                             </div>
@@ -332,22 +332,22 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div v-if="checkIsStory(news?.news_type)" class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.source') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.source') }}</span>
                         <span class="font-medium">{{ news?.source || notAvailable }}</span>
                     </div>
                 </div>
 
                 <div v-if="checkIsStory(news?.news_type)" class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.form.writer') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.writer') }}</span>
                         <span class="font-medium">{{ news?.writer || notAvailable }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.published') }}</span>
-                        <span class="font-medium">{{ news?.is_published ? t('pages.back_office.news.details.labels.yes') : t('pages.back_office.news.details.labels.no') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.published') }}</span>
+                        <span class="font-medium">{{ news?.is_published ? t('common.boolean.yes') : t('common.boolean.no') }}</span>
                     </div>
                 </div>
             </div>
@@ -355,20 +355,20 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.news.details.medias.details.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.created_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdAt') }}</span>
                         <span class="font-medium">
                             {{ news?.created_at ? formatDateTime(news.created_at) : notAvailable }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.created_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdBy') }}</span>
                         <span class="font-medium">
                             {{ news?.created_by?.name || notAvailable }}
                         </span>
@@ -377,14 +377,14 @@ onMounted(async () => {
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedAt') }}</span>
                         <span class="font-medium">
                             {{ news?.updated_at ? formatDateTime(news.updated_at) : notAvailable }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedBy') }}</span>
                         <span class="font-medium">
                             {{ news?.latest_activity_log?.causer?.name || notAvailable }}
                         </span>
@@ -395,23 +395,23 @@ onMounted(async () => {
 
         <div v-if="news?.breaking_news" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.news.details.app.breaking_news') }}
+                {{ t('common.messages.breakingNews') }}
             </h3>
 
             <div class="flex justify-between">
-                <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.title') }}</span>
+                <span class="text-gray-500">{{ t('common.labels.title') }}</span>
                 <span class="font-medium">{{ news?.breaking_news?.title || notAvailable }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-gray-500">{{ t('pages.back_office.news.details.labels.published') }}</span>
+                <span class="text-gray-500">{{ t('common.labels.published') }}</span>
                 <span class="font-medium">
-                    {{ news?.breaking_news?.is_published ? t('pages.back_office.news.details.labels.yes') : t('pages.back_office.news.details.labels.no') }}
+                    {{ news?.breaking_news?.is_published ? t('common.boolean.yes') : t('common.boolean.no') }}
                 </span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-gray-500">{{ t('pages.back_office.news.details.created_at') }}</span>
+                <span class="text-gray-500">{{ t('common.labels.createdAt') }}</span>
                 <span class="font-medium">
                     {{ news?.breaking_news?.created_at ? formatDateTime(news?.breaking_news?.created_at) : notAvailable
                     }}
@@ -421,7 +421,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.news.details.news_placements') }}
+                {{ t('admin.news.details.newsPlacements') }}
             </h3>
 
             <NewsPlacementList :news="news" :news-placements="news?.news_placements" />
@@ -429,7 +429,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.news.details.labels.relevant_news') }}
+                {{ t('common.labels.relevantNews') }}
             </h3>
 
             <RelatedOrRelevantNewsList :news="news?.relevant_news" />
@@ -437,7 +437,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.news.details.labels.related_news') }}
+                {{ t('common.labels.relatedNews') }}
             </h3>
 
             <RelatedOrRelevantNewsList :news="news?.related_news" />
@@ -445,7 +445,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.news.details.activity_logs.index.title') }}
+                {{ t('common.labels.activityLogs') }}
             </h3>
 
             <RecentActivities :model-slug="'news'" :model="news" />
@@ -465,7 +465,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.news.details.delete_modal.title') }}
+                                {{ t('common.modals.deleteNews') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -473,19 +473,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.news.details.delete_modal.body') }}
+                                {{ t('common.modals.thisActionCanBeUndoneByRestoringNews') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.news.details.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-60">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('pages.back_office.news.details.actions.deleting') : t('pages.back_office.news.details.actions.delete') }}
+                                    {{ deleteProcessing ? t('common.actions.deleting') : t('common.actions.delete') }}
                                 </button>
                             </div>
                         </div>
@@ -506,7 +506,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showRestoreModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-green-600">
-                                {{ t('pages.back_office.news.details.restore_modal.title') }}
+                                {{ t('common.modals.restoreNews') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -514,19 +514,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.news.details.restore_modal.body') }}
+                                {{ t('common.modals.thisActionCanBeUndoneByDeletingNews') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showRestoreModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.news.details.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleRestore" :disabled="restoreProcessing"
                                     class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-60">
                                     <FontAwesomeIcon v-if="restoreProcessing" icon="spinner" spin />
-                                    {{ restoreProcessing ? t('pages.back_office.news.details.actions.restoring') : t('pages.back_office.news.details.actions.restore') }}
+                                    {{ restoreProcessing ? t('common.messages.restoring') : t('common.actions.restore') }}
                                 </button>
                             </div>
                         </div>

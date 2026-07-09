@@ -32,8 +32,8 @@ const isUpdate = computed(() => !!event?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${event?.name} ${t('pages.back_office.events.create.labels.edit')}`
-        : t('pages.back_office.events.create.form.create_page_title')
+        ? `${event?.name} ${t('common.actions.edit')}`
+        : t('admin.events.create.form.createPageTitle')
 })
 
 const saveForm = useForm({
@@ -55,12 +55,12 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('pages.back_office.events.create.validation.name_is_required'))
+        saveForm.setError('name', t('common.validation.nameIsRequired'))
         valid = false
     }
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', t('pages.back_office.events.create.validation.language_is_required'))
+        saveForm.setError('language_id', t('common.validation.languageIsRequired'))
         valid = false
     }
 
@@ -108,7 +108,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.events.create.navigation.events'), href: route('back-office.events.index') },
+                { text: t('common.messages.events'), href: route('back-office.events.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -127,21 +127,21 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.events.create.labels.basic_information') }}
+                        {{ t('common.labels.basicInformation') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.labels.language') }} <span
+                                {{ t('common.labels.language') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="event?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
-                                :placeholder="t('pages.back_office.events.create.form.language_placeholder')" />
+                                :placeholder="t('common.placeholders.selectLanguage')" />
 
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -150,12 +150,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.labels.name') }} <span
+                                {{ t('common.labels.name') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.name"
-                                :placeholder="t('pages.back_office.events.create.form.name_placeholder')"
+                                :placeholder="t('common.placeholders.enterName')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -166,11 +166,11 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.form.brief') }}
+                                {{ t('common.labels.brief') }}
                             </label>
 
                             <textarea v-model="saveForm.brief" rows="4"
-                                :placeholder="t('pages.back_office.events.create.form.brief_placeholder')"
+                                :placeholder="t('common.placeholders.enterBrief')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -181,13 +181,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.labels.position') }}
+                                {{ t('common.labels.position') }}
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="position"
                                 :selectedItem="event?.position" :apiUrl="route('search.event-positions')"
                                 :error="saveForm.errors.position" :multiple="false"
-                                :placeholder="t('pages.back_office.events.create.form.position_placeholder')" />
+                                :placeholder="t('common.placeholders.selectPosition')" />
 
                             <p v-if="saveForm.errors.position" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.position }}
@@ -196,7 +196,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('pages.back_office.events.create.labels.is_current') }}
+                                {{ t('common.labels.isCurrent') }}
 
                             </label>
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -209,8 +209,8 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.is_current ? t('pages.back_office.events.create.labels.yes') :
-                                        t('pages.back_office.events.create.labels.no') }}
+                                    {{ saveForm.is_current ? t('common.boolean.yes') :
+                                        t('common.boolean.no') }}
                                 </span>
                             </label>
 
@@ -224,14 +224,14 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.events.create.form.banner_image_section') }}
+                        {{ t('admin.events.create.form.bannerImageSection') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.form.desktop_banner_image') }}
+                                {{ t('common.labels.desktopBannerImage') }}
                             </label>
 
                             <input type="file" @change="e => saveForm.desktop_banner_image = e.target.files[0]"
@@ -245,13 +245,13 @@ onMounted(async () => {
                             <MediaRenderer v-if="event?.desktop_banner_image" :media="event?.desktop_banner_image" />
 
                             <img v-else :src="'/uploads/images/event/desktop.png'"
-                                :alt="t('pages.back_office.events.create.form.desktop_banner_image')"
+                                :alt="t('common.labels.desktopBannerImage')"
                                 class="object-cover rounded-xl border border-gray-200 mt-2" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.form.mobile_banner_image') }}
+                                {{ t('common.labels.mobileBannerImage') }}
                             </label>
 
                             <input type="file" @change="e => saveForm.mobile_banner_image = e.target.files[0]"
@@ -265,7 +265,7 @@ onMounted(async () => {
                             <MediaRenderer v-if="event?.mobile_banner_image" :media="event?.mobile_banner_image" />
 
                             <img v-else :src="'/uploads/images/event/mobile.png'"
-                                :alt="t('pages.back_office.events.create.form.mobile_banner_image')"
+                                :alt="t('common.labels.mobileBannerImage')"
                                 class="object-cover rounded-xl border border-gray-200 mt-2" />
                         </div>
 
@@ -274,18 +274,18 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.events.create.form.seo_settings') }}
+                        {{ t('common.labels.seoSettings') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.form.seo_title') }}
+                                {{ t('common.labels.seoTitle') }}
                             </label>
 
                             <input v-model="saveForm.seo_title" type="text"
-                                :placeholder="t('pages.back_office.events.create.form.seo_title_placeholder')"
+                                :placeholder="t('common.placeholders.enterSeoTitle')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
 
@@ -296,11 +296,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.form.seo_brief') }}
+                                {{ t('common.labels.seoBrief') }}
                             </label>
 
                             <textarea v-model="saveForm.seo_brief" rows="3"
-                                :placeholder="t('pages.back_office.events.create.form.seo_brief_placeholder')"
+                                :placeholder="t('common.placeholders.enterSeoBrief')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -311,12 +311,12 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.events.create.form.seo_keywords') }}
+                                {{ t('common.labels.seoKeywords') }}
                             </label>
 
                             <SelectTaggable :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
-                                :placeholder="t('pages.back_office.events.create.form.seo_keywords_placeholder')" />
+                                :placeholder="t('common.placeholders.addKeywords')" />
 
                             <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.seo_keywords }}
@@ -332,8 +332,8 @@ onMounted(async () => {
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
 
-                        {{ saveForm.processing ? t('pages.back_office.events.create.actions.saving') :
-                            t('pages.back_office.events.create.actions.save') }}
+                        {{ saveForm.processing ? t('common.actions.saving') :
+                            t('common.actions.save') }}
                     </button>
                 </div>
 

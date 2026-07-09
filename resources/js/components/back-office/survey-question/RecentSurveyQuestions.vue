@@ -27,17 +27,17 @@ const { survey } = defineProps({
                     <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                         <tr>
                             <th class="px-4 py-2">
-                                {{ t("components.back_office.survey_question.recent_survey_questions.labels.sl") }}
+                                {{ t("common.labels.sl") }}
                             </th>
                             <th class="px-4 py-2">
-                                {{ t("components.back_office.survey_question.recent_survey_questions.labels.question") }}
+                                {{ t("common.labels.question") }}
                             </th>
 
                             <th class="px-4 py-2">
-                                {{ t("components.back_office.survey_question.recent_survey_questions.labels.created_at") }}
+                                {{ t("common.labels.createdAt") }}
                             </th>
                             <th class="px-4 py-2">
-                                {{ t("components.back_office.survey_question.recent_survey_questions.labels.actions") }}
+                                {{ t("common.labels.actions") }}
                             </th>
                         </tr>
                     </thead>
@@ -62,7 +62,7 @@ const { survey } = defineProps({
                                 <a :href="route('back-office.surveys.survey-questions.details', { slug: survey.slug ,surveyQuestionSlug: item.slug })"
                                     class="inline-flex items-center gap-1 px-2 py-1 text-xs border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
                                     <FontAwesomeIcon icon="info" />
-                                    {{ t("components.back_office.survey_question.recent_survey_questions.links.details") }}
+                                    {{ t("common.actions.details") }}
                                 </a>
                             </td>
 
@@ -75,7 +75,7 @@ const { survey } = defineProps({
             <div class="flex justify-center mt-4">
                 <a :href="route('back-office.surveys.survey-questions.index', { slug: survey.slug })"
                     class="inline-flex items-center justify-center px-4 py-2 border border-gray-400 text-gray-600 rounded hover:bg-gray-100">
-                    {{ t("components.back_office.survey_question.recent_survey_questions.links.show_all") }}
+                    {{ t("common.messages.showAll") }}
                 </a>
             </div>
 
@@ -83,7 +83,7 @@ const { survey } = defineProps({
 
         <div v-else>
             <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded">
-                {{ t("components.back_office.survey_question.recent_survey_questions.labels.no_record_found") }}
+                {{ t("common.labels.noRecordsFound") }}
             </div>
         </div>
 

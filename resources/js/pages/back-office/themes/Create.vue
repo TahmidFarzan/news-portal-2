@@ -32,8 +32,8 @@ const isUpdate = computed(() => !!theme?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${theme?.label} ${t('pages.back_office.themes.create.actions.edit')}`
-        : t('pages.back_office.themes.create.form.create_page_title')
+        ? `${theme?.label} ${t('common.actions.edit')}`
+        : t('admin.themes.create.form.createPageTitle')
 })
 
 const saveForm = useForm({
@@ -79,42 +79,42 @@ function validateForm() {
     let valid = true
 
     if (isEmpty(saveForm.group)) {
-        saveForm.setError('group', t('pages.back_office.themes.create.form.validation.group_required'))
+        saveForm.setError('group', t('admin.themes.create.form.validation.groupRequired'))
         valid = false
     }
 
     if (isEmpty(saveForm.label)) {
-        saveForm.setError('label', t('pages.back_office.themes.create.form.validation.label_required'))
+        saveForm.setError('label', t('admin.themes.create.form.validation.labelRequired'))
         valid = false
     }
 
     if (isEmpty(saveForm.type)) {
-        saveForm.setError('type', t('pages.back_office.themes.create.form.validation.type_required'))
+        saveForm.setError('type', t('common.validation.typeIsRequired'))
         valid = false
     }
 
     if (!hasValue(saveForm.value)) {
-        saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_required'))
+        saveForm.setError('value', t('admin.themes.create.form.validation.valueRequired'))
         valid = false
     }
 
     if (hasValue(saveForm.value) && saveForm.type === themeValueTypes.INTEGER) {
         if (!Number.isInteger(Number(saveForm.value))) {
-            saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_integer'))
+            saveForm.setError('value', t('admin.themes.create.form.validation.valueMustBeInteger'))
             valid = false
         }
     }
 
     if (hasValue(saveForm.value) && saveForm.type === themeValueTypes.TEXT) {
         if (saveForm.value) {
-            saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_text'))
+            saveForm.setError('value', t('admin.themes.create.form.validation.valueMustBeText'))
             valid = false
         }
     }
 
     if (hasValue(saveForm.value) && [themeValueTypes.FLOAT, themeValueTypes.DECIMAL].includes(saveForm.type)) {
         if (Number.isNaN(Number(saveForm.value))) {
-            saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_valid_number'))
+            saveForm.setError('value', t('admin.themes.create.form.validation.valueMustBeValidNumber'))
             valid = false
         }
     }
@@ -124,11 +124,11 @@ function validateForm() {
             const parsedValue = JSON.parse(saveForm.value)
 
             if (saveForm.type === themeValueTypes.ARRAY && !Array.isArray(parsedValue)) {
-                saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_valid_json_array'))
+                saveForm.setError('value', t('admin.themes.create.form.validation.valueMustBeValidJsonArray'))
                 valid = false
             }
         } catch {
-            saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_valid_json'))
+            saveForm.setError('value', t('admin.themes.create.form.validation.valueMustBeValidJson'))
             valid = false
         }
     }
@@ -137,7 +137,7 @@ function validateForm() {
         try {
             new URL(saveForm.value)
         } catch {
-            saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_valid_url'))
+            saveForm.setError('value', t('admin.themes.create.form.validation.valueMustBeValidUrl'))
             valid = false
         }
     }
@@ -146,7 +146,7 @@ function validateForm() {
         const colorRegex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/
 
         if (!colorRegex.test(saveForm.value)) {
-            saveForm.setError('value', t('pages.back_office.themes.create.form.validation.value_must_be_valid_color'))
+            saveForm.setError('value', t('admin.themes.create.form.validation.valueMustBeValidColor'))
             valid = false
         }
     }
@@ -180,7 +180,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.themes.create.labels.themes'), href: route('back-office.themes.index') },
+                { text: t('common.labels.themes'), href: route('back-office.themes.index') },
                 { text: pageTitle.value, active: true },
             ],
         })
@@ -197,11 +197,11 @@ onMounted(async () => {
 
             <div v-if="!hasThemeIdentity" class="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4">
                 <h3 class="font-semibold mb-1">
-                    {{ t('pages.back_office.themes.create.form.invalid_theme_data') }}
+                    {{ t('admin.themes.create.form.invalidThemeData') }}
                 </h3>
 
                 <p class="text-sm">
-                    {{ t('pages.back_office.themes.create.form.invalid_theme_data_body') }}
+                    {{ t('admin.themes.create.form.invalidThemeDataBody') }}
                 </p>
 
                 <div class="mt-3 space-y-1 text-sm">
@@ -213,7 +213,7 @@ onMounted(async () => {
             <form v-else @submit.prevent="handleSave" class="space-y-6">
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.themes.create.labels.basic_information') }}
+                        {{ t('common.labels.basicInformation') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -235,8 +235,8 @@ onMounted(async () => {
                             <select v-else-if="saveForm.type === themeValueTypes.BOOLEAN" v-model="saveForm.value"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'">
-                                <option :value="true">{{ t('pages.back_office.themes.create.labels.true') }}</option>
-                                <option :value="false">{{ t('pages.back_office.themes.create.labels.false') }}</option>
+                                <option :value="true">{{ t('common.labels.true') }}</option>
+                                <option :value="false">{{ t('common.labels.false') }}</option>
                             </select>
 
                             <input v-else-if="saveForm.type === themeValueTypes.INTEGER" v-model="saveForm.value"
@@ -255,12 +255,12 @@ onMounted(async () => {
                                 saveForm.type === themeValueTypes.JSON ||
                                 saveForm.type === themeValueTypes.ARRAY
                             " v-model="saveForm.value" rows="6"
-                                :placeholder="t('pages.back_office.themes.create.form.json_placeholder')"
+                                :placeholder="t('admin.themes.create.form.jsonPlaceholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'"></textarea>
 
                             <input v-else-if="saveForm.type === themeValueTypes.URL" v-model="saveForm.value" type="url"
-                                :placeholder="t('pages.back_office.themes.create.form.url_placeholder')"
+                                :placeholder="t('admin.themes.create.form.urlPlaceholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
 
@@ -273,7 +273,7 @@ onMounted(async () => {
                                 <input v-model="saveForm.value" type="color" class="w-16 h-10 border rounded-md" />
 
                                 <input v-model="saveForm.value" type="text"
-                                    :placeholder="t('pages.back_office.themes.create.form.color_placeholder')"
+                                    :placeholder="t('admin.themes.create.form.colorPlaceholder')"
                                     class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     :class="saveForm.errors.value ? 'border-red-500' : 'border-gray-300'" />
                             </div>
@@ -297,8 +297,8 @@ onMounted(async () => {
                             : 'bg-gray-400 cursor-not-allowed'">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('pages.back_office.themes.create.actions.saving') :
-                            t('pages.back_office.themes.create.actions.save') }}
+                        {{ saveForm.processing ? t('common.actions.saving') :
+                            t('common.actions.save') }}
                     </button>
                 </div>
             </form>

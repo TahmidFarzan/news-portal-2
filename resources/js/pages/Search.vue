@@ -67,7 +67,7 @@ const locationApiUrl = computed(() => makeLanguageUrl('search.location-tree'))
 const eventApiUrl = computed(() => makeLanguageUrl('search.events'))
 
 const metaTitle = computed(() => {
-    return page?.seo_title ?? page?.title ?? t('pages.search.labels.search')
+    return page?.seo_title ?? page?.title ?? t('common.actions.search')
 })
 
 const metaDescription = computed(() => {
@@ -192,34 +192,34 @@ onMounted(async () => {
 
     <div class="search-page space-y-6">
         <section class="page-hero">
-            <p>{{ t('pages.search.labels.search') }}</p>
-            <h1>{{ t('pages.search.labels.search') }}</h1>
+            <p>{{ t('common.actions.search') }}</p>
+            <h1>{{ t('common.actions.search') }}</h1>
         </section>
 
         <form class="search-filter rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4" @submit.prevent="applyFilter">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id || null" :apiUrl="newsTypesApiUrl" :multiple="false"
-                    :placeholder="t('pages.search.labels.news_type')" />
+                    :placeholder="t('common.labels.newsType')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.category_id || null" apiLabelKey="indentation_name" apiValueKey="id"
-                    :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('pages.search.labels.category')" />
+                    :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('common.labels.category')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.location_id || null" apiLabelKey="indentation_name" apiValueKey="id"
-                    :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('pages.search.labels.location')" />
+                    :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('common.labels.location')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id || null" :apiUrl="eventApiUrl" :multiple="false"
-                    :placeholder="t('pages.search.labels.event')" />
+                    :placeholder="t('common.labels.event')" />
 
-                <input v-model="filterForm.date" type="date" :aria-label="t('pages.search.labels.date')"
+                <input v-model="filterForm.date" type="date" :aria-label="t('common.labels.date')"
                     class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                <input v-model="filterForm.search" type="search" :placeholder="t('pages.search.news.index.search_placeholder')"
+                <input v-model="filterForm.search" type="search" :placeholder="t('common.placeholders.searchNews')"
                     class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
@@ -230,7 +230,7 @@ onMounted(async () => {
 
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ isFiltering ? t('pages.search.labels.loading') : t('pages.search.categories.index.apply_filter') }}
+                    {{ isFiltering ? t('common.labels.loading') : t('common.actions.applyFilter') }}
                 </button>
             </div>
         </form>

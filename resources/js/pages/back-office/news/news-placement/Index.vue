@@ -35,7 +35,7 @@ const {
 })
 
 const pageTitle = computed(() => {
-    return `${news?.title} ${t('pages.back_office.news.news_placement.index.placements.page_title_suffix')}`
+    return `${news?.title} ${t('admin.news.newsPlacement.index.placements.pageTitleSuffix')}`
 })
 
 const localHomeLeadNewsPlacements = ref([...homeLeadNewsPlacements])
@@ -136,7 +136,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.news.news_placement.index.labels.news'), href: route('back-office.news.index') },
+                { text: t('common.labels.news'), href: route('back-office.news.index') },
                 { text: pageTitle.value, active: true },
             ],
         })
@@ -153,26 +153,26 @@ onMounted(async () => {
             <button v-if="shouldShowAutoCreate" type="button"
                 class="inline-flex items-center px-5 py-2 rounded-lg text-sm font-medium transition bg-green-600 text-white hover:bg-green-700 disabled:opacity-60"
                 :disabled="autoCreateProcessing" @click="handleAutoCreate">
-                {{ autoCreateProcessing ? t('pages.back_office.news.news_placement.index.placements.auto_creating') : t('pages.back_office.news.news_placement.index.placements.auto_create') }}
+                {{ autoCreateProcessing ? t('admin.news.newsPlacement.index.placements.autoCreating') : t('admin.news.newsPlacement.index.placements.autoCreate') }}
             </button>
 
             <button type="button"
                 class="inline-flex items-center px-5 py-2 rounded-lg text-sm font-medium transition bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
                 :disabled="saveForm.processing" @click="handleSave">
-                {{ saveForm.processing ? t('pages.back_office.news.news_placement.index.actions.saving') : t('pages.back_office.news.news_placement.index.placements.save_all') }}
+                {{ saveForm.processing ? t('common.actions.saving') : t('admin.news.newsPlacement.index.placements.saveAll') }}
             </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
-            <NewsPlacementSortableList :title="t('pages.back_office.news.news_placement.index.placements.home_lead_news_placements')"
+            <NewsPlacementSortableList :title="t('admin.news.newsPlacement.index.placements.homeLeadNewsPlacements')"
                 v-model:items="localHomeLeadNewsPlacements" :news="news" field-name="home_lead_news_ids_sequence"
                 @sequence-change="handleSequenceChange" />
 
-            <NewsPlacementSortableList :title="t('pages.back_office.news.news_placement.index.placements.home_category_news_placements')"
+            <NewsPlacementSortableList :title="t('admin.news.newsPlacement.index.placements.homeCategoryNewsPlacements')"
                 v-model:items="localHomeCategoryNewsPlacements" :news="news"
                 field-name="home_category_news_ids_sequence" @sequence-change="handleSequenceChange" />
 
-            <NewsPlacementSortableList :title="t('pages.back_office.news.news_placement.index.placements.category_lead_news_placements')"
+            <NewsPlacementSortableList :title="t('admin.news.newsPlacement.index.placements.categoryLeadNewsPlacements')"
                 v-model:items="localCategoryLeadNewsPlacements" :news="news"
                 field-name="category_lead_news_ids_sequence" @sequence-change="handleSequenceChange" />
         </div>

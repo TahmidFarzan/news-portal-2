@@ -36,8 +36,8 @@ const isUpdate = computed(() => !!survey?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${survey?.name} ${t('pages.back_office.surveys.create.links.details')}`
-        : t('pages.back_office.surveys.create.labels.create_survey')
+        ? `${survey?.name} ${t('common.actions.details')}`
+        : t('admin.surveys.create.labels.createSurvey')
 })
 
 const saveForm = useForm({
@@ -54,17 +54,17 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('pages.back_office.surveys.create.validation.name_is_required'))
+        saveForm.setError('name', t('common.validation.nameIsRequired'))
         valid = false
     }
 
     if (!saveForm.date) {
-        saveForm.setError('date', t('pages.back_office.surveys.create.validation.date'))
+        saveForm.setError('date', t('admin.surveys.create.validation.date'))
         valid = false
     }
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', t('pages.back_office.surveys.create.validation.language_is_required'))
+        saveForm.setError('language_id', t('common.validation.languageIsRequired'))
         valid = false
     }
 
@@ -122,7 +122,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.surveys.create.labels.surveys'), href: route('back-office.surveys.index') },
+                { text: t('common.labels.surveys'), href: route('back-office.surveys.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -140,21 +140,21 @@ onMounted(async () => {
             <form @submit.prevent="handleSave" class="space-y-6 mt-3">
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4 mt-3">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.surveys.create.labels.basic_information') }}
+                        {{ t('common.labels.basicInformation') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.surveys.create.labels.language') }}
+                                {{ t('common.labels.language') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="survey?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
-                                :placeholder="t('pages.back_office.surveys.create.labels.language_placeholder')" />
+                                :placeholder="t('common.placeholders.selectLanguage')" />
 
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -163,12 +163,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.surveys.create.labels.name') }} <span
+                                {{ t('common.labels.name') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.name"
-                                :placeholder="t('pages.back_office.surveys.create.labels.name_placeholder')"
+                                :placeholder="t('common.placeholders.enterName')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -179,7 +179,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.surveys.create.labels.date') }}
+                                {{ t('common.labels.date') }}
                             </label>
 
                             <input type="date" v-model="saveForm.date"
@@ -188,11 +188,11 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.surveys.create.labels.brief') }}
+                                {{ t('common.labels.brief') }}
                             </label>
 
                             <textarea v-model="saveForm.brief" rows="4"
-                                :placeholder="t('pages.back_office.surveys.create.labels.brief_placeholder')"
+                                :placeholder="t('common.placeholders.enterBrief')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -203,7 +203,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('pages.back_office.surveys.create.labels.is_active') }}
+                                {{ t('common.labels.isActive') }}
                             </label>
 
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -217,8 +217,8 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.is_active ? t('pages.back_office.surveys.create.labels.yes') :
-                                        t('pages.back_office.surveys.create.labels.no') }}
+                                    {{ saveForm.is_active ? t('common.boolean.yes') :
+                                        t('common.boolean.no') }}
                                 </span>
                             </label>
                         </div>
@@ -230,8 +230,8 @@ onMounted(async () => {
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed">
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('pages.back_office.surveys.create.buttons.saving') :
-                            t('pages.back_office.surveys.create.buttons.save') }}
+                        {{ saveForm.processing ? t('common.actions.saving') :
+                            t('common.actions.save') }}
                     </button>
                 </div>
 

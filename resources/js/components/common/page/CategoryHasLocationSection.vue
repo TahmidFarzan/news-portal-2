@@ -387,7 +387,7 @@ watch(
             <FontAwesomeIcon icon="location-dot" class="text-blue-600" />
 
             <span>
-                {{ t('components.common.page.category_has_location_section.labels.location') }}
+                {{ t('common.labels.location') }}
             </span>
         </div>
 
@@ -396,7 +396,7 @@ watch(
                 <SelectInfinityLoadingApi :key="getLocationSelectKey(levelIndex)" :form="searchLocationForm"
                     :fieldName="getLocationFieldName(levelIndex)" :apiUrl="getLocationApiUrl(levelIndex)"
                     :error="searchLocationForm.errors?.[getLocationFieldName(levelIndex)]" :multiple="false"
-                    :placeholder="t('components.common.page.category_has_location_section.form.location_placeholder')" />
+                    :placeholder="t('pages.components.categoryHasLocationSection.form.locationPlaceholder')" />
             </div>
         </div>
 
@@ -408,8 +408,8 @@ watch(
             <span>
                 {{
                     isSearchingLocation
-                        ? t('components.common.page.category_has_location_section.actions.searching')
-                        : t('components.common.page.category_has_location_section.actions.search')
+                        ? t('pages.components.categoryHasLocationSection.actions.searching')
+                        : t('common.actions.search')
                 }}
             </span>
         </button>

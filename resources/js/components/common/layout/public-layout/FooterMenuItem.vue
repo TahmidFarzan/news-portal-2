@@ -25,7 +25,7 @@ const title = computed(() => {
     return item.title
         ?? item.name
         ?? item.label
-        ?? t("components.common.layout.public_layout.footer_menu_item.labels.menu")
+        ?? t("layout.public.footerMenuItem.labels.menu")
 })
 
 const children = computed(() => item.children ?? [])

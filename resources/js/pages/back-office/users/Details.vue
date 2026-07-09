@@ -52,7 +52,7 @@ const { user } = defineProps({
     user: Object
 })
 
-const pageTitle = computed(() => `${user?.name} ${t('pages.back_office.users.details.labels.details')}`)
+const pageTitle = computed(() => `${user?.name} ${t('common.actions.details')}`)
 const groupedPermissions = computed(() => {
     const permissions =
         user?.user_permissions || []
@@ -153,7 +153,7 @@ onMounted(
                     detail:
                         [
                             {
-                                text: t('pages.back_office.users.details.labels.users'),
+                                text: t('common.labels.users'),
                                 href: route('back-office.users.index')
                             },
                             {
@@ -178,14 +178,14 @@ onMounted(
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.users.details.title') }}
+                {{ t('admin.users.details.title') }}
             </h2>
 
             <div class="flex gap-2">
                 <a v-if="canUpdate(user)" :href="route('back-office.users.edit', { slug: user?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.users.details.actions.edit') }}
+                    {{ t('common.actions.edit') }}
                 </a>
 
                 <button v-if="user?.is_active && canActiveInactive(user)" type="button"
@@ -193,8 +193,8 @@ onMounted(
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 disabled:opacity-60">
                     <FontAwesomeIcon v-if="inactiveProcessing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="eye-slash" /> {{ inactiveProcessing ?
-                        t('pages.back_office.users.details.buttons.inactivating') :
-                        t('pages.back_office.users.details.buttons.inactive') }}
+                        t('common.actions.inactivating') :
+                        t('common.actions.inactive') }}
                 </button>
 
                 <button v-if="!user?.is_active && canActiveInactive(user)" type="button"
@@ -202,71 +202,71 @@ onMounted(
                     class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md flex items-center gap-2 disabled:opacity-60">
                     <FontAwesomeIcon v-if="activeProcessing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="eye" /> {{ activeProcessing ?
-                        t('pages.back_office.users.details.buttons.activating') :
-                        t('pages.back_office.users.details.buttons.active') }}
+                        t('common.actions.activating') :
+                        t('common.actions.active') }}
                 </button>
 
                 <button v-if="!user?.is_active && canDelete(user)" type="button" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    {{ t('pages.back_office.users.details.actions.delete') }}
+                    {{ t('common.actions.delete') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.users.details.labels.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.name') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.name') }}</span>
                         <span class="font-medium">{{ user?.name ||
-                            t('pages.back_office.users.details.labels.not_available') }}</span>
+                            t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.email') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.email') }}</span>
                         <span class="font-medium">
                             {{ user?.email ||
-                                t('pages.back_office.users.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                             <FontAwesomeIcon v-if="user?.email_verified_at" icon="circle-check"
                                 class="text-green-500" />
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.is_super_admin') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.isSuperAdmin') }}</span>
                         <span class="font-medium">
-                            {{ user?.is_super_admin ? t('pages.back_office.users.details.labels.yes') : t('pages.back_office.users.details.labels.no') }}
+                            {{ user?.is_super_admin ? t('common.boolean.yes') : t('common.boolean.no') }}
 
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.mobile') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.mobile') }}</span>
                         <span class="font-medium">
                             {{ user?.mobile ||
-                                t('pages.back_office.users.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
 
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.status') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.status') }}</span>
                         <span :class="user?.is_active ? 'text-green-600' : 'text-red-500'" class="font-medium">
-                            {{ user?.is_active ? t('pages.back_office.users.details.buttons.active') :
-                                t('pages.back_office.users.details.buttons.inactive') }}
+                            {{ user?.is_active ? t('common.actions.active') :
+                                t('common.actions.inactive') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 flex items-center justify-center">
                     <img :src="user?.profile_image?.preview_url || '/uploads/icons/auth/user.png'"
-                        :alt="t('pages.back_office.users.details.auth.profile.profile_image_alt')"
+                        :alt="t('common.messages.userProfileImage')"
                         class="w-40 h-40 object-cover rounded-xl border" />
                 </div>
 
@@ -276,38 +276,38 @@ onMounted(
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.birth_date') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.birthDate') }}</span>
                         <span class="font-medium">
                             {{ user?.birth_date ? formatDate(user?.birth_date) :
-                                t('pages.back_office.users.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.gender') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.gender') }}</span>
                         <span class="font-medium">{{ user?.gender?.name ||
-                            t('pages.back_office.users.details.labels.not_available') }}</span>
+                            t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.age') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.age') }}</span>
                         <span class="font-medium">{{ user?.age ||
-                            t('pages.back_office.users.details.labels.not_available') }}</span>
+                            t('common.labels.notAvailable') }}</span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.religion') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.religion') }}</span>
                         <span class="font-medium">{{ user?.religion?.name ||
-                            t('pages.back_office.users.details.labels.not_available') }}</span>
+                            t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.marital_status')
+                        <span class="text-gray-500">{{ t('common.labels.maritalStatus')
                         }}</span>
                         <span class="font-medium">{{ user?.marital_status?.name ||
-                            t('pages.back_office.users.details.labels.not_available') }}</span>
+                            t('common.labels.notAvailable') }}</span>
                     </div>
                 </div>
 
@@ -315,7 +315,7 @@ onMounted(
 
             <div class="border border-gray-200 rounded-lg p-4 text-sm space-y-2">
                 <span class="text-gray-500">
-                    {{ t('pages.back_office.users.details.form.user_permission') }}
+                    {{ t('common.labels.userPermisssion') }}
                 </span>
 
                 <div class="mt-3">
@@ -343,7 +343,7 @@ onMounted(
                     </div>
 
                     <span v-else class="font-medium">
-                        {{ t('pages.back_office.users.details.labels.not_available') }}
+                        {{ t('common.labels.notAvailable') }}
                     </span>
 
                 </div>
@@ -353,42 +353,42 @@ onMounted(
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.users.details.labels.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.created_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdAt') }}</span>
                         <span class="font-medium">
                             {{ user?.created_at ? formatDateTime(user.created_at) :
-                                t('pages.back_office.users.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.created_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdBy') }}</span>
                         <span class="font-medium">
-                            {{ user?.created_by?.name || t('pages.back_office.users.details.labels.not_available') }}
+                            {{ user?.created_by?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedAt') }}</span>
                         <span class="font-medium">
                             {{ user?.updated_at ? formatDateTime(user.updated_at) :
-                                t('pages.back_office.users.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.users.details.labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedBy') }}</span>
                         <span class="font-medium">
                             {{ user?.latest_activity_log?.causer?.name ||
-                                t('pages.back_office.users.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -398,7 +398,7 @@ onMounted(
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.users.details.activity_logs.index.title') }}
+                {{ t('common.labels.activityLogs') }}
             </h3>
 
             <RecentActivities :model-slug="'user'" :model="user" />
@@ -420,7 +420,7 @@ onMounted(
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.users.details.delete_modal.title') }}
+                                {{ t('common.modals.deleteUser') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -429,21 +429,21 @@ onMounted(
 
                             <p class="text-sm text-gray-500">
                                 {{
-                                    t('pages.back_office.users.details.modals.delete_confirmation_modal.irreversible_body')
+                                    t('common.modals.thisActionCannotBeUndone')
                                 }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button type="button" @click="closeDeleteModal"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.users.details.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button type="button" @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('pages.back_office.users.details.actions.deleting') :
-                                        t('pages.back_office.users.details.actions.delete') }}
+                                    {{ deleteProcessing ? t('common.actions.deleting') :
+                                        t('common.actions.delete') }}
                                 </button>
                             </div>
                         </div>
@@ -466,8 +466,8 @@ onMounted(
 
                             {{
                                 statusAction === 'inactive'
-                                    ? t('pages.back_office.users.details.buttons.inactive')
-                                    : t('pages.back_office.users.details.buttons.active')
+                                    ? t('common.actions.inactive')
+                                    : t('common.actions.active')
                             }}
 
                         </h3>
@@ -490,7 +490,7 @@ onMounted(
 
                             <button @click="closeStatusModal" class="px-4 py-2 bg-gray-100 rounded-md">
                                 {{
-                                    t('pages.back_office.users.details.actions.cancel')
+                                    t('common.actions.cancel')
                                 }}
                             </button>
 
@@ -509,12 +509,12 @@ onMounted(
                                         ? (
                                             inactiveProcessing
                                                 ? 'Inactivating...'
-                                                : t('pages.back_office.users.details.buttons.inactive')
+                                                : t('common.actions.inactive')
                                         )
                                         : (
                                             activeProcessing
                                                 ? 'Activating...'
-                                                : t('pages.back_office.users.details.buttons.active')
+                                                : t('common.actions.active')
                                         )
                                 }}
 

@@ -77,7 +77,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         <TagTrend :news="news" />
 
         <div v-if="news?.source" class="pt-4 text-sm text-gray-500">
-            <span>{{ t("components.common.news.view.story.labels.source") }}: </span>
+            <span>{{ t("common.labels.source") }}: </span>
             {{ news.source }}
         </div>
 

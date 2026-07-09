@@ -21,15 +21,15 @@ const { news } = defineProps({
 })
 
 const metaTitle = computed(() => {
-    return t("pages.image_gallery_news.labels.image_galleries") || ''
+    return t("pages.imageGalleryNews.labels.imageGalleries") || ''
 })
 
 const metaDescription = computed(() => {
-    return t("pages.image_gallery_news.labels.brief") || ''
+    return t("pages.imageGalleryNews.labels.brief") || ''
 })
 
 const metaKeywords = computed(() => {
-    return t("pages.image_gallery_news.labels.key_words") || ''
+    return t("pages.imageGalleryNews.labels.keyWords") || ''
 })
 
 const showGoogleAd = inject('showGoogleAd', computed(() => false))
@@ -37,7 +37,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
 <template>
 
-    <Head :title="t('pages.image_gallery_news.labels.image_galleries')">
+    <Head :title="t('pages.imageGalleryNews.labels.imageGalleries')">
         <link v-if="route('image-galleries')" rel="canonical" :href="route('image-galleries')" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
@@ -49,14 +49,14 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         <section class="grid grid-cols-1 items-center gap-5 md:grid-cols-12">
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
-                    <img :src="'/uploads/images/logo/image-gallery.png'" :alt="t('pages.image_gallery_news.labels.image_galleries')"
+                    <img :src="'/uploads/images/logo/image-gallery.png'" :alt="t('pages.imageGalleryNews.labels.imageGalleries')"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    {{ t('pages.image_gallery_news.labels.image_galleries') }}
+                    {{ t('pages.imageGalleryNews.labels.imageGalleries') }}
                 </p>
             </div>
         </section>

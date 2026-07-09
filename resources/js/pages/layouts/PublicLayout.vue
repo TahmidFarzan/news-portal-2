@@ -58,7 +58,7 @@ const flashMessage = computed(() => page.props.flashMessage)
 const translateNumerText = value => {
     return String(value)
         .split('')
-        .map(char => t(`pages.layouts.public_layout.number.${char}`))
+        .map(char => t(`common.numbers.${char}`))
         .join('')
 }
 
@@ -200,7 +200,7 @@ onBeforeUnmount(() => {
                     <a v-if="!authUser" :href="route('login')"
                         class="flex items-center gap-1 text-gray-300 hover:text-white max-[450px]:flex-shrink-0">
                         <FontAwesomeIcon icon="arrow-right-to-bracket" />
-                        <span class="max-[450px]:hidden">{{ t('pages.layouts.public_layout.labels.login') }}</span>
+                        <span class="max-[450px]:hidden">{{ t('common.labels.login') }}</span>
                     </a>
 
                     <div v-else class="max-[450px]:flex-shrink-0">
@@ -220,7 +220,7 @@ onBeforeUnmount(() => {
                     <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
                         class="h-10 max-w-40 object-contain">
                     <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)" class="hidden sm:inline">
-                        {{ t('pages.layouts.public_layout.app.name') }}
+                        {{ t('common.app.name') }}
                     </b>
                 </a>
 
@@ -245,21 +245,21 @@ onBeforeUnmount(() => {
             <slot />
         </main>
 
-        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('pages.layouts.public_layout.app.breaking_news')" />
+        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('common.messages.breakingNews')" />
 
         <footer class="public-footer py-4 mt-2 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
                 <span class="text-center md:text-left w-full md:w-auto flex-shrink-0">
-                    {{ t('pages.layouts.public_layout.footer.copyright') }} {{ translateNumerText(year) }} {{ t('pages.layouts.public_layout.app.name') }}
+                    {{ t('common.messages.text') }} {{ translateNumerText(year) }} {{ t('common.app.name') }}
                 </span>
 
                 <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" />
 
                 <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
-                    {{ t('pages.layouts.public_layout.footer.developed_by') }}
+                    {{ t('common.app.developedBy') }}
                     <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank" rel="noopener noreferrer"
                         class="text-blue-600 hover:underline font-medium">
-                        {{ t('pages.layouts.public_layout.footer.developer_name') }}
+                        {{ t('common.app.developerName') }}
                     </a>
                 </span>
             </div>

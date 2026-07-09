@@ -64,7 +64,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </section>
 
         <div v-else class="rounded-2xl border border-dashed border-gray-300 p-8 text-center text-gray-500">
-            {{ t("components.common.news.view.image_gallery.labels.no_gallery_image_found") }}
+            {{ t("news.components.view.imageGallery.labels.noGalleryImageFound") }}
         </div>
 
        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>

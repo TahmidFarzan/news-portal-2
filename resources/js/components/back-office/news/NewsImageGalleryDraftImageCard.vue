@@ -96,7 +96,7 @@ function normalizeErrors(error) {
 
     if (!Object.keys(normalizedErrors).length) {
         normalizedErrors.general =
-            error?.response?.data?.message || t("components.back_office.news.news_image_gallery_draft_image_card.messages.invalid_data")
+            error?.response?.data?.message || t("common.messages.invalidData")
     }
 
     return normalizedErrors
@@ -137,7 +137,7 @@ async function updateImage() {
     if (editProcessing.value) return
 
     if (!imageSlug.value) {
-        editErrors.value.general = t("components.back_office.news.news_image_gallery_draft_image_card.messages.missing_slug")
+        editErrors.value.general = t("admin.components.news.newsImageGalleryDraftImageCard.messages.missingSlug")
         return
     }
 
@@ -156,14 +156,14 @@ async function updateImage() {
         )
 
         if (response?.data?.status === 'error') {
-            editErrors.value.general = response?.data?.message || t("components.back_office.news.news_image_gallery_draft_image_card.messages.fail_to_update_image")
+            editErrors.value.general = response?.data?.message || t("admin.components.news.newsImageGalleryDraftImageCard.messages.failToUpdateImage")
             return
         }
 
         const updatedImage = response?.data?.media
 
         if (!updatedImage?.id) {
-            editErrors.value.general = t("components.back_office.news.news_image_gallery_draft_image_card.messages.invalid_response_after_image_update")
+            editErrors.value.general = t("admin.components.news.newsImageGalleryDraftImageCard.messages.invalidResponseAfterImageUpdate")
             return
         }
 
@@ -196,7 +196,7 @@ async function deleteImage() {
     if (deleteProcessing.value) return
 
     if (!imageSlug.value) {
-        deleteErrors.value.general = t("components.back_office.news.news_image_gallery_draft_image_card.messages.missing_slug")
+        deleteErrors.value.general = t("admin.components.news.newsImageGalleryDraftImageCard.messages.missingSlug")
         return
     }
 
@@ -211,7 +211,7 @@ async function deleteImage() {
         )
 
         if (response?.data?.status === 'error') {
-            deleteErrors.value.general = response?.data?.message || t("components.back_office.news.news_image_gallery_draft_image_card.messages.fail_to_delete_image")
+            deleteErrors.value.general = response?.data?.message || t("admin.components.news.newsImageGalleryDraftImageCard.messages.failToDeleteImage")
             return
         }
 
@@ -260,7 +260,7 @@ async function deleteImage() {
         </div>
 
         <div v-if="caption" class="p-3 text-sm text-gray-700">
-            <span class="font-medium">Caption:</span>
+            <span class="font-medium">{{ t("admin.components.news.newsImageGalleryDraftImageCard.labels.captionWithColon") }}</span>
             {{ caption }}
         </div>
 
@@ -290,7 +290,7 @@ async function deleteImage() {
                             class="mx-auto max-h-[80vh] max-w-full rounded-xl bg-white object-contain">
 
                         <div v-if="caption" class="mt-3 rounded-lg bg-white p-3 text-sm text-gray-700">
-                            <span class="font-medium">Caption:</span>
+                            <span class="font-medium">{{ t("admin.components.news.newsImageGalleryDraftImageCard.labels.captionWithColon") }}</span>
                             {{ caption}}
                         </div>
                     </div>
@@ -306,7 +306,7 @@ async function deleteImage() {
                 <div class="w-full max-w-lg rounded-xl bg-white p-5 shadow-xl">
                     <div class="mb-4 flex items-center justify-between">
                         <h2 class="text-lg font-semibold text-gray-800">
-                            {{ t("components.back_office.news.news_image_gallery_draft_image_card.labels.edit_image") }}
+                            {{ t("admin.components.news.newsImageGalleryDraftImageCard.labels.editImage") }}
                         </h2>
 
                         <button type="button"
@@ -324,7 +324,7 @@ async function deleteImage() {
                         <div class="space-y-4">
                             <div>
                                 <div class="mb-1 text-sm text-gray-500">
-                                    {{ t("components.back_office.news.news_image_gallery_draft_image_card.labels.preview") }}
+                                    {{ t("common.labels.preview") }}
                                 </div>
 
                                 <img :src="imageUrl" :alt="altText"
@@ -333,7 +333,7 @@ async function deleteImage() {
 
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    {{ t("components.back_office.news.news_image_gallery_draft_image_card.labels.caption") }}
+                                    {{ t("common.labels.caption") }}
                                 </label>
 
                                 <input v-model="editForm.caption" type="text"
@@ -347,7 +347,7 @@ async function deleteImage() {
 
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-gray-700">
-                                    {{ t("components.back_office.news.news_image_gallery_draft_image_card.labels.alt_text") }}
+                                    {{ t("common.labels.altText") }}
                                 </label>
 
                                 <input v-model="editForm.alt" type="text"
@@ -364,7 +364,7 @@ async function deleteImage() {
                             <button type="button"
                                 class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
                                 :disabled="editProcessing" @click="closeEditModal">
-                                {{ t("components.back_office.news.news_image_gallery_draft_image_card.actions.cancel") }}
+                                {{ t("common.actions.cancel") }}
                             </button>
 
                             <button type="submit"
@@ -373,7 +373,7 @@ async function deleteImage() {
                                 <FontAwesomeIcon v-if="editProcessing" icon="spinner" class="animate-spin" />
 
                                 <span>
-                                    {{ editProcessing ? t("components.back_office.news.news_image_gallery_draft_image_card.actions.updating") : t("components.back_office.news.news_image_gallery_draft_image_card.actions.update") }}
+                                    {{ editProcessing ? t("admin.components.news.newsImageGalleryDraftImageCard.actions.updating") : t("common.actions.update") }}
                                 </span>
                             </button>
                         </div>
@@ -390,7 +390,7 @@ async function deleteImage() {
                 <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
                     <div class="mb-4 flex items-center justify-between">
                         <h2 class="text-lg font-semibold text-gray-800">
-                            {{ t("components.back_office.news.news_image_gallery_draft_image_card.modals.delete_confirmation_modal.title") }}
+                            {{ t("common.modals.deleteConfirmation") }}
                         </h2>
 
                         <button type="button"
@@ -409,7 +409,7 @@ async function deleteImage() {
 
                         <div>
                             <p class="text-sm font-medium text-gray-800">
-                                {{ t("components.back_office.news.news_image_gallery_draft_image_card.modals.delete_confirmation_modal.body") }}
+                                {{ t("common.modals.areYouSureYouWantToDeleteThis") }}
                             </p>
                         </div>
                     </div>
@@ -418,7 +418,7 @@ async function deleteImage() {
                         <button type="button"
                             class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
                             :disabled="deleteProcessing" @click="closeDeleteModal">
-                            {{ t("components.back_office.news.news_image_gallery_draft_image_card.actions.cancel") }}
+                            {{ t("common.actions.cancel") }}
                         </button>
 
                         <button type="button"
@@ -429,7 +429,7 @@ async function deleteImage() {
                             <FontAwesomeIcon v-else icon="trash" />
 
                             <span>
-                                {{ deleteProcessing ? t("components.back_office.news.news_image_gallery_draft_image_card.actions.deleting") : t("components.back_office.news.news_image_gallery_draft_image_card.actions.delete") }}
+                                {{ deleteProcessing ? t("common.actions.deleting") : t("common.actions.delete") }}
                             </span>
                         </button>
                     </div>

@@ -33,8 +33,8 @@ const isUpdate = computed(() => !!contributor?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${contributor?.name} ${t('pages.back_office.contributors.create.labels.edit')}`
-        : t('pages.back_office.contributors.create.form.create_page_title')
+        ? `${contributor?.name} ${t('common.actions.edit')}`
+        : t('common.labels.contributorCreate')
 })
 
 const saveForm = useForm({
@@ -54,12 +54,12 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('pages.back_office.contributors.create.validation.name_is_required'))
+        saveForm.setError('name', t('common.validation.nameIsRequired'))
         valid = false
     }
 
     if (!saveForm.language_id) {
-        saveForm.setError('language_id', t('pages.back_office.contributors.create.validation.language_is_required'))
+        saveForm.setError('language_id', t('common.validation.languageIsRequired'))
         valid = false
     }
 
@@ -107,7 +107,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.contributors.create.navigation.contributors'), href: route('back-office.contributors.index') },
+                { text: t('common.labels.contributors'), href: route('back-office.contributors.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -126,20 +126,20 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.contributors.create.labels.basic_information') }}
+                        {{ t('common.labels.basicInformation') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.contributors.create.labels.language') }} <span class="text-red-500">*</span>
+                                {{ t('common.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
                                 :selectedItem="contributor?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
-                                :placeholder="t('pages.back_office.contributors.create.form.language_placeholder')" />
+                                :placeholder="t('common.placeholders.selectLanguage')" />
 
                             <p v-if="saveForm.errors.language_id" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.language_id }}
@@ -148,10 +148,10 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.contributors.create.labels.name') }} <span class="text-red-500">*</span>
+                                {{ t('common.labels.name') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name" :placeholder="t('pages.back_office.contributors.create.form.name_placeholder')"
+                            <input v-model="saveForm.name" :placeholder="t('common.placeholders.enterName')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -162,11 +162,11 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.contributors.create.form.brief') }}
+                                {{ t('common.labels.brief') }}
                             </label>
 
                             <textarea v-model="saveForm.brief" rows="4"
-                                :placeholder="t('pages.back_office.contributors.create.form.brief_placeholder')"
+                                :placeholder="t('common.placeholders.enterBrief')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -177,7 +177,7 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.contributors.create.form.profile_details') }}
+                                {{ t('common.labels.profileDetails') }}
                             </label>
 
                             <Editor inputField="profile_details" :form="saveForm" erroField="profile_details"
@@ -193,14 +193,14 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.contributors.create.form.profile_image_section') }}
+                        {{ t('common.labels.profileImage') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.contributors.create.labels.profile_image') }}
+                                {{ t('common.labels.profileImage') }}
                             </label>
 
                             <input type="file" @change="e => saveForm.profile_image = e.target.files[0]"
@@ -213,7 +213,7 @@ onMounted(async () => {
 
                             <MediaRenderer v-if="contributor?.profile_image" :media="contributor?.profile_image" />
 
-                            <img v-else :src="'/uploads/icons/auth/user.png'" :alt="t('pages.back_office.contributors.create.auth.profile.profile_image_alt')"
+                            <img v-else :src="'/uploads/icons/auth/user.png'" :alt="t('common.messages.userProfileImage')"
                                 class="object-cover rounded-xl border border-gray-200 mt-2 w-32 h-32" />
                         </div>
 
@@ -222,18 +222,18 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.contributors.create.form.seo_settings') }}
+                        {{ t('common.labels.seoSettings') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.contributors.create.form.seo_title') }}
+                                {{ t('common.labels.seoTitle') }}
                             </label>
 
                             <input v-model="saveForm.seo_title" type="text"
-                                :placeholder="t('pages.back_office.contributors.create.form.seo_title_placeholder')"
+                                :placeholder="t('common.placeholders.enterSeoTitle')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_title ? 'border-red-500' : 'border-gray-300'" />
 
@@ -244,11 +244,11 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.contributors.create.form.seo_brief') }}
+                                {{ t('common.labels.seoBrief') }}
                             </label>
 
                             <textarea v-model="saveForm.seo_brief" rows="3"
-                                :placeholder="t('pages.back_office.contributors.create.form.seo_brief_placeholder')"
+                                :placeholder="t('common.placeholders.enterSeoBrief')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.seo_brief ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -259,12 +259,12 @@ onMounted(async () => {
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.contributors.create.form.seo_keywords') }}
+                                {{ t('common.labels.seoKeywords') }}
                             </label>
 
                             <SelectTaggable :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
-                                :placeholder="t('pages.back_office.contributors.create.form.seo_keywords_placeholder')" />
+                                :placeholder="t('common.placeholders.addKeywords')" />
 
                             <p v-if="saveForm.errors.seo_keywords" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.seo_keywords }}
@@ -280,7 +280,7 @@ onMounted(async () => {
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
 
-                        {{ saveForm.processing ? t('pages.back_office.contributors.create.actions.saving') : t('pages.back_office.contributors.create.actions.save') }}
+                        {{ saveForm.processing ? t('common.actions.saving') : t('common.actions.save') }}
                     </button>
                 </div>
 

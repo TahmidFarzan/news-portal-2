@@ -130,43 +130,43 @@ onBeforeUnmount(() => {
                 <a :href="route('auth-user.profile.index')" @click="closeUserDropdown"
                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="user" class="text-gray-500" />
-                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.profile") }}</span>
+                    <span>{{ t("common.labels.profile") }}</span>
                 </a>
 
                 <a :href="route('auth-user.account.index')" @click="closeUserDropdown"
                     class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="user-gear" class="text-gray-500" />
-                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.account") }}</span>
+                    <span>{{ t("common.labels.account") }}</span>
                 </a>
 
                 <a v-if="canAccessActivityLogComputed" :href="route('back-office.activity-logs.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
-                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.activity_logs") }}</span>
+                    <span>{{ t("common.labels.activityLogs") }}</span>
                 </a>
 
                 <a v-if="canAccessLogViewerComputed" :href="route('log-viewer.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
-                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.log_viewer") }}</span>
+                    <span>{{ t("layout.auth.authTopbarDropdownMenu.navigation.logViewer") }}</span>
                 </a>
 
                 <a v-if="canAccessQueueMonitorComputed" :href="route('back-office.queue-monitor.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="chart-line" class="text-gray-500" />
-                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.queue_monitor") }}</span>
+                    <span>{{ t("layout.auth.authTopbarDropdownMenu.navigation.queueMonitor") }}</span>
                 </a>
 
                 <a v-if="canAccessSettingComputed" :href="route('back-office.settings.index')"
                     @click="closeUserDropdown" class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
                     <FontAwesomeIcon icon="gears" class="text-gray-500" />
-                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.navigation.settings") }}</span>
+                    <span>{{ t("layout.auth.authTopbarDropdownMenu.navigation.settings") }}</span>
                 </a>
 
                 <button type="button" @click="openLogoutModal"
                     class="flex items-center gap-2 w-full text-left px-3 py-2 text-red-500 hover:bg-gray-100">
                     <FontAwesomeIcon icon="right-from-bracket" />
-                    <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.actions.logout") }}</span>
+                    <span>{{ t("common.actions.logout") }}</span>
                 </button>
             </div>
         </Transition>
@@ -188,19 +188,19 @@ onBeforeUnmount(() => {
                         <div class="flex items-center gap-2 mb-3 text-red-500">
                             <FontAwesomeIcon icon="right-from-bracket" />
                             <span class="font-semibold text-gray-800">
-                                {{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.modals.logout_modal.title") }}
+                                {{ t("common.modals.logoutConfirmation") }}
                             </span>
                         </div>
 
                         <div class="mb-4 text-gray-600">
-                            {{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.modals.logout_modal.body") }}
+                            {{ t("common.modals.areYouSureYouWantToLogout") }}
                         </div>
 
                         <div class="flex justify-end gap-2">
                             <button type="button" @click="closeLogoutModal" :disabled="logoutProcessing"
                                 class="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-70 disabled:cursor-not-allowed">
                                 <FontAwesomeIcon icon="xmark" />
-                                <span>{{ t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.actions.logout") }}</span>
+                                <span>{{ t("common.actions.logout") }}</span>
                             </button>
 
                             <button type="button" @click="handleLogout" :disabled="logoutProcessing"
@@ -210,7 +210,7 @@ onBeforeUnmount(() => {
                                 <FontAwesomeIcon v-else icon="spinner" spin />
 
                                 <span>
-                                    {{ logoutProcessing ? t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.actions.logging_out") : t("components.common.layout.auth_layout.auth_topbar_dropdown_menu.actions.logout") }}
+                                    {{ logoutProcessing ? t("layout.auth.authTopbarDropdownMenu.actions.loggingOut") : t("common.actions.logout") }}
                                 </span>
                             </button>
                         </div>

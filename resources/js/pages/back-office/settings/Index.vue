@@ -61,32 +61,32 @@ const copiedKey = ref(null)
 const tabs = computed(() => [
     {
         key: 'queue',
-        label: t('pages.back_office.settings.index.tabs.queue'),
+        label: t('admin.settings.index.tabs.queue'),
         icon: faClock,
     },
     {
         key: 'schedule',
-        label: t('pages.back_office.settings.index.tabs.schedule'),
+        label: t('admin.settings.index.tabs.schedule'),
         icon: faCalendarDays,
     },
     {
         key: 'sitemap',
-        label: t('pages.back_office.settings.index.tabs.sitemap'),
+        label: t('common.messages.sitemap'),
         icon: faSitemap,
     },
     {
         key: 'feeds_rss',
-        label: t('pages.back_office.settings.index.tabs.feeds_rss'),
+        label: t('admin.settings.index.tabs.feedsRss'),
         icon: faRss,
     },
     {
         key: 'robots_txt',
-        label: t('pages.back_office.settings.index.tabs.robots_txt'),
+        label: t('admin.settings.index.tabs.robotsTxt'),
         icon: faGlobe,
     },
     {
         key: 'ads_txt',
-        label: t('pages.back_office.settings.index.tabs.ads_txt'),
+        label: t('admin.settings.index.tabs.adsTxt'),
         icon: faFileCode,
     },
 ])
@@ -98,37 +98,37 @@ const activeTabKey = computed(() => {
 const queueActions = computed(() => [
     {
         key: 'queue_start',
-        title: t('pages.back_office.settings.index.queue_actions.start_queue'),
+        title: t('admin.settings.index.queueActions.startQueue'),
         url: route('back-office.settings.queue.start'),
         icon: faPlay,
     },
     {
         key: 'queue_restart',
-        title: t('pages.back_office.settings.index.queue_actions.restart_queue'),
+        title: t('admin.settings.index.queueActions.restartQueue'),
         url: route('back-office.settings.queue.restart'),
         icon: faRotateRight,
     },
     {
         key: 'queue_clear',
-        title: t('pages.back_office.settings.index.queue_actions.clear_queue'),
+        title: t('admin.settings.index.queueActions.clearQueue'),
         url: route('back-office.settings.queue.clear'),
         icon: faBroom,
     },
     {
         key: 'queue_flush',
-        title: t('pages.back_office.settings.index.queue_actions.flush_queue'),
+        title: t('admin.settings.index.queueActions.flushQueue'),
         url: route('back-office.settings.queue.flush'),
         icon: faTrashCan,
     },
     {
         key: 'queue_monitor_stale',
-        title: t('pages.back_office.settings.index.queue_actions.monitor_stale'),
+        title: t('admin.settings.index.queueActions.monitorStale'),
         url: route('back-office.settings.queue.monitor.stale'),
         icon: faTriangleExclamation,
     },
     {
         key: 'queue_monitor_purge',
-        title: t('pages.back_office.settings.index.queue_actions.monitor_purge'),
+        title: t('admin.settings.index.queueActions.monitorPurge'),
         url: route('back-office.settings.queue.monitor.purge'),
         icon: faShieldHalved,
     },
@@ -137,13 +137,13 @@ const queueActions = computed(() => [
 const scheduleActions = computed(() => [
     {
         key: 'schedule_start',
-        title: t('pages.back_office.settings.index.schedule_actions.start_schedule'),
+        title: t('admin.settings.index.scheduleActions.startSchedule'),
         url: route('back-office.settings.schedule.start'),
         icon: faPlay,
     },
     {
         key: 'schedule_stop',
-        title: t('pages.back_office.settings.index.schedule_actions.stop_schedule'),
+        title: t('admin.settings.index.scheduleActions.stopSchedule'),
         url: route('back-office.settings.schedule.stop'),
         icon: faStop,
     },
@@ -151,14 +151,14 @@ const scheduleActions = computed(() => [
 
 const robotsTxtAction = computed(() => ({
     key: 'robots_txt_edit',
-    title: t('pages.back_office.settings.index.labels.edit_robots_txt'),
+    title: t('common.labels.editRobotsTxt'),
     url: route('back-office.settings.robots-txt.edit'),
     icon: faPenToSquare,
 }))
 
 const adsTxtAction = computed(() => ({
     key: 'ads_txt_edit',
-    title: t('pages.back_office.settings.index.labels.edit_ads_txt'),
+    title: t('common.labels.editAdsTxt'),
     url: route('back-office.settings.ads-txt.edit'),
     icon: faPenToSquare,
 }))
@@ -166,73 +166,73 @@ const adsTxtAction = computed(() => ({
 const sitemapLinks = computed(() => [
     {
         key: 'sitemaps_index',
-        title: t('pages.back_office.settings.index.sitemap_links.sitemap_index'),
+        title: t('admin.settings.index.sitemapLinks.sitemapIndex'),
         text: `${appUrl}/sitemaps.xml`,
         copyable: true,
     },
     {
         key: 'sitemaps_categories',
-        title: t('pages.back_office.settings.index.sitemap_links.categories_sitemap'),
+        title: t('admin.settings.index.sitemapLinks.categoriesSitemap'),
         text: `${appUrl}/sitemaps/categories.xml`,
         copyable: true,
     },
     {
         key: 'sitemaps_tags',
-        title: t('pages.back_office.settings.index.sitemap_links.tags_sitemap'),
+        title: t('admin.settings.index.sitemapLinks.tagsSitemap'),
         text: `${appUrl}/sitemaps/tags.xml`,
         copyable: true,
     },
     {
         key: 'sitemaps_events',
-        title: t('pages.back_office.settings.index.sitemap_links.events_sitemap'),
+        title: t('admin.settings.index.sitemapLinks.eventsSitemap'),
         text: `${appUrl}/sitemaps/events.xml`,
         copyable: true,
     },
     {
         key: 'sitemaps_contributors',
-        title: t('pages.back_office.settings.index.sitemap_links.contributors_sitemap'),
+        title: t('admin.settings.index.sitemapLinks.contributorsSitemap'),
         text: `${appUrl}/sitemaps/contributors.xml`,
         copyable: true,
     },
     {
         key: 'sitemaps_news',
-        title: t('pages.back_office.settings.index.sitemap_links.news_sitemap'),
+        title: t('admin.settings.index.sitemapLinks.newsSitemap'),
         text: `${appUrl}/sitemaps/news.xml`,
         copyable: true,
     },
     {
         key: 'sitemaps_latest_news',
-        title: t('pages.back_office.settings.index.sitemap_links.latest_news_sitemap'),
+        title: t('admin.settings.index.sitemapLinks.latestNewsSitemap'),
         text: `${appUrl}/sitemaps/latest-news.xml`,
         copyable: true,
     },
     {
         key: 'dynamic_categories_news',
-        title: t('pages.back_office.settings.index.sitemap_links.category_news_pattern'),
+        title: t('admin.settings.index.sitemapLinks.categoryNewsPattern'),
         text: `${appUrl}/categories/{slugTree}/news.xml`,
         copyable: true,
     },
     {
         key: 'dynamic_locations_news',
-        title: t('pages.back_office.settings.index.sitemap_links.location_news_pattern'),
+        title: t('admin.settings.index.sitemapLinks.locationNewsPattern'),
         text: `${appUrl}/locations/{slugTree}/news.xml`,
         copyable: true,
     },
     {
         key: 'dynamic_events_news',
-        title: t('pages.back_office.settings.index.sitemap_links.event_news_pattern'),
+        title: t('admin.settings.index.sitemapLinks.eventNewsPattern'),
         text: `${appUrl}/events/{slug}/news.xml`,
         copyable: true,
     },
     {
         key: 'dynamic_tags_news',
-        title: t('pages.back_office.settings.index.sitemap_links.tag_news_pattern'),
+        title: t('admin.settings.index.sitemapLinks.tagNewsPattern'),
         text: `${appUrl}/tags/{slug}/news.xml`,
         copyable: true,
     },
     {
         key: 'dynamic_contributors_news',
-        title: t('pages.back_office.settings.index.sitemap_links.contributor_news_pattern'),
+        title: t('admin.settings.index.sitemapLinks.contributorNewsPattern'),
         text: `${appUrl}/contributors/{slug}/news.xml`,
         copyable: true,
     },
@@ -241,12 +241,12 @@ const sitemapLinks = computed(() => [
 const feedTypes = computed(() => [
     {
         key: 'rss',
-        title: t('pages.back_office.settings.index.feed_links.rss_feeds'),
+        title: t('admin.settings.index.feedLinks.rssFeeds'),
         icon: faRss,
     },
     {
         key: 'atom',
-        title: t('pages.back_office.settings.index.feed_links.atom_feeds'),
+        title: t('admin.settings.index.feedLinks.atomFeeds'),
         icon: faAtom,
     },
 ])
@@ -254,37 +254,37 @@ const feedTypes = computed(() => [
 const feedLinkPatterns = computed(() => [
     {
         key: 'news',
-        title: t('pages.back_office.settings.index.feed_links.news_feed_pattern'),
+        title: t('admin.settings.index.feedLinks.newsFeedPattern'),
         text: `${appUrl}/feeds/{type}/news.xml`,
     },
     {
         key: 'latest_news',
-        title: t('pages.back_office.settings.index.feed_links.latest_news_feed_pattern'),
+        title: t('admin.settings.index.feedLinks.latestNewsFeedPattern'),
         text: `${appUrl}/feeds/{type}/latest-news.xml`,
     },
     {
         key: 'category_news',
-        title: t('pages.back_office.settings.index.feed_links.category_news_feed_pattern'),
+        title: t('admin.settings.index.feedLinks.categoryNewsFeedPattern'),
         text: `${appUrl}/feeds/{type}/categories/{slugTree}/news.xml`,
     },
     {
         key: 'location_news',
-        title: t('pages.back_office.settings.index.feed_links.location_news_feed_pattern'),
+        title: t('admin.settings.index.feedLinks.locationNewsFeedPattern'),
         text: `${appUrl}/feeds/{type}/locations/{slugTree}/news.xml`,
     },
     {
         key: 'event_news',
-        title: t('pages.back_office.settings.index.feed_links.event_news_feed_pattern'),
+        title: t('admin.settings.index.feedLinks.eventNewsFeedPattern'),
         text: `${appUrl}/feeds/{type}/events/{slug}/news.xml`,
     },
     {
         key: 'tag_news',
-        title: t('pages.back_office.settings.index.feed_links.tag_news_feed_pattern'),
+        title: t('admin.settings.index.feedLinks.tagNewsFeedPattern'),
         text: `${appUrl}/feeds/{type}/tags/{slug}/news.xml`,
     },
     {
         key: 'contributor_news',
-        title: t('pages.back_office.settings.index.feed_links.contributor_news_feed_pattern'),
+        title: t('admin.settings.index.feedLinks.contributorNewsFeedPattern'),
         text: `${appUrl}/feeds/{type}/contributors/{slug}/news.xml`,
     },
 ])
@@ -340,7 +340,7 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 {
-                    text: t('pages.back_office.settings.index.labels.setting'),
+                    text: t('admin.settings.index.labels.setting'),
                     active: true,
                 },
             ],
@@ -351,12 +351,12 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('pages.back_office.settings.index.labels.setting')" />
+    <Head :title="t('admin.settings.index.labels.setting')" />
 
     <div class="w-full space-y-6">
         <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold text-gray-950">
-                {{ t('pages.back_office.settings.index.labels.setting') }}
+                {{ t('admin.settings.index.labels.setting') }}
             </h2>
         </div>
 
@@ -379,11 +379,11 @@ onMounted(async () => {
                 <div v-if="activeTabKey === 'queue'" class="space-y-4">
                     <div>
                         <h3 class="text-base font-semibold text-gray-950">
-                            {{ t('pages.back_office.settings.index.labels.queue_actions') }}
+                            {{ t('admin.settings.index.labels.queueActions') }}
                         </h3>
 
                         <p class="mt-1 text-sm text-gray-500">
-                            {{ t('pages.back_office.settings.index.labels.queue_actions_description') }}
+                            {{ t('admin.settings.index.labels.queueActionsDescription') }}
                         </p>
                     </div>
 
@@ -408,7 +408,7 @@ onMounted(async () => {
                             </div>
 
                             <span class="text-xs font-semibold text-red-600">
-                                {{ t('pages.back_office.settings.index.labels.run') }}
+                                {{ t('admin.settings.index.labels.run') }}
                             </span>
                         </a>
                     </div>
@@ -417,11 +417,11 @@ onMounted(async () => {
                 <div v-else-if="activeTabKey === 'schedule'" class="space-y-4">
                     <div>
                         <h3 class="text-base font-semibold text-gray-950">
-                            {{ t('pages.back_office.settings.index.labels.schedule_actions') }}
+                            {{ t('admin.settings.index.labels.scheduleActions') }}
                         </h3>
 
                         <p class="mt-1 text-sm text-gray-500">
-                            {{ t('pages.back_office.settings.index.labels.schedule_actions_description') }}
+                            {{ t('admin.settings.index.labels.scheduleActionsDescription') }}
                         </p>
                     </div>
 
@@ -446,7 +446,7 @@ onMounted(async () => {
                             </div>
 
                             <span class="text-xs font-semibold text-red-600">
-                                {{ t('pages.back_office.settings.index.labels.run') }}
+                                {{ t('admin.settings.index.labels.run') }}
                             </span>
                         </a>
                     </div>
@@ -455,11 +455,11 @@ onMounted(async () => {
                 <div v-else-if="activeTabKey === 'sitemap'" class="space-y-4">
                     <div>
                         <h3 class="text-base font-semibold text-gray-950">
-                            {{ t('pages.back_office.settings.index.labels.sitemap_links') }}
+                            {{ t('admin.settings.index.labels.sitemapLinks') }}
                         </h3>
 
                         <p class="mt-1 text-sm text-gray-500">
-                            {{ t('pages.back_office.settings.index.labels.click_copy_sitemap_url') }}
+                            {{ t('admin.settings.index.labels.clickCopySitemapUrl') }}
                         </p>
                     </div>
 
@@ -485,8 +485,8 @@ onMounted(async () => {
                                             :class="item.copyable ? 'text-green-600' : 'text-gray-400'">
                                             {{
                                                 item.copyable
-                                                    ? t('pages.back_office.settings.index.labels.copy_enabled')
-                                                    : t('pages.back_office.settings.index.labels.pattern_only')
+                                                    ? t('admin.settings.index.labels.copyEnabled')
+                                                    : t('admin.settings.index.labels.patternOnly')
                                             }}
                                         </p>
                                     </div>
@@ -515,8 +515,8 @@ onMounted(async () => {
                                     <span>
                                         {{
                                             copiedKey === item.key
-                                                ? t('pages.back_office.settings.index.labels.copied')
-                                                : t('pages.back_office.settings.index.labels.copy')
+                                                ? t('common.labels.copied')
+                                                : t('common.labels.copy')
                                         }}
                                     </span>
                                 </button>
@@ -528,11 +528,11 @@ onMounted(async () => {
                 <div v-else-if="activeTabKey === 'feeds_rss'" class="space-y-4">
                     <div>
                         <h3 class="text-base font-semibold text-gray-950">
-                            {{ t('pages.back_office.settings.index.labels.feeds_rss_links') }}
+                            {{ t('admin.settings.index.labels.feedsRssLinks') }}
                         </h3>
 
                         <p class="mt-1 text-sm text-gray-500">
-                            {{ t('pages.back_office.settings.index.labels.feeds_rss_patterns_are_dynamic') }}
+                            {{ t('admin.settings.index.labels.feedsRssPatternsAreDynamic') }}
                         </p>
                     </div>
 
@@ -552,7 +552,7 @@ onMounted(async () => {
                                         </h4>
 
                                         <p class="text-xs text-green-600">
-                                            {{ t('pages.back_office.settings.index.labels.copy_enabled') }}
+                                            {{ t('admin.settings.index.labels.copyEnabled') }}
                                         </p>
                                     </div>
                                 </div>
@@ -585,8 +585,8 @@ onMounted(async () => {
                                             <span>
                                                 {{
                                                     copiedKey === item.key
-                                                        ? t('pages.back_office.settings.index.labels.copied')
-                                                        : t('pages.back_office.settings.index.labels.copy')
+                                                        ? t('common.labels.copied')
+                                                        : t('common.labels.copy')
                                                 }}
                                             </span>
                                         </button>
@@ -600,11 +600,11 @@ onMounted(async () => {
                 <div v-else-if="activeTabKey === 'robots_txt'" class="space-y-4">
                     <div>
                         <h3 class="text-base font-semibold text-gray-950">
-                            {{ t('pages.back_office.settings.index.tabs.robots_txt') }}
+                            {{ t('admin.settings.index.tabs.robotsTxt') }}
                         </h3>
 
                         <p class="mt-1 text-sm text-gray-500">
-                            {{ t('pages.back_office.settings.index.labels.robots_txt_edit_description') }}
+                            {{ t('admin.settings.index.labels.robotsTxtEditDescription') }}
                         </p>
                     </div>
 
@@ -613,7 +613,7 @@ onMounted(async () => {
                         <FontAwesomeIcon :icon="robotsTxtAction.icon" class="text-xs" />
 
                         <span>
-                            {{ t('pages.back_office.settings.index.labels.edit') }}
+                            {{ t('common.actions.edit') }}
                         </span>
                     </a>
                 </div>
@@ -621,11 +621,11 @@ onMounted(async () => {
                 <div v-else-if="activeTabKey === 'ads_txt'" class="space-y-4">
                     <div>
                         <h3 class="text-base font-semibold text-gray-950">
-                            {{ t('pages.back_office.settings.index.tabs.ads_txt') }}
+                            {{ t('admin.settings.index.tabs.adsTxt') }}
                         </h3>
 
                         <p class="mt-1 text-sm text-gray-500">
-                            {{ t('pages.back_office.settings.index.labels.ads_txt_edit_description') }}
+                            {{ t('admin.settings.index.labels.adsTxtEditDescription') }}
                         </p>
                     </div>
 
@@ -634,7 +634,7 @@ onMounted(async () => {
                         <FontAwesomeIcon :icon="adsTxtAction.icon" class="text-xs" />
 
                         <span>
-                            {{ t('pages.back_office.settings.index.labels.edit') }}
+                            {{ t('common.actions.edit') }}
                         </span>
                     </a>
                 </div>

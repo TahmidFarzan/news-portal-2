@@ -73,11 +73,11 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 {
-                    text: t('pages.back_office.settings.index.labels.setting'),
+                    text: t('admin.settings.index.labels.setting'),
                     href: route('back-office.settings.index'),
                 },
                 {
-                    text: t('pages.back_office.settings.robots_txt.edit.labels.title'),
+                    text: t('common.labels.editRobotsTxt'),
                     active: true,
                 },
             ],
@@ -88,17 +88,17 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('pages.back_office.settings.robots_txt.edit.labels.title')" />
+    <Head :title="t('common.labels.editRobotsTxt')" />
 
     <div class="w-full space-y-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h2 class="text-lg font-semibold text-gray-950">
-                    {{ t('pages.back_office.settings.robots_txt.edit.labels.title') }}
+                    {{ t('common.labels.editRobotsTxt') }}
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-500">
-                    {{ t('pages.back_office.settings.robots_txt.edit.labels.description') }}
+                    {{ t('admin.settings.robotsTxt.edit.labels.description') }}
                 </p>
             </div>
 
@@ -107,7 +107,7 @@ onMounted(async () => {
                 <FontAwesomeIcon :icon="faArrowLeft" class="text-xs" />
 
                 <span>
-                    {{ t('pages.back_office.settings.robots_txt.edit.labels.back') }}
+                    {{ t('common.labels.back') }}
                 </span>
             </Link>
         </div>
@@ -125,11 +125,11 @@ onMounted(async () => {
 
                                 <div>
                                     <h3 class="text-sm font-semibold text-gray-950">
-                                        {{ t('pages.back_office.settings.robots_txt.edit.labels.content') }}
+                                        {{ t('admin.settings.robotsTxt.edit.labels.content') }}
                                     </h3>
 
                                     <p class="text-xs text-gray-500">
-                                        {{ t('pages.back_office.settings.robots_txt.edit.labels.content_description') }}
+                                        {{ t('admin.settings.robotsTxt.edit.labels.contentDescription') }}
                                     </p>
                                 </div>
                             </div>
@@ -138,7 +138,7 @@ onMounted(async () => {
                         <div class="p-4">
                             <textarea v-model="form.robots_txt" rows="18"
                                 class="min-h-[420px] w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 font-mono text-sm text-gray-800 outline-none transition focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                                :placeholder="t('pages.back_office.settings.robots_txt.edit.labels.placeholder')" />
+                                :placeholder="t('admin.settings.robotsTxt.edit.labels.placeholder')" />
 
                             <p v-if="form.errors.robots_txt" class="mt-2 text-sm text-red-600">
                                 {{ form.errors.robots_txt }}
@@ -155,8 +155,8 @@ onMounted(async () => {
                             <span>
                                 {{
                                     form.processing
-                                        ? t('pages.back_office.settings.robots_txt.edit.labels.saving')
-                                        : t('pages.back_office.settings.robots_txt.edit.labels.save')
+                                        ? t('common.labels.saving')
+                                        : t('admin.settings.robotsTxt.edit.labels.save')
                                 }}
                             </span>
                         </button>
@@ -167,7 +167,7 @@ onMounted(async () => {
                             <FontAwesomeIcon :icon="faWandMagicSparkles" class="text-xs" />
 
                             <span>
-                                {{ t('pages.back_office.settings.robots_txt.edit.labels.use_example') }}
+                                {{ t('common.actions.useExample') }}
                             </span>
                         </button>
 
@@ -177,7 +177,7 @@ onMounted(async () => {
                             <FontAwesomeIcon :icon="faRotateLeft" class="text-xs" />
 
                             <span>
-                                {{ t('pages.back_office.settings.robots_txt.edit.labels.reset') }}
+                                {{ t('common.actions.reset') }}
                             </span>
                         </button>
                     </div>
@@ -186,17 +186,17 @@ onMounted(async () => {
                 <div class="space-y-4 lg:col-span-4">
                     <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
                         <h3 class="text-sm font-semibold text-gray-950">
-                            {{ t('pages.back_office.settings.robots_txt.edit.labels.help_title') }}
+                            {{ t('admin.settings.robotsTxt.edit.labels.helpTitle') }}
                         </h3>
 
                         <p class="mt-2 text-sm leading-6 text-gray-500">
-                            {{ t('pages.back_office.settings.robots_txt.edit.labels.help_description') }}
+                            {{ t('admin.settings.robotsTxt.edit.labels.helpDescription') }}
                         </p>
                     </div>
 
                     <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
                         <h3 class="text-sm font-semibold text-gray-950">
-                            {{ t('pages.back_office.settings.robots_txt.edit.labels.example_title') }}
+                            {{ t('admin.settings.robotsTxt.edit.labels.exampleTitle') }}
                         </h3>
 
                         <pre

@@ -4,6 +4,7 @@ import {
 } from 'vue'
 
 import { useLightboxRegistry } from '@/composables/useLightboxRegistry'
+import { useTranslate } from '@/composables/useTranslate'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -53,6 +54,7 @@ const {
 })
 
 const { getGroup, registerToLightbox, unregisterFromLightbox } = useLightboxRegistry()
+const { t } = useTranslate()
 
 const uid = getCurrentInstance()?.uid || Math.random().toString(36).slice(2)
 
@@ -68,7 +70,7 @@ const normalizedImage = computed(() => {
         id: image?.id || image?.uuid,
         src: image?.preview_url || image?.original_url || '',
         thumb: image?.preview_url || image?.original_url || '',
-        alt: image?.custom_properties?.alt || image?.name || 'Gallery image',
+        alt: image?.custom_properties?.alt || image?.name || t('media.imageWithLightBox.labels.galleryImage'),
         caption: image?.custom_properties?.caption || image?.name || '',
     }
 })
@@ -282,7 +284,7 @@ onBeforeUnmount(() => {
             <Transition name="lightbox-fade">
                 <div v-if="isOpen" class="fixed inset-0 z-[9999] flex bg-black/95 text-white" role="dialog"
                     aria-modal="true">
-                    <button type="button" class="absolute inset-0 cursor-default" aria-label="Close lightbox overlay"
+                    <button type="button" class="absolute inset-0 cursor-default" :aria-label="t('media.imageWithLightBox.aria.closeOverlay')"
                         @click="closeLightbox" />
 
                     <div class="lightbox-panel relative z-10 flex h-full w-full flex-col">
@@ -305,7 +307,7 @@ onBeforeUnmount(() => {
                                         :icon="isZoomed ? faMagnifyingGlassMinus : faMagnifyingGlassPlus" />
 
                                     <span class="hidden sm:inline">
-                                        {{ isZoomed ? 'Zoom Out' : 'Zoom In' }}
+                                        {{ isZoomed ? t('media.imageWithLightBox.actions.zoomOut') : t('media.imageWithLightBox.actions.zoomIn') }}
                                     </span>
                                 </button>
 
@@ -315,12 +317,12 @@ onBeforeUnmount(() => {
                                     @click.stop>
                                     <FontAwesomeIcon :icon="faUpRightFromSquare" />
 
-                                    <span>Original</span>
+                                    <span>{{ t('media.imageWithLightBox.actions.original') }}</span>
                                 </a>
 
                                 <button type="button"
                                     class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-lg transition hover:bg-white/20"
-                                    aria-label="Close lightbox" @click.stop="closeLightbox">
+                                    :aria-label="t('media.imageWithLightBox.aria.close')" @click.stop="closeLightbox">
                                     <FontAwesomeIcon :icon="faXmark" />
                                 </button>
                             </div>
@@ -330,7 +332,7 @@ onBeforeUnmount(() => {
                             class="relative flex h-full w-full flex-1 items-center justify-center overflow-auto bg-black p-0 outline-none">
                             <button v-if="hasMultipleImages" type="button"
                                 class="fixed left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-lg text-white transition hover:bg-black/80 sm:left-6"
-                                aria-label="Previous image" @click.stop="showPrevious">
+                                :aria-label="t('media.imageWithLightBox.aria.previous')" @click.stop="showPrevious">
                                 <FontAwesomeIcon :icon="faChevronLeft" />
                             </button>
 
@@ -345,7 +347,7 @@ onBeforeUnmount(() => {
 
                             <button v-if="hasMultipleImages" type="button"
                                 class="fixed right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-lg text-white transition hover:bg-black/80 sm:right-6"
-                                aria-label="Next image" @click.stop="showNext">
+                                :aria-label="t('media.imageWithLightBox.aria.next')" @click.stop="showNext">
                                 <FontAwesomeIcon :icon="faChevronRight" />
                             </button>
                         </div>

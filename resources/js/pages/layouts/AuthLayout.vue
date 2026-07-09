@@ -58,7 +58,7 @@ provide('authUser', authUser)
 
                 <div v-if="authUser && !authUser.email_verified_at"
                     class="mb-4 p-3 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded">
-                    {{ t('pages.layouts.auth_layout.auth.account.not_verified') }}
+                    {{ t('common.messages.notVerified') }}
                 </div>
 
                 <slot />
@@ -71,16 +71,16 @@ provide('authUser', authUser)
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
 
                 <span class="text-center md:text-left w-full md:w-auto">
-                    {{ t('pages.layouts.auth_layout.footer.copyright') }}
+                    {{ t('common.messages.text') }}
                     {{ new Date().getFullYear() }}
                     {{ appName }}
                 </span>
 
                 <span class="text-center md:text-right w-full md:w-auto">
-                    {{ t('pages.layouts.auth_layout.footer.developed_by') }}
+                    {{ t('common.app.developedBy') }}
                     <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank" rel="noopener noreferrer"
                         class="text-blue-600 hover:underline font-medium">
-                        {{ t('pages.layouts.auth_layout.footer.developer_name') }}
+                        {{ t('common.app.developerName') }}
                     </a>
                 </span>
 

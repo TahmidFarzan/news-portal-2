@@ -54,11 +54,11 @@ onMounted(async () => {
         new CustomEvent('set-breadcrumb', {
             detail: [
                 {
-                    text: t('pages.back_office.activity_logs.details.navigation.activity_logs'),
+                    text: t('common.labels.activityLogs'),
                     href: route('back-office.activity-logs.index')
                 },
                 {
-                    text: t('pages.back_office.activity_logs.details.page_title'),
+                    text: t('admin.activityLogs.details.pageTitle'),
                     active: true
                 },
             ],
@@ -69,25 +69,25 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('pages.back_office.activity_logs.details.page_title')" />
+    <Head :title="t('admin.activityLogs.details.pageTitle')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.activity_logs.details.title') }}
+                {{ t('admin.activityLogs.details.title') }}
             </h2>
 
             <button v-if="canDelete(activityLog)" @click="showDeleteModal = true"
                 class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="trash" />
-                {{ t('pages.back_office.activity_logs.details.actions.delete') }}
+                {{ t('common.actions.delete') }}
             </button>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.activity_logs.details.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -95,32 +95,32 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">
-                            {{ t('pages.back_office.activity_logs.details.log_name') }}
+                            {{ t('common.messages.logName') }}
                         </span>
 
                         <span class="font-medium">
-                            {{ activityLog?.log_name || t('pages.back_office.activity_logs.details.labels.not_available') }}
+                            {{ activityLog?.log_name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">
-                            {{ t('pages.back_office.activity_logs.details.table.columns.causer') }}
+                            {{ t('common.labels.causer') }}
                         </span>
 
                         <span class="font-medium">
-                            {{ activityLog?.causer?.name || t('pages.back_office.activity_logs.details.labels.system') }}
+                            {{ activityLog?.causer?.name || t('common.labels.system') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4">
                     <div class="text-gray-500 mb-1">
-                        {{ t('pages.back_office.activity_logs.details.table.columns.description') }}
+                        {{ t('common.labels.description') }}
                     </div>
 
                     <div class="text-gray-700">
-                        {{ activityLog?.description || t('pages.back_office.activity_logs.details.labels.not_available') }}
+                        {{ activityLog?.description || t('common.labels.notAvailable') }}
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@ onMounted(async () => {
         <div v-if="Object.keys(activityLog?.properties || {}).length"
             class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.activity_logs.details.properties') }}
+                {{ t('admin.activityLogs.details.properties') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -150,7 +150,7 @@ onMounted(async () => {
         <div v-if="Object.keys(activityLog?.attribute_changes || {}).length"
             class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.activity_logs.details.attribute_changes') }}
+                {{ t('admin.activityLogs.details.attributeChanges') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -169,19 +169,19 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.activity_logs.details.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="text-sm border border-gray-200 rounded-lg p-4 flex justify-between">
                 <span class="text-gray-500">
-                    {{ t('pages.back_office.activity_logs.details.table.columns.created_at') }}
+                    {{ t('common.labels.createdAt') }}
                 </span>
 
                 <span class="font-medium">
                     {{
                         activityLog?.created_at
                             ? formatDateTime(activityLog?.created_at)
-                            : t('pages.back_office.activity_logs.details.labels.not_available')
+                            : t('common.labels.notAvailable')
                     }}
                 </span>
             </div>
@@ -202,17 +202,17 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.activity_logs.details.delete_modal.title') }}
+                                {{ t('common.modals.deleteActivityLog') }}
                             </h3>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.activity_logs.details.delete_modal.body') }}
+                                {{ t('admin.activityLogs.details.deleteModal.body') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.activity_logs.details.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleting"
@@ -221,8 +221,8 @@ onMounted(async () => {
 
                                     {{
                                         deleting
-                                            ? t('pages.back_office.activity_logs.details.actions.deleting')
-                                            : t('pages.back_office.activity_logs.details.actions.delete')
+                                            ? t('common.actions.deleting')
+                                            : t('common.actions.delete')
                                     }}
                                 </button>
                             </div>

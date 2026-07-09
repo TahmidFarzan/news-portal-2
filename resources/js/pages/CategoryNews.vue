@@ -127,7 +127,7 @@ const getSecondGridColumnClass = (index) => {
 
 <template>
 
-    <Head :title="category?.name || t('pages.category_news.labels.category')">
+    <Head :title="category?.name || t('common.labels.category')">
         <link v-if="category?.public_url" rel="canonical" :href="category.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
@@ -142,19 +142,19 @@ const getSecondGridColumnClass = (index) => {
             <div class="md:col-span-3 lg:col-span-2">
                 <div class="flex h-28 w-28 items-center justify-center rounded-2xl bg-blue-50 p-4 sm:h-32 sm:w-32">
                     <img :src="'/uploads/images/logo/category.png'"
-                        :alt="category?.name || t('pages.category_news.categories.details.category_image_alt')"
+                        :alt="category?.name || t('pages.categoryNews.categories.details.categoryImageAlt')"
                         class="h-full w-full object-contain" loading="lazy" />
                 </div>
             </div>
 
             <div class="space-y-2 md:col-span-9 lg:col-span-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">
-                    {{ t('pages.category_news.labels.category') }}
+                    {{ t('common.labels.category') }}
                 </p>
 
                 <div v-if="category?.parent"
                     class="pointer-events-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                    <a :href="category.parent.public_url" :title="t('pages.category_news.labels.category')"
+                    <a :href="category.parent.public_url" :title="t('common.labels.category')"
                         class="inline-flex min-w-0 items-center gap-1 transition duration-300 hover:text-red-600"
                         @click.stop>
                         <FontAwesomeIcon icon="folder" class="shrink-0" />

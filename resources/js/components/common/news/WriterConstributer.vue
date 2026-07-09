@@ -28,11 +28,11 @@ const { news } = defineProps({
 <template>
     <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500">
         <span v-if="news?.writer">
-            {{ t("components.common.news.writer_constributer.labels.by") }} {{ news.writer }}
+            {{ t("news.components.writerConstributer.labels.by") }} {{ news.writer }}
         </span>
 
         <span v-if="news?.contributors.length">
-            {{ t("components.common.news.writer_constributer.labels.contributors") }}
+            {{ t("common.labels.contributors") }}
             <template v-for="(contributor, index) in news?.contributors" :key="contributor?.id || contributor?.name || index">
                 <a :href="contributor?.public_url || '#'" class="hover:text-gray-900">
                     {{ contributor?.name }}

@@ -171,7 +171,7 @@ const replaceCursorData = (pagination) => {
             @append="appendCursorData" @remove-last="removeLastCursorData" @replace="replaceCursorData" />
     </section>
     <section v-else class="news-empty-state">
-        <p>{{ t('components.common.news.list.labels.no_news_found') }}</p>
+        <p>{{ t('news.components.list.labels.noNewsFound') }}</p>
     </section>
 </template>
 

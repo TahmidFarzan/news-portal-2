@@ -32,8 +32,8 @@ const isUpdate = computed(() => !!googleAdsence?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${googleAdsence?.name} ${t('pages.back_office.google_adsences.create.labels.edit')}`
-        : t('pages.back_office.google_adsences.create.form.create_page_title')
+        ? `${googleAdsence?.name} ${t('common.actions.edit')}`
+        : t('admin.googleAdsences.create.form.createPageTitle')
 })
 
 const saveForm = useForm({
@@ -50,22 +50,22 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.name) {
-        saveForm.setError('name', t('pages.back_office.google_adsences.create.validation.name_is_required'))
+        saveForm.setError('name', t('common.validation.nameIsRequired'))
         valid = false
     }
 
     if (!saveForm.slot_id) {
-        saveForm.setError('slot_id', t('pages.back_office.google_adsences.create.validation.slot_id_is_required'))
+        saveForm.setError('slot_id', t('admin.googleAdsences.create.validation.slotIdIsRequired'))
         valid = false
     }
 
     if (!saveForm.position) {
-        saveForm.setError('position', t('pages.back_office.google_adsences.create.validation.position_is_required'))
+        saveForm.setError('position', t('admin.googleAdsences.create.validation.positionIsRequired'))
         valid = false
     }
 
     if (!saveForm.type) {
-        saveForm.setError('type', t('pages.back_office.google_adsences.create.validation.type_is_required'))
+        saveForm.setError('type', t('common.validation.typeIsRequired'))
         valid = false
     }
 
@@ -113,7 +113,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.google_adsences.create.navigation.google_adsences'), href: route('back-office.google-adsences.index') },
+                { text: t('common.messages.googleAdsense'), href: route('back-office.google-adsences.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -132,19 +132,19 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.google_adsences.create.labels.basic_information') }}
+                        {{ t('common.labels.basicInformation') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.google_adsences.create.labels.name') }} <span
+                                {{ t('common.labels.name') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.name"
-                                :placeholder="t('pages.back_office.google_adsences.create.form.name_placeholder')"
+                                :placeholder="t('common.placeholders.enterName')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -155,12 +155,12 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.google_adsences.create.labels.slot_id') }} <span
+                                {{ t('common.labels.slotId') }} <span
                                     class="text-red-500">*</span>
                             </label>
 
                             <input v-model="saveForm.slot_id"
-                                :placeholder="t('pages.back_office.google_adsences.create.form.slot_id_placeholder')"
+                                :placeholder="t('admin.googleAdsences.create.form.slotIdPlaceholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.slot_id ? 'border-red-500' : 'border-gray-300'" />
 
@@ -171,13 +171,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.google_adsences.create.labels.position') }}
+                                {{ t('common.labels.position') }}
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="position"
                                 :selectedItem="googleAdsence?.position" :apiUrl="route('search.google-adsence-positions')"
                                 :error="saveForm.errors.position" :multiple="false"
-                                :placeholder="t('pages.back_office.google_adsences.create.form.position_placeholder')" />
+                                :placeholder="t('common.placeholders.selectPosition')" />
 
                             <p v-if="saveForm.errors.position" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.position }}
@@ -186,13 +186,13 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.google_adsences.create.labels.type') }}
+                                {{ t('common.labels.type') }}
                             </label>
 
                             <SelectInfinityLoadingApi :form="saveForm" fieldName="type"
                                 :selectedItem="googleAdsence?.type" :apiUrl="route('search.google-adsence-types')"
                                 :error="saveForm.errors.type" :multiple="false"
-                                :placeholder="t('pages.back_office.google_adsences.create.form.type_placeholder')" />
+                                :placeholder="t('admin.googleAdsences.create.form.typePlaceholder')" />
 
                             <p v-if="saveForm.errors.type" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.type }}
@@ -201,7 +201,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('pages.back_office.google_adsences.create.labels.use_full_width_responsive') }}
+                                {{ t('common.labels.useFullWidthResponsive') }}
 
                             </label>
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -214,8 +214,8 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.use_full_width_responsive ? t('pages.back_office.google_adsences.create.labels.yes') :
-                                        t('pages.back_office.google_adsences.create.labels.no') }}
+                                    {{ saveForm.use_full_width_responsive ? t('common.boolean.yes') :
+                                        t('common.boolean.no') }}
                                 </span>
                             </label>
 
@@ -234,8 +234,8 @@ onMounted(async () => {
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
 
-                        {{ saveForm.processing ? t('pages.back_office.google_adsences.create.actions.saving') :
-                            t('pages.back_office.google_adsences.create.actions.save') }}
+                        {{ saveForm.processing ? t('common.actions.saving') :
+                            t('common.actions.save') }}
                     </button>
                 </div>
 

@@ -117,9 +117,9 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.surveys.create.labels.surveys'), href: route('back-office.surveys.index') },
-                { text: `${survey?.name} ${t('pages.back_office.surveys.details.labels.details')}`, href: route('back-office.surveys.details', { slug: survey?.slug }) },
-                { text: t('pages.back_office.survey_questions.index.labels.survey_questions'), active: true },
+                { text: t('common.labels.surveys'), href: route('back-office.surveys.index') },
+                { text: `${survey?.name} ${t('common.actions.details')}`, href: route('back-office.surveys.details', { slug: survey?.slug }) },
+                { text: t('common.labels.surveyQuestions'), active: true },
             ],
         })
     )
@@ -128,19 +128,19 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('pages.back_office.survey_questions.index.labels.survey_questions')" />
+    <Head :title="t('common.labels.surveyQuestions')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.survey_questions.index.labels.survey_questions') }}
+                {{ t('common.labels.surveyQuestions') }}
             </h2>
 
             <a v-if="canCreate()" :href="route('back-office.surveys.survey-questions.create', { slug: survey.slug })"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
-                {{ t('pages.back_office.survey_questions.index.links.create') }}
+                {{ t('common.actions.create') }}
             </a>
         </div>
 
@@ -149,17 +149,17 @@ onMounted(async () => {
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page" :selectedItem="filterForm.per_page"
                     :apiUrl="route('search.per-pages')" :multiple="false"
-                    :placeholder="t('pages.back_office.survey_questions.index.labels.per_page')" />
+                    :placeholder="t('common.labels.perPage')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    :placeholder="t('pages.back_office.survey_questions.index.labels.created_by')" />
+                    :placeholder="t('common.labels.createdBy')" />
 
                 <input v-model="filterForm.date" type="date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
                 <input v-model="filterForm.search" type="search"
-                    :placeholder="t('pages.back_office.survey_questions.index.labels.search_placeholder')"
+                    :placeholder="t('common.placeholders.searchSurvey')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -172,8 +172,8 @@ onMounted(async () => {
 
                     {{
                         filterForm.processing
-                            ? t('pages.back_office.survey_questions.index.buttons.applying_filter')
-                            : t('pages.back_office.survey_questions.index.buttons.apply_filter')
+                            ? t('common.actions.applyingFilter')
+                            : t('common.actions.applyFilter')
                     }}
                 </button>
             </div>
@@ -190,15 +190,15 @@ onMounted(async () => {
                                 #
                             </th>
                             <th class="px-4 py-3 text-left">
-                                {{ t('pages.back_office.survey_questions.index.labels.question') }}
+                                {{ t('common.labels.question') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('pages.back_office.survey_questions.index.labels.date') }}
+                                {{ t('common.labels.date') }}
                             </th>
 
                             <th class="px-4 py-3 text-right">
-                                {{ t('pages.back_office.survey_questions.index.labels.actions') }}
+                                {{ t('common.labels.actions') }}
                             </th>
                         </tr>
                     </thead>
@@ -222,20 +222,20 @@ onMounted(async () => {
 
                                     <a :href="route('back-office.surveys.survey-questions.details', { slug: survey.slug, surveyQuestionSlug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('pages.back_office.survey_questions.index.links.details')">
+                                        :title="t('common.actions.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canUpdate(item)"
                                         :href="route('back-office.surveys.survey-questions.edit', { slug: survey.slug, surveyQuestionSlug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
-                                        :title="t('pages.back_office.survey_questions.index.links.edit')">
+                                        :title="t('common.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
                                     <button v-if="canDelete(item)" @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('pages.back_office.survey_questions.index.buttons.delete')">
+                                        :title="t('common.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
@@ -245,7 +245,7 @@ onMounted(async () => {
 
                         <tr v-if="!surveyQuestions?.data?.length">
                             <td colspan="6" class="px-4 py-6 text-center text-gray-500">
-                                {{ t('pages.back_office.survey_questions.index.labels.no_record_found') }}
+                                {{ t('common.labels.noRecordsFound') }}
                             </td>
                         </tr>
                     </tbody>
@@ -271,7 +271,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.survey_questions.index.labels.delete_modal_title') }}
+                                {{ t('common.modals.deleteConfirmation') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -279,13 +279,13 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.survey_questions.index.labels.delete_modal_body') }}
+                                {{ t('common.modals.thisActionCannotBeUndone') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.survey_questions.index.buttons.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
@@ -294,8 +294,8 @@ onMounted(async () => {
 
                                     {{
                                         deleteProcessing
-                                            ? t('pages.back_office.survey_questions.index.buttons.deleting')
-                                            : t('pages.back_office.survey_questions.index.buttons.delete')
+                                            ? t('common.actions.deleting')
+                                            : t('common.actions.delete')
                                     }}
                                 </button>
                             </div>

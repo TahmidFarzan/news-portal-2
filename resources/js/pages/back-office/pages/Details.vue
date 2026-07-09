@@ -93,8 +93,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.pages.details.labels.page'), href: route('back-office.pages.index') },
-                { text: `${page?.title} ${t('pages.back_office.pages.details.labels.details')}`, active: true }
+                { text: t('common.labels.page'), href: route('back-office.pages.index') },
+                { text: `${page?.title} ${t('common.actions.details')}`, active: true }
             ],
         })
     )
@@ -103,12 +103,12 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${page?.title} ${t('pages.back_office.pages.details.labels.details')}`" />
+    <Head :title="`${page?.title} ${t('common.actions.details')}`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">{{ t('pages.back_office.pages.details.form.edit_page_title') }}</h2>
+            <h2 class="text-lg font-semibold">{{ t('admin.pages.details.form.editPageTitle') }}</h2>
 
             <div class="flex gap-2">
 
@@ -116,25 +116,25 @@ onMounted(async () => {
                     :href="route('back-office.pages.edit', { slug: page?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.pages.details.actions.edit') }}
+                    {{ t('common.actions.edit') }}
                 </a>
 
                 <button v-if="canTrash(page)" @click="showTrashModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    {{ t('pages.back_office.pages.details.actions.trash') }}
+                    {{ t('common.actions.trash') }}
                 </button>
 
                 <button v-if="canRestore(page)" @click="showRestoreModal = true"
                     class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="eye" />
-                    {{ t('pages.back_office.pages.details.actions.restore') }}
+                    {{ t('common.actions.restore') }}
                 </button>
 
                 <button v-if="page.is_published && canDelete(page)" @click="showDeleteModal = true"
                     class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash-can" />
-                    {{ t('pages.back_office.pages.details.actions.delete') }}
+                    {{ t('common.actions.delete') }}
                 </button>
 
             </div>
@@ -142,23 +142,23 @@ onMounted(async () => {
 
         <!-- BASIC INFO -->
         <div class="bg-white border rounded-xl shadow-sm p-5 space-y-4">
-            <h3 class="font-semibold border-b pb-2">{{ t('pages.back_office.pages.details.labels.basic_information') }}</h3>
+            <h3 class="font-semibold border-b pb-2">{{ t('common.labels.basicInformation') }}</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
 
                 <div class="border rounded-lg p-4">
-                    <span class="text-gray-500">{{ t('pages.back_office.pages.details.labels.language') }}</span>
-                    <div class="font-medium">{{ page?.language?.name || t('pages.back_office.pages.details.labels.not_available') }}</div>
+                    <span class="text-gray-500">{{ t('common.labels.language') }}</span>
+                    <div class="font-medium">{{ page?.language?.name || t('common.labels.notAvailable') }}</div>
                 </div>
 
                 <div class="border rounded-lg p-4">
-                    <span class="text-gray-500">{{ t('pages.back_office.pages.details.form.default_use_as') }}</span>
-                    <div class="font-medium">{{ page?.default_use_as || t('pages.back_office.pages.details.labels.not_available') }}</div>
+                    <span class="text-gray-500">{{ t('common.labels.defaultUseAs') }}</span>
+                    <div class="font-medium">{{ page?.default_use_as || t('common.labels.notAvailable') }}</div>
                 </div>
 
                 <div class="border rounded-lg p-4">
-                    <span class="text-gray-500">{{ t('pages.back_office.pages.details.labels.title') }}</span>
-                    <div class="font-medium">{{ page?.title || t('pages.back_office.pages.details.labels.not_available') }}</div>
+                    <span class="text-gray-500">{{ t('common.labels.title') }}</span>
+                    <div class="font-medium">{{ page?.title || t('common.labels.notAvailable') }}</div>
                 </div>
 
             </div>
@@ -167,13 +167,13 @@ onMounted(async () => {
 
         <!-- BODY -->
         <div v-if="!page?.is_default" class="bg-white border rounded-xl p-5">
-            <h3 class="font-semibold mb-2">{{ t('pages.back_office.pages.details.form.body') }}</h3>
-            <div v-html="page?.body || t('pages.back_office.pages.details.labels.not_available')" />
+            <h3 class="font-semibold mb-2">{{ t('common.labels.body') }}</h3>
+            <div v-html="page?.body || t('common.labels.notAvailable')" />
         </div>
 
         <!-- TREE -->
         <div class="bg-white border rounded-xl p-5">
-            <h3 class="font-semibold mb-2">{{ t('pages.back_office.pages.details.labels.tree') }}</h3>
+            <h3 class="font-semibold mb-2">{{ t('common.labels.tree') }}</h3>
 
             <div class="flex flex-wrap gap-2">
                 <span v-for="node in page?.bloodline || []"
@@ -186,22 +186,22 @@ onMounted(async () => {
 
         <!-- SEO -->
         <div class="bg-white border rounded-xl p-5">
-            <h3 class="font-semibold mb-3">{{ t('pages.back_office.pages.details.labels.seo_settings') }}</h3>
+            <h3 class="font-semibold mb-3">{{ t('common.labels.seoSettings') }}</h3>
 
             <div class="space-y-2 text-sm">
                 <div>
-                    <div class="text-gray-500">{{ t('pages.back_office.pages.details.labels.title') }}</div>
-                    <div>{{ page?.seo_title || t('pages.back_office.pages.details.labels.not_available') }}</div>
+                    <div class="text-gray-500">{{ t('common.labels.title') }}</div>
+                    <div>{{ page?.seo_title || t('common.labels.notAvailable') }}</div>
                 </div>
 
                 <div>
-                    <div class="text-gray-500">{{ t('pages.back_office.pages.details.labels.brief') }}</div>
-                    <div>{{ page?.seo_brief || t('pages.back_office.pages.details.labels.not_available') }}</div>
+                    <div class="text-gray-500">{{ t('common.labels.brief') }}</div>
+                    <div>{{ page?.seo_brief || t('common.labels.notAvailable') }}</div>
                 </div>
 
                 <div>
-                    <div class="text-gray-500">{{ t('pages.back_office.pages.details.labels.keywords') }}</div>
-                    <div>{{ page?.seo_keywords || t('pages.back_office.pages.details.labels.not_available') }}</div>
+                    <div class="text-gray-500">{{ t('admin.pages.details.labels.keywords') }}</div>
+                    <div>{{ page?.seo_keywords || t('common.labels.notAvailable') }}</div>
                 </div>
             </div>
         </div>
@@ -212,13 +212,13 @@ onMounted(async () => {
             <!-- TRASH -->
             <div v-if="showTrashModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
                 <div class="bg-white p-6 rounded-xl w-[380px] space-y-4">
-                    <h3 class="text-red-600 font-semibold">{{ t('pages.back_office.pages.details.actions.trash') }}</h3>
+                    <h3 class="text-red-600 font-semibold">{{ t('common.actions.trash') }}</h3>
                     <p>{{ page?.title }}</p>
 
                     <div class="flex justify-end gap-2">
-                        <button @click="closeTrashModal">{{ t('pages.back_office.pages.details.actions.cancel') }}</button>
+                        <button @click="closeTrashModal">{{ t('common.actions.cancel') }}</button>
                         <button @click="handleTrash" :disabled="trashProcessing">
-                            {{ trashProcessing ? t('pages.back_office.pages.details.actions.trashing') : t('pages.back_office.pages.details.actions.trash') }}
+                            {{ trashProcessing ? t('common.messages.trashing') : t('common.actions.trash') }}
                         </button>
                     </div>
                 </div>

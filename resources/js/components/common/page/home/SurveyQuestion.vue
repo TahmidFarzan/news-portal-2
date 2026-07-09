@@ -43,17 +43,17 @@ const percent = value => {
 const options = computed(() => [
     {
         value: 'yes',
-        label: t('components.common.util.survey_question.labels.yes'),
+        label: t('common.boolean.yes'),
     },
 
     {
         value: 'no',
-        label: t('components.common.util.survey_question.labels.no'),
+        label: t('common.boolean.no'),
     },
 
     {
         value: 'no_comment',
-        label: t('components.common.util.survey_question.labels.no_comment'),
+        label: t('components.utility.surveyQuestion.labels.noComment'),
     },
 ])
 
@@ -99,7 +99,7 @@ const submit = async () => {
             sessionStorage.setItem(cacheKey.value, submittedAnswer.value)
 
             editing.value = false
-            message.value = t('components.common.util.survey_question.api.submit_success')
+            message.value = t('components.utility.surveyQuestion.api.submitSuccess')
 
             await emit('updated')
 
@@ -110,7 +110,7 @@ const submit = async () => {
             sessionStorage.removeItem(
                 cacheKey.value
             )
-            error.value = response?.message ?? t('components.common.util.survey_question.api.submit_fail')
+            error.value = response?.message ?? t('components.utility.surveyQuestion.api.submitFail')
         }
     }
 
@@ -118,7 +118,7 @@ const submit = async () => {
         sessionStorage.removeItem(
             cacheKey.value
         )
-        error.value = t('components.common.util.survey_question.api.submit_fail')
+        error.value = t('components.utility.surveyQuestion.api.submitFail')
     }
 
     finally {
@@ -136,7 +136,7 @@ const changeAnswer = () => {
 const translateNumerText = value => {
     return String(value)
         .split('')
-        .map(char => t(`pages.layouts.public_layout.number.${char}`))
+        .map(char => t(`common.numbers.${char}`))
         .join('')
 }
 
@@ -189,7 +189,7 @@ watch(
                     </div>
 
                     <button class="h-8 px-3 text-xs rounded-md border transition hover:bg-white" @click="changeAnswer">
-                        {{ t('components.common.util.survey_question.buttons.change_answer') }}
+                        {{ t('components.utility.surveyQuestion.buttons.changeAnswer') }}
                     </button>
                 </div>
 
@@ -205,7 +205,7 @@ watch(
                     <button
                         class="survey-submit mt-2 w-full h-10 rounded-md text-white text-sm font-medium transition-all duration-300 hover:brightness-110 disabled:opacity-50"
                         @click="submit" :disabled="loading || !selectedAnswer">
-                        {{ loading ? '...' : t('components.common.util.survey_question.buttons.submit') }}
+                        {{ loading ? '...' : t('components.utility.surveyQuestion.buttons.submit') }}
                     </button>
 
                 </div>
@@ -253,7 +253,7 @@ watch(
             </template>
 
             <div v-else class="py-2 text-center text-xs text-gray-500">
-                {{ t('components.common.util.survey_question.labels.no_participate_found') }}
+                {{ t('components.utility.surveyQuestion.labels.noParticipateFound') }}
             </div>
 
         </div>

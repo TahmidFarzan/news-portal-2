@@ -19,6 +19,7 @@ import tinymce from 'tinymce/tinymce'
 import SelectMediaFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
 import axios from 'axios'
 import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { useTranslate } from '@/composables/useTranslate'
 
 import 'tinymce/tinymce'
 import 'tinymce/models/dom'
@@ -70,6 +71,7 @@ const {
 
 
 const tinymceLicenceKey = import.meta.env.VITE_TINY_MCE_TEXT_EDITOR_LICENSE_KEY || 'gpl'
+const { t } = useTranslate()
 
 const showMediaLibrary = ref(false)
 const mediaLibrary = ref(null)
@@ -109,7 +111,7 @@ const editorInit = computed(() => {
         config.setup = (editor) => {
             if (enableSelectFormMediaLibery) {
                 editor.ui.registry.addButton('openMediaLibraryButton', {
-                    text: 'Open Media Library',
+                    text: t('media.mediaSelectFromMediaLibery.actions.openMediaLibrary'),
                     onAction: () => {
                         showMediaLibrary.value = true
                         if (mediaLibrary.value) mediaLibrary.value.openModal()
@@ -133,8 +135,8 @@ const editorInit = computed(() => {
                                 const file = e.target.files[0]
                                 if (!file) return input.remove()
 
-                                const caption = prompt(`Enter ${type} caption:`, '') || ''
-                                const alt = prompt(`Enter ${type} alt text:`, '') || ''
+                                const caption = prompt(t('components.common.tinymce.editor.prompts.caption', { type }), '') || ''
+                                const alt = prompt(t('components.common.tinymce.editor.prompts.altText', { type }), '') || ''
 
                                 const formData = new FormData()
                                 formData.append('caption', caption)
@@ -161,12 +163,12 @@ const editorInit = computed(() => {
                                             html = `<div class="relative w-full pt-[56.25%] mb-2 mt-2"><audio controls src="${mediaUrl}" class="absolute top-0 left-0 w-full h-full object-cover border border-gray-300 rounded"></audio></div>`
                                             break
                                         case 'file':
-                                            const embed = confirm('Do you want to embed the file?')
+                                            const embed = confirm(t('components.common.tinymce.editor.prompts.embedFile'))
                                             if (embed) {
                                                 html = `<div class="w-full h-auto"><iframe src="${mediaUrl}" title="${caption}" width="100%" height="500"></iframe></div>`
                                             } else {
-                                                const anchorText = prompt('Enter link text:', media?.name || 'Download File')
-                                                const target = confirm('Open in new tab?') ? ' target="_blank"' : ''
+                                                const anchorText = prompt(t('components.common.tinymce.editor.prompts.linkText'), media?.name || t('components.common.tinymce.editor.labels.downloadFile'))
+                                                const target = confirm(t('components.common.tinymce.editor.prompts.openInNewTab')) ? ' target="_blank"' : ''
                                                 html = `<a href="${mediaUrl}"${target} class="inline-block px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${anchorText}</a>`
                                             }
                                             break
@@ -177,7 +179,7 @@ const editorInit = computed(() => {
                                 } catch (err) {
                                     console.error(err)
                                     editor.notificationManager.open({
-                                        text: `Upload failed: ${err.message}`,
+                                        text: t('components.common.tinymce.editor.messages.uploadFailed', { message: err.message }),
                                         type: 'error',
                                         timeout: 5000,
                                     })
@@ -191,10 +193,10 @@ const editorInit = computed(() => {
                     })
                 }
 
-                addButton('insertImageButton', 'Insert Image', 'image', 'image/*')
-                addButton('insertFileButton', 'Insert File', 'file', '.csv,.pdf,.doc,.docx,.txt,.xlsx,.xls')
-                addButton('insertVideoButton', 'Insert Video', 'video', 'video/*')
-                addButton('insertAudioButton', 'Insert Audio', 'audio', 'audio/*')
+                addButton('insertImageButton', t('components.common.tinymce.editor.actions.insertImage'), 'image', 'image/*')
+                addButton('insertFileButton', t('components.common.tinymce.editor.actions.insertFile'), 'file', '.csv,.pdf,.doc,.docx,.txt,.xlsx,.xls')
+                addButton('insertVideoButton', t('components.common.tinymce.editor.actions.insertVideo'), 'video', 'video/*')
+                addButton('insertAudioButton', t('components.common.tinymce.editor.actions.insertAudio'), 'audio', 'audio/*')
 
                 const updateEditorMediaIds = (id) => {
                     if (!form['editor_media_ids']) form['editor_media_ids'] = ''
@@ -243,3 +245,4 @@ const handleMediaSelected = (selected) => {
     })
 }
 </script>
+

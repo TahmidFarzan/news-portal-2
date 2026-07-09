@@ -114,7 +114,7 @@ watch(
         </div>
 
         <div v-if="loading" class="category-loading rounded-2xl border border-slate-100 p-4 text-sm text-gray-500">
-            {{ t("components.common.page.category_section.labels.loading") }}
+            {{ t("common.labels.loading") }}
         </div>
 
         <template v-else>

@@ -71,7 +71,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.themes.index.labels.themes'), active: true },
+                { text: t('common.labels.themes'), active: true },
             ],
         })
     )
@@ -80,13 +80,13 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('pages.back_office.themes.index.page_title')" />
+    <Head :title="t('common.labels.themes')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.themes.index.title') }}
+                {{ t('common.labels.themes') }}
             </h2>
         </div>
 
@@ -95,12 +95,12 @@ onMounted(async () => {
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                    :placeholder="t('pages.back_office.themes.index.labels.per_page')" />
+                    :placeholder="t('common.labels.perPage')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
-                <input type="search" v-model="filterForm.search" :placeholder="t('pages.back_office.themes.index.search_placeholder')"
+                <input type="search" v-model="filterForm.search" :placeholder="t('admin.themes.index.searchPlaceholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -110,7 +110,7 @@ onMounted(async () => {
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed">
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon icon="filter" />
-                    {{ filterForm.processing ? t('pages.back_office.themes.index.applying_filter') : t('pages.back_office.themes.index.apply_filter') }}
+                    {{ filterForm.processing ? t('common.actions.applyingFilter') : t('common.actions.applyFilter') }}
                 </button>
             </div>
         </form>
@@ -123,10 +123,10 @@ onMounted(async () => {
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.themes.index.labels.group') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.themes.index.labels.label') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('pages.back_office.themes.index.created') }}</th>
-                            <th class="px-4 py-3 text-right">{{ t('pages.back_office.themes.index.news.index.actions') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('common.labels.group') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('common.labels.label') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('common.labels.createdAt') }}</th>
+                            <th class="px-4 py-3 text-right">{{ t('common.labels.actions') }}</th>
                         </tr>
                     </thead>
 
@@ -135,15 +135,15 @@ onMounted(async () => {
                             <td class="px-4 py-3">{{ index + 1 }}</td>
 
                             <td class="px-4 py-3 font-medium">
-                                {{ item.group || t('pages.back_office.themes.index.labels.not_available') }}
+                                {{ item.group || t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item?.label || t('pages.back_office.themes.index.labels.not_available') }}
+                                {{ item?.label || t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) : t('pages.back_office.themes.index.labels.not_available') }}
+                                {{ item.created_at ? formatDateTime(item.created_at) : t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -151,14 +151,14 @@ onMounted(async () => {
 
                                     <a :href="route('back-office.themes.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('pages.back_office.themes.index.table.menus.details')">
+                                        :title="t('common.actions.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canUpdate(item)"
                                         :href="route('back-office.themes.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
-                                        :title="t('pages.back_office.themes.index.actions.edit')">
+                                        :title="t('common.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
@@ -168,7 +168,7 @@ onMounted(async () => {
 
                         <tr v-if="!themes?.data?.length">
                             <td colspan="5" class="px-4 py-8 text-center text-gray-500">
-                                {{ t('pages.back_office.themes.index.no_theme_found') }}
+                                {{ t('admin.themes.index.noThemeFound') }}
                             </td>
                         </tr>
                     </tbody>

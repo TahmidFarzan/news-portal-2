@@ -25,8 +25,8 @@ const isUpdate = computed(() => !!trend?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${trend?.tag?.name} ${t('pages.back_office.trends.create.actions.edit')}`
-        : t('pages.back_office.trends.create.form.create_page_title')
+        ? `${trend?.tag?.name} ${t('common.actions.edit')}`
+        : t('admin.trends.create.form.createPageTitle')
 })
 
 const saveForm = useForm({
@@ -40,7 +40,7 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.tag_id) {
-        saveForm.setError('tag_id', t('pages.back_office.trends.create.validation.tag_is_required'))
+        saveForm.setError('tag_id', t('admin.trends.create.validation.tagIsRequired'))
         valid = false
     }
 
@@ -88,7 +88,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.trends.create.labels.trends'), href: route('back-office.trends.index') },
+                { text: t('common.labels.trends'), href: route('back-office.trends.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -107,14 +107,14 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.trends.create.labels.basic_information') }}
+                        {{ t('common.labels.basicInformation') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.trends.create.labels.tag') }} <span class="text-red-500">*</span>
+                                {{ t('common.labels.tag') }} <span class="text-red-500">*</span>
                             </label>
 
                             <SelectInfinityLoadingApi
@@ -124,7 +124,7 @@ onMounted(async () => {
                                 :apiUrl="route('search.tags')"
                                 :error="saveForm.errors.tag_id"
                                 :multiple="false"
-                                :placeholder="t('pages.back_office.trends.create.form.tag_placeholder')"
+                                :placeholder="t('admin.trends.create.form.tagPlaceholder')"
                             />
 
                             <p v-if="saveForm.errors.tag_id" class="text-red-500 text-sm mt-1">
@@ -134,7 +134,7 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.trends.create.form.is_current') }}
+                                {{ t('admin.trends.create.form.isCurrent') }}
                             </label>
 
                             <input
@@ -159,7 +159,7 @@ onMounted(async () => {
                     >
                         <FontAwesomeIcon v-if="saveForm.processing" icon="spinner" spin />
                         <FontAwesomeIcon v-else icon="save" />
-                        {{ saveForm.processing ? t('pages.back_office.trends.create.actions.saving') : t('pages.back_office.trends.create.actions.save') }}
+                        {{ saveForm.processing ? t('common.actions.saving') : t('common.actions.save') }}
                     </button>
                 </div>
 

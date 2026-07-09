@@ -49,8 +49,8 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.medias.details.navigation.medias'), href: route('back-office.medias.index') },
-                { text: `${media?.name} ${t('pages.back_office.medias.details.labels.details')}`, active: true },
+                { text: t('common.labels.media'), href: route('back-office.medias.index') },
+                { text: `${media?.name} ${t('common.actions.details')}`, active: true },
             ],
         })
     )
@@ -59,53 +59,53 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="`${media?.name} ${t('pages.back_office.medias.details.labels.details')}`" />
+    <Head :title="`${media?.name} ${t('common.actions.details')}`" />
 
     <div class="w-full space-y-6">
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
             <h3 class="text-lg font-semibold mb-4 border-b pb-2">
-                {{ t('pages.back_office.medias.details.labels.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid md:grid-cols-2 gap-4">
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.labels.name') }}:</span>
-                        {{ media?.name || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('common.labels.name') }}:</span>
+                        {{ media?.name || t('common.labels.notAvailable') }}
                     </div>
 
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.collection_name') }}:</span>
-                        {{ media?.collection_name || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('common.messages.collectionName') }}:</span>
+                        {{ media?.collection_name || t('common.labels.notAvailable') }}
                     </div>
 
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.model_type') }}:</span>
-                        {{ extractModelName(media?.model_type) || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('admin.medias.details.modelType') }}:</span>
+                        {{ extractModelName(media?.model_type) || t('common.labels.notAvailable') }}
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.mime_type') }}:</span>
-                        {{ media?.mime_type || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('admin.medias.details.mimeType') }}:</span>
+                        {{ media?.mime_type || t('common.labels.notAvailable') }}
                     </div>
 
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.disk') }}:</span>
-                        {{ media?.disk || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('admin.medias.details.disk') }}:</span>
+                        {{ media?.disk || t('common.labels.notAvailable') }}
                     </div>
 
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.size') }}:</span>
-                        {{ media?.size || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('admin.medias.details.size') }}:</span>
+                        {{ media?.size || t('common.labels.notAvailable') }}
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div class="text-sm font-semibold text-gray-700 mb-2">
-                        {{ t('pages.back_office.medias.details.custom_properties') }}:
+                        {{ t('admin.medias.details.customProperties') }}:
                     </div>
 
                     <div v-if="media?.custom_properties && Object.keys(media.custom_properties).length"
@@ -117,19 +117,19 @@ onMounted(async () => {
                             </span>
 
                             <span class="text-gray-800 text-right">
-                                {{ value ? titleFormat(value) : t('pages.back_office.medias.details.labels.not_available') }}
+                                {{ value ? titleFormat(value) : t('common.labels.notAvailable') }}
                             </span>
                         </div>
                     </div>
 
                     <p v-else class="text-sm text-gray-500">
-                        {{ t('pages.back_office.medias.details.not_available') }}
+                        {{ t('admin.medias.details.notAvailable') }}
                     </p>
                 </div>
 
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div class="text-sm font-semibold text-gray-700 mb-2">
-                        {{ t('pages.back_office.medias.details.generated_conversions') }}:
+                        {{ t('admin.medias.details.generatedConversions') }}:
                     </div>
 
                     <div v-if="media?.generated_conversions && Object.keys(media.generated_conversions).length"
@@ -141,13 +141,13 @@ onMounted(async () => {
                             </span>
 
                             <span :class="value ? 'text-green-600 font-medium' : 'text-red-500 font-medium'">
-                                {{ value ? t('pages.back_office.medias.details.labels.yes') : t('pages.back_office.medias.details.labels.no') }}
+                                {{ value ? t('common.boolean.yes') : t('common.boolean.no') }}
                             </span>
                         </div>
                     </div>
 
                     <p v-else class="text-sm text-gray-500">
-                        {{ t('pages.back_office.medias.details.not_available') }}
+                        {{ t('admin.medias.details.notAvailable') }}
                     </p>
                 </div>
             </div>
@@ -155,25 +155,25 @@ onMounted(async () => {
             <div class="grid md:grid-cols-1 gap-4 mt-4">
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.original_url') }}:</span>
-                        {{ media?.original_url || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('admin.medias.details.originalUrl') }}:</span>
+                        {{ media?.original_url || t('common.labels.notAvailable') }}
                     </div>
 
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.preview_url') }}:</span>
-                        {{ media?.preview_url || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('admin.medias.details.previewUrl') }}:</span>
+                        {{ media?.preview_url || t('common.labels.notAvailable') }}
                     </div>
 
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.labels.order_column') }}:</span>
-                        {{ media?.order_column || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('common.labels.orderColumn') }}:</span>
+                        {{ media?.order_column || t('common.labels.notAvailable') }}
                     </div>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-1 gap-4 mt-4">
                 <div class="border border-gray-200 rounded-xl p-4 text-sm">
-                    <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.navigation.medias') }}:</span>
+                    <span class="font-medium text-gray-600">{{ t('common.labels.media') }}:</span>
                     <MediaRenderer :media="media" />
                 </div>
             </div>
@@ -181,19 +181,19 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
             <h3 class="text-lg font-semibold mb-4 border-b pb-2">
-                {{ t('pages.back_office.medias.details.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="grid md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-xl p-4 space-y-2">
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.table.columns.created_at') }}:</span>
-                        {{ media?.created_at ? formatDateTime(media.created_at) : t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('common.labels.createdAt') }}:</span>
+                        {{ media?.created_at ? formatDateTime(media.created_at) : t('common.labels.notAvailable') }}
                     </div>
 
                     <div>
-                        <span class="font-medium text-gray-600">{{ t('pages.back_office.medias.details.labels.created_by') }}:</span>
-                        {{ media?.created_by?.name || t('pages.back_office.medias.details.labels.not_available') }}
+                        <span class="font-medium text-gray-600">{{ t('common.labels.createdBy') }}:</span>
+                        {{ media?.created_by?.name || t('common.labels.notAvailable') }}
                     </div>
                 </div>
             </div>
@@ -201,7 +201,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6">
             <h3 class="text-lg font-semibold mb-4 border-b pb-2">
-                {{ t('pages.back_office.medias.details.activity_logs.index.title') }}
+                {{ t('common.labels.activityLogs') }}
             </h3>
 
             <RecentActivities :model-slug="'media'" :model="media" />
@@ -211,7 +211,7 @@ onMounted(async () => {
             <button @click="showDeleteModal = true"
                 class="px-4 py-2 border border-red-500 text-red-600 rounded hover:bg-red-50 flex items-center gap-2">
                 <FontAwesomeIcon icon="trash" />
-                {{ t('pages.back_office.medias.details.actions.delete') }}
+                {{ t('common.actions.delete') }}
             </button>
         </div>
 
@@ -228,7 +228,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div class="bg-white p-6 rounded-xl shadow-lg w-96">
                             <div class="font-semibold mb-2">
-                                {{ t('pages.back_office.medias.details.modals.delete_confirmation_modal.title') }}
+                                {{ t('common.modals.deleteConfirmation') }}
                             </div>
 
                             <p class="mb-2">
@@ -236,18 +236,18 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-600 mb-4">
-                                {{ t('pages.back_office.medias.details.modals.delete_confirmation_modal.irreversible_body') }}
+                                {{ t('common.modals.thisActionCannotBeUndone') }}
                             </p>
 
                             <div class="flex justify-end gap-2">
                                 <button @click="showDeleteModal = false" class="px-3 py-1 bg-gray-200 rounded">
-                                    {{ t('pages.back_office.medias.details.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('pages.back_office.medias.details.actions.deleting') : t('pages.back_office.medias.details.actions.delete') }}
+                                    {{ deleteProcessing ? t('common.actions.deleting') : t('common.actions.delete') }}
                                 </button>
                             </div>
                         </div>

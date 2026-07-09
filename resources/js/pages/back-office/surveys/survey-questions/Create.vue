@@ -25,8 +25,8 @@ const isUpdate = computed(() => !!surveyQuestion?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${surveyQuestion?.question} ${t('pages.back_office.survey_questions.create.labels.edit')}`
-        : t('pages.back_office.survey_question.create.labels.create')
+        ? `${surveyQuestion?.question} ${t('common.actions.edit')}`
+        : t('common.actions.create')
 })
 
 const saveForm = useForm({
@@ -39,7 +39,7 @@ function validateForm() {
     let valid = true
 
     if (!saveForm.question || saveForm.question.trim() === '') {
-        saveForm.setError('question', t('pages.back_office.survey_question.create.validation.title_is_required'))
+        saveForm.setError('question', t('common.validation.titleIsRequired'))
         valid = false
     }
 
@@ -84,9 +84,9 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.surveys.create.labels.surveys'), href: route('back-office.surveys.index') },
-                { text: `${survey?.name} ${t('pages.back_office.surveys.details.labels.details')}`, href: route('back-office.surveys.details',{slug : survey?.slug}) },
-                { text: t('pages.back_office.survey_questions.details.labels.survey_questions'),  href: route('back-office.surveys.survey-questions.index',{slug : survey?.slug}) ,active: false },
+                { text: t('common.labels.surveys'), href: route('back-office.surveys.index') },
+                { text: `${survey?.name} ${t('common.actions.details')}`, href: route('back-office.surveys.details',{slug : survey?.slug}) },
+                { text: t('common.labels.surveyQuestions'),  href: route('back-office.surveys.survey-questions.index',{slug : survey?.slug}) ,active: false },
                 {
                     text: pageTitle.value,
                     active: true
@@ -108,19 +108,19 @@ onMounted(async () => {
 
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">
-                        {{ t('pages.back_office.survey_questions.create.labels.basic_information') }}
+                        {{ t('common.labels.basicInformation') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('pages.back_office.survey_questions.create.labels.question') }}
+                                {{ t('common.labels.question') }}
                                 <span class="text-red-500">*</span>
                             </label>
 
 
                             <textarea v-model="saveForm.question" rows="4"
-                                :placeholder="t('pages.back_office.survey_questions.create.labels.question')"
+                                :placeholder="t('common.labels.question')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.question ? 'border-red-500' : 'border-gray-300'"></textarea>
 
@@ -140,8 +140,8 @@ onMounted(async () => {
 
                         {{
                             saveForm.processing
-                                ? t('pages.back_office.survey_questions.create.buttons.saving')
-                                : t('pages.back_office.survey_questions.create.buttons.save')
+                                ? t('common.actions.saving')
+                                : t('common.actions.save')
                         }}
                     </button>
                 </div>

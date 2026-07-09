@@ -61,11 +61,11 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.surveys.create.labels.surveys'), href: route('back-office.surveys.index') },
-                { text: `${survey?.name} ${t('pages.back_office.surveys.details.labels.details')}`, href: route('back-office.surveys.details', { slug: survey?.slug }) },
-                { text: t('pages.back_office.survey_questions.details.labels.survey_questions'), href: route('back-office.surveys.survey-questions.index', { slug: survey?.slug }), active: false },
+                { text: t('common.labels.surveys'), href: route('back-office.surveys.index') },
+                { text: `${survey?.name} ${t('common.actions.details')}`, href: route('back-office.surveys.details', { slug: survey?.slug }) },
+                { text: t('common.labels.surveyQuestions'), href: route('back-office.surveys.survey-questions.index', { slug: survey?.slug }), active: false },
                 {
-                    text: `${surveyQuestion?.question} ${t('pages.back_office.survey_questions.details.labels.details')}`,
+                    text: `${surveyQuestion?.question} ${t('common.actions.details')}`,
                     active: true
                 }
             ],
@@ -77,13 +77,13 @@ onMounted(async () => {
 <template>
 
     <Head
-        :title="`${surveyQuestion?.question} ${t('pages.back_office.survey_questions.details.labels.survey_question')}`" />
+        :title="`${surveyQuestion?.question} ${t('admin.surveyQuestions.details.labels.surveyQuestion')}`" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.survey_questions.details.labels.survey_question') }}
+                {{ t('admin.surveyQuestions.details.labels.surveyQuestion') }}
             </h2>
 
             <div class="flex gap-2">
@@ -91,29 +91,29 @@ onMounted(async () => {
                     :href="route('back-office.surveys.survey-questions.edit', { slug: survey?.slug, surveyQuestionSlug: surveyQuestion?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.survey_questions.details.links.edit') }}
+                    {{ t('common.actions.edit') }}
                 </a>
 
                 <button v-if="canDelete(surveyQuestion)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    {{ t('pages.back_office.survey_questions.details.buttons.delete') }}
+                    {{ t('common.actions.delete') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.survey_questions.details.labels.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.question')
+                        <span class="text-gray-500">{{ t('common.labels.question')
                             }}</span>
                         <span class="font-medium">{{ surveyQuestion?.question ||
-                            t('pages.back_office.survey_questions.details.labels.not_available') }}</span>
+                            t('common.labels.notAvailable') }}</span>
                     </div>
                 </div>
             </div>
@@ -121,11 +121,11 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.survey_questions.details.labels.survey_question_result') }}
+                {{ t('admin.surveyQuestions.details.labels.surveyQuestionResult') }}
             </h3>
 
             <div class="flex justify-between">
-                <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.yes') }}</span>
+                <span class="text-gray-500">{{ t('common.boolean.yes') }}</span>
                 <span class="font-medium">
                     {{ surveyQuestion?.survey_question_result?.yes || 0 }}
                 </span>
@@ -133,21 +133,21 @@ onMounted(async () => {
 
 
             <div class="flex justify-between">
-                <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.no') }}</span>
+                <span class="text-gray-500">{{ t('common.boolean.no') }}</span>
                 <span class="font-medium">
                     {{ surveyQuestion?.survey_question_result?.no || 0 }}
                 </span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.no_comment') }}</span>
+                <span class="text-gray-500">{{ t('admin.surveyQuestions.details.labels.noComment') }}</span>
                 <span class="font-medium">
                     {{ surveyQuestion?.survey_question_result?.no_comment || 0 }}
                 </span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.participate_count') }}</span>
+                <span class="text-gray-500">{{ t('admin.surveyQuestions.details.labels.participateCount') }}</span>
                 <span class="font-medium">
                     {{ surveyQuestion?.survey_question_result?.participate_count || 0 }}
                 </span>
@@ -157,55 +157,55 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.survey_questions.details.labels.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.created_at')
+                        <span class="text-gray-500">{{ t('common.labels.createdAt')
                             }}</span>
 
                         <span class="font-medium">
                             {{
                                 surveyQuestion?.created_at
                                     ? formatDateTime(surveyQuestion.created_at)
-                                    : t('pages.back_office.survey_questions.details.labels.not_available')
+                                    : t('common.labels.notAvailable')
                             }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.created_by')
+                        <span class="text-gray-500">{{ t('common.labels.createdBy')
                             }}</span>
                         <span class="font-medium">
                             {{ surveyQuestion?.created_by?.name ||
-                                t('pages.back_office.survey_questions.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.updated_at')
+                        <span class="text-gray-500">{{ t('common.labels.updatedAt')
                             }}</span>
 
                         <span class="font-medium">
                             {{
                                 surveyQuestion?.updated_at
                                     ? formatDateTime(surveyQuestion.updated_at)
-                                    : t('pages.back_office.survey_questions.details.labels.not_available')
+                                    : t('common.labels.notAvailable')
                             }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.survey_questions.details.labels.updated_by')
+                        <span class="text-gray-500">{{ t('common.labels.updatedBy')
                             }}</span>
                         <span class="font-medium">
                             {{ surveyQuestion?.latest_activity_log?.causer?.name ||
-                                t('pages.back_office.survey_questions.details.labels.not_available') }}
+                                t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -215,7 +215,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.survey_questions.details.labels.activity_logs_title') }}
+                {{ t('common.labels.activityLogs') }}
             </h3>
 
             <RecentActivities :model-slug="'survey-question'" :model="surveyQuestion" />
@@ -235,7 +235,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.survey_questions.details.labels.delete_modal_title') }}
+                                {{ t('common.modals.deleteConfirmation') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -243,13 +243,13 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.survey_questions.details.labels.delete_modal_body') }}
+                                {{ t('common.modals.thisActionCannotBeUndone') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.survey_questions.details.buttons.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
@@ -258,8 +258,8 @@ onMounted(async () => {
 
                                     {{
                                         deleteProcessing
-                                            ? t('pages.back_office.survey_questions.details.buttons.deleting')
-                                            : t('pages.back_office.survey_questions.details.buttons.delete')
+                                            ? t('common.actions.deleting')
+                                            : t('common.actions.delete')
                                     }}
                                 </button>
                             </div>

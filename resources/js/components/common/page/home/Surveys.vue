@@ -78,7 +78,7 @@ watch(
                     </div>
 
                     <div v-else>
-                        {{ t('components.common.util.surveys.labels.no_survey_question_added') }}
+                        {{ t('components.utility.surveys.labels.noSurveyQuestionAdded') }}
                     </div>
                 </div>
             </SwiperSlide>
@@ -100,7 +100,7 @@ watch(
                 </div>
 
                 <div v-else>
-                    {{ t('components.common.util.surveys.labels.no_survey_question_added') }}
+                    {{ t('components.utility.surveys.labels.noSurveyQuestionAdded') }}
                 </div>
             </div>
         </div>

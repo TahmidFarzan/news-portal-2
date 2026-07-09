@@ -320,10 +320,10 @@ onMounted(async () => {
 
             <template #afterList>
                 <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
-                    {{ t("components.common.multi_select.infinity_loading_api.labels.loading") }}
+                    {{ t("common.labels.loading") }}
                 </div>
                 <div v-else class="text-center py-1 text-xs text-gray-400">
-                    {{ t("components.common.multi_select.infinity_loading_api.labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
+                    {{ t("common.labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
                 </div>
             </template>
         </Multiselect>

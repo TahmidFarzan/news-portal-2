@@ -22,17 +22,17 @@ const { news } = defineProps({
 <template>
     <div class="w-full rounded-xl border border-gray-200 bg-white shadow-sm">
         <div v-if="!news.length" class="px-4 py-8 text-center text-sm text-gray-500">
-            No news found.
+            {{ t("admin.components.news.relatedOrRelevantNewsList.labels.noNewsFound") }}
         </div>
 
         <div v-else class="overflow-x-auto">
             <table class="w-full text-left text-sm">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-500">
                     <tr>
-                        <th class="px-4 py-3 font-semibold">Title</th>
-                        <th class="px-4 py-3 font-semibold">Category</th>
-                        <th class="px-4 py-3 font-semibold">Position</th>
-                        <th class="px-4 py-3 font-semibold">Action</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("common.labels.title") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("common.labels.category") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("common.labels.position") }}</th>
+                        <th class="px-4 py-3 font-semibold">{{ t("common.labels.action") }}</th>
                     </tr>
                 </thead>
 
@@ -54,7 +54,7 @@ const { news } = defineProps({
                             <a :href="route('back-office.news.details', { slug: perNews?.slug })"
                                 class="inline-flex items-center gap-1 rounded border border-blue-500 px-2 py-1 text-xs text-blue-500 hover:bg-blue-50">
                                 <FontAwesomeIcon icon="info" />
-                                {{ t("components.back_office.news.related_or_relevant_news_list.navigation.details") }}
+                                {{ t("common.actions.details") }}
                             </a>
                         </td>
                     </tr>

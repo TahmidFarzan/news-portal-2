@@ -101,7 +101,7 @@ onMounted(() => {
                 <li v-if="headerMenu.loading && headerMenu.items.length"
                     class="h-10 flex items-center px-3 text-sm text-gray-300 flex-shrink-0">
                     <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
-                    {{ t("components.common.layout.public_layout.header_menu.messages.loading") }}
+                    {{ t("layout.public.headerMenu.messages.loading") }}
                 </li>
             </ul>
         </HorizontalScroller>

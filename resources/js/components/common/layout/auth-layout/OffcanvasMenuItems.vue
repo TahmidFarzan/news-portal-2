@@ -200,20 +200,20 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/dashboard/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gauge" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.dashboard") }}
+            {{ t("common.labels.dashboard") }}
         </a>
 
         <a :href="route('back-office.medias.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/medias/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="photo-film" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.medias") }}
+            {{ t("common.labels.media") }}
         </a>
 
         <button @click="toggleShowSubMenu('NewsAttributes')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="layer-group" />
-                {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.news_attributes") }}
+                {{ t("layout.auth.offcanvasMenuItems.navigation.newsAttributes") }}
             </span>
             <FontAwesomeIcon :icon="isSubMenuVisible('NewsAttributes') ? 'chevron-up' : 'chevron-down'" />
         </button>
@@ -228,42 +228,42 @@ const isSubMenuVisible = (key) => {
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/categories/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="layer-group" />
-                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.categories") }}
+                    {{ t("common.messages.categories") }}
                 </a>
 
                 <a v-if="canAccessTagComputed" :href="route('back-office.tags.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/tags/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="tags" />
-                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.tags") }}
+                    {{ t("common.labels.tags") }}
                 </a>
 
                 <a v-if="canAccessTrendComputed" :href="route('back-office.trends.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/trends/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="star" />
-                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.trends") }}
+                    {{ t("common.labels.trends") }}
                 </a>
 
                 <a v-if="canAccessLocationComputed" :href="route('back-office.locations.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/locations/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="globe" />
-                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.location") }}
+                    {{ t("common.labels.location") }}
                 </a>
 
                 <a v-if="canAccessEventComputed" :href="route('back-office.events.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/events/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="fan" />
-                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.events") }}
+                    {{ t("common.messages.events") }}
                 </a>
 
                 <a v-if="canAccessContributorComputed" :href="route('back-office.contributors.index')"
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isCurrentPage('/back-office/contributors/*') ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="users" />
-                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.contributors") }}
+                    {{ t("common.labels.contributors") }}
                 </a>
 
             </div>
@@ -273,35 +273,35 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.news") }}
+            {{ t("common.labels.news") }}
         </a>
 
         <a v-if="canAccessBreakingNewsComputed" :href="route('back-office.breaking-news.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/breaking-news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.breaking_news") }}
+            {{ t("common.messages.breakingNews") }}
         </a>
 
         <a v-if="canAccessPageComputed" :href="route('back-office.pages.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/pages/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="file" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.pages") }}
+            {{ t("layout.auth.offcanvasMenuItems.navigation.pages") }}
         </a>
 
         <a v-if="canAccessMenuComputed" :href="route('back-office.menus.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/menus/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="ellipsis-vertical" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.menus") }}
+            {{ t("common.labels.menus") }}
         </a>
 
         <button @click="toggleShowSubMenu('UserManagement')"
             class="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-100">
             <span class="flex items-center gap-2">
                 <FontAwesomeIcon icon="users" />
-                {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.user_anagement") }}
+                {{ t("layout.auth.offcanvasMenuItems.navigation.userAnagement") }}
             </span>
             <FontAwesomeIcon :icon="isSubMenuVisible('UserManagement') ? 'chevron-up' : 'chevron-down'" />
         </button>
@@ -316,7 +316,7 @@ const isSubMenuVisible = (key) => {
                     class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
                     :class="isAnyCurrentPage(routeMap.UserManagement) ? 'bg-gray-200 font-medium' : ''">
                     <FontAwesomeIcon icon="user" />
-                    {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.users") }}
+                    {{ t("common.labels.users") }}
                 </a>
 
             </div>
@@ -326,21 +326,21 @@ const isSubMenuVisible = (key) => {
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/themes/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="gears" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.themes") }}
+            {{ t("common.labels.themes") }}
         </a>
 
         <a v-if="canAccessGoogleAdsenceComputed" :href="route('back-office.google-adsences.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/google-adsences/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="bullhorn" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.google_adsences") }}
+            {{ t("common.messages.googleAdsense") }}
         </a>
 
         <a v-if="canAccessSurveyComputed" :href="route('back-office.surveys.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
             :class="isCurrentPage('/auth-user/surveys/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="square-poll-horizontal" />
-            {{ t("components.common.layout.auth_layout.offcanvas_menu_items.navigation.surveys") }}
+            {{ t("common.labels.surveys") }}
         </a>
     </div>
 </template>

@@ -214,10 +214,10 @@ onMounted(() => {
             label="label" track-by="value" @search-change="onSearchDebounced" @open="onDropdownOpen">
             <template #afterList>
                 <div v-if="loadingMore" class="text-center py-2 text-xs text-gray-400">
-                    {{ t("components.common.multi_select.infinity_loading_local_data.labels.loading") }}
+                    {{ t("common.labels.loading") }}
                 </div>
                 <div v-else class="text-center py-1 text-xs text-gray-400">
-                    {{ t("components.common.multi_select.infinity_loading_local_data.labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
+                    {{ t("common.labels.page") }} {{ translateNumerText(page) }} / {{ translateNumerText(lastPage) }}
                 </div>
             </template>
         </Multiselect>

@@ -146,12 +146,12 @@ const handleReachEnd = async () => {
                         <OffCanvasMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
-                            {{ t("components.common.layout.public_layout.off_canvas_menu_item.labels.loading") }}
+                            {{ t("common.labels.loading") }}
                         </li>
 
                         <li v-if="childrenLoaded && !childrenLoading && !children.length"
                             class="px-3 py-2 text-sm text-gray-400">
-                            {{ t("components.common.layout.public_layout.off_canvas_menu_item.labels.no_menu_found") }}
+                            {{ t("common.labels.noMenuFound") }}
                         </li>
                     </ul>
                 </VerticalScroller>

@@ -32,7 +32,7 @@ const { googleAdsence } = defineProps({
     },
 })
 
-const pageTitle = computed(() => `${googleAdsence?.name} ${t('pages.back_office.google_adsences.details.labels.details')}`)
+const pageTitle = computed(() => `${googleAdsence?.name} ${t('common.actions.details')}`)
 
 const canUpdate = (googleAdsence) => canUpdateGoogleAdsence(authUser?.value, googleAdsence)
 const canDelete = (googleAdsence) => canDeleteGoogleAdsence(authUser?.value, googleAdsence)
@@ -55,7 +55,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.google_adsences.details.navigation.google_adsences'), href: route('back-office.google-adsences.index') },
+                { text: t('common.messages.googleAdsense'), href: route('back-office.google-adsences.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -71,67 +71,67 @@ onMounted(async () => {
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.google_adsences.details.title') }}
+                {{ t('admin.googleAdsences.details.title') }}
             </h2>
 
             <div class="flex gap-2">
                 <a v-if="canUpdate(googleAdsence)" :href="route('back-office.google-adsences.edit', { slug: googleAdsence?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
-                    {{ t('pages.back_office.google_adsences.details.table.menus.edit') }}
+                    {{ t('common.actions.edit') }}
                 </a>
 
                 <button v-if="canDelete(googleAdsence)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
-                    {{ t('pages.back_office.google_adsences.details.actions.delete') }}
+                    {{ t('common.actions.delete') }}
                 </button>
             </div>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.google_adsences.details.labels.basic_information') }}
+                {{ t('common.labels.basicInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.name') }}</span>
-                        <span class="font-medium">{{ googleAdsence?.name || t('pages.back_office.google_adsences.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.name') }}</span>
+                        <span class="font-medium">{{ googleAdsence?.name || t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.use_full_width_responsive') }}</span>
-                        <span class="font-medium">{{ googleAdsence?.use_full_width_responsive ? t('pages.back_office.google_adsences.details.labels.yes') : t('pages.back_office.google_adsences.details.labels.no') }}</span>
-                    </div>
-
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.position') }}</span>
-                        <span class="font-medium">{{ googleAdsence?.position || t('pages.back_office.google_adsences.details.labels.not_available') }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.type') }}</span>
-                        <span class="font-medium">{{ googleAdsence?.type || t('pages.back_office.google_adsences.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.useFullWidthResponsive') }}</span>
+                        <span class="font-medium">{{ googleAdsence?.use_full_width_responsive ? t('common.boolean.yes') : t('common.boolean.no') }}</span>
                     </div>
 
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.slot_id') }}</span>
-                        <span class="font-medium">{{ googleAdsence?.slot_id || t('pages.back_office.google_adsences.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.position') }}</span>
+                        <span class="font-medium">{{ googleAdsence?.position || t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.client_id') }}</span>
-                        <span class="font-medium">{{ googleAdsence?.client_id || t('pages.back_office.google_adsences.details.labels.not_available') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.type') }}</span>
+                        <span class="font-medium">{{ googleAdsence?.type || t('common.labels.notAvailable') }}</span>
+                    </div>
+
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.slotId') }}</span>
+                        <span class="font-medium">{{ googleAdsence?.slot_id || t('common.labels.notAvailable') }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('admin.googleAdsences.details.labels.clientId') }}</span>
+                        <span class="font-medium">{{ googleAdsence?.client_id || t('common.labels.notAvailable') }}</span>
                     </div>
 
                 </div>
@@ -141,39 +141,39 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.google_adsences.details.activity_logs.details.system_information') }}
+                {{ t('common.labels.systemInformation') }}
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.table.columns.created_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdAt') }}</span>
                         <span class="font-medium">
-                            {{ googleAdsence?.created_at ? formatDateTime(googleAdsence.created_at) : t('pages.back_office.google_adsences.details.labels.not_available') }}
+                            {{ googleAdsence?.created_at ? formatDateTime(googleAdsence.created_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.created_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdBy') }}</span>
                         <span class="font-medium">
-                            {{ googleAdsence?.created_by?.name || t('pages.back_office.google_adsences.details.labels.not_available') }}
+                            {{ googleAdsence?.created_by?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.updated_at') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedAt') }}</span>
                         <span class="font-medium">
-                            {{ googleAdsence?.updated_at ? formatDateTime(googleAdsence.updated_at) : t('pages.back_office.google_adsences.details.labels.not_available') }}
+                            {{ googleAdsence?.updated_at ? formatDateTime(googleAdsence.updated_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('pages.back_office.google_adsences.details.labels.updated_by') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedBy') }}</span>
                         <span class="font-medium">
-                            {{ googleAdsence?.latest_activity_log?.causer?.name || t('pages.back_office.google_adsences.details.labels.not_available') }}
+                            {{ googleAdsence?.latest_activity_log?.causer?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -183,7 +183,7 @@ onMounted(async () => {
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="text-base font-semibold border-b pb-2">
-                {{ t('pages.back_office.google_adsences.details.navigation.activity_logs') }}
+                {{ t('common.labels.activityLogs') }}
             </h3>
 
             <RecentActivities :model-slug="'google-adsence'" :model="googleAdsence" />
@@ -204,7 +204,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.google_adsences.details.delete_modal.title') }}
+                                {{ t('common.modals.deleteGoogleAdsense') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -212,19 +212,19 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.google_adsences.details.modals.delete_confirmation_modal.irreversible_body') }}
+                                {{ t('common.modals.thisActionCannotBeUndone') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.google_adsences.details.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('pages.back_office.google_adsences.details.actions.deleting') : t('pages.back_office.google_adsences.details.actions.delete') }}
+                                    {{ deleteProcessing ? t('common.actions.deleting') : t('common.actions.delete') }}
                                 </button>
                             </div>
                         </div>

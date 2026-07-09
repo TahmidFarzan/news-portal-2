@@ -211,7 +211,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('pages.back_office.breaking_news.index.navigation.breaking_news'), active: true },
+                { text: t('common.messages.breakingNews'), active: true },
             ],
         })
     )
@@ -220,19 +220,19 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('pages.back_office.breaking_news.index.navigation.breaking_news')" />
+    <Head :title="t('common.messages.breakingNews')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('pages.back_office.breaking_news.index.navigation.breaking_news') }}
+                {{ t('common.messages.breakingNews') }}
             </h2>
 
             <a v-if="canCreate()" :href="route('back-office.breaking-news.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
-                {{ t('pages.back_office.breaking_news.index.actions.create') }}
+                {{ t('common.actions.create') }}
             </a>
         </div>
 
@@ -241,39 +241,39 @@ onMounted(async () => {
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page" :selectedItem="filterForm.per_page"
                     :apiUrl="route('search.per-pages')" :multiple="false"
-                    :placeholder="t('pages.back_office.breaking_news.index.labels.per_page')" />
+                    :placeholder="t('common.labels.perPage')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
-                    :placeholder="t('pages.back_office.breaking_news.index.labels.created_by')" />
+                    :placeholder="t('common.labels.createdBy')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id" :apiUrl="route('search.news-types')" :multiple="false"
-                    :placeholder="t('pages.back_office.breaking_news.index.labels.news_type')" />
+                    :placeholder="t('common.labels.newsType')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
-                    :placeholder="t('pages.back_office.breaking_news.index.labels.language')" />
+                    :placeholder="t('common.labels.language')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id" selectedLabelKey="indentation_name"
                     selectedValueKey="id" :selectedItem="filterForm.category_id" apiLabelKey="indentation_name"
                     apiValueKey="id" :apiUrl="route('search.category-tree')" :multiple="false"
-                    :placeholder="t('pages.back_office.breaking_news.index.navigation.categories')" />
+                    :placeholder="t('common.messages.categories')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="location_id" selectedLabelKey="indentation_name"
                     selectedValueKey="id" :selectedItem="filterForm.location_id" apiLabelKey="indentation_name"
                     apiValueKey="id" :apiUrl="route('search.location-tree')" :multiple="false"
-                    :placeholder="t('pages.back_office.breaking_news.index.navigation.locations')" />
+                    :placeholder="t('common.messages.locations')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="event_id" :selectedItem="filterForm.event_id"
                     :apiUrl="route('search.events')" :multiple="false"
-                    :placeholder="t('pages.back_office.breaking_news.index.navigation.events')" />
+                    :placeholder="t('common.messages.events')" />
 
                 <input v-model="filterForm.date" type="date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
                 <input v-model="filterForm.search" type="search"
-                    :placeholder="t('pages.back_office.breaking_news.index.search_placeholder')"
+                    :placeholder="t('common.placeholders.searchNews')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -286,8 +286,8 @@ onMounted(async () => {
 
                     {{
                         filterForm.processing
-                            ? t('pages.back_office.breaking_news.index.activity_logs.index.applying_filter')
-                            : t('pages.back_office.breaking_news.index.activity_logs.index.apply_filter')
+                            ? t('common.actions.applyingFilter')
+                            : t('common.actions.applyFilter')
                     }}
                 </button>
             </div>
@@ -305,23 +305,23 @@ onMounted(async () => {
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('pages.back_office.breaking_news.index.labels.title') }}
+                                {{ t('common.labels.title') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('pages.back_office.breaking_news.index.labels.language') }}
+                                {{ t('common.labels.language') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('pages.back_office.breaking_news.index.activity_logs.index.created') }}
+                                {{ t('common.labels.createdAt') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('pages.back_office.breaking_news.index.labels.is_published') }}
+                                {{ t('common.labels.isPublished') }}
                             </th>
 
                             <th class="px-4 py-3 text-right">
-                                {{ t('pages.back_office.breaking_news.index.table.columns.action') }}
+                                {{ t('common.labels.action') }}
                             </th>
                         </tr>
                     </thead>
@@ -339,7 +339,7 @@ onMounted(async () => {
 
                             <td class="px-4 py-3 text-gray-600">
                                 {{ item.language ? item.language.name :
-                                    t('pages.back_office.breaking_news.index.labels.not_available') }}
+                                    t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
@@ -347,8 +347,8 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-600">
-                                {{ item.is_published ? t('pages.back_office.breaking_news.index.labels.yes') :
-                                    t('pages.back_office.breaking_news.index.labels.no') }}
+                                {{ item.is_published ? t('common.boolean.yes') :
+                                    t('common.boolean.no') }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -356,32 +356,32 @@ onMounted(async () => {
 
                                     <a :href="route('back-office.breaking-news.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('pages.back_office.breaking_news.index.table.menus.details')">
+                                        :title="t('common.actions.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canUpdate(item)"
                                         :href="route('back-office.breaking-news.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
-                                        :title="t('pages.back_office.breaking_news.index.table.menus.edit')">
+                                        :title="t('common.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
 
                                     <button v-if="canRestore(item)" @click="confirmRestore(item)"
                                         class="p-2 rounded-md text-green-600 hover:bg-green-50 border"
-                                        :title="t('pages.back_office.breaking_news.index.actions.restore')">
+                                        :title="t('common.actions.restore')">
                                         <FontAwesomeIcon icon="eye" />
                                     </button>
 
                                     <button v-if="canTrash(item)" @click="confirmTrash(item)"
                                         class="p-2 rounded-md text-orange-600 hover:bg-orange-50 border"
-                                        :title="t('pages.back_office.breaking_news.index.actions.trash')">
+                                        :title="t('common.actions.trash')">
                                         <FontAwesomeIcon icon="eye-slash" />
                                     </button>
 
                                     <button v-if="!item.is_published && canDelete(item)" @click="confirmDelete(item)"
                                         class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('pages.back_office.breaking_news.index.actions.delete')">
+                                        :title="t('common.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
@@ -391,7 +391,7 @@ onMounted(async () => {
 
                         <tr v-if="!breakingNewsItems?.data?.length">
                             <td colspan="6" class="px-4 py-6 text-center text-gray-500">
-                                {{ t('pages.back_office.breaking_news.index.labels.no_record_found') }}
+                                {{ t('common.labels.noRecordsFound') }}
                             </td>
                         </tr>
                     </tbody>
@@ -417,7 +417,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('pages.back_office.breaking_news.index.delete_modal.title') }}
+                                {{ t('common.modals.deleteBreakingNews') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -426,14 +426,14 @@ onMounted(async () => {
 
                             <p class="text-sm text-gray-500">
                                 {{
-                                    t('pages.back_office.breaking_news.index.modals.delete_confirmation_modal.irreversible_body')
+                                    t('common.modals.thisActionCannotBeUndone')
                                 }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showDeleteModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.breaking_news.index.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
@@ -442,8 +442,8 @@ onMounted(async () => {
 
                                     {{
                                         deleteProcessing
-                                            ? t('pages.back_office.breaking_news.index.actions.deleting')
-                                            : t('pages.back_office.breaking_news.index.actions.delete')
+                                            ? t('common.actions.deleting')
+                                            : t('common.actions.delete')
                                     }}
                                 </button>
                             </div>
@@ -467,7 +467,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showTrashModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-orange-600">
-                                {{ t('pages.back_office.breaking_news.index.trash_modal.title') }}
+                                {{ t('common.modals.trashBreakingNews') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -475,13 +475,13 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.breaking_news.index.trash_modal.body') }}
+                                {{ t('common.modals.thisBreakingNewsWillBeMovedToTrash') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showTrashModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.breaking_news.index.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleTrash(trashingRow)" :disabled="trashProcessing"
@@ -490,8 +490,8 @@ onMounted(async () => {
 
                                     {{
                                         trashProcessing
-                                            ? t('pages.back_office.breaking_news.index.actions.trashing')
-                                            : t('pages.back_office.breaking_news.index.actions.trash')
+                                            ? t('common.messages.trashing')
+                                            : t('common.actions.trash')
                                     }}
                                 </button>
                             </div>
@@ -515,7 +515,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showRestoreModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-green-600">
-                                {{ t('pages.back_office.breaking_news.index.restore_modal.title') }}
+                                {{ t('common.modals.restoreBreakingNews') }}
                             </h3>
 
                             <p class="text-sm font-medium">
@@ -523,13 +523,13 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('pages.back_office.breaking_news.index.restore_modal.body') }}
+                                {{ t('common.modals.thisActionCanBeUndoneByDeletingBreakingNews') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
                                 <button @click="showRestoreModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
-                                    {{ t('pages.back_office.breaking_news.index.actions.cancel') }}
+                                    {{ t('common.actions.cancel') }}
                                 </button>
 
                                 <button @click="handleRestore(restoringRow)" :disabled="restoreProcessing"
@@ -538,8 +538,8 @@ onMounted(async () => {
 
                                     {{
                                         restoreProcessing
-                                            ? t('pages.back_office.breaking_news.index.actions.restoring')
-                                            : t('pages.back_office.breaking_news.index.actions.restore')
+                                            ? t('common.messages.restoring')
+                                            : t('common.actions.restore')
                                     }}
                                 </button>
                             </div>

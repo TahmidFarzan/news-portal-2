@@ -119,7 +119,7 @@ const copyShareLink = async () => {
 <template>
     <div class="flex flex-wrap items-center gap-2">
             <span class="text-gray-400">
-                {{ t("components.common.news.social_share.labels.share") }} :
+                {{ t("news.components.socialShare.labels.share") }} :
             </span>
 
             <ShareNetwork v-for="network in networks" :key="network.key" :network="network.key" :url="shareUrl"
@@ -137,7 +137,7 @@ const copyShareLink = async () => {
                 <FontAwesomeIcon :icon="isCopied ? faCheck : faLink" class="text-xs" />
 
                 <span>
-                    {{ isCopied ? t("components.common.news.social_share.labels.copied") : t("components.common.news.social_share.labels.copy") }}
+                    {{ isCopied ? t("common.labels.copied") : t("common.labels.copy") }}
                 </span>
             </button>
         </div>
