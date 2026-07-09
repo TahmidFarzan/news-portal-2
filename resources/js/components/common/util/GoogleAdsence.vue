@@ -2,7 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 const props = defineProps({

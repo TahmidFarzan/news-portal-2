@@ -1,8 +1,8 @@
 
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL, useSmartCache } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL, useApiSmartCache } from '@/composables/useApiSmartCache'
 
-const { clearByPrefix } = useSmartCache()
+const { clearByPrefix } = useApiSmartCache()
 
 export const groups = {
     BreakingNews: 'Breaking news',

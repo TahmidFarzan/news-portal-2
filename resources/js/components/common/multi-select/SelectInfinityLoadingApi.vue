@@ -4,7 +4,7 @@ import Multiselect from "vue-multiselect"
 import "vue-multiselect/dist/vue-multiselect.css"
 
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 import { useTranslate } from '@/composables/useTranslate'
 const { t } = useTranslate()
 

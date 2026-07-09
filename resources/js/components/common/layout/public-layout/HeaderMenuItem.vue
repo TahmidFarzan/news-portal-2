@@ -1,7 +1,7 @@
 <script setup>
 import { ref, nextTick, onMounted, onBeforeUnmount, watch } from "vue"
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'

@@ -2,7 +2,7 @@
 import MediaRenderer from './MediaRenderer.vue'
 import { ref, watch, computed } from 'vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()

@@ -20,7 +20,7 @@ import {
 import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons'
 
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 import { useTheme } from '@/composables/useTheme'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 import { getSelectedLanguageCode, useTranslate } from '@/composables/useTranslate'

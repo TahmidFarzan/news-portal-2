@@ -190,11 +190,15 @@ const makeKey = (key, namespace = smartCachePrefix) => {
     return `${cacheNamespace}:${rawKey}`
 }
 
-const makePropsKey = (key, props, namespace = smartCachePrefix) => {
-    const propsSnapshot = resolveReactiveValue(props)
-    const serializedProps = safeStringify(propsSnapshot) || ''
+const buildApiKey = (identity = smartCacheKey.DEFAULT, request = {}) => {
+    const requestSnapshot = resolveReactiveValue(request)
+    const serializedRequest = safeStringify(requestSnapshot) || ''
 
-    return makeKey(`${normalizeKey(key)}:${serializedProps}`, namespace)
+    return `${normalizeKey(identity)}:${serializedRequest}`
+}
+
+const makeApiKey = (identity = smartCacheKey.DEFAULT, request = {}, namespace = smartCachePrefix) => {
+    return makeKey(buildApiKey(identity, request), namespace)
 }
 
 const isValidEntry = (entry) => {
@@ -263,7 +267,7 @@ const normalizeOptions = (options = {}) => {
     }
 }
 
-export function useSmartCache(defaultOptions = {}) {
+export function useApiSmartCache(defaultOptions = {}) {
     const getStorageKey = (key, options = {}) => {
         const mergedOptions = {
             ...defaultOptions,
@@ -365,10 +369,8 @@ export function useSmartCache(defaultOptions = {}) {
         return request
     }
 
-    const rememberProps = async (props, fetcher, options = {}) => {
-        const propsSnapshot = resolveReactiveValue(props)
-        const serializedProps = safeStringify(propsSnapshot) || ''
-        const cacheKey = `${normalizeKey(options.key || 'props')}:${serializedProps}`
+    const rememberApi = async (request, fetcher, options = {}) => {
+        const cacheKey = buildApiKey(options.key || smartCacheKey.DEFAULT, request)
 
         return remember(cacheKey, fetcher, options)
     }
@@ -413,11 +415,11 @@ export function useSmartCache(defaultOptions = {}) {
         get,
         set,
         remember,
-        rememberProps,
+        rememberApi,
         remove,
         clear,
         clearByPrefix,
         makeKey,
-        makePropsKey,
+        makeApiKey,
     }
 }

@@ -3,7 +3,7 @@ import { computed, ref, watch, onMounted } from 'vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 
 import GridCard from '@/components/common/news/GridCard.vue'
 import ListCard from '@/components/common/news/ListCard.vue'

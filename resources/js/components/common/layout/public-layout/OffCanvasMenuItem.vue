@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from "vue"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 
 import { useTranslate } from '@/composables/useTranslate'

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { smartCacheKey, smartCacheTTL, useSmartCache } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL, useApiSmartCache } from '@/composables/useApiSmartCache'
 
-const { remember, rememberProps, remove } = useSmartCache()
+const { remember, rememberApi, remove } = useApiSmartCache()
 
 const fetchJson = async (url, params = {}) => {
     const res = await axios.get(url, { params })
@@ -10,11 +10,11 @@ const fetchJson = async (url, params = {}) => {
 
 export async function fetchFromApi(url, params = {}, options = {}) {
     try {
-        return await rememberProps(
-            options.props || { url, params },
+        return await rememberApi(
+            { url, params },
             () => fetchJson(url, params),
             {
-                key: options.key ||  smartCacheKey.Default,
+                key: options.key || smartCacheKey.DEFAULT,
                 ttl: options.ttl ?? smartCacheTTL.SYSTEM_SHORT,
                 force: options.force ?? false,
             }

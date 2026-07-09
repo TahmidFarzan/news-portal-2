@@ -15,7 +15,7 @@ import ListCard from '@/components/common/news/ListCard.vue'
 
 import { newsTypes } from '@/composables/useNews'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 import { useTranslate, generateTranslationKey } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faLeftLong, faRightLong, faImages)

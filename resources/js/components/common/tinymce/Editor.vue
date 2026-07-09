@@ -18,7 +18,7 @@ import Editor from '@tinymce/tinymce-vue'
 import tinymce from 'tinymce/tinymce'
 import SelectMediaFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
 import axios from 'axios'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 import 'tinymce/tinymce'

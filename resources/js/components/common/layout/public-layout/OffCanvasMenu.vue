@@ -3,7 +3,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 import OffCanvasMenuItem from '@/components/common/layout/public-layout/OffCanvasMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

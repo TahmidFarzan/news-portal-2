@@ -2,7 +2,7 @@
 import { reactive, computed, onMounted } from 'vue'
 import FooterMenuItem from '@/components/common/layout/public-layout/FooterMenuItem.vue'
 import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useSmartCache'
+import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
