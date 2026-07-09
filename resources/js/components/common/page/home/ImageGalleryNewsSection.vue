@@ -38,6 +38,8 @@ const sliderNews = computed(() => newsItems.value.slice(3))
 const prevButtonClass = computed(() => `news-type-gallery-prev-${slug.value}`)
 const nextButtonClass = computed(() => `news-type-gallery-next-${slug.value}`)
 
+console.log(newsType)
+
 const loadNews = async () => {
     if (!slug.value) return
 
@@ -68,7 +70,7 @@ onMounted(async () => {
     <section v-if="newsItems.length" class="gallery-section rounded-2xl border border-slate-100 bg-white p-3">
         <div class="section-heading mb-4 flex items-center justify-between gap-3">
             <h2 class="text-xl font-bold text-gray-950">
-                {{ t(`components.common.page.news_type_gallery_section.labels.${translationKey}`) }}
+                {{ t(`common.labels.${translationKey}`) }}
             </h2>
         </div>
 

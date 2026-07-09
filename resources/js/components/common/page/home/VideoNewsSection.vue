@@ -74,7 +74,7 @@ onMounted(async () => {
     <section v-if="newsItems.length" class="video-section rounded-2xl border border-slate-100 bg-white p-3">
         <div class="section-heading mb-4 flex items-center justify-between gap-3">
             <h2 class="text-xl font-bold text-gray-950">
-                {{ t(`components.common.page.news_type_gallery_section.labels.${generateTranslationKey(title)}`) }}
+                {{ t(`common.labels.${generateTranslationKey(title)}`) }}
             </h2>
 
             <div class="flex items-center gap-2">

@@ -206,7 +206,7 @@ const resetAndFetch = async () => {
 const translateNumerText = value => {
     return String(value)
         .split('')
-        .map(char => t(`components.common.multi_select.infinity_loading_api.number.${char}`))
+        .map(char => t(`numbers.${char}`))
         .join('')
 }
 

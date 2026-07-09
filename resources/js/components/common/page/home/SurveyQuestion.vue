@@ -136,7 +136,7 @@ const changeAnswer = () => {
 const translateNumerText = value => {
     return String(value)
         .split('')
-        .map(char => t(`common.numbers.${char}`))
+        .map(char => t(`numbers.${char}`))
         .join('')
 }
 
