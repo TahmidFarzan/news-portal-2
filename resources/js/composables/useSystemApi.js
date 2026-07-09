@@ -10,6 +10,10 @@ const fetchJson = async (url, params = {}) => {
 
 export async function fetchFromApi(url, params = {}, options = {}) {
     try {
+        if (options.cache === false) {
+            return await fetchJson(url, params)
+        }
+
         return await rememberApi(
             { url, params },
             () => fetchJson(url, params),

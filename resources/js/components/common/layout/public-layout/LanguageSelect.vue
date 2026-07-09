@@ -1,8 +1,7 @@
 <script setup>
 import { ref, reactive, watch, nextTick, onMounted } from 'vue'
-import axios from 'axios'
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import { fetchFromApi } from '@/composables/useSystemApi'
+import { fetchFromApi, postToApi } from '@/composables/useSystemApi'
 import { setSelectedLanguage, useTranslate } from '@/composables/useTranslate'
 
 const language = ref(null)
@@ -18,7 +17,7 @@ const languageChangeForm = reactive({
 })
 
 const loadLanguage = async () => {
-    const response = await fetchFromApi(route('site.language'))
+    const response = await fetchFromApi(route('site.language'), {}, { cache: false })
 
     language.value = response
 
@@ -37,14 +36,14 @@ const languageChange = async () => {
     languageChangeForm.errors.language_id = null
 
     try {
-        const response = await axios.post(
+        const response = await postToApi(
             route('site.language-change', {
                 slugOrId: languageChangeForm.language_id,
             })
         )
 
-        if (response?.data?.status) {
-            language.value = response?.data?.data ?? language.value
+        if (response?.status) {
+            language.value = response?.data ?? language.value
 
             setSelectedLanguage(language.value)
 
@@ -52,7 +51,7 @@ const languageChange = async () => {
         }
 
     } catch (error) {
-        setLanguageForm.errors.language_id =
+        languageChangeForm.errors.language_id =
             error?.response?.data?.errors?.language_id?.[0] ??
             error?.response?.data?.message ??
             'Unable to set language'

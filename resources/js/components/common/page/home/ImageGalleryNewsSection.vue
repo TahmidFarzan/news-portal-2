@@ -38,8 +38,6 @@ const sliderNews = computed(() => newsItems.value.slice(3))
 const prevButtonClass = computed(() => `news-type-gallery-prev-${slug.value}`)
 const nextButtonClass = computed(() => `news-type-gallery-next-${slug.value}`)
 
-console.log(newsType)
-
 const loadNews = async () => {
     if (!slug.value) return
 

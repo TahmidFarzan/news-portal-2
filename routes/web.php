@@ -464,7 +464,7 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
+//Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::get('home', [PageController::class, 'home'])->name('home');
     Route::prefix('home')->name('home.')->group(function () {
         Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');
@@ -496,4 +496,4 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
 
     Route::get('{slugTree}', [PageController::class, 'page'])->where('slugTree', '.*')->name('page');
-});
+//});
