@@ -68,6 +68,7 @@ const loadCategorySection = async () => {
             {
                 key: `${smartCacheKey.API_HOME_PAGE}:${categoryApiUrl}`,
                 ttl: smartCacheTTL.HOME_PAGE,
+                languageAwareCache: true,
             }
         )
 
@@ -84,6 +85,7 @@ const loadCategorySection = async () => {
             {
                 key: `${smartCacheKey.API_HOME_PAGE}:${newsApiUrl}`,
                 ttl: smartCacheTTL.HOME_PAGE,
+                languageAwareCache: true,
             }
         )
 

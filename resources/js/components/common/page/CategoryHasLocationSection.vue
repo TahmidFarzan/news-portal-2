@@ -302,7 +302,11 @@ const fetchCategoryLocationMaxDepthAndLevel = async () => {
         const response = await fetchFromApi(
             route('category.location-max-depth-and-level', {
                 slugTree: category.slug_tree,
-            })
+            }),
+            {},
+            {
+                languageAwareCache: true,
+            }
         )
 
         categoryLocationMaxDepthAndLevel.value = response?.data ?? response
@@ -329,7 +333,11 @@ const searchByLocation = async () => {
         const response = await fetchFromApi(
             route('search.location', {
                 slugOrId: selectedLastLoopLocationItem.value,
-            })
+            }),
+            {},
+            {
+                languageAwareCache: true,
+            }
         )
 
         const location = response?.data ?? response
@@ -396,7 +404,8 @@ watch(
                 <SelectInfinityLoadingApi :key="getLocationSelectKey(levelIndex)" :form="searchLocationForm"
                     :fieldName="getLocationFieldName(levelIndex)" :apiUrl="getLocationApiUrl(levelIndex)"
                     :error="searchLocationForm.errors?.[getLocationFieldName(levelIndex)]" :multiple="false"
-                    :placeholder="t('pages.components.categoryHasLocationSection.form.locationPlaceholder')" />
+                    :placeholder="t('pages.components.categoryHasLocationSection.form.locationPlaceholder')"
+                    :language-aware-cache="true" />
             </div>
         </div>
 

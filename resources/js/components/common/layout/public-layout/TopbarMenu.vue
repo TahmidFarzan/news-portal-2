@@ -51,6 +51,7 @@ const getTopbarMenuItems = async (pageNumber = 1) => {
             {
                 key: `${smartCacheKey.API_LAYOUT_TOPBAR_MENU}:${apiUrl}`,
                 ttl: smartCacheTTL.LAYOUT_TOPBAR,
+                languageAwareCache: true,
             }
         )
 

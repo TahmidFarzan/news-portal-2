@@ -183,6 +183,21 @@ const normalizeKey = (key) => {
     return serialized || String(key)
 }
 
+const normalizeLanguageCode = (languageCode) => {
+    return String(languageCode ?? '').trim()
+}
+
+const resolveCacheKey = (key, options = {}) => {
+    const normalizedKey = normalizeKey(key)
+    const languageCode = normalizeLanguageCode(options.languageCode)
+
+    if (!languageCode) {
+        return normalizedKey
+    }
+
+    return `${normalizedKey}::language:${encodeURIComponent(languageCode)}`
+}
+
 const makeKey = (key, namespace = smartCachePrefix) => {
     const cacheNamespace = normalizeNamespace(namespace)
     const rawKey = normalizeKey(key).replace(/^:+/g, '')
@@ -197,8 +212,8 @@ const buildApiKey = (identity = smartCacheKey.DEFAULT, request = {}) => {
     return `${normalizeKey(identity)}:${serializedRequest}`
 }
 
-const makeApiKey = (identity = smartCacheKey.DEFAULT, request = {}, namespace = smartCachePrefix) => {
-    return makeKey(buildApiKey(identity, request), namespace)
+const makeApiKey = (identity = smartCacheKey.DEFAULT, request = {}, namespace = smartCachePrefix, options = {}) => {
+    return makeKey(resolveCacheKey(buildApiKey(identity, request), options), namespace)
 }
 
 const isValidEntry = (entry) => {
@@ -264,6 +279,7 @@ const normalizeOptions = (options = {}) => {
         ttl: resolveTtl(options.ttl),
         force: Boolean(options.force),
         persist: options.persist !== false,
+        languageCode: normalizeLanguageCode(options.languageCode),
     }
 }
 
@@ -274,7 +290,7 @@ export function useApiSmartCache(defaultOptions = {}) {
             ...options,
         }
 
-        return makeKey(key, mergedOptions.namespace)
+        return makeKey(resolveCacheKey(key, mergedOptions), mergedOptions.namespace)
     }
 
     const remove = (key, options = {}) => {

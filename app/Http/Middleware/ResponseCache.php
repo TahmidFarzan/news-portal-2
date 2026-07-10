@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -16,22 +15,28 @@ class ResponseCache
         ?string $staleWhileRevalidate = null,
         ?string $etag = null
     ): Response {
+
         $forceRefresh = $request->cookie('fresh_response') === '1';
 
         $response = $next($request);
 
         if ($forceRefresh) {
+
             $this->disableCache($response);
 
-            return $response->withoutCookie('fresh_response');
+            return $response->withoutCookie(
+                'fresh_response',
+                '/',
+                null
+            );
         }
 
         if (! $this->shouldCache($request, $response)) {
             return $response;
         }
 
-        $seconds = $this->seconds($seconds);
-        $visibility = $this->visibility($visibility, $request);
+        $seconds              = $this->seconds($seconds);
+        $visibility           = $this->visibility($visibility, $request);
         $staleWhileRevalidate = $this->seconds($staleWhileRevalidate, 300);
 
         $directives = [
@@ -40,7 +45,10 @@ class ResponseCache
             "stale-while-revalidate={$staleWhileRevalidate}",
         ];
 
-        $response->headers->set('Cache-Control', implode(', ', $directives));
+        $response->headers->set(
+            'Cache-Control',
+            implode(', ', $directives)
+        );
 
         if ($etag === 'etag') {
             $content = $response->getContent();

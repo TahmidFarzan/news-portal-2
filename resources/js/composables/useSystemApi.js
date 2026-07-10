@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { smartCacheKey, smartCacheTTL, useApiSmartCache } from '@/composables/useApiSmartCache'
+import { getSelectLanguageCode } from '@/composables/useTranslate'
 
 const { remember, rememberApi, remove } = useApiSmartCache()
 
@@ -14,6 +15,10 @@ export async function fetchFromApi(url, params = {}, options = {}) {
             return await fetchJson(url, params)
         }
 
+        const languageCode = options.languageAwareCache
+            ? getSelectLanguageCode()
+            : null
+
         return await rememberApi(
             { url, params },
             () => fetchJson(url, params),
@@ -21,6 +26,7 @@ export async function fetchFromApi(url, params = {}, options = {}) {
                 key: options.key || smartCacheKey.DEFAULT,
                 ttl: options.ttl ?? smartCacheTTL.SYSTEM_SHORT,
                 force: options.force ?? false,
+                languageCode,
             }
         )
     } catch (error) {

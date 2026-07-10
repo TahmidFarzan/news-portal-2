@@ -81,6 +81,7 @@ const loadBreakingNews = async (url = null) => {
             {
                 key: `${smartCacheKey.API_CURSOR_PAGINATION}:${apiUrl}`,
                 ttl: smartCacheTTL.SYSTEM_SHORT,
+                languageAwareCache: true,
             }
         )
         const result = normalizeResponse(response)

@@ -60,6 +60,7 @@ const loadChildren = async (page = 1) => {
             {
                 key: `${smartCacheKey.API_LAYOUT_OFFCANVAS_MENU}:${apiUrl}`,
                 ttl: smartCacheTTL.LAYOUT_OFFCANVAS_MENU,
+                languageAwareCache: true,
             }
         )
 

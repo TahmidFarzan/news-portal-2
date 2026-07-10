@@ -1,23 +1,14 @@
 <script setup>
+import { router } from '@inertiajs/vue3'
 import { ref, reactive, watch, nextTick, onMounted } from 'vue'
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 import { fetchFromApi, postToApi } from '@/composables/useSystemApi'
-import { smartCacheKey, useApiSmartCache } from '@/composables/useApiSmartCache'
 import { setSelectedLanguage, useTranslate } from '@/composables/useTranslate'
 
 const language = ref(null)
 const isReady = ref(false)
 
 const { t } = useTranslate()
-const { clearByPrefix } = useApiSmartCache()
-
-const layoutCacheKeys = [
-    smartCacheKey.API_LAYOUT_THEME,
-    smartCacheKey.API_LAYOUT_TOPBAR_MENU,
-    smartCacheKey.API_LAYOUT_HEADER_MENU,
-    smartCacheKey.API_LAYOUT_OFFCANVAS_MENU,
-    smartCacheKey.API_LAYOUT_FOOTER_MENU,
-]
 
 const languageChangeForm = reactive({
     language_id: null,
@@ -43,8 +34,6 @@ const loadLanguage = async () => {
 const languageChange = async () => {
     if (!languageChangeForm.language_id || !isReady.value) return
 
-    if (String(language.value?.id ?? '') === String(languageChangeForm.language_id)) return
-
     languageChangeForm.errors.language_id = null
 
     try {
@@ -59,11 +48,7 @@ const languageChange = async () => {
 
             setSelectedLanguage(language.value)
 
-            await Promise.all(layoutCacheKeys.map((cacheKey) => clearByPrefix(cacheKey)))
-
-            document.cookie = "fresh_response=1; path=/; max-age=60; SameSite=Lax"
-
-            window.location.reload()
+            window.location.href = route('home')
         }
 
     } catch (error) {

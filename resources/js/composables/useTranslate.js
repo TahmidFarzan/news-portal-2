@@ -37,12 +37,14 @@ export const getSelectedLanguage = () => {
     return (
         Object.values(languages).find(
             (language) => language.Code === currentLocale,
-        ) ?? languages.English.Code
+        ) ?? languages.English
     )
 }
 
 export const getSelectedLanguageCode = () =>
     getSelectedLanguage().Code
+
+export const getSelectLanguageCode = getSelectedLanguageCode
 
 export const generateTranslationKey = (value) => {
     return String(value ?? '')
