@@ -78,6 +78,8 @@ class SiteService
         $headerMenuCode    = MenuHelper::MENU_TYPE_HEADER;
         $headerMenuCodeKey = Str::lower($headerMenuCode);
 
+
+
         $cacheKey = "site:language:{$language->locale}:{$headerMenuCodeKey}:menu-items:per-page:{$perPage}:page:{$page}";
 
         $cacheTags = [
@@ -109,6 +111,7 @@ class SiteService
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
+            ->where("language_id", $language->id)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
@@ -179,6 +182,7 @@ class SiteService
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
+            ->where("language_id", $language->id)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
@@ -250,6 +254,7 @@ class SiteService
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
+            ->where("language_id", $language->id)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);
@@ -321,8 +326,7 @@ class SiteService
             ])
             ->whereNull("parent_id")
             ->where('menu_id', $menu->id)
-            ->whereRelation('menu.language', 'id', $language->id)
-            ->whereRelation('menu.menuType', 'name', $footerMenuCode)
+            ->where("language_id", $language->id)
             ->orderBy('position', 'asc')
             ->orderBy('id', 'asc')
             ->paginate($perPage);

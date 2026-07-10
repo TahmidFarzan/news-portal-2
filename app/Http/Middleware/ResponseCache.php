@@ -16,7 +16,15 @@ class ResponseCache
         ?string $staleWhileRevalidate = null,
         ?string $etag = null
     ): Response {
+        $forceRefresh = $request->cookie('fresh_response') === '1';
+
         $response = $next($request);
+
+        if ($forceRefresh) {
+            $this->disableCache($response);
+
+            return $response->withoutCookie('fresh_response');
+        }
 
         if (! $this->shouldCache($request, $response)) {
             return $response;
@@ -44,6 +52,20 @@ class ResponseCache
         }
 
         return $response;
+    }
+
+    private function disableCache(Response $response): void
+    {
+        $response->headers->set(
+            'Cache-Control',
+            'no-store, no-cache, must-revalidate, max-age=0'
+        );
+
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        $response->headers->remove('ETag');
+        $response->headers->remove('Last-Modified');
     }
 
     private function shouldCache(Request $request, Response $response): bool

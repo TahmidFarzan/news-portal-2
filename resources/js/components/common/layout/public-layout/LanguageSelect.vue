@@ -2,12 +2,22 @@
 import { ref, reactive, watch, nextTick, onMounted } from 'vue'
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 import { fetchFromApi, postToApi } from '@/composables/useSystemApi'
+import { smartCacheKey, useApiSmartCache } from '@/composables/useApiSmartCache'
 import { setSelectedLanguage, useTranslate } from '@/composables/useTranslate'
 
 const language = ref(null)
 const isReady = ref(false)
 
 const { t } = useTranslate()
+const { clearByPrefix } = useApiSmartCache()
+
+const layoutCacheKeys = [
+    smartCacheKey.API_LAYOUT_THEME,
+    smartCacheKey.API_LAYOUT_TOPBAR_MENU,
+    smartCacheKey.API_LAYOUT_HEADER_MENU,
+    smartCacheKey.API_LAYOUT_OFFCANVAS_MENU,
+    smartCacheKey.API_LAYOUT_FOOTER_MENU,
+]
 
 const languageChangeForm = reactive({
     language_id: null,
@@ -47,7 +57,11 @@ const languageChange = async () => {
 
             setSelectedLanguage(language.value)
 
-            window.location.href = route('home')
+            await Promise.all(layoutCacheKeys.map((cacheKey) => clearByPrefix(cacheKey)))
+
+            document.cookie = "fresh_response=1; path=/; max-age=60; SameSite=Lax"
+
+            window.location.reload()
         }
 
     } catch (error) {
@@ -68,15 +82,13 @@ watch(
 onMounted(async () => {
     await loadLanguage()
 })
-
 </script>
 
 <template>
     <div class="w-40 max-[450px]:w-32">
-        <SelectInfinityLoadingApi v-if="language" :key="language?.id" :selectedItem="language"
-            fieldName="language_id" :form="languageChangeForm" :apiUrl="route('site.languages')"
-            :error="languageChangeForm.errors.language_id" selectedLabelKey="name" selectedValueKey="id"
-            apiLabelKey="name" apiValueKey="id" :multiple="false" :placeholder="t('common.labels.language')" :compactDesign="true"
-            :useDarkTheme="true" />
+        <SelectInfinityLoadingApi v-if="language" :key="language?.id" :selectedItem="language" fieldName="language_id"
+            :form="languageChangeForm" :apiUrl="route('site.languages')" :error="languageChangeForm.errors.language_id"
+            selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id" :multiple="false"
+            :placeholder="t('common.labels.language')" :compactDesign="true" :useDarkTheme="true" />
     </div>
 </template>
