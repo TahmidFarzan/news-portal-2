@@ -43,6 +43,8 @@ const loadLanguage = async () => {
 const languageChange = async () => {
     if (!languageChangeForm.language_id || !isReady.value) return
 
+    if (String(language.value?.id ?? '') === String(languageChangeForm.language_id)) return
+
     languageChangeForm.errors.language_id = null
 
     try {
