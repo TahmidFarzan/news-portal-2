@@ -1,15 +1,25 @@
 <?php
-
 namespace App\Services\Cache;
 
+use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
+use App\Models\Language;
 use App\Models\Tag;
+use App\Models\Trend;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TagCacheService
 {
-    private int $cachedTime = 86400;
+    private int $cachedTTLOneDay = 86400;
+
+    private int $cachedTTLThreeMin = 300;
+
+    private string $mainTag = CacheHelper::TAG_TAG;
+
+    private string $secondKey = CacheHelper::KEY_TAG;
+
     private int $perPage = 5000;
 
     public function isConnected(): bool
@@ -19,202 +29,193 @@ class TagCacheService
 
     public function clearCached(): void
     {
-        CacheServerHelper::clearCachedByTag(['tag', 'public']);
-        CacheServerHelper::clearCachedByTag(['tag', 'sitemap']);
+        CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_PAGE]);
+        CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_SITEMAP]);
+        CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_FEED]);
     }
 
-    private function getPerPage(array $filters = []): int
+    private function getPerPage(int | null $perPage = null): int
     {
-        $perPage = (int) ($filters['per_page'] ?? $filters['perPage'] ?? $this->perPage);
-
-        return $perPage > 0 ? $perPage : $this->perPage;
+        return $perPage ?? $this->perPage;
     }
 
-    private function getPage(array $filters = []): int
+    private function generalQueryRecords(?Language $language = null): Builder
     {
-        $page = (int) ($filters['page'] ?? 1);
-
-        return $page > 0 ? $page : 1;
+        $records = Tag::query()->with('language');
+        if ($language && $language?->id) {
+            $records = $records->orderBy('id', 'asc');
+        }
+        return $records;
     }
 
-    private function normalizeFilters(array $filters = [], array $except = []): array
+    private function dbLastPageNo(?Language $language = null, int | null $perPage = null): int
     {
-        foreach ($except as $key) {
-            unset($filters[$key]);
+        return (int) ceil($this->generalQueryRecords($language)->count() / $this->getPerPage($perPage));
+    }
+
+    private function dbRecords(Request $request, ?Language $language = null, int | null $perPage = null): LengthAwarePaginator
+    {
+        $records = Tag::query()->with('language');
+        if ($language && $language?->id) {
+            $records = $records->where("language_id", $language?->id);
         }
 
-        $filters = array_filter($filters, function ($value) {
-            return $value !== null && $value !== '';
-        });
+        $records = $records->paginate($this->getPerPage($request->input("per_page", $perPage)));
 
-        ksort($filters);
-
-        return $filters;
+        return $records;
     }
 
-    private function filterHash(array $filters = [], array $except = []): string
+    private function dbRecordsLimitForTrend(?Language $language = null, int | null $perPage = null)
     {
-        $filters = $this->normalizeFilters($filters, $except);
-
-        return md5(json_encode($filters));
+        return Trend::with([
+            "tag",
+        ])
+            ->where("is_current", true)
+            ->whereRelation('tag', 'language_id', $language->id)
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'desc')
+            ->limit($this->getPerPage($perPage))
+            ->get();
     }
 
-    private function queryTags(array $filters = []): Builder
+    private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): Tag
     {
-        return Tag::query()
-            ->with('language')
-            ->orderBy('id', 'asc');
-    }
+        $record = Tag::with(['language']);
 
-    public function dbTagsCount(array $filters = []): int
-    {
-        return $this->queryTags($filters)->count();
-    }
-
-    public function dbLastPageNo(array $filters = []): int
-    {
-        return (int) ceil($this->dbTagsCount($filters) / $this->getPerPage($filters));
-    }
-
-    private function dbTags(array $filters = []): LengthAwarePaginator
-    {
-        return $this->queryTags($filters)->paginate(
-            $this->getPerPage($filters),
-            ['*'],
-            'page',
-            $this->getPage($filters)
-        );
-    }
-
-    public function cachedTags(string $key, array $filters = []): void
-    {
-        $page = $this->getPage($filters);
-        $hash = $this->filterHash($filters, ['page']);
-
-        CacheServerHelper::cachedData(
-            "tag:{$key}:page:{$page}:{$hash}",
-            $this->dbTags($filters),
-            $this->cachedTime,
-            ['tag', $key]
-        );
-    }
-
-    public function cachedTagsCount(string $key, array $filters = []): void
-    {
-        $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
-        CacheServerHelper::cachedData(
-            "tag:{$key}:count:{$hash}",
-            $this->dbTagsCount($filters),
-            $this->cachedTime,
-            ['tag', $key]
-        );
-    }
-
-    public function cachedLastPageNo(string $key, array $filters = []): void
-    {
-        $hash = $this->filterHash($filters, ['page']);
-
-        CacheServerHelper::cachedData(
-            "tag:{$key}:last-page-no:{$hash}",
-            $this->dbLastPageNo($filters),
-            $this->cachedTime,
-            ['tag', $key]
-        );
-    }
-
-    public function tagsCount(string $key, array $filters = []): int
-    {
-        $hash = $this->filterHash($filters, ['page', 'per_page', 'perPage']);
-        $cacheKey = "tag:{$key}:count:{$hash}";
-
-        $count = CacheServerHelper::getCachedData(
-            $cacheKey,
-            ['tag', $key]
-        );
-
-        if ($count === null) {
-            $count = $this->dbTagsCount($filters);
-
-            CacheServerHelper::cachedData(
-                $cacheKey,
-                $count,
-                $this->cachedTime,
-                ['tag', $key]
-            );
+        if ($language && $language?->id) {
+            $record = $record->where("language_id", $language?->id);
         }
 
-        return (int) $count;
+        $record = $record->where('slug', $idOrSlug)
+            ->orWhere('id', $idOrSlug)
+            ->firstOrFail();
+        return $record;
     }
 
-    public function lastPageNo(string $key, array $filters = []): int
+    public function getLastPageNo(string $key, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null): int
     {
-        $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "tag:{$key}:last-page-no:{$hash}";
+        $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey, $language);
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['tag', $key]
+            [$this->mainTag, $key]
         );
 
         if ($lastPage === null) {
-            $lastPage = $this->dbLastPageNo($filters);
+            $lastPage = $this->dbLastPageNo($language, $perPage);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $this->cachedTime,
-                ['tag', $key]
+                $cachedTTL ?? $this->cachedTTLOneDay,
+                [$this->mainTag, $key]
             );
         }
 
         return (int) $lastPage;
     }
 
-    public function tags(string $key, array $filters = []): LengthAwarePaginator
+    public function getRecords(string $key, Request $request, ?Language $language = null, int | null $cachedTTL = null): LengthAwarePaginator
     {
-        $page = $this->getPage($filters);
-        $hash = $this->filterHash($filters, ['page']);
-        $cacheKey = "tag:{$key}:page:{$page}:{$hash}";
+        $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequest($key, $this->secondKey, $request, $language);
 
-        $tags = CacheServerHelper::getCachedData(
+        $records = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['tag', $key]
+            [$this->mainTag, $key]
         );
 
-        if ($tags === null) {
-            $tags = $this->dbTags($filters);
+        if ($records === null) {
+            $records = $this->dbRecords($request, $language);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
-                $tags,
-                $this->cachedTime,
-                ['tag', $key]
+                $records,
+                $cachedTTL ?? $this->cachedTTLOneDay,
+                [$this->mainTag, $key]
             );
         }
 
-        return $tags;
+        return $records;
     }
 
-    public function tag(string $slug): Tag
+    public function getRecordsLimitForTrend(string $key, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null)
     {
-        $cacheKey = "tag:slug:{$slug}";
+        $cacheKey = CacheHelper::cacheKeyGenerateForRecordsLimitForTrend($key, $this->secondKey, $language, $perPage);
 
-        $tag = CacheServerHelper::getCachedData(
+        $records = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['tag', 'slug']
+            [$this->mainTag, $key]
         );
 
-        if (!$tag instanceof Tag) {
-            $tag = Tag::where('slug', $slug)->firstOrFail();
+        if ($records === null) {
+            $records = $this->dbRecordsLimitForTrend($language, $perPage);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
-                $tag,
-                $this->cachedTime,
-                ['tag', 'slug']
+                $records,
+                $cachedTTL ?? $this->cachedTTLOneDay,
+                [$this->mainTag, $key]
             );
         }
 
-        return $tag;
+        return $records;
+    }
+
+    public function getRecordById(string $key, int | string $id, ?Language $language = null, int | null $cachedTTL = null): Tag
+    {
+        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id, $language);
+
+        $record = CacheServerHelper::getCachedData(
+            $cacheKey,
+            [
+                $key,
+                $this->mainTag,
+            ]
+        );
+
+        if (! $record) {
+            $record = $this->dbRecordByIdOrSlug($id, $language);
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $record,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $key,
+                    $this->mainTag,
+                ]
+            );
+        }
+
+        return $record;
+    }
+
+    public function getRecordBySlug(string $key, string $slug, ?Language $language = null, int | null $cachedTTL = null): Tag
+    {
+        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
+
+        $record = CacheServerHelper::getCachedData(
+            $cacheKey,
+            [
+                $key,
+                $this->mainTag,
+            ]
+        );
+
+        if (! $record) {
+            $record = $this->dbRecordByIdOrSlug($slug, $language);
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $record,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $key,
+                    $this->mainTag,
+                ]
+            );
+        }
+
+        return $record;
     }
 }

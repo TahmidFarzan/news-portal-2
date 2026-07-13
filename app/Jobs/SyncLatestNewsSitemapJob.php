@@ -1,8 +1,10 @@
 <?php
 namespace App\Jobs;
 
+use App\Helpers\CacheHelper;
 use App\Services\Cache\NewsCacheService;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -42,7 +44,7 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(NewsCacheService $newsCacheService): void
     {
         try {
-            $newsCacheService->cachedLatest("sitemap");
+            $newsCacheService->cachedLatestRecord(CacheHelper::KEY_SITEMAP);
         } catch (Exception $ex) {
             Log::error('Latest news sitemap job error: ' . $ex->getMessage());
         }

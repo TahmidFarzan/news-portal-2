@@ -34,7 +34,7 @@ class FeedController extends Controller
         return view('feeds.news', compact("newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function categoryNews(Request $request, $slugTree): View
+    public function categoryNews(Request $request, string $slugTree): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
@@ -45,7 +45,7 @@ class FeedController extends Controller
         return view('feeds.attribute-news', compact("attribute", "newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function locationNews(Request $request, $slugTree): View
+    public function locationNews(Request $request, string $slugTree): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
@@ -56,7 +56,7 @@ class FeedController extends Controller
         return view('feeds.attribute-news', compact("attribute", "newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function eventNews(Request $request, $slug): View
+    public function eventNews(Request $request, string $slug): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
@@ -68,7 +68,7 @@ class FeedController extends Controller
     }
 
 
-    public function tagNews(Request $request, $slug): View
+    public function tagNews(Request $request, string $slug): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();
@@ -79,7 +79,7 @@ class FeedController extends Controller
         return view('feeds.attribute-news', compact("attribute", "newsItems", "feedLink", 'selfUrl', 'viewsType'));
     }
 
-    public function contributorNews(Request $request, $slug): View
+    public function contributorNews(Request $request, string $slug): View
     {
         $feedLink  = $request->fullUrl();
         $selfUrl   = $request->fullUrl();

@@ -21,40 +21,40 @@ class SiteController extends Controller
         );
     }
 
-    public function menuHeaderMenuMenuItems(Request $request): JsonResponse
+    public function menuHeaderMenuMenuItems(): JsonResponse
     {
         return response()->json(
-            $this->siteService->menuHeaderMenuMenuItems($request)
+            $this->siteService->menuHeaderMenuMenuItems()
         );
     }
 
-    public function menuOffCanvasMenuMenuItems(Request $request): JsonResponse
+    public function menuOffCanvasMenuMenuItems(): JsonResponse
     {
         return response()->json(
-            $this->siteService->menuOffCanvasMenuMenuItems($request)
+            $this->siteService->menuOffCanvasMenuMenuItems()
         );
     }
 
-    public function menuTopbarMenuMenuItems(Request $request): JsonResponse
+    public function menuTopbarMenuMenuItems(): JsonResponse
     {
         return response()->json(
-            $this->siteService->menuTopbarMenuMenuItems($request)
+            $this->siteService->menuTopbarMenuMenuItems()
         );
     }
 
-    public function menuFooterMenuMenuItems(Request $request): JsonResponse
+    public function menuFooterMenuMenuItems(): JsonResponse
     {
         return response()->json(
-            $this->siteService->menuFooterMenuMenuItems($request)
+            $this->siteService->menuFooterMenuMenuItems()
         );
     }
 
-    public function menuItemSubMenuItems(Request $request, string $slug): JsonResponse
+    public function menuItemSubMenuItems(string $slug): JsonResponse
     {
         $menuItem = $this->siteService->menuItem($slug);
 
         return response()->json(
-            $this->siteService->menuItemSubMenuItems($request, $menuItem)
+            $this->siteService->menuItemSubMenuItems($menuItem)
         );
     }
 

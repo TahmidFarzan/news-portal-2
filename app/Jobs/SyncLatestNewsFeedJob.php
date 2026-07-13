@@ -1,6 +1,7 @@
 <?php
 namespace App\Jobs;
 
+use App\Helpers\CacheHelper;
 use App\Services\Cache\NewsCacheService;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -42,7 +43,7 @@ class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
     public function handle(NewsCacheService $newsCacheService): void
     {
         try {
-            $newsCacheService->cachedLatest("feed");
+            $newsCacheService->cachedLatestRecord(CacheHelper::KEY_FEED);
         } catch (Exception $ex) {
             Log::error('Latest news feed cached job error: ' . $ex->getMessage());
         }

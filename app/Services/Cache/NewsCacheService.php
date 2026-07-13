@@ -1,20 +1,46 @@
 <?php
 namespace App\Services\Cache;
 
+use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
+use App\Models\BreakingNews;
 use App\Models\Category;
+use App\Models\Contributor;
+use App\Models\Event;
+use App\Models\Language;
 use App\Models\Location;
 use App\Models\News;
+use App\Models\NewsPlacement;
+use App\Models\NewsType;
+use App\Models\Tag;
+use App\Services\Cache\CategoryCacheService;
+use App\Services\Cache\LocationCacheService;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection as SupportCollection;
 
 class NewsCacheService
 {
-    private int $cachedTime        = 86400;
-    private int $perPage           = 5000;
-    private int $latestRecordLimit = 1000;
+    private int $cachedTTLOneDay   = 86400;
+    private int $cachedTTLThreeMin = 300;
+
+    private string $mainTag   = CacheHelper::TAG_NEWS;
+    private string $secondKey = CacheHelper::KEY_NEWS;
+
+    private int $perPage = 5000;
+    private int $limit   = 1000;
+
+    public CategoryCacheService $categoryCacheService;
+    public LocationCacheService $locationCacheService;
+
+    public function __construct(CategoryCacheService $categoryCacheService, LocationCacheService $locationCacheService)
+    {
+        $this->categoryCacheService = $categoryCacheService;
+        $this->locationCacheService = $locationCacheService;
+    }
 
     public function isConnected(): bool
     {
@@ -23,366 +49,835 @@ class NewsCacheService
 
     public function clearCached(): void
     {
-        CacheServerHelper::clearCachedByTag(['news', 'feed']);
-        CacheServerHelper::clearCachedByTag(['news', 'public']);
-        CacheServerHelper::clearCachedByTag(['news', 'sitemap']);
+        CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_PAGE]);
+        CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_SITEMAP]);
+        CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_FEED]);
     }
 
-    public function dbNewsCount(array $filters = []): int
+    private function perPage(int | null $perPage = null): int
     {
-        return $this->dbNewsQuery($filters)->count();
+        return $perPage ?? $this->perPage;
     }
 
-    public function dbLastPageNo(array $filters = []): int
+    private function dbRecordsGeneralQuery(?Language $language = null): Builder
     {
-        $perPage = $this->perPage($filters);
-
-        return (int) ceil($this->dbNewsCount($filters) / $perPage);
+        $records = News::where('is_published', true);
+        if ($language && $language?->id) {
+            $records = $records->where('language_id', $language->id);
+        }
+        return $records;
     }
 
-    public function dbNews(array $filters = []): LengthAwarePaginator
+    private function dbRecords(?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $perPage = null, bool $isCursorPaginate = false): LengthAwarePaginator | CursorPaginator
     {
-        $perPage = $this->perPage($filters);
-        $page    = $this->page($filters);
+        $request ??= request();
+        $sPerPage = $this->perPage($request->input("per_page", $perPage));
 
-        return $this->dbNewsQuery($filters)
-            ->orderBy('id', 'desc')
-            ->with(['language', 'newsType'])
-            ->paginate($perPage, ['*'], 'page', $page);
-    }
+        $records = News::with([
+            'language',
+            'newsType',
+            'category',
+            'tags',
+            'contributors',
+            'event',
+            'location',
+            'featureImage',
+            'featureImageMobile',
+        ])->where('is_published', true);
 
-    public function dbLatest(?int $latestRecordLimit = null): EloquentCollection
-    {
-        $latestRecordLimit = $latestRecordLimit ?? $this->latestRecordLimit;
+        if (
+            ($filterModel instanceof NewsType && $filterModel->id) ||
+            $request->filled('news_type_id')
+        ) {
+            $newsTypeId = $filterModel instanceof NewsType
+                ? $filterModel->id
+                : $request->input('news_type_id');
 
-        return News::where('is_published', true)
-            ->orderBy('id', 'desc')
-            ->take($latestRecordLimit)
-            ->get();
-    }
-
-    public function cachedNews(string $key, array $filters = []): void
-    {
-        CacheServerHelper::cachedData(
-            $this->newsCacheKey($key, $filters),
-            $this->dbNews($filters),
-            $this->cachedTime,
-            ['news', $key]
-        );
-    }
-
-    public function cachedNewsCount(string $key, array $filters = []): void
-    {
-        CacheServerHelper::cachedData(
-            $this->countCacheKey($key, $filters),
-            $this->dbNewsCount($filters),
-            $this->cachedTime,
-            ['news', $key]
-        );
-    }
-
-    public function cachedLastPageNo(string $key, array $filters = []): void
-    {
-        CacheServerHelper::cachedData(
-            $this->lastPageCacheKey($key, $filters),
-            $this->dbLastPageNo($filters),
-            $this->cachedTime,
-            ['news', $key]
-        );
-    }
-
-    public function cachedLatest(string $cachedKey): void
-    {
-        $cacheKey  = "news:{$cachedKey}:latest-news";
-        $newsItems = $this->dbLatest();
-
-        CacheServerHelper::cachedData(
-            $cacheKey,
-            $newsItems,
-            $this->cachedTime
-        );
-    }
-
-    public function newsCount(string $key, array $filters = []): int
-    {
-        $cacheKey = $this->countCacheKey($key, $filters);
-
-        $count = CacheServerHelper::getCachedData(
-            $cacheKey,
-            ['news', $key]
-        );
-
-        if ($count === null) {
-            $count = $this->dbNewsCount($filters);
-
-            CacheServerHelper::cachedData(
-                $cacheKey,
-                $count,
-                $this->cachedTime,
-                ['news', $key]
-            );
+            $records = $records->where('news_type_id', $newsTypeId);
         }
 
-        return (int) $count;
+        if (
+            ($filterModel instanceof Category && $filterModel->id) ||
+            $request->filled('category_id')
+        ) {
+            $categoryId = $filterModel instanceof Category
+                ? $filterModel->id
+                : $request->input('category_id');
+
+            $categoryIds = [$categoryId];
+
+            $category = $this->categoryCacheService->getRecordById(
+                $this->secondKey,
+                $categoryId,
+                $language,
+                $cachedTTL ?? $this->cachedTTLOneDay
+            );
+
+            if ($category) {
+                foreach ($category->children as $child) {
+                    $categoryIds[] = $child->id;
+                }
+            }
+
+            $records = $records->whereIn('category_id', $categoryIds);
+        }
+
+        if (
+            ($filterModel instanceof Event && $filterModel->id) ||
+            $request->filled('event_id')
+        ) {
+            $eventId = $filterModel instanceof Event
+                ? $filterModel->id
+                : $request->input('event_id');
+
+            $records = $records->where('event_id', $eventId);
+        }
+
+        if (
+            ($filterModel instanceof Location && $filterModel->id) ||
+            $request->filled('location_id')
+        ) {
+            $locationId = $filterModel instanceof Location
+                ? $filterModel->id
+                : $request->input('location_id');
+
+            $locationIds = [$locationId];
+
+            $location = $this->locationCacheService->getRecordById(
+                $this->secondKey,
+                $locationId,
+                $language,
+                $cachedTTL ?? $this->cachedTTLOneDay
+            );
+
+            if ($location) {
+                foreach ($location->children as $child) {
+                    $locationIds[] = $child->id;
+                }
+            }
+
+            $records = $records->whereIn('location_id', $locationIds);
+        }
+
+        if (
+            ($filterModel instanceof Tag && $filterModel->id) ||
+            $request->filled('tag_id')
+        ) {
+            $tagId = $filterModel instanceof Tag
+                ? $filterModel->id
+                : $request->input('tag_id');
+
+            $records = $records->whereHas('tags', function (Builder $query) use ($tagId) {
+                $query->where('id', $tagId);
+            });
+        }
+
+        if (
+            ($filterModel instanceof Contributor && $filterModel->id) ||
+            $request->filled('contributor_id')
+        ) {
+            $contributorId = $filterModel instanceof Contributor
+                ? $filterModel->id
+                : $request->input('contributor_id');
+
+            $records = $records->whereHas('contributors', function (Builder $query) use ($contributorId) {
+                $query->where('id', $contributorId);
+            });
+        }
+
+        if ($language?->id) {
+            $records = $records->where('language_id', $language->id);
+        }
+
+        $records = $records
+            ->orderByDesc('id')
+            ->orderByDesc('created_at');
+
+        if ($isCursorPaginate) {
+            return $records
+                ->cursorPaginate($sPerPage)
+                ->withQueryString();
+        }
+
+        return $records
+            ->paginate($sPerPage);
     }
 
-    public function lastPageNo(string $key, array $filters = []): int
+    private function dbRecordsLimit(?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int $limit = 4)
     {
-        $cacheKey = $this->lastPageCacheKey($key, $filters);
+        $request ??= request();
+
+        $records = News::with(['language', 'newsType', "category", "tags", "contributors", "event", "location", "featureImage", "featureImageMobile"])
+            ->where('is_published', true);
+
+        if ($language && $language?->id) {
+            $records = $records->where('language_id', $language?->id);
+        }
+        if (
+            ($filterModel instanceof NewsType && $filterModel->id) ||
+            $request->filled('news_type_id')
+        ) {
+            $newsTypeId = $filterModel instanceof NewsType
+                ? $filterModel->id
+                : $request->input('news_type_id');
+
+            $records = $records->where('news_type_id', $newsTypeId);
+        }
+
+        if (
+            ($filterModel instanceof Category && $filterModel->id) ||
+            $request->filled('category_id')
+        ) {
+            $categoryId = $filterModel instanceof Category
+                ? $filterModel->id
+                : $request->input('category_id');
+
+            $categoryIds = [$categoryId];
+
+            $category = $this->categoryCacheService->getRecordById(
+                $this->secondKey,
+                $categoryId,
+                $language,
+                $cachedTTL ?? $this->cachedTTLOneDay
+            );
+
+            if ($category) {
+                foreach ($category->children as $child) {
+                    $categoryIds[] = $child->id;
+                }
+            }
+
+            $records = $records->whereIn('category_id', $categoryIds);
+        }
+
+        if (
+            ($filterModel instanceof Event && $filterModel->id) ||
+            $request->filled('event_id')
+        ) {
+            $eventId = $filterModel instanceof Event
+                ? $filterModel->id
+                : $request->input('event_id');
+
+            $records = $records->where('event_id', $eventId);
+        }
+
+        if (
+            ($filterModel instanceof Location && $filterModel->id) ||
+            $request->filled('location_id')
+        ) {
+            $locationId = $filterModel instanceof Location
+                ? $filterModel->id
+                : $request->input('location_id');
+
+            $locationIds = [$locationId];
+
+            $location = $this->locationCacheService->getRecordById(
+                $this->secondKey,
+                $locationId,
+                $language,
+                $cachedTTL ?? $this->cachedTTLOneDay
+            );
+
+            if ($location) {
+                foreach ($location->children as $child) {
+                    $locationIds[] = $child->id;
+                }
+            }
+
+            $records = $records->whereIn('location_id', $locationIds);
+        }
+
+        if (
+            ($filterModel instanceof Tag && $filterModel->id) ||
+            $request->filled('tag_id')
+        ) {
+            $tagId = $filterModel instanceof Tag
+                ? $filterModel->id
+                : $request->input('tag_id');
+
+            $records = $records->whereHas('tags', function (Builder $query) use ($tagId) {
+                $query->where('id', $tagId);
+            });
+        }
+
+        if (
+            ($filterModel instanceof Contributor && $filterModel->id) ||
+            $request->filled('contributor_id')
+        ) {
+            $contributorId = $filterModel instanceof Contributor
+                ? $filterModel->id
+                : $request->input('contributor_id');
+
+            $records = $records->whereHas('contributors', function (Builder $query) use ($contributorId) {
+                $query->where('id', $contributorId);
+            });
+        }
+
+        $records = $records->orderBy('id', 'desc')
+            ->limit($limit)
+            ->get();
+        return $records;
+    }
+
+    private function dbRecordsLimitAccrodingNewsPlacement(string | null $pageName = null, string | null $pageSection = null, $category = null, ?Language $language = null, int $limit = 4)
+    {
+        $newsPlacementTable = (new NewsPlacement())->getTable();
+
+        $records = News::with([
+            "language",
+            'newsType',
+            'category',
+
+            'event',
+            'location',
+
+            'tags',
+            'tags.trend',
+
+            'contributors',
+
+            "featureImage",
+            "featureImageMobile",
+        ]);
+
+        if ($language && $language?->id) {
+            $records = $records->where('language_id', $language?->id);
+        }
+
+        $records = $records->withWhereHas('newsPlacements', function ($query) use ($category, $pageName, $pageSection) {
+            $query->where('category_id', $category?->id)
+                ->where('page', $pageName)
+                ->where('page_section', $pageSection);
+        });
+
+        $records = $records->orderBy(
+            NewsPlacement::query()
+                ->select('position')
+                ->where("language_id", $language->id)
+                ->whereColumn("{$newsPlacementTable}.news_id", 'news.id')
+                ->where('category_id', $category?->id)
+                ->where('page', $pageName)
+                ->where('page_section', $pageSection)
+                ->limit(1),
+            'asc'
+        )
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get();
+
+        return $records;
+    }
+
+    private function dbLatest(?int $limit = null, ?Language $language = null, bool $isCursorPaginate = false)
+    {
+        $limit = $limit ?? $this->limit;
+
+        $records = News::with([
+            "language",
+            'newsType',
+            'category',
+
+            'event',
+            'location',
+
+            'tags',
+            'tags.trend',
+
+            'contributors',
+
+            "featureImage",
+            "featureImageMobile",
+        ])->where('is_published', true)
+            ->orderBy('id', 'desc');
+
+        if ($language && $language?->id) {
+            $records = $records->where('language_id', $language?->id);
+        }
+
+        if ($isCursorPaginate) {
+            return $records
+                ->cursorPaginate($limit)
+                ->withQueryString();
+        }
+
+        $records = $records->limit($limit)
+            ->get();
+
+        return $records;
+    }
+
+    private function dbPopuler(?int $limit = null, ?Language $language = null): EloquentCollection
+    {
+        $limit = $limit ?? $this->limit;
+
+        $records = News::with([
+            "language",
+            'newsType',
+            'category',
+
+            'event',
+            'location',
+
+            'tags',
+            'tags.trend',
+
+            'contributors',
+
+            "featureImage",
+            "featureImageMobile",
+        ])->where('is_published', true)
+            ->whereBetween('created_at', [
+                now()->subDays(7),
+                now(),
+            ])
+            ->where("hit_count", ">", 0);
+
+        if ($language && $language?->id) {
+            $records = $records->where('language_id', $language?->id);
+        }
+
+        $records = $records
+            ->orderByDesc('hit_count')
+            ->orderByDesc('id')
+            ->orderByDesc('created_at');
+
+        $records = $records
+            ->limit($limit)
+            ->get();
+
+        return $records;
+    }
+
+    private function dbLastPageNo(?Language $language = null, int | null $perPage = null): int
+    {
+        $perPage = $this->perPage($perPage);
+
+        return (int) ceil($this->dbRecordsGeneralQuery($language)->count() / $perPage);
+    }
+
+    private function dbLastPageNoFilter(?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $perPage = null): int
+    {
+
+        $request ??= request();
+        $perPage = $this->perPage($request->input("per_page", $perPage));
+
+        $records = $this->dbRecordsGeneralQuery($language);
+
+        if (
+            ($filterModel instanceof NewsType && $filterModel->id) ||
+            $request->filled('news_type_id')
+        ) {
+            $newsTypeId = $filterModel instanceof NewsType
+                ? $filterModel->id
+                : $request->input('news_type_id');
+
+            $records->where('news_type_id', $newsTypeId);
+        }
+
+        if (
+            ($filterModel instanceof Category && $filterModel->id) ||
+            $request->filled('category_id')
+        ) {
+            $categoryId = $filterModel instanceof Category
+                ? $filterModel->id
+                : $request->input('category_id');
+
+            $categoryIds = [$categoryId];
+
+            $category = $this->categoryCacheService->getRecordById(
+                $this->secondKey,
+                $categoryId,
+                $language,
+                $cachedTTL ?? $this->cachedTTLOneDay
+            );
+
+            if ($category) {
+                foreach ($category->children as $child) {
+                    $categoryIds[] = $child->id;
+                }
+            }
+
+            $records->whereIn('category_id', $categoryIds);
+        }
+
+        if (
+            ($filterModel instanceof Event && $filterModel->id) ||
+            $request->filled('event_id')
+        ) {
+            $eventId = $filterModel instanceof Event
+                ? $filterModel->id
+                : $request->input('event_id');
+
+            $records->where('event_id', $eventId);
+        }
+
+        if (
+            ($filterModel instanceof Location && $filterModel->id) ||
+            $request->filled('location_id')
+        ) {
+            $locationId = $filterModel instanceof Location
+                ? $filterModel->id
+                : $request->input('location_id');
+
+            $locationIds = [$locationId];
+
+            $location = $this->locationCacheService->getRecordById(
+                $this->secondKey,
+                $locationId,
+                $language,
+                $cachedTTL ?? $this->cachedTTLOneDay
+            );
+
+            if ($location) {
+                foreach ($location->children as $child) {
+                    $locationIds[] = $child->id;
+                }
+            }
+
+            $records->whereIn('location_id', $locationIds);
+        }
+
+        if (
+            ($filterModel instanceof Tag && $filterModel->id) ||
+            $request->filled('tag_id')
+        ) {
+            $tagId = $filterModel instanceof Tag
+                ? $filterModel->id
+                : $request->input('tag_id');
+
+            $records->whereHas('tags', function (Builder $query) use ($tagId) {
+                $query->where('id', $tagId);
+            });
+        }
+
+        if (
+            ($filterModel instanceof Contributor && $filterModel->id) ||
+            $request->filled('contributor_id')
+        ) {
+            $contributorId = $filterModel instanceof Contributor
+                ? $filterModel->id
+                : $request->input('contributor_id');
+
+            $records->whereHas('contributors', function (Builder $query) use ($contributorId) {
+                $query->where('id', $contributorId);
+            });
+        }
+
+        return (int) ceil($records->count() / $perPage);
+    }
+
+    private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): News
+    {
+        $record = News::with([
+            'language',
+            'category',
+            "event",
+            "tags",
+            "location",
+            "contributors",
+            "featureImage",
+            "featureImageMobile",
+            "galleryImages",
+
+            'relevantNews' => function ($query) {
+                $query->latest('news.created_at')->limit(4);
+            },
+
+            'relevantNews.category',
+
+            'relatedNews'  => function ($query) {
+                $query->latest('news.created_at')->limit(4);
+            },
+            'relatedNews.category',
+        ]);
+
+        if ($language && $language?->id) {
+            $record = $record->where("language_id", $language?->id);
+        }
+
+        $record = $record
+            ->where("is_published", true)
+            ->where('slug', $idOrSlug)
+            ->orWhere('id', $idOrSlug)
+            ->firstOrFail();
+        return $record;
+    }
+
+    private function dbBreakingNews(?Request $request = null, ?Language $language = null, int $perPage = 10)
+    {
+        $records = BreakingNews::with(
+            "news",
+            "news.category",
+            "news.language",
+            "news.newsType",
+        );
+
+        if ($language && $language?->id) {
+            $records = $records->where("language_id", $language?->id);
+            $records = $records->whereRelation('news', 'language_id', $language?->id);
+        }
+
+        $records = $records
+            ->where('is_published', true)
+            ->orderByDesc('created_at')
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->cursorPaginate($perPage);
+        return $records;
+    }
+
+    public function getLastPageNo(string $cacheKey, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null): int
+    {
+        $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($cacheKey, $this->secondKey, $language);
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['news', $key]
+            [$this->mainTag, $cacheKey]
         );
 
         if ($lastPage === null) {
-            $lastPage = $this->dbLastPageNo($filters);
+            $lastPage = $this->dbLastPageNo($language, $perPage);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $this->cachedTime,
-                ['news', $key]
+                $cachedTTL ?? $this->cachedTTLOneDay,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
             );
         }
 
         return (int) $lastPage;
     }
 
-    public function news(string $key, array $filters = []): LengthAwarePaginator
+    public function getLastPageNoByFilter(string $cacheKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null): int
     {
-        $cacheKey = $this->newsCacheKey($key, $filters);
+        $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNoByFilter($cacheKey, $this->secondKey, $request, $filterModel, $language);
 
-        $newsItems = CacheServerHelper::getCachedData(
+        $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
-            ['news', $key]
+            [$this->mainTag, $cacheKey]
         );
 
-        if ($newsItems === null) {
-            $newsItems = $this->dbNews($filters);
+        if ($lastPage === null) {
+            $lastPage = $this->dbLastPageNoFilter($request, $filterModel, $language, $perPage);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
-                $newsItems,
-                $this->cachedTime,
-                ['news', $key]
+                $lastPage,
+                $cachedTTL ?? $this->cachedTTLOneDay,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
             );
         }
 
-        return $newsItems;
+        return (int) $lastPage;
     }
 
-    public function getLatest(string $cachedKey, ?int $latestRecordLimit = null): EloquentCollection | SupportCollection
+    public function getRecords(string $cacheKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null, bool $isCursorPaginate = false)
     {
-        $newsItems      = null;
-        $cacheKey       = "news:{$cachedKey}:latest-news";
-        $redisConnected = CacheServerHelper::isConnected();
+        $cacheKey = CacheHelper::cacheKeyGenerateForNews($cacheKey, $this->secondKey, $request, $filterModel, $language, $perPage);
 
-        if ($redisConnected) {
-            $newsItems = CacheServerHelper::getCachedData($cacheKey);
+        $records = CacheServerHelper::getCachedData(
+            $cacheKey,
+            [$this->mainTag, $cacheKey]
+        );
 
-            if ($newsItems === null) {
-                $newsItems = $this->dbLatest($latestRecordLimit);
+        if ($records === null) {
+            $records = $this->dbRecords($request, $filterModel, $language, $perPage, $isCursorPaginate);
 
-                CacheServerHelper::cachedData(
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $records,
+                $cachedTTL ?? $this->cachedTTLOneDay,
+                [
                     $cacheKey,
-                    $newsItems,
-                    $this->cachedTime
-                );
-            }
-
-            if ($newsItems !== null) {
-                $limit = ($latestRecordLimit !== null && $latestRecordLimit > 0)
-                    ? $latestRecordLimit
-                    : $this->latestRecordLimit;
-
-                return collect($newsItems)->take($limit);
-            }
+                    $this->mainTag,
+                ]
+            );
         }
 
-        return $this->dbLatest($latestRecordLimit);
+        return $records;
     }
 
-    private function dbNewsQuery(array $filters = []): Builder
+    public function getRecordsLimit(string $cacheKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $limit = 4, int | null $cachedTTL = null)
     {
-        $newsItems = News::query()->where('is_published', true);
+        $cacheKey = CacheHelper::cacheKeyGenerateForRecordByLimit($cacheKey, $this->secondKey, $language, $limit);
 
-        if ($this->filled($filters, 'category_id')) {
+        $records = CacheServerHelper::getCachedData(
+            $cacheKey,
+            [$this->mainTag, $cacheKey]
+        );
 
-            $categoryIds = [];
+        if ($records === null) {
+            $records = $this->dbRecordsLimit($request, $filterModel, $language, $limit);
 
-            $category = $this->categoryById($filters['category_id']);
-            array_push($categoryIds, $filters['category_id']);
-
-            if ($category) {
-                foreach ($category->children as $perChildren) {
-                    array_push($categoryIds, $perChildren->id);
-                }
-            }
-            $newsItems = $newsItems->whereIn('category_id', $categoryIds);
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $records,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
+            );
         }
 
-        if ($this->filled($filters, 'event_id')) {
-            $newsItems = $newsItems->where('event_id', $filters['event_id']);
-        }
-
-        if ($this->filled($filters, 'location_id')) {
-            $locationIds = [];
-
-            $location = $this->locationById($filters['location_id']);
-            array_push($locationIds, $filters['location_id']);
-
-            if ($location) {
-                foreach ($location->children as $perChildren) {
-                    array_push($locationIds, $perChildren->id);
-                }
-            }
-            $newsItems = $newsItems->whereIn('location_id', $locationIds);
-        }
-
-        if ($this->filled($filters, 'language_id')) {
-            $newsItems = $newsItems->where('language_id', $filters['language_id']);
-        }
-
-        if ($this->filled($filters, 'news_type_id')) {
-            $newsItems = $newsItems->where('news_type_id', $filters['news_type_id']);
-        }
-
-        if ($this->filled($filters, 'tag_id')) {
-            $tagId = $filters['tag_id'];
-
-            $newsItems = $newsItems->whereHas('tags', function (Builder $relationQuery) use ($tagId): void {
-                $relationQuery->where('id', $tagId);
-            });
-        }
-
-        if ($this->filled($filters, 'contributor_id')) {
-            $contributorId = $filters['contributor_id'];
-
-            $newsItems = $newsItems->whereHas('contributors', function (Builder $relationQuery) use ($contributorId): void {
-                $relationQuery->where('id', $contributorId);
-            });
-        }
-
-        return $newsItems;
+        return $records;
     }
 
-    private function perPage(array $filters): int
+    public function getRecordsLimitAccrodingNewsPlacement(string $cacheKey, string | null $pageName = null, string | null $pageSection = null, $category = null, ?Language $language = null, int $limit = 4, int | null $cachedTTL = null)
     {
-        $perPage = (int) ($filters['per_page'] ?? $this->perPage);
+        $cacheKey = CacheHelper::cacheKeyGenerateForRecordByLimitAccrodingNewsPlacement($cacheKey, $this->secondKey, $pageName, $pageSection, $category, $limit, $language);
 
-        return $perPage > 0 ? $perPage : $this->perPage;
-    }
+        $records = CacheServerHelper::getCachedData(
+            $cacheKey,
+            [$this->mainTag, $cacheKey]
+        );
 
-    private function page(array $filters): int
-    {
-        $page = (int) ($filters['page'] ?? 1);
+        if ($records === null) {
+            $records = $this->dbRecordsLimitAccrodingNewsPlacement($pageName, $pageSection, $category, $language, $limit);
 
-        return $page > 0 ? $page : 1;
-    }
-
-    private function filterKey(array $filters): string
-    {
-        $filterData = [];
-
-        foreach ($this->filterableKeys() as $key) {
-            if ($this->filled($filters, $key)) {
-                $filterData[$key] = $filters[$key];
-            }
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $records,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
+            );
         }
 
-        if (empty($filterData)) {
-            return 'all';
+        return $records;
+    }
+
+    public function getLatestRecord(string $cacheKey, ?Language $language = null, ?int $limit = null, bool $isCursorPaginate = false, int | null $cachedTTL = null)
+    {
+        $cacheKey = CacheHelper::cacheKeyGenerateForLatest($cacheKey, $this->secondKey, $language, $isCursorPaginate);
+
+        $records = CacheServerHelper::getCachedData($cacheKey);
+
+        if ($records === null) {
+            $records = $this->dbLatest($limit, $language, $isCursorPaginate);
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $records,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
+            );
+        }
+        return $records;
+    }
+
+    public function getPopulerRecord(string $cacheKey, ?Language $language = null, ?int $limit = null, int | null $cachedTTL = null): EloquentCollection | SupportCollection
+    {
+        $cacheKey = CacheHelper::cacheKeyGenerateForPopuler($cacheKey, $this->secondKey, $language);
+
+        $records = CacheServerHelper::getCachedData($cacheKey);
+
+        if ($records === null) {
+            $records = $this->dbPopuler($limit, $language);
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $records,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
+            );
+        }
+        return $records;
+    }
+
+    public function getRecordBySlug(string $cacheKey, string $slug, ?Language $language = null, int | null $cachedTTL = null): News
+    {
+        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($cacheKey, $this->secondKey, $slug, $language);
+
+        $record = CacheServerHelper::getCachedData(
+            $cacheKey,
+            [
+                $cacheKey,
+                $this->mainTag,
+            ]
+        );
+
+        if (! $record) {
+            $record = $this->dbRecordByIdOrSlug($slug, $language);
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $record,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
+            );
         }
 
-        ksort($filterData);
-
-        return md5(json_encode($filterData));
+        return $record;
     }
 
-    private function hasFilters(array $filters): bool
+    public function getRecordById(string $cacheKey, string $id, ?Language $language = null, int | null $cachedTTL = null): News
     {
-        foreach ($this->filterableKeys() as $key) {
-            if ($this->filled($filters, $key)) {
-                return true;
-            }
+        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordById($cacheKey, $this->secondKey, $id, $language);
+
+        $record = CacheServerHelper::getCachedData(
+            $cacheKey,
+            [
+                $cacheKey,
+                $this->mainTag,
+            ]
+        );
+
+        if (! $record) {
+            $record = $this->dbRecordByIdOrSlug($id, $language);
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $record,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
+            );
         }
 
-        return false;
+        return $record;
     }
 
-    private function filled(array $filters, string $key): bool
+    public function getBreakingNews(string $cacheKey, ?Request $request = null, ?Language $language = null, int $limit = 10, int | null $cachedTTL = null)
     {
-        if (! array_key_exists($key, $filters)) {
-            return false;
+        $cacheKey = CacheHelper::cacheKeyGenerateForBreakingNews($cacheKey, $this->secondKey, $request, $language, $limit);
+
+        $records = CacheServerHelper::getCachedData($cacheKey);
+
+        if ($records === null) {
+            $records = $this->dbBreakingNews($request, $language, $limit);
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $records,
+                $cachedTTL ?? $this->cachedTTLThreeMin,
+                [
+                    $cacheKey,
+                    $this->mainTag,
+                ]
+            );
         }
-
-        $value = $filters[$key];
-
-        if (is_array($value)) {
-            return count($value) > 0;
-        }
-
-        return $value !== null && $value !== '';
+        return $records;
     }
 
-    private function filterableKeys(): array
-    {
-        return [
-            'category_id',
-            'event_id',
-            'location_id',
-            'language_id',
-            'news_type_id',
-            'tag_id',
-            'contributor_id',
-        ];
-    }
-
-    private function countCacheKey(string $key, array $filters): string
-    {
-        if (! $this->hasFilters($filters)) {
-            return "news:{$key}:count";
-        }
-
-        $filterKey = $this->filterKey($filters);
-
-        return "news:{$key}:filter:{$filterKey}:count";
-    }
-
-    private function lastPageCacheKey(string $key, array $filters): string
-    {
-        if (! $this->hasFilters($filters) && ! $this->filled($filters, 'per_page')) {
-            return "news:{$key}:last-page-no";
-        }
-
-        $filterKey = $this->filterKey($filters);
-        $perPage   = $this->perPage($filters);
-
-        return "news:{$key}:filter:{$filterKey}:per_page:{$perPage}:last-page-no";
-    }
-
-    private function newsCacheKey(string $key, array $filters): string
-    {
-        $page = $this->page($filters);
-
-        if (! $this->hasFilters($filters) && ! $this->filled($filters, 'per_page')) {
-            return "news:{$key}:page:{$page}";
-        }
-
-        $filterKey = $this->filterKey($filters);
-        $perPage   = $this->perPage($filters);
-
-        return "news:{$key}:filter:{$filterKey}:per_page:{$perPage}:page:{$page}";
-    }
-
-    private function categoryById(string | int $slugOrId): Category
-    {
-        return Category::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
-    }
-
-    private function locationById(string | int $slugOrId): Location
-    {
-        return Location::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
-    }
 }

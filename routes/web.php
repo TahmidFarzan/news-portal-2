@@ -464,14 +464,12 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-
-
 Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::get('home', [PageController::class, 'home'])->name('home');
     Route::prefix('home')->name('home.')->group(function () {
         Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');
-        Route::get('category/{idOrSlug}', [PageController::class, 'homeCategory'])->name('category');
-        Route::get('category/{idOrSlug}/news', [PageController::class, 'homeCategoryNews'])->name('category-news');
+        Route::get('category/{slug}', [PageController::class, 'homeCategory'])->name('category');
+        Route::get('category/{slug}/news', [PageController::class, 'homeCategoryNews'])->name('category-news');
         Route::get('news-type/{slug}/news', [PageController::class, 'homeNewsTypeNews'])->name('news-type-news');
 
         Route::prefix('surveys')->name('surveys.')->group(function () {

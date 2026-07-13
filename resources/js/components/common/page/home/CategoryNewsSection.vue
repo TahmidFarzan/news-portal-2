@@ -11,9 +11,9 @@ import CategoryHasLocationSection from '@/components/common/page/CategoryHasLoca
 
 const { t } = useTranslate()
 
-const { categoryIdOrSlug, language, style, limit } = defineProps({
-    categoryIdOrSlug: {
-        type: [String, Number],
+const { categorySlug, language, style, limit } = defineProps({
+    categorySlug: {
+        type: [String],
         required: true,
     },
     language: {
@@ -53,13 +53,13 @@ const normalizeResponseData = (response) => {
 }
 
 const loadCategorySection = async () => {
-    if (!categoryIdOrSlug) return
+    if (!categorySlug) return
 
     loading.value = true
 
     try {
         const categoryApiUrl = route('home.category', {
-            idOrSlug: categoryIdOrSlug,
+            slug: categorySlug,
         })
 
         const categoryResponse = await fetchFromApi(
@@ -75,7 +75,7 @@ const loadCategorySection = async () => {
         category.value = categoryResponse?.data ?? categoryResponse
 
         const newsApiUrl = route('home.category-news', {
-            idOrSlug: categoryIdOrSlug,
+            slug: categorySlug,
             limit,
         })
 
@@ -101,7 +101,7 @@ const loadCategorySection = async () => {
 onMounted(loadCategorySection)
 
 watch(
-    () => [categoryIdOrSlug, language],
+    () => [categorySlug, language],
     loadCategorySection,
 )
 </script>

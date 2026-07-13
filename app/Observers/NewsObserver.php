@@ -4,8 +4,7 @@ namespace App\Observers;
 use App\Jobs\DeleteNewsRelationsJob;
 use App\Jobs\SyncLatestNewsFeedJob;
 use App\Jobs\SyncLatestNewsSitemapJob;
-use App\Jobs\SyncNewsFeedJob;
-use App\Jobs\SyncNewsSitemapJob;
+
 use App\Models\News;
 
 class NewsObserver
@@ -17,10 +16,8 @@ class NewsObserver
 
     public function created(News $news): void
     {
-        SyncNewsSitemapJob::dispatch();
         SyncLatestNewsSitemapJob::dispatch();
 
-        SyncNewsFeedJob::dispatch();
         SyncLatestNewsFeedJob::dispatch();
     }
 
@@ -30,10 +27,9 @@ class NewsObserver
             return;
         }
 
-        SyncNewsSitemapJob::dispatch();
+
         SyncLatestNewsSitemapJob::dispatch();
 
-        SyncNewsFeedJob::dispatch();
         SyncLatestNewsFeedJob::dispatch();
     }
 }

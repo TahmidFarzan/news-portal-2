@@ -2,7 +2,7 @@
 namespace App\Observers;
 
 use App\Jobs\DeletePageRelationsJob;
-use App\Jobs\SyncPageSitemapJob;
+
 use App\Models\Page;
 use Illuminate\Support\Str;
 
@@ -23,15 +23,6 @@ class PageObserver
         DeletePageRelationsJob::dispatchSync($page->id);
     }
 
-    public function created(Page $page): void
-    {
-        SyncPageSitemapJob::dispatch();
-    }
-
-    public function deleted(Page $page): void
-    {
-        SyncPageSitemapJob::dispatch();
-    }
 
     private function treeUpdate(Page $page)
     {

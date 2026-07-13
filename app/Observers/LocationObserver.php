@@ -1,7 +1,7 @@
 <?php
 namespace App\Observers;
 
-use App\Jobs\SyncLocationSitemapJob;
+
 use App\Models\Location;
 use Illuminate\Support\Str;
 use App\Jobs\DeleteLocationRelationsJob;
@@ -21,16 +21,6 @@ class LocationObserver
     public function deleting(Location $location): void
     {
         DeleteLocationRelationsJob::dispatchSync($location->id);
-    }
-
-    public function created(Location $location): void
-    {
-        SyncLocationSitemapJob::dispatch();
-    }
-
-    public function deleted(Location $location): void
-    {
-        SyncLocationSitemapJob::dispatch();
     }
 
     private function treeUpdate(Location $location)

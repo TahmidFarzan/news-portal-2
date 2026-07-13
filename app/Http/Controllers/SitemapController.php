@@ -21,7 +21,7 @@ class SitemapController extends Controller
 
     public function categories(Request $request)
     {
-        if ($request->filled('page')) {
+        if ($request->input()) {
             $records = $this->sitemapService->getCategories($request);
             return response()->view('sitemaps.attributes', compact('records'));
         }
@@ -34,11 +34,10 @@ class SitemapController extends Controller
 
     public function tags(Request $request)
     {
-        if ($request->filled('page')) {
+        if ($request->input()) {
             $records = $this->sitemapService->getTags($request);
             return response()->view('sitemaps.attributes', compact('records'));
         }
-
         $routeUrl = route('sitemaps.tags');
         $lastPage = $this->sitemapService->getTagsLastPageNo();
 
@@ -47,7 +46,7 @@ class SitemapController extends Controller
 
     public function locations(Request $request)
     {
-        if ($request->filled('page')) {
+        if ($request->input()) {
             $records = $this->sitemapService->getLocations($request);
             return response()->view('sitemaps.attributes', compact('records'));
         }
@@ -60,7 +59,7 @@ class SitemapController extends Controller
 
     public function events(Request $request)
     {
-        if ($request->filled('page')) {
+        if ($request->input()) {
             $records = $this->sitemapService->getEvents($request);
             return response()->view('sitemaps.attributes', compact('records'));
         }
@@ -73,7 +72,7 @@ class SitemapController extends Controller
 
     public function contributors(Request $request)
     {
-        if ($request->filled('page')) {
+        if ($request->input()) {
             $records = $this->sitemapService->getContributors($request);
             return response()->view('sitemaps.attributes', compact('records'));
         }
@@ -86,29 +85,28 @@ class SitemapController extends Controller
 
     public function latestNews(Request $request)
     {
-        $records = $this->sitemapService->latestNews($request);
-
+        $records = $this->sitemapService->latestNews();
         return response()->view('sitemaps.news', compact('records'));
     }
 
     public function news(Request $request)
     {
-        if ($request->filled("page")) {
+        if ($request->input()) {
             $records = $this->sitemapService->getNews($request);
             return response()->view('sitemaps.news', compact('records'));
         }
 
         $routeUrl = route('sitemaps.news');
-        $lastPage = $this->sitemapService->getNewsLastPageNo($request);
+        $lastPage = $this->sitemapService->getNewsLastPageNo();
 
         return response()->view('sitemaps.paginable-index', compact('lastPage', 'routeUrl'));
     }
 
-    public function categoryNews(Request $request, $slugTree)
+    public function categoryNews(Request $request, string $slugTree)
     {
         $category = $this->sitemapService->categoryBySlugTree($slugTree);
 
-        if ($request->filled("page")) {
+        if ($request->input()) {
             $records = $this->sitemapService->getCategoryNews($request, $category);
             return response()->view('sitemaps.news', compact('records'));
         }
@@ -121,11 +119,11 @@ class SitemapController extends Controller
 
     }
 
-    public function tagNews(Request $request, $slug)
+    public function tagNews(Request $request, string $slug)
     {
         $tag = $this->sitemapService->tag($slug);
 
-        if ($request->filled("page")) {
+        if ($request->input()) {
             $records = $this->sitemapService->getTagNews($request, $tag);
             return response()->view('sitemaps.news', compact('records'));
         }
@@ -138,11 +136,11 @@ class SitemapController extends Controller
 
     }
 
-    public function locationNews(Request $request, $slugTree)
+    public function locationNews(Request $request, string $slugTree)
     {
         $location = $this->sitemapService->locationBySlugTree($slugTree);
 
-        if ($request->filled("page")) {
+        if ($request->input()) {
             $records = $this->sitemapService->getLocationNews($request, $location);
             return response()->view('sitemaps.news', compact('records'));
         }
@@ -155,11 +153,11 @@ class SitemapController extends Controller
 
     }
 
-    public function eventNews(Request $request, $slug)
+    public function eventNews(Request $request, string $slug)
     {
         $event = $this->sitemapService->event($slug);
 
-        if ($request->filled("page")) {
+        if ($request->input()) {
             $records = $this->sitemapService->getEventNews($request, $event);
             return response()->view('sitemaps.news', compact('records'));
         }
@@ -171,11 +169,11 @@ class SitemapController extends Controller
         return response()->view('sitemaps.paginable-index', compact('lastPage', "routeUrl"));
     }
 
-    public function contributorNews(Request $request, $slug)
+    public function contributorNews(Request $request, string $slug)
     {
         $contributor = $this->sitemapService->contributor($slug);
 
-        if ($request->filled("page")) {
+        if ($request->input()) {
             $records = $this->sitemapService->getContributorNews($request, $contributor);
             return response()->view('sitemaps.news', compact('records'));
         }

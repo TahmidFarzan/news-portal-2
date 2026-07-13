@@ -18,8 +18,8 @@ class PageController extends Controller
     {
         $page         = $this->pageService->homePage();
         $leadNews     = $this->pageService->homeLeadNews();
-        $recentNews   = $this->pageService->recentNews();
-        $popularNews  = $this->pageService->popularNews();
+        $recentNews   = $this->pageService->recentNewsSidebar();
+        $popularNews  = $this->pageService->popularNewsSidebar();
         $topEvents    = $this->pageService->homeTopEvents();
         $bottomEvents = $this->pageService->homeBottomEvents();
         $trends       = $this->pageService->homeTrends();
@@ -52,16 +52,16 @@ class PageController extends Controller
         return response()->json($news);
     }
 
-    public function homeCategoryNews(Request $request, int | string $idOrSlug)
+    public function homeCategoryNews(Request $request, int | string $slug)
     {
-        $category = $this->pageService->homeCategoryByIdOrSlug($idOrSlug);
+        $category = $this->pageService->homeCategoryBySlug($slug);
         $news     = $this->pageService->homeCategoryNews($request, $category);
         return response()->json($news);
     }
 
-    public function homeCategory(int | string $idOrSlug)
+    public function homeCategory(int | string $slug)
     {
-        $category = $this->pageService->homeCategoryByIdOrSlug($idOrSlug);
+        $category = $this->pageService->homeCategoryBySlug($slug);
         return response()->json($category);
     }
 
@@ -73,7 +73,7 @@ class PageController extends Controller
 
     public function latest(Request $request)
     {
-        $news = $this->pageService->newsSearch($request);
+        $news = $this->pageService->recentNews();
         $page = $this->pageService->latestPage();
 
         if ($request->expectsJson()) {
@@ -216,8 +216,9 @@ class PageController extends Controller
         $news     = $this->pageService->categoryNews($request, $category);
 
         $pageSectionNews = $this->pageService->categoryNewsPlacement($category);
-        $recentNews      = $this->pageService->recentNews();
-        $popularNews     = $this->pageService->popularNews();
+
+        $recentNews      = $this->pageService->recentNewsSidebar();
+        $popularNews     = $this->pageService->popularNewsSidebar();
 
         if ($request->expectsJson()) {
             return response()->json([

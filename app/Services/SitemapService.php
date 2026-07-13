@@ -1,11 +1,12 @@
 <?php
 namespace App\Services;
 
+use App\Helpers\CacheHelper;
 use App\Models\Category;
+use App\Models\Contributor;
 use App\Models\Event;
 use App\Models\Location;
 use App\Models\Tag;
-use App\Models\Contributor;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\ContributorCacheService;
 use App\Services\Cache\EventCacheService;
@@ -45,181 +46,152 @@ class SitemapService
 
     public function categoryBySlugTree(string $slugTree): Category
     {
-        return $this->categoryCacheService->categoryBySlugTree($slugTree);
+        return $this->categoryCacheService->getRecordBySlugTree(CacheHelper::KEY_SITEMAP, $slugTree, null, null);
     }
 
     public function tag(string $slug): Tag
     {
-        return $this->tagCacheService->tag($slug);
+        return $this->tagCacheService->getRecordBySlug(CacheHelper::KEY_SITEMAP, $slug, null, null);
     }
 
     public function locationBySlugTree(string $slugTree): Location
     {
-        return $this->locationCacheService->locationBySlugTree($slugTree);
+        return $this->locationCacheService->getRecordBySlugTree(CacheHelper::KEY_SITEMAP, $slugTree, null, null);
     }
 
     public function event(string $slug): Event
     {
-        return $this->eventCacheService->event($slug);
+        return $this->eventCacheService->getRecordBySlug(CacheHelper::KEY_SITEMAP, $slug, null, null);
     }
 
     public function contributor(string $slug): Contributor
     {
-        return $this->contributorCacheService->contributor($slug);
+        return $this->contributorCacheService->getRecordBySlug(CacheHelper::KEY_SITEMAP, $slug, null, null);
     }
 
     public function getCategories(Request $request)
     {
-        return $this->categoryCacheService->categories('sitemap', $request->input());
+
+        return $this->categoryCacheService->getRecords(CacheHelper::KEY_SITEMAP, $request);
     }
 
     public function getCategoriesLastPageNo()
     {
-        return $this->categoryCacheService->lastPageNo('sitemap');
+        return $this->categoryCacheService->getLastPageNo(CacheHelper::KEY_SITEMAP);
     }
 
     public function getTags(Request $request)
     {
-        return $this->tagCacheService->tags('sitemap', $request->input());
+        return $this->tagCacheService->getRecords(CacheHelper::KEY_SITEMAP, $request);
     }
 
     public function getTagsLastPageNo()
     {
-        return $this->tagCacheService->lastPageNo('sitemap', []);
+        return $this->tagCacheService->getLastPageNo(CacheHelper::KEY_SITEMAP);
     }
 
     public function getLocations(Request $request)
     {
-        return $this->locationCacheService->locations('sitemap', $request->input());
+        return $this->locationCacheService->getRecords(CacheHelper::KEY_SITEMAP, $request);
     }
 
     public function getLocationsLastPageNo()
     {
-        return $this->locationCacheService->lastPageNo('sitemap', []);
+        return $this->locationCacheService->getLastPageNo(CacheHelper::KEY_SITEMAP);
     }
 
     public function getEvents(Request $request)
     {
-        return $this->eventCacheService->events('sitemap', $request->input());
+        return $this->eventCacheService->getRecords(CacheHelper::KEY_SITEMAP, $request);
     }
 
     public function getEventsLastPageNo()
     {
-        return $this->eventCacheService->lastPageNo('sitemap', []);
+        return $this->eventCacheService->getLastPageNo(CacheHelper::KEY_SITEMAP);
     }
 
     public function getContributors(Request $request)
     {
-        return $this->contributorCacheService->contributors('sitemap', $request->input());
+        return $this->contributorCacheService->getRecords(CacheHelper::KEY_SITEMAP, $request);
     }
 
     public function getContributorsLastPageNo()
     {
-        return $this->contributorCacheService->lastPageNo('sitemap',[]);
+        return $this->contributorCacheService->getLastPageNo(CacheHelper::KEY_SITEMAP);
     }
 
     public function latestNews()
     {
-        return $this->newsCacheService->getLatest("sitemap");
+        return $this->newsCacheService->getLatestRecord(CacheHelper::KEY_SITEMAP);
     }
 
     public function getNews(Request $request)
     {
-        return $this->newsCacheService->news("sitemap", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_SITEMAP, $request);
     }
 
-    public function getNewsLastPageNo(Request $request)
+    public function getNewsLastPageNo()
     {
-        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+        return $this->newsCacheService->getLastPageNo(CacheHelper::KEY_SITEMAP);
     }
 
     public function getCategoryNews(Request $request, Category $category)
     {
-        $request->merge([
-            'category_id' => $category->id,
-        ]);
-        return $this->newsCacheService->news("sitemap", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_SITEMAP, $request, $category);
     }
 
     public function getCategoryNewsLastPageNo(Request $request, Category $category)
     {
-        $request->merge([
-            'category_id' => $category->id,
-        ]);
-        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+        return $this->newsCacheService->getLastPageNoByFilter(CacheHelper::KEY_SITEMAP, $request, $category);
     }
 
     public function getLocationNews(Request $request, Location $location)
     {
-        $request->merge([
-            'location_id' => $location->id,
-        ]);
-        return $this->newsCacheService->news("sitemap", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_SITEMAP, $request, $location);
     }
 
     public function getLocationNewsLastPageNo(Request $request, Location $location)
     {
-        $request->merge([
-            'location_id' => $location->id,
-        ]);
-        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+        return $this->newsCacheService->getLastPageNoByFilter(CacheHelper::KEY_SITEMAP, $request, $location);
     }
 
     public function getEventNews(Request $request, Event $event)
     {
-        $request->merge([
-            'event_id' => $event->id,
-        ]);
-        return $this->newsCacheService->news("sitemap", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_SITEMAP, $request, $event);
     }
 
     public function getEventNewsLastPageNo(Request $request, Event $event)
     {
-        $request->merge([
-            'event_id' => $event->id,
-        ]);
-        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+        return $this->newsCacheService->getLastPageNoByFilter(CacheHelper::KEY_SITEMAP, $request, $event);
     }
 
     public function getContributorNews(Request $request, Contributor $contributor)
     {
-        $request->merge([
-            'contributor_id' => $contributor->id,
-        ]);
-        return $this->newsCacheService->news("sitemap", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_SITEMAP, $request, $contributor);
     }
 
     public function getContributorNewsLastPageNo(Request $request, Contributor $contributor)
     {
-        $request->merge([
-            'contributor_id' => $contributor->id,
-        ]);
-        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+        return $this->newsCacheService->getLastPageNoByFilter(CacheHelper::KEY_SITEMAP, $request, $contributor);
     }
 
     public function getTagNews(Request $request, Tag $tag)
     {
-        $request->merge([
-            'tag_id' => $tag->id,
-        ]);
-        return $this->newsCacheService->news("sitemap", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_SITEMAP, $request, $tag);
     }
 
     public function getTagNewsLastPageNo(Request $request, Tag $tag)
     {
-        $request->merge([
-            'tag_id' => $tag->id,
-        ]);
-        return $this->newsCacheService->lastPageNo("sitemap", $request->input());
+        return $this->newsCacheService->getLastPageNoByFilter(CacheHelper::KEY_SITEMAP, $request, $tag);
     }
 
     public function getPages(Request $request)
     {
-        return $this->pageCacheService->pages("sitemap", $request->input());
+        return $this->pageCacheService->getRecords(CacheHelper::KEY_SITEMAP, $request);
     }
 
-    public function getPagesLastPageNo(Request $request)
+    public function getPagesLastPageNo()
     {
-        return $this->pageCacheService->lastPageNo("sitemap", $request->input());
+        return $this->pageCacheService->getLastPageNo(CacheHelper::KEY_SITEMAP);
     }
 }

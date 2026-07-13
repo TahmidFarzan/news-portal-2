@@ -1,17 +1,18 @@
 <?php
 namespace App\Services;
 
+use App\Helpers\CacheHelper;
 use App\Models\Category;
-use App\Models\Location;
-use App\Models\Event;
-use App\Models\Tag;
 use App\Models\Contributor;
+use App\Models\Event;
+use App\Models\Location;
+use App\Models\Tag;
 use App\Services\Cache\CategoryCacheService;
-use App\Services\Cache\LocationCacheService;
-use App\Services\Cache\EventCacheService;
-use App\Services\Cache\TagCacheService;
 use App\Services\Cache\ContributorCacheService;
+use App\Services\Cache\EventCacheService;
+use App\Services\Cache\LocationCacheService;
 use App\Services\Cache\NewsCacheService;
+use App\Services\Cache\TagCacheService;
 use Illuminate\Http\Request;
 
 class FeedService
@@ -30,93 +31,77 @@ class FeedService
         EventCacheService $eventCacheService,
         TagCacheService $tagCacheService,
         ContributorCacheService $contributorCacheService
-    )
-    {
-        $this->newsCacheService     = $newsCacheService;
-        $this->categoryCacheService = $categoryCacheService;
-        $this->locationCacheService = $locationCacheService;
-        $this->eventCacheService = $eventCacheService;
-        $this->tagCacheService = $tagCacheService;
+    ) {
+        $this->newsCacheService        = $newsCacheService;
+        $this->categoryCacheService    = $categoryCacheService;
+        $this->locationCacheService    = $locationCacheService;
+        $this->eventCacheService       = $eventCacheService;
+        $this->tagCacheService         = $tagCacheService;
         $this->contributorCacheService = $contributorCacheService;
     }
 
     public function categoryBySlugTree(string $slugTree): Category
     {
-        return $this->categoryCacheService->categoryBySlugTree($slugTree);
+        return $this->categoryCacheService->getRecordBySlugTree(CacheHelper::KEY_FEED, $slugTree);
     }
 
     public function locationBySlugTree(string $slugTree): Location
     {
-        return $this->locationCacheService->locationBySlugTree($slugTree);
+        return $this->locationCacheService->getRecordBySlugTree(CacheHelper::KEY_FEED, $slugTree);
     }
 
     public function event(string $slug): Event
     {
-        return $this->eventCacheService->event($slug);
+        return $this->eventCacheService->getRecordBySlug(CacheHelper::KEY_FEED, $slug);
     }
 
     public function tag(string $slug): Tag
     {
-        return $this->tagCacheService->tag($slug);
+        return $this->tagCacheService->getRecordBySlug(CacheHelper::KEY_SITEMAP, $slug);
     }
 
     public function contributor(string $slug): Contributor
     {
-        return $this->contributorCacheService->contributor($slug);
+        return $this->contributorCacheService->getRecordBySlug(CacheHelper::KEY_FEED, $slug);
     }
 
     public function latestNews()
     {
-        return $this->newsCacheService->getLatest("feed");
+        return $this->newsCacheService->getLatestRecord(CacheHelper::KEY_FEED);
     }
 
     public function getNews(Request $request)
     {
-        return $this->newsCacheService->news("feed", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_FEED, $request);
     }
 
-    public function getNewsLastPageNo(Request $request)
+    public function getNewsLastPageNo()
     {
-        return $this->newsCacheService->lastPageNo("feed", $request->input());
+        return $this->newsCacheService->getLastPageNo(CacheHelper::KEY_FEED, null, null);
     }
 
     public function getCategoryNews(Request $request, Category $category)
     {
-        $request->merge([
-            'category_id' => $category->id,
-        ]);
-        return $this->newsCacheService->news("feed", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_FEED, $request, $category);
     }
 
     public function getLocationNews(Request $request, Location $location)
     {
-        $request->merge([
-            'location_id' => $location->id,
-        ]);
-        return $this->newsCacheService->news("feed", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_FEED, $request, $location);
     }
 
     public function getEventNews(Request $request, Event $event)
     {
-        $request->merge([
-            'event_id' => $event->id,
-        ]);
-        return $this->newsCacheService->news("feed", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_FEED, $request, $event);
     }
 
     public function getTagNews(Request $request, Tag $tag)
     {
-        $request->merge([
-            'tag_id' => $tag->id,
-        ]);
-        return $this->newsCacheService->news("feed", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_FEED, $request, $tag);
     }
 
     public function getContributorNews(Request $request, Contributor $contributor)
     {
-        $request->merge([
-            'contributor_id' => $contributor->id,
-        ]);
-        return $this->newsCacheService->news("feed", $request->input());
+        return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_FEED, $request, $contributor);
     }
 }

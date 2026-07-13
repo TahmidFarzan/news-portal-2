@@ -1,7 +1,7 @@
 <?php
 namespace App\Observers;
 
-use App\Jobs\SyncCategorySitemapJob;
+
 use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Jobs\DeleteCategoryRelationsJob;
@@ -25,12 +25,11 @@ class CategoryObserver
 
     public function created(Category $category): void
     {
-        SyncCategorySitemapJob::dispatch();
     }
 
     public function deleted(Category $category): void
     {
-        SyncCategorySitemapJob::dispatch();
+
     }
 
     private function treeUpdate(Category $category)

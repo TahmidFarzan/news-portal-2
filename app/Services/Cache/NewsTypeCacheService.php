@@ -1,24 +1,23 @@
 <?php
 namespace App\Services\Cache;
 
-use App\Helpers\EventHelper;
 use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
-use App\Models\Event;
 use App\Models\Language;
+use App\Models\NewsType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class EventCacheService
+class NewsTypeCacheService
 {
     private int $cachedTTLOneDay = 86400;
 
     private int $cachedTTLThreeMin = 300;
 
-    private string $mainTag = CacheHelper::TAG_EVENT;
+    private string $mainTag = CacheHelper::TAG_NEWS_TYPE;
 
-    private string $secondKey = CacheHelper::KEY_EVENT;
+    private string $secondKey = CacheHelper::KEY_NEWS_TYPE;
 
     private int $perPage = 5000;
 
@@ -41,9 +40,9 @@ class EventCacheService
 
     private function generalQueryRecords(?Language $language = null): Builder
     {
-        $records = Event::query()->with('language');
+        $records = NewsType::query()->orderBy('id', 'asc');
         if ($language && $language?->id) {
-            $records = $records->orderBy('id', 'asc');
+            $records = $records->where("language_id", $language?->id);
         }
         return $records;
     }
@@ -55,7 +54,7 @@ class EventCacheService
 
     private function dbRecords(Request $request, ?Language $language = null, int | null $perPage = null): LengthAwarePaginator
     {
-        $records = Event::query()->with('language');
+        $records = NewsType::query()->orderBy('id', 'asc');
         if ($language && $language?->id) {
             $records = $records->where("language_id", $language?->id);
         }
@@ -65,22 +64,16 @@ class EventCacheService
         return $records;
     }
 
-    private function dbRecordsByPosition(string $position=EventHelper::POSITION_TOP, ?Language $language = null)
+    private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): NewsType
     {
-        return Event::with(["desktopBannerImage", "mobileBannerImage"])->where("language_id", $language->id)
-                    ->where("position", $position)->where("is_current", true)->get();
-    }
-
-    private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): Event
-    {
-        $record = Event::with(['language',"desktopBannerImage", "mobileBannerImage"])->where("is_current", true);
+        $record = NewsType::query();
 
         if ($language && $language?->id) {
             $record = $record->where("language_id", $language?->id);
         }
 
-        $record = $record->where('slug', $idOrSlug)
-            ->orWhere('id', $idOrSlug)
+        $record = $record->where('id', $idOrSlug)
+            ->orWhere('slug', $idOrSlug)
             ->firstOrFail();
         return $record;
     }
@@ -131,30 +124,7 @@ class EventCacheService
         return $records;
     }
 
-    public function getRecordsByPosition(string $key, string $position=EventHelper::POSITION_TOP, ?Language $language = null, int | null $cachedTTL = null)
-    {
-        $cacheKey = CacheHelper::cacheKeyGenerateForEventByPosition($key, $this->secondKey, $position, $language);
-
-        $records = CacheServerHelper::getCachedData(
-            $cacheKey,
-            [$this->mainTag, $key]
-        );
-
-        if ($records === null) {
-            $records = $this->dbRecordsByPosition($position, $language);
-
-            CacheServerHelper::cachedData(
-                $cacheKey,
-                $records,
-                $cachedTTL ?? $this->cachedTTLOneDay,
-                [$this->mainTag, $key]
-            );
-        }
-
-        return $records;
-    }
-
-    public function getRecordById(string $key, int | string $id, ?Language $language = null, int | null $cachedTTL = null): Event
+    public function getRecordById(string $key, int | string $id, ?Language $language = null, int | null $cachedTTL = null): NewsType
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id, $language);
 
@@ -183,7 +153,7 @@ class EventCacheService
         return $record;
     }
 
-    public function getRecordBySlug(string $key, string $slug, ?Language $language = null, int | null $cachedTTL = null): Event
+    public function getRecordBySlug(string $key, string $slug, ?Language $language = null, int | null $cachedTTL = null): NewsType
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
 
