@@ -706,7 +706,7 @@ class NewsCacheService
 
     public function getRecordsLimit(string $cacheKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $limit = 4, int | null $cachedTTL = null)
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateForRecordByLimit($cacheKey, $this->secondKey, $language, $limit);
+        $cacheKey = CacheHelper::cacheKeyGenerateForRecordByLimit($cacheKey, $this->secondKey, $filterModel, $request, $language, $limit);
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,

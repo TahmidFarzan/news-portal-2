@@ -139,12 +139,47 @@ class CacheHelper
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateForRecordByLimit(string $key, string $secondKey, ?Language $language = null, int $limit = 4): string
+    public static function cacheKeyGenerateForRecordByLimit(string $key, string $secondKey, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Request $request = null, ?Language $language = null, int $limit = 4): string
     {
+        $request ??= request();
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
             $cacheKey .= ":" . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
+        }
+
+        if ($filterModel instanceof Category && $filterModel->id) {
+            $cacheKey .= ":" . CacheHelper::KEY_CATEGORY . ":{$filterModel?->slug}";
+        }
+
+        if ($filterModel instanceof Tag && $filterModel->id) {
+            $cacheKey .= ":" . CacheHelper::KEY_TAG . ":{$filterModel?->slug}";
+        }
+
+        if ($filterModel instanceof Event && $filterModel->id) {
+            $cacheKey .= ":" . CacheHelper::KEY_EVENT . ":{$filterModel?->slug}";
+        }
+
+        if ($filterModel instanceof Location && $filterModel->id) {
+            $cacheKey .= ":" . CacheHelper::KEY_LOCATION . ":{$filterModel?->slug}";
+        }
+
+        if ($filterModel instanceof Contributor && $filterModel->id) {
+            $cacheKey .= ":" . CacheHelper::KEY_CONTRIBUTOR . ":{$filterModel?->slug}";
+        }
+
+        if ($filterModel instanceof NewsType && $filterModel->id) {
+            $cacheKey .= ":" . CacheHelper::KEY_NEWS_TYPE . ":{$filterModel?->slug}";
+        }
+
+        if ($request->input()) {
+            $cacheData = $request->except([
+                '_token',
+            ]);
+
+            ksort($cacheData);
+
+            $cacheKey .= ":" . md5(json_encode($cacheData));
         }
 
         $cacheKey .= ":" . CacheHelper::KEY_LIMIT . ":{$limit}";

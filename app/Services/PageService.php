@@ -37,15 +37,15 @@ class PageService
     protected int $cachedTTL = 300;
 
     protected SiteService $siteService;
-    public NewsCacheService $newsCacheService;
-    public NewsTypeCacheService $newsTypeCacheService;
-    public CategoryCacheService $categoryCacheService;
-    public TagCacheService $tagCacheService;
-    public EventCacheService $eventCacheService;
-    public ContributorCacheService $contributorCacheService;
-    public PageCacheService $pageCacheService;
-    public LocationCacheService $locationCacheService;
-    public SurveyCacheService $surveyCacheService;
+    protected NewsCacheService $newsCacheService;
+    protected NewsTypeCacheService $newsTypeCacheService;
+    protected CategoryCacheService $categoryCacheService;
+    protected TagCacheService $tagCacheService;
+    protected EventCacheService $eventCacheService;
+    protected ContributorCacheService $contributorCacheService;
+    protected PageCacheService $pageCacheService;
+    protected LocationCacheService $locationCacheService;
+    protected SurveyCacheService $surveyCacheService;
 
     public function __construct(
         SiteService $siteService,
