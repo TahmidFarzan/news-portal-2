@@ -37,11 +37,11 @@ const slug = computed(() => {
 })
 
 const prevButtonClass = computed(() => {
-    return `news-type-slider-prev-${slug.value}`
+    return `video-slider-prev`
 })
 
 const nextButtonClass = computed(() => {
-    return `news-type-slider-next-${slug.value}`
+    return `video-slider-next`
 })
 
 const loadNews = async () => {
