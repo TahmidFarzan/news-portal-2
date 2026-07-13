@@ -148,6 +148,10 @@ const showSurveys = computed(() => {
 
 const selectedLanguageCode = computed(() => getSelectedLanguageCode())
 
+const layoutSystemApiRefreshKey = (componentName) => {
+    return computed(() => `section-component-${componentName}-${getSelectLanguageCode()}`)
+}
+
 provide('showGoogleAd', showGoogleAd)
 provide('showTrends', showTrends)
 provide('showSurveys', showSurveys)
@@ -194,7 +198,7 @@ onBeforeUnmount(() => {
                 <div
                     class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
                     <div v-if="isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
-                        <TopbarMenu class="hidden min-[300px]:inline" />
+                        <TopbarMenu :key="layoutSystemApiRefreshKey('topbar-menu')" class="hidden min-[300px]:inline" />
                     </div>
 
                     <a v-if="!authUser" :href="route('login')"
@@ -204,7 +208,7 @@ onBeforeUnmount(() => {
                     </a>
 
                     <div v-else class="max-[450px]:flex-shrink-0">
-                        <AuthTopbarDropdownMenu :auth-user="authUser" />
+                        <AuthTopbarDropdownMenu :key="layoutSystemApiRefreshKey('auth-topbar-menu')" :auth-user="authUser" />
                     </div>
 
                     <LanguageSelect class="max-[450px]:flex-shrink-0" />
@@ -226,7 +230,7 @@ onBeforeUnmount(() => {
 
 
                 <div class="flex-1 min-w-0 h-10 flex items-center">
-                    <HeaderMenu class="hidden min-[401px]:inline" />
+                    <HeaderMenu :key="layoutSystemApiRefreshKey('header-menu')" class="hidden min-[401px]:inline" />
                 </div>
 
                 <div class="h-10 flex items-center gap-2 flex-shrink-0">
@@ -236,7 +240,7 @@ onBeforeUnmount(() => {
                         <FontAwesomeIcon icon="magnifying-glass" />
                     </a>
 
-                    <OffCanvasMenu />
+                    <OffCanvasMenu :key="layoutSystemApiRefreshKey('off-canvas-menu')" />
                 </div>
             </div>
         </div>
@@ -245,7 +249,7 @@ onBeforeUnmount(() => {
             <slot />
         </main>
 
-        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('common.messages.breakingNews')" />
+        <BreakingNews :key="layoutSystemApiRefreshKey('breaking-news')" v-if="isTruthyValue(showBreakingNews?.value)" :title="t('common.messages.breakingNews')" />
 
         <footer class="public-footer py-4 mt-2 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
@@ -253,7 +257,7 @@ onBeforeUnmount(() => {
                     {{ t('common.messages.text') }} {{ translateNumerText(year) }} {{ t('common.app.name') }}
                 </span>
 
-                <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" />
+                <FooterMenu :key="layoutSystemApiRefreshKey('footer-menu')" v-if="isTruthyValue(showFooterMenu?.value)" />
 
                 <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
                     {{ t('common.app.developedBy') }}

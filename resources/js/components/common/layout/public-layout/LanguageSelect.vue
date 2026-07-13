@@ -49,6 +49,7 @@ const languageChange = async () => {
             setSelectedLanguage(language.value)
 
             window.location.href = route('home')
+            //router.visit(route('home'))
         }
 
     } catch (error) {

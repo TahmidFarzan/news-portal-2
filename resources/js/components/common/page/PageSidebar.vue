@@ -45,7 +45,7 @@ const currentNews = computed(() => {
 
             <button v-if="hasPopularNews" class="sidebar-tab" :class="{ active: activeTab === 'popular' }"
                 @click="activeTab = 'popular'">
-                {{ t('common.labels.recentNews') }}
+                {{ t('common.labels.popularNews') }}
             </button>
         </div>
 

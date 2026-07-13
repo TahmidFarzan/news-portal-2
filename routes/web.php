@@ -464,8 +464,6 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-
-
 Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::get('home', [PageController::class, 'home'])->name('home');
     Route::prefix('home')->name('home.')->group(function () {
