@@ -153,6 +153,7 @@ class PageController extends Controller
     public function newsDetails(string $slug)
     {
         $news = $this->pageService->news($slug);
+
         $this->pageService->newsHitCounterCalculate($news);
         return Inertia::render('NewsDetails', [
             'news' => $news,

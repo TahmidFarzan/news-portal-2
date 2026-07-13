@@ -74,8 +74,8 @@ class NewsCacheService
         $sPerPage = $this->perPage($request->input("per_page", $perPage));
 
         $records = News::with([
-            'language',
             'newsType',
+            'language',
             'category',
             'tags',
             'contributors',
@@ -203,11 +203,11 @@ class NewsCacheService
             ->paginate($sPerPage);
     }
 
-    private function dbRecordsLimit(?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int $limit = 4)
+    private function dbRecordsLimit(?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int $limit = 4): EloquentCollection
     {
         $request ??= request();
 
-        $records = News::with(['language', 'newsType', "category", "tags", "contributors", "event", "location", "featureImage", "featureImageMobile"])
+        $records = News::with(['newsType','language',"category", "tags", "contributors", "event", "location", "featureImage", "featureImageMobile"])
             ->where('is_published', true);
 
         if ($language && $language?->id) {
@@ -319,13 +319,13 @@ class NewsCacheService
         return $records;
     }
 
-    private function dbRecordsLimitAccrodingNewsPlacement(string | null $pageName = null, string | null $pageSection = null, $category = null, ?Language $language = null, int $limit = 4)
+    private function dbRecordsLimitAccrodingNewsPlacement(string | null $pageName = null, string | null $pageSection = null, $category = null, ?Language $language = null, int $limit = 4): EloquentCollection
     {
         $newsPlacementTable = (new NewsPlacement())->getTable();
 
         $records = News::with([
-            "language",
             'newsType',
+            "language",
             'category',
 
             'event',
@@ -368,13 +368,13 @@ class NewsCacheService
         return $records;
     }
 
-    private function dbLatest(?int $limit = null, ?Language $language = null, bool $isCursorPaginate = false)
+    private function dbLatest(?int $limit = null, ?Language $language = null, bool $isCursorPaginate = false): EloquentCollection | CursorPaginator
     {
         $limit = $limit ?? $this->limit;
 
         $records = News::with([
-            "language",
             'newsType',
+            "language",
             'category',
 
             'event',
@@ -411,8 +411,8 @@ class NewsCacheService
         $limit = $limit ?? $this->limit;
 
         $records = News::with([
-            "language",
             'newsType',
+            "language",
             'category',
 
             'event',
@@ -569,6 +569,7 @@ class NewsCacheService
     private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): News
     {
         $record = News::with([
+            'newsType',
             'language',
             'category',
             "event",
@@ -603,7 +604,7 @@ class NewsCacheService
         return $record;
     }
 
-    private function dbBreakingNews(?Request $request = null, ?Language $language = null, int $perPage = 10)
+    private function dbBreakingNews(?Request $request = null, ?Language $language = null, int $perPage = 10): CursorPaginator
     {
         $records = BreakingNews::with(
             "news",
@@ -678,7 +679,7 @@ class NewsCacheService
         return (int) $lastPage;
     }
 
-    public function getRecords(string $cacheKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null, bool $isCursorPaginate = false)
+    public function getRecords(string $cacheKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null, bool $isCursorPaginate = false): LengthAwarePaginator | CursorPaginator
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForNews($cacheKey, $this->secondKey, $request, $filterModel, $language, $perPage);
 
@@ -704,7 +705,7 @@ class NewsCacheService
         return $records;
     }
 
-    public function getRecordsLimit(string $cacheKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $limit = 4, int | null $cachedTTL = null)
+    public function getRecordsLimit(string $cacheKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, int | null $limit = 4, int | null $cachedTTL = null): SupportCollection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordByLimit($cacheKey, $this->secondKey, $filterModel, $request, $language, $limit);
 
@@ -730,7 +731,7 @@ class NewsCacheService
         return $records;
     }
 
-    public function getRecordsLimitAccrodingNewsPlacement(string $cacheKey, string | null $pageName = null, string | null $pageSection = null, $category = null, ?Language $language = null, int $limit = 4, int | null $cachedTTL = null)
+    public function getRecordsLimitAccrodingNewsPlacement(string $cacheKey, string | null $pageName = null, string | null $pageSection = null, $category = null, ?Language $language = null, int $limit = 4, int | null $cachedTTL = null): SupportCollection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordByLimitAccrodingNewsPlacement($cacheKey, $this->secondKey, $pageName, $pageSection, $category, $limit, $language);
 
@@ -756,7 +757,7 @@ class NewsCacheService
         return $records;
     }
 
-    public function getLatestRecord(string $cacheKey, ?Language $language = null, ?int $limit = null, bool $isCursorPaginate = false, int | null $cachedTTL = null)
+    public function getLatestRecord(string $cacheKey, ?Language $language = null, ?int $limit = null, bool $isCursorPaginate = false, int | null $cachedTTL = null): SupportCollection | CursorPaginator
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForLatest($cacheKey, $this->secondKey, $language, $isCursorPaginate);
 
@@ -778,7 +779,7 @@ class NewsCacheService
         return $records;
     }
 
-    public function getPopulerRecord(string $cacheKey, ?Language $language = null, ?int $limit = null, int | null $cachedTTL = null): EloquentCollection | SupportCollection
+    public function getPopulerRecord(string $cacheKey, ?Language $language = null, ?int $limit = null, int | null $cachedTTL = null): SupportCollection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForPopuler($cacheKey, $this->secondKey, $language);
 
@@ -858,7 +859,7 @@ class NewsCacheService
         return $record;
     }
 
-    public function getBreakingNews(string $cacheKey, ?Request $request = null, ?Language $language = null, int $limit = 10, int | null $cachedTTL = null)
+    public function getBreakingNews(string $cacheKey, ?Request $request = null, ?Language $language = null, int $limit = 10, int | null $cachedTTL = null): CursorPaginator
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForBreakingNews($cacheKey, $this->secondKey, $request, $language, $limit);
 

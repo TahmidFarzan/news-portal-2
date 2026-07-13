@@ -41,7 +41,7 @@ class PageCacheService
     private function generalQueryRecords(?Language $language = null): Builder
     {
         $records = Page::query()
-            ->with('language')
+            ->with(['language'])
             ->where('is_published', true)
             ->orderBy('id', 'asc');
 
@@ -59,7 +59,7 @@ class PageCacheService
     private function dbRecords(Request $request, ?Language $language = null, int | null $perPage = null): LengthAwarePaginator
     {
         $records = Page::query()
-            ->with('language')
+            ->with(['language'])
             ->where('is_published', true)
             ->orderBy('id', 'asc');
 
@@ -74,7 +74,7 @@ class PageCacheService
 
     private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): Page
     {
-        $record = Page::where('is_published', true)->where('is_default', false);
+        $record = Page::with(['language'])->where('is_published', true)->where('is_default', false);
 
         if ($language && $language?->id) {
             $record = $record->where("language_id", $language?->id);
@@ -87,7 +87,7 @@ class PageCacheService
 
     private function dbRecordSlugTree(string $slugTree, ?Language $language = null): Page
     {
-        $record = Page::where('is_published', true)->where('is_default', false);
+        $record = Page::with(['language'])->where('is_published', true)->where('is_default', false);
 
         if ($language && $language?->id) {
             $record = $record->where("language_id", $language?->id);
@@ -99,7 +99,7 @@ class PageCacheService
 
     private function dbRecordUseAs(string $useAs, ?Language $language = null): Page
     {
-        $record = Page::where('is_published', true)->where('is_default', true);
+        $record = Page::with(['language'])->where('is_published', true)->where('is_default', true);
 
         if ($language && $language?->id) {
             $record = $record->where("language_id", $language?->id);

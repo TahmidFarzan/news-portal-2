@@ -115,6 +115,7 @@ const layoutSystemApiRefreshKey = (componentName) => {
     return computed(() => `section-component-${componentName}-${page?.language?.slug}`)
 }
 
+
 </script>
 
 <template>
@@ -227,19 +228,19 @@ const layoutSystemApiRefreshKey = (componentName) => {
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div class="space-y-3">
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('internation-section')" v-if="page?.language?.code == languages.English.Code"
-                        class="home-international-section mt-4" categoryIdOrSlug="international"
+                        class="home-international-section mt-4" categorySlug="international"
                         :language="page?.language" :style="3" :limit="4" />
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('international-section')" v-if="page?.language?.code == languages.Bangla.Code"
-                        class="home-international-section mt-4" categoryIdOrSlug="আন্তর্জাতিক"
+                        class="home-international-section mt-4" categorySlug="আন্তর্জাতিক"
                         :language="page?.language" :style="3" :limit="4" />
                 </div>
 
                 <div class="space-y-3">
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('technology-section')" v-if="page?.language?.code == languages.English.Code"
-                        class="home-technology-section mt-4" categoryIdOrSlug="technology" :language="page?.language"
+                        class="home-technology-section mt-4" categorySlug="technology" :language="page?.language"
                         :style="3" :limit="4" />
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('technology-section')" v-if="page?.language?.code == languages.Bangla.Code"
-                        class="home-technology-section mt-4" categoryIdOrSlug="প্রযুক্তি" :language="page?.language"
+                        class="home-technology-section mt-4" categorySlug="প্রযুক্তি" :language="page?.language"
                         :style="3" :limit="4" />
                 </div>
             </div>
@@ -253,25 +254,25 @@ const layoutSystemApiRefreshKey = (componentName) => {
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div class="space-y-3">
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('health-section')" v-if="page?.language?.code == languages.English.Code"
-                        class="home-health-section mt-4" categoryIdOrSlug="health" :language="page?.language" :style="4"
+                        class="home-health-section mt-4" categorySlug="health" :language="page?.language" :style="4"
                         :limit="4" />
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('health-section')" v-if="page?.language?.code == languages.Bangla.Code"
-                        class="home-health-section mt-4" categoryIdOrSlug="স্বাস্থ্য" :language="page?.language"
+                        class="home-health-section mt-4" categorySlug="স্বাস্থ্য" :language="page?.language"
                         :style="4" :limit="4" />
                 </div>
 
                 <div class="space-y-3">
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('education-section')" v-if="page?.language?.code == languages.English.Code" class="mt-4"
-                        categoryIdOrSlug="education" :language="page?.language" :style="4" :limit="4" />
+                        categorySlug="education" :language="page?.language" :style="4" :limit="4" />
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('education-section')" v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
-                        categoryIdOrSlug="শিক্ষা" :language="page?.language" :style="4" :limit="4" />
+                        categorySlug="শিক্ষা" :language="page?.language" :style="4" :limit="4" />
                 </div>
 
                 <div class="space-y-3">
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('lifestyle-section')" v-if="page?.language?.code == languages.English.Code" class="mt-4"
-                        categoryIdOrSlug="lifestyle" :language="page?.language" :style="4" :limit="4" />
+                        categorySlug="lifestyle" :language="page?.language" :style="4" :limit="4" />
                     <CategoryNewsSection :key="layoutSystemApiRefreshKey('lifestyle-section')" v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
-                        categoryIdOrSlug="জীবনধারা" :language="page?.language" :style="4" :limit="4" />
+                        categorySlug="জীবনধারা" :language="page?.language" :style="4" :limit="4" />
                 </div>
             </div>
         </div>
