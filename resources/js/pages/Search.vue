@@ -138,10 +138,7 @@ onMounted(async () => {
             route('search.news-type', {
                 slugOrId: filterForm.news_type_id,
             }),
-            {},
-            {
-                languageAwareCache: true,
-            }
+            {}
         )
 
         filterForm.news_type_id = rNewsType || null
@@ -152,10 +149,7 @@ onMounted(async () => {
             route('search.category', {
                 slugOrId: filterForm.category_id,
             }),
-            {},
-            {
-                languageAwareCache: true,
-            }
+            {}
         )
 
         filterForm.category_id = rCategory || null
@@ -166,10 +160,7 @@ onMounted(async () => {
             route('search.location', {
                 slugOrId: filterForm.location_id,
             }),
-            {},
-            {
-                languageAwareCache: true,
-            }
+            {}
         )
 
         filterForm.location_id = rLocation || null
@@ -180,10 +171,7 @@ onMounted(async () => {
             route('search.event', {
                 slugOrId: filterForm.event_id,
             }),
-            {},
-            {
-                languageAwareCache: true,
-            }
+            {}
         )
 
         filterForm.event_id = rEvent || null
@@ -216,23 +204,21 @@ onMounted(async () => {
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id || null" :apiUrl="newsTypesApiUrl" :multiple="false"
-                    :placeholder="t('common.labels.newsType')" :language-aware-cache="true" />
+                    :placeholder="t('common.labels.newsType')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.category_id || null" apiLabelKey="indentation_name" apiValueKey="id"
-                    :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('common.labels.category')"
-                    :language-aware-cache="true" />
+                    :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('common.labels.category')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.location_id || null" apiLabelKey="indentation_name" apiValueKey="id"
-                    :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('common.labels.location')"
-                    :language-aware-cache="true" />
+                    :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('common.labels.location')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id || null" :apiUrl="eventApiUrl" :multiple="false"
-                    :placeholder="t('common.labels.event')" :language-aware-cache="true" />
+                    :placeholder="t('common.labels.event')" />
 
                 <input v-model="filterForm.date" type="date" :aria-label="t('common.labels.date')"
                     class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />

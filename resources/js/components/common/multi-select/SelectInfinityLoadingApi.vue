@@ -24,7 +24,6 @@ const {
     compactDesign,
     useDarkTheme,
     defaultLabel,
-    languageAwareCache,
 } = defineProps({
     selectedItem: { type: [String, Number, Object, Array], default: null },
     fieldName: { type: String, required: true },
@@ -41,7 +40,6 @@ const {
     compactDesign: { type: Boolean, default: false },
     useDarkTheme: { type: Boolean, default: false },
     defaultLabel: { type: String, default: "Select item" },
-    languageAwareCache: { type: Boolean, default: false },
 })
 
 const options = ref([])
@@ -77,7 +75,6 @@ const getMultiSelectCacheOptions = (params = {}) => {
             ? `${smartCacheKey.API_MULTI_SELECT}:${apiUrl}:${cacheParamsKey}`
             : `${smartCacheKey.API_MULTI_SELECT}:${apiUrl}`,
         ttl: smartCacheTTL.API_MULTI_SELECT,
-        languageAwareCache,
     }
 }
 

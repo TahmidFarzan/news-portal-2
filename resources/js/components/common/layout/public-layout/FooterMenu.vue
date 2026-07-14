@@ -48,7 +48,6 @@ const getFooterMenuItems = async (pageNumber = 1) => {
             {
                 key: `${smartCacheKey.API_LAYOUT_FOOTER_MENU}:${apiUrl}`,
                 ttl: smartCacheTTL.LAYOUT_FOOTER_MENU,
-                languageAwareCache: true,
             }
         )
 

@@ -89,7 +89,6 @@ const loadChildren = async (page = 1) => {
             {
                 key: `${smartCacheKey.API_LAYOUT_HEADER_MENU}:${apiUrl}`,
                 ttl: smartCacheTTL.LAYOUT_MENU,
-                languageAwareCache: true,
             }
         )
 

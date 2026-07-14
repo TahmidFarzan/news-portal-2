@@ -74,7 +74,6 @@ const loadEventNews = async (event) => {
             {
                 key: `${smartCacheKey.API_HOME_PAGE}:${apiUrl}`,
                 ttl: smartCacheTTL.HOME_PAGE,
-                languageAwareCache: true,
             }
         )
 
