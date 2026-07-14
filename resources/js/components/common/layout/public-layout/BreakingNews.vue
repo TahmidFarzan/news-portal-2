@@ -169,7 +169,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <section v-if="hasNews" class="overflow-hidden border-y border-gray-100 bg-white">
+    <section v-if="hasNews"
+        class="fixed bottom-0 left-0 right-0 z-[9999] overflow-hidden border-t border-gray-200 bg-white shadow-lg">
         <div class="mx-auto flex max-w-7xl flex-col overflow-hidden px-3 sm:h-11 sm:flex-row sm:items-center sm:px-4">
             <div
                 class="flex h-9 w-full shrink-0 items-center justify-center bg-red-600 px-4 text-sm font-bold text-white sm:h-full sm:w-auto sm:justify-start sm:text-base">
