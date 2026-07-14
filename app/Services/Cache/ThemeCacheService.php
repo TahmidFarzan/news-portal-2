@@ -1,15 +1,18 @@
 <?php
+
 namespace App\Services\Cache;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
 use App\Models\Theme;
+use Illuminate\Support\Collection;
 
 class ThemeCacheService
 {
     private int $cachedTTL = 300;
 
-    private string $mainTag   = CacheHelper::TAG_THEME;
+    private string $mainTag = CacheHelper::TAG_THEME;
+
     private string $secondKey = CacheHelper::KEY_THEME;
 
     public function isConnected(): bool
@@ -22,22 +25,22 @@ class ThemeCacheService
         CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_PAGE]);
     }
 
-    private function dbThemes()
+    private function dbThemes(): Collection
     {
         return Theme::orderBy('position', 'asc')->orderBy('id', 'asc')->get();
     }
 
-    private function dbThemesByGroupAndLabels(string $group, array $labels)
+    private function dbThemesByGroupAndLabels(string $group, array $labels): Collection
     {
         return Theme::orderBy('position', 'asc')->where('group', $group)->whereIn('label', $labels)->orderBy('id', 'asc')->get();
     }
 
-    private function dbThemeByGroupAndLabel(string $group, string $label)
+    private function dbThemeByGroupAndLabel(string $group, string $label): Theme
     {
         return Theme::where('group', $group)->where('label', $label)->orderBy('id', 'desc')->firstOrFail();
     }
 
-    public function getThemes(string $key, int | null $cachedTTL = null)
+    public function getThemes(string $key, ?int $cachedTTL = null): Collection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateThemes($key, $this->secondKey);
 
@@ -66,7 +69,7 @@ class ThemeCacheService
         return $records;
     }
 
-    public function getThemesByGroupAndLabels(string $key, string $group, array $labels, int | null $cachedTTL = null)
+    public function getThemesByGroupAndLabels(string $key, string $group, array $labels, ?int $cachedTTL = null): Collection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateThemesByGroupAndLabels($key, $this->secondKey, $group, $labels);
 
@@ -95,7 +98,7 @@ class ThemeCacheService
         return $records;
     }
 
-    public function getThemeByGroupAndLabel(string $key, string $group, string $label, int | null $cachedTTL = null)
+    public function getThemeByGroupAndLabel(string $key, string $group, string $label, ?int $cachedTTL = null): Theme
     {
         $cacheKey = CacheHelper::cacheKeyGenerateThemesByGroupAndLabel($key, $this->secondKey, $group, $label);
 

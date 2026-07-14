@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Services;
 
 use App\Helpers\CacheHelper;
-use App\Helpers\CacheServerHelper;
 use App\Helpers\EventHelper;
 use App\Helpers\PageHelper;
 use App\Models\Category;
@@ -26,9 +26,10 @@ use App\Services\Cache\NewsTypeCacheService;
 use App\Services\Cache\PageCacheService;
 use App\Services\Cache\SurveyCacheService;
 use App\Services\Cache\TagCacheService;
-use App\Services\SiteService;
 use Exception;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -37,14 +38,23 @@ class PageService
     protected int $cachedTTL = 300;
 
     protected SiteService $siteService;
+
     protected NewsCacheService $newsCacheService;
+
     protected NewsTypeCacheService $newsTypeCacheService;
+
     protected CategoryCacheService $categoryCacheService;
+
     protected TagCacheService $tagCacheService;
+
     protected EventCacheService $eventCacheService;
+
     protected ContributorCacheService $contributorCacheService;
+
     protected PageCacheService $pageCacheService;
+
     protected LocationCacheService $locationCacheService;
+
     protected SurveyCacheService $surveyCacheService;
 
     public function __construct(
@@ -59,16 +69,16 @@ class PageService
         LocationCacheService $locationCacheService,
         SurveyCacheService $surveyCacheService
     ) {
-        $this->siteService             = $siteService;
-        $this->newsCacheService        = $newsCacheService;
-        $this->categoryCacheService    = $categoryCacheService;
-        $this->tagCacheService         = $tagCacheService;
-        $this->eventCacheService       = $eventCacheService;
+        $this->siteService = $siteService;
+        $this->newsCacheService = $newsCacheService;
+        $this->categoryCacheService = $categoryCacheService;
+        $this->tagCacheService = $tagCacheService;
+        $this->eventCacheService = $eventCacheService;
         $this->contributorCacheService = $contributorCacheService;
-        $this->pageCacheService        = $pageCacheService;
-        $this->newsTypeCacheService    = $newsTypeCacheService;
-        $this->locationCacheService    = $locationCacheService;
-        $this->surveyCacheService      = $surveyCacheService;
+        $this->pageCacheService = $pageCacheService;
+        $this->newsTypeCacheService = $newsTypeCacheService;
+        $this->locationCacheService = $locationCacheService;
+        $this->surveyCacheService = $surveyCacheService;
     }
 
     public function language(): Language
@@ -226,7 +236,7 @@ class PageService
         );
     }
 
-    public function categoryNewsPlacement(Category $category)
+    public function categoryNewsPlacement(Category $category): Collection
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE,
@@ -239,7 +249,7 @@ class PageService
         );
     }
 
-    public function recentNews()
+    public function recentNews(): CursorPaginator
     {
         return $this->newsCacheService->getLatestRecord(
             CacheHelper::KEY_PAGE,
@@ -250,7 +260,7 @@ class PageService
         );
     }
 
-    public function popularNews()
+    public function popularNews(): Collection
     {
         return $this->newsCacheService->getPopulerRecord(
             CacheHelper::KEY_PAGE,
@@ -260,7 +270,7 @@ class PageService
         );
     }
 
-    public function newsTypeNews(Request $request, NewsType $newsType)
+    public function newsTypeNews(Request $request, NewsType $newsType): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -273,7 +283,7 @@ class PageService
         );
     }
 
-    public function categoryNews(Request $request, Category $category)
+    public function categoryNews(Request $request, Category $category): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -286,7 +296,7 @@ class PageService
         );
     }
 
-    public function eventNews(Request $request, Event $event)
+    public function eventNews(Request $request, Event $event): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -299,7 +309,7 @@ class PageService
         );
     }
 
-    public function locationNews(Request $request, Location $location)
+    public function locationNews(Request $request, Location $location): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -312,7 +322,7 @@ class PageService
         );
     }
 
-    public function tagNews(Request $request, Tag $tag)
+    public function tagNews(Request $request, Tag $tag): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -325,7 +335,7 @@ class PageService
         );
     }
 
-    public function contributorNews(Request $request, Contributor $contributor)
+    public function contributorNews(Request $request, Contributor $contributor): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -338,7 +348,7 @@ class PageService
         );
     }
 
-    public function newsSearch(Request $request)
+    public function newsSearch(Request $request): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -361,7 +371,7 @@ class PageService
         );
     }
 
-    public function homeTopEvents()
+    public function homeTopEvents(): Collection
     {
         return $this->eventCacheService->getRecordsByPosition(
             CacheHelper::KEY_PAGE_HOME,
@@ -371,7 +381,7 @@ class PageService
         );
     }
 
-    public function homeBottomEvents()
+    public function homeBottomEvents(): Collection
     {
         return $this->eventCacheService->getRecordsByPosition(
             CacheHelper::KEY_PAGE_HOME,
@@ -381,7 +391,7 @@ class PageService
         );
     }
 
-    public function homeLeadNews()
+    public function homeLeadNews(): Collection
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE_HOME,
@@ -394,7 +404,7 @@ class PageService
         );
     }
 
-    public function homeEventNews(Event $event)
+    public function homeEventNews(Event $event): Collection
     {
         return $this->newsCacheService->getRecordsLimit(
             CacheHelper::KEY_PAGE_HOME,
@@ -406,7 +416,7 @@ class PageService
         );
     }
 
-    public function homeCategoryNews(Request $request, Category $category)
+    public function homeCategoryNews(Request $request, Category $category): Collection
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE_HOME,
@@ -419,7 +429,7 @@ class PageService
         );
     }
 
-    public function homeNewsTypeNews(NewsType $newsType)
+    public function homeNewsTypeNews(NewsType $newsType): Collection
     {
         return $this->newsCacheService->getRecordsLimit(
             CacheHelper::KEY_PAGE_HOME,
@@ -431,7 +441,7 @@ class PageService
         );
     }
 
-    public function homeTrends()
+    public function homeTrends(): Collection
     {
         return $this->tagCacheService->getRecordsLimitForTrend(
             CacheHelper::KEY_PAGE_HOME,
@@ -441,7 +451,7 @@ class PageService
         );
     }
 
-    public function homeSurveys()
+    public function homeSurveys(): Collection
     {
         return $this->surveyCacheService->getRecordsByDate(
             CacheHelper::KEY_PAGE_HOME,
@@ -474,17 +484,17 @@ class PageService
 
     public function homeSurveySurveyQuestionSubmit(Request $request, Survey $survey, SurveyQuestion $surveyQuestion): array
     {
-        $yes       = $request->boolean('yes');
-        $no        = $request->boolean('no');
+        $yes = $request->boolean('yes');
+        $no = $request->boolean('no');
         $noComment = $request->boolean('no_comment');
 
         if (! $yes && ! $no && ! $noComment) {
             return [
-                'status'  => 'warning',
+                'status' => 'warning',
                 'message' => __(
                     'status-messages.site.survey.survey-question.no_answer_selected_warning'
                 ),
-                'data'    => null,
+                'data' => null,
             ];
         }
 
@@ -511,8 +521,8 @@ class PageService
                         'survey_question_id' => $surveyQuestion->id,
                     ],
                     [
-                        'yes'        => 0,
-                        'no'         => 0,
+                        'yes' => 0,
+                        'no' => 0,
                         'no_comment' => 0,
                     ]);
 
@@ -540,18 +550,18 @@ class PageService
                 session()->put(
                     $sessionKey,
                     [
-                        'survey_id'          => $survey->id,
+                        'survey_id' => $survey->id,
                         'survey_question_id' => $surveyQuestion->id,
-                        'answer'             => $answer,
-                        'expired_at'         => now()->addHours(6)->timestamp,
+                        'answer' => $answer,
+                        'expired_at' => now()->addHours(6)->timestamp,
                     ]
                 );
             });
 
             return [
-                'status'  => 'success',
+                'status' => 'success',
                 'message' => __('status-messages.site.survey.survey-question.success'),
-                'data'    => session()->get($sessionKey),
+                'data' => session()->get($sessionKey),
             ];
 
         } catch (Exception $exception) {
@@ -559,9 +569,9 @@ class PageService
             Log::error('Failed to submit survey question.', ['exception' => $exception]);
 
             return [
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => __('status-messages.site.survey.survey-question.fail'),
-                'data'    => null,
+                'data' => null,
             ];
         }
 
@@ -578,7 +588,7 @@ class PageService
         }
     }
 
-    public function recentNewsSidebar()
+    public function recentNewsSidebar(): Collection
     {
         return $this->newsCacheService->getLatestRecord(
             CacheHelper::KEY_PAGE,
@@ -589,7 +599,7 @@ class PageService
         );
     }
 
-    public function popularNewsSidebar()
+    public function popularNewsSidebar(): Collection
     {
         return $this->newsCacheService->getPopulerRecord(
             CacheHelper::KEY_PAGE,

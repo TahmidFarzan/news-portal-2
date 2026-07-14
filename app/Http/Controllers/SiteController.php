@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Services\SiteService;
@@ -79,7 +80,7 @@ class SiteController extends Controller
         );
     }
 
-    public function languageChange(int | string $slugOrId)
+    public function languageChange(int|string $slugOrId): JsonResponse
     {
         $result = $this->siteService->languageChange($slugOrId);
 
@@ -89,6 +90,7 @@ class SiteController extends Controller
     public function getGoogleAdsence(Request $request): JsonResponse
     {
         $GoogleAdsences = $this->siteService->getGoogleAdsence($request);
+
         return response()->json($GoogleAdsences);
     }
 }

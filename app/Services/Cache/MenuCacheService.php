@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Cache;
 
 use App\Helpers\CacheHelper;
@@ -6,13 +7,16 @@ use App\Helpers\CacheServerHelper;
 use App\Models\Language;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class MenuCacheService
 {
     private int $cachedTTL = 300;
-    private int $perPage   = 10;
 
-    private string $mainTag   = CacheHelper::TAG_MENU;
+    private int $perPage = 10;
+
+    private string $mainTag = CacheHelper::TAG_MENU;
+
     private string $secondKey = CacheHelper::KEY_MENU;
 
     public function isConnected(): bool
@@ -25,7 +29,7 @@ class MenuCacheService
         CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_PAGE]);
     }
 
-    private function getPerPage(int | null $perPage = null): int
+    private function getPerPage(?int $perPage = null): int
     {
         return $perPage ?? $this->perPage;
     }
@@ -39,7 +43,7 @@ class MenuCacheService
         ]);
 
         if ($language && $language?->id) {
-            $record = $record->where("language_id", $language->id);
+            $record = $record->where('language_id', $language->id);
         }
         $record = $record->where('slug', $slug)->firstOrFail();
 
@@ -55,14 +59,14 @@ class MenuCacheService
         ]);
 
         if ($language && $language?->id) {
-            $record = $record->where("language_id", $language->id);
+            $record = $record->where('language_id', $language->id);
         }
         $record = $record->whereRelation('menuType', 'name', $menuTypeCode)->firstOrFail();
 
         return $record;
     }
 
-    private function dbMenuItems(Menu $menu, MenuItem | null $parentMenuItem = null, ?Language $language = null, int | null $perPage = null)
+    private function dbMenuItems(Menu $menu, ?MenuItem $parentMenuItem = null, ?Language $language = null, ?int $perPage = null): LengthAwarePaginator
     {
         $records = MenuItem::with([
             'model',
@@ -73,9 +77,9 @@ class MenuCacheService
         ]);
 
         if ($parentMenuItem && $parentMenuItem?->id) {
-            $records = $records->where("parent_id", $parentMenuItem?->id);
+            $records = $records->where('parent_id', $parentMenuItem?->id);
         } else {
-            $records = $records->whereNull("parent_id");
+            $records = $records->whereNull('parent_id');
         }
 
         if ($menu && $menu?->id) {
@@ -83,7 +87,7 @@ class MenuCacheService
         }
 
         if ($language && $language?->id) {
-            $records = $records->where("language_id", $language->id);
+            $records = $records->where('language_id', $language->id);
         }
 
         $records = $records->orderBy('position', 'asc')
@@ -103,14 +107,14 @@ class MenuCacheService
             'menu.language',
         ]);
         if ($language && $language?->id) {
-            $record = $record->where("language_id", $language->id);
+            $record = $record->where('language_id', $language->id);
         }
         $record = $record->where('slug', $slug)->firstOrFail();
 
         return $record;
     }
 
-    public function getMenuBySlug(string $key, string $slug, ?Language $language = null, int | null $cachedTTL = null): Menu
+    public function getMenuBySlug(string $key, string $slug, ?Language $language = null, ?int $cachedTTL = null): Menu
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
 
@@ -139,7 +143,7 @@ class MenuCacheService
         return $record;
     }
 
-    public function getMenuByMenuTypeCode(string $key, string $menuTypeCode, ?Language $language = null, int | null $cachedTTL = null): Menu
+    public function getMenuByMenuTypeCode(string $key, string $menuTypeCode, ?Language $language = null, ?int $cachedTTL = null): Menu
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $menuTypeCode, $language);
 
@@ -168,7 +172,7 @@ class MenuCacheService
         return $record;
     }
 
-    public function getMenuItemBySlug(string $key, string $slug, ?Language $language = null, int | null $cachedTTL = null): MenuItem
+    public function getMenuItemBySlug(string $key, string $slug, ?Language $language = null, ?int $cachedTTL = null): MenuItem
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleMenuItemBySlug($key, $this->secondKey, $slug, $language);
 
@@ -197,7 +201,7 @@ class MenuCacheService
         return $record;
     }
 
-    public function getMenuItems(string $key, Menu $menu, MenuItem | null $parentMenuItem = null, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null)
+    public function getMenuItems(string $key, Menu $menu, ?MenuItem $parentMenuItem = null, ?Language $language = null, ?int $perPage = null, ?int $cachedTTL = null): LengthAwarePaginator
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleMenuItems($key, $this->secondKey, $menu, $parentMenuItem, $language);
 

@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Services\PageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class PageController extends Controller
 {
@@ -14,64 +17,68 @@ class PageController extends Controller
         $this->pageService = $pageService;
     }
 
-    public function home()
+    public function home(): InertiaResponse
     {
-        $page         = $this->pageService->homePage();
-        $leadNews     = $this->pageService->homeLeadNews();
-        $recentNews   = $this->pageService->recentNewsSidebar();
-        $popularNews  = $this->pageService->popularNewsSidebar();
-        $topEvents    = $this->pageService->homeTopEvents();
+        $page = $this->pageService->homePage();
+        $leadNews = $this->pageService->homeLeadNews();
+        $recentNews = $this->pageService->recentNewsSidebar();
+        $popularNews = $this->pageService->popularNewsSidebar();
+        $topEvents = $this->pageService->homeTopEvents();
         $bottomEvents = $this->pageService->homeBottomEvents();
-        $trends       = $this->pageService->homeTrends();
-        $surveys      = $this->pageService->homeSurveys();
+        $trends = $this->pageService->homeTrends();
+        $surveys = $this->pageService->homeSurveys();
 
         return Inertia::render('Home', [
-            'page'         => $page,
-            'leadNews'     => $leadNews,
-            "recentNews"   => $recentNews,
-            "popularNews"  => $popularNews,
-            "topEvents"    => $topEvents,
-            "bottomEvents" => $bottomEvents,
-            "trends"       => $trends,
-            "surveys"      => $surveys,
+            'page' => $page,
+            'leadNews' => $leadNews,
+            'recentNews' => $recentNews,
+            'popularNews' => $popularNews,
+            'topEvents' => $topEvents,
+            'bottomEvents' => $bottomEvents,
+            'trends' => $trends,
+            'surveys' => $surveys,
         ]);
     }
 
-    public function homeEventNews(string $slug)
+    public function homeEventNews(string $slug): JsonResponse
     {
         $event = $this->pageService->event($slug);
-        $news  = $this->pageService->homeEventNews($event);
+        $news = $this->pageService->homeEventNews($event);
 
         return response()->json($news);
     }
 
-    public function homeNewsTypeNews(string $slug)
+    public function homeNewsTypeNews(string $slug): JsonResponse
     {
         $newsType = $this->pageService->newsType($slug);
-        $news     = $this->pageService->homeNewsTypeNews($newsType);
+        $news = $this->pageService->homeNewsTypeNews($newsType);
+
         return response()->json($news);
     }
 
-    public function homeCategoryNews(Request $request, int | string $slug)
+    public function homeCategoryNews(Request $request, int|string $slug): JsonResponse
     {
         $category = $this->pageService->homeCategoryBySlug($slug);
-        $news     = $this->pageService->homeCategoryNews($request, $category);
+        $news = $this->pageService->homeCategoryNews($request, $category);
+
         return response()->json($news);
     }
 
-    public function homeCategory(int | string $slug)
+    public function homeCategory(int|string $slug): JsonResponse
     {
         $category = $this->pageService->homeCategoryBySlug($slug);
+
         return response()->json($category);
     }
 
-    public function homeSurveys()
+    public function homeSurveys(): JsonResponse
     {
         $category = $this->pageService->homeSurveys();
+
         return response()->json($category);
     }
 
-    public function latest(Request $request)
+    public function latest(Request $request): InertiaResponse|JsonResponse
     {
         $news = $this->pageService->recentNews();
         $page = $this->pageService->latestPage();
@@ -88,11 +95,11 @@ class PageController extends Controller
         ]);
     }
 
-    public function search(Request $request)
+    public function search(Request $request): InertiaResponse|JsonResponse
     {
-        $news     = $this->pageService->newsSearch($request);
+        $news = $this->pageService->newsSearch($request);
         $language = $this->pageService->language();
-        $page     = $this->pageService->searchPage();
+        $page = $this->pageService->searchPage();
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -101,16 +108,16 @@ class PageController extends Controller
         }
 
         return Inertia::render('Search', [
-            "language" => $language,
-            'news'     => $news,
-            "page"     => $page,
+            'language' => $language,
+            'news' => $news,
+            'page' => $page,
         ]);
     }
 
-    public function videos(Request $request)
+    public function videos(Request $request): InertiaResponse|JsonResponse
     {
-        $newsType = $this->pageService->newsType("video");
-        $news     = $this->pageService->newsTypeNews($request, $newsType);
+        $newsType = $this->pageService->newsType('video');
+        $news = $this->pageService->newsTypeNews($request, $newsType);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -120,14 +127,14 @@ class PageController extends Controller
 
         return Inertia::render('VideoNews', [
             'newsTypes' => $newsType,
-            'news'      => $news,
+            'news' => $news,
         ]);
     }
 
-    public function imageGalleries(Request $request)
+    public function imageGalleries(Request $request): InertiaResponse|JsonResponse
     {
-        $newsType = $this->pageService->newsType("image-gallery");
-        $news     = $this->pageService->newsTypeNews($request, $newsType);
+        $newsType = $this->pageService->newsType('image-gallery');
+        $news = $this->pageService->newsTypeNews($request, $newsType);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -137,32 +144,33 @@ class PageController extends Controller
 
         return Inertia::render('ImagesGalleryNews', [
             'newsTypes' => $newsType,
-            'news'      => $news,
+            'news' => $news,
         ]);
     }
 
-    public function page(string $slugTree)
+    public function page(string $slugTree): InertiaResponse
     {
         $page = $this->pageService->page($slugTree);
 
         return Inertia::render('Page', [
-            "page" => $page,
+            'page' => $page,
         ]);
     }
 
-    public function newsDetails(string $slug)
+    public function newsDetails(string $slug): InertiaResponse
     {
         $news = $this->pageService->news($slug);
 
         $this->pageService->newsHitCounterCalculate($news);
+
         return Inertia::render('NewsDetails', [
             'news' => $news,
         ]);
     }
 
-    public function tagNews(Request $request, string $slug)
+    public function tagNews(Request $request, string $slug): InertiaResponse|JsonResponse
     {
-        $tag  = $this->pageService->tag($slug);
+        $tag = $this->pageService->tag($slug);
         $news = $this->pageService->tagNews($request, $tag);
 
         if ($request->expectsJson()) {
@@ -172,15 +180,15 @@ class PageController extends Controller
         }
 
         return Inertia::render('TagNews', [
-            'tag'  => $tag,
+            'tag' => $tag,
             'news' => $news,
         ]);
     }
 
-    public function contributorNews(Request $request, string $slug)
+    public function contributorNews(Request $request, string $slug): InertiaResponse|JsonResponse
     {
         $contributor = $this->pageService->contributor($slug);
-        $news        = $this->pageService->contributorNews($request, $contributor);
+        $news = $this->pageService->contributorNews($request, $contributor);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -190,14 +198,14 @@ class PageController extends Controller
 
         return Inertia::render('ContributorNews', [
             'contributor' => $contributor,
-            'news'        => $news,
+            'news' => $news,
         ]);
     }
 
-    public function eventNews(Request $request, string $slug)
+    public function eventNews(Request $request, string $slug): InertiaResponse|JsonResponse
     {
         $event = $this->pageService->event($slug);
-        $news  = $this->pageService->eventNews($request, $event);
+        $news = $this->pageService->eventNews($request, $event);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -207,19 +215,19 @@ class PageController extends Controller
 
         return Inertia::render('EventNews', [
             'event' => $event,
-            'news'  => $news,
+            'news' => $news,
         ]);
     }
 
-    public function categoryNews(Request $request, string $slugTree)
+    public function categoryNews(Request $request, string $slugTree): InertiaResponse|JsonResponse
     {
         $category = $this->pageService->category($slugTree);
-        $news     = $this->pageService->categoryNews($request, $category);
+        $news = $this->pageService->categoryNews($request, $category);
 
         $pageSectionNews = $this->pageService->categoryNewsPlacement($category);
 
-        $recentNews      = $this->pageService->recentNewsSidebar();
-        $popularNews     = $this->pageService->popularNewsSidebar();
+        $recentNews = $this->pageService->recentNewsSidebar();
+        $popularNews = $this->pageService->popularNewsSidebar();
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -228,19 +236,19 @@ class PageController extends Controller
         }
 
         return Inertia::render('CategoryNews', [
-            'category'        => $category,
-            'news'            => $news,
-            "recentNews"      => $recentNews,
-            "popularNews"     => $popularNews,
-            "pageSectionNews" => $pageSectionNews,
+            'category' => $category,
+            'news' => $news,
+            'recentNews' => $recentNews,
+            'popularNews' => $popularNews,
+            'pageSectionNews' => $pageSectionNews,
         ]);
     }
 
-    public function locationNews(Request $request, string $slugTree)
+    public function locationNews(Request $request, string $slugTree): InertiaResponse|JsonResponse
     {
 
         $location = $this->pageService->location($slugTree);
-        $news     = $this->pageService->locationNews($request, $location);
+        $news = $this->pageService->locationNews($request, $location);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -250,22 +258,23 @@ class PageController extends Controller
 
         return Inertia::render('LocationNews', [
             'location' => $location,
-            'news'     => $news,
+            'news' => $news,
         ]);
     }
 
-    public function categoryLocationMaxDepthAndLevel(string $slugTree)
+    public function categoryLocationMaxDepthAndLevel(string $slugTree): JsonResponse
     {
-        $category                         = $this->pageService->category($slugTree);
+        $category = $this->pageService->category($slugTree);
         $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
+
         return response()->json($categoryLocationMaxDepthAndLevel);
     }
 
-    public function homeSurveySurveyQuestionSubmit(Request $request, string $slug, string $surveyQuestionSlug)
+    public function homeSurveySurveyQuestionSubmit(Request $request, string $slug, string $surveyQuestionSlug): JsonResponse
     {
-        $survey         = $this->pageService->homeSurvey($slug);
+        $survey = $this->pageService->homeSurvey($slug);
         $surveyQuestion = $this->pageService->homeSurveyQuestion($survey, $surveyQuestionSlug);
-        $result         = $this->pageService->homeSurveySurveyQuestionSubmit($request, $survey, $surveyQuestion);
+        $result = $this->pageService->homeSurveySurveyQuestionSubmit($request, $survey, $surveyQuestion);
 
         return response()->json($result);
     }

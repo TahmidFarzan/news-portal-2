@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Cache;
 
 use App\Helpers\CacheHelper;
@@ -6,12 +7,14 @@ use App\Helpers\CacheServerHelper;
 use App\Models\Language;
 use App\Models\Survey;
 use App\Models\SurveyQuestion;
+use Illuminate\Support\Collection;
 
 class SurveyCacheService
 {
     private int $cachedTTL = 300;
 
-    private string $mainTag   = CacheHelper::TAG_SURVEY;
+    private string $mainTag = CacheHelper::TAG_SURVEY;
+
     private string $secondKey = CacheHelper::KEY_SURVEY;
 
     public function isConnected(): bool
@@ -27,13 +30,13 @@ class SurveyCacheService
     private function dbSurveyBySlug(string $slug, ?Language $language = null): Survey
     {
         $record = Survey::query()->with([
-            "surveyQuestions",
-            "surveyQuestions.surveyQuestionResult",
+            'surveyQuestions',
+            'surveyQuestions.surveyQuestionResult',
         ])
-            ->where("is_active", true);
+            ->where('is_active', true);
 
         if ($language && $language?->id) {
-            $record = $record->where("language_id", $language?->id);
+            $record = $record->where('language_id', $language?->id);
         }
 
         $record = $record->where('slug', $slug)->firstOrFail();
@@ -41,17 +44,17 @@ class SurveyCacheService
         return $record;
     }
 
-    private function dbSurveyByDate($nowDate, ?Language $language = null)
+    private function dbSurveyByDate(string $nowDate, ?Language $language = null): Collection
     {
         $records = Survey::query()->with([
-            "surveyQuestions",
-            "surveyQuestions.surveyQuestionResult",
+            'surveyQuestions',
+            'surveyQuestions.surveyQuestionResult',
         ])
             ->whereDate('date', $nowDate)
-            ->where("is_active", true);
+            ->where('is_active', true);
 
         if ($language && $language?->id) {
-            $records = $records->where("language_id", $language?->id);
+            $records = $records->where('language_id', $language?->id);
         }
 
         $records = $records->get();
@@ -59,15 +62,15 @@ class SurveyCacheService
         return $records;
     }
 
-    private function dbSurveyQuestionByQuestion(Survey $survey, string $slug)
+    private function dbSurveyQuestionByQuestion(Survey $survey, string $slug): SurveyQuestion
     {
         return SurveyQuestion::query()
-            ->where("survey_id", $survey->id)
-            ->where("slug", $slug)
+            ->where('survey_id', $survey->id)
+            ->where('slug', $slug)
             ->firstOrFail();
     }
 
-    public function getSurveyBySlug(string $key, string $slug, ?Language $language = null, int | null $cachedTTL = null): Survey
+    public function getSurveyBySlug(string $key, string $slug, ?Language $language = null, ?int $cachedTTL = null): Survey
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
 
@@ -96,7 +99,7 @@ class SurveyCacheService
         return $record;
     }
 
-    public function getRecordsByDate(string $key, $nowDate, ?Language $language = null, int | null $cachedTTL = null)
+    public function getRecordsByDate(string $key, string $nowDate, ?Language $language = null, ?int $cachedTTL = null): Collection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSurveysByDate($key, $this->secondKey, $nowDate, $language);
 
@@ -125,7 +128,7 @@ class SurveyCacheService
         return $records;
     }
 
-    public function getSurveyQuestionByQuestion(string $key, Survey $survey, string $slug, ?Language $language = null, int | null $cachedTTL = null)
+    public function getSurveyQuestionByQuestion(string $key, Survey $survey, string $slug, ?Language $language = null, ?int $cachedTTL = null): SurveyQuestion
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSurveyQuestionBySlugForSurvey($key, $this->secondKey, $survey, $slug, $language);
 
