@@ -294,11 +294,11 @@ onBeforeUnmount(() => {
                     </span>
                 </div>
 
-                <span class="inline-flex min-w-0 items-center" :class="isCompact ? 'gap-1' : 'gap-1 sm:gap-1.5'">
+                <span v-if="news?.published_at" class="inline-flex min-w-0 items-center" :class="isCompact ? 'gap-1' : 'gap-1 sm:gap-1.5'">
                     <FontAwesomeIcon icon="clock" class="shrink-0 text-gray-400"
                         :class="isCompact ? 'text-[10px]' : 'text-[10px] sm:text-xs'" />
                     <span class="truncate">
-                        {{ news?.published_at || formatDateTime(news?.created_at) }}
+                        {{ news?.published_at }}
                     </span>
                 </span>
             </div>

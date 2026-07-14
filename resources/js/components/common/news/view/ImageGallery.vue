@@ -48,12 +48,12 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
             </p>
 
             <div class="flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-gray-500 mb-3">
-                <span class="inline-flex items-center gap-1.5">
+                <span v-if="news?.published_at" class="inline-flex items-center gap-1.5">
                     <FontAwesomeIcon icon="clock" class="text-xs text-gray-400" />
-                    {{ news?.published_at || formatDateTime(news?.created_at) }}
+                    {{ news?.published_at }}
                 </span>
 
-                <span v-if="news?.published_at || news?.created_at" class="hidden h-4 w-px bg-gray-300 sm:inline-block" />
+                <span v-if="news?.published_at" class="hidden h-4 w-px bg-gray-300 sm:inline-block" />
 
                 <SocialShare :news="news"/>
             </div>

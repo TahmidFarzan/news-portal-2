@@ -307,13 +307,13 @@ onBeforeUnmount(() => {
                 {{ news?.brief }}
             </p>
 
-            <div class="flex flex-wrap items-center text-gray-500"
+            <div v-if="news?.published_at" class="flex flex-wrap items-center text-gray-500"
                 :class="isCompact ? 'gap-x-2 gap-y-1 text-xs' : 'mb-3 gap-x-4 gap-y-3 text-sm'">
                 <span class="inline-flex items-center" :class="isCompact ? 'gap-1' : 'gap-1.5'">
                     <FontAwesomeIcon icon="clock" class="text-gray-400"
                         :class="isCompact ? 'text-[10px]' : 'text-xs'" />
 
-                    {{ news?.published_at || formatDateTime(news?.created_at) }}
+                    {{ news?.published_at }}
                 </span>
             </div>
         </div>
