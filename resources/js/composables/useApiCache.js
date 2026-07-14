@@ -13,10 +13,10 @@ const normalizeAppName = (value) => {
         .replace(/^-|-$/g, '') || 'app'
 }
 
-export const smartCacheVersion = 'v2'
-export const smartCachePrefix = `${normalizeAppName(import.meta.env.VITE_APP_NAME)}-front-end-${smartCacheVersion}`
+export const apiCacheVersion = 'v2'
+export const apiCachePrefix = `${normalizeAppName(import.meta.env.VITE_APP_NAME)}-front-end-${apiCacheVersion}`
 
-export const smartCacheTTL = Object.freeze({
+export const apiCacheTTL = Object.freeze({
     DEFAULT: 60,
     SYSTEM_SHORT: 60,
     SYSTEM_MEDIUM: 180,
@@ -57,7 +57,7 @@ export const smartCacheTTL = Object.freeze({
     MODEL_PAGINATION: 30,
 })
 
-export const smartCacheKey = Object.freeze({
+export const apiCacheKey = Object.freeze({
     DEFAULT: "api:get",
 
     API_MULTI_SELECT: "api:multiselect",
@@ -103,7 +103,7 @@ const canUseLocalStorage = () => {
     if (!hasWindow()) return false
 
     try {
-        const testKey = `${smartCachePrefix}:storage_test`
+        const testKey = `${apiCachePrefix}:storage_test`
         window.localStorage.setItem(testKey, '1')
         window.localStorage.removeItem(testKey)
         return true
@@ -141,7 +141,7 @@ const getDefaultTtl = () => {
             : Math.max(1, Math.floor(envTimeout))
     }
 
-    return smartCacheTTL.DEFAULT
+    return apiCacheTTL.DEFAULT
 }
 
 const resolveTtl = (ttl) => {
@@ -149,8 +149,8 @@ const resolveTtl = (ttl) => {
     return Number.isFinite(seconds) && seconds > 0 ? seconds : getDefaultTtl()
 }
 
-const normalizeNamespace = (namespace = smartCachePrefix) => {
-    return String(namespace || smartCachePrefix).replace(/:+$/g, '')
+const normalizeNamespace = (namespace = apiCachePrefix) => {
+    return String(namespace || apiCachePrefix).replace(/:+$/g, '')
 }
 
 const resolveReactiveValue = (value) => {
@@ -183,21 +183,21 @@ const normalizeKey = (key) => {
     return serialized || String(key)
 }
 
-const makeKey = (key, namespace = smartCachePrefix) => {
+const makeKey = (key, namespace = apiCachePrefix) => {
     const cacheNamespace = normalizeNamespace(namespace)
     const rawKey = normalizeKey(key).replace(/^:+/g, '')
 
     return `${cacheNamespace}:${rawKey}`
 }
 
-const buildApiKey = (identity = smartCacheKey.DEFAULT, request = {}) => {
+const buildApiKey = (identity = apiCacheKey.DEFAULT, request = {}) => {
     const requestSnapshot = resolveReactiveValue(request)
     const serializedRequest = safeStringify(requestSnapshot) || ''
 
     return `${normalizeKey(identity)}:${serializedRequest}`
 }
 
-const makeApiKey = (identity = smartCacheKey.DEFAULT, request = {}, namespace = smartCachePrefix, options = {}) => {
+const makeApiKey = (identity = apiCacheKey.DEFAULT, request = {}, namespace = apiCachePrefix, options = {}) => {
     void options
 
     return makeKey(buildApiKey(identity, request), namespace)
@@ -207,7 +207,7 @@ const isValidEntry = (entry) => {
     return Boolean(
         entry &&
         Object.prototype.hasOwnProperty.call(entry, 'value') &&
-        entry.version === smartCacheVersion &&
+        entry.version === apiCacheVersion &&
         Number.isFinite(entry.expiresAt) &&
         Number.isFinite(entry.createdAt)
     )
@@ -256,20 +256,20 @@ const buildEntry = (value, ttlSeconds) => {
         value,
         expiresAt: now + (ttlSeconds * 1000),
         createdAt: now,
-        version: smartCacheVersion,
+        version: apiCacheVersion,
     }
 }
 
 const normalizeOptions = (options = {}) => {
     return {
-        namespace: options.namespace || smartCachePrefix,
+        namespace: options.namespace || apiCachePrefix,
         ttl: resolveTtl(options.ttl),
         force: Boolean(options.force),
         persist: options.persist !== false,
     }
 }
 
-export function useApiSmartCache(defaultOptions = {}) {
+export function useApiCache(defaultOptions = {}) {
     const getStorageKey = (key, options = {}) => {
         const mergedOptions = {
             ...defaultOptions,
@@ -372,7 +372,7 @@ export function useApiSmartCache(defaultOptions = {}) {
     }
 
     const rememberApi = async (request, fetcher, options = {}) => {
-        const cacheKey = buildApiKey(options.key || smartCacheKey.DEFAULT, request)
+        const cacheKey = buildApiKey(options.key || apiCacheKey.DEFAULT, request)
 
         return remember(cacheKey, fetcher, options)
     }

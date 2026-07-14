@@ -14,8 +14,8 @@ import GridCard from '@/components/common/news/GridCard.vue'
 import ListCard from '@/components/common/news/ListCard.vue'
 
 import { newsTypes } from '@/composables/useNews'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTranslate, generateTranslationKey } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faLeftLong, faRightLong, faImages)
@@ -49,8 +49,8 @@ const loadNews = async () => {
         apiUrl,
         {},
         {
-            key: `${smartCacheKey.API_HOME_PAGE}:${apiUrl}`,
-            ttl: smartCacheTTL.HOME_PAGE,
+            key: `${apiCacheKey.API_HOME_PAGE}:${apiUrl}`,
+            ttl: apiCacheTTL.HOME_PAGE,
         }
     )
 

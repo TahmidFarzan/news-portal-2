@@ -8,7 +8,7 @@ import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInf
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { fetchFromApi } from '@/composables/useSystemApi'
+import { fetchFromApi } from '@/composables/useApiClient'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

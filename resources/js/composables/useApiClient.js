@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { smartCacheKey, smartCacheTTL, useApiSmartCache } from '@/composables/useApiSmartCache'
+import { apiCacheKey, apiCacheTTL, useApiCache } from '@/composables/useApiCache'
 
-const { remember, rememberApi, remove } = useApiSmartCache()
+const { remember, rememberApi, remove } = useApiCache()
 
 const fetchJson = async (url, params = {}) => {
     const res = await axios.get(url, { params })
@@ -18,8 +18,8 @@ export async function fetchFromApi(url, params = {}, options = {}) {
             { url, params },
             () => fetchJson(url, params),
             {
-                key: options.key || smartCacheKey.DEFAULT,
-                ttl: options.ttl ?? smartCacheTTL.SYSTEM_SHORT,
+                key: options.key || apiCacheKey.DEFAULT,
+                ttl: options.ttl ?? apiCacheTTL.SYSTEM_SHORT,
                 force: options.force ?? false,
             }
         )
@@ -32,7 +32,7 @@ export async function fetchFromApi(url, params = {}, options = {}) {
 export async function fetchUser(userSlugOrId) {
     if (!userSlugOrId) return null
 
-    const cacheKey = `${smartCacheKey.API_USER}:${userSlugOrId}`
+    const cacheKey = `${apiCacheKey.API_USER}:${userSlugOrId}`
 
     try {
         return await remember(
@@ -42,7 +42,7 @@ export async function fetchUser(userSlugOrId) {
                 return response.data || null
             },
             {
-                ttl: smartCacheTTL.SYSTEM_SHORT,
+                ttl: apiCacheTTL.SYSTEM_SHORT,
             }
         )
     }

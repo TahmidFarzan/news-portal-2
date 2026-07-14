@@ -1,8 +1,8 @@
 
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL, useApiSmartCache } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL, useApiCache } from '@/composables/useApiCache'
 
-const { clearByPrefix } = useApiSmartCache()
+const { clearByPrefix } = useApiCache()
 
 export const groups = {
     BreakingNews: 'Breaking news',
@@ -46,8 +46,8 @@ export const getPermissions = async (authUser) => {
             apiUrl,
             {},
             {
-                key: `${smartCacheKey.API_USER}:${authUser.id}`,
-                ttl: smartCacheTTL.API_USER,
+                key: `${apiCacheKey.API_USER}:${authUser.id}`,
+                ttl: apiCacheTTL.API_USER,
             }
         )
 
@@ -59,11 +59,11 @@ export const getPermissions = async (authUser) => {
 
 export const clearPermissionCache = (userId) => {
     if (userId) {
-        clearByPrefix(`${smartCacheKey.API_USER}:${userId}`)
+        clearByPrefix(`${apiCacheKey.API_USER}:${userId}`)
         return
     }
 
-    clearByPrefix(`${smartCacheKey.API_USER}:`)
+    clearByPrefix(`${apiCacheKey.API_USER}:`)
 }
 
 export const hasPermission = async (authUser, module, permissionAccess) => {

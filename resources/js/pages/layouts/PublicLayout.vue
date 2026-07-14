@@ -19,8 +19,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTheme } from '@/composables/useTheme'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 import { getSelectedLanguageCode, useTranslate } from '@/composables/useTranslate'
@@ -76,8 +76,8 @@ const loadSiteThemes = async () => {
         apiUrl,
         {},
         {
-            key: `${smartCacheKey.API_LAYOUT_THEME}:${apiUrl}`,
-            ttl: smartCacheTTL.SYSTEM_LONG,
+            key: `${apiCacheKey.API_LAYOUT_THEME}:${apiUrl}`,
+            ttl: apiCacheTTL.SYSTEM_LONG,
         }
     )
 

@@ -15,7 +15,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faSave, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { isStory as checkIsStory, isVideo as checkIsVideo, isImageGallery as checkIsImageGallery } from '@/composables/useNews'
-import { fetchFromApi } from '@/composables/useSystemApi'
+import { fetchFromApi } from '@/composables/useApiClient'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faSave, faSpinner)

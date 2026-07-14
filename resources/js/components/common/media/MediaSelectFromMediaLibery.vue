@@ -1,8 +1,8 @@
 <script setup>
 import MediaRenderer from './MediaRenderer.vue'
 import { ref, watch, computed } from 'vue'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
@@ -56,8 +56,8 @@ const loading = ref(false)
 let loadedPages = new Set()
 
 const hasSelection = computed(() => selectedMediaList.value.length > 0)
-const resolvedCacheKey = computed(() => props.cacheKey || smartCacheKey.DEFAULT)
-const resolvedCacheTtl = computed(() => props.cacheTtl ?? smartCacheTTL.DEFAULT)
+const resolvedCacheKey = computed(() => props.cacheKey || apiCacheKey.DEFAULT)
+const resolvedCacheTtl = computed(() => props.cacheTtl ?? apiCacheTTL.DEFAULT)
 
 const openModal = () => {
     showModal.value = true

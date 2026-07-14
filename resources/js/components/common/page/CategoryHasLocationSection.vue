@@ -4,7 +4,7 @@ import { router, useForm } from '@inertiajs/vue3'
 
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
+import { fetchFromApi } from '@/composables/useApiClient'
 import { useTranslate } from '@/composables/useTranslate'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

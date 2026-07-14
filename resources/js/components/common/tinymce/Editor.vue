@@ -7,7 +7,7 @@
 
         <SelectMediaFromMediaLibery ref="mediaLibrary" v-model:showModal="showMediaLibrary"
             :fetch-url="route('search.medias')" :media-type="'All'" :multiple="true"
-            :cache-key="smartCacheKey.API_TINYMCE" :cache-ttl="smartCacheTTL.API_TINYMCE"
+            :cache-key="apiCacheKey.API_TINYMCE" :cache-ttl="apiCacheTTL.API_TINYMCE"
             @media-selected="handleMediaSelected" :hide-default-open-button="true" />
     </div>
 </template>
@@ -18,7 +18,7 @@ import Editor from '@tinymce/tinymce-vue'
 import tinymce from 'tinymce/tinymce'
 import SelectMediaFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
 import axios from 'axios'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 import 'tinymce/tinymce'

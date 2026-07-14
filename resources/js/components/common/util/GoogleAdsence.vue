@@ -1,8 +1,8 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 const props = defineProps({
@@ -123,8 +123,8 @@ const fetchAds = async () => {
         apiUrl,
         params,
         {
-            key: `${smartCacheKey.API_SITE_GOOGLE_ADSENCE}:${apiUrl}:${cacheParamsKey}`,
-            ttl: smartCacheTTL.GOOGLE_ADSENCE,
+            key: `${apiCacheKey.API_SITE_GOOGLE_ADSENCE}:${apiUrl}:${cacheParamsKey}`,
+            ttl: apiCacheTTL.GOOGLE_ADSENCE,
         }
     )
 

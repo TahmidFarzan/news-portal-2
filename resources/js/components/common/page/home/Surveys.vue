@@ -9,8 +9,8 @@ import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
@@ -33,8 +33,8 @@ const load = async () => {
             apiUrl,
             {},
             {
-                key: `${smartCacheKey.API_HOME_PAGE}:${apiUrl}`,
-                ttl: smartCacheTTL.HOME_PAGE,
+                key: `${apiCacheKey.API_HOME_PAGE}:${apiUrl}`,
+                ttl: apiCacheTTL.HOME_PAGE,
             }
         )
 

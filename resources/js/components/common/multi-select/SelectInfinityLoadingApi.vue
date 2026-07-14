@@ -3,8 +3,8 @@ import { ref, computed, onMounted, nextTick, watch } from "vue"
 import Multiselect from "vue-multiselect"
 import "vue-multiselect/dist/vue-multiselect.css"
 
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTranslate } from '@/composables/useTranslate'
 const { t } = useTranslate()
 
@@ -72,9 +72,9 @@ const getMultiSelectCacheOptions = (params = {}) => {
 
     return {
         key: cacheParamsKey
-            ? `${smartCacheKey.API_MULTI_SELECT}:${apiUrl}:${cacheParamsKey}`
-            : `${smartCacheKey.API_MULTI_SELECT}:${apiUrl}`,
-        ttl: smartCacheTTL.API_MULTI_SELECT,
+            ? `${apiCacheKey.API_MULTI_SELECT}:${apiUrl}:${cacheParamsKey}`
+            : `${apiCacheKey.API_MULTI_SELECT}:${apiUrl}`,
+        ttl: apiCacheTTL.API_MULTI_SELECT,
     }
 }
 

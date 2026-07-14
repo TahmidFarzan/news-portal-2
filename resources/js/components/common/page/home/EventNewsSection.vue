@@ -6,8 +6,8 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faRightLong } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 
 import GridCard from '@/components/common/news/GridCard.vue'
 import ListCard from '@/components/common/news/ListCard.vue'
@@ -72,8 +72,8 @@ const loadEventNews = async (event) => {
             apiUrl,
             {},
             {
-                key: `${smartCacheKey.API_HOME_PAGE}:${apiUrl}`,
-                ttl: smartCacheTTL.HOME_PAGE,
+                key: `${apiCacheKey.API_HOME_PAGE}:${apiUrl}`,
+                ttl: apiCacheTTL.HOME_PAGE,
             }
         )
 

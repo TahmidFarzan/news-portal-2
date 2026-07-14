@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted, watch } from "vue"
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
@@ -58,8 +58,8 @@ const loadChildren = async (page = 1) => {
             apiUrl,
             {},
             {
-                key: `${smartCacheKey.API_LAYOUT_OFFCANVAS_MENU}:${apiUrl}`,
-                ttl: smartCacheTTL.LAYOUT_OFFCANVAS_MENU,
+                key: `${apiCacheKey.API_LAYOUT_OFFCANVAS_MENU}:${apiUrl}`,
+                ttl: apiCacheTTL.LAYOUT_OFFCANVAS_MENU,
             }
         )
 

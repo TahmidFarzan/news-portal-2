@@ -23,7 +23,7 @@ import { useTranslate } from '@/composables/useTranslate'
 
 import 'vue-tel-input/vue-tel-input.css'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
+import { fetchFromApi } from '@/composables/useApiClient'
 
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 

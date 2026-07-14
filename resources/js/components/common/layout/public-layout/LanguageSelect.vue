@@ -2,7 +2,7 @@
 import { router } from '@inertiajs/vue3'
 import { ref, reactive, watch, nextTick, onMounted } from 'vue'
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import { fetchFromApi, postToApi } from '@/composables/useSystemApi'
+import { fetchFromApi, postToApi } from '@/composables/useApiClient'
 import { setSelectedLanguage, useTranslate } from '@/composables/useTranslate'
 
 const language = ref(null)

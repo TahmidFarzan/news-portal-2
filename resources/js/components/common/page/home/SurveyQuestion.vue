@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 
-import { fetchFromApi, postToApi } from '@/composables/useSystemApi'
+import { fetchFromApi, postToApi } from '@/composables/useApiClient'
 import { useTranslate } from '@/composables/useTranslate'
 
 const {

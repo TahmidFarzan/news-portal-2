@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 
 const {
     selectedItem,
@@ -108,8 +108,8 @@ async function loadData() {
                 apiUrl,
                 {},
                 {
-                    key: `${smartCacheKey.API_MULTI_SELECT}:${apiUrl}`,
-                    ttl: smartCacheTTL.API_MULTI_SELECT,
+                    key: `${apiCacheKey.API_MULTI_SELECT}:${apiUrl}`,
+                    ttl: apiCacheTTL.API_MULTI_SELECT,
                 }
             )
 

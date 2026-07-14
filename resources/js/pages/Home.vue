@@ -15,7 +15,7 @@ import Trends from '@/components/common/page/home/Trends.vue'
 import Surveys from '@/components/common/page/home/Surveys.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
+import { fetchFromApi } from '@/composables/useApiClient'
 import {
     languages,
 } from '@/composables/useTranslate'

@@ -2,8 +2,8 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 import OffCanvasMenuItem from '@/components/common/layout/public-layout/OffCanvasMenuItem.vue'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -55,8 +55,8 @@ const getOffCanvasMenuItems = async (pageNumber = 1) => {
             apiUrl,
             {},
             {
-                key: `${smartCacheKey.API_LAYOUT_OFFCANVAS_MENU}:${apiUrl}`,
-                ttl: smartCacheTTL.LAYOUT_OFFCANVAS_MENU,
+                key: `${apiCacheKey.API_LAYOUT_OFFCANVAS_MENU}:${apiUrl}`,
+                ttl: apiCacheTTL.LAYOUT_OFFCANVAS_MENU,
             }
         )
 

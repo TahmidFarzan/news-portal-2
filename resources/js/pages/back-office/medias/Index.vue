@@ -12,7 +12,7 @@ import { faTrash, faFilter, faInfo, faSpinner } from '@fortawesome/free-solid-sv
 
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
-import { fetchFromApi } from '@/composables/useSystemApi'
+import { fetchFromApi } from '@/composables/useApiClient'
 import { useTranslate } from '@/composables/useTranslate'
 
 library.add(faTrash, faFilter, faInfo, faSpinner)

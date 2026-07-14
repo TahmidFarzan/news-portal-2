@@ -2,8 +2,8 @@
 import { computed, ref, watch, onMounted } from 'vue'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 
 import GridCard from '@/components/common/news/GridCard.vue'
 import ListCard from '@/components/common/news/ListCard.vue'
@@ -66,8 +66,8 @@ const loadCategorySection = async () => {
             categoryApiUrl,
             {},
             {
-                key: `${smartCacheKey.API_HOME_PAGE}:${categoryApiUrl}`,
-                ttl: smartCacheTTL.HOME_PAGE,
+                key: `${apiCacheKey.API_HOME_PAGE}:${categoryApiUrl}`,
+                ttl: apiCacheTTL.HOME_PAGE,
             }
         )
 
@@ -82,8 +82,8 @@ const loadCategorySection = async () => {
             newsApiUrl,
             {},
             {
-                key: `${smartCacheKey.API_HOME_PAGE}:${newsApiUrl}`,
-                ttl: smartCacheTTL.HOME_PAGE,
+                key: `${apiCacheKey.API_HOME_PAGE}:${newsApiUrl}`,
+                ttl: apiCacheTTL.HOME_PAGE,
             }
         )
 

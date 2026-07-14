@@ -2,8 +2,8 @@
 import { reactive, computed, onMounted } from 'vue'
 import HorizontalScroller from '@/components/common/layout/HorizontalScroller.vue'
 import HeaderMenuItem from '@/components/common/layout/public-layout/HeaderMenuItem.vue'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -49,8 +49,8 @@ const getHeaderMenuItems = async (pageNumber = 1) => {
             apiUrl,
             {},
             {
-                key: `${smartCacheKey.API_LAYOUT_HEADER_MENU}:${apiUrl}`,
-                ttl: smartCacheTTL.LAYOUT_MENU,
+                key: `${apiCacheKey.API_LAYOUT_HEADER_MENU}:${apiUrl}`,
+                ttl: apiCacheTTL.LAYOUT_MENU,
             }
         )
 

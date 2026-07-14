@@ -5,7 +5,7 @@ import ModelPropertyAttributes from '@/components/back-office/activity-log/Model
 
 import { titleFormat } from '@/composables/useUtil'
 import { formatDateTime } from '@/composables/useDateTime'
-import { fetchUser } from '@/composables/useSystemApi'
+import { fetchUser } from '@/composables/useApiClient'
 
 const { property } = defineProps({
     property: {

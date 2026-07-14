@@ -20,7 +20,7 @@ import {
 } from '@/composables/usePassword'
 import { useTranslate } from '@/composables/useTranslate'
 
-import { fetchFromApi } from '@/composables/useSystemApi'
+import { fetchFromApi } from '@/composables/useApiClient'
 
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 

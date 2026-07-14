@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { fetchFromApi } from '@/composables/useSystemApi'
-import { smartCacheKey, smartCacheTTL } from '@/composables/useApiSmartCache'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -79,8 +79,8 @@ const loadBreakingNews = async (url = null) => {
             apiUrl,
             {},
             {
-                key: `${smartCacheKey.API_CURSOR_PAGINATION}:${apiUrl}`,
-                ttl: smartCacheTTL.SYSTEM_SHORT,
+                key: `${apiCacheKey.API_CURSOR_PAGINATION}:${apiUrl}`,
+                ttl: apiCacheTTL.SYSTEM_SHORT,
             }
         )
         const result = normalizeResponse(response)
