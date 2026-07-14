@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
+use App\Helpers\SystemHelper;
 use App\Observers\NewsObserver;
 use App\Policies\NewsPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -33,7 +34,7 @@ use Spatie\Sluggable\SlugOptions;
         'title', 'sub_title', "content_shoulder", 'brief',
         "body", "video_url", 'writer', 'source',
         "seo_brief", 'seo_title', 'seo_keywords',
-        'created_by_id', 'slug', 'is_published','hit_count'
+        'created_by_id', 'slug', 'is_published', 'hit_count',
     ])]
 #[UsePolicy(NewsPolicy::class)]
 #[ObservedBy([NewsObserver::class])]
@@ -64,7 +65,7 @@ class News extends Model implements HasMedia
                 'title', 'sub_title', "content_shoulder", 'brief',
                 "body", "video_url", 'writer', 'source',
                 "seo_brief", 'seo_title', 'seo_keywords',
-                'slug', 'is_published','hit_count'
+                'slug', 'is_published', 'hit_count',
             ])
             ->useLogName('News')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
@@ -125,23 +126,70 @@ class News extends Model implements HasMedia
 
     public function getPublishedAtAttribute(): ?string
     {
-        $publishedTime = null;
-
-        if ($this->slug) {
-            $current     = now();
-            $publishedAt = $this->created_at;
-            $interval    = $current->diff($publishedAt);
-            if ($interval->h > 0) {
-                $publishedTime = $publishedAt->format('h\h i\m \a\g\o');
-            } elseif ($interval->i > 0) {
-                $publishedTime = $publishedAt->format('i\m s\s \a\g\o');
-            } elseif ($interval->s > 0) {
-                $publishedTime = $publishedAt->format('s\s \a\g\o');
-            } else {
-                $publishedTime = $publishedAt->format(config("app.date_time_format"));
-            }
+        if (! $this->slug || ! $this->created_at) {
+            return null;
         }
-        return $publishedTime;
+
+        $locale          = config('app.locale');
+        $contentLanguage = $this->language?->code;
+
+        $displayLanguage = SystemHelper::LANGUAGE_EN_CODE;
+
+        if (
+            $contentLanguage &&
+            $contentLanguage !== $locale &&
+            in_array($contentLanguage, [
+                SystemHelper::LANGUAGE_EN_CODE,
+                SystemHelper::LANGUAGE_BN_CODE,
+            ], true)
+        ) {
+            $displayLanguage = $contentLanguage;
+        } elseif (
+            in_array($locale, [
+                SystemHelper::LANGUAGE_EN_CODE,
+                SystemHelper::LANGUAGE_BN_CODE,
+            ], true)
+        ) {
+            $displayLanguage = $locale;
+        }
+
+        $publishedAt = $this->created_at;
+        $seconds     = $publishedAt->diffInSeconds(now());
+
+        $numbers = trans('time.numbers', [], $displayLanguage);
+
+        $localize = static fn(string | int $value): string => strtr((string) $value, $numbers);
+
+        if ($seconds < 60) {
+            return $localize($seconds) . trans('time.second_ago', [], $displayLanguage);
+        }
+
+        if ($seconds < 3600) {
+            return $localize((int) floor($seconds / 60)) . trans('time.minute_ago', [], $displayLanguage);
+        }
+
+        if ($seconds < 86400) {
+            return $localize((int) floor($seconds / 3600)) . trans('time.hour_ago', [], $displayLanguage);
+        }
+
+        $publishedAtFormatted = $publishedAt->format(config('app.date_time_format'));
+
+        $publishedAtFormatted = strtr(
+            $publishedAtFormatted,
+            trans('time.months', [], $displayLanguage)
+        );
+
+        $publishedAtFormatted = strtr(
+            $publishedAtFormatted,
+            trans('time.meridiem', [], $displayLanguage)
+        );
+
+        $publishedAtFormatted = strtr(
+            $publishedAtFormatted,
+            $numbers
+        );
+
+        return $publishedAtFormatted;
     }
 
     public function getIsRecentCreatedAttribute(): bool
