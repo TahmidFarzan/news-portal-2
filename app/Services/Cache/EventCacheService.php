@@ -1,9 +1,9 @@
 <?php
 namespace App\Services\Cache;
 
-use App\Helpers\EventHelper;
 use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
+use App\Helpers\EventHelper;
 use App\Models\Event;
 use App\Models\Language;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,15 +12,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class EventCacheService
 {
-    private int $cachedTTLOneDay = 86400;
+    private int $perPage   = 5000;
+    private int $cachedTTL = 86400;
 
-    private int $cachedTTLThreeMin = 300;
-
-    private string $mainTag = CacheHelper::TAG_EVENT;
-
+    private string $mainTag   = CacheHelper::TAG_EVENT;
     private string $secondKey = CacheHelper::KEY_EVENT;
-
-    private int $perPage = 5000;
 
     public function isConnected(): bool
     {
@@ -65,15 +61,15 @@ class EventCacheService
         return $records;
     }
 
-    private function dbRecordsByPosition(string $position=EventHelper::POSITION_TOP, ?Language $language = null)
+    private function dbRecordsByPosition(string $position = EventHelper::POSITION_TOP, ?Language $language = null)
     {
         return Event::with(["desktopBannerImage", "mobileBannerImage"])->where("language_id", $language->id)
-                    ->where("position", $position)->where("is_current", true)->get();
+            ->where("position", $position)->where("is_current", true)->get();
     }
 
     private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): Event
     {
-        $record = Event::with(['language',"desktopBannerImage", "mobileBannerImage"])->where("is_current", true);
+        $record = Event::with(['language', "desktopBannerImage", "mobileBannerImage"])->where("is_current", true);
 
         if ($language && $language?->id) {
             $record = $record->where("language_id", $language?->id);
@@ -85,7 +81,7 @@ class EventCacheService
         return $record;
     }
 
-    public function getLastPageNo(string $key, ?Language $language = null, int|null $perPage = null ,int | null $cachedTTL = null): int
+    public function getLastPageNo(string $key, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null): int
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey, $language);
 
@@ -100,7 +96,7 @@ class EventCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [$this->mainTag, $key]
             );
         }
@@ -123,7 +119,7 @@ class EventCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [$this->mainTag, $key]
             );
         }
@@ -131,7 +127,7 @@ class EventCacheService
         return $records;
     }
 
-    public function getRecordsByPosition(string $key, string $position=EventHelper::POSITION_TOP, ?Language $language = null, int | null $cachedTTL = null)
+    public function getRecordsByPosition(string $key, string $position = EventHelper::POSITION_TOP, ?Language $language = null, int | null $cachedTTL = null)
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForEventByPosition($key, $this->secondKey, $position, $language);
 
@@ -146,7 +142,7 @@ class EventCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [$this->mainTag, $key]
             );
         }
@@ -172,7 +168,7 @@ class EventCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -201,7 +197,7 @@ class EventCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,

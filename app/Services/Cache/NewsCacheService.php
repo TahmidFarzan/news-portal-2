@@ -24,14 +24,12 @@ use Illuminate\Support\Collection as SupportCollection;
 
 class NewsCacheService
 {
-    private int $cachedTTLOneDay   = 86400;
-    private int $cachedTTLThreeMin = 300;
+    private int $perPage   = 5000;
+    private int $limit     = 1000;
+    private int $cachedTTL = 86400;
 
     private string $mainTag   = CacheHelper::TAG_NEWS;
     private string $secondKey = CacheHelper::KEY_NEWS;
-
-    private int $perPage = 5000;
-    private int $limit   = 1000;
 
     public CategoryCacheService $categoryCacheService;
     public LocationCacheService $locationCacheService;
@@ -110,7 +108,7 @@ class NewsCacheService
                 $this->secondKey,
                 $categoryId,
                 $language,
-                $cachedTTL ?? $this->cachedTTLOneDay
+                $cachedTTL ?? $this->cachedTTL
             );
 
             if ($category) {
@@ -147,7 +145,7 @@ class NewsCacheService
                 $this->secondKey,
                 $locationId,
                 $language,
-                $cachedTTL ?? $this->cachedTTLOneDay
+                $cachedTTL ?? $this->cachedTTL
             );
 
             if ($location) {
@@ -207,7 +205,7 @@ class NewsCacheService
     {
         $request ??= request();
 
-        $records = News::with(['newsType','language',"category", "tags", "contributors", "event", "location", "featureImage", "featureImageMobile"])
+        $records = News::with(['newsType', 'language', "category", "tags", "contributors", "event", "location", "featureImage", "featureImageMobile"])
             ->where('is_published', true);
 
         if ($language && $language?->id) {
@@ -238,7 +236,7 @@ class NewsCacheService
                 $this->secondKey,
                 $categoryId,
                 $language,
-                $cachedTTL ?? $this->cachedTTLOneDay
+                $cachedTTL ?? $this->cachedTTL
             );
 
             if ($category) {
@@ -275,7 +273,7 @@ class NewsCacheService
                 $this->secondKey,
                 $locationId,
                 $language,
-                $cachedTTL ?? $this->cachedTTLOneDay
+                $cachedTTL ?? $this->cachedTTL
             );
 
             if ($location) {
@@ -488,7 +486,7 @@ class NewsCacheService
                 $this->secondKey,
                 $categoryId,
                 $language,
-                $cachedTTL ?? $this->cachedTTLOneDay
+                $cachedTTL ?? $this->cachedTTL
             );
 
             if ($category) {
@@ -525,7 +523,7 @@ class NewsCacheService
                 $this->secondKey,
                 $locationId,
                 $language,
-                $cachedTTL ?? $this->cachedTTLOneDay
+                $cachedTTL ?? $this->cachedTTL
             );
 
             if ($location) {
@@ -642,7 +640,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -668,7 +666,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -694,7 +692,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -720,7 +718,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -746,7 +744,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -769,7 +767,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -791,7 +789,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -819,7 +817,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -848,7 +846,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,
@@ -871,7 +869,7 @@ class NewsCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $cacheKey,
                     $this->mainTag,

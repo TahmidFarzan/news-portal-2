@@ -5,7 +5,6 @@ use App\Helpers\ActivityLogHelper;
 use App\Helpers\DatatableHelper;
 use App\Helpers\EventHelper;
 use App\Helpers\GoogleAdsenceHelper;
-use App\Helpers\MediaHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\PageHelper;
 use App\Helpers\UserHelper;

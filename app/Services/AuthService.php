@@ -27,7 +27,7 @@ class AuthService
         return Auth::user();
     }
 
-    public function findBySlug($slugOrId): User
+    public function findBySlug(int|string $slugOrId): User
     {
         return User::where('id', $slugOrId)
             ->orWhere('slug', $slugOrId)

@@ -9,8 +9,8 @@ use App\Models\MenuItem;
 
 class MenuCacheService
 {
-    private int $cachedTTLThreeMin = 300;
-    private int $perPage           = 10;
+    private int $cachedTTL = 300;
+    private int $perPage   = 10;
 
     private string $mainTag   = CacheHelper::TAG_MENU;
     private string $secondKey = CacheHelper::KEY_MENU;
@@ -128,7 +128,7 @@ class MenuCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -157,7 +157,7 @@ class MenuCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -186,7 +186,7 @@ class MenuCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -215,7 +215,7 @@ class MenuCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,

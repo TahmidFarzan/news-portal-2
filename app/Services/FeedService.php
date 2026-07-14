@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 
 class FeedService
 {
+    private int $cachedTTL = 300;
+
     protected NewsCacheService $newsCacheService;
     protected CategoryCacheService $categoryCacheService;
     protected LocationCacheService $locationCacheService;
@@ -67,7 +69,7 @@ class FeedService
 
     public function latestNews()
     {
-        return $this->newsCacheService->getLatestRecord(CacheHelper::KEY_FEED);
+        return $this->newsCacheService->getLatestRecord(CacheHelper::KEY_FEED, null,null,false, $this->cachedTTL);
     }
 
     public function getNews(Request $request)
@@ -77,7 +79,7 @@ class FeedService
 
     public function getNewsLastPageNo()
     {
-        return $this->newsCacheService->getLastPageNo(CacheHelper::KEY_FEED, null, null);
+        return $this->newsCacheService->getLastPageNo(CacheHelper::KEY_FEED);
     }
 
     public function getCategoryNews(Request $request, Category $category)

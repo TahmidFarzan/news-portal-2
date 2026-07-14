@@ -7,7 +7,7 @@ use App\Models\Theme;
 
 class ThemeCacheService
 {
-    private int $cachedTTLThreeMin = 300;
+    private int $cachedTTL = 300;
 
     private string $mainTag   = CacheHelper::TAG_THEME;
     private string $secondKey = CacheHelper::KEY_THEME;
@@ -55,7 +55,7 @@ class ThemeCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -84,7 +84,7 @@ class ThemeCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -113,7 +113,7 @@ class ThemeCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,

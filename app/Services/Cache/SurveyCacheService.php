@@ -9,9 +9,9 @@ use App\Models\SurveyQuestion;
 
 class SurveyCacheService
 {
-    private int $cachedTTLThreeMin = 300;
+    private int $cachedTTL = 300;
 
-    private string $mainTag = CacheHelper::TAG_SURVEY;
+    private string $mainTag   = CacheHelper::TAG_SURVEY;
     private string $secondKey = CacheHelper::KEY_SURVEY;
 
     public function isConnected(): bool
@@ -85,7 +85,7 @@ class SurveyCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -114,7 +114,7 @@ class SurveyCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -143,7 +143,7 @@ class SurveyCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,

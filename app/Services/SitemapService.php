@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 
 class SitemapService
 {
+    protected int $cachedTTL = 300;
+
     protected CategoryCacheService $categoryCacheService;
     protected LocationCacheService $locationCacheService;
     protected EventCacheService $eventCacheService;
@@ -122,7 +124,7 @@ class SitemapService
 
     public function latestNews()
     {
-        return $this->newsCacheService->getLatestRecord(CacheHelper::KEY_SITEMAP);
+        return $this->newsCacheService->getLatestRecord(CacheHelper::KEY_SITEMAP, null, null, false, $this->cachedTTL);
     }
 
     public function getNews(Request $request)

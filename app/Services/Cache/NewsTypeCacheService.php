@@ -11,15 +11,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class NewsTypeCacheService
 {
-    private int $cachedTTLOneDay = 86400;
+    private int $perPage   = 5000;
+    private int $cachedTTL = 86400;
 
-    private int $cachedTTLThreeMin = 300;
-
-    private string $mainTag = CacheHelper::TAG_NEWS_TYPE;
-
+    private string $mainTag   = CacheHelper::TAG_NEWS_TYPE;
     private string $secondKey = CacheHelper::KEY_NEWS_TYPE;
-
-    private int $perPage = 5000;
 
     public function isConnected(): bool
     {
@@ -78,7 +74,7 @@ class NewsTypeCacheService
         return $record;
     }
 
-    public function getLastPageNo(string $key, ?Language $language = null, int|null $perPage = null ,int | null $cachedTTL = null): int
+    public function getLastPageNo(string $key, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null): int
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey, $language);
 
@@ -93,7 +89,7 @@ class NewsTypeCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [$this->mainTag, $key]
             );
         }
@@ -116,7 +112,7 @@ class NewsTypeCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [$this->mainTag, $key]
             );
         }
@@ -142,7 +138,7 @@ class NewsTypeCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -171,7 +167,7 @@ class NewsTypeCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,

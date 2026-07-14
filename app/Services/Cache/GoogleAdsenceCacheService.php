@@ -7,7 +7,7 @@ use App\Models\GoogleAdsence;
 
 class GoogleAdsenceCacheService
 {
-    private int $cachedTTLThreeMin = 300;
+    private int $cachedTTL = 86400;
 
     private string $mainTag   = CacheHelper::TAG_GOOGLE_ADSENCE;
     private string $secondKey = CacheHelper::KEY_GOOGLE_ADSENCE;
@@ -21,7 +21,6 @@ class GoogleAdsenceCacheService
     {
         CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_PAGE]);
     }
-
 
     private function dbGoogleAdsencesByTypeAndPosition(string $type, string $position)
     {
@@ -46,7 +45,7 @@ class GoogleAdsenceCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,

@@ -6,8 +6,6 @@ use App\Helpers\CacheServerHelper;
 use App\Helpers\GoogleAdsenceHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\ThemeHelper;
-
-use App\Models\GoogleAdsence;
 use App\Models\Language;
 use App\Models\MenuItem;
 use App\Services\Cache\MenuCacheService;
@@ -15,11 +13,11 @@ use App\Services\Cache\NewsCacheService;
 use App\Services\Cache\ThemeCacheService;
 use App\Services\Cache\GoogleAdsenceCacheService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class SiteService
 {
     protected int $cachedTTL = 300;
+
     protected MenuCacheService $menuCacheService;
     protected ThemeCacheService $themeCacheService;
     protected NewsCacheService $newsCacheService;

@@ -12,15 +12,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class TagCacheService
 {
-    private int $cachedTTLOneDay = 86400;
+    private int $perPage   = 5000;
+    private int $cachedTTL = 86400;
 
-    private int $cachedTTLThreeMin = 300;
-
-    private string $mainTag = CacheHelper::TAG_TAG;
-
+    private string $mainTag   = CacheHelper::TAG_TAG;
     private string $secondKey = CacheHelper::KEY_TAG;
-
-    private int $perPage = 5000;
 
     public function isConnected(): bool
     {
@@ -107,7 +103,7 @@ class TagCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $lastPage,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [$this->mainTag, $key]
             );
         }
@@ -130,7 +126,7 @@ class TagCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [$this->mainTag, $key]
             );
         }
@@ -153,7 +149,7 @@ class TagCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
-                $cachedTTL ?? $this->cachedTTLOneDay,
+                $cachedTTL ?? $this->cachedTTL,
                 [$this->mainTag, $key]
             );
         }
@@ -179,7 +175,7 @@ class TagCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
@@ -208,7 +204,7 @@ class TagCacheService
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $record,
-                $cachedTTL ?? $this->cachedTTLThreeMin,
+                $cachedTTL ?? $this->cachedTTL,
                 [
                     $key,
                     $this->mainTag,
