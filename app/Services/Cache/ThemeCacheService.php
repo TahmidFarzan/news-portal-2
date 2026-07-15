@@ -27,12 +27,12 @@ class ThemeCacheService
 
     private function dbThemes(): Collection
     {
-        return Theme::orderBy('position', 'asc')->orderBy('id', 'asc')->get();
+        return Theme::orderBy('id', 'asc')->get();
     }
 
     private function dbThemesByGroupAndLabels(string $group, array $labels): Collection
     {
-        return Theme::orderBy('position', 'asc')->where('group', $group)->whereIn('label', $labels)->orderBy('id', 'asc')->get();
+        return Theme::where('group', $group)->whereIn('label', $labels)->orderBy('id', 'asc')->get();
     }
 
     private function dbThemeByGroupAndLabel(string $group, string $label): Theme
