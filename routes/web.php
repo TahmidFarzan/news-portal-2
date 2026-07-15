@@ -438,7 +438,7 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
 });
 
 Route::prefix('site')->name('site.')->group(function () {
-    Route::get('language', [SiteController::class, 'language'])->name('language');
+    Route::get('languages/{slug}', [SiteController::class, 'language'])->name('language');
     Route::get('defalult-language', [SiteController::class, 'defaultLanguage'])->name('default-language');
     Route::post('language-change/{slugOrId}', [SiteController::class, 'languageChange'])->name('language-change');
 

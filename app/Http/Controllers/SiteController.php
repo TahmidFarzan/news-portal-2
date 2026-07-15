@@ -15,10 +15,10 @@ class SiteController extends Controller
         $this->siteService = $siteService;
     }
 
-    public function language(): JsonResponse
+    public function language($slug): JsonResponse
     {
         return response()->json(
-            $this->siteService->language()
+            $this->siteService->language($slug)
         );
     }
 
