@@ -42,42 +42,24 @@ class SiteService
         $this->googleAdsenceCacheService = $googleAdsenceCacheService;
     }
 
-    public function language(): Language
+    public function language(string|null $slug): Language|null
     {
-        $languageId = session('selected_language_id');
-
-        if ($languageId) {
-            return Language::select([
-                'id',
-                'name',
-                'code',
-                'locale',
-                'slug',
-            ])
-                ->where('id', $languageId)
-                ->firstOrFail();
+        if ($slug) {
+            return Language::where('slug', $slug)->firstOrFail();
         }
 
-        return Language::select([
-            'id',
-            'name',
-            'code',
-            'locale',
-            'slug',
-        ])
-            ->oldest('id')
-            ->firstOrFail();
+        return null;
     }
 
-    public function menuItem(string $slug): MenuItem
+    public function menuItem(string $slug, Language|null $language): MenuItem
     {
-        return $this->menuCacheService->getMenuItemBySlug(CacheHelper::KEY_LAYOUT, $slug, $this->language(), $this->cachedTTL);
+        return $this->menuCacheService->getMenuItemBySlug(CacheHelper::KEY_LAYOUT, $slug, $language, $this->cachedTTL);
     }
 
-    public function menuHeaderMenuMenuItems(): array
+    public function menuHeaderMenuMenuItems(Language|null $language): array
     {
-        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_HEADER, $this->language(), $this->cachedTTL);
-        $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $this->language(), 10, $this->cachedTTL);
+        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_HEADER, $language, $this->cachedTTL);
+        $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $language, 10, $this->cachedTTL);
 
         $list = $query->map(fn ($row) => [
             'id' => $row->id,
@@ -99,10 +81,10 @@ class SiteService
         return $data;
     }
 
-    public function menuOffCanvasMenuMenuItems(): array
+    public function menuOffCanvasMenuMenuItems(Language|null $language): array
     {
-        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_OFFCANVAS, $this->language(), $this->cachedTTL);
-        $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $this->language(), 20, $this->cachedTTL);
+        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_OFFCANVAS, $language, $this->cachedTTL);
+        $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $language, 20, $this->cachedTTL);
 
         $list = $query->map(fn ($row) => [
             'id' => $row->id,
@@ -124,10 +106,10 @@ class SiteService
         return $data;
     }
 
-    public function menuTopbarMenuMenuItems(): array
+    public function menuTopbarMenuMenuItems(Language|null $language): array
     {
-        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_TOPBAR, $this->language(), $this->cachedTTL);
-        $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $this->language(), 20, $this->cachedTTL);
+        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_TOPBAR, $language, $this->cachedTTL);
+        $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $language, 20, $this->cachedTTL);
 
         $list = $query->map(fn ($row) => [
             'id' => $row->id,
@@ -149,10 +131,10 @@ class SiteService
         return $data;
     }
 
-    public function menuFooterMenuMenuItems(): array
+    public function menuFooterMenuMenuItems(Language|null $language): array
     {
-        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_FOOTER, $this->language(), $this->cachedTTL);
-        $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $this->language(), 20, $this->cachedTTL);
+        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_FOOTER, $language, $this->cachedTTL);
+        $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $language, 20, $this->cachedTTL);
 
         $list = $query->map(fn ($row) => [
             'id' => $row->id,
@@ -246,12 +228,12 @@ class SiteService
         );
     }
 
-    public function breakingNews(Request $request): CursorPaginator
+    public function breakingNews(Request $request,Language|null $language): CursorPaginator
     {
         return $this->newsCacheService->getBreakingNews(
             CacheHelper::KEY_SITE,
             $request,
-            $this->language(),
+            $language,
             10,
             $this->cachedTTL
         );
