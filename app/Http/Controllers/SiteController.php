@@ -22,6 +22,13 @@ class SiteController extends Controller
         );
     }
 
+    public function defaultLanguage(): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->defaultLanguage()
+        );
+    }
+
     public function menuHeaderMenuMenuItems(): JsonResponse
     {
         return response()->json(

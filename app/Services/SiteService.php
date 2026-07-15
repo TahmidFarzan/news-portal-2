@@ -7,6 +7,7 @@ use App\Helpers\CacheServerHelper;
 use App\Helpers\GoogleAdsenceHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\ThemeHelper;
+use App\Helpers\SystemHelper;
 use App\Models\Language;
 use App\Models\MenuItem;
 use App\Models\Theme;
@@ -49,6 +50,12 @@ class SiteService
         }
 
         return null;
+    }
+
+        public function defaultLanguage(): Language
+    {
+        return Language::where('code', SystemHelper::SITE_DEFAULT_LANGUAGE)->firstOrFail();
+
     }
 
     public function menuItem(string $slug, Language|null $language): MenuItem
