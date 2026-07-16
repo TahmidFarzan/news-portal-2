@@ -15,10 +15,10 @@ class SiteController extends Controller
         $this->siteService = $siteService;
     }
 
-    public function language($slug): JsonResponse
+    public function language(string | null $code=null): JsonResponse
     {
         return response()->json(
-            $this->siteService->language($slug)
+            $this->siteService->language($code)
         );
     }
 
@@ -29,37 +29,42 @@ class SiteController extends Controller
         );
     }
 
-    public function menuHeaderMenuMenuItems(): JsonResponse
+    public function menuHeaderMenuMenuItems(string | null $languageCode=null): JsonResponse
     {
+        $language = $this->siteService->language($languageCode);
         return response()->json(
-            $this->siteService->menuHeaderMenuMenuItems()
+            $this->siteService->menuHeaderMenuMenuItems($language)
         );
     }
 
-    public function menuOffCanvasMenuMenuItems(): JsonResponse
+    public function menuOffCanvasMenuMenuItems(string | null $languageCode=null): JsonResponse
     {
+        $language = $this->siteService->language($languageCode);
         return response()->json(
-            $this->siteService->menuOffCanvasMenuMenuItems()
+            $this->siteService->menuOffCanvasMenuMenuItems($language)
         );
     }
 
-    public function menuTopbarMenuMenuItems(): JsonResponse
+    public function menuTopbarMenuMenuItems(string | null $languageCode=null): JsonResponse
     {
+        $language = $this->siteService->language($languageCode);
         return response()->json(
-            $this->siteService->menuTopbarMenuMenuItems()
+            $this->siteService->menuTopbarMenuMenuItems($language)
         );
     }
 
-    public function menuFooterMenuMenuItems(): JsonResponse
+    public function menuFooterMenuMenuItems(string | null $languageCode=null): JsonResponse
     {
+        $language = $this->siteService->language($languageCode);
         return response()->json(
-            $this->siteService->menuFooterMenuMenuItems()
+            $this->siteService->menuFooterMenuMenuItems($language)
         );
     }
 
-    public function menuItemSubMenuItems(string $slug): JsonResponse
+    public function menuItemSubMenuItems(string $slug, string | null $languageCode=null): JsonResponse
     {
-        $menuItem = $this->siteService->menuItem($slug);
+        $language = $this->siteService->language($languageCode);
+        $menuItem = $this->siteService->menuItem($slug, $language);
 
         return response()->json(
             $this->siteService->menuItemSubMenuItems($menuItem)
@@ -73,10 +78,11 @@ class SiteController extends Controller
         );
     }
 
-    public function breakingNews(Request $request): JsonResponse
+    public function breakingNews(Request $request, string | null $languageCode=null): JsonResponse
     {
+        $language = $this->siteService->language($languageCode);
         return response()->json(
-            $this->siteService->breakingNews($request)
+            $this->siteService->breakingNews($request, $language)
         );
     }
 

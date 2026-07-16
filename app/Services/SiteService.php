@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Services;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
 use App\Helpers\GoogleAdsenceHelper;
 use App\Helpers\MenuHelper;
-use App\Helpers\ThemeHelper;
 use App\Helpers\SystemHelper;
+use App\Helpers\ThemeHelper;
 use App\Models\Language;
 use App\Models\MenuItem;
 use App\Models\Theme;
@@ -37,127 +36,127 @@ class SiteService
         NewsCacheService $newsCacheService,
         GoogleAdsenceCacheService $googleAdsenceCacheService
     ) {
-        $this->menuCacheService = $menuCacheService;
-        $this->themeCacheService = $themeCacheService;
-        $this->newsCacheService = $newsCacheService;
+        $this->menuCacheService          = $menuCacheService;
+        $this->themeCacheService         = $themeCacheService;
+        $this->newsCacheService          = $newsCacheService;
         $this->googleAdsenceCacheService = $googleAdsenceCacheService;
     }
 
-    public function language(string|null $slug): Language|null
+    public function language(string | null $code): Language
     {
-        if ($slug) {
-            return Language::where('slug', $slug)->firstOrFail();
+        if ($code) {
+            return Language::where('code', $code)->firstOrFail();
         }
 
-        return null;
+        return $this->defaultLanguage();
     }
 
-        public function defaultLanguage(): Language
+    public function defaultLanguage(): Language
     {
         return Language::where('code', SystemHelper::SITE_DEFAULT_LANGUAGE)->firstOrFail();
 
     }
 
-    public function menuItem(string $slug, Language|null $language): MenuItem
+    public function menuItem(string $slug, Language | null $language): MenuItem
     {
         return $this->menuCacheService->getMenuItemBySlug(CacheHelper::KEY_LAYOUT, $slug, $language, $this->cachedTTL);
     }
 
-    public function menuHeaderMenuMenuItems(Language|null $language): array
+    public function menuHeaderMenuMenuItems(Language | null $language): array
     {
-        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_HEADER, $language, $this->cachedTTL);
+        $menu  = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_HEADER, $language, $this->cachedTTL);
         $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $language, 10, $this->cachedTTL);
 
-        $list = $query->map(fn ($row) => [
-            'id' => $row->id,
-            'name' => $row->name,
-            'slug' => $row->slug,
-            'parent' => $row->parent,
+        $list = $query->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
             'has_descendants' => $row->has_descendants,
-            'public_url' => $row->public_url,
+            'public_url'      => $row->public_url,
         ]);
 
         $data = [
-            'items' => $list,
-            'total' => $query->total(),
+            'items'        => $list,
+            'total'        => $query->total(),
             'current_page' => $query->currentPage(),
-            'last_page' => $query->lastPage(),
-            'per_page' => $query->perPage(),
+            'last_page'    => $query->lastPage(),
+            'per_page'     => $query->perPage(),
         ];
 
         return $data;
     }
 
-    public function menuOffCanvasMenuMenuItems(Language|null $language): array
+    public function menuOffCanvasMenuMenuItems(Language | null $language): array
     {
-        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_OFFCANVAS, $language, $this->cachedTTL);
+        $menu  = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_OFFCANVAS, $language, $this->cachedTTL);
         $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $language, 20, $this->cachedTTL);
 
-        $list = $query->map(fn ($row) => [
-            'id' => $row->id,
-            'name' => $row->name,
-            'slug' => $row->slug,
-            'parent' => $row->parent,
+        $list = $query->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
             'has_descendants' => $row->has_descendants,
-            'public_url' => $row->public_url,
+            'public_url'      => $row->public_url,
         ]);
 
         $data = [
-            'items' => $list,
-            'total' => $query->total(),
+            'items'        => $list,
+            'total'        => $query->total(),
             'current_page' => $query->currentPage(),
-            'last_page' => $query->lastPage(),
-            'per_page' => $query->perPage(),
+            'last_page'    => $query->lastPage(),
+            'per_page'     => $query->perPage(),
         ];
 
         return $data;
     }
 
-    public function menuTopbarMenuMenuItems(Language|null $language): array
+    public function menuTopbarMenuMenuItems(Language | null $language): array
     {
-        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_TOPBAR, $language, $this->cachedTTL);
+        $menu  = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_TOPBAR, $language, $this->cachedTTL);
         $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $language, 20, $this->cachedTTL);
 
-        $list = $query->map(fn ($row) => [
-            'id' => $row->id,
-            'name' => $row->name,
-            'slug' => $row->slug,
-            'parent' => $row->parent,
+        $list = $query->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
             'has_descendants' => $row->has_descendants,
-            'public_url' => $row->public_url,
+            'public_url'      => $row->public_url,
         ]);
 
         $data = [
-            'items' => $list,
-            'total' => $query->total(),
+            'items'        => $list,
+            'total'        => $query->total(),
             'current_page' => $query->currentPage(),
-            'last_page' => $query->lastPage(),
-            'per_page' => $query->perPage(),
+            'last_page'    => $query->lastPage(),
+            'per_page'     => $query->perPage(),
         ];
 
         return $data;
     }
 
-    public function menuFooterMenuMenuItems(Language|null $language): array
+    public function menuFooterMenuMenuItems(Language | null $language): array
     {
-        $menu = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_FOOTER, $language, $this->cachedTTL);
+        $menu  = $this->menuCacheService->getMenuByMenuTypeCode(CacheHelper::KEY_LAYOUT, MenuHelper::MENU_TYPE_FOOTER, $language, $this->cachedTTL);
         $query = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menu, null, $language, 20, $this->cachedTTL);
 
-        $list = $query->map(fn ($row) => [
-            'id' => $row->id,
-            'name' => $row->name,
-            'slug' => $row->slug,
-            'parent' => $row->parent,
+        $list = $query->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
             'has_descendants' => $row->has_descendants,
-            'public_url' => $row->public_url,
+            'public_url'      => $row->public_url,
         ]);
 
         $data = [
-            'items' => $list,
-            'total' => $query->total(),
+            'items'        => $list,
+            'total'        => $query->total(),
             'current_page' => $query->currentPage(),
-            'last_page' => $query->lastPage(),
-            'per_page' => $query->perPage(),
+            'last_page'    => $query->lastPage(),
+            'per_page'     => $query->perPage(),
         ];
 
         return $data;
@@ -167,21 +166,21 @@ class SiteService
     {
         $records = $this->menuCacheService->getMenuItems(CacheHelper::KEY_LAYOUT, $menuItem->menu, $menuItem, $menuItem->language, 10, $this->cachedTTL);
 
-        $list = $records->getCollection()->map(fn ($row) => [
-            'id' => $row->id,
-            'name' => $row->name,
-            'slug' => $row->slug,
-            'parent' => $row->parent,
+        $list = $records->getCollection()->map(fn($row) => [
+            'id'              => $row->id,
+            'name'            => $row->name,
+            'slug'            => $row->slug,
+            'parent'          => $row->parent,
             'has_descendants' => $row->has_descendants,
-            'public_url' => $row->public_url,
+            'public_url'      => $row->public_url,
         ]);
 
         $data = [
-            'items' => $list,
-            'total' => $records->total(),
+            'items'        => $list,
+            'total'        => $records->total(),
             'current_page' => $records->currentPage(),
-            'last_page' => $records->lastPage(),
-            'per_page' => $records->perPage(),
+            'last_page'    => $records->lastPage(),
+            'per_page'     => $records->perPage(),
         ];
 
         return $data;
@@ -235,7 +234,7 @@ class SiteService
         );
     }
 
-    public function breakingNews(Request $request,Language|null $language): CursorPaginator
+    public function breakingNews(Request $request, Language | null $language): CursorPaginator
     {
         return $this->newsCacheService->getBreakingNews(
             CacheHelper::KEY_SITE,
@@ -248,7 +247,7 @@ class SiteService
 
     public function getGoogleAdsence(Request $request): Collection
     {
-        $type = $request->input('type', GoogleAdsenceHelper::TYPE_SECTION);
+        $type     = $request->input('type', GoogleAdsenceHelper::TYPE_SECTION);
         $position = $request->input('position', GoogleAdsenceHelper::POSITION_TOP);
 
         return $this->googleAdsenceCacheService->getGoogleAdsencesByTypeAndPosition(
@@ -262,8 +261,8 @@ class SiteService
     public function languages(Request $request): array
     {
         $perPage = (int) $request->input('per_page', 15);
-        $search = $request->input('search');
-        $page = (int) $request->input('page', 1);
+        $search  = $request->input('search');
+        $page    = (int) $request->input('page', 1);
 
         $cacheSearch = md5($search ?? '');
 
@@ -284,25 +283,25 @@ class SiteService
         $query = Language::query();
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%'.$search.'%');
+            $query->where('name', 'like', '%' . $search . '%');
         }
 
         $records = $query
             ->orderByDesc('id')
             ->paginate($perPage);
 
-        $list = $records->map(fn ($row) => [
-            'id' => $row->id,
+        $list = $records->map(fn($row) => [
+            'id'   => $row->id,
             'name' => $row->name,
             'slug' => $row->slug,
         ]);
 
         $data = [
-            'items' => $list,
-            'total' => $records->total(),
+            'items'        => $list,
+            'total'        => $records->total(),
             'current_page' => $records->currentPage(),
-            'last_page' => $records->lastPage(),
-            'per_page' => $records->perPage(),
+            'last_page'    => $records->lastPage(),
+            'per_page'     => $records->perPage(),
         ];
 
         CacheServerHelper::cachedData(
@@ -315,7 +314,7 @@ class SiteService
         return $data;
     }
 
-    public function languageChange(int|string $slugOrId): array
+    public function languageChange(int | string $slugOrId): array
     {
         $language = Language::query()
             ->where('id', $slugOrId)
@@ -325,9 +324,9 @@ class SiteService
         session()->put('selected_language_id', $language->id);
 
         return [
-            'status' => true,
+            'status'  => true,
             'message' => __('status-messages.site.language.change.success'),
-            'data' => $language,
+            'data'    => $language,
         ];
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Services\PageService;
@@ -17,71 +16,85 @@ class PageController extends Controller
         $this->pageService = $pageService;
     }
 
-    public function home(): InertiaResponse
+    public function home(string | null $languageCode = null): InertiaResponse
     {
-        $page = $this->pageService->homePage();
-        $leadNews = $this->pageService->homeLeadNews();
-        $recentNews = $this->pageService->recentNewsSidebar();
-        $popularNews = $this->pageService->popularNewsSidebar();
-        $topEvents = $this->pageService->homeTopEvents();
-        $bottomEvents = $this->pageService->homeBottomEvents();
-        $trends = $this->pageService->homeTrends();
-        $surveys = $this->pageService->homeSurveys();
+        $language = $this->pageService->language($languageCode);
+
+        $page         = $this->pageService->homePage($language);
+        $leadNews     = $this->pageService->homeLeadNews($language);
+        $recentNews   = $this->pageService->recentNewsSidebar($language);
+        $popularNews  = $this->pageService->popularNewsSidebar($language);
+        $topEvents    = $this->pageService->homeTopEvents($language);
+        $bottomEvents = $this->pageService->homeBottomEvents($language);
+        $trends       = $this->pageService->homeTrends($language);
+        $surveys      = $this->pageService->homeSurveys($language);
 
         return Inertia::render('Home', [
-            'page' => $page,
-            'leadNews' => $leadNews,
-            'recentNews' => $recentNews,
-            'popularNews' => $popularNews,
-            'topEvents' => $topEvents,
+            'page'         => $page,
+            'leadNews'     => $leadNews,
+            'recentNews'   => $recentNews,
+            'popularNews'  => $popularNews,
+            'topEvents'    => $topEvents,
             'bottomEvents' => $bottomEvents,
-            'trends' => $trends,
-            'surveys' => $surveys,
+            'trends'       => $trends,
+            'surveys'      => $surveys,
         ]);
     }
 
-    public function homeEventNews(string $slug): JsonResponse
+    public function homeEventNews(string $slug, string | null $languageCode = null): JsonResponse
     {
-        $event = $this->pageService->event($slug);
-        $news = $this->pageService->homeEventNews($event);
+        $language = $this->pageService->language($languageCode);
+
+        $event = $this->pageService->event($slug, $language);
+        $news  = $this->pageService->homeEventNews($event, $language);
 
         return response()->json($news);
     }
 
-    public function homeNewsTypeNews(string $slug): JsonResponse
+    public function homeNewsTypeNews(string $slug, string | null $languageCode = null): JsonResponse
     {
-        $newsType = $this->pageService->newsType($slug);
-        $news = $this->pageService->homeNewsTypeNews($newsType);
+        $language = $this->pageService->language($languageCode);
+
+        $newsType = $this->pageService->newsType($slug, $language);
+        $news     = $this->pageService->homeNewsTypeNews($newsType, $language);
 
         return response()->json($news);
     }
 
-    public function homeCategoryNews(Request $request, int|string $slug): JsonResponse
+    public function homeCategoryNews(Request $request, int | string $slug, string | null $languageCode = null): JsonResponse
     {
-        $category = $this->pageService->homeCategoryBySlug($slug);
-        $news = $this->pageService->homeCategoryNews($request, $category);
+        $language = $this->pageService->language($languageCode);
+
+        $category = $this->pageService->homeCategoryBySlug($slug, $language);
+        $news     = $this->pageService->homeCategoryNews($request, $category, $language);
 
         return response()->json($news);
     }
 
-    public function homeCategory(int|string $slug): JsonResponse
+    public function homeCategory(int | string $slug, string | null $languageCode = null): JsonResponse
     {
-        $category = $this->pageService->homeCategoryBySlug($slug);
+        $language = $this->pageService->language($languageCode);
+
+        $category = $this->pageService->homeCategoryBySlug($slug, $language);
 
         return response()->json($category);
     }
 
-    public function homeSurveys(): JsonResponse
+    public function homeSurveys(string | null $languageCode = null): JsonResponse
     {
-        $category = $this->pageService->homeSurveys();
+        $language = $this->pageService->language($languageCode);
+
+        $category = $this->pageService->homeSurveys($language);
 
         return response()->json($category);
     }
 
-    public function latest(Request $request): InertiaResponse|JsonResponse
+    public function latest(Request $request, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
-        $news = $this->pageService->recentNews();
-        $page = $this->pageService->latestPage();
+        $language = $this->pageService->language($languageCode);
+
+        $news = $this->pageService->recentNews($language);
+        $page = $this->pageService->latestPage($language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -95,11 +108,13 @@ class PageController extends Controller
         ]);
     }
 
-    public function search(Request $request): InertiaResponse|JsonResponse
+    public function search(Request $request, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
-        $news = $this->pageService->newsSearch($request);
-        $language = $this->pageService->language();
-        $page = $this->pageService->searchPage();
+        $language = $this->pageService->language($languageCode);
+
+        $news     = $this->pageService->newsSearch($request, $language);
+        $language = $this->pageService->language($language);
+        $page     = $this->pageService->searchPage($language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -109,15 +124,17 @@ class PageController extends Controller
 
         return Inertia::render('Search', [
             'language' => $language,
-            'news' => $news,
-            'page' => $page,
+            'news'     => $news,
+            'page'     => $page,
         ]);
     }
 
-    public function videos(Request $request): InertiaResponse|JsonResponse
+    public function videos(Request $request, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
+        $language = $this->pageService->language($languageCode);
+
         $newsType = $this->pageService->newsType('video');
-        $news = $this->pageService->newsTypeNews($request, $newsType);
+        $news     = $this->pageService->newsTypeNews($request, $newsType, $language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -127,14 +144,16 @@ class PageController extends Controller
 
         return Inertia::render('VideoNews', [
             'newsTypes' => $newsType,
-            'news' => $news,
+            'news'      => $news,
         ]);
     }
 
-    public function imageGalleries(Request $request): InertiaResponse|JsonResponse
+    public function imageGalleries(Request $request, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
+        $language = $this->pageService->language($languageCode);
+
         $newsType = $this->pageService->newsType('image-gallery');
-        $news = $this->pageService->newsTypeNews($request, $newsType);
+        $news     = $this->pageService->newsTypeNews($request, $newsType, $language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -144,22 +163,25 @@ class PageController extends Controller
 
         return Inertia::render('ImagesGalleryNews', [
             'newsTypes' => $newsType,
-            'news' => $news,
+            'news'      => $news,
         ]);
     }
 
-    public function page(string $slugTree): InertiaResponse
+    public function page(string $slugTree, string | null $languageCode = null): InertiaResponse
     {
-        $page = $this->pageService->page($slugTree);
+        $language = $this->pageService->language($languageCode);
+
+        $page = $this->pageService->page($slugTree, $language);
 
         return Inertia::render('Page', [
             'page' => $page,
         ]);
     }
 
-    public function newsDetails(string $slug): InertiaResponse
+    public function newsDetails(string $slug, string | null $languageCode = null): InertiaResponse
     {
-        $news = $this->pageService->news($slug);
+        $language = $this->pageService->language($languageCode);
+        $news     = $this->pageService->news($slug, $language);
 
         $this->pageService->newsHitCounterCalculate($news);
 
@@ -168,10 +190,12 @@ class PageController extends Controller
         ]);
     }
 
-    public function tagNews(Request $request, string $slug): InertiaResponse|JsonResponse
+    public function tagNews(Request $request, string $slug, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
-        $tag = $this->pageService->tag($slug);
-        $news = $this->pageService->tagNews($request, $tag);
+        $language = $this->pageService->language($languageCode);
+
+        $tag  = $this->pageService->tag($slug, $language);
+        $news = $this->pageService->tagNews($request, $tag, $language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -180,15 +204,17 @@ class PageController extends Controller
         }
 
         return Inertia::render('TagNews', [
-            'tag' => $tag,
+            'tag'  => $tag,
             'news' => $news,
         ]);
     }
 
-    public function contributorNews(Request $request, string $slug): InertiaResponse|JsonResponse
+    public function contributorNews(Request $request, string $slug, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
-        $contributor = $this->pageService->contributor($slug);
-        $news = $this->pageService->contributorNews($request, $contributor);
+        $language = $this->pageService->language($languageCode);
+
+        $contributor = $this->pageService->contributor($slug, $language);
+        $news        = $this->pageService->contributorNews($request, $contributor, $language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -198,14 +224,16 @@ class PageController extends Controller
 
         return Inertia::render('ContributorNews', [
             'contributor' => $contributor,
-            'news' => $news,
+            'news'        => $news,
         ]);
     }
 
-    public function eventNews(Request $request, string $slug): InertiaResponse|JsonResponse
+    public function eventNews(Request $request, string $slug, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
-        $event = $this->pageService->event($slug);
-        $news = $this->pageService->eventNews($request, $event);
+        $language = $this->pageService->language($languageCode);
+
+        $event = $this->pageService->event($slug, $language);
+        $news  = $this->pageService->eventNews($request, $event, $language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -215,19 +243,21 @@ class PageController extends Controller
 
         return Inertia::render('EventNews', [
             'event' => $event,
-            'news' => $news,
+            'news'  => $news,
         ]);
     }
 
-    public function categoryNews(Request $request, string $slugTree): InertiaResponse|JsonResponse
+    public function categoryNews(Request $request, string $slugTree, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
-        $category = $this->pageService->category($slugTree);
-        $news = $this->pageService->categoryNews($request, $category);
+        $language = $this->pageService->language($languageCode);
 
-        $pageSectionNews = $this->pageService->categoryNewsPlacement($category);
+        $category = $this->pageService->category($slugTree, $language);
+        $news     = $this->pageService->categoryNews($request, $category, $language);
 
-        $recentNews = $this->pageService->recentNewsSidebar();
-        $popularNews = $this->pageService->popularNewsSidebar();
+        $pageSectionNews = $this->pageService->categoryNewsPlacement($category, $language);
+
+        $recentNews  = $this->pageService->recentNewsSidebar($language);
+        $popularNews = $this->pageService->popularNewsSidebar($language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -236,19 +266,20 @@ class PageController extends Controller
         }
 
         return Inertia::render('CategoryNews', [
-            'category' => $category,
-            'news' => $news,
-            'recentNews' => $recentNews,
-            'popularNews' => $popularNews,
+            'category'        => $category,
+            'news'            => $news,
+            'recentNews'      => $recentNews,
+            'popularNews'     => $popularNews,
             'pageSectionNews' => $pageSectionNews,
         ]);
     }
 
-    public function locationNews(Request $request, string $slugTree): InertiaResponse|JsonResponse
+    public function locationNews(Request $request, string $slugTree, string | null $languageCode = null): InertiaResponse | JsonResponse
     {
+        $language = $this->pageService->language($languageCode);
 
-        $location = $this->pageService->location($slugTree);
-        $news = $this->pageService->locationNews($request, $location);
+        $location = $this->pageService->location($slugTree, $language);
+        $news     = $this->pageService->locationNews($request, $location, $language);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -258,23 +289,27 @@ class PageController extends Controller
 
         return Inertia::render('LocationNews', [
             'location' => $location,
-            'news' => $news,
+            'news'     => $news,
         ]);
     }
 
-    public function categoryLocationMaxDepthAndLevel(string $slugTree): JsonResponse
+    public function categoryLocationMaxDepthAndLevel(string $slugTree, string | null $languageCode = null): JsonResponse
     {
-        $category = $this->pageService->category($slugTree);
-        $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category);
+        $language = $this->pageService->language($languageCode);
+
+        $category                         = $this->pageService->category($slugTree, $language);
+        $categoryLocationMaxDepthAndLevel = $this->pageService->categoryLocationMaxDepthAndLevel($category, $language);
 
         return response()->json($categoryLocationMaxDepthAndLevel);
     }
 
-    public function homeSurveySurveyQuestionSubmit(Request $request, string $slug, string $surveyQuestionSlug): JsonResponse
+    public function homeSurveySurveyQuestionSubmit(Request $request, string $slug, string $surveyQuestionSlug, string | null $languageCode = null): JsonResponse
     {
-        $survey = $this->pageService->homeSurvey($slug);
-        $surveyQuestion = $this->pageService->homeSurveyQuestion($survey, $surveyQuestionSlug);
-        $result = $this->pageService->homeSurveySurveyQuestionSubmit($request, $survey, $surveyQuestion);
+        $language = $this->pageService->language($languageCode);
+
+        $survey         = $this->pageService->homeSurvey($slug, $language);
+        $surveyQuestion = $this->pageService->homeSurveyQuestion($survey, $surveyQuestionSlug, $language);
+        $result         = $this->pageService->homeSurveySurveyQuestionSubmit($request, $survey, $surveyQuestion);
 
         return response()->json($result);
     }

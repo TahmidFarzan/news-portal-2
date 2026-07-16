@@ -34,49 +34,29 @@ class NewsTypeCacheService
         return $perPage ?? $this->perPage;
     }
 
-    private function generalQueryRecords(?Language $language = null): Builder
+    private function generalQueryRecords(): Builder
     {
-        $records = NewsType::query()->orderBy('id', 'asc');
-        if ($language && $language?->id) {
-            $records = $records->where("language_id", $language?->id);
-        }
-        return $records;
+        return NewsType::query()->orderBy('id', 'asc');
     }
 
-    private function dbLastPageNo(?Language $language = null, int | null $perPage = null): int
+    private function dbLastPageNo(int | null $perPage = null): int
     {
-        return (int) ceil($this->generalQueryRecords($language)->count() / $this->getPerPage($perPage));
+        return (int) ceil($this->generalQueryRecords()->count() / $this->getPerPage($perPage));
     }
 
-    private function dbRecords(Request $request, ?Language $language = null, int | null $perPage = null): LengthAwarePaginator
+    private function dbRecords(Request $request, int | null $perPage = null): LengthAwarePaginator
     {
-        $records = NewsType::query()->orderBy('id', 'asc');
-        if ($language && $language?->id) {
-            $records = $records->where("language_id", $language?->id);
-        }
-
-        $records = $records->paginate($this->getPerPage($request->input("per_page", $perPage)));
-
-        return $records;
+        return NewsType::query()->orderBy('id', 'asc')->paginate($this->getPerPage($request->input("per_page", $perPage)));;
     }
 
-    private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): NewsType
+    private function dbRecordByIdOrSlug(string | int $idOrSlug): NewsType
     {
-        $record = NewsType::query();
-
-        if ($language && $language?->id) {
-            $record = $record->where("language_id", $language?->id);
-        }
-
-        $record = $record->where('id', $idOrSlug)
-            ->orWhere('slug', $idOrSlug)
-            ->firstOrFail();
-        return $record;
+        return NewsType::where('id', $idOrSlug)->orWhere('slug', $idOrSlug)->firstOrFail();
     }
 
-    public function getLastPageNo(string $key, ?Language $language = null, int | null $perPage = null, int | null $cachedTTL = null): int
+    public function getLastPageNo(string $key, int | null $perPage = null, int | null $cachedTTL = null): int
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey, $language);
+        $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey);
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -84,7 +64,7 @@ class NewsTypeCacheService
         );
 
         if ($lastPage === null) {
-            $lastPage = $this->dbLastPageNo($language, $perPage);
+            $lastPage = $this->dbLastPageNo($perPage);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -97,9 +77,9 @@ class NewsTypeCacheService
         return (int) $lastPage;
     }
 
-    public function getRecords(string $key, Request $request, ?Language $language = null, int | null $cachedTTL = null): LengthAwarePaginator
+    public function getRecords(string $key, Request $request, int | null $cachedTTL = null): LengthAwarePaginator
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequest($key, $this->secondKey, $request, $language);
+        $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequest($key, $this->secondKey, $request);
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -107,7 +87,7 @@ class NewsTypeCacheService
         );
 
         if ($records === null) {
-            $records = $this->dbRecords($request, $language);
+            $records = $this->dbRecords($request);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -120,9 +100,9 @@ class NewsTypeCacheService
         return $records;
     }
 
-    public function getRecordById(string $key, int | string $id, ?Language $language = null, int | null $cachedTTL = null): NewsType
+    public function getRecordById(string $key, int | string $id, int | null $cachedTTL = null): NewsType
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id, $language);
+        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id);
 
         $record = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -133,7 +113,7 @@ class NewsTypeCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($id, $language);
+            $record = $this->dbRecordByIdOrSlug($id);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -149,9 +129,9 @@ class NewsTypeCacheService
         return $record;
     }
 
-    public function getRecordBySlug(string $key, string $slug, ?Language $language = null, int | null $cachedTTL = null): NewsType
+    public function getRecordBySlug(string $key, string $slug, int | null $cachedTTL = null): NewsType
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
+        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug);
 
         $record = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -162,7 +142,7 @@ class NewsTypeCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($slug, $language);
+            $record = $this->dbRecordByIdOrSlug($slug);
 
             CacheServerHelper::cachedData(
                 $cacheKey,

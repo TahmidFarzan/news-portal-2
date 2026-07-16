@@ -438,9 +438,29 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
 });
 
 Route::prefix('site')->name('site.')->group(function () {
-    Route::get('languages/{slug}', [SiteController::class, 'language'])->name('language');
+    Route::get('languages/{code?}', [SiteController::class, 'language'])->name('language');
     Route::get('defalult-language', [SiteController::class, 'defaultLanguage'])->name('default-language');
     Route::post('language-change/{slugOrId}', [SiteController::class, 'languageChange'])->name('language-change');
+
+    Route::get('themes', [SiteController::class, 'themes'])->name('themes');
+    Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
+    Route::get('languages', [SiteController::class, 'languages'])->name('languages');
+
+    Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
+
+    Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'en|bn'])->group(function () {
+        Route::prefix('menus')->name('menus.')->group(function () {
+            Route::get('header-menu-items', [SiteController::class, 'menuHeaderMenuMenuItems'])->name('header-menu-items');
+            Route::get('off-canvas-menu-items', [SiteController::class, 'menuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
+            Route::get('topbar-menu-items', [SiteController::class, 'menuTopbarMenuMenuItems'])->name('topbar-menu-items');
+            Route::get('footer-menu-items', [SiteController::class, 'menuFooterMenuMenuItems'])->name('footer-menu-items');
+        });
+
+        Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
+            Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
+        });
+
+    });
 
     Route::prefix('menus')->name('menus.')->group(function () {
         Route::get('header-menu-items', [SiteController::class, 'menuHeaderMenuMenuItems'])->name('header-menu-items');
@@ -452,13 +472,6 @@ Route::prefix('site')->name('site.')->group(function () {
     Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
         Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
     });
-
-    Route::get('themes', [SiteController::class, 'themes'])->name('themes');
-    Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
-    Route::get('languages', [SiteController::class, 'languages'])->name('languages');
-
-    Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
-
 });
 
 Route::get('/', function () {
@@ -466,6 +479,40 @@ Route::get('/', function () {
 });
 
 Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
+    Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'en|bn'])->group(function () {
+        Route::get('home', [PageController::class, 'home'])->name('home');
+        Route::prefix('home')->name('home.')->group(function () {
+            Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');
+            Route::get('category/{slug}', [PageController::class, 'homeCategory'])->name('category');
+            Route::get('category/{slug}/news', [PageController::class, 'homeCategoryNews'])->name('category-news');
+            Route::get('news-type/{slug}/news', [PageController::class, 'homeNewsTypeNews'])->name('news-type-news');
+
+            Route::prefix('surveys')->name('surveys.')->group(function () {
+                Route::get('get', [PageController::class, 'homeSurveys'])->name('get');
+                Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'homeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
+            });
+
+        });
+
+        Route::get('latest', [PageController::class, 'latest'])->name('latest');
+        Route::get('search', [PageController::class, 'search'])->name('search');
+
+        Route::get('videos', [PageController::class, 'videos'])->name('videos');
+        Route::get('image-galleries', [PageController::class, 'imageGalleries'])->name('image-galleries');
+
+        Route::get('tags/{slug}', [PageController::class, 'tagNews'])->name('tag.news');
+        Route::get('contributors/{slug}', [PageController::class, 'contributorNews'])->name('contributor.news');
+        Route::get('events/{slug}', [PageController::class, 'eventNews'])->name('event.news');
+
+        Route::get('categories/{slugTree}', [PageController::class, 'categoryNews'])->where('slugTree', '.*')->name('category.news');
+        Route::get('locations/{slugTree}', [PageController::class, 'locationNews'])->where('slugTree', '.*')->name('location.news');
+        Route::get('category/{slugTree}/location-max-depth-and-level', [PageController::class, 'categoryLocationMaxDepthAndLevel'])->where('slugTree', '.*')->name('category.location-max-depth-and-level');
+
+        Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
+
+        Route::get('{slugTree}', [PageController::class, 'page'])->where('slugTree', '.*')->name('page');
+    });
+
     Route::get('home', [PageController::class, 'home'])->name('home');
     Route::prefix('home')->name('home.')->group(function () {
         Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');
@@ -497,4 +544,5 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
 
     Route::get('{slugTree}', [PageController::class, 'page'])->where('slugTree', '.*')->name('page');
+
 });

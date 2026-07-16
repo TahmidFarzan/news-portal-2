@@ -18,7 +18,7 @@ const languageChangeForm = reactive({
 })
 
 const loadLanguage = async () => {
-    const response = await fetchFromApi(route('site.language'), {}, { cache: false })
+    const response = await fetchFromApi(route('site.language',{code:null}), {}, { cache: false })
 
     language.value = response
 
