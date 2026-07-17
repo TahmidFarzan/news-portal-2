@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Helpers\SystemHelper;
 use App\Helpers\PageHelper;
 use App\Observers\PageObserver;
 use App\Policies\PagePolicy;
@@ -96,13 +97,17 @@ class Page extends Model
         }
 
         if (! $this->is_default) {
-            return route('page', ['slugTree' => $this->slug_tree]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("page", ['slug_tree' => $this->slug_tree]);
+            } else {
+                $url = route("localized.page", ["languageCode" => $this->language->code, 'slug_tree' => $this->slug_tree]);
+            }
         }
 
         return match ($this->default_use_as) {
-            PageHelper::DAFAULT_USE_AS_HOME   => route('home'),
-            PageHelper::DAFAULT_USE_AS_LATEST => route('latest'),
-            PageHelper::DAFAULT_USE_AS_SEARCH => route('search'),
+            PageHelper::DAFAULT_USE_AS_HOME   => ($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE) ? route('home') : route('home',["languageCode" => $this->language->code]),
+            PageHelper::DAFAULT_USE_AS_LATEST => ($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE) ? route('latest') : route('latest',["languageCode" => $this->language->code]),
+            PageHelper::DAFAULT_USE_AS_SEARCH => ($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE) ? route('search') : route('search',["languageCode" => $this->language->code]),
             default                           => null,
         };
     }

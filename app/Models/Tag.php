@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Helpers\SystemHelper;
 use App\Observers\TagObserver;
 use App\Policies\TagPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -84,7 +85,11 @@ class Tag extends Model
         $url = null;
 
         if($this->slug){
-            $url = route("tag.news", ['slug' => $this->slug]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("tag.news", ['slug' => $this->slug]);
+            } else {
+                $url = route("localized.tag.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
+            }
         }
 
         return $url;

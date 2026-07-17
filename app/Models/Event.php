@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Helpers\SystemHelper;
 use App\Helpers\MediaHelper;
 use App\Observers\EventObserver;
 use App\Policies\EventPolicy;
@@ -109,7 +110,11 @@ class Event extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            $url = route("event.news", ['slug' => $this->slug]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("event.news", ['slug' => $this->slug]);
+            } else {
+                $url = route("localized.event.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
+            }
         }
 
         return $url;

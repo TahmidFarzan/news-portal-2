@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Helpers\SystemHelper;
 use App\Observers\CategoryObserver;
 use App\Policies\CategoryPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -73,7 +74,7 @@ class Category extends Model
             ->generateSlugsFrom('name')
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
+            ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string
@@ -91,7 +92,12 @@ class Category extends Model
         $url = null;
 
         if ($this->slug_tree) {
-            $url = route("category.news", ['slugTree' => $this->slug_tree]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("category.news", ['slugTree' => $this->slug_tree]);
+            }
+            else{
+                $url = route("localized.category.news", ["languageCode" => $this->language->code,'slugTree' => $this->slug_tree]);
+            }
         }
 
         return $url;

@@ -293,6 +293,8 @@ class SiteService
         $list = $records->map(fn($row) => [
             'id'   => $row->id,
             'name' => $row->name,
+            'code' => $row->code,
+            'locale' => $row->locale,
             'slug' => $row->slug,
         ]);
 

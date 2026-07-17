@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
+use App\Helpers\SystemHelper;
 use App\Observers\ContributorObserver;
 use App\Policies\ContributorPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -75,7 +76,7 @@ class Contributor extends Model implements HasMedia
             ->generateSlugsFrom("name")
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
+            ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string
@@ -106,8 +107,12 @@ class Contributor extends Model implements HasMedia
     {
         $url = null;
 
-        if($this->slug){
-            $url = route("contributor.news", ['slug' => $this->slug]);
+        if ($this->slug) {
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("contributor.news", ['slug' => $this->slug]);
+            } else {
+                $url = route("localized.contributor.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
+            }
         }
 
         return $url;
@@ -118,7 +123,7 @@ class Contributor extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            $url = route("feeds.atom.contributor.news",['slug' => $this->slug]);
+            $url = route("feeds.atom.contributor.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -129,7 +134,7 @@ class Contributor extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            $url = route("feeds.rss.contributor.news",['slug' => $this->slug]);
+            $url = route("feeds.rss.contributor.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -140,7 +145,7 @@ class Contributor extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            $url = route("sitemaps.contributor.news",['slug' => $this->slug]);
+            $url = route("sitemaps.contributor.news", ['slug' => $this->slug]);
         }
 
         return $url;
@@ -153,7 +158,6 @@ class Contributor extends Model implements HasMedia
         $intervalInHours = $current->diffInHours($publishedAt);
         return $intervalInHours < 72;
     }
-
 
     public function activityLogs(): MorphMany
     {
@@ -170,7 +174,6 @@ class Contributor extends Model implements HasMedia
         return $this->belongsTo(Language::class, 'language_id');
     }
 
-
     public function latestActivityLog(): MorphOne
     {
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
@@ -178,7 +181,7 @@ class Contributor extends Model implements HasMedia
 
     public function news(): HasMany
     {
-        return $this->hasMany(News::class,'contributor_news' );
+        return $this->hasMany(News::class, 'contributor_news');
     }
 
     public function profileImage(): MorphOne

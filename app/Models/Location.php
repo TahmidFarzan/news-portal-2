@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Helpers\SystemHelper;
 use App\Observers\LocationObserver;
 use App\Policies\LocationPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -138,7 +139,12 @@ class Location extends Model
         $url = null;
 
         if ($this->slug_tree) {
-            $url = route("sitemaps.location.news", ['slugTree' => $this->slug_tree]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("location.news", ['slugTree' => $this->slug_tree]);
+            }
+            else{
+                $url = route("localized.location.news", ["languageCode" => $this->language->code,'slugTree' => $this->slug_tree]);
+            }
         }
 
         return $url;
