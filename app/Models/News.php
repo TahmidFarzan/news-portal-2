@@ -118,7 +118,12 @@ class News extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            $url = route("news.details", ["slug" => $this->slug]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("news.details", ['slug' => $this->slug]);
+            }
+            else{
+                $url = route("localized.news.details", ["languageCode" => $this->language->code,'slug' => $this->slug]);
+            }
         }
 
         return $url;
