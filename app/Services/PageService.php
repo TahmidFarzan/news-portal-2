@@ -80,12 +80,17 @@ class PageService
         $this->surveyCacheService      = $surveyCacheService;
     }
 
-    public function language(string | null $code): Language
+    public function language(string $code): Language
     {
         return $this->siteService->language($code);
     }
 
-    public function page(string $slugTree, Language | null $language): Page
+    public function defaultLanguage(): Language
+    {
+        return $this->siteService->defaultLanguage();
+    }
+
+    public function page(Language $language, string $slugTree): Page
     {
         return $this->pageCacheService->getRecordBySlugTree(
             CacheHelper::KEY_PAGE,
@@ -95,7 +100,7 @@ class PageService
         );
     }
 
-    public function homePage(Language | null $language): Page
+    public function homePage(Language $language): Page
     {
         return $this->pageCacheService->getRecordByUseAs(
             CacheHelper::KEY_PAGE,
@@ -105,7 +110,7 @@ class PageService
         );
     }
 
-    public function latestPage(Language | null $language): Page
+    public function latestPage(Language $language): Page
     {
         return $this->pageCacheService->getRecordByUseAs(
             CacheHelper::KEY_PAGE,
@@ -115,7 +120,7 @@ class PageService
         );
     }
 
-    public function searchPage(Language | null $language): Page
+    public function searchPage(Language $language): Page
     {
         return $this->pageCacheService->getRecordByUseAs(
             CacheHelper::KEY_PAGE,
@@ -134,7 +139,7 @@ class PageService
         );
     }
 
-    public function category(string $slugTree, Language | null $language): Category
+    public function category(Language $language, string $slugTree): Category
     {
         return $this->categoryCacheService->getRecordBySlugTree(
             CacheHelper::KEY_PAGE,
@@ -144,9 +149,9 @@ class PageService
         );
     }
 
-    public function categoryById(string $id, Language | null $language): Category
+    public function categoryById(Language $language, string $id): Category
     {
-        return $this->categoryCacheService->getRecordBySlug(
+        return $this->categoryCacheService->getRecordById(
             CacheHelper::KEY_PAGE,
             $id,
             $language,
@@ -154,7 +159,7 @@ class PageService
         );
     }
 
-    public function categoryBySlug(string $slug, Language | null $language): Category
+    public function categoryBySlug(Language $language, string $slug): Category
     {
         return $this->categoryCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
@@ -164,7 +169,7 @@ class PageService
         );
     }
 
-    public function event(string $slug, Language | null $language): Event
+    public function event(Language $language, string $slug): Event
     {
         return $this->eventCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
@@ -174,7 +179,7 @@ class PageService
         );
     }
 
-    public function tag(string $slug, Language | null $language): Tag
+    public function tag(Language $language, string $slug): Tag
     {
         return $this->tagCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
@@ -184,7 +189,7 @@ class PageService
         );
     }
 
-    public function contributor(string $slug, Language | null $language): Contributor
+    public function contributor(Language $language, string $slug): Contributor
     {
         return $this->contributorCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
@@ -194,7 +199,7 @@ class PageService
         );
     }
 
-    public function location(string $slugTree, Language | null $language): Location
+    public function location(Language $language, string $slugTree): Location
     {
         return $this->locationCacheService->getRecordBySlugTree(
             CacheHelper::KEY_PAGE,
@@ -204,7 +209,7 @@ class PageService
         );
     }
 
-    public function locationById(string $id, Language | null $language): Location
+    public function locationById(Language $language, string $id): Location
     {
         return $this->locationCacheService->getRecordById(
             CacheHelper::KEY_PAGE,
@@ -214,7 +219,7 @@ class PageService
         );
     }
 
-    public function news(string $slug, Language | null $language): News
+    public function news(Language $language, string $slug): News
     {
         return $this->newsCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
@@ -224,7 +229,7 @@ class PageService
         );
     }
 
-    public function categoryLocationMaxDepthAndLevel(Category $category, Language | null $language): object
+    public function categoryLocationMaxDepthAndLevel(Language $language, Category $category): object
     {
         return $this->locationCacheService->getMaxDepthAndLevel(
             CacheHelper::KEY_PAGE,
@@ -234,7 +239,7 @@ class PageService
         );
     }
 
-    public function categoryNewsPlacement(Category $category, Language | null $language): Collection
+    public function categoryNewsPlacement(Language $language, Category $category): Collection
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE,
@@ -247,7 +252,7 @@ class PageService
         );
     }
 
-    public function recentNews(Language | null $language): CursorPaginator
+    public function recentNews(Language $language): CursorPaginator
     {
         return $this->newsCacheService->getLatestRecord(
             CacheHelper::KEY_PAGE,
@@ -258,7 +263,7 @@ class PageService
         );
     }
 
-    public function popularNews(Language | null $language): Collection
+    public function popularNews(Language $language): Collection
     {
         return $this->newsCacheService->getPopulerRecord(
             CacheHelper::KEY_PAGE,
@@ -268,7 +273,7 @@ class PageService
         );
     }
 
-    public function newsTypeNews(Request $request, NewsType $newsType, Language | null $language): CursorPaginator
+    public function newsTypeNews(Request $request, NewsType $newsType, Language $language): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -281,7 +286,7 @@ class PageService
         );
     }
 
-    public function categoryNews(Request $request, Category $category, Language | null $language): CursorPaginator
+    public function categoryNews(Request $request, Language $language, Category $category): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -294,7 +299,7 @@ class PageService
         );
     }
 
-    public function eventNews(Request $request, Event $event, Language | null $language): CursorPaginator
+    public function eventNews(Request $request, Event $event, Language $language): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -307,7 +312,7 @@ class PageService
         );
     }
 
-    public function locationNews(Request $request, Location $location, Language | null $language): CursorPaginator
+    public function locationNews(Request $request, Location $location, Language $language): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -320,7 +325,7 @@ class PageService
         );
     }
 
-    public function tagNews(Request $request, Tag $tag, Language | null $language): CursorPaginator
+    public function tagNews(Request $request, Tag $tag, Language $language): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -333,7 +338,7 @@ class PageService
         );
     }
 
-    public function contributorNews(Request $request, Contributor $contributor, Language | null $language): CursorPaginator
+    public function contributorNews(Request $request, Contributor $contributor, Language $language): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -346,7 +351,7 @@ class PageService
         );
     }
 
-    public function newsSearch(Request $request, Language | null $language): CursorPaginator
+    public function newsSearch(Request $request, Language $language): CursorPaginator
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
@@ -359,7 +364,7 @@ class PageService
         );
     }
 
-    public function homeCategoryBySlug(string $slug, Language | null $language): Category
+    public function homeCategoryBySlug(Language $language, string $slug): Category
     {
         return $this->categoryCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE_HOME,
@@ -369,7 +374,7 @@ class PageService
         );
     }
 
-    public function homeTopEvents(Language | null $language): Collection
+    public function homeTopEvents(Language $language): Collection
     {
         return $this->eventCacheService->getRecordsByPosition(
             CacheHelper::KEY_PAGE_HOME,
@@ -379,7 +384,7 @@ class PageService
         );
     }
 
-    public function homeBottomEvents(Language | null $language): Collection
+    public function homeBottomEvents(Language $language): Collection
     {
         return $this->eventCacheService->getRecordsByPosition(
             CacheHelper::KEY_PAGE_HOME,
@@ -389,7 +394,7 @@ class PageService
         );
     }
 
-    public function homeLeadNews(Language | null $language): Collection
+    public function homeLeadNews(Language $language): Collection
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE_HOME,
@@ -402,7 +407,7 @@ class PageService
         );
     }
 
-    public function homeEventNews(Event $event, Language | null $language): Collection
+    public function homeEventNews(Event $event, Language $language): Collection
     {
         return $this->newsCacheService->getRecordsLimit(
             CacheHelper::KEY_PAGE_HOME,
@@ -414,7 +419,7 @@ class PageService
         );
     }
 
-    public function homeCategoryNews(Request $request, Category $category, Language | null $language): Collection
+    public function homeCategoryNews(Request $request, Language $language, Category $category): Collection
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE_HOME,
@@ -427,7 +432,7 @@ class PageService
         );
     }
 
-    public function homeNewsTypeNews(NewsType $newsType, Language | null $language): Collection
+    public function homeNewsTypeNews(NewsType $newsType, Language $language): Collection
     {
         return $this->newsCacheService->getRecordsLimit(
             CacheHelper::KEY_PAGE_HOME,
@@ -439,7 +444,7 @@ class PageService
         );
     }
 
-    public function homeTrends(Language | null $language): Collection
+    public function homeTrends(Language $language): Collection
     {
         return $this->tagCacheService->getRecordsLimitForTrend(
             CacheHelper::KEY_PAGE_HOME,
@@ -449,7 +454,7 @@ class PageService
         );
     }
 
-    public function homeSurveys(Language | null $language): Collection
+    public function homeSurveys(Language $language): Collection
     {
         return $this->surveyCacheService->getRecordsByDate(
             CacheHelper::KEY_PAGE_HOME,
@@ -459,7 +464,7 @@ class PageService
         );
     }
 
-    public function homeSurvey(string $slug, Language | null $language): Survey
+    public function homeSurvey(Language $language, string $slug): Survey
     {
         return $this->surveyCacheService->getSurveyBySlug(
             CacheHelper::KEY_PAGE_HOME,
@@ -469,7 +474,7 @@ class PageService
         );
     }
 
-    public function homeSurveyQuestion(Survey $survey, string $slug, Language | null $language): SurveyQuestion
+    public function homeSurveyQuestion(Language $language, Survey $survey, string $slug): SurveyQuestion
     {
         return $this->surveyCacheService->getSurveyQuestionByQuestion(
             CacheHelper::KEY_PAGE_HOME,
@@ -586,7 +591,7 @@ class PageService
         }
     }
 
-    public function recentNewsSidebar(Language | null $language): Collection
+    public function recentNewsSidebar(Language $language): Collection
     {
         return $this->newsCacheService->getLatestRecord(
             CacheHelper::KEY_PAGE,
@@ -597,7 +602,7 @@ class PageService
         );
     }
 
-    public function popularNewsSidebar(Language | null $language): Collection
+    public function popularNewsSidebar(Language $language): Collection
     {
         return $this->newsCacheService->getPopulerRecord(
             CacheHelper::KEY_PAGE,

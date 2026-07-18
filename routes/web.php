@@ -438,7 +438,7 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
 });
 
 Route::prefix('site')->name('site.')->group(function () {
-    Route::get('languages/{code?}', [SiteController::class, 'language'])->name('language');
+    Route::get('languages/{code}', [SiteController::class, 'language'])->name('language');
     Route::get('defalult-language', [SiteController::class, 'defaultLanguage'])->name('default-language');
     Route::post('language-change/{slugOrId}', [SiteController::class, 'languageChange'])->name('language-change');
 
@@ -450,10 +450,10 @@ Route::prefix('site')->name('site.')->group(function () {
 
     Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'en|bn'])->group(function () {
         Route::prefix('menus')->name('menus.')->group(function () {
-            Route::get('header-menu-items', [SiteController::class, 'menuHeaderMenuMenuItems'])->name('header-menu-items');
-            Route::get('off-canvas-menu-items', [SiteController::class, 'menuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
-            Route::get('topbar-menu-items', [SiteController::class, 'menuTopbarMenuMenuItems'])->name('topbar-menu-items');
-            Route::get('footer-menu-items', [SiteController::class, 'menuFooterMenuMenuItems'])->name('footer-menu-items');
+            Route::get('header-menu-items', [SiteController::class, 'localizedMenuHeaderMenuMenuItems'])->name('header-menu-items');
+            Route::get('off-canvas-menu-items', [SiteController::class, 'localizedMenuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
+            Route::get('topbar-menu-items', [SiteController::class, 'localizedMenuTopbarMenuMenuItems'])->name('topbar-menu-items');
+            Route::get('footer-menu-items', [SiteController::class, 'localizedMenuFooterMenuMenuItems'])->name('footer-menu-items');
         });
 
         Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
@@ -480,37 +480,37 @@ Route::get('/', function () {
 
 Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'en|bn'])->group(function () {
-        Route::get('home', [PageController::class, 'home'])->name('home');
+        Route::get('home', [PageController::class, 'localizedHome'])->name('home');
         Route::prefix('home')->name('home.')->group(function () {
-            Route::get('event/{slug}/news', [PageController::class, 'homeEventNews'])->name('event-news');
-            Route::get('category/{slug}', [PageController::class, 'homeCategory'])->name('category');
-            Route::get('category/{slug}/news', [PageController::class, 'homeCategoryNews'])->name('category-news');
-            Route::get('news-type/{slug}/news', [PageController::class, 'homeNewsTypeNews'])->name('news-type-news');
+            Route::get('event/{slug}/news', [PageController::class, 'localizedHomeEventNews'])->name('event-news');
+            Route::get('category/{slug}', [PageController::class, 'localizedHomeCategory'])->name('category');
+            Route::get('category/{slug}/news', [PageController::class, 'localizedHomeCategoryNews'])->name('category-news');
+            Route::get('news-type/{slug}/news', [PageController::class, 'localizedHomeNewsTypeNews'])->name('news-type-news');
 
             Route::prefix('surveys')->name('surveys.')->group(function () {
-                Route::get('get', [PageController::class, 'homeSurveys'])->name('get');
-                Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'homeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
+                Route::get('get', [PageController::class, 'localizedHomeSurveys'])->name('get');
+                Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'localizedHomeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
             });
 
         });
 
-        Route::get('latest', [PageController::class, 'latest'])->name('latest');
-        Route::get('search', [PageController::class, 'search'])->name('search');
+        Route::get('latest', [PageController::class, 'localizedLatest'])->name('latest');
+        Route::get('search', [PageController::class, 'localizedSearch'])->name('search');
 
-        Route::get('videos', [PageController::class, 'videos'])->name('videos');
-        Route::get('image-galleries', [PageController::class, 'imageGalleries'])->name('image-galleries');
+        Route::get('videos', [PageController::class, 'localizedVideos'])->name('videos');
+        Route::get('image-galleries', [PageController::class, 'localizedImageGalleries'])->name('image-galleries');
 
-        Route::get('tags/{slug}', [PageController::class, 'tagNews'])->name('tag.news');
-        Route::get('contributors/{slug}', [PageController::class, 'contributorNews'])->name('contributor.news');
-        Route::get('events/{slug}', [PageController::class, 'eventNews'])->name('event.news');
+        Route::get('tags/{slug}', [PageController::class, 'localizedTagNews'])->name('tag.news');
+        Route::get('contributors/{slug}', [PageController::class, 'localizedContributorNews'])->name('contributor.news');
+        Route::get('events/{slug}', [PageController::class, 'localizedEventNews'])->name('event.news');
 
-        Route::get('categories/{slugTree}', [PageController::class, 'categoryNews'])->where('slugTree', '.*')->name('category.news');
-        Route::get('locations/{slugTree}', [PageController::class, 'locationNews'])->where('slugTree', '.*')->name('location.news');
-        Route::get('category/{slugTree}/location-max-depth-and-level', [PageController::class, 'categoryLocationMaxDepthAndLevel'])->where('slugTree', '.*')->name('category.location-max-depth-and-level');
+        Route::get('categories/{slugTree}', [PageController::class, 'localizedCategoryNews'])->where('slugTree', '.*')->name('category.news');
+        Route::get('locations/{slugTree}', [PageController::class, 'localizedLocationNews'])->where('slugTree', '.*')->name('location.news');
+        Route::get('category/{slugTree}/location-max-depth-and-level', [PageController::class, 'localizedCategoryLocationMaxDepthAndLevel'])->where('slugTree', '.*')->name('category.location-max-depth-and-level');
 
-        Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
+        Route::get('news/{slug}', [PageController::class, 'localizedNewsDetails'])->name('news.details');
 
-        Route::get('{slugTree}', [PageController::class, 'page'])->where('slugTree', '.*')->name('page');
+        Route::get('{slugTree}', [PageController::class, 'localizedPage'])->where('slugTree', '.*')->name('page');
     });
 
     Route::get('home', [PageController::class, 'home'])->name('home');

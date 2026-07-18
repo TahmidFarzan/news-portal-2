@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Services\SiteService;
@@ -15,7 +14,7 @@ class SiteController extends Controller
         $this->siteService = $siteService;
     }
 
-    public function language(string | null $code=null): JsonResponse
+    public function language(string $code): JsonResponse
     {
         return response()->json(
             $this->siteService->language($code)
@@ -29,7 +28,49 @@ class SiteController extends Controller
         );
     }
 
-    public function menuHeaderMenuMenuItems(string | null $languageCode=null): JsonResponse
+    public function menuHeaderMenuMenuItems(): JsonResponse
+    {
+        $language = $this->siteService->defaultLanguage();
+        return response()->json(
+            $this->siteService->menuHeaderMenuMenuItems($language)
+        );
+    }
+
+    public function menuOffCanvasMenuMenuItems(): JsonResponse
+    {
+        $language = $this->siteService->defaultLanguage();
+        return response()->json(
+            $this->siteService->menuOffCanvasMenuMenuItems($language)
+        );
+    }
+
+    public function menuTopbarMenuMenuItems(): JsonResponse
+    {
+        $language = $this->siteService->defaultLanguage();
+        return response()->json(
+            $this->siteService->menuTopbarMenuMenuItems($language)
+        );
+    }
+
+    public function menuFooterMenuMenuItems(): JsonResponse
+    {
+        $language = $this->siteService->defaultLanguage();
+        return response()->json(
+            $this->siteService->menuFooterMenuMenuItems($language)
+        );
+    }
+
+    public function menuItemSubMenuItems(string $slug): JsonResponse
+    {
+        $language = $this->siteService->defaultLanguage();
+        $menuItem = $this->siteService->menuItem($language, $slug);
+
+        return response()->json(
+            $this->siteService->menuItemSubMenuItems($menuItem)
+        );
+    }
+
+    public function localizedMenuHeaderMenuMenuItems(string $languageCode): JsonResponse
     {
         $language = $this->siteService->language($languageCode);
         return response()->json(
@@ -37,7 +78,7 @@ class SiteController extends Controller
         );
     }
 
-    public function menuOffCanvasMenuMenuItems(string | null $languageCode=null): JsonResponse
+    public function localizedMenuOffCanvasMenuMenuItems(string $languageCode): JsonResponse
     {
         $language = $this->siteService->language($languageCode);
         return response()->json(
@@ -45,7 +86,7 @@ class SiteController extends Controller
         );
     }
 
-    public function menuTopbarMenuMenuItems(string | null $languageCode=null): JsonResponse
+    public function localizedMenuTopbarMenuMenuItems(string $languageCode): JsonResponse
     {
         $language = $this->siteService->language($languageCode);
         return response()->json(
@@ -53,7 +94,7 @@ class SiteController extends Controller
         );
     }
 
-    public function menuFooterMenuMenuItems(string | null $languageCode=null): JsonResponse
+    public function localizedMenuFooterMenuMenuItems(string $languageCode): JsonResponse
     {
         $language = $this->siteService->language($languageCode);
         return response()->json(
@@ -61,10 +102,10 @@ class SiteController extends Controller
         );
     }
 
-    public function menuItemSubMenuItems(string $slug, string | null $languageCode=null): JsonResponse
+    public function localizedMenuItemSubMenuItems(string $languageCode, string $slug): JsonResponse
     {
         $language = $this->siteService->language($languageCode);
-        $menuItem = $this->siteService->menuItem($slug, $language);
+        $menuItem = $this->siteService->menuItem($language, $slug);
 
         return response()->json(
             $this->siteService->menuItemSubMenuItems($menuItem)
@@ -78,7 +119,7 @@ class SiteController extends Controller
         );
     }
 
-    public function breakingNews(Request $request, string | null $languageCode=null): JsonResponse
+    public function breakingNews(Request $request, string | null $languageCode = null): JsonResponse
     {
         $language = $this->siteService->language($languageCode);
         return response()->json(
@@ -93,7 +134,7 @@ class SiteController extends Controller
         );
     }
 
-    public function languageChange(int|string $slugOrId): JsonResponse
+    public function languageChange(int | string $slugOrId): JsonResponse
     {
         $result = $this->siteService->languageChange($slugOrId);
 
