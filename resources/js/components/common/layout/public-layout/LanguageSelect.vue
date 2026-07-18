@@ -1,82 +1,76 @@
 <script setup>
-import { router } from '@inertiajs/vue3'
-import { ref, reactive, watch, nextTick, onMounted } from 'vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import { fetchFromApi, postToApi } from '@/composables/useApiClient'
-import { setSelectedLanguage, useTranslate } from '@/composables/useTranslate'
+import { computed } from 'vue'
 
-const language = ref(null)
-const isReady = ref(false)
-
-const { t } = useTranslate()
-
-const languageChangeForm = reactive({
-    language_id: null,
-    errors: {
-        language_id: null,
+const {
+    availableLanguages = [],
+    currentLanguage = null,
+    defaultLanguage = null,
+} = defineProps({
+    availableLanguages: {
+        type: Array,
+        default: () => [],
+    },
+    currentLanguage: {
+        type: Object,
+        default: null,
+    },
+    defaultLanguage: {
+        type: Object,
+        default: null,
     },
 })
 
-const loadLanguage = async () => {
-    const response = await fetchFromApi(route('site.language',{code:null}), {}, { cache: false })
-
-    language.value = response
-
-    setSelectedLanguage(language.value)
-
-    languageChangeForm.language_id = language.value?.id ?? null
-
-    await nextTick()
-
-    isReady.value = true
+const normalizeLanguageCode = (code) => {
+    return String(code ?? '').trim().toLowerCase()
 }
 
-const languageChange = async () => {
-    if (!languageChangeForm.language_id || !isReady.value) return
+const languageCodes = computed(() => {
+    return availableLanguages
+        .map((language) => normalizeLanguageCode(language?.code))
+        .filter(Boolean)
+})
 
-    languageChangeForm.errors.language_id = null
+const targetLanguage = computed(() => {
+    const currentCode = normalizeLanguageCode(currentLanguage?.code)
 
-    try {
-        const response = await postToApi(
-            route('site.language-change', {
-                slugOrId: languageChangeForm.language_id,
-            })
-        )
+    return availableLanguages.find((language) => {
+        return normalizeLanguageCode(language?.code) !== currentCode
+    }) ?? null
+})
 
-        if (response?.status) {
-            language.value = response?.data ?? language.value
-
-            setSelectedLanguage(language.value)
-
-            window.location.href = route('home')
-            //router.visit(route('home'))
-        }
-
-    } catch (error) {
-        languageChangeForm.errors.language_id =
-            error?.response?.data?.errors?.language_id?.[0] ??
-            error?.response?.data?.message ??
-            'Unable to set language'
+const switchUrl = computed(() => {
+    if (!targetLanguage.value?.code || !defaultLanguage?.code) {
+        return '#'
     }
-}
 
-watch(
-    () => languageChangeForm.language_id,
-    async () => {
-        await languageChange()
+    const targetCode = normalizeLanguageCode(targetLanguage.value.code)
+    const defaultCode = normalizeLanguageCode(defaultLanguage.code)
+    const pathSegments = window.location.pathname.split('/').filter(Boolean)
+
+    if (pathSegments.length && languageCodes.value.includes(normalizeLanguageCode(pathSegments[0]))) {
+        pathSegments.shift()
     }
-)
 
-onMounted(async () => {
-    await loadLanguage()
+    if (targetCode !== defaultCode) {
+        pathSegments.unshift(targetCode)
+    }
+
+    const path = `/${pathSegments.join('/')}`.replace(/\/+$/, '') || '/'
+
+    return `${window.location.origin}${path}${window.location.search}${window.location.hash}`
+})
+
+const targetLabel = computed(() => {
+    return targetLanguage.value?.name
+        ?? targetLanguage.value?.code?.toUpperCase()
+        ?? ''
 })
 </script>
 
 <template>
-    <div class="w-40 max-[450px]:w-32">
-        <SelectInfinityLoadingApi v-if="language" :key="language?.id" :selectedItem="language" fieldName="language_id"
-            :form="languageChangeForm" :apiUrl="route('site.languages')" :error="languageChangeForm.errors.language_id"
-            selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id" :multiple="false"
-            :placeholder="t('common.labels.language')" :compactDesign="true" :useDarkTheme="true" />
-    </div>
+    <a v-if="targetLanguage" :href="switchUrl" target="_blank" rel="noopener noreferrer"
+        class="inline-flex h-8 min-w-12 items-center justify-center rounded-md border border-white/20 px-3 text-sm font-semibold text-white transition hover:bg-white/10"
+        :hreflang="targetLanguage?.code" :lang="targetLanguage?.code">
+        {{ targetLabel }}
+    </a>
 </template>

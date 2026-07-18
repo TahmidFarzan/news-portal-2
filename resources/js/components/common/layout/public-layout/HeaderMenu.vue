@@ -17,6 +17,13 @@ library.add(faSpinner)
 
 const { t } = useTranslate()
 
+const { languageRoute = (routeName, params = {}) => route(routeName, params) } = defineProps({
+    languageRoute: {
+        type: Function,
+        default: (routeName, params = {}) => route(routeName, params),
+    },
+})
+
 const headerMenu = reactive({
     items: [],
     loading: false,
@@ -44,7 +51,7 @@ const getHeaderMenuItems = async (pageNumber = 1) => {
         headerMenu.loading = true
         headerMenu.error = null
 
-        const apiUrl = route('site.menus.header-menu-items', { page: pageNumber })
+        const apiUrl = languageRoute('site.menus.header-menu-items', { page: pageNumber })
         const response = await fetchFromApi(
             apiUrl,
             {},
@@ -90,7 +97,8 @@ onMounted(() => {
             :watch-key="`${headerMenu.items.length}-${headerMenu.loading}`" @reach-end="handleReachEnd">
             <ul class="h-10 flex items-center gap-2 whitespace-nowrap">
                 <template v-if="headerMenu.items.length">
-                    <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item" />
+                    <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item"
+                        :language-route="languageRoute" />
                 </template>
 
                 <template v-else-if="isInitialLoading">

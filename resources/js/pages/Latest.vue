@@ -43,12 +43,13 @@ const metaKeywords = computed(() => {
 })
 
 const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 </script>
 
 <template>
 
     <Head :title="metaTitle">
-        <link rel="canonical" :href="route('latest')" />
+        <link rel="canonical" :href="publicRoute('latest')" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 

@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, inject, watch } from 'vue'
 
-import { fetchFromApi, postToApi } from '@/composables/useApiClient'
+import { postToApi } from '@/composables/useApiClient'
 import { useTranslate } from '@/composables/useTranslate'
 
 const {
@@ -15,6 +15,7 @@ const {
 const emit = defineEmits(['updated'])
 
 const { t } = useTranslate()
+const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const loading = ref(false)
 const message = ref(null)
@@ -73,7 +74,7 @@ const submit = async () => {
 
         const response = await postToApi(
 
-            route(
+            publicRoute(
                 'home.surveys.survey-questions-submit',
                 {
                     slug:

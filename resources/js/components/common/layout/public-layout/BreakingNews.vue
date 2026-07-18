@@ -10,9 +10,14 @@ const { t } = useTranslate()
 const {
     title = 'Breaking News',
     speed = 45,
+    languageRoute = (routeName, params = {}) => route(routeName, params),
 } = defineProps({
     title: String,
     speed: Number,
+    languageRoute: {
+        type: Function,
+        default: (routeName, params = {}) => route(routeName, params),
+    },
 })
 
 const wrapperRef = ref(null)
@@ -74,7 +79,7 @@ const loadBreakingNews = async (url = null) => {
     loading.value = true
 
     try {
-        const apiUrl = url ?? route('site.breaking-news')
+        const apiUrl = url ?? languageRoute('site.breaking-news')
         const response = await fetchFromApi(
             apiUrl,
             {},

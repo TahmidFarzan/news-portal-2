@@ -1,7 +1,7 @@
 <script setup>
 import SurveyQuestion from '@/components/common/page/home/SurveyQuestion.vue'
 
-import { computed, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
@@ -14,6 +14,7 @@ import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
+const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const { surveys: initialSurveys } = defineProps({
     surveys: {
@@ -27,7 +28,7 @@ const surveys = ref([...initialSurveys])
 
 const load = async () => {
     try {
-        const apiUrl = route('home.surveys.get')
+        const apiUrl = publicRoute('home.surveys.get')
 
         const response = await fetchFromApi(
             apiUrl,

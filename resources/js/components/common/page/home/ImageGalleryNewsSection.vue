@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Navigation } from 'swiper/modules'
@@ -21,6 +21,7 @@ import { useTranslate, generateTranslationKey } from '@/composables/useTranslate
 FontAwesomeLibrary.add(faLeftLong, faRightLong, faImages)
 
 const { t } = useTranslate()
+const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const newsType = newsTypes.ImageGallery
 
@@ -41,7 +42,7 @@ const nextButtonClass = computed(() => `news-type-gallery-next-${slug.value}`)
 const loadNews = async () => {
     if (!slug.value) return
 
-    const apiUrl = route('home.news-type-news', {
+    const apiUrl = publicRoute('home.news-type-news', {
         slug: slug.value,
     })
 

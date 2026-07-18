@@ -9,7 +9,11 @@ import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
 
-const { item, level = 0 } = defineProps({
+const {
+    item,
+    level = 0,
+    languageRoute = (routeName, params = {}) => route(routeName, params),
+} = defineProps({
     item: {
         type: Object,
         required: true,
@@ -17,6 +21,10 @@ const { item, level = 0 } = defineProps({
     level: {
         type: Number,
         default: 0,
+    },
+    languageRoute: {
+        type: Function,
+        default: (routeName, params = {}) => route(routeName, params),
     },
 })
 
@@ -50,7 +58,7 @@ const loadChildren = async (page = 1) => {
     try {
         childrenLoading.value = true
 
-        const apiUrl = route('site.menu-items.sub-menu-items', {
+        const apiUrl = languageRoute('site.menu-items.sub-menu-items', {
             slug: item.slug,
             page,
         })
@@ -143,7 +151,8 @@ const handleReachEnd = async () => {
                 <VerticalScroller max-height-class="max-h-64" :loading="childrenLoading"
                     :watch-key="`${children.length}-${childrenLoading}-${isOpen}`" @reach-end="handleReachEnd">
                     <ul class="space-y-1 py-1">
-                        <OffCanvasMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
+                        <OffCanvasMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1"
+                            :language-route="languageRoute" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
                             {{ t("common.labels.loading") }}

@@ -113,7 +113,6 @@ class PageController extends Controller
         $language = $this->pageService->defaultLanguage();
 
         $news     = $this->pageService->newsSearch($request, $language);
-        $language = $this->pageService->language($language);
         $page     = $this->pageService->searchPage($language);
 
         if ($request->expectsJson()) {
@@ -411,7 +410,6 @@ class PageController extends Controller
         $language = $this->pageService->language($languageCode);
 
         $news     = $this->pageService->newsSearch($request, $language);
-        $language = $this->pageService->language($language);
         $page     = $this->pageService->searchPage($language);
 
         if ($request->expectsJson()) {

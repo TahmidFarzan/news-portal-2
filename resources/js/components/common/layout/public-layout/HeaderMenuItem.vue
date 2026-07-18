@@ -16,7 +16,11 @@ library.add(faChevronDown)
 
 const { t } = useTranslate()
 
-const { item, level = 0 } = defineProps({
+const {
+    item,
+    level = 0,
+    languageRoute = (routeName, params = {}) => route(routeName, params),
+} = defineProps({
     item: {
         type: Object,
         required: true,
@@ -24,6 +28,10 @@ const { item, level = 0 } = defineProps({
     level: {
         type: Number,
         default: 0,
+    },
+    languageRoute: {
+        type: Function,
+        default: (routeName, params = {}) => route(routeName, params),
     },
 })
 
@@ -79,7 +87,7 @@ const loadChildren = async (page = 1) => {
     try {
         childrenLoading.value = true
 
-        const apiUrl = route('site.menu-items.sub-menu-items', {
+        const apiUrl = languageRoute('site.menu-items.sub-menu-items', {
             slug: item.slug,
             page,
         })
@@ -215,7 +223,8 @@ onBeforeUnmount(() => {
                 <VerticalScroller max-height-class="max-h-72" :loading="childrenLoading"
                     :watch-key="`${children.length}-${childrenLoading}-${isOpen}`" @reach-end="handleSubMenuReachEnd">
                     <ul class="py-1">
-                        <HeaderMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
+                        <HeaderMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1"
+                            :language-route="languageRoute" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
                             {{ t("common.labels.loading") }}

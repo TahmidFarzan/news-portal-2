@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, inject, ref, watch, onMounted } from 'vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useApiClient'
@@ -10,6 +10,7 @@ import ListCard from '@/components/common/news/ListCard.vue'
 import CategoryHasLocationSection from '@/components/common/page/CategoryHasLocationSection.vue'
 
 const { t } = useTranslate()
+const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const { categorySlug, language, style, limit } = defineProps({
     categorySlug: {
@@ -58,7 +59,7 @@ const loadCategorySection = async () => {
     loading.value = true
 
     try {
-        const categoryApiUrl = route('home.category', {
+        const categoryApiUrl = publicRoute('home.category', {
             slug: categorySlug,
         })
 
@@ -73,7 +74,7 @@ const loadCategorySection = async () => {
 
         category.value = categoryResponse?.data ?? categoryResponse
 
-        const newsApiUrl = route('home.category-news', {
+        const newsApiUrl = publicRoute('home.category-news', {
             slug: categorySlug,
             limit,
         })

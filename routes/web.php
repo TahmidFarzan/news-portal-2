@@ -452,7 +452,7 @@ Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'e
         });
 
         Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
-            Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
+            Route::get('sub-menu-items', [SiteController::class, 'localizedMenuItemSubMenuItems'])->name('sub-menu-items');
         });
     });
 
@@ -537,7 +537,6 @@ Route::prefix('feeds')->name('feeds.')->group(function () {
 Route::prefix('site')->name('site.')->group(function () {
     Route::get('languages/{code}', [SiteController::class, 'language'])->name('language');
     Route::get('defalult-language', [SiteController::class, 'defaultLanguage'])->name('default-language');
-    Route::post('language-change/{slugOrId}', [SiteController::class, 'languageChange'])->name('language-change');
 
     Route::get('themes', [SiteController::class, 'themes'])->name('themes');
     Route::get('languages', [SiteController::class, 'languages'])->name('languages');

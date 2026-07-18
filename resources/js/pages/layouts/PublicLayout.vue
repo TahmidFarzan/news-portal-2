@@ -8,7 +8,7 @@ import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
-import { ref, computed, nextTick, onMounted, onBeforeUnmount, provide } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount, provide } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -22,8 +22,7 @@ import { faFacebook, faGoogle, faYoutube } from '@fortawesome/free-brands-svg-ic
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTheme } from '@/composables/useTheme'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
-import { getSelectedLanguageCode, useTranslate } from '@/composables/useTranslate'
+import { setSelectedLanguage, getSelectedLanguageCode, useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
 
@@ -46,6 +45,10 @@ const {
 const headerNavbar = ref(null)
 const isHeaderSticky = ref(false)
 const siteThemes = ref([])
+const defaultLanguage = ref(null)
+const availableLanguages = ref([])
+const languageContextLoaded = ref(false)
+const languageCacheKey = 'api:layout:language'
 
 const year = new Date().getFullYear()
 
@@ -148,18 +151,98 @@ const showSurveys = computed(() => {
 
 const selectedLanguageCode = computed(() => getSelectedLanguageCode())
 
+const normalizeLanguageCode = (code) => {
+    return String(code ?? '').trim().toLowerCase()
+}
+
+const firstPathSegment = computed(() => {
+    return decodeURIComponent(
+        window.location.pathname
+            .split('/')
+            .filter(Boolean)[0] ?? ''
+    )
+})
+
+const findLanguageByCode = (code) => {
+    const normalizedCode = normalizeLanguageCode(code)
+
+    return availableLanguages.value.find((language) => {
+        return normalizeLanguageCode(language?.code) === normalizedCode
+    }) ?? null
+}
+
+const currentLanguage = computed(() => {
+    return findLanguageByCode(firstPathSegment.value) ?? defaultLanguage.value
+})
+
+const isDefaultLanguage = (language) => {
+    return normalizeLanguageCode(language?.code) === normalizeLanguageCode(defaultLanguage.value?.code)
+}
+
+const publicRoute = (routeName, params = {}, language = currentLanguage.value) => {
+    if (language?.code && !isDefaultLanguage(language)) {
+        return route(`localized.${routeName}`, {
+            languageCode: language.code,
+            ...params,
+        })
+    }
+
+    return route(routeName, params)
+}
+
 const layoutSystemApiRefreshKey = (componentName) => {
-    return computed(() => `section-component-${componentName}-${getSelectLanguageCode()}`)
+    return `section-component-${componentName}-${selectedLanguageCode.value}`
 }
 
 provide('showGoogleAd', showGoogleAd)
 provide('showTrends', showTrends)
 provide('showSurveys', showSurveys)
+provide('publicRoute', publicRoute)
+provide('currentLanguage', currentLanguage)
+provide('defaultLanguage', defaultLanguage)
+provide('availableLanguages', availableLanguages)
+
+const loadLanguageContext = async () => {
+    const [defaultLanguageResponse, languagesResponse] = await Promise.all([
+        fetchFromApi(route('site.default-language'), {}, { cache: false }),
+        fetchFromApi(route('site.languages'), { per_page: 100 }, {
+            key: `${languageCacheKey}:${route('site.languages')}`,
+            ttl: apiCacheTTL.SYSTEM_LONG,
+        }),
+    ])
+
+    defaultLanguage.value = defaultLanguageResponse?.data ?? defaultLanguageResponse ?? null
+    availableLanguages.value = Array.isArray(languagesResponse?.items)
+        ? languagesResponse.items
+        : []
+
+    if (defaultLanguage.value && !findLanguageByCode(defaultLanguage.value.code)) {
+        availableLanguages.value = [
+            defaultLanguage.value,
+            ...availableLanguages.value,
+        ]
+    }
+
+    setSelectedLanguage(currentLanguage.value)
+    languageContextLoaded.value = true
+}
+
+watch(
+    currentLanguage,
+    (language) => {
+        if (language) {
+            setSelectedLanguage(language)
+        }
+    }
+)
 
 onMounted(async () => {
     await nextTick()
 
-    await loadSiteThemes()
+    await Promise.all([
+        loadLanguageContext(),
+        loadSiteThemes(),
+    ])
 
     handlePageScroll()
 
@@ -197,8 +280,8 @@ onBeforeUnmount(() => {
 
                 <div
                     class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
-                    <div v-if="isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
-                        <TopbarMenu :key="layoutSystemApiRefreshKey('topbar-menu')" class="hidden min-[300px]:inline" />
+                    <div v-if="languageContextLoaded && isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
+                        <TopbarMenu :key="layoutSystemApiRefreshKey('topbar-menu')" :language-route="publicRoute" class="hidden min-[300px]:inline" />
                     </div>
 
                     <a v-if="!authUser" :href="route('login')"
@@ -211,7 +294,9 @@ onBeforeUnmount(() => {
                         <AuthTopbarDropdownMenu :key="layoutSystemApiRefreshKey('auth-topbar-menu')" :auth-user="authUser" />
                     </div>
 
-                    <LanguageSelect class="max-[450px]:flex-shrink-0" />
+                    <LanguageSelect v-if="languageContextLoaded" class="max-[450px]:flex-shrink-0"
+                        :available-languages="availableLanguages" :current-language="currentLanguage"
+                        :default-language="defaultLanguage" />
                 </div>
             </div>
         </div>
@@ -219,7 +304,7 @@ onBeforeUnmount(() => {
         <div ref="headerNavbar" class="public-header text-white transition-shadow"
             :class="{ 'is-sticky sticky top-0 z-50': isHeaderSticky }">
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
-                <a :href="route('home')"
+                <a :href="languageContextLoaded ? publicRoute('home') : route('home')"
                     class="brand-link h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
                     <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
                         class="h-10 max-w-40 object-contain">
@@ -230,26 +315,27 @@ onBeforeUnmount(() => {
 
 
                 <div class="flex-1 min-w-0 h-10 flex items-center">
-                    <HeaderMenu :key="layoutSystemApiRefreshKey('header-menu')" class="hidden min-[401px]:inline" />
+                    <HeaderMenu v-if="languageContextLoaded" :key="layoutSystemApiRefreshKey('header-menu')" :language-route="publicRoute" class="hidden min-[401px]:inline" />
                 </div>
 
                 <div class="h-10 flex items-center gap-2 flex-shrink-0">
-                    <a :href="route('search')"
+                    <a :href="languageContextLoaded ? publicRoute('search') : route('search')"
                         class="header-action w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
                         aria-label="Search">
                         <FontAwesomeIcon icon="magnifying-glass" />
                     </a>
 
-                    <OffCanvasMenu :key="layoutSystemApiRefreshKey('off-canvas-menu')" />
+                    <OffCanvasMenu v-if="languageContextLoaded" :key="layoutSystemApiRefreshKey('off-canvas-menu')" :language-route="publicRoute" />
                 </div>
             </div>
         </div>
 
         <main class="main public-main mx-auto w-full max-w-7xl px-4 py-6">
-            <slot />
+            <slot v-if="languageContextLoaded" />
         </main>
 
-        <BreakingNews :key="layoutSystemApiRefreshKey('breaking-news')" v-if="isTruthyValue(showBreakingNews?.value)" :title="t('common.messages.breakingNews')" />
+        <BreakingNews :key="layoutSystemApiRefreshKey('breaking-news')" v-if="languageContextLoaded && isTruthyValue(showBreakingNews?.value)"
+            :title="t('common.messages.breakingNews')" :language-route="publicRoute" />
 
         <footer class="public-footer py-4 mt-2 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
@@ -257,7 +343,7 @@ onBeforeUnmount(() => {
                     {{ t('common.messages.text') }} {{ translateNumerText(year) }} {{ t('common.app.name') }}
                 </span>
 
-                <FooterMenu :key="layoutSystemApiRefreshKey('footer-menu')" v-if="isTruthyValue(showFooterMenu?.value)" />
+                <FooterMenu :key="layoutSystemApiRefreshKey('footer-menu')" v-if="languageContextLoaded && isTruthyValue(showFooterMenu?.value)" :language-route="publicRoute" />
 
                 <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
                     {{ t('common.app.developedBy') }}

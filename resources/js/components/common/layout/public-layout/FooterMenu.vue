@@ -14,6 +14,13 @@ import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
 
+const { languageRoute = (routeName, params = {}) => route(routeName, params) } = defineProps({
+    languageRoute: {
+        type: Function,
+        default: (routeName, params = {}) => route(routeName, params),
+    },
+})
+
 const footerMenu = reactive({
     items: [],
     loading: false,
@@ -41,7 +48,7 @@ const getFooterMenuItems = async (pageNumber = 1) => {
         footerMenu.loading = true
         footerMenu.error = null
 
-        const apiUrl = route('site.menus.footer-menu-items', { page: pageNumber })
+        const apiUrl = languageRoute('site.menus.footer-menu-items', { page: pageNumber })
         const response = await fetchFromApi(
             apiUrl,
             {},

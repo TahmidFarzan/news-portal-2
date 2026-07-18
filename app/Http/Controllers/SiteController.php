@@ -142,13 +142,6 @@ class SiteController extends Controller
         );
     }
 
-    public function languageChange(int | string $slugOrId): JsonResponse
-    {
-        $result = $this->siteService->languageChange($slugOrId);
-
-        return response()->json($result);
-    }
-
     public function getGoogleAdsence(Request $request): JsonResponse
     {
         $GoogleAdsences = $this->siteService->getGoogleAdsence($request);

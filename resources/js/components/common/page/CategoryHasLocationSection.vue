@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { router, useForm } from '@inertiajs/vue3'
 
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
@@ -35,6 +35,7 @@ const {
 })
 
 const { t } = useTranslate()
+const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const categoryLocationMaxDepthAndLevel = ref(null)
 const isLoadingLocationConfig = ref(false)
@@ -300,7 +301,7 @@ const fetchCategoryLocationMaxDepthAndLevel = async () => {
 
     try {
         const response = await fetchFromApi(
-            route('category.location-max-depth-and-level', {
+            publicRoute('category.location-max-depth-and-level', {
                 slugTree: category.slug_tree,
             }),
             {}

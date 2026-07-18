@@ -20,6 +20,13 @@ library.add(faBars, faXmark, faSpinner)
 
 const { t } = useTranslate()
 
+const { languageRoute = (routeName, params = {}) => route(routeName, params) } = defineProps({
+    languageRoute: {
+        type: Function,
+        default: (routeName, params = {}) => route(routeName, params),
+    },
+})
+
 const appName = import.meta.env.VITE_APP_NAME
 const appLogo = import.meta.env.VITE_APP_LOGO
 
@@ -50,7 +57,7 @@ const getOffCanvasMenuItems = async (pageNumber = 1) => {
         offCanvasMenu.loading = true
         offCanvasMenu.error = null
 
-        const apiUrl = route('site.menus.off-canvas-menu-items', { page: pageNumber })
+        const apiUrl = languageRoute('site.menus.off-canvas-menu-items', { page: pageNumber })
         const response = await fetchFromApi(
             apiUrl,
             {},
@@ -124,7 +131,7 @@ onMounted(() => {
             <aside v-if="showOffCanvas"
                 class="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-white shadow-xl z-[999] flex flex-col">
                 <div class="flex items-center justify-between px-4 py-3 border-b">
-                    <a :href="route('home')" class="inline-flex items-center">
+                    <a :href="languageRoute('home')" class="inline-flex items-center">
                         <img v-if="appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
 
                         <span v-else class="text-lg font-semibold text-gray-800">
@@ -146,7 +153,7 @@ onMounted(() => {
                         <ul class="space-y-1 pr-1">
                             <template v-if="hasOffCanvasMenu">
                                 <OffCanvasMenuItem v-for="item in offCanvasMenu.items" :key="item.id" :item="item"
-                                    @navigate="closeOffCanvas" />
+                                    :language-route="languageRoute" @navigate="closeOffCanvas" />
                             </template>
 
                             <template v-else-if="offCanvasMenu.loading">

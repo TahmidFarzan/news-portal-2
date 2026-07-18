@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -15,6 +15,7 @@ import ListCard from '@/components/common/news/ListCard.vue'
 FontAwesomeLibrary.add(faRightLong)
 
 const { t } = useTranslate()
+const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const { events } = defineProps({
     events: {
@@ -64,7 +65,7 @@ const loadEventNews = async (event) => {
     loadingEvents.value[event.slug] = true
 
     try {
-        const apiUrl = route('home.event-news', {
+        const apiUrl = publicRoute('home.event-news', {
             slug: event.slug,
         })
 

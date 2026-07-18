@@ -316,19 +316,4 @@ class SiteService
         return $data;
     }
 
-    public function languageChange(int | string $slugOrId): array
-    {
-        $language = Language::query()
-            ->where('id', $slugOrId)
-            ->orWhere('slug', $slugOrId)
-            ->firstOrFail();
-
-        session()->put('selected_language_id', $language->id);
-
-        return [
-            'status'  => true,
-            'message' => __('status-messages.site.language.change.success'),
-            'data'    => $language,
-        ];
-    }
 }

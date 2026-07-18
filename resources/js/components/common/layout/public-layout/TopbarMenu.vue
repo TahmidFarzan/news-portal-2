@@ -17,6 +17,13 @@ library.add(faSpinner)
 
 const { t } = useTranslate()
 
+const { languageRoute = (routeName, params = {}) => route(routeName, params) } = defineProps({
+    languageRoute: {
+        type: Function,
+        default: (routeName, params = {}) => route(routeName, params),
+    },
+})
+
 const topbarMenu = reactive({
     items: [],
     loading: false,
@@ -44,7 +51,7 @@ const getTopbarMenuItems = async (pageNumber = 1) => {
         topbarMenu.loading = true
         topbarMenu.error = null
 
-        const apiUrl = route('site.menus.topbar-menu-items', { page: pageNumber })
+        const apiUrl = languageRoute('site.menus.topbar-menu-items', { page: pageNumber })
         const response = await fetchFromApi(
             apiUrl,
             {},
