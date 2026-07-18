@@ -141,7 +141,7 @@ class Contributor extends Model implements HasMedia
             if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
                 $url = route("feeds.rss.contributor.news", ['slug' => $this->slug]);
             } else {
-                $url = route("localized.feeds.rss.contributor.news", ["languageCode" => $this->language->code, 'slug' => $this->slug_]);
+                $url = route("localized.feeds.rss.contributor.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
 

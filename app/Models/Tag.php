@@ -101,10 +101,9 @@ class Tag extends Model
 
         if ($this->slug) {
             if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.rss.tag.news", ['slugTree' => $this->slug]);
-            }
-            else{
-                $url = route("localized.feeds.rss.tag.news", ["languageCode" => $this->language->code,'slugTree' => $this->slug]);
+                $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
+            } else {
+                $url = route("localized.feeds.rss.tag.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
 
@@ -117,10 +116,9 @@ class Tag extends Model
 
         if ($this->slug) {
             if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.rss.tag.news", ['slugTree' => $this->slug]);
-            }
-            else{
-                $url = route("localized.feeds.rss.tag.news", ["languageCode" => $this->language->code,'slugTree' => $this->slug]);
+                $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
+            } else {
+                $url = route("localized.feeds.rss.tag.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
 

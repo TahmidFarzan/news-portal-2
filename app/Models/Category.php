@@ -110,7 +110,7 @@ class Category extends Model
             if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
                 $url = route("feeds.atom.category.news", ['slugTree' => $this->slug_tree]);
             } else {
-                $url = route("localized.feeds.atom.rss.category.news", ["languageCode" => $this->language->code, 'slugTree' => $this->slug_tree]);
+                $url = route("localized.feeds.atom.category.news", ["languageCode" => $this->language->code, 'slugTree' => $this->slug_tree]);
             }
         }
 
