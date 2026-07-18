@@ -25,6 +25,7 @@ use App\Services\Cache\NewsTypeCacheService;
 use App\Services\Cache\PageCacheService;
 use App\Services\Cache\SurveyCacheService;
 use App\Services\Cache\TagCacheService;
+use App\Services\SiteService;
 use Exception;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Http\Request;
@@ -94,8 +95,9 @@ class PageService
     {
         return $this->pageCacheService->getRecordBySlugTree(
             CacheHelper::KEY_PAGE,
-            $slugTree,
             $language,
+            $slugTree,
+
             $this->cachedTTL
         );
     }
@@ -104,8 +106,8 @@ class PageService
     {
         return $this->pageCacheService->getRecordByUseAs(
             CacheHelper::KEY_PAGE,
-            PageHelper::DAFAULT_USE_AS_HOME,
             $language,
+            PageHelper::DAFAULT_USE_AS_HOME,
             $this->cachedTTL
         );
     }
@@ -114,8 +116,8 @@ class PageService
     {
         return $this->pageCacheService->getRecordByUseAs(
             CacheHelper::KEY_PAGE,
-            PageHelper::DAFAULT_USE_AS_LATEST,
             $language,
+            PageHelper::DAFAULT_USE_AS_LATEST,
             $this->cachedTTL
         );
     }
@@ -124,8 +126,8 @@ class PageService
     {
         return $this->pageCacheService->getRecordByUseAs(
             CacheHelper::KEY_PAGE,
-            PageHelper::DAFAULT_USE_AS_SEARCH,
             $language,
+            PageHelper::DAFAULT_USE_AS_SEARCH,
             $this->cachedTTL
         );
     }
@@ -143,8 +145,9 @@ class PageService
     {
         return $this->categoryCacheService->getRecordBySlugTree(
             CacheHelper::KEY_PAGE,
-            $slugTree,
             $language,
+            $slugTree,
+
             $this->cachedTTL
         );
     }
@@ -153,8 +156,9 @@ class PageService
     {
         return $this->categoryCacheService->getRecordById(
             CacheHelper::KEY_PAGE,
-            $id,
             $language,
+            $id,
+
             $this->cachedTTL
         );
     }
@@ -163,8 +167,8 @@ class PageService
     {
         return $this->categoryCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
-            $slug,
             $language,
+            $slug,
             $this->cachedTTL
         );
     }
@@ -173,8 +177,8 @@ class PageService
     {
         return $this->eventCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
-            $slug,
             $language,
+            $slug,
             $this->cachedTTL
         );
     }
@@ -183,8 +187,8 @@ class PageService
     {
         return $this->tagCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
-            $slug,
             $language,
+            $slug,
             $this->cachedTTL
         );
     }
@@ -193,8 +197,8 @@ class PageService
     {
         return $this->contributorCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
-            $slug,
             $language,
+            $slug,
             $this->cachedTTL
         );
     }
@@ -203,8 +207,9 @@ class PageService
     {
         return $this->locationCacheService->getRecordBySlugTree(
             CacheHelper::KEY_PAGE,
-            $slugTree,
             $language,
+            $slugTree,
+
             $this->cachedTTL
         );
     }
@@ -213,8 +218,9 @@ class PageService
     {
         return $this->locationCacheService->getRecordById(
             CacheHelper::KEY_PAGE,
-            $id,
             $language,
+            $id,
+
             $this->cachedTTL
         );
     }
@@ -223,8 +229,9 @@ class PageService
     {
         return $this->newsCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE,
-            $slug,
             $language,
+            $slug,
+
             $this->cachedTTL
         );
     }
@@ -233,8 +240,9 @@ class PageService
     {
         return $this->locationCacheService->getMaxDepthAndLevel(
             CacheHelper::KEY_PAGE,
-            $category,
             $language,
+            $category,
+
             $this->cachedTTL
         );
     }
@@ -243,10 +251,11 @@ class PageService
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE,
+            $language,
             PageHelper::PAGE_CATEGORY,
             PageHelper::PAGE_SECTION_LEAD_NEWS,
             $category,
-            $language,
+
             5,
             $this->cachedTTL
         );
@@ -277,9 +286,10 @@ class PageService
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
+            $language,
             $request,
             $newsType,
-            $language,
+
             $request->input('per_page', 24),
             $this->cachedTTL,
             true
@@ -290,9 +300,10 @@ class PageService
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
+            $language,
             $request,
             $category,
-            $language,
+
             $request->input('per_page', 24),
             $this->cachedTTL,
             true
@@ -303,9 +314,10 @@ class PageService
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
+            $language,
             $request,
             $event,
-            $language,
+
             $request->input('per_page', 24),
             $this->cachedTTL,
             true
@@ -316,9 +328,10 @@ class PageService
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
+            $language,
             $request,
             $location,
-            $language,
+
             $request->input('per_page', 24),
             $this->cachedTTL,
             true
@@ -329,9 +342,10 @@ class PageService
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
+            $language,
             $request,
             $tag,
-            $language,
+
             $request->input('per_page', 24),
             $this->cachedTTL,
             true
@@ -342,9 +356,10 @@ class PageService
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
+            $language,
             $request,
             $contributor,
-            $language,
+
             $request->input('per_page', 24),
             $this->cachedTTL,
             true
@@ -355,9 +370,10 @@ class PageService
     {
         return $this->newsCacheService->getRecords(
             CacheHelper::KEY_PAGE,
+            $language,
             $request,
             null,
-            $language,
+
             $request->input('per_page', 16),
             $this->cachedTTL,
             true
@@ -368,8 +384,8 @@ class PageService
     {
         return $this->categoryCacheService->getRecordBySlug(
             CacheHelper::KEY_PAGE_HOME,
-            $slug,
             $language,
+            $slug,
             $this->cachedTTL
         );
     }
@@ -378,8 +394,8 @@ class PageService
     {
         return $this->eventCacheService->getRecordsByPosition(
             CacheHelper::KEY_PAGE_HOME,
-            EventHelper::POSITION_TOP,
             $language,
+            EventHelper::POSITION_TOP,
             $this->cachedTTL
         );
     }
@@ -388,8 +404,8 @@ class PageService
     {
         return $this->eventCacheService->getRecordsByPosition(
             CacheHelper::KEY_PAGE_HOME,
-            EventHelper::POSITION_BOTTOM,
             $language,
+            EventHelper::POSITION_BOTTOM,
             $this->cachedTTL
         );
     }
@@ -398,10 +414,10 @@ class PageService
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE_HOME,
+            $language,
             PageHelper::PAGE_HOME,
             PageHelper::PAGE_SECTION_LEAD_NEWS,
             null,
-            $language,
             10,
             $this->cachedTTL
         );
@@ -411,9 +427,10 @@ class PageService
     {
         return $this->newsCacheService->getRecordsLimit(
             CacheHelper::KEY_PAGE_HOME,
+            $language,
             null,
             $event,
-            $language,
+
             10,
             $this->cachedTTL
         );
@@ -423,10 +440,11 @@ class PageService
     {
         return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE_HOME,
+            $language,
             PageHelper::PAGE_HOME,
             PageHelper::PAGE_SECTION_CATEGORY_NEWS,
             $category,
-            $language,
+
             $request->input('limit', 4),
             $this->cachedTTL
         );
@@ -436,9 +454,10 @@ class PageService
     {
         return $this->newsCacheService->getRecordsLimit(
             CacheHelper::KEY_PAGE_HOME,
+            $language,
             null,
             $newsType,
-            $language,
+
             10,
             $this->cachedTTL
         );
@@ -458,8 +477,8 @@ class PageService
     {
         return $this->surveyCacheService->getRecordsByDate(
             CacheHelper::KEY_PAGE_HOME,
-            now()->toDateString(),
             $language,
+            now()->toDateString(),
             $this->cachedTTL
         );
     }
@@ -468,8 +487,9 @@ class PageService
     {
         return $this->surveyCacheService->getSurveyBySlug(
             CacheHelper::KEY_PAGE_HOME,
-            $slug,
             $language,
+            $slug,
+
             $this->cachedTTL
         );
     }
@@ -478,9 +498,10 @@ class PageService
     {
         return $this->surveyCacheService->getSurveyQuestionByQuestion(
             CacheHelper::KEY_PAGE_HOME,
+            $language,
             $survey,
             $slug,
-            $language,
+
             $this->cachedTTL
         );
     }

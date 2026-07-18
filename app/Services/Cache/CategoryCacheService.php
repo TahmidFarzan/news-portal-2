@@ -11,12 +11,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class CategoryCacheService
 {
-    private int $perPage = 5000;
+    private int $perPage   = 5000;
     private int $cachedTTL = 86400;
 
-    private string $mainTag = CacheHelper::TAG_CATEGORY;
+    private string $mainTag   = CacheHelper::TAG_CATEGORY;
     private string $secondKey = CacheHelper::KEY_CATEGORY;
-
 
     public function isConnected(): bool
     {
@@ -35,7 +34,7 @@ class CategoryCacheService
         return $perPage ?? $this->perPage;
     }
 
-    private function generalQueryRecords(?Language $language = null): Builder
+    private function generalQueryRecords(Language $language): Builder
     {
         $records = Category::query()->with('language');
         if ($language && $language?->id) {
@@ -44,12 +43,12 @@ class CategoryCacheService
         return $records;
     }
 
-    private function dbLastPageNo(?Language $language = null, int | null $perPage = null): int
+    private function dbLastPageNo(Language $language, int | null $perPage = null): int
     {
         return (int) ceil($this->generalQueryRecords($language)->count() / $this->getPerPage($perPage));
     }
 
-    private function dbRecords(Request $request, ?Language $language = null, int | null $perPage = null): LengthAwarePaginator
+    private function dbRecords(Request $request, Language $language, int | null $perPage = null): LengthAwarePaginator
     {
         $records = Category::query()->with('language');
         if ($language && $language?->id) {
@@ -61,7 +60,7 @@ class CategoryCacheService
         return $records;
     }
 
-    private function dbRecordByIdOrSlug(string | int $idOrSlug, ?Language $language = null): Category
+    private function dbRecordByIdOrSlug(Language $language, string | int $idOrSlug): Category
     {
         $record = Category::with(['language', 'parent', "children"]);
 
@@ -75,7 +74,7 @@ class CategoryCacheService
         return $record;
     }
 
-    private function dbRecordSlugTree(string $slugTree, ?Language $language = null): Category
+    private function dbRecordSlugTree(Language $language, string $slugTree): Category
     {
         $record = Category::with(['language', 'parent', "children"]);
 
@@ -88,7 +87,7 @@ class CategoryCacheService
         return $record;
     }
 
-    public function getLastPageNo(string $key, ?Language $language = null, int|null $perPage = null ,int | null $cachedTTL = null): int
+    public function getLastPageNo(string $key, Language $language, int | null $perPage = null, int | null $cachedTTL = null): int
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey, $language);
 
@@ -111,7 +110,7 @@ class CategoryCacheService
         return (int) $lastPage;
     }
 
-    public function getRecords(string $key, Request $request, ?Language $language = null, int | null $cachedTTL = null): LengthAwarePaginator
+    public function getRecords(string $key, Request $request, Language $language, int | null $cachedTTL = null): LengthAwarePaginator
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequest($key, $this->secondKey, $request, $language);
 
@@ -134,7 +133,7 @@ class CategoryCacheService
         return $records;
     }
 
-    public function getRecordBySlugTree(string $key, string $slugTree, ?Language $language = null, int | null $cachedTTL = null): Category
+    public function getRecordBySlugTree(string $key, Language $language, string $slugTree, int | null $cachedTTL = null): Category
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlugTree($key, $this->secondKey, $slugTree, $language);
 
@@ -147,7 +146,7 @@ class CategoryCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordSlugTree($slugTree, $language);
+            $record = $this->dbRecordSlugTree($language, $slugTree);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -163,7 +162,7 @@ class CategoryCacheService
         return $record;
     }
 
-    public function getRecordById(string $key, int | string $id, ?Language $language = null, int | null $cachedTTL = null): Category
+    public function getRecordById(string $key, Language $language, int | string $id, int | null $cachedTTL = null): Category
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id, $language);
 
@@ -176,7 +175,7 @@ class CategoryCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($id, $language);
+            $record = $this->dbRecordByIdOrSlug($language, $id);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -192,7 +191,7 @@ class CategoryCacheService
         return $record;
     }
 
-    public function getRecordBySlug(string $key, int | string $slug, ?Language $language = null, int | null $cachedTTL = null): Category
+    public function getRecordBySlug(string $key, Language $language, int | string $slug,  int | null $cachedTTL = null): Category
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
 
@@ -205,7 +204,7 @@ class CategoryCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($slug, $language);
+            $record = $this->dbRecordByIdOrSlug($language, $slug);
 
             CacheServerHelper::cachedData(
                 $cacheKey,

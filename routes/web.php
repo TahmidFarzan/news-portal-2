@@ -395,6 +395,102 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
     });
 });
 
+Route::get('/', function () {
+    return redirect()->route('home');
+});
+
+Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'en|bn'])->group(function () {
+    Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->group(function () {
+        Route::get('index.xml', [SitemapController::class, 'localizedIndex'])->name('index');
+
+        Route::get('categories.xml', [SitemapController::class, 'localizedCategories'])->name('categories');
+        Route::get('tags.xml', [SitemapController::class, 'localizedTags'])->name('tags');
+        Route::get('locations.xml', [SitemapController::class, 'localizedLocations'])->name('locations');
+        Route::get('events.xml', [SitemapController::class, 'localizedEvents'])->name('events');
+        Route::get('contributors.xml', [SitemapController::class, 'localizedContributors'])->name('contributors');
+
+        Route::get('news.xml', [SitemapController::class, 'localizedNews'])->name('news');
+        Route::get('latest-news.xml', [SitemapController::class, 'localizedLatestNews'])->name('latest-news');
+
+        Route::get('categories/{slugTree}/news.xml', [SitemapController::class, 'localizedCategoryNews'])->where('slugTree', '.*')->name('category.news');
+        Route::get('locations/{slugTree}/news.xml', [SitemapController::class, 'localizedLocationNews'])->where('slugTree', '.*')->name('location.news');
+        Route::get('events/{slug}/news.xml', [SitemapController::class, 'localizedEventNews'])->name('event.news');
+        Route::get('tags/{slug}/news.xml', [SitemapController::class, 'localizedTagNews'])->name('tag.news');
+        Route::get('contributors/{slug}/news.xml', [SitemapController::class, 'localizedContributorNews'])->name('contributor.news');
+
+    });
+
+    Route::prefix('feeds')->name('feeds.')->group(function () {
+        Route::prefix('rss')->name('rss.')->middleware(['feed.response:rss'])->group(function () {
+            Route::get('news.xml', [FeedController::class, 'localizedNews'])->name('news');
+            Route::get('latest-news.xml', [FeedController::class, 'localizedLatestNews'])->name('latest-news');
+            Route::get('categories/{slugTree}/news.xml', [FeedController::class, 'localizedCategoryNews'])->where('slugTree', '.*')->name('category.news');
+            Route::get('locations/{slugTree}/news.xml', [FeedController::class, 'localizedLocationNews'])->where('slugTree', '.*')->name('location.news');
+            Route::get('events/{slug}/news.xml', [FeedController::class, 'localizedEventNews'])->name('event.news');
+            Route::get('tags/{slug}/news.xml', [FeedController::class, 'localizedTagNews'])->name('tag.news');
+            Route::get('contributors/{slug}/news.xml', [FeedController::class, 'localizedContributorNews'])->name('contributor.news');
+        });
+
+        Route::prefix('atom')->name('atom.')->middleware(['feed.response:atom'])->group(function () {
+            Route::get('news.xml', [FeedController::class, 'localizedNews'])->name('news');
+            Route::get('latest-news.xml', [FeedController::class, 'localizedLatestNews'])->name('latest-news');
+            Route::get('categories/{slugTree}/news.xml', [FeedController::class, 'localizedCategoryNews'])->where('slugTree', '.*')->name('category.news');
+            Route::get('locations/{slugTree}/news.xml', [FeedController::class, 'localizedLocationNews'])->where('slugTree', '.*')->name('location.news');
+            Route::get('events/{slug}/news.xml', [FeedController::class, 'localizedEventNews'])->name('event.news');
+            Route::get('tags/{slug}/news.xml', [FeedController::class, 'localizedTagNews'])->name('tag.news');
+            Route::get('contributors/{slug}/news.xml', [FeedController::class, 'localizedCcontributorNews'])->name('contributor.news');
+        });
+    });
+
+    Route::prefix('site')->name('site.')->group(function () {
+        Route::prefix('menus')->name('menus.')->group(function () {
+            Route::get('header-menu-items', [SiteController::class, 'localizedMenuHeaderMenuMenuItems'])->name('header-menu-items');
+            Route::get('off-canvas-menu-items', [SiteController::class, 'localizedMenuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
+            Route::get('topbar-menu-items', [SiteController::class, 'localizedMenuTopbarMenuMenuItems'])->name('topbar-menu-items');
+            Route::get('footer-menu-items', [SiteController::class, 'localizedMenuFooterMenuMenuItems'])->name('footer-menu-items');
+        });
+
+        Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
+            Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
+        });
+    });
+
+    Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
+
+        Route::get('home', [PageController::class, 'localizedHome'])->name('home');
+        Route::prefix('home')->name('home.')->group(function () {
+            Route::get('event/{slug}/news', [PageController::class, 'localizedHomeEventNews'])->name('event-news');
+            Route::get('category/{slug}', [PageController::class, 'localizedHomeCategory'])->name('category');
+            Route::get('category/{slug}/news', [PageController::class, 'localizedHomeCategoryNews'])->name('category-news');
+            Route::get('news-type/{slug}/news', [PageController::class, 'localizedHomeNewsTypeNews'])->name('news-type-news');
+
+            Route::prefix('surveys')->name('surveys.')->group(function () {
+                Route::get('get', [PageController::class, 'localizedHomeSurveys'])->name('get');
+                Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'localizedHomeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
+            });
+
+        });
+
+        Route::get('latest', [PageController::class, 'localizedLatest'])->name('latest');
+        Route::get('search', [PageController::class, 'localizedSearch'])->name('search');
+
+        Route::get('videos', [PageController::class, 'localizedVideos'])->name('videos');
+        Route::get('image-galleries', [PageController::class, 'localizedImageGalleries'])->name('image-galleries');
+
+        Route::get('tags/{slug}', [PageController::class, 'localizedTagNews'])->name('tag.news');
+        Route::get('contributors/{slug}', [PageController::class, 'localizedContributorNews'])->name('contributor.news');
+        Route::get('events/{slug}', [PageController::class, 'localizedEventNews'])->name('event.news');
+
+        Route::get('categories/{slugTree}', [PageController::class, 'localizedCategoryNews'])->where('slugTree', '.*')->name('category.news');
+        Route::get('locations/{slugTree}', [PageController::class, 'localizedLocationNews'])->where('slugTree', '.*')->name('location.news');
+        Route::get('category/{slugTree}/location-max-depth-and-level', [PageController::class, 'localizedCategoryLocationMaxDepthAndLevel'])->where('slugTree', '.*')->name('category.location-max-depth-and-level');
+
+        Route::get('news/{slug}', [PageController::class, 'localizedNewsDetails'])->name('news.details');
+
+        Route::get('{slugTree}', [PageController::class, 'localizedPage'])->where('slugTree', '.*')->name('page');
+    });
+});
+
 Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->group(function () {
     Route::get('index.xml', [SitemapController::class, 'index'])->name('index');
 
@@ -448,20 +544,6 @@ Route::prefix('site')->name('site.')->group(function () {
 
     Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
 
-    Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'en|bn'])->group(function () {
-        Route::prefix('menus')->name('menus.')->group(function () {
-            Route::get('header-menu-items', [SiteController::class, 'localizedMenuHeaderMenuMenuItems'])->name('header-menu-items');
-            Route::get('off-canvas-menu-items', [SiteController::class, 'localizedMenuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
-            Route::get('topbar-menu-items', [SiteController::class, 'localizedMenuTopbarMenuMenuItems'])->name('topbar-menu-items');
-            Route::get('footer-menu-items', [SiteController::class, 'localizedMenuFooterMenuMenuItems'])->name('footer-menu-items');
-        });
-
-        Route::prefix('menu-items/{slug}')->name('menu-items.')->group(function () {
-            Route::get('sub-menu-items', [SiteController::class, 'menuItemSubMenuItems'])->name('sub-menu-items');
-        });
-
-    });
-
     Route::prefix('menus')->name('menus.')->group(function () {
         Route::get('header-menu-items', [SiteController::class, 'menuHeaderMenuMenuItems'])->name('header-menu-items');
         Route::get('off-canvas-menu-items', [SiteController::class, 'menuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
@@ -474,44 +556,7 @@ Route::prefix('site')->name('site.')->group(function () {
     });
 });
 
-Route::get('/', function () {
-    return redirect()->route('home');
-});
-
 Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
-    Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'en|bn'])->group(function () {
-        Route::get('home', [PageController::class, 'localizedHome'])->name('home');
-        Route::prefix('home')->name('home.')->group(function () {
-            Route::get('event/{slug}/news', [PageController::class, 'localizedHomeEventNews'])->name('event-news');
-            Route::get('category/{slug}', [PageController::class, 'localizedHomeCategory'])->name('category');
-            Route::get('category/{slug}/news', [PageController::class, 'localizedHomeCategoryNews'])->name('category-news');
-            Route::get('news-type/{slug}/news', [PageController::class, 'localizedHomeNewsTypeNews'])->name('news-type-news');
-
-            Route::prefix('surveys')->name('surveys.')->group(function () {
-                Route::get('get', [PageController::class, 'localizedHomeSurveys'])->name('get');
-                Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'localizedHomeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
-            });
-
-        });
-
-        Route::get('latest', [PageController::class, 'localizedLatest'])->name('latest');
-        Route::get('search', [PageController::class, 'localizedSearch'])->name('search');
-
-        Route::get('videos', [PageController::class, 'localizedVideos'])->name('videos');
-        Route::get('image-galleries', [PageController::class, 'localizedImageGalleries'])->name('image-galleries');
-
-        Route::get('tags/{slug}', [PageController::class, 'localizedTagNews'])->name('tag.news');
-        Route::get('contributors/{slug}', [PageController::class, 'localizedContributorNews'])->name('contributor.news');
-        Route::get('events/{slug}', [PageController::class, 'localizedEventNews'])->name('event.news');
-
-        Route::get('categories/{slugTree}', [PageController::class, 'localizedCategoryNews'])->where('slugTree', '.*')->name('category.news');
-        Route::get('locations/{slugTree}', [PageController::class, 'localizedLocationNews'])->where('slugTree', '.*')->name('location.news');
-        Route::get('category/{slugTree}/location-max-depth-and-level', [PageController::class, 'localizedCategoryLocationMaxDepthAndLevel'])->where('slugTree', '.*')->name('category.location-max-depth-and-level');
-
-        Route::get('news/{slug}', [PageController::class, 'localizedNewsDetails'])->name('news.details');
-
-        Route::get('{slugTree}', [PageController::class, 'localizedPage'])->where('slugTree', '.*')->name('page');
-    });
 
     Route::get('home', [PageController::class, 'home'])->name('home');
     Route::prefix('home')->name('home.')->group(function () {

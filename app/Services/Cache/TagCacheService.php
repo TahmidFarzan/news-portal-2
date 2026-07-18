@@ -39,7 +39,7 @@ class TagCacheService
         return $perPage ?? $this->perPage;
     }
 
-    private function generalQueryRecords(?Language $language = null): Builder
+    private function generalQueryRecords(Language $language): Builder
     {
         $records = Tag::query()->with('language');
         if ($language && $language?->id) {
@@ -49,12 +49,12 @@ class TagCacheService
         return $records;
     }
 
-    private function dbLastPageNo(?Language $language = null, ?int $perPage = null): int
+    private function dbLastPageNo(Language $language, ?int $perPage = null): int
     {
         return (int) ceil($this->generalQueryRecords($language)->count() / $this->getPerPage($perPage));
     }
 
-    private function dbRecords(Request $request, ?Language $language = null, ?int $perPage = null): LengthAwarePaginator
+    private function dbRecords(Request $request, Language $language, ?int $perPage = null): LengthAwarePaginator
     {
         $records = Tag::query()->with('language');
         if ($language && $language?->id) {
@@ -66,7 +66,7 @@ class TagCacheService
         return $records;
     }
 
-    private function dbRecordsLimitForTrend(?Language $language = null, ?int $perPage = null): Collection
+    private function dbRecordsLimitForTrend(Language $language, ?int $perPage = null): Collection
     {
         return Trend::with([
             'tag',
@@ -79,7 +79,7 @@ class TagCacheService
             ->get();
     }
 
-    private function dbRecordByIdOrSlug(string|int $idOrSlug, ?Language $language = null): Tag
+    private function dbRecordByIdOrSlug(Language $language, string|int $idOrSlug, ): Tag
     {
         $record = Tag::with(['language']);
 
@@ -94,7 +94,7 @@ class TagCacheService
         return $record;
     }
 
-    public function getLastPageNo(string $key, ?Language $language = null, ?int $perPage = null, ?int $cachedTTL = null): int
+    public function getLastPageNo(string $key, Language $language, ?int $perPage = null, ?int $cachedTTL = null): int
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey, $language);
 
@@ -117,7 +117,7 @@ class TagCacheService
         return (int) $lastPage;
     }
 
-    public function getRecords(string $key, Request $request, ?Language $language = null, ?int $cachedTTL = null): LengthAwarePaginator
+    public function getRecords(string $key, Language $language, Request $request,  ?int $cachedTTL = null): LengthAwarePaginator
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequest($key, $this->secondKey, $request, $language);
 
@@ -127,7 +127,7 @@ class TagCacheService
         );
 
         if ($records === null) {
-            $records = $this->dbRecords($request, $language);
+            $records = $this->dbRecords( $request, $language, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -140,7 +140,7 @@ class TagCacheService
         return $records;
     }
 
-    public function getRecordsLimitForTrend(string $key, ?Language $language = null, ?int $perPage = null, ?int $cachedTTL = null): Collection
+    public function getRecordsLimitForTrend(string $key, Language $language, ?int $perPage = null, ?int $cachedTTL = null): Collection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordsLimitForTrend($key, $this->secondKey, $language, $perPage);
 
@@ -163,7 +163,7 @@ class TagCacheService
         return $records;
     }
 
-    public function getRecordById(string $key, int|string $id, ?Language $language = null, ?int $cachedTTL = null): Tag
+    public function getRecordById(string $key, Language $language, int|string $id,  ?int $cachedTTL = null): Tag
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id, $language);
 
@@ -176,7 +176,7 @@ class TagCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($id, $language);
+            $record = $this->dbRecordByIdOrSlug($language, $id);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -192,7 +192,7 @@ class TagCacheService
         return $record;
     }
 
-    public function getRecordBySlug(string $key, string $slug, ?Language $language = null, ?int $cachedTTL = null): Tag
+    public function getRecordBySlug(string $key, Language $language, string $slug,?int $cachedTTL = null): Tag
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
 
@@ -205,7 +205,7 @@ class TagCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($slug, $language);
+            $record = $this->dbRecordByIdOrSlug( $language, $slug,);
 
             CacheServerHelper::cachedData(
                 $cacheKey,

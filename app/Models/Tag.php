@@ -72,7 +72,7 @@ class Tag extends Model
             ->generateSlugsFrom("name")
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)));
+            ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)));
     }
 
     public function getRouteKeyName(): string
@@ -84,7 +84,7 @@ class Tag extends Model
     {
         $url = null;
 
-        if($this->slug){
+        if ($this->slug) {
             if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
                 $url = route("tag.news", ['slug' => $this->slug]);
             } else {
@@ -100,7 +100,12 @@ class Tag extends Model
         $url = null;
 
         if ($this->slug) {
-            $url = route("feeds.atom.tag.news", ['slug' => $this->slug]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("feeds.rss.tag.news", ['slugTree' => $this->slug]);
+            }
+            else{
+                $url = route("localized.feeds.rss.tag.news", ["languageCode" => $this->language->code,'slugTree' => $this->slug]);
+            }
         }
 
         return $url;
@@ -111,7 +116,12 @@ class Tag extends Model
         $url = null;
 
         if ($this->slug) {
-            $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("feeds.rss.tag.news", ['slugTree' => $this->slug]);
+            }
+            else{
+                $url = route("localized.feeds.rss.tag.news", ["languageCode" => $this->language->code,'slugTree' => $this->slug]);
+            }
         }
 
         return $url;
@@ -122,7 +132,11 @@ class Tag extends Model
         $url = null;
 
         if ($this->slug) {
-            $url = route("sitemaps.tag.news", ['slug' => $this->slug]);
+            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+                $url = route("sitemaps.tag.news", ['slug' => $this->slug]);
+            } else {
+                $url = route("localized.sitemaps.tag.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
+            }
         }
 
         return $url;

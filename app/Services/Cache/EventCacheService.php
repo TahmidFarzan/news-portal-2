@@ -39,7 +39,7 @@ class EventCacheService
         return $perPage ?? $this->perPage;
     }
 
-    private function generalQueryRecords(?Language $language = null): Builder
+    private function generalQueryRecords(Language $language): Builder
     {
         $records = Event::query()->with('language');
         if ($language && $language?->id) {
@@ -49,12 +49,12 @@ class EventCacheService
         return $records;
     }
 
-    private function dbLastPageNo(?Language $language = null, ?int $perPage = null): int
+    private function dbLastPageNo(Language $language, ?int $perPage = null): int
     {
         return (int) ceil($this->generalQueryRecords($language)->count() / $this->getPerPage($perPage));
     }
 
-    private function dbRecords(Request $request, ?Language $language = null, ?int $perPage = null): LengthAwarePaginator
+    private function dbRecords(Request $request, Language $language, ?int $perPage = null): LengthAwarePaginator
     {
         $records = Event::query()->with('language');
         if ($language && $language?->id) {
@@ -66,13 +66,13 @@ class EventCacheService
         return $records;
     }
 
-    private function dbRecordsByPosition(string $position = EventHelper::POSITION_TOP, ?Language $language = null): Collection
+    private function dbRecordsByPosition(Language $language, string $position = EventHelper::POSITION_TOP, ): Collection
     {
         return Event::with(['desktopBannerImage', 'mobileBannerImage'])->where('language_id', $language->id)
             ->where('position', $position)->where('is_current', true)->get();
     }
 
-    private function dbRecordByIdOrSlug(string|int $idOrSlug, ?Language $language = null): Event
+    private function dbRecordByIdOrSlug(Language $language,string|int $idOrSlug, ): Event
     {
         $record = Event::with(['language', 'desktopBannerImage', 'mobileBannerImage'])->where('is_current', true);
 
@@ -87,7 +87,7 @@ class EventCacheService
         return $record;
     }
 
-    public function getLastPageNo(string $key, ?Language $language = null, ?int $perPage = null, ?int $cachedTTL = null): int
+    public function getLastPageNo(string $key, Language $language, ?int $perPage = null, ?int $cachedTTL = null): int
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey, $language);
 
@@ -110,7 +110,7 @@ class EventCacheService
         return (int) $lastPage;
     }
 
-    public function getRecords(string $key, Request $request, ?Language $language = null, ?int $cachedTTL = null): LengthAwarePaginator
+    public function getRecords(string $key, Request $request, Language $language, ?int $cachedTTL = null): LengthAwarePaginator
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequest($key, $this->secondKey, $request, $language);
 
@@ -133,7 +133,7 @@ class EventCacheService
         return $records;
     }
 
-    public function getRecordsByPosition(string $key, string $position = EventHelper::POSITION_TOP, ?Language $language = null, ?int $cachedTTL = null): Collection
+    public function getRecordsByPosition(string $key, Language $language,string $position = EventHelper::POSITION_TOP,  ?int $cachedTTL = null): Collection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForEventByPosition($key, $this->secondKey, $position, $language);
 
@@ -143,7 +143,7 @@ class EventCacheService
         );
 
         if ($records === null) {
-            $records = $this->dbRecordsByPosition($position, $language);
+            $records = $this->dbRecordsByPosition($language, $position);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -156,7 +156,7 @@ class EventCacheService
         return $records;
     }
 
-    public function getRecordById(string $key, int|string $id, ?Language $language = null, ?int $cachedTTL = null): Event
+    public function getRecordById(string $key, int|string $id, Language $language, ?int $cachedTTL = null): Event
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id, $language);
 
@@ -169,7 +169,7 @@ class EventCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($id, $language);
+            $record = $this->dbRecordByIdOrSlug($language, $id, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -185,7 +185,7 @@ class EventCacheService
         return $record;
     }
 
-    public function getRecordBySlug(string $key, string $slug, ?Language $language = null, ?int $cachedTTL = null): Event
+    public function getRecordBySlug(string $key, Language $language, string $slug,  ?int $cachedTTL = null): Event
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
 
@@ -198,7 +198,7 @@ class EventCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($slug, $language);
+            $record = $this->dbRecordByIdOrSlug($language, $slug, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,

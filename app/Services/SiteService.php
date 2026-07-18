@@ -238,8 +238,8 @@ class SiteService
     {
         return $this->newsCacheService->getBreakingNews(
             CacheHelper::KEY_SITE,
-            $request,
             $language,
+            $request,
             10,
             $this->cachedTTL
         );

@@ -27,7 +27,11 @@ import {
     faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { useTranslate } from '@/composables/useTranslate'
+import { languages, useTranslate } from '@/composables/useTranslate'
+
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
+
 
 FontAwesomeLibrary.add(
     faAtom,
@@ -57,6 +61,9 @@ const appUrl = String(import.meta.env.VITE_APP_URL || '').replace(/\/$/, '')
 
 const activeTab = ref(null)
 const copiedKey = ref(null)
+
+const siteLanguages = ref([])
+const defaultLanguage = ref(null)
 
 const tabs = computed(() => [
     {
@@ -163,143 +170,186 @@ const adsTxtAction = computed(() => ({
     icon: faPenToSquare,
 }))
 
-const sitemapLinks = computed(() => [
+const sitemapPatterns = [
     {
         key: 'sitemaps_index',
-        title: t('admin.settings.index.sitemapLinks.sitemapIndex'),
-        text: `${appUrl}/sitemaps.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.sitemapIndex'),
+        path: '/sitemaps.xml',
     },
     {
         key: 'sitemaps_categories',
-        title: t('admin.settings.index.sitemapLinks.categoriesSitemap'),
-        text: `${appUrl}/sitemaps/categories.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.categoriesSitemap'),
+        path: '/sitemaps/categories.xml',
     },
     {
         key: 'sitemaps_tags',
-        title: t('admin.settings.index.sitemapLinks.tagsSitemap'),
-        text: `${appUrl}/sitemaps/tags.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.tagsSitemap'),
+        path: '/sitemaps/tags.xml',
     },
     {
         key: 'sitemaps_events',
-        title: t('admin.settings.index.sitemapLinks.eventsSitemap'),
-        text: `${appUrl}/sitemaps/events.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.eventsSitemap'),
+        path: '/sitemaps/events.xml',
     },
     {
         key: 'sitemaps_contributors',
-        title: t('admin.settings.index.sitemapLinks.contributorsSitemap'),
-        text: `${appUrl}/sitemaps/contributors.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.contributorsSitemap'),
+        path: '/sitemaps/contributors.xml',
     },
     {
         key: 'sitemaps_news',
-        title: t('admin.settings.index.sitemapLinks.newsSitemap'),
-        text: `${appUrl}/sitemaps/news.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.newsSitemap'),
+        path: '/sitemaps/news.xml',
     },
     {
         key: 'sitemaps_latest_news',
-        title: t('admin.settings.index.sitemapLinks.latestNewsSitemap'),
-        text: `${appUrl}/sitemaps/latest-news.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.latestNewsSitemap'),
+        path: '/sitemaps/latest-news.xml',
     },
     {
         key: 'dynamic_categories_news',
-        title: t('admin.settings.index.sitemapLinks.categoryNewsPattern'),
-        text: `${appUrl}/categories/{slugTree}/news.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.categoryNewsPattern'),
+        path: '/categories/{slugTree}/news.xml',
     },
     {
         key: 'dynamic_locations_news',
-        title: t('admin.settings.index.sitemapLinks.locationNewsPattern'),
-        text: `${appUrl}/locations/{slugTree}/news.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.locationNewsPattern'),
+        path: '/locations/{slugTree}/news.xml',
     },
     {
         key: 'dynamic_events_news',
-        title: t('admin.settings.index.sitemapLinks.eventNewsPattern'),
-        text: `${appUrl}/events/{slug}/news.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.eventNewsPattern'),
+        path: '/events/{slug}/news.xml',
     },
     {
         key: 'dynamic_tags_news',
-        title: t('admin.settings.index.sitemapLinks.tagNewsPattern'),
-        text: `${appUrl}/tags/{slug}/news.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.tagNewsPattern'),
+        path: '/tags/{slug}/news.xml',
     },
     {
         key: 'dynamic_contributors_news',
-        title: t('admin.settings.index.sitemapLinks.contributorNewsPattern'),
-        text: `${appUrl}/contributors/{slug}/news.xml`,
-        copyable: true,
+        title: () => t('admin.settings.index.sitemapLinks.contributorNewsPattern'),
+        path: '/contributors/{slug}/news.xml',
     },
-])
+]
 
-const feedTypes = computed(() => [
+const sitemapLinks = computed(() => {
+    return siteLanguages.value.flatMap((language) => {
+        const prefix = getLanguagePrefix(language)
+
+        return sitemapPatterns.map((item) => ({
+            key: `${language.code}_${item.key}`,
+            language: language.name,
+            title: item.title(),
+            text: `${appUrl}${prefix}${item.path}`,
+            copyable: true,
+        }))
+    })
+})
+
+const feedTypes = [
     {
         key: 'rss',
-        title: t('admin.settings.index.feedLinks.rssFeeds'),
+        title: () => t('admin.settings.index.feedLinks.rssFeeds'),
         icon: faRss,
     },
     {
         key: 'atom',
-        title: t('admin.settings.index.feedLinks.atomFeeds'),
+        title: () => t('admin.settings.index.feedLinks.atomFeeds'),
         icon: faAtom,
     },
-])
+]
 
-const feedLinkPatterns = computed(() => [
+const feedPatterns = [
     {
         key: 'news',
-        title: t('admin.settings.index.feedLinks.newsFeedPattern'),
-        text: `${appUrl}/feeds/{type}/news.xml`,
+        title: () => t('admin.settings.index.feedLinks.newsFeedPattern'),
+        path: '/feeds/{type}/news.xml',
     },
     {
         key: 'latest_news',
-        title: t('admin.settings.index.feedLinks.latestNewsFeedPattern'),
-        text: `${appUrl}/feeds/{type}/latest-news.xml`,
+        title: () => t('admin.settings.index.feedLinks.latestNewsFeedPattern'),
+        path: '/feeds/{type}/latest-news.xml',
     },
     {
         key: 'category_news',
-        title: t('admin.settings.index.feedLinks.categoryNewsFeedPattern'),
-        text: `${appUrl}/feeds/{type}/categories/{slugTree}/news.xml`,
+        title: () => t('admin.settings.index.feedLinks.categoryNewsFeedPattern'),
+        path: '/feeds/{type}/categories/{slugTree}/news.xml',
     },
     {
         key: 'location_news',
-        title: t('admin.settings.index.feedLinks.locationNewsFeedPattern'),
-        text: `${appUrl}/feeds/{type}/locations/{slugTree}/news.xml`,
+        title: () => t('admin.settings.index.feedLinks.locationNewsFeedPattern'),
+        path: '/feeds/{type}/locations/{slugTree}/news.xml',
     },
     {
         key: 'event_news',
-        title: t('admin.settings.index.feedLinks.eventNewsFeedPattern'),
-        text: `${appUrl}/feeds/{type}/events/{slug}/news.xml`,
+        title: () => t('admin.settings.index.feedLinks.eventNewsFeedPattern'),
+        path: '/feeds/{type}/events/{slug}/news.xml',
     },
     {
         key: 'tag_news',
-        title: t('admin.settings.index.feedLinks.tagNewsFeedPattern'),
-        text: `${appUrl}/feeds/{type}/tags/{slug}/news.xml`,
+        title: () => t('admin.settings.index.feedLinks.tagNewsFeedPattern'),
+        path: '/feeds/{type}/tags/{slug}/news.xml',
     },
     {
         key: 'contributor_news',
-        title: t('admin.settings.index.feedLinks.contributorNewsFeedPattern'),
-        text: `${appUrl}/feeds/{type}/contributors/{slug}/news.xml`,
+        title: () => t('admin.settings.index.feedLinks.contributorNewsFeedPattern'),
+        path: '/feeds/{type}/contributors/{slug}/news.xml',
     },
-])
+]
 
 const feedGroups = computed(() => {
-    return feedTypes.value.map((feedType) => ({
-        ...feedType,
-        links: feedLinkPatterns.value.map((item) => ({
-            key: `${feedType.key}_${item.key}`,
-            title: item.title,
-            text: item.text.replace('{type}', feedType.key),
-            copyable: true,
-        })),
-    }))
+    return siteLanguages.value.flatMap((language) => {
+        const prefix = getLanguagePrefix(language)
+
+        return feedTypes.map((feedType) => ({
+            key: `${language.code}_${feedType.key}`,
+            language: language.name,
+            title: `${feedType.title()} (${language.code.toUpperCase()})`,
+            icon: feedType.icon,
+            links: feedPatterns.map((pattern) => ({
+                key: `${language.code}_${feedType.key}_${pattern.key}`,
+                title: pattern.title(),
+                text: `${appUrl}${prefix}${pattern.path.replace('{type}', feedType.key)}`,
+                copyable: true,
+            })),
+        }))
+    })
 })
+
+const loadLanguages = async () => {
+    const apiUrl = route('site.languages')
+
+    const response = await fetchFromApi(
+        apiUrl,
+        {},
+        {
+            key: `${apiCacheKey.API_LAYOUT_THEME}:${apiUrl}`,
+            ttl: apiCacheTTL.SYSTEM_LONG,
+        },
+    )
+
+    siteLanguages.value = Array.isArray(response)
+        ? response
+        : response?.data ?? []
+}
+
+const loadDefaultLanguage = async () => {
+    const apiUrl = route('site.defalult-language')
+
+    const response = await fetchFromApi(
+        apiUrl,
+        {},
+        {
+            key: `${apiCacheKey.API_LAYOUT_THEME}:${apiUrl}`,
+            ttl: apiCacheTTL.SYSTEM_LONG,
+        },
+    )
+
+    defaultLanguage.value = Array.isArray(response)
+        ? response[0]
+        : response?.data ?? response
+}
 
 const copyToClipboard = async (item) => {
     if (!item?.copyable || !item?.text) return
@@ -333,7 +383,22 @@ const copyToClipboard = async (item) => {
     }
 }
 
+const getLanguagePrefix = (language) => {
+    if (!language || !defaultLanguage.value) {
+        return ''
+    }
+
+    return language.code === defaultLanguage.value.code
+        ? ''
+        : `/${language.code}`
+}
+
 onMounted(async () => {
+    await Promise.all([
+        loadLanguages(),
+        loadDefaultLanguage(),
+    ])
+
     await nextTick()
 
     window.dispatchEvent(
@@ -366,8 +431,8 @@ onMounted(async () => {
                     <button v-for="tab in tabs" :key="tab.key" type="button"
                         class="inline-flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition"
                         :class="activeTabKey === tab.key
-                                ? 'border-red-600 text-red-600'
-                                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                            ? 'border-red-600 text-red-600'
+                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                             " @click="activeTab = tab.key">
                         <FontAwesomeIcon :icon="tab.icon" class="text-xs" />
                         <span>{{ tab.label }}</span>
@@ -465,14 +530,11 @@ onMounted(async () => {
 
                     <div class="overflow-hidden rounded-xl border border-gray-200">
                         <div v-for="item in sitemapLinks" :key="item.key"
-                            class="grid grid-cols-1 gap-3 border-b border-gray-100 p-4 last:border-b-0 md:grid-cols-12 md:items-center"
-                            :class="item.copyable ? 'bg-white' : 'bg-gray-50'">
+                            class="grid grid-cols-1 gap-3 border-b border-gray-100 p-4 last:border-b-0 md:grid-cols-12 md:items-center">
                             <div class="md:col-span-4">
                                 <div class="flex items-center gap-2">
-                                    <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg" :class="item.copyable
-                                            ? 'bg-red-50 text-red-600'
-                                            : 'bg-gray-100 text-gray-400'
-                                        ">
+                                    <span
+                                        class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-600">
                                         <FontAwesomeIcon :icon="faSitemap" class="text-xs" />
                                     </span>
 
@@ -481,34 +543,24 @@ onMounted(async () => {
                                             {{ item.title }}
                                         </p>
 
-                                        <p class="mt-0.5 text-xs"
-                                            :class="item.copyable ? 'text-green-600' : 'text-gray-400'">
-                                            {{
-                                                item.copyable
-                                                    ? t('admin.settings.index.labels.copyEnabled')
-                                                    : t('admin.settings.index.labels.patternOnly')
-                                            }}
+                                        <p class="mt-1 text-xs text-blue-600">
+                                            {{ item.language }}
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="min-w-0 md:col-span-6">
-                                <p class="truncate rounded-lg border px-3 py-2 font-mono text-xs" :class="item.copyable
-                                        ? 'border-gray-200 bg-gray-50 text-gray-700'
-                                        : 'border-gray-100 bg-white text-gray-400'
-                                    ">
+                            <div class="md:col-span-6">
+                                <p
+                                    class="truncate rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-xs text-gray-700">
                                     {{ item.text }}
                                 </p>
                             </div>
 
-                            <div class="flex justify-start md:col-span-2 md:justify-end">
+                            <div class="flex justify-end md:col-span-2">
                                 <button type="button"
-                                    class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition"
-                                    :class="item.copyable
-                                            ? 'bg-red-600 text-white hover:bg-red-700'
-                                            : 'cursor-not-allowed bg-gray-100 text-gray-400'
-                                        " :disabled="!item.copyable" @click="copyToClipboard(item)">
+                                    class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700"
+                                    @click="copyToClipboard(item)">
                                     <FontAwesomeIcon :icon="copiedKey === item.key ? faCheck : faCopy"
                                         class="text-xs" />
 
@@ -539,46 +591,43 @@ onMounted(async () => {
                     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
                         <div v-for="feedGroup in feedGroups" :key="feedGroup.key"
                             class="overflow-hidden rounded-xl border border-gray-200 bg-white">
-                            <div class="flex items-center justify-between border-b border-gray-100 p-4">
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600">
-                                        <FontAwesomeIcon :icon="feedGroup.icon" class="text-sm" />
-                                    </span>
+                            <div class="border-b border-gray-100 p-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <span
+                                            class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                                            <FontAwesomeIcon :icon="feedGroup.icon" class="text-sm" />
+                                        </span>
 
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-gray-950">
-                                            {{ feedGroup.title }}
-                                        </h4>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">
+                                                {{ feedGroup.title }}
+                                            </h4>
 
-                                        <p class="text-xs text-green-600">
-                                            {{ t('admin.settings.index.labels.copyEnabled') }}
-                                        </p>
+                                            <p class="text-xs text-blue-600">
+                                                {{ feedGroup.language }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div>
                                 <div v-for="item in feedGroup.links" :key="item.key"
-                                    class="grid grid-cols-1 gap-3 border-b border-gray-100 p-4 last:border-b-0">
-                                    <div class="min-w-0">
-                                        <p class="truncate text-sm font-semibold text-gray-950">
+                                    class="border-b border-gray-100 p-4 last:border-b-0">
+                                    <div class="space-y-3">
+                                        <p class="text-sm font-semibold text-gray-900">
                                             {{ item.title }}
                                         </p>
 
                                         <p
-                                            class="mt-2 truncate rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-xs text-gray-700">
+                                            class="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-xs text-gray-700 break-all">
                                             {{ item.text }}
                                         </p>
-                                    </div>
 
-                                    <div>
                                         <button type="button"
-                                            class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition"
-                                            :class="item.copyable
-                                                    ? 'bg-red-600 text-white hover:bg-red-700'
-                                                    : 'cursor-not-allowed bg-gray-100 text-gray-400'
-                                                " :disabled="!item.copyable" @click="copyToClipboard(item)">
+                                            class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700"
+                                            @click="copyToClipboard(item)">
                                             <FontAwesomeIcon :icon="copiedKey === item.key ? faCheck : faCopy"
                                                 class="text-xs" />
 

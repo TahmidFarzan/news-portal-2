@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services\Cache;
 
 use App\Helpers\CacheHelper;
@@ -38,7 +37,7 @@ class LocationCacheService
         return $perPage ?? $this->perPage;
     }
 
-    private function generalQueryRecords(?Language $language = null): Builder
+    private function generalQueryRecords(Language $language): Builder
     {
         $records = Location::query()->with('language');
         if ($language && $language?->id) {
@@ -48,7 +47,7 @@ class LocationCacheService
         return $records;
     }
 
-    private function dbRecordMaxDepthAndLevel(?Category $category, ?Language $language = null): object
+    private function dbRecordMaxDepthAndLevel(Language $language, ?Category $category, ): object
     {
         $maxDepth = Location::withQueryConstraint(
             function (Builder $query) use ($category, $language) {
@@ -74,12 +73,12 @@ class LocationCacheService
         return $data;
     }
 
-    private function dbLastPageNo(?Language $language = null, ?int $perPage = null): int
+    private function dbLastPageNo(Language $language, ?int $perPage = null): int
     {
         return (int) ceil($this->generalQueryRecords($language)->count() / $this->getPerPage($perPage));
     }
 
-    private function dbRecords(Request $request, ?Language $language = null, ?int $perPage = null): LengthAwarePaginator
+    private function dbRecords(Request $request, Language $language, ?int $perPage = null): LengthAwarePaginator
     {
         $records = Location::query()->with('language');
         if ($language && $language?->id) {
@@ -91,7 +90,7 @@ class LocationCacheService
         return $records;
     }
 
-    private function dbRecordByIdOrSlug(string|int $idOrSlug, ?Language $language = null): Location
+    private function dbRecordByIdOrSlug(Language $language, string | int $idOrSlug, ): Location
     {
         $record = Location::with(['language', 'parent', 'children']);
 
@@ -106,7 +105,7 @@ class LocationCacheService
         return $record;
     }
 
-    private function dbRecordSlugTree(string $slugTree, ?Language $language = null): Location
+    private function dbRecordSlugTree(Language $language, string $slugTree, ): Location
     {
         $record = Location::with(['language', 'parent', 'children']);
 
@@ -120,7 +119,7 @@ class LocationCacheService
         return $record;
     }
 
-    public function getLastPageNo(string $key, ?Language $language = null, ?int $perPage = null, ?int $cachedTTL = null): int
+    public function getLastPageNo(string $key, Language $language, ?int $perPage = null, ?int $cachedTTL = null): int
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($key, $this->secondKey, $language);
 
@@ -143,7 +142,7 @@ class LocationCacheService
         return (int) $lastPage;
     }
 
-    public function getRecords(string $key, Request $request, ?Language $language = null, ?int $cachedTTL = null): LengthAwarePaginator
+    public function getRecords(string $key, Request $request, Language $language, ?int $cachedTTL = null): LengthAwarePaginator
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequest($key, $this->secondKey, $request, $language);
 
@@ -166,7 +165,7 @@ class LocationCacheService
         return $records;
     }
 
-    public function getMaxDepthAndLevel(string $key, ?Category $category, ?Language $language = null, ?int $cachedTTL = null): object
+    public function getMaxDepthAndLevel(string $key, Language $language, ?Category $category, ?int $cachedTTL = null): object
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForMaxDepthAndLevel($key, $this->secondKey, $category, $language);
 
@@ -179,7 +178,7 @@ class LocationCacheService
         );
 
         if (! $data) {
-            $data = $this->dbRecordMaxDepthAndLevel($category, $language);
+            $data = $this->dbRecordMaxDepthAndLevel($language, $category, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -195,7 +194,7 @@ class LocationCacheService
         return $data;
     }
 
-    public function getRecordBySlugTree(string $key, string $slugTree, ?Language $language = null, ?int $cachedTTL = null): Location
+    public function getRecordBySlugTree(string $key, Language $language, string $slugTree, ?int $cachedTTL = null): Location
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlugTree($key, $this->secondKey, $slugTree, $language);
 
@@ -208,7 +207,7 @@ class LocationCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordSlugTree($slugTree, $language);
+            $record = $this->dbRecordSlugTree($language, $slugTree, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -224,7 +223,7 @@ class LocationCacheService
         return $record;
     }
 
-    public function getRecordById(string $key, int|string $id, ?Language $language = null, ?int $cachedTTL = null): Location
+    public function getRecordById(string $key, Language $language, int | string $id, ?int $cachedTTL = null): Location
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id, $language);
 
@@ -237,7 +236,7 @@ class LocationCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($id, $language);
+            $record = $this->dbRecordByIdOrSlug($language, $id, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -253,7 +252,7 @@ class LocationCacheService
         return $record;
     }
 
-    public function getRecordBySlug(string $key, string $slug, ?Language $language = null, ?int $cachedTTL = null): Location
+    public function getRecordBySlug(string $key, Language $language, string $slug, ?int $cachedTTL = null): Location
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
 
@@ -266,7 +265,7 @@ class LocationCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($slug, $language);
+            $record = $this->dbRecordByIdOrSlug($language, $slug, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,

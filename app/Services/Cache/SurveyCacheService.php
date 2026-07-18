@@ -27,7 +27,7 @@ class SurveyCacheService
         CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_PAGE]);
     }
 
-    private function dbSurveyBySlug(string $slug, ?Language $language = null): Survey
+    private function dbSurveyBySlug(Language $language, string $slug, ): Survey
     {
         $record = Survey::query()->with([
             'surveyQuestions',
@@ -44,7 +44,7 @@ class SurveyCacheService
         return $record;
     }
 
-    private function dbSurveyByDate(string $nowDate, ?Language $language = null): Collection
+    private function dbSurveyByDate(Language $language, string $nowDate, ): Collection
     {
         $records = Survey::query()->with([
             'surveyQuestions',
@@ -70,7 +70,7 @@ class SurveyCacheService
             ->firstOrFail();
     }
 
-    public function getSurveyBySlug(string $key, string $slug, ?Language $language = null, ?int $cachedTTL = null): Survey
+    public function getSurveyBySlug(string $key, Language $language,string $slug,  ?int $cachedTTL = null): Survey
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug, $language);
 
@@ -83,7 +83,7 @@ class SurveyCacheService
         );
 
         if (! $record) {
-            $record = $this->dbSurveyBySlug($slug, $language);
+            $record = $this->dbSurveyBySlug( $language, $slug,);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -99,7 +99,7 @@ class SurveyCacheService
         return $record;
     }
 
-    public function getRecordsByDate(string $key, string $nowDate, ?Language $language = null, ?int $cachedTTL = null): Collection
+    public function getRecordsByDate(string $key, Language $language,string $nowDate,  ?int $cachedTTL = null): Collection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSurveysByDate($key, $this->secondKey, $nowDate, $language);
 
@@ -112,7 +112,7 @@ class SurveyCacheService
         );
 
         if (! $records) {
-            $records = $this->dbSurveyByDate($nowDate, $language);
+            $records = $this->dbSurveyByDate($language, $nowDate, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -128,7 +128,7 @@ class SurveyCacheService
         return $records;
     }
 
-    public function getSurveyQuestionByQuestion(string $key, Survey $survey, string $slug, ?Language $language = null, ?int $cachedTTL = null): SurveyQuestion
+    public function getSurveyQuestionByQuestion(string $key, Language $language, Survey $survey, string $slug,  ?int $cachedTTL = null): SurveyQuestion
     {
         $cacheKey = CacheHelper::cacheKeyGenerateSurveyQuestionBySlugForSurvey($key, $this->secondKey, $survey, $slug, $language);
 
