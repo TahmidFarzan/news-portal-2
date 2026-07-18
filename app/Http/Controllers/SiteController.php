@@ -70,6 +70,14 @@ class SiteController extends Controller
         );
     }
 
+    public function breakingNews(Request $request): JsonResponse
+    {
+        $language = $this->siteService->defaultLanguage();
+        return response()->json(
+            $this->siteService->breakingNews($request, $language)
+        );
+    }
+
     public function localizedMenuHeaderMenuMenuItems(string $languageCode): JsonResponse
     {
         $language = $this->siteService->language($languageCode);
@@ -112,18 +120,18 @@ class SiteController extends Controller
         );
     }
 
-    public function themes(): JsonResponse
-    {
-        return response()->json(
-            $this->siteService->themes()
-        );
-    }
-
-    public function breakingNews(Request $request, string | null $languageCode = null): JsonResponse
+    public function localizedBreakingNews(Request $request, string $languageCode): JsonResponse
     {
         $language = $this->siteService->language($languageCode);
         return response()->json(
             $this->siteService->breakingNews($request, $language)
+        );
+    }
+
+    public function themes(): JsonResponse
+    {
+        return response()->json(
+            $this->siteService->themes()
         );
     }
 

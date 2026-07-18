@@ -443,6 +443,7 @@ Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'e
     });
 
     Route::prefix('site')->name('site.')->group(function () {
+        Route::get('breaking-news', [SiteController::class, 'localizedBreakingNews'])->name('breaking-news');
         Route::prefix('menus')->name('menus.')->group(function () {
             Route::get('header-menu-items', [SiteController::class, 'localizedMenuHeaderMenuMenuItems'])->name('header-menu-items');
             Route::get('off-canvas-menu-items', [SiteController::class, 'localizedMenuOffCanvasMenuMenuItems'])->name('off-canvas-menu-items');
@@ -539,10 +540,10 @@ Route::prefix('site')->name('site.')->group(function () {
     Route::post('language-change/{slugOrId}', [SiteController::class, 'languageChange'])->name('language-change');
 
     Route::get('themes', [SiteController::class, 'themes'])->name('themes');
-    Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
     Route::get('languages', [SiteController::class, 'languages'])->name('languages');
-
     Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
+
+    Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
 
     Route::prefix('menus')->name('menus.')->group(function () {
         Route::get('header-menu-items', [SiteController::class, 'menuHeaderMenuMenuItems'])->name('header-menu-items');

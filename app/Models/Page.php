@@ -92,16 +92,18 @@ class Page extends Model
 
     public function getPublicUrlAttribute(): ?string
     {
+        $url = null;
         if (! $this->slug_tree || ! $this->slug) {
-            return null;
+            return $url;
         }
 
         if (! $this->is_default) {
             if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("page", ['slug_tree' => $this->slug_tree]);
+                $url = route("page", ['slugTree' => $this->slug_tree]);
             } else {
-                $url = route("localized.page", ["languageCode" => $this->language->code, 'slug_tree' => $this->slug_tree]);
+                $url = route("localized.page", ["languageCode" => $this->language->code, 'slugTree' => $this->slug_tree]);
             }
+            return $url;
         }
 
         return match ($this->default_use_as) {
