@@ -1,7 +1,7 @@
 <script setup>
 import SurveyQuestion from '@/components/common/page/home/SurveyQuestion.vue'
 
-import { computed, inject, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
@@ -14,21 +14,57 @@ import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
-const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
-const { surveys: initialSurveys } = defineProps({
+const {
+    surveys: initialSurveys,
+    currentLanguage,
+    isDefaultLanguage = false,
+} = defineProps({
     surveys: {
         type: [Array, Object],
         default: () => [],
     },
+    currentLanguage: {
+        type: Object,
+        required: true,
+    },
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
 })
 
-const surveys = ref([...initialSurveys])
+const normalizeSurveys = (value) => {
+    if (Array.isArray(value)) {
+        return value
+    }
 
+    if (Array.isArray(value?.data)) {
+        return value.data
+    }
+
+    return []
+}
+
+const surveys = ref(normalizeSurveys(initialSurveys))
+
+const getSurveysApiUrl = () => {
+    if (isDefaultLanguage) {
+        return route('home.surveys.get')
+    }
+
+    return route('localized.home.surveys.get', {
+        languageCode: currentLanguage.code,
+    })
+}
 
 const load = async () => {
+    if (!isDefaultLanguage && !currentLanguage?.code) {
+        return
+    }
+
     try {
-        const apiUrl = publicRoute('home.surveys.get')
+        const apiUrl = getSurveysApiUrl()
 
         const response = await fetchFromApi(
             apiUrl,
@@ -39,9 +75,7 @@ const load = async () => {
             }
         )
 
-        surveys.value = Array.isArray(response)
-            ? [...response]
-            : []
+        surveys.value = normalizeSurveys(response)
     } catch {
         surveys.value = []
     }
@@ -52,9 +86,17 @@ const useSwiper = computed(() => surveys.value.length > 1)
 watch(
     () => initialSurveys,
     value => {
-        surveys.value = [...value]
+        surveys.value = normalizeSurveys(value)
     },
     { deep: true }
+)
+
+watch(
+    () => [
+        currentLanguage?.code,
+        isDefaultLanguage,
+    ],
+    load
 )
 </script>
 
@@ -74,7 +116,8 @@ watch(
                         <div v-for="surveyQuestion in survey.survey_questions"
                             :key="surveyQuestion.id" class="col-span-12">
                             <SurveyQuestion :key="`${survey.id}-${surveyQuestion.id}`" :survey="survey"
-                                :survey-question="surveyQuestion" @updated="load" />
+                                :survey-question="surveyQuestion" :current-language="currentLanguage"
+                                :is-default-language="isDefaultLanguage" @updated="load" />
                         </div>
                     </div>
 
@@ -96,7 +139,8 @@ watch(
                     <div v-for="surveyQuestion in survey.survey_questions" :key="`${survey.id}-${surveyQuestion.id}`"
                         class="col-span-12">
                         <SurveyQuestion :key="`${survey.id}-${surveyQuestion.id}`" :survey="survey"
-                            :survey-question="surveyQuestion" @updated="load" />
+                            :survey-question="surveyQuestion" :current-language="currentLanguage"
+                            :is-default-language="isDefaultLanguage" @updated="load" />
                     </div>
                 </div>
 

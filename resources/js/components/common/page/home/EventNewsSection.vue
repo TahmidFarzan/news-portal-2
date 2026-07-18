@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -15,12 +15,23 @@ import ListCard from '@/components/common/news/ListCard.vue'
 FontAwesomeLibrary.add(faRightLong)
 
 const { t } = useTranslate()
-const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
-const { events } = defineProps({
+const {
+    events,
+    currentLanguage,
+    isDefaultLanguage = false,
+} = defineProps({
     events: {
         type: [Array, Object],
         default: () => [],
+    },
+    currentLanguage: {
+        type: Object,
+        required: true,
+    },
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
     },
 })
 
@@ -57,17 +68,33 @@ const getNewsItems = (news) => {
     return news?.data ?? []
 }
 
+const getEventNewsApiUrl = (event) => {
+    if (isDefaultLanguage) {
+        return route('home.event-news', {
+            slug: event.slug,
+        })
+    }
+
+    return route('localized.home.event-news', {
+        languageCode: currentLanguage.code,
+        slug: event.slug,
+    })
+}
+
 const loadEventNews = async (event) => {
-    if (!event?.slug || eventNews.value[event.slug] || loadingEvents.value[event.slug]) {
+    if (
+        !event?.slug ||
+        (!isDefaultLanguage && !currentLanguage?.code) ||
+        eventNews.value[event.slug] ||
+        loadingEvents.value[event.slug]
+    ) {
         return
     }
 
     loadingEvents.value[event.slug] = true
 
     try {
-        const apiUrl = publicRoute('home.event-news', {
-            slug: event.slug,
-        })
+        const apiUrl = getEventNewsApiUrl(event)
 
         const response = await fetchFromApi(
             apiUrl,
@@ -87,12 +114,19 @@ const loadEventNews = async (event) => {
 }
 
 watch(
-    eventItems,
-    (items) => {
+    () => [
+        eventItems.value,
+        currentLanguage?.code,
+        isDefaultLanguage,
+    ],
+    ([items]) => {
+        eventNews.value = {}
+        loadingEvents.value = {}
         items.forEach(loadEventNews)
     },
     {
         immediate: true,
+        deep: true,
     },
 )
 </script>

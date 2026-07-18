@@ -99,6 +99,12 @@ const secondGridPageSectionNews = computed(() => {
 })
 
 const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const layoutCurrentLanguage = inject('currentLanguage', computed(() => category?.language ?? null))
+const isDefaultLanguage = inject('isDefaultLanguage', computed(() => false))
+
+const currentLanguage = computed(() => {
+    return category?.language ?? layoutCurrentLanguage.value ?? null
+})
 
 const getFirstGridColumnClass = (index) => {
     if (firstGridPageSectionNews.value.length === 1) {
@@ -213,7 +219,8 @@ const getSecondGridColumnClass = (index) => {
             </div>
 
             <div class="space-y-2 md:col-span-4 lg:col-span-4">
-                <CategoryHasLocationSection :category="category" />
+                <CategoryHasLocationSection :category="category" :current-language="currentLanguage"
+                    :is-default-language="isDefaultLanguage" />
 
                 <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
 

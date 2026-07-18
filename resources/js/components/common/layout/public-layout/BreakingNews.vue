@@ -1,8 +1,15 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import {
+    ref,
+    computed,
+    onMounted,
+    onBeforeUnmount,
+    nextTick,
+    watch,
+} from 'vue'
+
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
-
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
@@ -10,13 +17,24 @@ const { t } = useTranslate()
 const {
     title = 'Breaking News',
     speed = 45,
-    languageRoute = (routeName, params = {}) => route(routeName, params),
+    isDefaultLanguage = false,
+    currentLanguage,
 } = defineProps({
-    title: String,
-    speed: Number,
-    languageRoute: {
-        type: Function,
-        default: (routeName, params = {}) => route(routeName, params),
+    title: {
+        type: String,
+        default: 'Breaking News',
+    },
+    speed: {
+        type: Number,
+        default: 45,
+    },
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
+    currentLanguage: {
+        type: Object,
+        required: true,
     },
 })
 
@@ -33,11 +51,19 @@ const isSmallScreen = ref(false)
 
 let animationFrame = null
 let lastTimestamp = 0
+let resizeTimer = null
+let requestId = 0
 
-const hasNews = computed(() => news.value.length > 0)
+const hasNews = computed(() => {
+    return news.value.length > 0
+})
 
 const tickerSpeed = computed(() => {
-    return isSmallScreen.value ? Math.max(speed * 0.7, 22) : speed
+    const normalizedSpeed = Number(speed) || 45
+
+    return isSmallScreen.value
+        ? Math.max(normalizedSpeed * 0.7, 22)
+        : normalizedSpeed
 })
 
 const displayNews = computed(() => {
@@ -45,27 +71,97 @@ const displayNews = computed(() => {
         return []
     }
 
-    return fullyLoaded.value
-        ? [...news.value, ...news.value]
-        : news.value
+    if (!fullyLoaded.value) {
+        return news.value
+    }
+
+    return [
+        ...news.value,
+        ...news.value,
+    ]
 })
 
+const getInitialApiUrl = () => {
+    if (isDefaultLanguage) {
+        return route('site.breaking-news')
+    }
+
+    const languageCode = currentLanguage?.code
+
+    if (!languageCode) {
+        throw new Error('Current language code is required.')
+    }
+
+    return route('localized.site.breaking-news', {
+        languageCode: languageCode,
+    })
+}
+
 const normalizeResponse = (response) => {
+    const source =
+        response?.data &&
+            !Array.isArray(response.data) &&
+            (
+                Array.isArray(response.data.data) ||
+                'next_page_url' in response.data
+            )
+            ? response.data
+            : response
+
+    const items =
+        Array.isArray(source?.data)
+            ? source.data
+            : Array.isArray(source?.items)
+                ? source.items
+                : []
+
     return {
-        data: Array.isArray(response?.data) ? response.data : [],
-        nextPageUrl: response?.next_page_url ?? null,
+        data: items,
+        nextPageUrl:
+            source?.next_page_url ??
+            source?.nextPageUrl ??
+            null,
     }
 }
 
 const hasPublicUrl = (newsItem) => {
-    return typeof newsItem?.public_url === 'string' && newsItem.public_url.trim() !== ''
+    return (
+        typeof newsItem?.public_url === 'string' &&
+        newsItem.public_url.trim() !== ''
+    )
+}
+
+const getNewsUniqueKey = (newsItem) => {
+    return (
+        newsItem?.id ??
+        newsItem?.public_url ??
+        newsItem?.slug ??
+        newsItem?.title ??
+        null
+    )
 }
 
 const appendUniqueNews = (items = []) => {
-    const existingIds = new Set(news.value.map((newsItem) => newsItem.id))
+    if (!Array.isArray(items) || !items.length) {
+        return
+    }
+
+    const existingKeys = new Set(
+        news.value
+            .map(getNewsUniqueKey)
+            .filter(Boolean)
+    )
 
     const uniqueItems = items.filter((newsItem) => {
-        return newsItem?.id && !existingIds.has(newsItem.id)
+        const key = getNewsUniqueKey(newsItem)
+
+        if (!key || existingKeys.has(key)) {
+            return false
+        }
+
+        existingKeys.add(key)
+
+        return true
     })
 
     news.value.push(...uniqueItems)
@@ -76,10 +172,13 @@ const loadBreakingNews = async (url = null) => {
         return
     }
 
+    const currentRequestId = ++requestId
+
     loading.value = true
 
     try {
-        const apiUrl = url ?? languageRoute('site.breaking-news')
+        const apiUrl = url || getInitialApiUrl()
+
         const response = await fetchFromApi(
             apiUrl,
             {},
@@ -88,6 +187,11 @@ const loadBreakingNews = async (url = null) => {
                 ttl: apiCacheTTL.SYSTEM_SHORT,
             }
         )
+
+        if (currentRequestId !== requestId) {
+            return
+        }
+
         const result = normalizeResponse(response)
 
         appendUniqueNews(result.data)
@@ -100,25 +204,59 @@ const loadBreakingNews = async (url = null) => {
 
         await nextTick()
     } catch (error) {
-        console.error('Failed to load breaking news:', error)
+        if (currentRequestId === requestId) {
+            console.error(
+                'Failed to load breaking news:',
+                error
+            )
+        }
     } finally {
-        loading.value = false
+        if (currentRequestId === requestId) {
+            loading.value = false
+        }
     }
 }
 
 const shouldLoadNextPage = () => {
-    if (!wrapperRef.value || !trackRef.value) {
+    if (
+        !wrapperRef.value ||
+        !trackRef.value
+    ) {
         return false
     }
 
-    if (!nextPageUrl.value || loading.value || fullyLoaded.value) {
+    if (
+        !nextPageUrl.value ||
+        loading.value ||
+        fullyLoaded.value
+    ) {
         return false
     }
 
-    const wrapperWidth = wrapperRef.value.offsetWidth
-    const trackWidth = trackRef.value.scrollWidth
+    const wrapperWidth =
+        wrapperRef.value.clientWidth
 
-    return Math.abs(translateX.value) + wrapperWidth + 300 >= trackWidth
+    const trackWidth =
+        trackRef.value.scrollWidth
+
+    if (
+        wrapperWidth <= 0 ||
+        trackWidth <= 0
+    ) {
+        return false
+    }
+
+    return (
+        Math.abs(translateX.value) +
+        wrapperWidth +
+        300 >=
+        trackWidth
+    )
+}
+
+const resetTickerPosition = () => {
+    translateX.value = 0
+    lastTimestamp = 0
 }
 
 const animate = (timestamp) => {
@@ -126,49 +264,134 @@ const animate = (timestamp) => {
         lastTimestamp = timestamp
     }
 
-    const deltaTime = timestamp - lastTimestamp
+    const deltaTime = Math.min(
+        timestamp - lastTimestamp,
+        100
+    )
+
     lastTimestamp = timestamp
 
-    if (news.value.length) {
-        translateX.value -= (tickerSpeed.value * deltaTime) / 1000
+    if (
+        news.value.length &&
+        trackRef.value
+    ) {
+        translateX.value -=
+            (tickerSpeed.value * deltaTime) /
+            1000
     }
 
     if (shouldLoadNextPage()) {
         loadBreakingNews(nextPageUrl.value)
     }
 
-    if (fullyLoaded.value && trackRef.value) {
-        const originalTrackWidth = trackRef.value.scrollWidth / 2
+    if (
+        fullyLoaded.value &&
+        news.value.length &&
+        trackRef.value
+    ) {
+        const originalTrackWidth =
+            trackRef.value.scrollWidth / 2
 
-        if (originalTrackWidth > 0 && Math.abs(translateX.value) >= originalTrackWidth) {
-            translateX.value = 0
+        if (
+            originalTrackWidth > 0 &&
+            Math.abs(translateX.value) >=
+            originalTrackWidth
+        ) {
+            translateX.value += originalTrackWidth
         }
     }
 
-    animationFrame = requestAnimationFrame(animate)
+    animationFrame =
+        requestAnimationFrame(animate)
 }
 
 const updateScreenSize = () => {
-    isSmallScreen.value = window.innerWidth < 640
-    translateX.value = 0
-    lastTimestamp = 0
+    isSmallScreen.value =
+        window.innerWidth < 640
 }
+
+const handleResize = () => {
+    if (resizeTimer) {
+        clearTimeout(resizeTimer)
+    }
+
+    resizeTimer = setTimeout(() => {
+        updateScreenSize()
+        resetTickerPosition()
+    }, 150)
+}
+
+const resetBreakingNews = async () => {
+    requestId++
+
+    news.value = []
+    nextPageUrl.value = null
+    loading.value = false
+    fullyLoaded.value = false
+
+    resetTickerPosition()
+
+    if (
+        !isDefaultLanguage &&
+        !currentLanguage?.code
+    ) {
+        return
+    }
+
+    await loadBreakingNews()
+}
+
+watch(
+    () => [
+        isDefaultLanguage,
+        currentLanguage?.code,
+    ],
+    async (
+        [newIsDefault, newCode],
+        [oldIsDefault, oldCode]
+    ) => {
+        if (
+            newIsDefault === oldIsDefault &&
+            newCode === oldCode
+        ) {
+            return
+        }
+
+        await resetBreakingNews()
+    }
+)
 
 onMounted(async () => {
     updateScreenSize()
-    window.addEventListener('resize', updateScreenSize)
+
+    window.addEventListener(
+        'resize',
+        handleResize
+    )
 
     await loadBreakingNews()
 
-    animationFrame = requestAnimationFrame(animate)
+    animationFrame =
+        requestAnimationFrame(animate)
 })
 
 onBeforeUnmount(() => {
+    requestId++
+
     if (animationFrame) {
         cancelAnimationFrame(animationFrame)
+        animationFrame = null
     }
 
-    window.removeEventListener('resize', updateScreenSize)
+    if (resizeTimer) {
+        clearTimeout(resizeTimer)
+        resizeTimer = null
+    }
+
+    window.removeEventListener(
+        'resize',
+        handleResize
+    )
 })
 </script>
 
@@ -183,9 +406,11 @@ onBeforeUnmount(() => {
 
             <div class="flex min-w-0 flex-1 items-center gap-3 py-2 sm:h-full sm:py-0">
                 <div ref="wrapperRef" class="min-w-0 flex-1 overflow-hidden px-1 text-gray-800 sm:px-4">
-                    <div ref="trackRef" class="inline-flex items-center whitespace-nowrap will-change-transform"
-                        :style="{ transform: `translateX(${translateX}px)` }">
-                        <template v-for="(newsItem, index) in displayNews" :key="`${newsItem.id}-${index}`">
+                    <div ref="trackRef" class="inline-flex items-center whitespace-nowrap will-change-transform" :style="{
+                        transform: `translate3d(${translateX}px, 0, 0)`,
+                    }">
+                        <template v-for="(newsItem, index) in displayNews"
+                            :key="`${getNewsUniqueKey(newsItem)}-${index}`">
                             <a v-if="hasPublicUrl(newsItem)" :href="newsItem.public_url"
                                 class="inline-flex items-center text-xs font-medium transition duration-200 hover:text-blue-600 hover:underline sm:text-sm md:text-base">
                                 {{ newsItem.title }}

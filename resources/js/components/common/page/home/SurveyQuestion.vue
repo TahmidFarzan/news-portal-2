@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, inject, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 import { postToApi } from '@/composables/useApiClient'
 import { useTranslate } from '@/composables/useTranslate'
@@ -7,15 +7,24 @@ import { useTranslate } from '@/composables/useTranslate'
 const {
     survey,
     surveyQuestion,
+    currentLanguage,
+    isDefaultLanguage = false,
 } = defineProps({
     survey: Object,
     surveyQuestion: Object,
+    currentLanguage: {
+        type: Object,
+        required: true,
+    },
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 const emit = defineEmits(['updated'])
 
 const { t } = useTranslate()
-const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const loading = ref(false)
 const message = ref(null)
@@ -63,6 +72,9 @@ const selectedLabel = computed(() =>
 )
 
 const submit = async () => {
+    if (!isDefaultLanguage && !currentLanguage?.code) {
+        return
+    }
 
     loading.value = true
 
@@ -74,16 +86,7 @@ const submit = async () => {
 
         const response = await postToApi(
 
-            publicRoute(
-                'home.surveys.survey-questions-submit',
-                {
-                    slug:
-                        survey?.slug,
-
-                    surveyQuestionSlug:
-                        surveyQuestion?.slug,
-                }
-            ),
+            getSubmitApiUrl(),
 
             {
                 yes: selectedAnswer.value === 'yes',
@@ -152,6 +155,28 @@ const progressColor = value => {
     }
 
     return 'bg-sky-500'
+}
+
+const getSubmitApiUrl = () => {
+    const params = {
+        slug: survey?.slug,
+        surveyQuestionSlug: surveyQuestion?.slug,
+    }
+
+    if (isDefaultLanguage) {
+        return route(
+            'home.surveys.survey-questions-submit',
+            params
+        )
+    }
+
+    return route(
+        'localized.home.surveys.survey-questions-submit',
+        {
+            languageCode: currentLanguage.code,
+            ...params,
+        }
+    )
 }
 
 watch(

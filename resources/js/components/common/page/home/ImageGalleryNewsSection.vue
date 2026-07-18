@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Navigation } from 'swiper/modules'
@@ -21,7 +21,20 @@ import { useTranslate, generateTranslationKey } from '@/composables/useTranslate
 FontAwesomeLibrary.add(faLeftLong, faRightLong, faImages)
 
 const { t } = useTranslate()
-const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
+
+const {
+    currentLanguage,
+    isDefaultLanguage = false,
+} = defineProps({
+    currentLanguage: {
+        type: Object,
+        required: true,
+    },
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
+})
 
 const newsType = newsTypes.ImageGallery
 
@@ -39,12 +52,23 @@ const sliderNews = computed(() => newsItems.value.slice(3))
 const prevButtonClass = computed(() => `news-type-gallery-prev-${slug.value}`)
 const nextButtonClass = computed(() => `news-type-gallery-next-${slug.value}`)
 
-const loadNews = async () => {
-    if (!slug.value) return
+const getNewsTypeNewsApiUrl = () => {
+    if (isDefaultLanguage) {
+        return route('home.news-type-news', {
+            slug: slug.value,
+        })
+    }
 
-    const apiUrl = publicRoute('home.news-type-news', {
+    return route('localized.home.news-type-news', {
+        languageCode: currentLanguage.code,
         slug: slug.value,
     })
+}
+
+const loadNews = async () => {
+    if (!slug.value || (!isDefaultLanguage && !currentLanguage?.code)) return
+
+    const apiUrl = getNewsTypeNewsApiUrl()
 
     const response = await fetchFromApi(
         apiUrl,
@@ -63,6 +87,14 @@ const loadNews = async () => {
 onMounted(async () => {
     await loadNews()
 })
+
+watch(
+    () => [
+        currentLanguage?.code,
+        isDefaultLanguage,
+    ],
+    loadNews
+)
 </script>
 
 <template>

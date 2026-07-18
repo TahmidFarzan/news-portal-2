@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { router, useForm } from '@inertiajs/vue3'
 
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
@@ -23,6 +23,8 @@ FontAwesomeLibrary.add(
 const {
     category,
     isOnSidebar,
+    currentLanguage,
+    isDefaultLanguage = false,
 } = defineProps({
     category: {
         type: Object,
@@ -32,10 +34,17 @@ const {
         type: Boolean,
         default: true,
     },
+    currentLanguage: {
+        type: Object,
+        default: null,
+    },
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 const { t } = useTranslate()
-const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const categoryLocationMaxDepthAndLevel = ref(null)
 const isLoadingLocationConfig = ref(false)
@@ -46,6 +55,10 @@ const isReadyToWatchLocationChanges = ref(false)
 const locationLevelResetKeys = ref([])
 
 const searchLocationForm = useForm({})
+
+const resolvedCurrentLanguage = computed(() => {
+    return currentLanguage ?? category?.language ?? null
+})
 
 const getLocationFieldName = (index) => {
     return `location_level_${index + 1}`
@@ -202,6 +215,19 @@ const getLocationApiUrl = (index) => {
     return appendQueryParam(baseLocationsApiUrl.value, 'parent_id', parentId)
 }
 
+const getCategoryLocationMaxDepthAndLevelApiUrl = () => {
+    if (isDefaultLanguage) {
+        return route('category.location-max-depth-and-level', {
+            slugTree: category.slug_tree,
+        })
+    }
+
+    return route('localized.category.location-max-depth-and-level', {
+        languageCode: resolvedCurrentLanguage.value.code,
+        slugTree: category.slug_tree,
+    })
+}
+
 const selectedLastLoopLocationItem = computed(() => {
     for (let index = locationMaxLevel.value - 1; index >= 0; index--) {
         const selectedLocationId = getSelectedLocationId(index)
@@ -278,6 +304,7 @@ const fetchCategoryLocationMaxDepthAndLevel = async () => {
         !category?.has_location
         || !category?.slug_tree
         || !categorySlugTreeKey.value
+        || (!isDefaultLanguage && !resolvedCurrentLanguage.value?.code)
     ) {
         clearAllLocationFields()
 
@@ -301,9 +328,7 @@ const fetchCategoryLocationMaxDepthAndLevel = async () => {
 
     try {
         const response = await fetchFromApi(
-            publicRoute('category.location-max-depth-and-level', {
-                slugTree: category.slug_tree,
-            }),
+            getCategoryLocationMaxDepthAndLevelApiUrl(),
             {}
         )
 
@@ -348,7 +373,11 @@ const searchByLocation = async () => {
 }
 
 watch(
-    categorySlugTreeKey,
+    () => [
+        categorySlugTreeKey.value,
+        resolvedCurrentLanguage.value?.code,
+        isDefaultLanguage,
+    ],
     fetchCategoryLocationMaxDepthAndLevel,
     { immediate: true }
 )

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, ref, watch, onMounted } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useApiClient'
@@ -10,9 +10,15 @@ import ListCard from '@/components/common/news/ListCard.vue'
 import CategoryHasLocationSection from '@/components/common/page/CategoryHasLocationSection.vue'
 
 const { t } = useTranslate()
-const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
-const { categorySlug, language, style, limit } = defineProps({
+const {
+    categorySlug,
+    language,
+    style,
+    limit,
+    currentLanguage,
+    isDefaultLanguage = false,
+} = defineProps({
     categorySlug: {
         type: [String],
         required: true,
@@ -29,6 +35,14 @@ const { categorySlug, language, style, limit } = defineProps({
         type: [String, Number],
         default: 4,
     },
+    currentLanguage: {
+        type: Object,
+        default: null,
+    },
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 const loading = ref(false)
@@ -36,6 +50,10 @@ const category = ref(null)
 const newsItems = ref([])
 
 const sectionStyle = computed(() => Number(style || 1))
+
+const resolvedCurrentLanguage = computed(() => {
+    return currentLanguage ?? language ?? null
+})
 
 const sectionTitle = computed(() => {
     return category.value?.name ?? ''
@@ -53,15 +71,41 @@ const normalizeResponseData = (response) => {
     return []
 }
 
+const getHomeCategoryApiUrl = () => {
+    if (isDefaultLanguage) {
+        return route('home.category', {
+            slug: categorySlug,
+        })
+    }
+
+    return route('localized.home.category', {
+        languageCode: resolvedCurrentLanguage.value.code,
+        slug: categorySlug,
+    })
+}
+
+const getHomeCategoryNewsApiUrl = () => {
+    if (isDefaultLanguage) {
+        return route('home.category-news', {
+            slug: categorySlug,
+            limit,
+        })
+    }
+
+    return route('localized.home.category-news', {
+        languageCode: resolvedCurrentLanguage.value.code,
+        slug: categorySlug,
+        limit,
+    })
+}
+
 const loadCategorySection = async () => {
-    if (!categorySlug) return
+    if (!categorySlug || (!isDefaultLanguage && !resolvedCurrentLanguage.value?.code)) return
 
     loading.value = true
 
     try {
-        const categoryApiUrl = publicRoute('home.category', {
-            slug: categorySlug,
-        })
+        const categoryApiUrl = getHomeCategoryApiUrl()
 
         const categoryResponse = await fetchFromApi(
             categoryApiUrl,
@@ -74,10 +118,7 @@ const loadCategorySection = async () => {
 
         category.value = categoryResponse?.data ?? categoryResponse
 
-        const newsApiUrl = publicRoute('home.category-news', {
-            slug: categorySlug,
-            limit,
-        })
+        const newsApiUrl = getHomeCategoryNewsApiUrl()
 
         const newsResponse = await fetchFromApi(
             newsApiUrl,
@@ -100,7 +141,12 @@ const loadCategorySection = async () => {
 onMounted(loadCategorySection)
 
 watch(
-    () => [categorySlug, language],
+    () => [
+        categorySlug,
+        language,
+        resolvedCurrentLanguage.value?.code,
+        isDefaultLanguage,
+    ],
     loadCategorySection,
 )
 </script>
@@ -119,7 +165,8 @@ watch(
         </div>
 
         <template v-else>
-            <CategoryHasLocationSection v-if="category" :category="category" :isOnSidebar="false" class="mb-3" />
+            <CategoryHasLocationSection v-if="category" :category="category" :isOnSidebar="false"
+                :current-language="resolvedCurrentLanguage" :is-default-language="isDefaultLanguage" class="mb-3" />
 
             <div v-if="sectionStyle === 1">
                 <div class="hidden gap-3 lg:grid lg:grid-cols-4">

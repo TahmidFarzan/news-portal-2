@@ -1,23 +1,27 @@
 <script setup>
-import { reactive, computed, onMounted } from 'vue'
+import { reactive, computed, onMounted, watch } from 'vue'
+
 import FooterMenuItem from '@/components/common/layout/public-layout/FooterMenuItem.vue'
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
-
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {
-    faSpinner
-} from '@fortawesome/free-solid-svg-icons'
-
 import { useTranslate } from '@/composables/useTranslate'
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const { t } = useTranslate()
 
-const { languageRoute = (routeName, params = {}) => route(routeName, params) } = defineProps({
-    languageRoute: {
-        type: Function,
-        default: (routeName, params = {}) => route(routeName, params),
+const {
+    isDefaultLanguage = false,
+    currentLanguage,
+} = defineProps({
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
+    currentLanguage: {
+        type: Object,
+        required: true,
     },
 })
 
@@ -27,28 +31,138 @@ const footerMenu = reactive({
     loaded: false,
     error: null,
     page: 1,
-    lastPage: 1
+    lastPage: 1,
 })
 
 const isInitialLoading = computed(() => {
-    return footerMenu.loading && !footerMenu.items.length
+    return footerMenu.loading && footerMenu.items.length === 0
+})
+
+const hasMorePages = computed(() => {
+    return footerMenu.page < footerMenu.lastPage
 })
 
 const normalizeMenuItems = (items = []) => {
+    if (!Array.isArray(items)) {
+        return []
+    }
+
     return items.map((item) => ({
         ...item,
-        children: item.children ?? []
+        children: Array.isArray(item?.children)
+            ? item.children
+            : [],
     }))
 }
 
-const getFooterMenuItems = async (pageNumber = 1) => {
-    if (footerMenu.loading || pageNumber > footerMenu.lastPage) return
+const mergeUniqueMenuItems = (currentItems = [], newItems = []) => {
+    const itemsMap = new Map()
+
+        ;[...currentItems, ...newItems].forEach((item) => {
+            if (!item) {
+                return
+            }
+
+            const key =
+                item.id ??
+                item.url ??
+                item.slug ??
+                item.name ??
+                JSON.stringify(item)
+
+            itemsMap.set(key, item)
+        })
+
+    return Array.from(itemsMap.values())
+}
+
+const getFooterMenuApiUrl = (pageNumber = 1) => {
+    if (isDefaultLanguage) {
+        return route('site.menus.footer-menu-items', {
+            page: pageNumber,
+        })
+    }
+
+    const languageCode = currentLanguage?.code
+
+    if (!languageCode) {
+        throw new Error('Current language code is required.')
+    }
+
+    return route('localized.site.menus.footer-menu-items', {
+        languageCode: languageCode,
+        page: pageNumber,
+    })
+}
+
+const normalizeApiResponse = (response, requestedPage = 1) => {
+    const paginator =
+        response?.data &&
+            !Array.isArray(response.data) &&
+            (
+                Array.isArray(response.data.data) ||
+                Array.isArray(response.data.items)
+            )
+            ? response.data
+            : response
+
+    const rawItems =
+        paginator?.items ??
+        paginator?.data ??
+        []
+
+    return {
+        items: normalizeMenuItems(
+            Array.isArray(rawItems) ? rawItems : []
+        ),
+        currentPage: Number(
+            paginator?.current_page ??
+            paginator?.currentPage ??
+            requestedPage
+        ),
+        lastPage: Number(
+            paginator?.last_page ??
+            paginator?.lastPage ??
+            requestedPage
+        ),
+    }
+}
+
+const getFooterMenuItems = async (pageNumber = 1, forceReset = false) => {
+    const requestedPage = Number(pageNumber)
+
+    if (
+        footerMenu.loading ||
+        !Number.isFinite(requestedPage) ||
+        requestedPage < 1
+    ) {
+        return
+    }
+
+    if (
+        !forceReset &&
+        footerMenu.loaded &&
+        requestedPage > footerMenu.lastPage
+    ) {
+        return
+    }
 
     try {
         footerMenu.loading = true
         footerMenu.error = null
 
-        const apiUrl = languageRoute('site.menus.footer-menu-items', { page: pageNumber })
+        if (forceReset || requestedPage === 1) {
+            footerMenu.page = 1
+            footerMenu.lastPage = 1
+
+            if (forceReset) {
+                footerMenu.items = []
+                footerMenu.loaded = false
+            }
+        }
+
+        const apiUrl = getFooterMenuApiUrl(requestedPage)
+
         const response = await fetchFromApi(
             apiUrl,
             {},
@@ -58,16 +172,32 @@ const getFooterMenuItems = async (pageNumber = 1) => {
             }
         )
 
-        const items = normalizeMenuItems(response?.items ?? [])
+        const {
+            items,
+            currentPage,
+            lastPage,
+        } = normalizeApiResponse(response, requestedPage)
 
-        footerMenu.items = pageNumber === 1
-            ? items
-            : [...footerMenu.items, ...items]
+        if (requestedPage === 1 || forceReset) {
+            footerMenu.items = items
+        } else {
+            footerMenu.items = mergeUniqueMenuItems(
+                footerMenu.items,
+                items
+            )
+        }
 
-        footerMenu.page = Number(response?.current_page ?? pageNumber)
-        footerMenu.lastPage = Number(response?.last_page ?? pageNumber)
+        footerMenu.page = Math.max(1, currentPage)
+        footerMenu.lastPage = Math.max(
+            footerMenu.page,
+            lastPage
+        )
     } catch (error) {
-        footerMenu.error = error
+        footerMenu.error =
+            error instanceof Error
+                ? error.message
+                : 'Failed to load footer menu.'
+
         console.error('Failed to fetch footer menu:', error)
     } finally {
         footerMenu.loading = false
@@ -75,26 +205,73 @@ const getFooterMenuItems = async (pageNumber = 1) => {
     }
 }
 
+const loadMoreFooterMenuItems = async () => {
+    if (
+        footerMenu.loading ||
+        !hasMorePages.value
+    ) {
+        return
+    }
+
+    await getFooterMenuItems(
+        footerMenu.page + 1
+    )
+}
+
 onMounted(() => {
-    getFooterMenuItems()
+    getFooterMenuItems(1)
 })
+
+watch(
+    () => [
+        isDefaultLanguage,
+        currentLanguage?.code,
+    ],
+    ([newIsDefault, newCode], [oldIsDefault, oldCode]) => {
+        if (
+            newIsDefault === oldIsDefault &&
+            newCode === oldCode
+        ) {
+            return
+        }
+
+        if (
+            !newIsDefault &&
+            !newCode
+        ) {
+            return
+        }
+
+        getFooterMenuItems(1, true)
+    }
+)
 </script>
 
 <template>
-    <nav class="w-full md:w-auto md:flex-1 min-w-0 min-h-6" aria-label="Footer menu" :aria-busy="footerMenu.loading">
+    <nav class="w-full min-w-0 min-h-6 md:w-auto md:flex-1" aria-label="Footer menu"
+        :aria-busy="footerMenu.loading ? 'true' : 'false'">
         <ul class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center">
             <template v-if="footerMenu.items.length">
-                <FooterMenuItem v-for="item in footerMenu.items" :key="item.id" :item="item" />
+                <FooterMenuItem v-for="item in footerMenu.items" :key="item.id ??
+                    item.url ??
+                    item.slug ??
+                    item.name
+                    " :item="item" />
             </template>
 
             <template v-else-if="isInitialLoading">
-                <li v-for="index in 4" :key="index" class="h-4 w-16 rounded bg-gray-200 animate-pulse" />
+                <li v-for="index in 4" :key="`footer-menu-skeleton-${index}`"
+                    class="h-4 w-16 animate-pulse rounded bg-gray-200" aria-hidden="true" />
             </template>
-
-            <li v-if="footerMenu.loading && footerMenu.items.length" class="text-xs text-gray-400">
-                <FontAwesomeIcon icon="spinner" spin class="text-2xl text-blue-500" />
-                {{ t("common.labels.loading") }}
-            </li>
         </ul>
+
+        <div v-if="footerMenu.loading && footerMenu.items.length"
+            class="mt-2 flex items-center justify-center gap-2 text-xs text-gray-400" role="status" aria-live="polite">
+            <FontAwesomeIcon :icon="faSpinner" spin class="text-base text-blue-500" />
+
+            <span>
+                {{ t('common.labels.loading') }}
+            </span>
+        </div>
     </nav>
 </template>
