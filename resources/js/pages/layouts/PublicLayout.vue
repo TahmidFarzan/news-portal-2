@@ -8,7 +8,7 @@ import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
-import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount, provide,} from 'vue'
+import { ref, computed, watch, nextTick, onMounted, provide,} from 'vue'
 
 import { usePage } from '@inertiajs/vue3'
 
@@ -63,7 +63,6 @@ const siteThemes = ref([])
 
 const defaultLanguage = ref({})
 const currentLanguage = ref({})
-const availableLanguages = ref([])
 
 const isDefaultLanguage = ref(true)
 
@@ -156,45 +155,6 @@ const loadLanguageByFirstPathSegment = async () => {
         setSelectedLanguage(currentLanguage.value)
     }
 }
-const loadAvailableLanguages = async () => {
-    try {
-        const response = await fetchFromApi(
-            route('site.languages'),
-            {
-                per_page: 100,
-            },
-            {
-                key: `${apiCacheKey.API_LAYOUT_LANGUAGE}:${route('site.languages')}`,
-                ttl: apiCacheTTL.SYSTEM_LONG,
-            }
-        )
-
-        const languages =
-            Array.isArray(response?.items)
-                ? response.items
-                : Array.isArray(response?.data)
-                    ? response.data
-                    : []
-
-        availableLanguages.value = languages
-
-        if (defaultLanguage.value) {
-            const exists = availableLanguages.value.some(
-                (lang) => lang.code === defaultLanguage.value.code
-            )
-
-            if (!exists) {
-                availableLanguages.value = [
-                    defaultLanguage.value,
-                    ...availableLanguages.value,
-                ]
-            }
-        }
-    } catch (error) {
-        console.error('Failed to load available languages:', error)
-    }
-}
-
 const getTheme = (field, group = null) => {
     return siteThemes.value.find((theme) => {
         const matchedField =
@@ -317,11 +277,7 @@ provide('isDefaultLanguage', isDefaultLanguage)
 onMounted(async () => {
     await nextTick()
     await loadDefaultLanguage()
-
-    await Promise.all([
-        loadAvailableLanguages(),
-        loadSiteThemes(),
-    ])
+    await loadSiteThemes()
 })
 
 watch(
@@ -380,8 +336,7 @@ watch(
                         <AuthTopbarDropdownMenu :key="componentRefreshKey('auth-dropdown-menu')" :auth-user="authUser" />
                     </div>
 
-                    <LanguageSelect :key="componentRefreshKey('language-select')" :availableLanguages="availableLanguages"
-                        :currentLanguage="currentLanguage" :defaultLanguage="defaultLanguage" class="max-[450px]:flex-shrink-0"  />
+                    <LanguageSelect :currentLanguage="currentLanguage" :defaultLanguage="defaultLanguage" class="max-[450px]:flex-shrink-0"  />
                 </div>
             </div>
         </div>

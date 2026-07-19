@@ -1,15 +1,12 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { fetchFromApi } from '@/composables/useApiClient'
+import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 
 const {
-    availableLanguages = [],
     currentLanguage = null,
     defaultLanguage = null,
 } = defineProps({
-    availableLanguages: {
-        type: Array,
-        default: () => [],
-    },
     currentLanguage: {
         type: Object,
         default: null,
@@ -20,12 +17,35 @@ const {
     },
 })
 
+const loadedLanguages = ref([])
+
 const normalizeLanguageCode = (code) => {
     return String(code ?? '').trim().toLowerCase()
 }
 
+const availableLanguages = computed(() => {
+    const languages = loadedLanguages.value
+
+    if (!defaultLanguage) {
+        return languages
+    }
+
+    const exists = languages.some(
+        (lang) => lang.code === defaultLanguage.code
+    )
+
+    if (exists) {
+        return languages
+    }
+
+    return [
+        defaultLanguage,
+        ...languages,
+    ]
+})
+
 const languageCodes = computed(() => {
-    return availableLanguages
+    return availableLanguages.value
         .map((language) => normalizeLanguageCode(language?.code))
         .filter(Boolean)
 })
@@ -33,7 +53,7 @@ const languageCodes = computed(() => {
 const targetLanguage = computed(() => {
     const currentCode = normalizeLanguageCode(currentLanguage?.code)
 
-    return availableLanguages.find((language) => {
+    return availableLanguages.value.find((language) => {
         return normalizeLanguageCode(language?.code) !== currentCode
     }) ?? null
 })
@@ -65,6 +85,34 @@ const targetLabel = computed(() => {
         ?? targetLanguage.value?.code?.toUpperCase()
         ?? ''
 })
+
+const loadAvailableLanguages = async () => {
+    try {
+        const response = await fetchFromApi(
+            route('site.languages'),
+            {
+                per_page: 100,
+            },
+            {
+                key: `${apiCacheKey.API_LAYOUT_LANGUAGE}:${route('site.languages')}`,
+                ttl: apiCacheTTL.SYSTEM_LONG,
+            }
+        )
+
+        const languages =
+            Array.isArray(response?.items)
+                ? response.items
+                : Array.isArray(response?.data)
+                    ? response.data
+                    : []
+
+        loadedLanguages.value = languages
+    } catch (error) {
+        console.error('Failed to load available languages:', error)
+    }
+}
+
+onMounted(loadAvailableLanguages)
 </script>
 
 <template>
