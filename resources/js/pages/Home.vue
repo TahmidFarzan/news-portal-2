@@ -14,6 +14,7 @@ import CategoryNewsSection from '@/components/common/page/home/CategoryNewsSecti
 import Trends from '@/components/common/page/home/Trends.vue'
 import Surveys from '@/components/common/page/home/Surveys.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import { loweriseText } from '@/composables/useUtil'
 
 import {
     languages,
@@ -21,7 +22,6 @@ import {
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
 defineOptions({ layout: Layout })
-
 
 const { t } = useTranslate()
 
@@ -66,7 +66,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 const showTrends = inject('showTrends', computed(() => false))
 const showSurveys = inject('showSurveys', computed(() => false))
 const layoutCurrentLanguage = inject('currentLanguage', computed(() => page?.language ?? null))
-const isDefaultLanguage = inject('isDefaultLanguage', computed(() => false))
+const isDefaultLanguage = inject('isDefaultLanguage', computed(() => true))
 
 const currentLanguage = computed(() => {
     return page?.language ?? layoutCurrentLanguage.value ?? null
@@ -116,17 +116,20 @@ const metaKeywords = computed(() => {
     return page?.seo_keywords ?? ''
 })
 
-const layoutSystemApiRefreshKey = (componentName) => {
-    return computed(() => `section-component-${componentName}-${page?.language?.slug}`)
+const componentRefreshKey = (componentName) => {
+    return [
+        'home-section-component',
+        componentName,
+        loweriseText(currentLanguage.value?.code) || 'default',
+    ].join('-')
 }
-
 
 </script>
 
 <template>
 
     <Head :title="metaTitle">
-        <link v-if="page?.public_url" rel="canonical" :href="page.public_url" />
+        <link v-if="page?.public_url" rel="canonical" :href="page?.public_url" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 
@@ -136,16 +139,16 @@ const layoutSystemApiRefreshKey = (componentName) => {
     </Head>
 
     <section class="home-page min-h-screen">
-        <div v-if="topEvents" class="home-top-events">
-            <EventNewsSection :key="layoutSystemApiRefreshKey('event-section-top')" :events="topEvents"
-                :current-language="currentLanguage" :is-default-language="isDefaultLanguage" class="mb-4" />
+        <div :key="componentRefreshKey('event-top')" v-if="topEvents" class="home-top-events">
+            <EventNewsSection :events="topEvents" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+                class="mb-4" />
         </div>
 
-        <Trends :key="layoutSystemApiRefreshKey('trend-section')" v-if="showTrends" class="home-trends" :trends="trends" />
+        <Trends :key="componentRefreshKey('trend')" v-if="showTrends" class="home-trends" :trends="trends" />
 
-        <div :key="layoutSystemApiRefreshKey('main-section')" class="home-lead-shell rounded-2xl border border-slate-100 p-2">
+        <div class="home-lead-shell rounded-2xl border border-slate-100 p-2">
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">
-                <main class="lg:col-span-8">
+                <main class="lg:col-span-8" :key="componentRefreshKey('main')">
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-12 lg:grid-cols-12">
                         <div class="space-y-3 md:col-span-6 lg:col-span-6">
                             <GridCard v-if="primaryLeadNews" class="home-primary-lead-card" :news="primaryLeadNews"
@@ -172,15 +175,14 @@ const layoutSystemApiRefreshKey = (componentName) => {
                     </div>
                 </main>
 
-                <aside class="lg:col-span-4">
-                    <PageSidebar :key="layoutSystemApiRefreshKey('sidebar-section')" :recentNews="recentNews" :popularNews="popularNews" />
-
-                    <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM"
-                        class="mt-4" />
+                <aside class="lg:col-span-4" :key="componentRefreshKey('sidebar')">
+                    <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
+                    <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" class="mt-4" />
                 </aside>
             </div>
 
-            <div v-if="extraLeadNews.length" class="home-extra-news mt-4 border-t border-slate-100 pt-4">
+            <div :key="componentRefreshKey('extra-news')" v-if="extraLeadNews.length"
+                class="home-extra-news mt-4 border-t border-slate-100 pt-4">
                 <div class="grid grid-cols-1 gap-3 md:hidden">
                     <ListCard v-for="(perNews, index) in extraLeadNews" :key="perNews?.id || perNews?.slug || index"
                         :news="perNews" :hideCategory="true" :hideEvent="true" :hideLocation="true" :hideBrief="true"
@@ -194,82 +196,74 @@ const layoutSystemApiRefreshKey = (componentName) => {
             </div>
         </div>
 
-        <Surveys :key="layoutSystemApiRefreshKey('survey-section')" v-if="showSurveys" class="home-surveys mt-4"
-            :surveys="surveys" :current-language="currentLanguage" :is-default-language="isDefaultLanguage" />
+        <Surveys :key="componentRefreshKey('survey-section')" v-if="showSurveys" :surveys="surveys"
+            :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"  class="home-surveys mt-4"/>
 
         <div v-if="bottomEvents" class="home-bottom-events">
-            <EventNewsSection :key="layoutSystemApiRefreshKey('event-section-bottom')" :events="bottomEvents"
-                :current-language="currentLanguage" :is-default-language="isDefaultLanguage" class="mt-4" />
+            <EventNewsSection :key="componentRefreshKey('event-section-bottom')" :events="bottomEvents"
+                :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" class="mt-4" />
         </div>
 
-        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
 
-        <CategoryNewsSection :key="layoutSystemApiRefreshKey('politic-section')" v-if="page?.language?.code == languages.English.Code" class="home-politics-section mt-4"
-            categorySlug="politics" :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-            :language="page?.language" :style="1" :limit="4" />
-        <CategoryNewsSection :key="layoutSystemApiRefreshKey('politic-section')" v-if="page?.language?.code == languages.Bangla.Code" class="home-politics-section mt-4"
-            categorySlug="রাজনীতি" :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-            :language="page?.language" :style="1" :limit="4" />
+        <CategoryNewsSection :key="componentRefreshKey('politic-section')" v-if="page?.language?.code == languages.English.Code"
+            categorySlug="politics" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+            :language="page?.language" :style="1" :limit="4" class="home-politics-section mt-4" />
+        <CategoryNewsSection :key="componentRefreshKey('politic-section')" v-if="page?.language?.code == languages.Bangla.Code"
+            categorySlug="রাজনীতি" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+            :language="page?.language" :style="1" :limit="4" class="home-politics-section mt-4" />
 
-        <CategoryNewsSection :key="layoutSystemApiRefreshKey('national-section')" v-if="page?.language?.code == languages.English.Code" class="home-national-section mt-4"
-            categorySlug="national" :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-            :language="page?.language" :style="1" :limit="4" />
-        <CategoryNewsSection :key="layoutSystemApiRefreshKey('national-section')" v-if="page?.language?.code == languages.Bangla.Code" class="home-national-section mt-4"
-            categorySlug="জাতীয়" :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-            :language="page?.language" :style="1" :limit="4" />
+        <CategoryNewsSection :key="componentRefreshKey('national-section')" v-if="page?.language?.code == languages.English.Code"
+            categorySlug="national" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+            :language="page?.language" :style="1" :limit="4" class="home-national-section mt-4"/>
+        <CategoryNewsSection :key="componentRefreshKey('national-section')" v-if="page?.language?.code == languages.Bangla.Code"
+            categorySlug="জাতীয়" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+            :language="page?.language" :style="1" :limit="4" class="home-national-section mt-4"/>
 
-        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
 
-        <CategoryNewsSection :key="layoutSystemApiRefreshKey('sport-section')" v-if="page?.language?.code == languages.English.Code" class="home-sports-section mt-4"
-            categorySlug="sports" :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-            :language="page?.language" :style="2" :limit="6" />
-        <CategoryNewsSection :key="layoutSystemApiRefreshKey('sport-section')" v-if="page?.language?.code == languages.Bangla.Code" class="home-sports-section mt-4"
-            categorySlug="খেলাধুলা" :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-            :language="page?.language" :style="2" :limit="6" />
+        <CategoryNewsSection :key="componentRefreshKey('sport-section')" v-if="page?.language?.code == languages.English.Code"
+            categorySlug="sports" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+            :language="page?.language" :style="2" :limit="6" class="home-sports-section mt-4"/>
+        <CategoryNewsSection :key="componentRefreshKey('sport-section')" v-if="page?.language?.code == languages.Bangla.Code"
+            categorySlug="খেলাধুলা" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+            :language="page?.language" :style="2" :limit="6" class="home-sports-section mt-4" />
 
-        <CategoryNewsSection :key="layoutSystemApiRefreshKey('entertainment-section')" v-if="page?.language?.code == languages.English.Code"
-            class="home-entertainment-section mt-4" categorySlug="entertainment"
-            :current-language="currentLanguage" :is-default-language="isDefaultLanguage" :language="page?.language"
-            :style="2" :limit="6" />
-        <CategoryNewsSection :key="layoutSystemApiRefreshKey('entertainment-section')" v-if="page?.language?.code == languages.Bangla.Code"
-            class="home-entertainment-section mt-4" categorySlug="বিনোদন" :current-language="currentLanguage"
-            :is-default-language="isDefaultLanguage" :language="page?.language" :style="2"
-            :limit="6" />
+        <CategoryNewsSection :key="componentRefreshKey('entertainment-section')" v-if="page?.language?.code == languages.English.Code"
+            categorySlug="entertainment" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :language="page?.language"
+            :style="2" :limit="6" class="home-entertainment-section mt-4" />
+        <CategoryNewsSection :key="componentRefreshKey('entertainment-section')" v-if="page?.language?.code == languages.Bangla.Code"
+            categorySlug="বিনোদন" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :language="page?.language" :style="2"
+            :limit="6" class="home-entertainment-section mt-4"/>
 
-        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
 
-        <VideoNewsSection :key="layoutSystemApiRefreshKey('video-section')" :current-language="currentLanguage"
-            :is-default-language="isDefaultLanguage" class="home-video-news-section mt-4" />
+        <VideoNewsSection :key="componentRefreshKey('video-section')" :currentLanguage="currentLanguage"
+            :isDefaultLanguage="isDefaultLanguage" class="home-video-news-section mt-4" />
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div class="space-y-3">
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('internation-section')" v-if="page?.language?.code == languages.English.Code"
-                        class="home-international-section mt-4" categorySlug="international"
-                        :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-                        :language="page?.language" :style="3" :limit="4" />
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('international-section')" v-if="page?.language?.code == languages.Bangla.Code"
-                        class="home-international-section mt-4" categorySlug="আন্তর্জাতিক"
-                        :language="page?.language" :style="3" :limit="4" />
+                    <CategoryNewsSection :key="componentRefreshKey('internation-section')" v-if="page?.language?.code == languages.English.Code"
+                        categorySlug="international" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+                        :language="page?.language" :style="3" :limit="4" class="home-international-section mt-4"/>
+                    <CategoryNewsSection :key="componentRefreshKey('international-section')" v-if="page?.language?.code == languages.Bangla.Code"
+                        categorySlug="আন্তর্জাতিক" :language="page?.language" :style="3" :limit="4"  class="home-international-section mt-4"/>
                 </div>
 
                 <div class="space-y-3">
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('technology-section')" v-if="page?.language?.code == languages.English.Code"
-                        class="home-technology-section mt-4" categorySlug="technology"
-                        :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-                        :language="page?.language"
-                        :style="3" :limit="4" />
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('technology-section')" v-if="page?.language?.code == languages.Bangla.Code"
-                        class="home-technology-section mt-4" categorySlug="প্রযুক্তি"
-                        :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-                        :language="page?.language"
-                        :style="3" :limit="4" />
+                    <CategoryNewsSection :key="componentRefreshKey('technology-section')" v-if="page?.language?.code == languages.English.Code"
+                        categorySlug="technology" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+                        :language="page?.language" :style="3" :limit="4"  class="home-technology-section mt-4"/>
+                    <CategoryNewsSection :key="componentRefreshKey('technology-section')" v-if="page?.language?.code == languages.Bangla.Code"
+                        categorySlug="প্রযুক্তি" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+                        :language="page?.language" :style="3" :limit="4" class="home-technology-section mt-4"/>
                 </div>
             </div>
         </div>
 
-        <ImageGalleryNewsSection :key="layoutSystemApiRefreshKey('image-gallery-section')"
-            :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
+        <ImageGalleryNewsSection :key="componentRefreshKey('image-gallery-section')"
+            :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
             class="home-gallery-news-section mt-4" />
 
         <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
@@ -277,32 +271,30 @@ const layoutSystemApiRefreshKey = (componentName) => {
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div class="space-y-3">
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('health-section')" v-if="page?.language?.code == languages.English.Code"
-                        class="home-health-section mt-4" categorySlug="health" :current-language="currentLanguage"
-                        :is-default-language="isDefaultLanguage" :language="page?.language" :style="4"
-                        :limit="4" />
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('health-section')" v-if="page?.language?.code == languages.Bangla.Code"
-                        class="home-health-section mt-4" categorySlug="স্বাস্থ্য" :current-language="currentLanguage"
-                        :is-default-language="isDefaultLanguage" :language="page?.language"
-                        :style="4" :limit="4" />
+                    <CategoryNewsSection :key="componentRefreshKey('health-section')" v-if="page?.language?.code == languages.English.Code"
+                        categorySlug="health" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :language="page?.language" :style="4"
+                        :limit="4" class="home-health-section mt-4" />
+                    <CategoryNewsSection :key="componentRefreshKey('health-section')" v-if="page?.language?.code == languages.Bangla.Code"
+                        categorySlug="স্বাস্থ্য" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :language="page?.language"
+                        :style="4" :limit="4" class="home-health-section mt-4" />
                 </div>
 
                 <div class="space-y-3">
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('education-section')" v-if="page?.language?.code == languages.English.Code" class="mt-4"
-                        categorySlug="education" :current-language="currentLanguage"
-                        :is-default-language="isDefaultLanguage" :language="page?.language" :style="4" :limit="4" />
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('education-section')" v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
-                        categorySlug="শিক্ষা" :current-language="currentLanguage" :is-default-language="isDefaultLanguage"
-                        :language="page?.language" :style="4" :limit="4" />
+                    <CategoryNewsSection :key="componentRefreshKey('education-section')" v-if="page?.language?.code == languages.English.Code"
+                        categorySlug="education" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :language="page?.language"
+                        :style="4" :limit="4" class="mt-4"/>
+                    <CategoryNewsSection :key="componentRefreshKey('education-section')" v-if="page?.language?.code == languages.Bangla.Code"
+                        categorySlug="শিক্ষা" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :language="page?.language"
+                        :style="4" :limit="4" class="mt-4"/>
                 </div>
 
                 <div class="space-y-3">
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('lifestyle-section')" v-if="page?.language?.code == languages.English.Code" class="mt-4"
-                        categorySlug="lifestyle" :current-language="currentLanguage"
-                        :is-default-language="isDefaultLanguage" :language="page?.language" :style="4" :limit="4" />
-                    <CategoryNewsSection :key="layoutSystemApiRefreshKey('lifestyle-section')" v-if="page?.language?.code == languages.Bangla.Code" class="mt-4"
-                        categorySlug="জীবনধারা" :current-language="currentLanguage"
-                        :is-default-language="isDefaultLanguage" :language="page?.language" :style="4" :limit="4" />
+                    <CategoryNewsSection :key="componentRefreshKey('lifestyle-section')" v-if="page?.language?.code == languages.English.Code"
+                        categorySlug="lifestyle" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :language="page?.language"
+                        :style="4" :limit="4" class="mt-4"/>
+                    <CategoryNewsSection :key="componentRefreshKey('lifestyle-section')" v-if="page?.language?.code == languages.Bangla.Code"
+                        categorySlug="জীবনধারা" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :language="page?.language"
+                        :style="4" :limit="4" class="mt-4"/>
                 </div>
             </div>
         </div>

@@ -12,7 +12,8 @@ const { t } = useTranslate()
 const {
     item,
     level = 0,
-    languageRoute = (routeName, params = {}) => route(routeName, params),
+    isDefaultLanguage = false,
+    currentLanguage,
 } = defineProps({
     item: {
         type: Object,
@@ -22,11 +23,16 @@ const {
         type: Number,
         default: 0,
     },
-    languageRoute: {
-        type: Function,
-        default: (routeName, params = {}) => route(routeName, params),
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
+    currentLanguage: {
+        type: Object,
+        required: true,
     },
 })
+
 
 const isOpen = ref(false)
 const children = ref([])
@@ -50,6 +56,27 @@ const resetChildrenState = () => {
     childrenLastPage.value = 1
 }
 
+const getMenuApiUrl = (slug, pageNumber = 1) => {
+    if (isDefaultLanguage) {
+        return route('site.menu-items.sub-menu-items', {
+            slug: slug,
+            page: pageNumber,
+        })
+    }
+
+    const languageCode = currentLanguage?.code
+
+    if (!languageCode) {
+        throw new Error('Current language code is required.')
+    }
+
+    return route('localized.site.menu-items.sub-menu-items', {
+        languageCode: languageCode,
+        slug: slug,
+        page: pageNumber,
+    })
+}
+
 const loadChildren = async (page = 1) => {
     if (!item?.has_descendants) return
     if (childrenLoading.value) return
@@ -58,10 +85,7 @@ const loadChildren = async (page = 1) => {
     try {
         childrenLoading.value = true
 
-        const apiUrl = languageRoute('site.menu-items.sub-menu-items', {
-            slug: item.slug,
-            page,
-        })
+        const apiUrl = getMenuApiUrl(item.slug, page)
         const response = await fetchFromApi(
             apiUrl,
             {},
@@ -152,7 +176,7 @@ const handleReachEnd = async () => {
                     :watch-key="`${children.length}-${childrenLoading}-${isOpen}`" @reach-end="handleReachEnd">
                     <ul class="space-y-1 py-1">
                         <OffCanvasMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1"
-                            :language-route="languageRoute" />
+                            :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
                             {{ t("common.labels.loading") }}

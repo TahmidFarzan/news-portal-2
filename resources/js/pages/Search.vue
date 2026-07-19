@@ -60,7 +60,6 @@ const makeLanguageUrl = (routeName) => {
     return route(routeName) + `?language_id=${language.id}`
 }
 const showGoogleAd = inject('showGoogleAd', computed(() => false))
-const publicRoute = inject('publicRoute', (routeName, params = {}) => route(routeName, params))
 
 const newsTypesApiUrl = computed(() => makeLanguageUrl('search.news-types'))
 const categoryApiUrl = computed(() => makeLanguageUrl('search.category-tree'))
@@ -81,6 +80,11 @@ const metaKeywords = computed(() => {
     }
 
     return page?.seo_keywords ?? ''
+})
+
+
+const metaUrl = computed(() => {
+    return page?.public_url
 })
 
 const getFilterValue = (value) => {
@@ -114,7 +118,7 @@ const applyFilter = () => {
 
     isFiltering.value = true
 
-    inertiaRouter.get(publicRoute('search'), cleanParams, {
+    inertiaRouter.get(metaUrl, cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -186,7 +190,7 @@ onMounted(async () => {
 <template>
 
     <Head :title="metaTitle">
-        <link rel="canonical" :href="publicRoute('search')" />
+        <link rel="canonical" :href="metaUrl" />
 
         <meta v-if="metaTitle" name="title" :content="metaTitle" />
 

@@ -329,13 +329,11 @@ const loadLanguages = async () => {
         },
     )
 
-    siteLanguages.value = Array.isArray(response)
-        ? response
-        : response?.data ?? []
+    siteLanguages.value = response.items || []
 }
 
 const loadDefaultLanguage = async () => {
-    const apiUrl = route('site.defalult-language')
+    const apiUrl = route('site.default-language')
 
     const response = await fetchFromApi(
         apiUrl,
@@ -346,9 +344,7 @@ const loadDefaultLanguage = async () => {
         },
     )
 
-    defaultLanguage.value = Array.isArray(response)
-        ? response[0]
-        : response?.data ?? response
+    defaultLanguage.value = response
 }
 
 const copyToClipboard = async (item) => {

@@ -216,7 +216,7 @@ const getLocationApiUrl = (index) => {
 }
 
 const getCategoryLocationMaxDepthAndLevelApiUrl = () => {
-    if (isDefaultLanguage) {
+    if (isDefaultLanguage.value) {
         return route('category.location-max-depth-and-level', {
             slugTree: category.slug_tree,
         })

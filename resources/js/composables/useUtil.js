@@ -21,3 +21,10 @@ export const capitalize = (str) => {
     if (!str) return 'N/A'
     return str.charAt(0).toUpperCase() + str.slice(1)
 }
+
+
+export const loweriseText = (value) => {
+    return String(value ?? '')
+        .trim()
+        .toLowerCase()
+}

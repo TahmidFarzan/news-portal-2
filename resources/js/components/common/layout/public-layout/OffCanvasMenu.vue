@@ -20,10 +20,18 @@ library.add(faBars, faXmark, faSpinner)
 
 const { t } = useTranslate()
 
-const { languageRoute = (routeName, params = {}) => route(routeName, params) } = defineProps({
-    languageRoute: {
-        type: Function,
-        default: (routeName, params = {}) => route(routeName, params),
+
+const {
+    isDefaultLanguage = false,
+    currentLanguage,
+} = defineProps({
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
+    currentLanguage: {
+        type: Object,
+        required: true,
     },
 })
 
@@ -50,6 +58,25 @@ const normalizeMenuItems = (items = []) => {
     }))
 }
 
+const getMenuApiUrl = (pageNumber = 1) => {
+    if (isDefaultLanguage) {
+        return route('site.menus.off-canvas-menu-items', {
+            page: pageNumber,
+        })
+    }
+
+    const languageCode = currentLanguage?.code
+
+    if (!languageCode) {
+        throw new Error('Current language code is required.')
+    }
+
+    return route('localized.site.menus.off-canvas-menu-items', {
+        languageCode: languageCode,
+        page: pageNumber,
+    })
+}
+
 const getOffCanvasMenuItems = async (pageNumber = 1) => {
     if (offCanvasMenu.loading || pageNumber > offCanvasMenu.lastPage) return
 
@@ -57,7 +84,8 @@ const getOffCanvasMenuItems = async (pageNumber = 1) => {
         offCanvasMenu.loading = true
         offCanvasMenu.error = null
 
-        const apiUrl = languageRoute('site.menus.off-canvas-menu-items', { page: pageNumber })
+        const apiUrl = getMenuApiUrl(pageNumber)
+
         const response = await fetchFromApi(
             apiUrl,
             {},
@@ -131,7 +159,7 @@ onMounted(() => {
             <aside v-if="showOffCanvas"
                 class="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-white shadow-xl z-[999] flex flex-col">
                 <div class="flex items-center justify-between px-4 py-3 border-b">
-                    <a :href="languageRoute('home')" class="inline-flex items-center">
+                    <a :href="isDefaultLanguage ? route('home') : route('localized.home', { languageCode: currentLanguage?.code })" class="inline-flex items-center">
                         <img v-if="appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
 
                         <span v-else class="text-lg font-semibold text-gray-800">
@@ -153,7 +181,7 @@ onMounted(() => {
                         <ul class="space-y-1 pr-1">
                             <template v-if="hasOffCanvasMenu">
                                 <OffCanvasMenuItem v-for="item in offCanvasMenu.items" :key="item.id" :item="item"
-                                    :language-route="languageRoute" @navigate="closeOffCanvas" />
+                                    :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" @navigate="closeOffCanvas" />
                             </template>
 
                             <template v-else-if="offCanvasMenu.loading">

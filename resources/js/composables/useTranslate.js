@@ -16,6 +16,7 @@ export const languages = {
         Locale: 'bn_BD',
     },
 }
+const translate = i18n.global.t
 
 export const useTranslate = () => {
     const { t, locale } = useI18n()
@@ -27,8 +28,7 @@ export const useTranslate = () => {
 }
 
 export const setSelectedLanguage = (language) => {
-    i18n.global.locale.value =
-        language?.code ?? language?.Code ?? languages.English.Code
+    i18n.global.locale.value = language?.code ?? languages.English.Code
 }
 
 export const getSelectedLanguage = () => {
@@ -41,8 +41,7 @@ export const getSelectedLanguage = () => {
     )
 }
 
-export const getSelectedLanguageCode = () =>
-    getSelectedLanguage().Code
+export const getSelectedLanguageCode = () => getSelectedLanguage().Code
 
 export const getSelectLanguageCode = getSelectedLanguageCode
 
@@ -51,4 +50,11 @@ export const generateTranslationKey = (value) => {
         .trim()
         .toLowerCase()
         .replaceAll(' ', '_')
+}
+
+export const translateNumerText = (text) => {
+    return String(text)
+        .split('')
+        .map((char) => translate(`numbers.${char}`))
+        .join('')
 }

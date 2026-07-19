@@ -219,8 +219,8 @@ const getSecondGridColumnClass = (index) => {
             </div>
 
             <div class="space-y-2 md:col-span-4 lg:col-span-4">
-                <CategoryHasLocationSection :category="category" :current-language="currentLanguage"
-                    :is-default-language="isDefaultLanguage" />
+                <CategoryHasLocationSection :category="category" :currentLanguage="currentLanguage"
+                    :isDefaultLanguage="isDefaultLanguage" />
 
                 <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
 

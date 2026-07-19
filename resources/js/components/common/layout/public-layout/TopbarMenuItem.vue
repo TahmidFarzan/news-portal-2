@@ -3,7 +3,9 @@ import { computed, ref } from 'vue'
 
 const {
     item,
-    level = 0
+    level = 0,
+    isDefaultLanguage = false,
+    currentLanguage,
 } = defineProps({
     item: {
         type: Object,
@@ -12,16 +14,20 @@ const {
     level: {
         type: Number,
         default: 0
-    }
+    },
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
+    currentLanguage: {
+        type: Object,
+        required: true,
+    },
 })
 
 const isOpen = ref(false)
-
 const children = computed(() => item.children ?? [])
-
 const hasChildren = computed(() => children.value.length > 0)
-
-
 const isRoot = computed(() => level === 0)
 
 const linkClasses = computed(() => {
@@ -55,7 +61,7 @@ const dropdownClasses = computed(() => {
             leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100 scale-100 translate-y-0"
             leave-to-class="opacity-0 scale-95 translate-y-1">
             <ul v-if="hasChildren && isOpen" :class="dropdownClasses">
-                <TopbarMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" />
+                <TopbarMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"/>
             </ul>
         </Transition>
     </li>

@@ -8,15 +8,7 @@ import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
-import {
-    ref,
-    computed,
-    watch,
-    nextTick,
-    onMounted,
-    onBeforeUnmount,
-    provide,
-} from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount, provide,} from 'vue'
 
 import { usePage } from '@inertiajs/vue3'
 
@@ -37,11 +29,13 @@ import {
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTheme } from '@/composables/useTheme'
+import { loweriseText } from '@/composables/useUtil'
 
 import {
     setSelectedLanguage,
     getSelectedLanguageCode,
     useTranslate,
+    translateNumerText,
 } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
@@ -67,14 +61,13 @@ const isHeaderSticky = ref(false)
 
 const siteThemes = ref([])
 
-const defaultLanguage = ref(null)
+const defaultLanguage = ref({})
+const currentLanguage = ref({})
 const availableLanguages = ref([])
-const languageContextLoaded = ref(false)
 
-const languageCacheKey = 'api:layout:language'
+const isDefaultLanguage = ref(true)
 
 const year = new Date().getFullYear()
-
 const appName = import.meta.env.VITE_APP_NAME
 const appLogo = import.meta.env.VITE_APP_LOGO
 
@@ -86,28 +79,22 @@ const flashMessage = computed(() => {
     return page.props.flashMessage
 })
 
-const translateNumerText = (value) => {
-    return String(value)
-        .split('')
-        .map((char) => t(`numbers.${char}`))
-        .join('')
-}
+const firstPathSegment = computed(() => {
+    const url = String(page.url ?? '/')
+    const pathname = url.split('?')[0]
 
-const handlePageScroll = () => {
-    isHeaderSticky.value = window.scrollY > 0
-}
-
-const normalizeText = (value) => {
-    return String(value ?? '')
-        .trim()
-        .toLowerCase()
-}
-
-const normalizeLanguageCode = (code) => {
-    return String(code ?? '')
-        .trim()
-        .toLowerCase()
-}
+    try {
+        return decodeURIComponent(
+            pathname
+                .split('/')
+                .filter(Boolean)[0] ?? ''
+        )
+    } catch {
+        return pathname
+            .split('/')
+            .filter(Boolean)[0] ?? ''
+    }
+})
 
 const loadSiteThemes = async () => {
     const apiUrl = route('site.themes')
@@ -126,15 +113,97 @@ const loadSiteThemes = async () => {
         : response?.data ?? []
 }
 
+const loadDefaultLanguage = async () => {
+    try {
+        const response = await fetchFromApi(
+            route('site.default-language'),
+            {},
+            {
+                cache: false,
+            }
+        )
+
+        defaultLanguage.value = response ?? null
+    } catch (error) {
+        console.error('Failed to load default language:', error)
+    }
+}
+
+const loadLanguageByFirstPathSegment = async () => {
+
+    if (!firstPathSegment.value) {
+        return;
+    }
+
+    try {
+        const response = await fetchFromApi(
+            route('site.language', {
+                code: firstPathSegment.value
+            }),
+            {},
+            {
+                cache: false,
+            }
+        )
+
+        currentLanguage.value = response ?? defaultLanguage.value;
+        isDefaultLanguage.value = currentLanguage.value?.code === defaultLanguage.value?.code;
+
+        setSelectedLanguage(currentLanguage.value)
+    } catch (error) {
+        currentLanguage.value = defaultLanguage.value
+        isDefaultLanguage.value = currentLanguage.value?.code === defaultLanguage.value?.code
+        setSelectedLanguage(currentLanguage.value)
+    }
+}
+const loadAvailableLanguages = async () => {
+    try {
+        const response = await fetchFromApi(
+            route('site.languages'),
+            {
+                per_page: 100,
+            },
+            {
+                key: `${apiCacheKey.API_LAYOUT_LANGUAGE}:${route('site.languages')}`,
+                ttl: apiCacheTTL.SYSTEM_LONG,
+            }
+        )
+
+        const languages =
+            Array.isArray(response?.items)
+                ? response.items
+                : Array.isArray(response?.data)
+                    ? response.data
+                    : []
+
+        availableLanguages.value = languages
+
+        if (defaultLanguage.value) {
+            const exists = availableLanguages.value.some(
+                (lang) => lang.code === defaultLanguage.value.code
+            )
+
+            if (!exists) {
+                availableLanguages.value = [
+                    defaultLanguage.value,
+                    ...availableLanguages.value,
+                ]
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load available languages:', error)
+    }
+}
+
 const getTheme = (field, group = null) => {
     return siteThemes.value.find((theme) => {
         const matchedField =
-            normalizeText(theme?.key) === normalizeText(field) ||
-            normalizeText(theme?.label) === normalizeText(field)
+            loweriseText(theme?.key) === loweriseText(field) ||
+            loweriseText(theme?.label) === loweriseText(field)
 
         const matchedGroup =
             !group ||
-            normalizeText(theme?.group) === normalizeText(group)
+            loweriseText(theme?.group) === loweriseText(group)
 
         return matchedField && matchedGroup
     }) ?? null
@@ -223,286 +292,51 @@ const showSurveys = computed(() => {
     return isTruthyValue(theme?.value)
 })
 
-const currentPath = computed(() => {
-    const url = String(page.url ?? '/')
-
-    return url.split('?')[0]
-})
-
-const firstPathSegment = computed(() => {
-    const pathname = currentPath.value
-
-    try {
-        return decodeURIComponent(
-            pathname
-                .split('/')
-                .filter(Boolean)[0] ?? ''
-        )
-    } catch {
-        return pathname
-            .split('/')
-            .filter(Boolean)[0] ?? ''
-    }
-})
-
-const findLanguageByCode = (code) => {
-    const normalizedCode = normalizeLanguageCode(code)
-
-    if (!normalizedCode) {
-        return null
-    }
-
-    return availableLanguages.value.find((language) => {
-        return (
-            normalizeLanguageCode(language?.code) ===
-            normalizedCode
-        )
-    }) ?? null
+const componentRefreshKey = (componentName) => {
+    return [
+        'layout-section-component',
+        componentName,
+        loweriseText(currentLanguage.value?.code) || 'default',
+    ].join('-')
 }
-
-const currentLanguage = computed(() => {
-    const routeLanguage = findLanguageByCode(
-        firstPathSegment.value
-    )
-
-    return (
-        routeLanguage ??
-        defaultLanguage.value ??
-        null
-    )
-})
-
-const isLanguageDefault = (language) => {
-    const languageCode = normalizeLanguageCode(
-        language?.code
-    )
-
-    const defaultCode = normalizeLanguageCode(
-        defaultLanguage.value?.code
-    )
-
-    if (!languageCode || !defaultCode) {
-        return false
-    }
-
-    return languageCode === defaultCode
-}
-
-const isDefaultLanguage = computed(() => {
-    return isLanguageDefault(
-        currentLanguage.value
-    )
-})
 
 const selectedLanguageCode = computed(() => {
     return (
         currentLanguage.value?.code ??
         defaultLanguage.value?.code ??
-        getSelectedLanguageCode() ??
-        ''
+        getSelectedLanguageCode()
     )
 })
 
-const publicRoute = (
-    routeName,
-    params = {},
-    language = currentLanguage.value
-) => {
-    if (
-        language?.code &&
-        !isLanguageDefault(language)
-    ) {
-        return route(
-            `localized.${routeName}`,
-            {
-                languageCode: language.code,
-                ...params,
-            }
-        )
-    }
-
-    return route(
-        routeName,
-        params
-    )
-}
-
-const layoutSystemApiRefreshKey = (componentName) => {
-    return [
-        'section-component',
-        componentName,
-        normalizeLanguageCode(
-            currentLanguage.value?.code
-        ) || 'default',
-    ].join('-')
-}
-
-provide(
-    'showGoogleAd',
-    showGoogleAd
-)
-
-provide(
-    'showTrends',
-    showTrends
-)
-
-provide(
-    'showSurveys',
-    showSurveys
-)
-
-provide(
-    'publicRoute',
-    publicRoute
-)
-
-provide(
-    'currentLanguage',
-    currentLanguage
-)
-
-provide(
-    'defaultLanguage',
-    defaultLanguage
-)
-
-provide(
-    'availableLanguages',
-    availableLanguages
-)
-
-provide(
-    'isDefaultLanguage',
-    isDefaultLanguage
-)
-
-const loadLanguageContext = async () => {
-    languageContextLoaded.value = false
-
-    try {
-        const [
-            defaultLanguageResponse,
-            languagesResponse,
-        ] = await Promise.all([
-            fetchFromApi(
-                route('site.default-language'),
-                {},
-                {
-                    cache: false,
-                }
-            ),
-
-            fetchFromApi(
-                route('site.languages'),
-                {
-                    per_page: 100,
-                },
-                {
-                    key: `${languageCacheKey}:${route('site.languages')}`,
-                    ttl: apiCacheTTL.SYSTEM_LONG,
-                }
-            ),
-        ])
-
-        defaultLanguage.value =
-            defaultLanguageResponse?.data ??
-            defaultLanguageResponse ??
-            null
-
-        const languages =
-            Array.isArray(languagesResponse?.items)
-                ? languagesResponse.items
-                : Array.isArray(languagesResponse?.data)
-                    ? languagesResponse.data
-                    : []
-
-        availableLanguages.value = languages
-
-        if (
-            defaultLanguage.value &&
-            !findLanguageByCode(
-                defaultLanguage.value.code
-            )
-        ) {
-            availableLanguages.value = [
-                defaultLanguage.value,
-                ...availableLanguages.value,
-            ]
-        }
-
-        const language =
-            findLanguageByCode(
-                firstPathSegment.value
-            ) ??
-            defaultLanguage.value ??
-            null
-
-        if (language) {
-            setSelectedLanguage(language)
-        }
-    } catch (error) {
-        console.error(
-            'Failed to load language context:',
-            error
-        )
-    } finally {
-        languageContextLoaded.value = true
-    }
-}
-
-watch(
-    () => currentLanguage.value?.code,
-    (
-        newLanguageCode,
-        oldLanguageCode
-    ) => {
-        if (
-            !newLanguageCode ||
-            newLanguageCode === oldLanguageCode
-        ) {
-            return
-        }
-
-        const language =
-            findLanguageByCode(
-                newLanguageCode
-            ) ??
-            currentLanguage.value
-
-        if (language) {
-            setSelectedLanguage(language)
-        }
-    }
-)
+provide('showGoogleAd', showGoogleAd)
+provide('showTrends', showTrends)
+provide('showSurveys', showSurveys)
+provide('currentLanguage', currentLanguage)
+provide('isDefaultLanguage', isDefaultLanguage)
 
 onMounted(async () => {
     await nextTick()
+    await loadDefaultLanguage()
 
     await Promise.all([
-        loadLanguageContext(),
+        loadAvailableLanguages(),
         loadSiteThemes(),
     ])
+})
 
-    handlePageScroll()
-
-    window.addEventListener(
-        'scroll',
-        handlePageScroll,
-        {
-            passive: true,
+watch(
+    () => page.url,
+    async () => {
+        if (!defaultLanguage.value?.code) {
+            await loadDefaultLanguage()
         }
-    )
-})
+        await loadLanguageByFirstPathSegment()
+    },
+    {
+        immediate: true,
+    }
+)
 
-onBeforeUnmount(() => {
-    window.removeEventListener(
-        'scroll',
-        handlePageScroll
-    )
-
-    document.body.style.overflow = ''
-})
 </script>
 
 <template>
@@ -528,16 +362,9 @@ onBeforeUnmount(() => {
 
                 <div
                     class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
-                    <div v-if="
-                        languageContextLoaded &&
-                        isTruthyValue(
-                            showTopbarMenu?.value
-                        )
-                    " class="max-[450px]:flex-1 max-[450px]:min-w-0">
-                        <TopbarMenu :key="layoutSystemApiRefreshKey(
-                            'topbar-menu'
-                        )
-                            " :language-route="publicRoute" class="hidden min-[300px]:inline" />
+                    <div v-if="isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
+                        <TopbarMenu :key="componentRefreshKey('topbar-menu')" :currentLanguage="currentLanguage"
+                            :isDefaultLanguage="isDefaultLanguage" class="hidden min-[300px]:inline" />
                     </div>
 
                     <a v-if="!authUser" :href="route('login')"
@@ -550,100 +377,51 @@ onBeforeUnmount(() => {
                     </a>
 
                     <div v-else class="max-[450px]:flex-shrink-0">
-                        <AuthTopbarDropdownMenu :key="layoutSystemApiRefreshKey(
-                            'auth-topbar-menu'
-                        )
-                            " :auth-user="authUser" />
+                        <AuthTopbarDropdownMenu :key="componentRefreshKey('auth-dropdown-menu')" :auth-user="authUser" />
                     </div>
 
-                    <LanguageSelect v-if="languageContextLoaded" class="max-[450px]:flex-shrink-0" :available-languages="availableLanguages
-                        " :current-language="currentLanguage
-                            " :default-language="defaultLanguage
-                            " />
+                    <LanguageSelect :key="componentRefreshKey('language-select')" :availableLanguages="availableLanguages"
+                        :currentLanguage="currentLanguage" :defaultLanguage="defaultLanguage" class="max-[450px]:flex-shrink-0"  />
                 </div>
             </div>
         </div>
 
-        <div ref="headerNavbar" class="public-header text-white transition-shadow" :class="{
-            'is-sticky sticky top-0 z-50':
-                isHeaderSticky,
-        }">
+        <div ref="headerNavbar" class="public-header text-white transition-shadow"
+            :class="{ 'is-sticky sticky top-0 z-50': isHeaderSticky, }">
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
-                <a :href="languageContextLoaded
-                        ? publicRoute('home')
-                        : route('home')
-                    "
+                <a :href="isDefaultLanguage ? route('home') : route('localized.home', { languageCode: currentLanguage?.code })"
                     class="brand-link h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
-                    <img v-if="
-                        isTruthyValue(
-                            showLogoOnHeaderMenu?.value
-                        ) &&
-                        appLogo
-                    " :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain" />
+                    <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
+                        class="h-10 max-w-40 object-contain" />
 
-                    <b v-if="
-                        isTruthyValue(
-                            showNameOnHeaderMenu?.value
-                        )
-                    " class="hidden sm:inline">
+                    <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)" class="hidden sm:inline">
                         {{ t('common.app.name') }}
                     </b>
                 </a>
 
                 <div class="flex-1 min-w-0 h-10 flex items-center">
-                    <HeaderMenu v-if="
-                        languageContextLoaded
-                    " :key="layoutSystemApiRefreshKey(
-                            'header-menu'
-                        )
-                            " :language-route="publicRoute
-                            " class="hidden min-[401px]:inline" />
+                    <HeaderMenu :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
+                        :key="componentRefreshKey('header-menu')" class="hidden min-[401px]:inline" />
                 </div>
 
                 <div class="h-10 flex items-center gap-2 flex-shrink-0">
-                    <a :href="languageContextLoaded
-                            ? publicRoute(
-                                'search'
-                            )
-                            : route(
-                                'search'
-                            )
-                        " class="header-action w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
+                    <a :href="isDefaultLanguage ? route('search') : route('localized.search', { languageCode: currentLanguage?.code })"
+                        class="header-action w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
                         aria-label="Search">
                         <FontAwesomeIcon icon="magnifying-glass" />
                     </a>
 
-                    <OffCanvasMenu v-if="
-                        languageContextLoaded
-                    " :key="layoutSystemApiRefreshKey(
-                            'off-canvas-menu'
-                        )
-                            " :language-route="publicRoute
-                            " />
+                    <OffCanvasMenu :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :key="componentRefreshKey('offcanvas-menu')"/>
                 </div>
             </div>
         </div>
 
         <main class="main public-main mx-auto w-full max-w-7xl px-4 py-6">
-            <slot v-if="
-                languageContextLoaded
-            " />
+            <slot />
         </main>
 
-        <BreakingNews v-if="
-            languageContextLoaded &&
-            isTruthyValue(
-                showBreakingNews?.value
-            )
-        " :key="layoutSystemApiRefreshKey(
-                'breaking-news'
-            )
-                " :title="t(
-                'common.messages.breakingNews'
-            )
-                " :current-language="currentLanguage
-                " :is-default-language="isDefaultLanguage
-                " />
+        <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('common.messages.breakingNews')"
+            :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :key="componentRefreshKey('breaking-news')"/>
 
         <footer class="public-footer py-4 mt-2 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
@@ -653,17 +431,8 @@ onBeforeUnmount(() => {
                     {{ t('common.app.name') }}
                 </span>
 
-                <FooterMenu v-if="
-                    languageContextLoaded &&
-                    isTruthyValue(
-                        showFooterMenu?.value
-                    )
-                " :key="layoutSystemApiRefreshKey(
-                        'footer-menu'
-                    )
-                        " :current-language="currentLanguage
-                        " :is-default-language="isDefaultLanguage
-                        " />
+                <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" :currentLanguage="currentLanguage"
+                    :isDefaultLanguage="isDefaultLanguage" :key="componentRefreshKey('footer-menu')"/>
 
                 <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
                     {{ t('common.app.developedBy') }}
@@ -676,8 +445,7 @@ onBeforeUnmount(() => {
             </div>
         </footer>
 
-        <ToasterMessage :flash-message="flashMessage
-            " />
+        <ToasterMessage :flash-message="flashMessage" />
     </div>
 </template>
 

@@ -70,6 +70,7 @@ export const apiCacheKey = Object.freeze({
     API_LAYOUT_HEADER_MENU: "api:layout:header-menu",
     API_LAYOUT_OFFCANVAS_MENU: "api:layout:offcanvas-menu",
     API_LAYOUT_FOOTER_MENU: "api:layout:footer-menu",
+    API_LAYOUT_LANGUAGE: "api:layout:language",
 
     API_SITE_GOOGLE_ADSENCE: "api:site-google-adsence",
 

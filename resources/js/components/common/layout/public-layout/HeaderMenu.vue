@@ -17,10 +17,17 @@ library.add(faSpinner)
 
 const { t } = useTranslate()
 
-const { languageRoute = (routeName, params = {}) => route(routeName, params) } = defineProps({
-    languageRoute: {
-        type: Function,
-        default: (routeName, params = {}) => route(routeName, params),
+const {
+    isDefaultLanguage = false,
+    currentLanguage,
+} = defineProps({
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
+    currentLanguage: {
+        type: Object,
+        required: true,
     },
 })
 
@@ -44,6 +51,25 @@ const normalizeMenuItems = (items = []) => {
     }))
 }
 
+const getMenuApiUrl = (pageNumber = 1) => {
+    if (isDefaultLanguage) {
+        return route('site.menus.header-menu-items', {
+            page: pageNumber,
+        })
+    }
+
+    const languageCode = currentLanguage?.code
+
+    if (!languageCode) {
+        throw new Error('Current language code is required.')
+    }
+
+    return route('localized.site.menus.header-menu-items', {
+        languageCode: languageCode,
+        page: pageNumber,
+    })
+}
+
 const getHeaderMenuItems = async (pageNumber = 1) => {
     if (headerMenu.loading || pageNumber > headerMenu.lastPage) return
 
@@ -51,7 +77,7 @@ const getHeaderMenuItems = async (pageNumber = 1) => {
         headerMenu.loading = true
         headerMenu.error = null
 
-        const apiUrl = languageRoute('site.menus.header-menu-items', { page: pageNumber })
+        const apiUrl = getMenuApiUrl(pageNumber)
         const response = await fetchFromApi(
             apiUrl,
             {},
@@ -98,7 +124,7 @@ onMounted(() => {
             <ul class="h-10 flex items-center gap-2 whitespace-nowrap">
                 <template v-if="headerMenu.items.length">
                     <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item"
-                        :language-route="languageRoute" />
+                        :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" />
                 </template>
 
                 <template v-else-if="isInitialLoading">

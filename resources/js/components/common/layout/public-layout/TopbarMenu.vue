@@ -17,10 +17,17 @@ library.add(faSpinner)
 
 const { t } = useTranslate()
 
-const { languageRoute = (routeName, params = {}) => route(routeName, params) } = defineProps({
-    languageRoute: {
-        type: Function,
-        default: (routeName, params = {}) => route(routeName, params),
+const {
+    isDefaultLanguage = false,
+    currentLanguage,
+} = defineProps({
+    isDefaultLanguage: {
+        type: Boolean,
+        default: false,
+    },
+    currentLanguage: {
+        type: Object,
+        required: true,
     },
 })
 
@@ -44,6 +51,25 @@ const normalizeMenuItems = (items = []) => {
     }))
 }
 
+const getMenuApiUrl = (pageNumber = 1) => {
+    if (isDefaultLanguage) {
+        return route('site.menus.topbar-menu-items', {
+            page: pageNumber,
+        })
+    }
+
+    const languageCode = currentLanguage?.code
+
+    if (!languageCode) {
+        throw new Error('Current language code is required.')
+    }
+
+    return route('localized.site.menus.topbar-menu-items', {
+        languageCode: languageCode,
+        page: pageNumber,
+    })
+}
+
 const getTopbarMenuItems = async (pageNumber = 1) => {
     if (topbarMenu.loading || pageNumber > topbarMenu.lastPage) return
 
@@ -51,7 +77,7 @@ const getTopbarMenuItems = async (pageNumber = 1) => {
         topbarMenu.loading = true
         topbarMenu.error = null
 
-        const apiUrl = languageRoute('site.menus.topbar-menu-items', { page: pageNumber })
+        const apiUrl = getMenuApiUrl(pageNumber)
         const response = await fetchFromApi(
             apiUrl,
             {},
@@ -98,7 +124,7 @@ onMounted(() => {
             @reach-end="handleReachEnd">
             <ul class="h-8 flex items-center gap-3 whitespace-nowrap min-w-0">
                 <template v-if="topbarMenu.items.length">
-                    <TopbarMenuItem v-for="item in topbarMenu.items" :key="item.id" :item="item" />
+                    <TopbarMenuItem v-for="item in topbarMenu.items" :key="item.id" :item="item" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" />
                 </template>
 
                 <template v-else-if="isInitialLoading">

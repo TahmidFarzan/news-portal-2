@@ -72,7 +72,7 @@ const normalizeResponseData = (response) => {
 }
 
 const getHomeCategoryApiUrl = () => {
-    if (isDefaultLanguage) {
+    if (isDefaultLanguage.value) {
         return route('home.category', {
             slug: categorySlug,
         })
@@ -85,7 +85,7 @@ const getHomeCategoryApiUrl = () => {
 }
 
 const getHomeCategoryNewsApiUrl = () => {
-    if (isDefaultLanguage) {
+    if (isDefaultLanguage.value) {
         return route('home.category-news', {
             slug: categorySlug,
             limit,
@@ -116,7 +116,7 @@ const loadCategorySection = async () => {
             }
         )
 
-        category.value = categoryResponse?.data ?? categoryResponse
+        category.value = categoryResponse
 
         const newsApiUrl = getHomeCategoryNewsApiUrl()
 
