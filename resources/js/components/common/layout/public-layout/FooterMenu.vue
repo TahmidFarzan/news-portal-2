@@ -12,13 +12,8 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 const { t } = useTranslate()
 
 const {
-    isDefaultLanguage = false,
     currentLanguage,
 } = defineProps({
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
-    },
     currentLanguage: {
         type: Object,
         required: true,
@@ -76,24 +71,16 @@ const mergeUniqueMenuItems = (currentItems = [], newItems = []) => {
     return Array.from(itemsMap.values())
 }
 
-const getFooterMenuApiUrl = (pageNumber = 1) => {
-    if (isDefaultLanguage) {
-        return route('site.menus.footer-menu-items', {
+const getMenuApiUrl = (pageNumber = 1) => {
+    return currentLanguage?.is_default
+        ? route('site.menus.footer-menu-items', {
             page: pageNumber,
         })
-    }
-
-    const languageCode = currentLanguage?.code
-
-    if (!languageCode) {
-        throw new Error('Current language code is required.')
-    }
-
-    return route('localized.site.menus.footer-menu-items', {
-        languageCode: languageCode,
-        page: pageNumber,
-    })
-}
+        : route('localized.site.menus.footer-menu-items', {
+            languageCode: currentLanguage?.code,
+            page: pageNumber,
+        });
+};
 
 const normalizeApiResponse = (response, requestedPage = 1) => {
     const paginator =
@@ -161,7 +148,7 @@ const getFooterMenuItems = async (pageNumber = 1, forceReset = false) => {
             }
         }
 
-        const apiUrl = getFooterMenuApiUrl(requestedPage)
+        const apiUrl = getMenuApiUrl(requestedPage)
 
         const response = await fetchFromApi(
             apiUrl,
@@ -224,7 +211,7 @@ onMounted(() => {
 
 watch(
     () => [
-        isDefaultLanguage,
+        currentLanguage?.is_defualt,
         currentLanguage?.code,
     ],
     ([newIsDefault, newCode], [oldIsDefault, oldCode]) => {

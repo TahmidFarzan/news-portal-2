@@ -1,8 +1,8 @@
 <?php
 namespace Database\Seeders;
 
-use App\Models\News;
 use App\Models\Contributor;
+use App\Models\News;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -41,10 +41,10 @@ class NewsContributorSyncSeeder extends Seeder
 
                     foreach ($randomContributorIds as $contributorId) {
                         $rows[] = [
-                            'news_id'    => $perNews->id,
-                            'contributor_id'     => $contributorId,
-                            'created_at' => $now,
-                            'updated_at' => $now,
+                            'news_id'        => $perNews->id,
+                            'contributor_id' => $contributorId,
+                            'created_at'     => $now,
+                            'updated_at'     => $now,
                         ];
                     }
                 }

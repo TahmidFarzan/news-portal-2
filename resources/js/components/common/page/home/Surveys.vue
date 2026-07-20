@@ -18,7 +18,6 @@ const { t } = useTranslate()
 const {
     surveys: initialSurveys,
     currentLanguage,
-    isDefaultLanguage = false,
 } = defineProps({
     surveys: {
         type: [Array, Object],
@@ -27,10 +26,6 @@ const {
     currentLanguage: {
         type: Object,
         required: true,
-    },
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
     },
 })
 
@@ -49,17 +44,15 @@ const normalizeSurveys = (value) => {
 const surveys = ref(normalizeSurveys(initialSurveys))
 
 const getSurveysApiUrl = () => {
-    if (isDefaultLanguage) {
-        return route('home.surveys.get')
-    }
-
-    return route('localized.home.surveys.get', {
-        languageCode: currentLanguage.code,
-    })
+    return currentLanguage?.is_default
+        ? route('home.surveys.get')
+        : route('localized.home.surveys.get', {
+            languageCode: currentLanguage?.code,
+        });
 }
 
 const load = async () => {
-    if (!isDefaultLanguage && !currentLanguage?.code) {
+    if (!currentLanguage?.is_default && !currentLanguage?.code) {
         return
     }
 
@@ -94,7 +87,7 @@ watch(
 watch(
     () => [
         currentLanguage?.code,
-        isDefaultLanguage,
+        currentLanguage?.is_default,
     ],
     load
 )
@@ -113,11 +106,10 @@ watch(
                     </h2>
 
                     <div v-if="survey.survey_questions?.length" class="grid grid-cols-12 gap-2">
-                        <div v-for="surveyQuestion in survey.survey_questions"
-                            :key="surveyQuestion.id" class="col-span-12">
+                        <div v-for="surveyQuestion in survey.survey_questions" :key="surveyQuestion.id"
+                            class="col-span-12">
                             <SurveyQuestion :key="`${survey.id}-${surveyQuestion.id}`" :survey="survey"
-                                :survey-question="surveyQuestion" :current-language="currentLanguage"
-                                :is-default-language="isDefaultLanguage" @updated="load" />
+                                :survey-question="surveyQuestion" :currentLanguage="currentLanguage" @updated="load" />
                         </div>
                     </div>
 
@@ -129,8 +121,7 @@ watch(
         </Swiper>
 
         <div v-else class="space-y-2">
-            <div v-for="survey in surveys" :key="survey.id"
-                class="survey-card border border-gray-100 rounded-xl p-2">
+            <div v-for="survey in surveys" :key="survey.id" class="survey-card border border-gray-100 rounded-xl p-2">
                 <h2 class="survey-title font-bold mb-4">
                     {{ survey.name }}
                 </h2>
@@ -139,8 +130,7 @@ watch(
                     <div v-for="surveyQuestion in survey.survey_questions" :key="`${survey.id}-${surveyQuestion.id}`"
                         class="col-span-12">
                         <SurveyQuestion :key="`${survey.id}-${surveyQuestion.id}`" :survey="survey"
-                            :survey-question="surveyQuestion" :current-language="currentLanguage"
-                            :is-default-language="isDefaultLanguage" @updated="load" />
+                            :survey-question="surveyQuestion" :current-language="currentLanguage" @updated="load" />
                     </div>
                 </div>
 

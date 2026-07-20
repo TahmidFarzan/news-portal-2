@@ -2,7 +2,6 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
-use App\Helpers\SystemHelper;
 use App\Observers\NewsObserver;
 use App\Policies\NewsPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -118,11 +117,9 @@ class News extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("news.details", ['slug' => $this->slug]);
-            }
-            else{
-                $url = route("localized.news.details", ["languageCode" => $this->language->code,'slug' => $this->slug]);
+            $url = route("news.details", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
+                $url = route("localized.news.details", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
 
@@ -135,58 +132,44 @@ class News extends Model implements HasMedia
             return null;
         }
 
-        $locale          = config('app.locale');
-        $contentLanguage = $this->language?->code;
+        $locale = config('app.locale');
 
-        $displayLanguage = SystemHelper::LANGUAGE_EN_CODE;
+        $displayLanguageCode = $locale;
+        $contentLanguageCode = $this->language?->code;
 
-        if (
-            $contentLanguage &&
-            $contentLanguage !== $locale &&
-            in_array($contentLanguage, [
-                SystemHelper::LANGUAGE_EN_CODE,
-                SystemHelper::LANGUAGE_BN_CODE,
-            ], true)
-        ) {
-            $displayLanguage = $contentLanguage;
-        } elseif (
-            in_array($locale, [
-                SystemHelper::LANGUAGE_EN_CODE,
-                SystemHelper::LANGUAGE_BN_CODE,
-            ], true)
-        ) {
-            $displayLanguage = $locale;
+        if (!($displayLanguageCode == $contentLanguageCode)) {
+            $displayLanguageCode = $contentLanguageCode;
         }
 
         $publishedAt = $this->created_at;
         $seconds     = $publishedAt->diffInSeconds(now());
 
-        $numbers = trans('time.numbers', [], $displayLanguage);
+        $numbers = trans('time.numbers', [], $displayLanguageCode);
 
         $localize = static fn(string | int $value): string => strtr((string) $value, $numbers);
 
         if ($seconds < 60) {
-            return $localize($seconds) . trans('time.second_ago', [], $displayLanguage);
+            return $localize($seconds) . trans('time.second_ago', [], $displayLanguageCode);
         }
 
         if ($seconds < 3600) {
-            return $localize((int) floor($seconds / 60)) . trans('time.minute_ago', [], $displayLanguage);
+            return $localize((int) floor($seconds / 60)) . trans('time.minute_ago', [], $displayLanguageCode);
         }
 
         if ($seconds < 86400) {
-            return $localize((int) floor($seconds / 3600)) . trans('time.hour_ago', [], $displayLanguage);
+            return $localize((int) floor($seconds / 3600)) . trans('time.hour_ago', [], $displayLanguageCode);
         }
 
         $publishedAtFormatted = $publishedAt->format(config('app.date_time_format'));
 
         $publishedAtFormatted = strtr(
             $publishedAtFormatted,
-            trans('time.months', [], $displayLanguage)
+            trans('time.months', [], $displayLanguageCode)
         );
 
         $publishedAtFormatted = strtr(
             $publishedAtFormatted,
-            trans('time.meridiem', [], $displayLanguage)
+            trans('time.meridiem', [], $displayLanguageCode)
         );
 
         $publishedAtFormatted = strtr(

@@ -11,11 +11,15 @@ const { t } = useTranslate()
 
 const {
     item,
-    level = 0,
-    isDefaultLanguage = false,
     currentLanguage,
+    level = 0,
+
 } = defineProps({
     item: {
+        type: Object,
+        required: true,
+    },
+    currentLanguage: {
         type: Object,
         required: true,
     },
@@ -23,16 +27,8 @@ const {
         type: Number,
         default: 0,
     },
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
-    },
-    currentLanguage: {
-        type: Object,
-        required: true,
-    },
-})
 
+})
 
 const isOpen = ref(false)
 const children = ref([])
@@ -57,24 +53,16 @@ const resetChildrenState = () => {
 }
 
 const getMenuApiUrl = (slug, pageNumber = 1) => {
-    if (isDefaultLanguage) {
-        return route('site.menu-items.sub-menu-items', {
-            slug: slug,
+    return currentLanguage?.is_default
+        ? route('site.menu-items.sub-menu-items', {
+            slug,
             page: pageNumber,
         })
-    }
-
-    const languageCode = currentLanguage?.code
-
-    if (!languageCode) {
-        throw new Error('Current language code is required.')
-    }
-
-    return route('localized.site.menu-items.sub-menu-items', {
-        languageCode: languageCode,
-        slug: slug,
-        page: pageNumber,
-    })
+        : route('localized.site.menu-items.sub-menu-items', {
+            languageCode: currentLanguage?.code,
+            slug,
+            page: pageNumber,
+        });
 }
 
 const loadChildren = async (page = 1) => {
@@ -176,7 +164,7 @@ const handleReachEnd = async () => {
                     :watch-key="`${children.length}-${childrenLoading}-${isOpen}`" @reach-end="handleReachEnd">
                     <ul class="space-y-1 py-1">
                         <OffCanvasMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1"
-                            :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" />
+                            :currentLanguage="currentLanguage" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
                             {{ t("common.labels.loading") }}

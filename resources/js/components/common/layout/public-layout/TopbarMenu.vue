@@ -18,13 +18,8 @@ library.add(faSpinner)
 const { t } = useTranslate()
 
 const {
-    isDefaultLanguage = false,
     currentLanguage,
 } = defineProps({
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
-    },
     currentLanguage: {
         type: Object,
         required: true,
@@ -52,22 +47,14 @@ const normalizeMenuItems = (items = []) => {
 }
 
 const getMenuApiUrl = (pageNumber = 1) => {
-    if (isDefaultLanguage) {
-        return route('site.menus.topbar-menu-items', {
+    return currentLanguage?.is_default
+        ? route('site.menus.topbar-menu-items', {
             page: pageNumber,
         })
-    }
-
-    const languageCode = currentLanguage?.code
-
-    if (!languageCode) {
-        throw new Error('Current language code is required.')
-    }
-
-    return route('localized.site.menus.topbar-menu-items', {
-        languageCode: languageCode,
-        page: pageNumber,
-    })
+        : route('localized.site.menus.topbar-menu-items', {
+            languageCode: currentLanguage?.code,
+            page: pageNumber,
+        });
 }
 
 const getTopbarMenuItems = async (pageNumber = 1) => {
@@ -124,7 +111,8 @@ onMounted(() => {
             @reach-end="handleReachEnd">
             <ul class="h-8 flex items-center gap-3 whitespace-nowrap min-w-0">
                 <template v-if="topbarMenu.items.length">
-                    <TopbarMenuItem v-for="item in topbarMenu.items" :key="item.id" :item="item" :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" />
+                    <TopbarMenuItem v-for="item in topbarMenu.items" :key="item.id" :item="item"
+                        :currentLanguage="currentLanguage" />
                 </template>
 
                 <template v-else-if="isInitialLoading">

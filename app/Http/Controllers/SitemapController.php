@@ -232,7 +232,8 @@ class SitemapController extends Controller
         }
 
         $routeUrl = route('sitemaps.categories');
-        if (! ($language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+
+        if (!$language->is_default) {
             $routeUrl = route('sitemaps.localized.categories');
         }
         $lastPage = $this->sitemapService->getCategoriesLastPageNo($language);
@@ -249,7 +250,7 @@ class SitemapController extends Controller
             return response()->view('sitemaps.attributes', compact('records'));
         }
         $routeUrl = route('sitemaps.tags');
-        if (! ($language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+        if (! $language->is_default) {
             $routeUrl = route('sitemaps.localized.tags');
         }
         $lastPage = $this->sitemapService->getTagsLastPageNo($language);
@@ -267,7 +268,7 @@ class SitemapController extends Controller
         }
 
         $routeUrl = route('sitemaps.locations');
-        if (! ($language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+        if (! $language->is_default) {
             $routeUrl = route('sitemaps.localized.locations');
         }
         $lastPage = $this->sitemapService->getLocationsLastPageNo($language);
@@ -285,7 +286,7 @@ class SitemapController extends Controller
         }
 
         $routeUrl = route('sitemaps.events');
-        if (! ($language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+        if (! $language->is_default) {
             $routeUrl = route('sitemaps.localized.events');
         }
         $lastPage = $this->sitemapService->getEventsLastPageNo($language);
@@ -303,7 +304,7 @@ class SitemapController extends Controller
         }
 
         $routeUrl = route('sitemaps.contributors');
-        if (! ($language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+        if (! $language->is_default) {
             $routeUrl = route('sitemaps.localized.contributors');
         }
         $lastPage = $this->sitemapService->getContributorsLastPageNo($language);
@@ -329,7 +330,7 @@ class SitemapController extends Controller
         }
 
         $routeUrl = route('sitemaps.news');
-        if (! ($language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
+        if (! $language->is_default) {
             $routeUrl = route('sitemaps.localized.news');
         }
         $lastPage = $this->sitemapService->getNewsLastPageNo($language);

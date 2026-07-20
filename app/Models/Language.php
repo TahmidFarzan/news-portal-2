@@ -30,6 +30,7 @@ class Language extends Model
     protected function casts(): array
     {
         return [
+            'is_default' => "boolean",
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];

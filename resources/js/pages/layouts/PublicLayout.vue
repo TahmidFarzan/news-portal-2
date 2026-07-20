@@ -8,7 +8,7 @@ import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
-import { ref, computed, watch, nextTick, onMounted, provide,} from 'vue'
+import { ref, computed, watch, nextTick, onMounted, provide, } from 'vue'
 
 import { usePage } from '@inertiajs/vue3'
 
@@ -64,8 +64,6 @@ const siteThemes = ref([])
 const defaultLanguage = ref({})
 const currentLanguage = ref({})
 
-const isDefaultLanguage = ref(true)
-
 const year = new Date().getFullYear()
 const appName = import.meta.env.VITE_APP_NAME
 const appLogo = import.meta.env.VITE_APP_LOGO
@@ -113,12 +111,14 @@ const loadSiteThemes = async () => {
 }
 
 const loadDefaultLanguage = async () => {
+    const apiUrl = route('site.default-language')
     try {
         const response = await fetchFromApi(
-            route('site.default-language'),
+            apiUrl,
             {},
             {
-                cache: false,
+                key: `${apiCacheKey.API_LAYOUT_DEFAULT_LANGUAGE}:${apiUrl}`,
+                ttl: apiCacheTTL.SYSTEM_SHORT,
             }
         )
 
@@ -131,30 +131,31 @@ const loadDefaultLanguage = async () => {
 const loadLanguageByFirstPathSegment = async () => {
 
     if (!firstPathSegment.value) {
-        return;
+        currentLanguage.value = defaultLanguage.value
+        setSelectedLanguage(currentLanguage.value)
+        return
     }
 
     try {
+        const apiUrl = route('site.language', { code: firstPathSegment.value })
+
         const response = await fetchFromApi(
-            route('site.language', {
-                code: firstPathSegment.value
-            }),
+            apiUrl,
             {},
             {
-                cache: false,
+                key: `${apiCacheKey.API_LAYOUT_LANGUAGE}:${apiUrl}`,
+                ttl: apiCacheTTL.SYSTEM_SHORT,
             }
         )
 
-        currentLanguage.value = response ?? defaultLanguage.value;
-        isDefaultLanguage.value = currentLanguage.value?.code === defaultLanguage.value?.code;
-
+        currentLanguage.value = response ?? defaultLanguage.value
         setSelectedLanguage(currentLanguage.value)
-    } catch (error) {
+    } catch {
         currentLanguage.value = defaultLanguage.value
-        isDefaultLanguage.value = currentLanguage.value?.code === defaultLanguage.value?.code
         setSelectedLanguage(currentLanguage.value)
     }
 }
+
 const getTheme = (field, group = null) => {
     return siteThemes.value.find((theme) => {
         const matchedField =
@@ -167,6 +168,14 @@ const getTheme = (field, group = null) => {
 
         return matchedField && matchedGroup
     }) ?? null
+}
+
+const componentRefreshKey = (componentName) => {
+    return [
+        'layout-section-component',
+        componentName,
+        loweriseText(currentLanguage.value?.code) || 'default',
+    ].join('-')
 }
 
 const facebookTheme = computed(() => {
@@ -252,14 +261,6 @@ const showSurveys = computed(() => {
     return isTruthyValue(theme?.value)
 })
 
-const componentRefreshKey = (componentName) => {
-    return [
-        'layout-section-component',
-        componentName,
-        loweriseText(currentLanguage.value?.code) || 'default',
-    ].join('-')
-}
-
 const selectedLanguageCode = computed(() => {
     return (
         currentLanguage.value?.code ??
@@ -268,15 +269,39 @@ const selectedLanguageCode = computed(() => {
     )
 })
 
+const homeUrl = computed(() => {
+    if (!currentLanguage.value?.code) {
+        return route('home')
+    }
+
+    return currentLanguage.value.is_default
+        ? route('home')
+        : route('localized.home', {
+            languageCode: currentLanguage.value.code,
+        })
+})
+
+const searchUrl = computed(() => {
+    if (!currentLanguage.value?.code) {
+        return route('search')
+    }
+
+    return currentLanguage.value.is_default
+        ? route('search')
+        : route('localized.search', {
+            languageCode: currentLanguage.value.code,
+        })
+})
+
 provide('showGoogleAd', showGoogleAd)
 provide('showTrends', showTrends)
 provide('showSurveys', showSurveys)
 provide('currentLanguage', currentLanguage)
-provide('isDefaultLanguage', isDefaultLanguage)
 
 onMounted(async () => {
     await nextTick()
     await loadDefaultLanguage()
+    await loadLanguageByFirstPathSegment()
     await loadSiteThemes()
 })
 
@@ -288,9 +313,6 @@ watch(
         }
         await loadLanguageByFirstPathSegment()
     },
-    {
-        immediate: true,
-    }
 )
 
 </script>
@@ -320,7 +342,7 @@ watch(
                     class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
                     <div v-if="isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
                         <TopbarMenu :key="componentRefreshKey('topbar-menu')" :currentLanguage="currentLanguage"
-                            :isDefaultLanguage="isDefaultLanguage" class="hidden min-[300px]:inline" />
+                            class="hidden min-[300px]:inline" />
                     </div>
 
                     <a v-if="!authUser" :href="route('login')"
@@ -333,10 +355,12 @@ watch(
                     </a>
 
                     <div v-else class="max-[450px]:flex-shrink-0">
-                        <AuthTopbarDropdownMenu :key="componentRefreshKey('auth-dropdown-menu')" :auth-user="authUser" />
+                        <AuthTopbarDropdownMenu :key="componentRefreshKey('auth-dropdown-menu')"
+                            :auth-user="authUser" />
                     </div>
 
-                    <LanguageSelect :currentLanguage="currentLanguage" :defaultLanguage="defaultLanguage" class="max-[450px]:flex-shrink-0"  />
+                    <LanguageSelect :currentLanguage="currentLanguage" :defaultLanguage="defaultLanguage"
+                        class="max-[450px]:flex-shrink-0" />
                 </div>
             </div>
         </div>
@@ -344,7 +368,7 @@ watch(
         <div ref="headerNavbar" class="public-header text-white transition-shadow"
             :class="{ 'is-sticky sticky top-0 z-50': isHeaderSticky, }">
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
-                <a :href="isDefaultLanguage ? route('home') : route('localized.home', { languageCode: currentLanguage?.code })"
+                <a :href="homeUrl"
                     class="brand-link h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
                     <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
                         class="h-10 max-w-40 object-contain" />
@@ -355,18 +379,18 @@ watch(
                 </a>
 
                 <div class="flex-1 min-w-0 h-10 flex items-center">
-                    <HeaderMenu :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage"
-                        :key="componentRefreshKey('header-menu')" class="hidden min-[401px]:inline" />
+                    <HeaderMenu :currentLanguage="currentLanguage" :key="componentRefreshKey('header-menu')"
+                        class="hidden min-[401px]:inline" />
                 </div>
 
                 <div class="h-10 flex items-center gap-2 flex-shrink-0">
-                    <a :href="isDefaultLanguage ? route('search') : route('localized.search', { languageCode: currentLanguage?.code })"
+                    <a :href="searchUrl"
                         class="header-action w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
                         aria-label="Search">
                         <FontAwesomeIcon icon="magnifying-glass" />
                     </a>
 
-                    <OffCanvasMenu :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :key="componentRefreshKey('offcanvas-menu')"/>
+                    <OffCanvasMenu :currentLanguage="currentLanguage" :key="componentRefreshKey('offcanvas-menu')" />
                 </div>
             </div>
         </div>
@@ -376,7 +400,7 @@ watch(
         </main>
 
         <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('common.messages.breakingNews')"
-            :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" :key="componentRefreshKey('breaking-news')"/>
+            :currentLanguage="currentLanguage" :key="componentRefreshKey('breaking-news')" />
 
         <footer class="public-footer py-4 mt-2 text-sm">
             <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
@@ -387,7 +411,7 @@ watch(
                 </span>
 
                 <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" :currentLanguage="currentLanguage"
-                    :isDefaultLanguage="isDefaultLanguage" :key="componentRefreshKey('footer-menu')"/>
+                    :key="componentRefreshKey('footer-menu')" />
 
                 <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
                     {{ t('common.app.developedBy') }}

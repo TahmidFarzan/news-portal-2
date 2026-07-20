@@ -108,9 +108,8 @@ class Contributor extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("contributor.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("contributor.news", ['slug' => $this->slug]);
+            if (!$this->language->is_default) {
                 $url = route("localized.contributor.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -123,9 +122,8 @@ class Contributor extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.atom.contributor.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("feeds.atom.contributor.news", ['slug' => $this->slug]);
+            if (!$this->language->is_default) {
                 $url = route("localized.feeds.atom.contributor.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -138,9 +136,8 @@ class Contributor extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.rss.contributor.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("feeds.rss.contributor.news", ['slug' => $this->slug]);
+            if (!$this->language->is_default) {
                 $url = route("localized.feeds.rss.contributor.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -153,9 +150,8 @@ class Contributor extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("sitemaps.contributor.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("sitemaps.contributor.news", ['slug' => $this->slug]);
+            if (!$this->language->is_default) {
                 $url = route("localized.sitemaps.contributor.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }

@@ -8,17 +8,12 @@ const {
     survey,
     surveyQuestion,
     currentLanguage,
-    isDefaultLanguage = false,
 } = defineProps({
     survey: Object,
     surveyQuestion: Object,
     currentLanguage: {
         type: Object,
         required: true,
-    },
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
     },
 })
 
@@ -72,7 +67,7 @@ const selectedLabel = computed(() =>
 )
 
 const submit = async () => {
-    if (!isDefaultLanguage && !currentLanguage?.code) {
+    if (!currentLanguage?.id_default && !currentLanguage?.code) {
         return
     }
 
@@ -158,25 +153,16 @@ const progressColor = value => {
 }
 
 const getSubmitApiUrl = () => {
-    const params = {
-        slug: survey?.slug,
-        surveyQuestionSlug: surveyQuestion?.slug,
-    }
-
-    if (isDefaultLanguage) {
-        return route(
-            'home.surveys.survey-questions-submit',
-            params
-        )
-    }
-
-    return route(
-        'localized.home.surveys.survey-questions-submit',
-        {
-            languageCode: currentLanguage.code,
-            ...params,
-        }
-    )
+    return currentLanguage?.is_default
+        ? route('home.surveys.survey-questions-submit', {
+            slug: survey?.slug,
+            surveyQuestionSlug: surveyQuestion?.slug,
+        })
+        : route('localized.home.surveys.survey-questions-submit', {
+            languageCode: currentLanguage?.code,
+            slug: survey?.slug,
+            surveyQuestionSlug: surveyQuestion?.slug,
+        });
 }
 
 watch(

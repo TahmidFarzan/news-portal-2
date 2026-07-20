@@ -2,7 +2,6 @@
 namespace App\Models;
 
 use App\Helpers\MediaHelper;
-use App\Helpers\SystemHelper;
 use App\Observers\EventObserver;
 use App\Policies\EventPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -110,9 +109,8 @@ class Event extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("event.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("event.news", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
                 $url = route("localized.event.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -126,9 +124,8 @@ class Event extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.rss.event.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("feeds.rss.event.news", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
                 $url = route("localized.feeds.rss.event.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -141,9 +138,8 @@ class Event extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.rss.event.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("feeds.rss.event.news", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
                 $url = route("localized.feeds.rss.event.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -156,9 +152,8 @@ class Event extends Model implements HasMedia
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("sitemaps.event.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("sitemaps.event.news", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
                 $url = route("localized.sitemaps.event.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }

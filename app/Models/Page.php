@@ -1,7 +1,6 @@
 <?php
 namespace App\Models;
 
-use App\Helpers\SystemHelper;
 use App\Helpers\PageHelper;
 use App\Observers\PageObserver;
 use App\Policies\PagePolicy;
@@ -24,7 +23,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 #[Table('pages')]
 #[Fillable([
-        'title', 'brief', 'slug','body',
+        'title', 'brief', 'slug', 'body',
         'language_id', 'created_by_id', "parent_id",
         "seo_brief", 'seo_title', 'seo_keywords',
         'default_use_as', 'is_default', 'is_published',
@@ -44,10 +43,10 @@ class Page extends Model
     protected function casts(): array
     {
         return [
-            'is_default' => 'boolean',
+            'is_default'   => 'boolean',
             'is_published' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+            'created_at'   => 'datetime',
+            'updated_at'   => 'datetime',
         ];
     }
 
@@ -98,18 +97,17 @@ class Page extends Model
         }
 
         if (! $this->is_default) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("page", ['slugTree' => $this->slug_tree]);
-            } else {
+            $url = route("page", ['slugTree' => $this->slug_tree]);
+            if (! $this->language->is_default) {
                 $url = route("localized.page", ["languageCode" => $this->language->code, 'slugTree' => $this->slug_tree]);
             }
             return $url;
         }
 
         return match ($this->default_use_as) {
-            PageHelper::DAFAULT_USE_AS_HOME   => ($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE) ? route('home') : route('home',["languageCode" => $this->language->code]),
-            PageHelper::DAFAULT_USE_AS_LATEST => ($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE) ? route('latest') : route('latest',["languageCode" => $this->language->code]),
-            PageHelper::DAFAULT_USE_AS_SEARCH => ($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE) ? route('search') : route('search',["languageCode" => $this->language->code]),
+            PageHelper::DAFAULT_USE_AS_HOME   => $this->language->is_default ? route('home') : route('localized.home', ["languageCode" => $this->language->code]),
+            PageHelper::DAFAULT_USE_AS_LATEST => $this->language->is_default ? route('latest') : route('localized.latest', ["languageCode" => $this->language->code]),
+            PageHelper::DAFAULT_USE_AS_SEARCH => $this->language->is_default ? route('search') : route('localized.search', ["languageCode" => $this->language->code]),
             default                           => null,
         };
     }

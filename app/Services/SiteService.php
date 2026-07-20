@@ -54,7 +54,7 @@ class SiteService
 
     public function defaultLanguage(): Language
     {
-        return Language::where('code', SystemHelper::SITE_DEFAULT_LANGUAGE)->firstOrFail();
+        return Language::where('is_default', true)->firstOrFail();
     }
 
     public function menuItem(Language $language, string $slug): MenuItem

@@ -19,7 +19,6 @@ const { t } = useTranslate()
 const {
     events,
     currentLanguage,
-    isDefaultLanguage = false,
 } = defineProps({
     events: {
         type: [Array, Object],
@@ -28,10 +27,6 @@ const {
     currentLanguage: {
         type: Object,
         required: true,
-    },
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
     },
 })
 
@@ -69,22 +64,20 @@ const getNewsItems = (news) => {
 }
 
 const getEventNewsApiUrl = (event) => {
-    if (isDefaultLanguage) {
-        return route('home.event-news', {
+    return currentLanguage?.is_default
+        ? route('home.event-news', {
             slug: event.slug,
         })
-    }
-
-    return route('localized.home.event-news', {
-        languageCode: currentLanguage.code,
-        slug: event.slug,
-    })
-}
+        : route('localized.home.event-news', {
+            languageCode: currentLanguage?.code,
+            slug: event.slug,
+        });
+};
 
 const loadEventNews = async (event) => {
     if (
         !event?.slug ||
-        (!isDefaultLanguage && !currentLanguage?.code) ||
+        (!currentLanguage?.id_default && !currentLanguage?.code) ||
         eventNews.value[event.slug] ||
         loadingEvents.value[event.slug]
     ) {
@@ -117,7 +110,7 @@ watch(
     () => [
         eventItems.value,
         currentLanguage?.code,
-        isDefaultLanguage,
+        currentLanguage?.id_default,
     ],
     ([items]) => {
         eventNews.value = {}

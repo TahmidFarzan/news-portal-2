@@ -50,12 +50,17 @@ class NewsSeeder extends Seeder
                     $event    = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
                     $location = null;
-                    if ( ($mainCategory->name == "National" && $language->code === SeederHelper::LANGUAGE_EN_CODE) || ($mainCategory->name == "জাতীয়" && $language->code === SeederHelper::LANGUAGE_BN_CODE)) {
+                    if (($mainCategory->name == "National" && $language->code === SeederHelper::LANGUAGE_EN_CODE) || ($mainCategory->name == "জাতীয়" && $language->code === SeederHelper::LANGUAGE_BN_CODE)) {
                         $location = $mainCategory->locations()->first() ?? null;
                     }
 
                     $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
                     $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
+
+                    $writer = 'News Desk';
+                    if ($language->code == SeederHelper::LANGUAGE_BN_CODE) {
+                        $writer = 'সংবাদ ডেস্ক';
+                    }
 
                     News::factory()->state([
                         'news_type_id'     => $newsType?->id ?? null,
@@ -72,7 +77,7 @@ class NewsSeeder extends Seeder
                         'body'             => $isStory ? $perRandomDemoNews->body : null,
                         'video_url'        => $isVideo ? $perRandomDemoNews->video_url : null,
 
-                        'writer'           => $isStory ? 'News Desk' : null,
+                        'writer'           => $isStory ? $writer : null,
                         'source'           => null,
 
                         'seo_title'        => $perRandomDemoNews->title,
@@ -100,7 +105,6 @@ class NewsSeeder extends Seeder
                     $newsType = $newsTypes->random();
                     $event    = Event::query()->where('language_id', $language->id)->inRandomOrder()->first();
 
-
                     $isStory = $newsType->name === NewsHelper::NEWS_TYPE_STORY;
                     $isVideo = $newsType->name === NewsHelper::NEWS_TYPE_VIDEO;
 
@@ -109,7 +113,7 @@ class NewsSeeder extends Seeder
                         'language_id'      => $language?->id ?? null,
                         'category_id'      => $category?->id ?? null,
                         'event_id'         => $event?->id ?? null,
-                        'location_id'      =>  null,
+                        'location_id'      => null,
 
                         'title'            => $perRandomDemoNews->title,
                         'sub_title'        => $perRandomDemoNews->sub_title,

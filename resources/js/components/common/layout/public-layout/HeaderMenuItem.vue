@@ -18,11 +18,15 @@ const { t } = useTranslate()
 
 const {
     item,
-    level = 0,
-    isDefaultLanguage = false,
     currentLanguage,
+    level = 0,
+
 } = defineProps({
     item: {
+        type: Object,
+        required: true,
+    },
+    currentLanguage: {
         type: Object,
         required: true,
     },
@@ -30,14 +34,7 @@ const {
         type: Number,
         default: 0,
     },
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
-    },
-    currentLanguage: {
-        type: Object,
-        required: true,
-    },
+
 })
 
 const rootRef = ref(null)
@@ -85,24 +82,16 @@ const updateDropdownPosition = () => {
 }
 
 const getMenuApiUrl = (slug, pageNumber = 1) => {
-    if (isDefaultLanguage) {
-        return route('site.menu-items.sub-menu-items', {
-            slug: slug,
+    return currentLanguage?.is_default
+        ? route('site.menu-items.sub-menu-items', {
+            slug,
             page: pageNumber,
         })
-    }
-
-    const languageCode = currentLanguage?.code
-
-    if (!languageCode) {
-        throw new Error('Current language code is required.')
-    }
-
-    return route('localized.site.menu-items.sub-menu-items', {
-        languageCode: languageCode,
-        slug: slug,
-        page: pageNumber,
-    })
+        : route('localized.site.menu-items.sub-menu-items', {
+            languageCode: currentLanguage?.code,
+            slug,
+            page: pageNumber,
+        });
 }
 
 const loadChildren = async (page = 1) => {
@@ -247,7 +236,7 @@ onBeforeUnmount(() => {
                     :watch-key="`${children.length}-${childrenLoading}-${isOpen}`" @reach-end="handleSubMenuReachEnd">
                     <ul class="py-1">
                         <HeaderMenuItem v-for="child in children" :key="child.id" :item="child" :level="level + 1"
-                            :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" />
+                            :currentLanguage="currentLanguage" />
 
                         <li v-if="childrenLoading" class="px-3 py-2 text-sm text-gray-400">
                             {{ t("common.labels.loading") }}

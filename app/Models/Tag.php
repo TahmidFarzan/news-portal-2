@@ -1,7 +1,6 @@
 <?php
 namespace App\Models;
 
-use App\Helpers\SystemHelper;
 use App\Observers\TagObserver;
 use App\Policies\TagPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -85,9 +84,8 @@ class Tag extends Model
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("tag.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("tag.news", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
                 $url = route("localized.tag.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -100,9 +98,8 @@ class Tag extends Model
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
                 $url = route("localized.feeds.rss.tag.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -115,9 +112,8 @@ class Tag extends Model
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("feeds.rss.tag.news", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
                 $url = route("localized.feeds.rss.tag.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }
@@ -130,9 +126,8 @@ class Tag extends Model
         $url = null;
 
         if ($this->slug) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("sitemaps.tag.news", ['slug' => $this->slug]);
-            } else {
+            $url = route("sitemaps.tag.news", ['slug' => $this->slug]);
+            if (! $this->language->is_default) {
                 $url = route("localized.sitemaps.tag.news", ["languageCode" => $this->language->code, 'slug' => $this->slug]);
             }
         }

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ThemeSeeder::class);
 
         $this->call(LanguageSeeder::class);
+        $this->call(UpdateLanguageDefaultSeeder::class);
 
         $this->call(NewsTypeSeeder::class);
         $this->call(MenuTypeSeeder::class);

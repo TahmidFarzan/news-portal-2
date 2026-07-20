@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
 import VerticalScroller from '@/components/common/layout/VerticalScroller.vue'
 import OffCanvasMenuItem from '@/components/common/layout/public-layout/OffCanvasMenuItem.vue'
 import { fetchFromApi } from '@/composables/useApiClient'
@@ -22,13 +22,8 @@ const { t } = useTranslate()
 
 
 const {
-    isDefaultLanguage = false,
     currentLanguage,
 } = defineProps({
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
-    },
     currentLanguage: {
         type: Object,
         required: true,
@@ -59,23 +54,15 @@ const normalizeMenuItems = (items = []) => {
 }
 
 const getMenuApiUrl = (pageNumber = 1) => {
-    if (isDefaultLanguage) {
-        return route('site.menus.off-canvas-menu-items', {
+    return currentLanguage?.is_default
+        ? route('site.menus.off-canvas-menu-items', {
             page: pageNumber,
         })
-    }
-
-    const languageCode = currentLanguage?.code
-
-    if (!languageCode) {
-        throw new Error('Current language code is required.')
-    }
-
-    return route('localized.site.menus.off-canvas-menu-items', {
-        languageCode: languageCode,
-        page: pageNumber,
-    })
-}
+        : route('localized.site.menus.off-canvas-menu-items', {
+            languageCode: currentLanguage?.code,
+            page: pageNumber,
+        })
+};
 
 const getOffCanvasMenuItems = async (pageNumber = 1) => {
     if (offCanvasMenu.loading || pageNumber > offCanvasMenu.lastPage) return
@@ -132,9 +119,24 @@ const closeOffCanvas = () => {
     showOffCanvas.value = false
 }
 
-onMounted(() => {
-    getOffCanvasMenuItems()
-})
+// onMounted(() => {
+//     getOffCanvasMenuItems()
+// })
+
+watch(
+    () => currentLanguage?.code,
+    () => {
+        offCanvasMenu.items = []
+        offCanvasMenu.loading = false
+        offCanvasMenu.loaded = false
+        offCanvasMenu.error = null
+        offCanvasMenu.page = 1
+        offCanvasMenu.lastPage = 1
+    },
+    {
+        immediate: true,
+    }
+)
 </script>
 
 <template>
@@ -159,7 +161,8 @@ onMounted(() => {
             <aside v-if="showOffCanvas"
                 class="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-white shadow-xl z-[999] flex flex-col">
                 <div class="flex items-center justify-between px-4 py-3 border-b">
-                    <a :href="isDefaultLanguage ? route('home') : route('localized.home', { languageCode: currentLanguage?.code })" class="inline-flex items-center">
+                    <a :href="currentLanguage?.is_default ? route('home') : route('localized.home', { languageCode: currentLanguage?.code })"
+                        class="inline-flex items-center">
                         <img v-if="appLogo" :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain">
 
                         <span v-else class="text-lg font-semibold text-gray-800">
@@ -181,7 +184,7 @@ onMounted(() => {
                         <ul class="space-y-1 pr-1">
                             <template v-if="hasOffCanvasMenu">
                                 <OffCanvasMenuItem v-for="item in offCanvasMenu.items" :key="item.id" :item="item"
-                                    :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" @navigate="closeOffCanvas" />
+                                    :currentLanguage="currentLanguage" @navigate="closeOffCanvas" />
                             </template>
 
                             <template v-else-if="offCanvasMenu.loading">

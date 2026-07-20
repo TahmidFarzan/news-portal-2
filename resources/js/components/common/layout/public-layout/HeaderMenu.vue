@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed, onMounted } from 'vue'
+import { reactive, computed, onMounted, watch } from 'vue'
 import HorizontalScroller from '@/components/common/layout/HorizontalScroller.vue'
 import HeaderMenuItem from '@/components/common/layout/public-layout/HeaderMenuItem.vue'
 import { fetchFromApi } from '@/composables/useApiClient'
@@ -18,13 +18,8 @@ library.add(faSpinner)
 const { t } = useTranslate()
 
 const {
-    isDefaultLanguage = false,
     currentLanguage,
 } = defineProps({
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
-    },
     currentLanguage: {
         type: Object,
         required: true,
@@ -52,23 +47,15 @@ const normalizeMenuItems = (items = []) => {
 }
 
 const getMenuApiUrl = (pageNumber = 1) => {
-    if (isDefaultLanguage) {
-        return route('site.menus.header-menu-items', {
+    return currentLanguage?.is_default
+        ? route('site.menus.header-menu-items', {
             page: pageNumber,
         })
-    }
-
-    const languageCode = currentLanguage?.code
-
-    if (!languageCode) {
-        throw new Error('Current language code is required.')
-    }
-
-    return route('localized.site.menus.header-menu-items', {
-        languageCode: languageCode,
-        page: pageNumber,
-    })
-}
+        : route('localized.site.menus.header-menu-items', {
+            languageCode: currentLanguage?.code,
+            page: pageNumber,
+        });
+};
 
 const getHeaderMenuItems = async (pageNumber = 1) => {
     if (headerMenu.loading || pageNumber > headerMenu.lastPage) return
@@ -112,9 +99,21 @@ const handleReachEnd = async () => {
     }
 }
 
-onMounted(() => {
-    getHeaderMenuItems()
-})
+watch(
+    () => currentLanguage?.code,
+    async (code) => {
+        if (!code) return
+
+        headerMenu.items = []
+        headerMenu.page = 1
+        headerMenu.lastPage = 1
+
+        await getHeaderMenuItems()
+    },
+    {
+        immediate: true,
+    }
+)
 </script>
 
 <template>
@@ -124,7 +123,7 @@ onMounted(() => {
             <ul class="h-10 flex items-center gap-2 whitespace-nowrap">
                 <template v-if="headerMenu.items.length">
                     <HeaderMenuItem v-for="item in headerMenu.items" :key="item.id" :item="item"
-                        :currentLanguage="currentLanguage" :isDefaultLanguage="isDefaultLanguage" />
+                        :currentLanguage="currentLanguage" />
                 </template>
 
                 <template v-else-if="isInitialLoading">

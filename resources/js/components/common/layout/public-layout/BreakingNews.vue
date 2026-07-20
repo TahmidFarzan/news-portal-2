@@ -17,7 +17,6 @@ const { t } = useTranslate()
 const {
     title = 'Breaking News',
     speed = 45,
-    isDefaultLanguage = false,
     currentLanguage,
 } = defineProps({
     title: {
@@ -27,10 +26,6 @@ const {
     speed: {
         type: Number,
         default: 45,
-    },
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
     },
     currentLanguage: {
         type: Object,
@@ -82,20 +77,12 @@ const displayNews = computed(() => {
 })
 
 const getInitialApiUrl = () => {
-    if (isDefaultLanguage) {
-        return route('site.breaking-news')
-    }
-
-    const languageCode = currentLanguage?.code
-
-    if (!languageCode) {
-        throw new Error('Current language code is required.')
-    }
-
-    return route('localized.site.breaking-news', {
-        languageCode: languageCode,
-    })
-}
+    return currentLanguage?.is_default
+        ? route('site.breaking-news')
+        : route('localized.site.breaking-news', {
+            languageCode: currentLanguage?.code,
+        });
+};
 
 const normalizeResponse = (response) => {
     const source =
@@ -332,8 +319,7 @@ const resetBreakingNews = async () => {
     resetTickerPosition()
 
     if (
-        !isDefaultLanguage &&
-        !currentLanguage?.code
+        !currentLanguage
     ) {
         return
     }
@@ -343,7 +329,7 @@ const resetBreakingNews = async () => {
 
 watch(
     () => [
-        isDefaultLanguage,
+        currentLanguage?.is_default,
         currentLanguage?.code,
     ],
     async (

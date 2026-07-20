@@ -22,26 +22,23 @@ FontAwesomeLibrary.add(
 
 const {
     category,
-    isOnSidebar,
     currentLanguage,
-    isDefaultLanguage = false,
+    isOnSidebar,
+
 } = defineProps({
     category: {
         type: Object,
         required: true,
     },
-    isOnSidebar: {
-        type: Boolean,
-        default: true,
-    },
     currentLanguage: {
         type: Object,
         default: null,
     },
-    isDefaultLanguage: {
+    isOnSidebar: {
         type: Boolean,
-        default: false,
+        default: true,
     },
+
 })
 
 const { t } = useTranslate()
@@ -55,10 +52,6 @@ const isReadyToWatchLocationChanges = ref(false)
 const locationLevelResetKeys = ref([])
 
 const searchLocationForm = useForm({})
-
-const resolvedCurrentLanguage = computed(() => {
-    return currentLanguage ?? category?.language ?? null
-})
 
 const getLocationFieldName = (index) => {
     return `location_level_${index + 1}`
@@ -216,17 +209,15 @@ const getLocationApiUrl = (index) => {
 }
 
 const getCategoryLocationMaxDepthAndLevelApiUrl = () => {
-    if (isDefaultLanguage.value) {
-        return route('category.location-max-depth-and-level', {
+    return currentLanguage?.is_default
+        ? route('category.location-max-depth-and-level', {
             slugTree: category.slug_tree,
         })
-    }
-
-    return route('localized.category.location-max-depth-and-level', {
-        languageCode: resolvedCurrentLanguage.value.code,
-        slugTree: category.slug_tree,
-    })
-}
+        : route('localized.category.location-max-depth-and-level', {
+            languageCode: currentLanguage?.code,
+            slugTree: category.slug_tree,
+        });
+};
 
 const selectedLastLoopLocationItem = computed(() => {
     for (let index = locationMaxLevel.value - 1; index >= 0; index--) {
@@ -304,7 +295,7 @@ const fetchCategoryLocationMaxDepthAndLevel = async () => {
         !category?.has_location
         || !category?.slug_tree
         || !categorySlugTreeKey.value
-        || (!isDefaultLanguage && !resolvedCurrentLanguage.value?.code)
+        || (!currentLanguage?.is_deafult && !currentLanguage?.code)
     ) {
         clearAllLocationFields()
 
@@ -375,8 +366,8 @@ const searchByLocation = async () => {
 watch(
     () => [
         categorySlugTreeKey.value,
-        resolvedCurrentLanguage.value?.code,
-        isDefaultLanguage,
+        currentLanguage?.code,
+        currentLanguage?.is_deafult,
     ],
     fetchCategoryLocationMaxDepthAndLevel,
     { immediate: true }

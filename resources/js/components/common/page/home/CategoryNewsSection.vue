@@ -13,19 +13,17 @@ const { t } = useTranslate()
 
 const {
     categorySlug,
-    language,
+    currentLanguage,
     style,
     limit,
-    currentLanguage,
-    isDefaultLanguage = false,
 } = defineProps({
     categorySlug: {
         type: [String],
         required: true,
     },
-    language: {
+    currentLanguage: {
         type: Object,
-        default: null,
+        required: true,
     },
     style: {
         type: [String, Number],
@@ -35,14 +33,7 @@ const {
         type: [String, Number],
         default: 4,
     },
-    currentLanguage: {
-        type: Object,
-        default: null,
-    },
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
-    },
+
 })
 
 const loading = ref(false)
@@ -50,10 +41,6 @@ const category = ref(null)
 const newsItems = ref([])
 
 const sectionStyle = computed(() => Number(style || 1))
-
-const resolvedCurrentLanguage = computed(() => {
-    return currentLanguage ?? language ?? null
-})
 
 const sectionTitle = computed(() => {
     return category.value?.name ?? ''
@@ -72,35 +59,31 @@ const normalizeResponseData = (response) => {
 }
 
 const getHomeCategoryApiUrl = () => {
-    if (isDefaultLanguage.value) {
-        return route('home.category', {
+    return currentLanguage?.is_default
+        ? route('home.category', {
             slug: categorySlug,
         })
-    }
-
-    return route('localized.home.category', {
-        languageCode: resolvedCurrentLanguage.value.code,
-        slug: categorySlug,
-    })
+        : route('localized.home.category', {
+            languageCode: currentLanguage?.code,
+            slug: categorySlug,
+        });
 }
 
 const getHomeCategoryNewsApiUrl = () => {
-    if (isDefaultLanguage.value) {
-        return route('home.category-news', {
+    return currentLanguage?.is_default
+        ? route('home.category-news', {
             slug: categorySlug,
             limit,
         })
-    }
-
-    return route('localized.home.category-news', {
-        languageCode: resolvedCurrentLanguage.value.code,
-        slug: categorySlug,
-        limit,
-    })
+        : route('localized.home.category-news', {
+            languageCode: currentLanguage?.code,
+            slug: categorySlug,
+            limit,
+        });
 }
 
 const loadCategorySection = async () => {
-    if (!categorySlug || (!isDefaultLanguage && !resolvedCurrentLanguage.value?.code)) return
+    if (!categorySlug || !currentLanguage) return
 
     loading.value = true
 
@@ -143,9 +126,8 @@ onMounted(loadCategorySection)
 watch(
     () => [
         categorySlug,
-        language,
-        resolvedCurrentLanguage.value?.code,
-        isDefaultLanguage,
+        currentLanguage?.code,
+        currentLanguage?.is_default
     ],
     loadCategorySection,
 )
@@ -166,7 +148,7 @@ watch(
 
         <template v-else>
             <CategoryHasLocationSection v-if="category" :category="category" :isOnSidebar="false"
-                :current-language="resolvedCurrentLanguage" :is-default-language="isDefaultLanguage" class="mb-3" />
+                :currentLanguage="currentLanguage" class="mb-3" />
 
             <div v-if="sectionStyle === 1">
                 <div class="hidden gap-3 lg:grid lg:grid-cols-4">

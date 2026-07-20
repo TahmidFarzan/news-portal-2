@@ -7,6 +7,7 @@ export const languages = {
         Slug: 'english',
         Code: 'en',
         Locale: 'en_US',
+        IsDefault: true,
     },
 
     Bangla: {
@@ -14,6 +15,7 @@ export const languages = {
         Slug: 'bangla',
         Code: 'bn',
         Locale: 'bn_BD',
+        IsDefault: false,
     },
 }
 const translate = i18n.global.t

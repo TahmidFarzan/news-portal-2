@@ -23,20 +23,14 @@ const { t } = useTranslate()
 
 const {
     currentLanguage,
-    isDefaultLanguage = false,
 } = defineProps({
     currentLanguage: {
         type: Object,
         required: true,
     },
-    isDefaultLanguage: {
-        type: Boolean,
-        default: false,
-    },
 })
 
 const newsType = newsTypes.Video
-
 
 const modules = [Autoplay, Navigation]
 
@@ -59,20 +53,18 @@ const nextButtonClass = computed(() => {
 })
 
 const getNewsTypeNewsApiUrl = () => {
-    if (isDefaultLanguage) {
-        return route('home.news-type-news', {
+    return currentLanguage?.is_default
+        ? route('home.news-type-news', {
             slug: slug.value,
         })
-    }
-
-    return route('localized.home.news-type-news', {
-        languageCode: currentLanguage.code,
-        slug: slug.value,
-    })
+        : route('localized.home.news-type-news', {
+            languageCode: currentLanguage?.code,
+            slug: slug.value,
+        });
 }
 
 const loadNews = async () => {
-    if (!slug.value || (!isDefaultLanguage && !currentLanguage?.code)) return
+    if (!slug.value || (!currentLanguage?.is_default && !currentLanguage?.code)) return
 
     const apiUrl = getNewsTypeNewsApiUrl()
 
@@ -97,7 +89,7 @@ onMounted(async () => {
 watch(
     () => [
         currentLanguage?.code,
-        isDefaultLanguage,
+        currentLanguage?.is_default,
     ],
     loadNews
 )

@@ -106,9 +106,8 @@ class Location extends Model
         $url = null;
 
         if ($this->slug_tree) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("location.news", ['slugTree' => $this->slug_tree]);
-            } else {
+            $url = route("location.news", ['slugTree' => $this->slug_tree]);
+            if (!$this->language->is_default) {
                 $url = route("localized.location.news", ["languageCode" => $this->language->code, 'slugTree' => $this->slug_tree]);
             }
         }
@@ -121,9 +120,8 @@ class Location extends Model
         $url = null;
 
         if ($this->slug_tree) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.atom.location.news", ['slugTree' => $this->slug_tree]);
-            } else {
+            $url = route("feeds.atom.location.news", ['slugTree' => $this->slug_tree]);
+            if (!$this->language->is_default) {
                 $url = route("localized.feeds.atom.location.news", ["languageCode" => $this->language->code, 'slugTree' => $this->slug_tree]);
             }
         }
@@ -136,9 +134,8 @@ class Location extends Model
         $url = null;
 
         if ($this->slug_tree) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("feeds.rss.location.news", ['slugTree' => $this->slug_tree]);
-            } else {
+            $url = route("feeds.rss.location.news", ['slugTree' => $this->slug_tree]);
+            if (!$this->language->is_default) {
                 $url = route("localized.feeds.rss.location.news", ["languageCode" => $this->language->code, 'slugTree' => $this->slug_tree]);
             }
         }
@@ -151,9 +148,8 @@ class Location extends Model
         $url = null;
 
         if ($this->slug_tree) {
-            if (($this->language->code == SystemHelper::SITE_DEFAULT_LANGUAGE)) {
-                $url = route("sitemaps.location.news", ['slugTree' => $this->slug_tree]);
-            } else {
+            $url = route("sitemaps.location.news", ['slugTree' => $this->slug_tree]);
+            if (!$this->language->is_default) {
                 $url = route("localized.sitemaps.location.news", ["languageCode" => $this->language->code, 'slugTree' => $this->slug_tree]);
             }
         }
