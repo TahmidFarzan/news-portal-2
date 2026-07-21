@@ -1,11 +1,9 @@
 <?php
 namespace App\Services\BackOffice;
 
-use App\Http\Requests\LanguageRequest;
 use App\Models\Language;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -18,12 +16,7 @@ class LanguageService
 
     public function find(string $slug): Language
     {
-        return Language::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Language $language): Language
-    {
-        $language->load([
+        return Language::with([
             'createdBy',
 
             'categories'   => fn($query)   => $query->latest()->limit(10),
@@ -34,9 +27,7 @@ class LanguageService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $language;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)
@@ -71,61 +62,34 @@ class LanguageService
             ->appends($request->all());
     }
 
-    public function save(LanguageRequest $request, Language $language): array
+    public function setAsDefault(Language $language): array
     {
-        $isNew       = empty($language->id);
-        $statusEvent = $isNew ? "save" : "update";
-
         try {
 
-            DB::transaction(function () use ($request, $language, $isNew) {
-                $language->name          = $request->input('name');
-                $language->code          = $request->input('code');
-                $language->locale        = $request->input('locale');
-                $language->brief         = $request->input('brief');
-                $language->created_by_id = $isNew ? Auth::id() : $language->created_by_id;
+            $defaultLanguage = Language::where("is_default", true)->whereNot("id", $language->id)->first();
 
+            DB::transaction(function () use ($language, $defaultLanguage) {
+                if ($defaultLanguage) {
+                    $defaultLanguage->is_default = false;
+                    $defaultLanguage->save();
+                }
+                $language->is_default = true;
                 $language->save();
             });
 
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.language.{$statusEvent}.success"),
+                'message' => __('status-messages.language.set_as_default.success'),
             ];
         } catch (Exception $exception) {
 
-            Log::error("Failed to {$statusEvent} language.", [
+            Log::error('Language set as default failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.language.save.failed'),
-            ];
-        }
-    }
-
-    public function delete(Language $language): array
-    {
-        try {
-
-            DB::transaction(function () use ($language) {
-                $language->forceDelete();
-            });
-
-            return [
-                'status'  => 'success',
-                'message' => __('status-messages.language.delete.success'),
-            ];
-        } catch (Exception $exception) {
-
-            Log::error('Language delete failed.', [
-                'exception' => $exception,
-            ]);
-
-            return [
-                'status'  => 'error',
-                'message' => __('status-messages.language.delete.failed'),
+                'message' => __('status-messages.language.set_as_default.failed'),
             ];
         }
     }

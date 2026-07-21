@@ -137,6 +137,7 @@ const loadLanguageByFirstPathSegment = async () => {
     }
 
     try {
+        currentLanguage.value = defaultLanguage.value
         const apiUrl = route('site.language', { code: firstPathSegment.value })
 
         const response = await fetchFromApi(

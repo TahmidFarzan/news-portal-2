@@ -14,6 +14,7 @@
             "action": "অ্যাকশন",
             "noRecordsFound": "কোনো রেকর্ড পাওয়া যায়নি।",
             "name": "নাম",
+            "default": "ডিফল্ট",
             "language": "ভাষা",
             "position": "পজিশন",
             "galleryImages": "গ্যালারি ছবি",
@@ -41,6 +42,7 @@
             "themes": "থিমসমূহ",
             "surveys": "সার্ভেসমূহ",
             "loading": "লোড হচ্ছে",
+            "languages": "ভাষা",
             "noMenuFound": "কোনো মেনু পাওয়া যায়নি",
             "relatedNews": "সম্পর্কিত নিউজ",
             "relevantNews": "প্রাসঙ্গিক নিউজ",
@@ -141,6 +143,8 @@
             "update": "আপডেট",
             "deleting": "মুছে ফেলা হচ্ছে",
             "delete": "মুছুন",
+            "setingAsDefault": "ডিফল্ট হিসাবে সেট করা",
+            "setAsDefault": "ডিফল্ট হিসাবে সেট করুন",
             "logout": "লগআউট",
             "loadMore": "আরও লোড করুন",
             "select": "নির্বাচন করুন",
@@ -204,15 +208,16 @@
             "trashing": "ট্র্যাশে পাঠানো হচ্ছে...",
             "restoring": "রিস্টোর হচ্ছে...",
             "locations": "লোকেশনসমূহ",
-            "seo": "SEO",
-            "sitemapAndFeeds": "Sitemap ও Feeds",
-            "sitemapUrl": "Sitemap URL",
-            "feedsRss": "Feeds (RSS)",
-            "feedsAtom": "Feeds (ATOM)",
+            "languages": "ভাষা",
+            "seo": "এসইও",
+            "sitemapAndFeeds": "সাইটম্যাপ ও ফিড",
+            "sitemapUrl": "সাইটম্যাপ ইউআরএল",
+            "feedsRss": "ফিড (আরএসএস)",
+            "feedsAtom": "ফিড (অ্যাটম)",
             "collectionName": "কালেকশন নাম",
             "addMenuItem": "মেনু আইটেম যোগ করুন",
             "menuItems": "মেনু আইটেমসমূহ",
-            "sitemap": "Sitemap",
+            "sitemap": "সাইটম্যাপ",
             "questions": "প্রশ্নসমূহ",
             "createQuestion": "প্রশ্ন তৈরি করুন",
             "isTrend": "ট্রেন্ড কিনা",
@@ -243,7 +248,9 @@
             "thisActionCanBeUndoneByDeletingNews": "নিউজ মুছে দিয়ে এই অ্যাকশনটি ফিরিয়ে নেওয়া যাবে।",
             "deleteTag": "ট্যাগ মুছুন",
             "deleteTrend": "ট্রেন্ড মুছুন",
-            "deleteUser": "ইউজার মুছুন"
+            "deleteUser": "ইউজার মুছুন",
+            "deleteLanguage": "ভাষা মুছুন",
+            "setAsDefaultLanguageMessage": "এটি শুধুমাত্র পাবলিক সাইটের ভাষাকে প্রভাবিত করবে। ব্যাকএন্ডের ভাষা অপরিবর্তিত থাকবে, কারণ তা নির্দিষ্ট।"
         },
         "boolean": {
             "yes": "হ্যাঁ",
@@ -436,6 +443,14 @@
             },
             "index": {
                 "searchPlaceholder": "লোকেশন খুঁজুন..."
+            }
+        },
+        "languages": {
+            "details": {
+                "title": "ভাষার বিবরণ"
+            },
+            "index": {
+                "searchPlaceholder": "অনুসন্ধান ভাষা..."
             }
         },
         "medias": {

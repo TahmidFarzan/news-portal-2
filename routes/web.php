@@ -20,6 +20,7 @@ use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\ThemeController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
+use App\Http\Controllers\BackOffice\LanguageController;
 
 //
 use App\Http\Controllers\FeedController;
@@ -313,6 +314,11 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
         Route::get('details/{slug}', [ThemeController::class, 'details'])->name('details');
 
         Route::patch('update/{slug}', [ThemeController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('languages')->name('languages.')->group(function () {
+        Route::get('/', [LanguageController::class, 'index'])->name('index');
+        Route::patch('set-as-default/{slug}', [LanguageController::class, 'setAsDefault'])->name('set-as-default');
     });
 
     Route::prefix('google-adsences')->name('google-adsences.')->group(function () {

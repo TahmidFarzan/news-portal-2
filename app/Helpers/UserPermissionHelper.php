@@ -21,6 +21,7 @@ class UserPermissionHelper
     public const MODULE_EVENT           = 'Event';
     public const MODULE_GOOGLE_ADSENCE  = 'Google adsence';
     public const MODULE_LOCATION        = 'Location';
+    public const MODULE_LANGUAGE        = 'Language';
     public const MODULE_MENU            = 'Menu';
     public const MODULE_MENU_ITEM       = 'Menu item';
     public const MODULE_NEWS            = 'News';
@@ -41,6 +42,7 @@ class UserPermissionHelper
             self::MODULE_EVENT,
             self::MODULE_GOOGLE_ADSENCE,
             self::MODULE_LOCATION,
+            self::MODULE_LANGUAGE,
             self::MODULE_MENU,
             self::MODULE_MENU_ITEM,
             self::MODULE_NEWS,
@@ -80,6 +82,13 @@ class UserPermissionHelper
             return SystemHelper::toOptions([
                 self::ACCESS_VIEW_ANY,
                 self::ACCESS_VIEW,
+                self::ACCESS_UPDATE,
+            ]);
+        }
+
+        if ($moduleName == self::MODULE_LANGUAGE) {
+            return SystemHelper::toOptions([
+                self::ACCESS_VIEW_ANY,
                 self::ACCESS_UPDATE,
             ]);
         }

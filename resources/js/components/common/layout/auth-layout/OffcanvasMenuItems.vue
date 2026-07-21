@@ -23,7 +23,8 @@ import {
     faGears,
     faFile,
     faBullhorn,
-    faSquarePollHorizontal
+    faSquarePollHorizontal,
+    faLanguage
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
@@ -46,7 +47,8 @@ library.add(
     faGears,
     faFile,
     faBullhorn,
-    faSquarePollHorizontal
+    faSquarePollHorizontal,
+    faLanguage
 )
 const { t } = useTranslate()
 
@@ -58,6 +60,7 @@ import {
     canAccessPage,
     canAccessMenu,
     canAccessTheme,
+    canAccessLanguage,
     canAccessGoogleAdsence,
     canAccessCategory,
     canAccessTag,
@@ -135,9 +138,11 @@ const canAccessContributorComputed = computed(() => {
 const canAccessNewsComputed = computed(() => {
     return canAccessNews(authUser)
 })
+
 const canAccessBreakingNewsComputed = computed(() => {
     return canAccessBreakingNews(authUser)
 })
+
 const canAccessPageComputed = computed(() => {
     return canAccessPage(authUser)
 })
@@ -149,6 +154,11 @@ const canAccessMenuComputed = computed(() => {
 const canAccessThemeComputed = computed(() => {
     return canAccessTheme(authUser)
 })
+
+const canAccessLanguageComputed = computed(() => {
+    return canAccessLanguage(authUser)
+})
+
 const canAccessGoogleAdsenceComputed = computed(() => {
     return canAccessGoogleAdsence(authUser)
 })
@@ -204,7 +214,7 @@ const isSubMenuVisible = (key) => {
         </a>
 
         <a :href="route('back-office.medias.index')" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/medias/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/back-office/medias/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="photo-film" />
             {{ t("common.labels.media") }}
         </a>
@@ -271,28 +281,28 @@ const isSubMenuVisible = (key) => {
 
         <a v-if="canAccessNewsComputed" :href="route('back-office.news.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/news/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/back-office/news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
             {{ t("common.labels.news") }}
         </a>
 
         <a v-if="canAccessBreakingNewsComputed" :href="route('back-office.breaking-news.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/breaking-news/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/back-office/breaking-news/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="newspaper" />
             {{ t("common.messages.breakingNews") }}
         </a>
 
         <a v-if="canAccessPageComputed" :href="route('back-office.pages.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/pages/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/back-office/pages/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="file" />
             {{ t("layout.auth.offcanvasMenuItems.navigation.pages") }}
         </a>
 
         <a v-if="canAccessMenuComputed" :href="route('back-office.menus.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/menus/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/back-office/menus/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="ellipsis-vertical" />
             {{ t("common.labels.menus") }}
         </a>
@@ -329,16 +339,23 @@ const isSubMenuVisible = (key) => {
             {{ t("common.labels.themes") }}
         </a>
 
+        <a v-if="canAccessLanguageComputed" :href="route('back-office.languages.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/back-office/languages/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="language" />
+            {{ t("common.labels.languages") }}
+        </a>
+
         <a v-if="canAccessGoogleAdsenceComputed" :href="route('back-office.google-adsences.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/google-adsences/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/back-office/google-adsences/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="bullhorn" />
             {{ t("common.messages.googleAdsense") }}
         </a>
 
         <a v-if="canAccessSurveyComputed" :href="route('back-office.surveys.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/auth-user/surveys/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/back-office/surveys/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="square-poll-horizontal" />
             {{ t("common.labels.surveys") }}
         </a>

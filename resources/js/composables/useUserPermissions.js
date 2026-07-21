@@ -11,6 +11,7 @@ export const groups = {
     Event: 'Event',
     GoogleAdsence: 'Google adsence',
     Location: 'Location',
+    Language: 'Language',
     Menu: 'Menu',
     MenuItem: 'Menu item',
     News: 'News',
@@ -196,6 +197,9 @@ export const canDeleteMenuItem = async (authUser, menuItem) => hasPermission(aut
 
 export const canAccessTheme = async (authUser) => hasPermission(authUser, groups.Theme, access.ViewAny)
 export const canUpdateTheme = async (authUser, theme) => hasPermission(authUser, groups.Theme, access.Update)
+
+export const canAccessLanguage = async (authUser) => hasPermission(authUser, groups.Language, access.ViewAny)
+export const canUpdateLanguage = async (authUser, language) => hasPermission(authUser, groups.Language, access.Update)
 
 export const canAccessGoogleAdsence = async (authUser) => hasPermission(authUser, groups.GoogleAdsence, access.ViewAny)
 export const canCreateGoogleAdsence = async (authUser) => hasPermission(authUser, groups.GoogleAdsence, access.Create)

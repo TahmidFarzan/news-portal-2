@@ -14,6 +14,7 @@
             "action": "Action",
             "noRecordsFound": "No records found.",
             "name": "Name",
+            "default": "Default",
             "language": "Language",
             "position": "Position",
             "galleryImages": "Gallery images",
@@ -41,6 +42,7 @@
             "themes": "Themes",
             "surveys": "Surveys",
             "loading": "Loading",
+            "languages": "Languages",
             "noMenuFound": "No menu found",
             "relatedNews": "Related news",
             "relevantNews": "Relevant news",
@@ -141,6 +143,8 @@
             "update": "Update",
             "deleting": "Deleting",
             "delete": "Delete",
+            "setingAsDefault": "Seting As Default",
+            "setAsDefault": "Set As Default",
             "logout": "Logout",
             "loadMore": "Load More",
             "select": "Select",
@@ -204,6 +208,7 @@
             "trashing": "Trashing...",
             "restoring": "Restoring...",
             "locations": "Locations",
+            "languages": "Languages",
             "seo": "SEO",
             "sitemapAndFeeds": "Sitemap & Feeds",
             "sitemapUrl": "Sitemap URL",
@@ -243,7 +248,9 @@
             "thisActionCanBeUndoneByDeletingNews": "This action can be undone by deleting news.",
             "deleteTag": "Delete Tag",
             "deleteTrend": "Delete Trend",
-            "deleteUser": "Delete User"
+            "deleteUser": "Delete User",
+            "setAsDefaultLanguage": "Set As Default Language",
+            "setAsDefaultLanguageMessage": "This will only affect the public site's language. The backend language will remain unchanged, as it is fixed."
         },
         "boolean": {
             "yes": "Yes",
@@ -436,6 +443,14 @@
             },
             "index": {
                 "searchPlaceholder": "Search location..."
+            }
+        },
+        "languages": {
+            "details": {
+                "title": "Language Details"
+            },
+            "index": {
+                "searchPlaceholder": "Search language..."
             }
         },
         "medias": {

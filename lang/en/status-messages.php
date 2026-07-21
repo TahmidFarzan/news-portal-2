@@ -45,17 +45,9 @@ return [
     ],
 
     'language'        => [
-        'save'   => [
-            'success' => 'Language saved successfully.',
-            'failed'  => 'Failed to save language.',
-        ],
-        'update' => [
-            'success' => 'Language updated successfully.',
-            'failed'  => 'Failed to update language.',
-        ],
-        'delete' => [
-            'success' => 'Language deleted successfully.',
-            'failed'  => 'Failed to delete language.',
+        'set_as_default' => [
+            'success' => 'Language set as default successfully.',
+            'failed'  => 'Failed to delete set as default.',
         ],
     ],
 

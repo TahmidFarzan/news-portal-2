@@ -9,18 +9,17 @@ import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import {
-    faTrash, faFilter, faInfo,
-    faPlus, faPen, faEye, faEyeSlash, faSpinner
+    faTrash, faFilter, faStar, faSpinner
 } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useApiClient'
 
-import { canCreateLocation, canUpdateLocation, canDeleteLocation } from '@/composables/useUserPermissions'
+import { canUpdateLanguage } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
-FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
+FontAwesomeLibrary.add(faTrash, faFilter, faStar, faSpinner)
 
 defineOptions({ layout: Layout })
 
@@ -28,30 +27,27 @@ const { t } = useTranslate()
 
 const authUser = inject("authUser")
 
-const deletingRow = ref(null)
-const showDeleteModal = ref(false)
-const deleteProcessing = ref(false)
+const setingAsDefaultRow = ref(null)
+const showSetAsDefaultModal = ref(false)
+const setAsDefaultProcessing = ref(false)
 
-const { locations } = defineProps({
-    locations: {
+const { languages } = defineProps({
+    languages: {
         type: Object,
         default: () => ({})
     },
 })
 
 const paginationOnly = computed(() => {
-    if (!locations) return {}
+    if (!languages) return {}
 
-    const { data, ...rest } = locations
+    const { data, ...rest } = languages
     return rest
 })
 
 const filterForm = useForm({
     per_page: null,
     created_by_id: null,
-    parent_id: '',
-    language_id: '',
-    category_id: '',
     date: '',
     search: '',
 })
@@ -61,7 +57,7 @@ const applyFilter = () => {
 
     const cleanParams = itemListFilterParameters(filterForm.data())
 
-    intertiaJsRoute.get(route('back-office.locations.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.languages.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -69,25 +65,23 @@ const applyFilter = () => {
     })
 }
 
-const confirmDelete = (location) => {
-    deletingRow.value = location
-    showDeleteModal.value = true
+const confirmSetAsDefault = (language) => {
+    setingAsDefaultRow.value = language
+    showSetAsDefaultModal.value = true
 }
 
-const canCreate = () => canCreateLocation(authUser?.value)
-const canUpdate = (location) => canUpdateLocation(authUser?.value, location)
-const canDelete = (location) => canDeleteLocation(authUser?.value, location)
+const canSetAsDefault = (language) => canUpdateLanguage(authUser?.value, language)
 
-const handleDelete = (location) => {
-    if (!location || deleteProcessing.value) return
+const handleSetAsDefault = (language) => {
+    if (!language || setAsDefaultProcessing.value) return
 
-    deleteProcessing.value = true
+    setAsDefaultProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.locations.delete', { slug: location?.slug }), {
+    intertiaJsRoute.patch(route('back-office.languages.update', { slug: language?.slug }), {}, {
         onFinish: () => {
-            showDeleteModal.value = false
-            deletingRow.value = null
-            deleteProcessing.value = false
+            showSetAsDefaultModal.value = false
+            setingAsDefaultRow.value = null
+            setAsDefaultProcessing.value = false
         }
     })
 }
@@ -97,35 +91,8 @@ onMounted(async () => {
 
     filterForm.per_page = urlParams.get('per_page') || ''
     filterForm.created_by_id = urlParams.get('created_by_id') || ''
-    filterForm.parent_id = urlParams.get('parent_id') || ''
-    filterForm.language_id = urlParams.get('language_id') || ''
-    filterForm.category_id = urlParams.get('category_id') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
-
-    if (filterForm.parent_id) {
-        const rParent = await fetchFromApi(
-            route('search.location', { slugOrId: filterForm.parent_id })
-        )
-
-        filterForm.parent_id = rParent || null
-    }
-
-    if (filterForm.category_id) {
-        const rCategory = await fetchFromApi(
-            route('search.category', { slugOrId: filterForm.category_id })
-        )
-
-        filterForm.category_id = rCategory || null
-    }
-
-    if (filterForm.language_id) {
-        const rLanguage = await fetchFromApi(
-            route('search.language', { slugOrId: filterForm.language_id })
-        )
-
-        filterForm.language_id = rLanguage || null
-    }
 
     if (filterForm.created_by_id) {
         const rCreatedBy = await fetchFromApi(
@@ -140,7 +107,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('common.messages.locations'), active: true },
+                { text: t('common.messages.languages'), active: true },
             ],
         })
     )
@@ -149,20 +116,15 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('common.messages.locations')" />
+    <Head :title="t('common.messages.languages')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('common.messages.locations') }}
+                {{ t('common.messages.languages') }}
             </h2>
 
-            <a v-if="canCreate()" :href="route('back-office.locations.create')"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
-                <FontAwesomeIcon icon="plus" />
-                {{ t('common.actions.create') }}
-            </a>
         </div>
 
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
@@ -175,27 +137,12 @@ onMounted(async () => {
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     :placeholder="t('common.labels.createdBy')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
-                    :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
-                    :placeholder="t('common.labels.language')" />
-
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="parent_id" selectedLabelKey="indentation_name"
-                    selectedValueKey="id" :selectedItem="filterForm.parent_id" apiLabelKey="indentation_name"
-                    apiValueKey="id" :apiUrl="route('search.location-tree')" :multiple="false"
-                    :placeholder="t('common.placeholders.parent')" />
-
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id" selectedLabelKey="indentation_name"
-                    selectedValueKey="id" :selectedItem="filterForm.category_id" apiLabelKey="indentation_name"
-                    apiValueKey="id" :apiUrl="route('search.category-tree')" :multiple="false"
-                    :placeholder="t('common.labels.category')" />
-
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
                 <input type="search" v-model="filterForm.search"
-                    :placeholder="t('admin.locations.index.searchPlaceholder')"
+                    :placeholder="t('admin.languages.index.searchPlaceholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-
             </div>
 
             <div class="flex justify-end">
@@ -204,7 +151,9 @@ onMounted(async () => {
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ filterForm.processing ? t('common.actions.applyingFilter') : t('common.actions.applyFilter')
+                    {{
+                        filterForm.processing ?
+                            t('common.actions.applyingFilter') : t('common.actions.applyFilter')
                     }}
                 </button>
             </div>
@@ -219,14 +168,14 @@ onMounted(async () => {
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
                             <th class="px-4 py-3 text-left">{{ t('common.labels.name') }}</th>
-                            <th class="px-4 py-3 text-left">{{ t('common.placeholders.parent') }}</th>
+                            <th class="px-4 py-3 text-left">{{ t('common.labels.default') }}</th>
                             <th class="px-4 py-3 text-left">{{ t('common.labels.createdAt') }}</th>
                             <th class="px-4 py-3 text-right">{{ t('common.labels.action') }}</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in locations?.data || []" :key="item.id"
+                        <tr v-for="(item, index) in languages?.data || []" :key="item.id"
                             class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
 
@@ -234,42 +183,37 @@ onMounted(async () => {
                                 {{ item.name }}
                             </td>
 
-                            <td class="px-4 py-3 text-gray-600">
-                                {{ item.parent ? item.parent.name : t('common.labels.notAvailable') }}
+                            <td class="px-4 py-3 font-medium">
+                                <span :class="item.is_default
+                                    ? 'text-blue-600 hover:bg-blue-50'
+                                    : 'text-gray-600 hover:bg-gray-50'" class="inline-flex items-center gap-1 rounded px-2 py-1 transition-colors">
+                                    <FontAwesomeIcon v-if="item.is_default" icon="star" />
+                                    {{ item.is_default ? t('common.boolean.yes') : t('common.boolean.no') }}
+                                </span>
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) : t('common.labels.notAvailable')
+                                {{
+                                    item.created_at ?
+                                        formatDateTime(item.created_at) : t('common.labels.notAvailable')
                                 }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
-                                    <a :href="route('back-office.locations.details', { slug: item.slug })"
+                                    <button v-if="canSetAsDefault(item) && !item.is_default"
+                                        @click="confirmSetAsDefault(item)"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
-                                        :title="t('common.actions.details')">
-                                        <FontAwesomeIcon icon="info" />
-                                    </a>
-
-                                    <a v-if="canUpdate(item)"
-                                        :href="route('back-office.locations.edit', { slug: item.slug })"
-                                        class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
-                                        :title="t('common.actions.edit')">
-                                        <FontAwesomeIcon icon="pen" />
-                                    </a>
-
-                                    <button v-if="canDelete(item)" @click="confirmDelete(item)"
-                                        class="p-2 rounded-md text-red-600 hover:bg-red-50 border"
-                                        :title="t('common.actions.delete')">
-                                        <FontAwesomeIcon icon="trash" />
+                                        :title="t('common.actions.setAsDefault')">
+                                        <FontAwesomeIcon icon="star" />
                                     </button>
 
                                 </div>
                             </td>
                         </tr>
 
-                        <tr v-if="!locations?.data?.length">
+                        <tr v-if="!languages?.data?.length">
                             <td colspan="5" class="px-4 py-6 text-center text-gray-500">
                                 {{ t('common.labels.noRecordsFound') }}
                             </td>
@@ -286,7 +230,7 @@ onMounted(async () => {
             <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
                 enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
                 leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showDeleteModal"
+                <div v-if="showSetAsDefaultModal"
                     class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
 
                     <Transition enter-active-class="transition ease-out duration-200"
@@ -295,29 +239,31 @@ onMounted(async () => {
                         leave-active-class="transition ease-in duration-150"
                         leave-from-class="opacity-100 scale-100 translate-y-0"
                         leave-to-class="opacity-0 scale-95 translate-y-4">
-                        <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
-                            <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('common.modals.deleteLocation') }}
+                        <div v-if="showSetAsDefaultModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
+                            <h3 class="text-lg font-semibold text-blue-600">
+                                {{ t('common.modals.setAsDefaultLanguage') }}
                             </h3>
 
                             <p class="text-sm font-medium">
-                                {{ deletingRow?.name }}
+                                {{ setingAsDefaultRow?.name }}
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ t('common.modals.thisActionCannotBeUndone') }}
+                                {{ t('common.modals.setAsDefaultLanguageMessage') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
-                                <button @click="showDeleteModal = false"
+                                <button @click="showSetAsDefaultModal = false"
                                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
                                     {{ t('common.actions.cancel') }}
                                 </button>
 
-                                <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
-                                    <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('common.actions.deleting') : t('common.actions.delete') }}
+                                <button @click="handleSetAsDefault(setingAsDefaultRow)"
+                                    :disabled="setAsDefaultProcessing"
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                                    <FontAwesomeIcon v-if="setAsDefaultProcessing" icon="spinner" spin />
+                                    {{ setAsDefaultProcessing ? t('common.actions.deleting') :
+                                    t('common.actions.delete') }}
                                 </button>
                             </div>
                         </div>
