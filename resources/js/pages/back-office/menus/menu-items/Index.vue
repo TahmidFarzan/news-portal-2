@@ -122,22 +122,6 @@ onMounted(async () => {
     filterForm.search = urlParams.get('search') || null
     filterForm.model_type = urlParams.get('model_type') || null
 
-    if (filterForm.language_id) {
-        const rLanguage = await fetchFromApi(
-            route('search.language', { slugOrId: filterForm.language_id })
-        )
-
-        filterForm.language_id = rLanguage || null
-    }
-
-    if (filterForm.created_by_id) {
-        const rCreatedBy = await fetchFromApi(
-            route('search.user', { slugOrId: filterForm.created_by_id })
-        )
-
-        filterForm.created_by_id = rCreatedBy || null
-    }
-
     await nextTick()
 
     window.dispatchEvent(

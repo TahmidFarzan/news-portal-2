@@ -166,30 +166,6 @@ onMounted(async () => {
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
 
-    if (filterForm.language_id) {
-        const rLanguage = await fetchFromApi(
-            route('search.language', { slugOrId: filterForm.language_id })
-        )
-
-        filterForm.language_id = rLanguage || null
-    }
-
-    if (filterForm.parent_id) {
-        const rParent = await fetchFromApi(
-            route('search.page', { slugOrId: filterForm.parent_id })
-        )
-
-        filterForm.parent_id = rParent || null
-    }
-
-    if (filterForm.created_by_id) {
-        const rCreatedBy = await fetchFromApi(
-            route('search.user', { slugOrId: filterForm.created_by_id })
-        )
-
-        filterForm.created_by_id = rCreatedBy || null
-    }
-
     await nextTick()
 
     window.dispatchEvent(

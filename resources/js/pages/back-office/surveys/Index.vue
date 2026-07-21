@@ -210,18 +210,6 @@ onMounted(async () => {
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
 
-    if (filterForm.created_by_id) {
-        filterForm.created_by_id = await fetchFromApi(route('search.users', { slugOrId: filterForm.created_by_id }))
-    }
-
-    if (filterForm.language_id) {
-        const rLanguage = await fetchFromApi(
-            route('search.language', { slugOrId: filterForm.language_id })
-        )
-
-        filterForm.language_id = rLanguage || null
-    }
-
     await nextTick()
 
     window.dispatchEvent(

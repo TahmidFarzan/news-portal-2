@@ -133,54 +133,6 @@ onMounted(async () => {
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
 
-    if (filterForm.news_type_id) {
-        const rNewsType = await fetchFromApi(
-            route('search.news-type', { slugOrId: filterForm.news_type_id })
-        )
-
-        filterForm.news_type_id = rNewsType || null
-    }
-
-    if (filterForm.category_id) {
-        const rCategory = await fetchFromApi(
-            route('search.category', { slugOrId: filterForm.category_id })
-        )
-
-        filterForm.category_id = rCategory || null
-    }
-
-    if (filterForm.language_id) {
-        const rLanguage = await fetchFromApi(
-            route('search.language', { slugOrId: filterForm.language_id })
-        )
-
-        filterForm.language_id = rLanguage || null
-    }
-
-    if (filterForm.location_id) {
-        const rLocation = await fetchFromApi(
-            route('search.location', { slugOrId: filterForm.location_id })
-        )
-
-        filterForm.location_id = rLocation || null
-    }
-
-    if (filterForm.event_id) {
-        const rEvent = await fetchFromApi(
-            route('search.event', { slugOrId: filterForm.event_id })
-        )
-
-        filterForm.event_id = rEvent || null
-    }
-
-    if (filterForm.created_by_id) {
-        const rCreatedBy = await fetchFromApi(
-            route('search.user', { slugOrId: filterForm.created_by_id })
-        )
-
-        filterForm.created_by_id = rCreatedBy || null
-    }
-
     await nextTick()
 
     window.dispatchEvent(

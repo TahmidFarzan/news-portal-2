@@ -2,7 +2,6 @@
 namespace App\Http\Controllers\BackOffice;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LanguageRequest;
 use App\Services\BackOffice\LanguageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -28,7 +27,6 @@ class LanguageController extends Controller
             'languages' => $languages,
         ]);
     }
-
 
     public function setAsDefault(string $slug)
     {

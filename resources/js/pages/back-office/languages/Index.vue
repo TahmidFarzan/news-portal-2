@@ -94,14 +94,6 @@ onMounted(async () => {
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
 
-    if (filterForm.created_by_id) {
-        const rCreatedBy = await fetchFromApi(
-            route('search.user', { slugOrId: filterForm.created_by_id })
-        )
-
-        filterForm.created_by_id = rCreatedBy || null
-    }
-
     await nextTick()
 
     window.dispatchEvent(

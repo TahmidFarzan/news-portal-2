@@ -199,14 +199,6 @@ onMounted(async () => {
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
 
-    if (filterForm.created_by_id) {
-        filterForm.created_by_id = await fetchFromApi( route( 'search.user', { slugOrId: filterForm.created_by_id}))
-    }
-
-    if ( filterForm.user_permission_id ) {
-        filterForm.user_permission_id = await fetchFromApi( route( 'search.user-permission', { slugOrId: filterForm.user_permission_id } ) )
-    }
-
     await nextTick()
 
     window.dispatchEvent(

@@ -95,11 +95,6 @@ onMounted(async () => {
     filterForm.search = urlParams.get('search') || null
     filterForm.per_page = urlParams.get('per_page') || null
 
-    if (filterForm.created_by_id) {
-        const rCreatedBy = await fetchFromApi(route('search.user', { slugOrId: filterForm.created_by_id }))
-        filterForm.created_by_id = rCreatedBy || null
-    }
-
     await nextTick()
 
     window.dispatchEvent(
