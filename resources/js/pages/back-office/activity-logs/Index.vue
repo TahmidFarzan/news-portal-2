@@ -94,11 +94,6 @@ onMounted(async () => {
     filterForm.per_page = urlParams.get('per_page') || null
     filterForm.subject_type = urlParams.get('subject_type') || null
 
-    if (filterForm.causer_id) {
-        const rCauserBy = await fetchFromApi(route('search.user', { slugOrId: filterForm.causer_id }))
-        filterForm.causer_id = rCauserBy || null
-    }
-
     await nextTick()
 
     window.dispatchEvent(
@@ -127,17 +122,17 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
-                    :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
+                    :selectedItem="filterForm.per_page || null" :apiUrl="route('search.per-pages')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('common.labels.perPage')" />
 
                 <SelectInfinityLoadingApi v-if="showSubjectType" :form="filterForm" fieldName="subject_type"
-                    :selectedItem="filterForm.subject_type" :apiUrl="route('search.activity-log-subject-types')"
+                    :selectedItem="filterForm.subject_type || null" :apiUrl="route('search.activity-log-subject-types')"
                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('admin.activityLogs.index.subjectPlaceholder')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="causer_id"
-                    :selectedItem="filterForm.causer_id" :apiUrl="route('search.users')" :multiple="false"
+                    :selectedItem="filterForm.causer_id || null" :apiUrl="route('search.users')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('common.labels.causer')" />
 

@@ -5,7 +5,7 @@ import { router } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { useTranslate } from '@/composables/useTranslate'
+import { useTranslate, translateNumerText } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faChevronLeft, faChevronRight)
 
@@ -40,12 +40,6 @@ const sanitizeLabel = (label) => label.replace(/&laquo;|&raquo;/g, '').trim()
 const isPrevious = (label) => label.includes('&laquo;') || label.toLowerCase().includes('previous')
 const isNext = (label) => label.includes('&raquo;') || label.toLowerCase().includes('next')
 
-const translateNumerText = value => {
-    return String(value)
-        .split('')
-        .map(char => t(`components.common.model.pagination.number.${char}`))
-        .join('')
-}
 </script>
 
 <template>
