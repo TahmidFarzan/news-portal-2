@@ -3,7 +3,6 @@ namespace App\Services\Cache;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
-use App\Models\Language;
 use App\Models\NewsType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -79,7 +78,7 @@ class NewsTypeCacheService
 
     public function getRecords(string $key, Request $request, int | null $cachedTTL = null): LengthAwarePaginator
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequest($key, $this->secondKey, $request);
+        $cacheKey = CacheHelper::cacheKeyGenerateForRecordsRequestWithoutLanguage($key, $this->secondKey, $request);
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -102,7 +101,7 @@ class NewsTypeCacheService
 
     public function getRecordById(string $key, int | string $id, int | null $cachedTTL = null): NewsType
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $id);
+        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlugWithoutLanguage($key, $this->secondKey, $id);
 
         $record = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -131,7 +130,7 @@ class NewsTypeCacheService
 
     public function getRecordBySlug(string $key, string $slug, int | null $cachedTTL = null): NewsType
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($key, $this->secondKey, $slug);
+        $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlugWithoutLanguage($key, $this->secondKey, $slug);
 
         $record = CacheServerHelper::getCachedData(
             $cacheKey,

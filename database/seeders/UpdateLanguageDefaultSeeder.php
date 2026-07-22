@@ -10,7 +10,7 @@ class UpdateLanguageDefaultSeeder extends Seeder
     public function run(): void
     {
         Language::query()
-            ->where('code', SeederHelper::SITE_DEFAULT_LANGUAGE)
+            ->where('code', SeederHelper::SITE_PUBLIC_DEFAULT_LANGUAGE)
             ->update([
                 'is_default' => true,
             ]);

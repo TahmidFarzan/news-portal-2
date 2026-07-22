@@ -14,6 +14,7 @@ use App\Services\Cache\GoogleAdsenceCacheService;
 use App\Services\Cache\MenuCacheService;
 use App\Services\Cache\NewsCacheService;
 use App\Services\Cache\ThemeCacheService;
+use App\Services\Cache\LanguageCacheService;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -30,21 +31,25 @@ class SiteService
 
     protected GoogleAdsenceCacheService $googleAdsenceCacheService;
 
+        protected LanguageCacheService $languageCacheService;
+
     public function __construct(
         MenuCacheService $menuCacheService,
         ThemeCacheService $themeCacheService,
         NewsCacheService $newsCacheService,
-        GoogleAdsenceCacheService $googleAdsenceCacheService
+        GoogleAdsenceCacheService $googleAdsenceCacheService,
+        LanguageCacheService $languageCacheService
     ) {
         $this->menuCacheService          = $menuCacheService;
         $this->themeCacheService         = $themeCacheService;
         $this->newsCacheService          = $newsCacheService;
         $this->googleAdsenceCacheService = $googleAdsenceCacheService;
+        $this->languageCacheService = $languageCacheService;
     }
 
     public function language(string $code): Language
     {
-        $language = Language::where('code', $code)->first();
+        $language = $this->languageCacheService->getRecordByCodeFirst(CacheHelper::KEY_LAYOUT, $code ,$this->cachedTTL);
         if (! $language) {
             return $this->defaultLanguage();
         }
@@ -54,7 +59,7 @@ class SiteService
 
     public function defaultLanguage(): Language
     {
-        return Language::where('is_default', true)->firstOrFail();
+        return $this->languageCacheService->getRecordByDefault(CacheHelper::KEY_LAYOUT, $this->cachedTTL);
     }
 
     public function menuItem(Language $language, string $slug): MenuItem
@@ -260,35 +265,7 @@ class SiteService
 
     public function languages(Request $request): array
     {
-        $perPage = (int) $request->input('per_page', 15);
-        $search  = $request->input('search');
-        $page    = (int) $request->input('page', 1);
-
-        $cacheSearch = md5($search ?? '');
-
-        $cacheKey = "site:languages:basic-pagination:search:{$cacheSearch}:page:{$page}:per-page:{$perPage}";
-
-        $cacheTags = [
-            'site',
-            'site.languages',
-            'site:languages:basic-pagination',
-        ];
-
-        $cachedData = CacheServerHelper::getCachedData($cacheKey, $cacheTags);
-
-        if ($cachedData !== null) {
-            return $cachedData;
-        }
-
-        $query = Language::query();
-
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $search . '%');
-        }
-
-        $records = $query
-            ->orderByDesc('id')
-            ->paginate($perPage);
+        $records = $this->languageCacheService->getRecords(CacheHelper::KEY_LAYOUT, $request ,$this->cachedTTL);
 
         $list = $records->map(fn($row) => [
             'id'     => $row->id,
@@ -306,14 +283,8 @@ class SiteService
             'per_page'     => $records->perPage(),
         ];
 
-        CacheServerHelper::cachedData(
-            $cacheKey,
-            $data,
-            CacheServerHelper::sixHoursInSecond,
-            $cacheTags
-        );
-
         return $data;
+
     }
 
 }

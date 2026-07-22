@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Helpers;
 
 use App\Models\Category;
@@ -109,6 +108,8 @@ class CacheHelper
 
     public const KEY_BY_MENU_TYPE_CODE = 'by:menu-type-code';
 
+    public const KEY_BY_DEFAULT = 'by:default';
+
     public const KEY_MAX_DEPTH_AND_LEVEL = 'max-depth-and-level';
 
     public const TAG_PAGE = 'page';
@@ -141,43 +142,58 @@ class CacheHelper
 
     public const TAG_GOOGLE_ADSENCE = 'google-adsence';
 
-    public static function cacheKeyGenerateSingleRecordById(string $key, string $secondKey, string|int $id, ?Language $language = null): string
+    public const TAG_LANGUAGE = 'language';
+
+    public static function cacheKeyGenerateSingleRecordById(string $key, string $secondKey, string | int $id, ?Language $language = null): string
     {
         $cacheKey = "{$key}:{$secondKey}:";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_BY_ID.":{$id}";
+        $cacheKey .= ':' . CacheHelper::KEY_BY_ID . ":{$id}";
 
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateSingleRecordBySlug(string $key, string $secondKey, string|int $slug, ?Language $language = null): string
+    public static function cacheKeyGenerateSingleRecordBySlug(string $key, string $secondKey, string | int $slug, ?Language $language = null): string
     {
         $cacheKey = "{$key}:{$secondKey}:";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_BY_SLUG.":{$slug}";
+        $cacheKey .= ':' . CacheHelper::KEY_BY_SLUG . ":{$slug}";
 
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateSingleRecordBySlugTree(string $key, string $secondKey, string|int $slugTree, ?Language $language = null): string
+    public static function cacheKeyGenerateSingleRecordByCode(string $key, string $secondKey, string | int $slug, ?Language $language = null): string
+    {
+        $cacheKey = "{$key}:{$secondKey}:";
+
+        if ($language && $language?->id) {
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
+        }
+
+        $cacheKey .= ':' . CacheHelper::KEY_BY_SLUG . ":{$slug}";
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateSingleRecordBySlugTree(string $key, string $secondKey, string | int $slugTree, ?Language $language = null): string
     {
         $safeSlugTreeForCache = str_replace('/', '_', trim($slugTree, '/'));
 
         $cacheKey = "{$key}:{$secondKey}:";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_BY_SLUG_TREE.":{$safeSlugTreeForCache}";
+        $cacheKey .= ':' . CacheHelper::KEY_BY_SLUG_TREE . ":{$safeSlugTreeForCache}";
 
         return $cacheKey;
     }
@@ -187,45 +203,81 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}:";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_USE_AS.":{$useAs}";
+        $cacheKey .= ':' . CacheHelper::KEY_USE_AS . ":{$useAs}";
 
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateForRecordByLimit(string $key, string $secondKey, NewsType|Category|Tag|Contributor|Event|Location|null $filterModel = null, ?Request $request = null, ?Language $language = null, int $limit = 4): string
+    public static function cacheKeyGenerateSingleRecordByIdWithoutLanguage(string $key, string $secondKey, string | int $id): string
+    {
+        $cacheKey = "{$key}:{$secondKey}:";
+
+        $cacheKey .= ':' . CacheHelper::KEY_BY_ID . ":{$id}";
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateSingleRecordBySlugWithoutLanguage(string $key, string $secondKey, string | int $slug, ): string
+    {
+        $cacheKey = "{$key}:{$secondKey}:";
+
+        $cacheKey .= ':' . CacheHelper::KEY_BY_SLUG . ":{$slug}";
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateSingleRecordByCodeWithoutLanguage(string $key, string $secondKey, string | int $slug): string
+    {
+        $cacheKey = "{$key}:{$secondKey}:";
+
+        $cacheKey .= ':' . CacheHelper::KEY_BY_SLUG . ":{$slug}";
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateSingleDefaultRecordByCodeWithoutLanguage(string $key, string $secondKey): string
+    {
+        $cacheKey = "{$key}:{$secondKey}:";
+
+        $cacheKey .= ':' . CacheHelper::KEY_BY_DEFAULT;
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateForRecordByLimit(string $key, string $secondKey, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Request $request = null, ?Language $language = null, int $limit = 4): string
     {
         $request ??= request();
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($filterModel instanceof Category && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_CATEGORY.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_CATEGORY . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Tag && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_TAG.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_TAG . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Event && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_EVENT.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_EVENT . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Location && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LOCATION.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LOCATION . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Contributor && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_CONTRIBUTOR.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_CONTRIBUTOR . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof NewsType && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_NEWS_TYPE.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_NEWS_TYPE . ":{$filterModel?->slug}";
         }
 
         if ($request->input()) {
@@ -235,10 +287,10 @@ class CacheHelper
 
             ksort($cacheData);
 
-            $cacheKey .= ':'.md5(json_encode($cacheData));
+            $cacheKey .= ':' . md5(json_encode($cacheData));
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_LIMIT.":{$limit}";
+        $cacheKey .= ':' . CacheHelper::KEY_LIMIT . ":{$limit}";
 
         return $cacheKey;
     }
@@ -250,22 +302,22 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($pageName) {
-            $cacheKey .= ':'.CacheHelper::KEY_PAGE_NAME.":{$pageName}";
+            $cacheKey .= ':' . CacheHelper::KEY_PAGE_NAME . ":{$pageName}";
         }
 
         if ($pageSection && $pageSectionSlugKey) {
-            $cacheKey .= ':'.CacheHelper::KEY_PAGE_SECTION_NAME.":{$pageSectionSlugKey}";
+            $cacheKey .= ':' . CacheHelper::KEY_PAGE_SECTION_NAME . ":{$pageSectionSlugKey}";
         }
 
         if ($category && $category?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_CATEGORY.":{$category->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_CATEGORY . ":{$category->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_LIMIT.":{$limit}";
+        $cacheKey .= ':' . CacheHelper::KEY_LIMIT . ":{$limit}";
 
         return $cacheKey;
     }
@@ -275,14 +327,14 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($isCursorPaginate) {
-            $cacheKey .= ':'.CacheHelper::KEY_CURSOR;
+            $cacheKey .= ':' . CacheHelper::KEY_CURSOR;
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_LATEST;
+        $cacheKey .= ':' . CacheHelper::KEY_LATEST;
 
         return $cacheKey;
     }
@@ -292,23 +344,23 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_POPULER;
+        $cacheKey .= ':' . CacheHelper::KEY_POPULER;
 
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateForRecordPerPage(string $key, string $secondKey, string|int $page = 1, ?Language $language = null): string
+    public static function cacheKeyGenerateForRecordPerPage(string $key, string $secondKey, string | int $page = 1, ?Language $language = null): string
     {
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_PAGE_NO.":{$page}";
+        $cacheKey .= ':' . CacheHelper::KEY_PAGE_NO . ":{$page}";
 
         return $cacheKey;
     }
@@ -318,10 +370,10 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_COUNT;
+        $cacheKey .= ':' . CacheHelper::KEY_COUNT;
 
         return $cacheKey;
     }
@@ -331,10 +383,10 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_LAST_PAGE_NO;
+        $cacheKey .= ':' . CacheHelper::KEY_LAST_PAGE_NO;
 
         return $cacheKey;
     }
@@ -344,53 +396,53 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($category && $category?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_CATEGORY.':'.$category->slug;
+            $cacheKey .= ':' . CacheHelper::KEY_CATEGORY . ':' . $category->slug;
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_MAX_DEPTH_AND_LEVEL;
+        $cacheKey .= ':' . CacheHelper::KEY_MAX_DEPTH_AND_LEVEL;
 
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateForNews(string $key, string $secondKey, ?Request $request = null, NewsType|Category|Tag|Contributor|Event|Location|null $filterModel = null, ?Language $language = null, ?int $perPage = null): string
+    public static function cacheKeyGenerateForNews(string $key, string $secondKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null, ?int $perPage = null): string
     {
         $request ??= request();
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($filterModel instanceof Category && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_CATEGORY.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_CATEGORY . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Tag && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_TAG.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_TAG . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Event && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_EVENT.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_EVENT . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Location && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LOCATION.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LOCATION . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Contributor && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_CONTRIBUTOR.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_CONTRIBUTOR . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof NewsType && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_NEWS_TYPE.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_NEWS_TYPE . ":{$filterModel?->slug}";
         }
 
         if ($perPage) {
-            $cacheKey .= ':'.CacheHelper::KEY_PER_PAGE.":{$perPage}";
+            $cacheKey .= ':' . CacheHelper::KEY_PER_PAGE . ":{$perPage}";
         }
 
         if ($request->input()) {
@@ -400,20 +452,19 @@ class CacheHelper
 
             ksort($cacheData);
 
-            $cacheKey .= ':'.md5(json_encode($cacheData));
+            $cacheKey .= ':' . md5(json_encode($cacheData));
         }
 
         return $cacheKey;
     }
 
-    // New
     public static function cacheKeyGenerateForRecordsRequest(string $key, string $secondKey, Request $request, ?Language $language = null): string
     {
         $request ??= request();
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($request->input()) {
@@ -423,47 +474,65 @@ class CacheHelper
 
             ksort($cacheData);
 
-            $cacheKey .= ':'.md5(json_encode($cacheData));
+            $cacheKey .= ':' . md5(json_encode($cacheData));
         }
 
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateForLastPageNoByFilter(string $key, string $secondKey, ?Request $request = null, NewsType|Category|Tag|Contributor|Event|Location|null $filterModel = null, ?Language $language = null): string
+    public static function cacheKeyGenerateForRecordsRequestWithoutLanguage(string $key, string $secondKey, Request $request): string
+    {
+        $request ??= request();
+        $cacheKey = "{$key}:{$secondKey}";
+
+        if ($request->input()) {
+            $cacheData = $request->except([
+                '_token',
+            ]);
+
+            ksort($cacheData);
+
+            $cacheKey .= ':' . md5(json_encode($cacheData));
+        }
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateForLastPageNoByFilter(string $key, string $secondKey, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?Language $language = null): string
     {
         $request ??= request();
 
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($filterModel instanceof Category && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_CATEGORY.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_CATEGORY . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Tag && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_TAG.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_TAG . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Event && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_EVENT.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_EVENT . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Location && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LOCATION.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LOCATION . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof Contributor && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_CONTRIBUTOR.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_CONTRIBUTOR . ":{$filterModel?->slug}";
         }
 
         if ($filterModel instanceof NewsType && $filterModel->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_NEWS_TYPE.":{$filterModel?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_NEWS_TYPE . ":{$filterModel?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_LAST_PAGE_NO;
+        $cacheKey .= ':' . CacheHelper::KEY_LAST_PAGE_NO;
 
         if ($request->input()) {
             $cacheData = $request->except([
@@ -472,7 +541,7 @@ class CacheHelper
 
             ksort($cacheData);
 
-            $cacheKey .= ':'.md5(json_encode($cacheData));
+            $cacheKey .= ':' . md5(json_encode($cacheData));
         }
 
         return $cacheKey;
@@ -483,11 +552,11 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
-        $cacheKey .= ':'.CacheHelper::KEY_EVENT;
+        $cacheKey .= ':' . CacheHelper::KEY_EVENT;
 
-        $cacheKey .= ':'.CacheHelper::KEY_POSITION.':'.Str::lower($position);
+        $cacheKey .= ':' . CacheHelper::KEY_POSITION . ':' . Str::lower($position);
 
         return $cacheKey;
     }
@@ -497,12 +566,12 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
-        $cacheKey .= ':'.CacheHelper::KEY_TREND;
+        $cacheKey .= ':' . CacheHelper::KEY_TREND;
 
         if ($limit) {
-            $cacheKey .= ':'.CacheHelper::KEY_LIMIT.":{$limit}";
+            $cacheKey .= ':' . CacheHelper::KEY_LIMIT . ":{$limit}";
         }
 
         return $cacheKey;
@@ -511,14 +580,14 @@ class CacheHelper
     public static function cacheKeyGenerateSurveysByDate(string $key, string $secondKey, string $date, ?Language $language = null): string
     {
         $cacheKey = "{$key}:{$secondKey}";
-        $cacheKey .= ':'.CacheHelper::KEY_SURVEY;
+        $cacheKey .= ':' . CacheHelper::KEY_SURVEY;
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($date) {
-            $cacheKey .= ':'.CacheHelper::KEY_DATE.":{$date}";
+            $cacheKey .= ':' . CacheHelper::KEY_DATE . ":{$date}";
         }
 
         return $cacheKey;
@@ -527,18 +596,18 @@ class CacheHelper
     public static function cacheKeyGenerateSurveyQuestionBySlugForSurvey(string $key, string $secondKey, Survey $survey, string $slug, ?Language $language = null): string
     {
         $cacheKey = "{$key}:{$secondKey}";
-        $cacheKey .= ':'.CacheHelper::KEY_SURVEY;
+        $cacheKey .= ':' . CacheHelper::KEY_SURVEY;
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($survey) {
-            $cacheKey .= ':'.CacheHelper::KEY_BY_SLUG.":{$survey?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_BY_SLUG . ":{$survey?->slug}";
         }
 
         if ($slug) {
-            $cacheKey .= ':'.CacheHelper::KEY_SURVEY_QUESTION.":{$slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_SURVEY_QUESTION . ":{$slug}";
         }
 
         return $cacheKey;
@@ -549,10 +618,10 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_BY_MENU_TYPE_CODE.":{$menuTypeCode}";
+        $cacheKey .= ':' . CacheHelper::KEY_BY_MENU_TYPE_CODE . ":{$menuTypeCode}";
 
         return $cacheKey;
     }
@@ -562,12 +631,12 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_MENU_ITEM;
+        $cacheKey .= ':' . CacheHelper::KEY_MENU_ITEM;
 
-        $cacheKey .= ':'.CacheHelper::KEY_BY_SLUG.":{$slug}";
+        $cacheKey .= ':' . CacheHelper::KEY_BY_SLUG . ":{$slug}";
 
         return $cacheKey;
     }
@@ -577,18 +646,18 @@ class CacheHelper
         $cacheKey = "{$key}:{$secondKey}";
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($menu && $menu?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_MENU.":{$menu?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_MENU . ":{$menu?->slug}";
         }
 
         if ($menuItem && $menuItem?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_MENU_ITEM.":{$menuItem?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_MENU_ITEM . ":{$menuItem?->slug}";
         }
 
-        $cacheKey .= ':'.CacheHelper::KEY_MENU_ITEM;
+        $cacheKey .= ':' . CacheHelper::KEY_MENU_ITEM;
 
         return $cacheKey;
     }
@@ -597,7 +666,7 @@ class CacheHelper
     {
         $cacheKey = "{$key}:{$secondKey}";
 
-        $cacheKey .= ':'.CacheHelper::KEY_THEMES;
+        $cacheKey .= ':' . CacheHelper::KEY_THEMES;
 
         return $cacheKey;
     }
@@ -606,13 +675,13 @@ class CacheHelper
     {
         $cacheKey = "{$key}:{$secondKey}";
 
-        $cacheKey .= ':'.CacheHelper::KEY_GROUP.":{$group}";
+        $cacheKey .= ':' . CacheHelper::KEY_GROUP . ":{$group}";
 
-        $cacheKey .= ':'.CacheHelper::KEY_LABEL.':'.(
+        $cacheKey .= ':' . CacheHelper::KEY_LABEL . ':' . (
             is_array($labels) ? implode(',', $labels) : $labels
         );
 
-        $cacheKey .= ':'.CacheHelper::KEY_THEMES;
+        $cacheKey .= ':' . CacheHelper::KEY_THEMES;
 
         return $cacheKey;
     }
@@ -621,10 +690,10 @@ class CacheHelper
     {
         $cacheKey = "{$key}:{$secondKey}";
 
-        $cacheKey .= ':'.CacheHelper::KEY_GROUP.":{$group}";
-        $cacheKey .= ':'.CacheHelper::KEY_LABEL.":{$label}";
+        $cacheKey .= ':' . CacheHelper::KEY_GROUP . ":{$group}";
+        $cacheKey .= ':' . CacheHelper::KEY_LABEL . ":{$label}";
 
-        $cacheKey .= ':'.CacheHelper::KEY_THEME;
+        $cacheKey .= ':' . CacheHelper::KEY_THEME;
 
         return $cacheKey;
     }
@@ -635,10 +704,10 @@ class CacheHelper
 
         $cacheKey = "{$key}:{$secondKey}";
 
-        $cacheKey .= ':'.CacheHelper::KEY_BREAKING_NEWS;
+        $cacheKey .= ':' . CacheHelper::KEY_BREAKING_NEWS;
 
         if ($language && $language?->id) {
-            $cacheKey .= ':'.CacheHelper::KEY_LANGUAGE.":{$language?->slug}";
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
         }
 
         if ($request->input()) {
@@ -648,9 +717,9 @@ class CacheHelper
 
             ksort($cacheData);
 
-            $cacheKey .= ':'.md5(json_encode($cacheData));
+            $cacheKey .= ':' . md5(json_encode($cacheData));
         }
-        $cacheKey .= ':'.CacheHelper::KEY_PER_PAGE.":{$perPage}";
+        $cacheKey .= ':' . CacheHelper::KEY_PER_PAGE . ":{$perPage}";
 
         return $cacheKey;
     }
@@ -659,10 +728,10 @@ class CacheHelper
     {
         $cacheKey = "{$key}:{$secondKey}";
 
-        $cacheKey .= ':'.CacheHelper::KEY_TYPE.":{$type}";
-        $cacheKey .= ':'.CacheHelper::KEY_POSITION.":{$position}";
+        $cacheKey .= ':' . CacheHelper::KEY_TYPE . ":{$type}";
+        $cacheKey .= ':' . CacheHelper::KEY_POSITION . ":{$position}";
 
-        $cacheKey .= ':'.CacheHelper::KEY_GOOGLE_ADSENCE;
+        $cacheKey .= ':' . CacheHelper::KEY_GOOGLE_ADSENCE;
 
         return $cacheKey;
     }
