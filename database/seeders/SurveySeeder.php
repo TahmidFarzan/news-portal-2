@@ -262,7 +262,7 @@ class SurveySeeder extends Seeder
 
         $dates[] = now();
 
-        for ($i = 1; $i <= 7; $i++) {
+        for ($i = 1; $i <= 365; $i++) {
             $dates[] = now()->copy()->addDays($i);
         }
 
