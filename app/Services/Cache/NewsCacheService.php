@@ -890,4 +890,15 @@ class NewsCacheService
 
         return $records;
     }
+
+    public function clearCacheByNews(News $news)
+    {
+        $pageCacheKey    = CacheHelper::cacheKeyGenerateSingleRecordBySlug(CacheHelper::TAG_PAGE, $this->secondKey, $news->slug, $news->language ?? null);
+        $feedCacheKey    = CacheHelper::cacheKeyGenerateSingleRecordBySlug(CacheHelper::TAG_FEED, $this->secondKey, $news->slug, $news->language ?? null);
+        $sitemapCacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug(CacheHelper::TAG_SITEMAP, $this->secondKey, $news->slug, $news->language ?? null);
+
+        CacheServerHelper::clearCached($pageCacheKey, [$pageCacheKey, $this->mainTag]);
+        CacheServerHelper::clearCached($feedCacheKey, [$feedCacheKey, $this->mainTag]);
+        CacheServerHelper::clearCached($sitemapCacheKey, [$sitemapCacheKey, $this->mainTag]);
+    }
 }

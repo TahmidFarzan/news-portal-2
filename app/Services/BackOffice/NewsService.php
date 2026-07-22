@@ -22,6 +22,7 @@ use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\NewsType;
 use App\Services\BackOffice\MediaService;
+use App\Services\Cache\NewsCacheService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +33,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class NewsService
 {
     protected MediaService $mediaService;
+    protected NewsCacheService $newsCacheService;
 
-    public function __construct(MediaService $mediaService)
+    public function __construct(MediaService $mediaService, NewsCacheService $newsCacheService)
     {
-        $this->mediaService = $mediaService;
+        $this->mediaService     = $mediaService;
+        $this->newsCacheService = $newsCacheService;
     }
 
     public function new (): News
@@ -243,6 +246,10 @@ class NewsService
                     $this->syncGalleryImagesMedia($request, $news);
                 }
                 $this->syncNewPlacementAfterNewsCreate($news);
+            }
+
+            if ($request->boolean("clear_cache", false)) {
+                $this->newsCacheService->clearCacheByNews($news);
             }
 
             return [

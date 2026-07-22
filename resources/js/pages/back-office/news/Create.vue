@@ -84,6 +84,8 @@ const saveForm = useForm({
     editor_media_ids: null,
     relevant_news_ids: news?.relevant_news?.map(item => item.id) ?? [],
     related_news_ids: news?.related_news?.map(item => item.id) ?? [],
+
+    clear_cache: false,
 })
 
 const categoryApiUrl = computed(() => {
@@ -646,7 +648,7 @@ onMounted(async () => {
                 <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
                     <h3 class="text-base font-semibold">{{ t('common.labels.publishSettings') }}</h3>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div v-if="isStory">
                             <label class="block text-sm font-medium mb-1">
                                 {{ t('common.labels.source') }}
@@ -673,6 +675,26 @@ onMounted(async () => {
 
                                 <span class="text-sm text-gray-600">
                                     {{ saveForm.is_published ? t('common.boolean.yes') : t('common.boolean.no') }}
+                                </span>
+                            </label>
+                        </div>
+
+                        <div v-if="isUpdate">
+                            <label class="mb-1 block text-sm font-medium text-gray-700">
+                                {{ t('common.labels.clear_cache') }}
+                            </label>
+
+                            <label class="inline-flex cursor-pointer items-center gap-3">
+                                <input v-model="saveForm.clear_cache" type="checkbox" class="peer sr-only" :checked="saveForm.clear_cache"/>
+
+                                <span class="relative h-7 w-14 rounded-full bg-gray-300 transition
+                                    after:absolute after:left-1 after:top-1 after:h-5 after:w-5
+                                    after:rounded-full after:bg-white after:transition-all after:content-['']
+                                    peer-checked:bg-green-600 peer-checked:after:translate-x-7">
+                                </span>
+
+                                <span class="text-sm text-gray-600">
+                                    {{ saveForm.clear_cache ? t('common.boolean.yes') : t('common.boolean.no') }}
                                 </span>
                             </label>
                         </div>

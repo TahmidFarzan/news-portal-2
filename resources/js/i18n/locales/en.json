@@ -129,7 +129,8 @@
             "userPermisssion": "User Permisssion",
             "category": "Category",
             "video": "Video",
-            "image_gallery": "Image gallery"
+            "image_gallery": "Image gallery",
+            "clear_cache" : "Clear cache"
         },
         "actions": {
             "details": "Details",
