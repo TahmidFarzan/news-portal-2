@@ -20,12 +20,7 @@ class EventService
 
     public function find(string $slug): Event
     {
-        return Event::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Event $event): Event
-    {
-        $event->load([
+        return Event::with([
             'language',
 
             'createdBy',
@@ -36,11 +31,9 @@ class EventService
             'latestActivityLog',
             'latestActivityLog.causer',
 
-            "desktopBannerImage",
-            "mobileBannerImage"
-        ]);
-
-        return $event;
+            'desktopBannerImage',
+            'mobileBannerImage',
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)
@@ -102,7 +95,7 @@ class EventService
                 $event->name        = $request->input('name');
                 $event->brief       = $request->input('brief');
                 $event->language_id = $request->input('language_id');
-                $event->is_current = $request->boolean('is_current') ? true : false;;
+                $event->is_current  = $request->boolean('is_current') ? true : false;;
 
                 $event->seo_title     = $request->input('seo_title', $request->input('name'));
                 $event->seo_brief     = $request->input('seo_brief', $request->input('brief'));

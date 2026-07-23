@@ -32,7 +32,6 @@ class PageController extends Controller
     public function details(string $slug)
     {
         $page = $this->pageService->find($slug);
-        $page = $this->pageService->loadRelations($page);
 
         Gate::authorize('view', $page);
 
@@ -54,7 +53,6 @@ class PageController extends Controller
     public function edit(string $slug)
     {
         $page = $this->pageService->find($slug);
-        $page = $this->pageService->loadRelations($page);
 
         Gate::authorize('update', $page);
 

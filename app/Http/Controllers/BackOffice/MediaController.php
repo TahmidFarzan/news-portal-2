@@ -28,7 +28,6 @@ class MediaController extends Controller
     public function details(string $slug)
     {
         $media = $this->mediaService->find($slug);
-        $media = $this->mediaService->loadRelations($media);
         return Inertia::render('back-office/medias/Details', [
             'media' => $media,
         ]);

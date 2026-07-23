@@ -17,25 +17,24 @@ class ThemeService
 
     public function find(string $slug): Theme
     {
-        return Theme::where('slug', $slug)->firstOrFail();
-    }
-
-    public function findByGroupAndLabel(string $group, string $label): Theme
-    {
-        return Theme::where('group', $group)->where('label', $label)->firstOrFail();
-    }
-
-    public function loadRelations(Theme $theme): Theme
-    {
-        $theme->load([
+        return Theme::with([
             'activityLogs' => fn($query) => $query->latest()->limit(10),
             'activityLogs.causer',
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
+        ])->where('slug', $slug)->firstOrFail();
+    }
 
-        return $theme;
+    public function findByGroupAndLabel(string $group, string $label): Theme
+    {
+        return Theme::with([
+            'activityLogs' => fn($query) => $query->latest()->limit(10),
+            'activityLogs.causer',
+
+            'latestActivityLog',
+            'latestActivityLog.causer',
+        ])->where('group', $group)->where('label', $label)->firstOrFail();
     }
 
     public function search(Request $request)

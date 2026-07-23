@@ -32,7 +32,6 @@ class TrendController extends Controller
     public function details(string $slug)
     {
         $trend = $this->trendService->find($slug);
-        $trend = $this->trendService->loadRelations($trend);
 
         Gate::authorize('view', $trend);
 
@@ -54,7 +53,6 @@ class TrendController extends Controller
     public function edit(string $slug)
     {
         $trend = $this->trendService->find($slug);
-        $trend = $this->trendService->loadRelations($trend);
 
         Gate::authorize('update', $trend);
 

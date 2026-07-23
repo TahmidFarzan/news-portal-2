@@ -36,7 +36,6 @@ class SurveyController extends Controller
     public function details(string $slug)
     {
         $survey = $this->surveyService->find($slug);
-        $survey = $this->surveyService->loadRelations($survey);
 
         Gate::authorize('view', $survey);
 
@@ -58,7 +57,6 @@ class SurveyController extends Controller
     public function edit(string $slug)
     {
         $survey = $this->surveyService->find($slug);
-        $survey = $this->surveyService->loadRelations($survey);
 
         Gate::authorize('update', $survey);
 
@@ -154,10 +152,7 @@ class SurveyController extends Controller
     public function surveyQuestionDetails(string $slug, string $surveyQuestionSlug)
     {
         $survey = $this->surveyService->find($slug);
-        $survey = $this->surveyService->loadRelations($survey);
-
         $surveyQuestion = $this->surveyQuestionService->find($survey, $surveyQuestionSlug);
-        $surveyQuestion = $this->surveyQuestionService->loadRelations($surveyQuestion);
 
         Gate::authorize('view', $surveyQuestion);
 
@@ -170,7 +165,6 @@ class SurveyController extends Controller
     public function surveyQuestionCreate(string $slug)
     {
         $survey = $this->surveyService->find($slug);
-        $survey = $this->surveyService->loadRelations($survey);
 
         $surveyQuestion = $this->surveyQuestionService->new();
 
@@ -185,10 +179,8 @@ class SurveyController extends Controller
     public function surveyQuestionEdit(string $slug, string $surveyQuestionSlug)
     {
         $survey = $this->surveyService->find($slug);
-        $survey = $this->surveyService->loadRelations($survey);
 
         $surveyQuestion = $this->surveyQuestionService->find($survey, $surveyQuestionSlug);
-        $surveyQuestion = $this->surveyQuestionService->loadRelations($surveyQuestion);
 
         Gate::authorize('create', $surveyQuestion);
 
@@ -201,7 +193,6 @@ class SurveyController extends Controller
     public function surveyQuestionSave(SurveyQuestionRequest $request, string $slug)
     {
         $survey = $this->surveyService->find($slug);
-        $survey = $this->surveyService->loadRelations($survey);
 
         $surveyQuestion = $this->surveyQuestionService->new();
 
@@ -218,10 +209,8 @@ class SurveyController extends Controller
     public function surveyQuestionUpdate(SurveyQuestionRequest $request, string $slug, string $surveyQuestionSlug)
     {
         $survey = $this->surveyService->find($slug);
-        $survey = $this->surveyService->loadRelations($survey);
 
         $surveyQuestion = $this->surveyQuestionService->find($survey, $surveyQuestionSlug);
-        $surveyQuestion = $this->surveyQuestionService->loadRelations($surveyQuestion);
 
         Gate::authorize('update', $surveyQuestion);
 
@@ -237,10 +226,7 @@ class SurveyController extends Controller
     public function surveyQuestionDelete(string $slug, string $surveyQuestionSlug)
     {
         $survey = $this->surveyService->find($slug);
-        $survey = $this->surveyService->loadRelations($survey);
-
         $surveyQuestion = $this->surveyQuestionService->find($survey, $surveyQuestionSlug);
-        $surveyQuestion = $this->surveyQuestionService->loadRelations($surveyQuestion);
 
         Gate::authorize('delete', $surveyQuestion);
 

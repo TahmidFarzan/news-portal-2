@@ -19,12 +19,7 @@ class BreakingNewsService
 
     public function find(string $slug): BreakingNews
     {
-        return BreakingNews::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(BreakingNews $breakingNews): BreakingNews
-    {
-        $breakingNews->load([
+        return BreakingNews::with([
             'createdBy',
 
             'language',
@@ -35,9 +30,7 @@ class BreakingNewsService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $breakingNews;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)

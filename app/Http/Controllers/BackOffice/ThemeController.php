@@ -32,7 +32,6 @@ class ThemeController extends Controller
     public function details(string $slug)
     {
         $theme = $this->themeService->find($slug);
-        $theme = $this->themeService->loadRelations($theme);
 
         Gate::authorize('view', $theme);
 
@@ -44,7 +43,6 @@ class ThemeController extends Controller
     public function edit(string $slug)
     {
         $theme = $this->themeService->find($slug);
-        $theme = $this->themeService->loadRelations($theme);
 
         Gate::authorize('update', $theme);
 

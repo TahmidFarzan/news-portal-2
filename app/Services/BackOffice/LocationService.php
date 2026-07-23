@@ -26,12 +26,7 @@ class LocationService
 
     public function find(string $slug): Location
     {
-        return Location::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Location $location): Location
-    {
-        $location->load([
+        return Location::with([
             'category',
             'category.parent',
 
@@ -47,9 +42,21 @@ class LocationService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
+        ])->where('slug', $slug)->firstOrFail();
+    }
 
-        return $location;
+    public function firstByIdOrSlug(int | string $slugOrId): Location | null
+    {
+        return Location::with([
+            'children',
+
+            'parent',
+            'bloodline',
+
+            'language',
+
+            'createdBy',
+        ])->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first() ?? null;
     }
 
     public function search(Request $request)

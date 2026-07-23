@@ -142,7 +142,6 @@ class AuthController extends Controller
     public function profileIndex()
     {
         $user = $this->authService->authUser();
-        $user = $this->authService->loadRelations($user);
 
         return Inertia::render('auth-user/Profile', ['user' => $user]);
     }
@@ -150,7 +149,6 @@ class AuthController extends Controller
     public function accountIndex()
     {
         $user = $this->authService->authUser();
-        $user = $this->authService->loadRelations($user);
 
         return Inertia::render('auth-user/Account', ['user' => $user]);
     }

@@ -18,12 +18,7 @@ class SurveyService
 
     public function find(string $slug): Survey
     {
-        return Survey::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Survey $survey): Survey
-    {
-        $survey->load([
+        return Survey::with([
             'surveyQuestions',
             'language',
 
@@ -34,9 +29,7 @@ class SurveyService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $survey;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)

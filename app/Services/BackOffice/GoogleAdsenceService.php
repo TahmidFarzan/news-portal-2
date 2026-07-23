@@ -1,15 +1,15 @@
 <?php
 namespace App\Services\BackOffice;
 
+use App\Helpers\ThemeHelper;
 use App\Http\Requests\GoogleAdsenceRequest;
 use App\Models\GoogleAdsence;
+use App\Services\BackOffice\ThemeService;
 use Exception;
-use App\Helpers\ThemeHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\BackOffice\ThemeService;
 
 class GoogleAdsenceService
 {
@@ -27,13 +27,7 @@ class GoogleAdsenceService
 
     public function find(string $slug): GoogleAdsence
     {
-        return GoogleAdsence::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(GoogleAdsence $googleAdsence): GoogleAdsence
-    {
-        $googleAdsence->load([
-
+        return GoogleAdsence::with([
             'createdBy',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
@@ -41,9 +35,7 @@ class GoogleAdsenceService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $googleAdsence;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)
@@ -92,7 +84,7 @@ class GoogleAdsenceService
         try {
 
             DB::transaction(function () use ($request, $googleAdsence, $isNew) {
-                $googleAdsenceClient = $this->themeService->findByGroupAndLabel(ThemeHelper::GROUP_APP,ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID);
+                $googleAdsenceClient = $this->themeService->findByGroupAndLabel(ThemeHelper::GROUP_APP, ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID);
 
                 $googleAdsence->name                      = $request->input('name');
                 $googleAdsence->slot_id                   = $request->input('slot_id');

@@ -19,12 +19,7 @@ class TagService
 
     public function find(string $slug): Tag
     {
-        return Tag::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Tag $tag): Tag
-    {
-        $tag->load([
+        return Tag::with([
             'trend',
             'language',
 
@@ -35,9 +30,7 @@ class TagService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $tag;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)

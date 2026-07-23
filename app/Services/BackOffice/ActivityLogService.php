@@ -17,17 +17,10 @@ class ActivityLogService
 
     public function findBySlug(string $slug): Activity
     {
-        return Activity::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Activity $activity): Activity
-    {
-        $activity->load([
+        return Activity::with([
             'causer',
             'subject',
-        ]);
-
-        return $activity;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(?string $modelSlug, ?string $recordSlug, Request $request)

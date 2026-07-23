@@ -32,7 +32,6 @@ class TagController extends Controller
     public function details(string $slug)
     {
         $tag = $this->tagService->find($slug);
-        $tag = $this->tagService->loadRelations($tag);
 
         Gate::authorize('view', $tag);
 
@@ -54,7 +53,6 @@ class TagController extends Controller
     public function edit(string $slug)
     {
         $tag = $this->tagService->find($slug);
-        $tag = $this->tagService->loadRelations($tag);
 
         Gate::authorize('update', $tag);
 

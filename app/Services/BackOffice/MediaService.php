@@ -18,24 +18,28 @@ class MediaService
         return new Media();
     }
 
-    public function find(string $slug): Media
+    public function find(string $slug): array
     {
-        return Media::where('slug', $slug)->orWhere('uuid', $slug)->firstOrFail();
-    }
-
-    public function firstById(string $id): Media
-    {
-        return Media::where('id', $id)->first();
-    }
-
-    public function loadRelations(Media $media)
-    {
-        $media->load([
+        $media = Media::with([
             'model',
-        ]);
+        ])->where('slug', $slug)
+            ->orWhere('uuid', $slug)
+            ->firstOrFail();
+
         $media->activity_logs = $this->activityLogs($media);
-        $media                = $media->toArray();
-        return $media;
+
+        return $media->toArray();
+    }
+
+    public function firstById(string $id)
+    {
+        $media = Media::with([
+            'model',
+        ])->where('id', $id)->first();
+
+        $media->activity_logs = $this->activityLogs($media);
+
+        return $media->toArray();
     }
 
     public function activityLogs(Media $media)
@@ -169,7 +173,7 @@ class MediaService
                     'alt'               => $media->getCustomProperty('alt') ?? $media->model->name ?? "",
                     'media_type'        => $media->getTypeFromMime(),
                     'original_url'      => $media->original_url,
-                    'preview_url'         => $media->preview_url,
+                    'preview_url'       => $media->preview_url,
 
                 ],
             ];

@@ -33,7 +33,6 @@ class MenuController extends Controller
     public function details(string $slug)
     {
         $menu = $this->menuService->find($slug);
-        $menu = $this->menuService->loadRelations($menu);
 
         Gate::authorize('view', $menu);
 
@@ -55,7 +54,6 @@ class MenuController extends Controller
     public function edit(string $slug)
     {
         $menu = $this->menuService->find($slug);
-        $menu = $this->menuService->loadRelations($menu);
 
         Gate::authorize('update', $menu);
 
@@ -133,10 +131,8 @@ class MenuController extends Controller
     public function menuItemEdit(string $slug, string $menuItemSlug)
     {
         $menu = $this->menuService->find($slug);
-        $menu = $this->menuService->loadRelations($menu);
 
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
-        $menuItem = $this->menuService->menuItemLoadRelations($menuItem);
         Gate::authorize('update', $menuItem);
 
         return Inertia::render('back-office/menus/menu-items/Create', [
@@ -148,10 +144,8 @@ class MenuController extends Controller
     public function menuItemDetails(string $slug, string $menuItemSlug)
     {
         $menu = $this->menuService->find($slug);
-        $menu = $this->menuService->loadRelations($menu);
 
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
-        $menuItem = $this->menuService->menuItemLoadRelations($menuItem);
 
         Gate::authorize('view', $menuItem);
 
@@ -164,7 +158,6 @@ class MenuController extends Controller
     public function menuItemSave(MenuItemRequest $request, string $slug)
     {
         $menu = $this->menuService->find($slug);
-        $menu = $this->menuService->loadRelations($menu);
         $menuItem = $this->menuService->menuItemNew();
 
         Gate::authorize('save', $menuItem);
@@ -180,7 +173,6 @@ class MenuController extends Controller
     public function menuItemUpdate(MenuItemRequest $request, string $slug, string $menuItemSlug)
     {
         $menu = $this->menuService->find($slug);
-        $menu = $this->menuService->loadRelations($menu);
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
 
         Gate::authorize('update', $menuItem);
@@ -196,7 +188,6 @@ class MenuController extends Controller
     public function menuItemDelete(string $slug, string $menuItemSlug)
     {
         $menu = $this->menuService->find($slug);
-        $menu = $this->menuService->loadRelations($menu);
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
 
         Gate::authorize('delete', $menu);

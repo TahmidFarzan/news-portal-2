@@ -20,12 +20,7 @@ class ContributorService
 
     public function find(string $slug): Contributor
     {
-        return Contributor::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Contributor $contributor): Contributor
-    {
-        $contributor->load([
+        return Contributor::with([
             'language',
 
             'createdBy',
@@ -37,9 +32,7 @@ class ContributorService
             'latestActivityLog.causer',
 
             'profileImage',
-        ]);
-
-        return $contributor;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)

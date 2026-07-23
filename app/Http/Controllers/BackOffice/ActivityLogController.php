@@ -44,7 +44,6 @@ class ActivityLogController extends Controller
     public function details(string $slug)
     {
         $activityLog = $this->activityLogService->findBySlug($slug);
-        $activityLog = $this->activityLogService->loadRelations($activityLog);
 
         return Inertia::render('back-office/activity-logs/Details', [
             'activityLog' => $activityLog,

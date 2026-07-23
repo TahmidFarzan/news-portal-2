@@ -19,12 +19,7 @@ class SurveyQuestionService
 
     public function find(Survey $survey, string $slug): SurveyQuestion
     {
-        return SurveyQuestion::where('survey_id', $survey->id)->where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(SurveyQuestion $surveyQuestion): SurveyQuestion
-    {
-        $surveyQuestion->load([
+        return SurveyQuestion::with([
             'survey',
             'surveyQuestionResult',
 
@@ -35,9 +30,9 @@ class SurveyQuestionService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $surveyQuestion;
+        ])->where('survey_id', $survey->id)
+            ->where('slug', $slug)
+            ->firstOrFail();
     }
 
     public function search(Request $request, Survey $survey)
@@ -76,9 +71,9 @@ class SurveyQuestionService
 
         try {
 
-            DB::transaction(function () use ($request,$survey, $surveyQuestion, $isNew) {
-                $surveyQuestion->question    = $request->input('question');
-                $surveyQuestion->survey_id   = $survey->id;
+            DB::transaction(function () use ($request, $survey, $surveyQuestion, $isNew) {
+                $surveyQuestion->question  = $request->input('question');
+                $surveyQuestion->survey_id = $survey->id;
 
                 $surveyQuestion->created_by_id = $isNew ? Auth::id() : $surveyQuestion->created_by_id;
 

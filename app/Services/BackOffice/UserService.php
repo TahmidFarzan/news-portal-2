@@ -20,22 +20,7 @@ class UserService
 
     public function findBySlug(string $slug): User
     {
-        return User::where('slug', $slug)->firstOrFail();
-    }
-
-    public function findTrashedBySlug(string $slug): User
-    {
-        return User::onlyTrashed()->where('slug', $slug)->firstOrFail();
-    }
-
-    public function findWithTrashedBySlug(string $slug): User
-    {
-        return User::withTrashed()->where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(User $user): User
-    {
-        $user->load([
+        return User::with([
             'userPermissions',
             'createdBy',
 
@@ -44,9 +29,35 @@ class UserService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
+        ])->where('slug', $slug)->firstOrFail();
+    }
 
-        return $user;
+    public function findTrashedBySlug(string $slug): User
+    {
+        return User::with([
+            'userPermissions',
+            'createdBy',
+
+            'activityLogs' => fn($query) => $query->latest()->limit(10),
+            'activityLogs.causer',
+
+            'latestActivityLog',
+            'latestActivityLog.causer',
+        ])->onlyTrashed()->where('slug', $slug)->firstOrFail();
+    }
+
+    public function findWithTrashedBySlug(string $slug): User
+    {
+        return User::with([
+            'userPermissions',
+            'createdBy',
+
+            'activityLogs' => fn($query) => $query->latest()->limit(10),
+            'activityLogs.causer',
+
+            'latestActivityLog',
+            'latestActivityLog.causer',
+        ])->withTrashed()->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)

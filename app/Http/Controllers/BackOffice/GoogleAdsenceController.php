@@ -34,7 +34,6 @@ class GoogleAdsenceController extends Controller
     public function details(string $slug)
     {
         $googleAdsence = $this->googleAdsenceService->find($slug);
-        $googleAdsence = $this->googleAdsenceService->loadRelations($googleAdsence);
 
         Gate::authorize('view', $googleAdsence);
 
@@ -56,7 +55,6 @@ class GoogleAdsenceController extends Controller
     public function edit(string $slug)
     {
         $googleAdsence = $this->googleAdsenceService->find($slug);
-        $googleAdsence = $this->googleAdsenceService->loadRelations($googleAdsence);
 
         Gate::authorize('update', $googleAdsence);
 

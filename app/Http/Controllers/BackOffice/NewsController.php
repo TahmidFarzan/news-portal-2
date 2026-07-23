@@ -34,7 +34,6 @@ class NewsController extends Controller
     public function details(string $slug)
     {
         $news = $this->newsService->find($slug);
-        $news = $this->newsService->loadRelations($news);
 
         Gate::authorize('view', $news);
 
@@ -56,7 +55,6 @@ class NewsController extends Controller
     public function edit(string $slug)
     {
         $news = $this->newsService->find($slug);
-        $news = $this->newsService->loadRelations($news);
 
         Gate::authorize('update', $news);
 

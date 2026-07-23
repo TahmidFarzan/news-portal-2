@@ -33,7 +33,6 @@ class UserController extends Controller
     public function details(string $slug)
     {
         $user = $this->userService->findWithTrashedBySlug($slug);
-        $user = $this->userService->loadRelations($user);
 
         Gate::authorize('create', $user);
 
@@ -55,7 +54,6 @@ class UserController extends Controller
     public function edit(string $slug)
     {
         $user = $this->userService->findWithTrashedBySlug($slug);
-        $user = $this->userService->loadRelations($user);
 
         Gate::authorize('update', $user);
 

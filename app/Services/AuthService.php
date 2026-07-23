@@ -27,16 +27,9 @@ class AuthService
         return Auth::user();
     }
 
-    public function findBySlug(int|string $slugOrId): User
+    public function findBySlug(int | string $slugOrId): User
     {
-        return User::where('id', $slugOrId)
-            ->orWhere('slug', $slugOrId)
-            ->firstOrFail();
-    }
-
-    public function loadRelations(User $user): User
-    {
-        $user->load([
+        return User::with([
             'media',
             'createdBy',
 
@@ -45,9 +38,9 @@ class AuthService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $user;
+        ])->where('id', $slugOrId)
+            ->orWhere('slug', $slugOrId)
+            ->firstOrFail();
     }
 
     public function login(LoginRequest $request): array

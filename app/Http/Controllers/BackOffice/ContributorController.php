@@ -32,7 +32,6 @@ class ContributorController extends Controller
     public function details(string $slug)
     {
         $contributor = $this->contributorService->find($slug);
-        $contributor = $this->contributorService->loadRelations($contributor);
 
         Gate::authorize('view', $contributor);
 
@@ -54,7 +53,6 @@ class ContributorController extends Controller
     public function edit(string $slug)
     {
         $contributor = $this->contributorService->find($slug);
-        $contributor = $this->contributorService->loadRelations($contributor);
 
         Gate::authorize('update', $contributor);
 

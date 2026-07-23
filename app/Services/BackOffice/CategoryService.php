@@ -26,13 +26,8 @@ class CategoryService
 
     public function find(string $slug): Category
     {
-        return Category::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Category $category): Category
-    {
-        $category->load([
-            "locations",
+        return Category::with([
+            'locations',
 
             'parent',
             'bloodline',
@@ -46,9 +41,22 @@ class CategoryService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
+        ])->where('slug', $slug)->firstOrFail();
+    }
 
-        return $category;
+    public function firstByIdOrSlug(int | string $slugOrId): Category | null
+    {
+        return Category::with([
+            'children',
+            'locations',
+
+            'parent',
+            'bloodline',
+
+            'language',
+
+            'createdBy',
+        ])->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first() ?? null;
     }
 
     public function search(Request $request)

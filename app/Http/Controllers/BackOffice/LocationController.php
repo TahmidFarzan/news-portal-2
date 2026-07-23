@@ -32,7 +32,6 @@ class LocationController extends Controller
     public function details(string $slug)
     {
         $location = $this->locationService->find($slug);
-        $location = $this->locationService->loadRelations($location);
 
         Gate::authorize('view', $location);
 
@@ -54,7 +53,6 @@ class LocationController extends Controller
     public function edit(string $slug)
     {
         $location = $this->locationService->find($slug);
-        $location = $this->locationService->loadRelations($location);
 
         Gate::authorize('update', $location);
 

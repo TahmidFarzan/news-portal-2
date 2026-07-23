@@ -21,6 +21,8 @@ use App\Models\Location;
 use App\Models\News;
 use App\Models\NewsPlacement;
 use App\Models\NewsType;
+use App\Services\BackOffice\CategoryService;
+use App\Services\BackOffice\LocationService;
 use App\Services\BackOffice\MediaService;
 use App\Services\Cache\NewsCacheService;
 use Exception;
@@ -33,12 +35,16 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class NewsService
 {
     protected MediaService $mediaService;
+    protected CategoryService $categoryService;
+    protected LocationService $locationService;
     protected NewsCacheService $newsCacheService;
 
-    public function __construct(MediaService $mediaService, NewsCacheService $newsCacheService)
+    public function __construct(MediaService $mediaService, NewsCacheService $newsCacheService, CategoryService $categoryService, LocationService $locationService)
     {
         $this->mediaService     = $mediaService;
         $this->newsCacheService = $newsCacheService;
+        $this->categoryService  = $categoryService;
+        $this->locationService  = $locationService;
     }
 
     public function new (): News
@@ -48,17 +54,7 @@ class NewsService
 
     public function find(string $slug): News
     {
-        return News::where('slug', $slug)->firstOrFail();
-    }
-
-    public function newsTypefindById(string $id): NewsType
-    {
-        return NewsType::where('id', $id)->firstOrFail();
-    }
-
-    public function loadRelations(News $news): News
-    {
-        $news->load([
+        return News::with([
             'createdBy',
 
             'language',
@@ -89,12 +85,15 @@ class NewsService
             'latestActivityLog',
             'latestActivityLog.causer',
 
-            "featureImage",
-            "featureImageMobile",
-            "galleryImages",
-        ]);
+            'featureImage',
+            'featureImageMobile',
+            'galleryImages',
+        ])->where('slug', $slug)->firstOrFail();
+    }
 
-        return $news;
+    public function newsTypefindById(string $id): NewsType
+    {
+        return NewsType::where('id', $id)->firstOrFail();
     }
 
     public function search(Request $request)
@@ -110,7 +109,7 @@ class NewsService
         if ($request->filled('category_id')) {
             $categoryIds = [];
 
-            $category = $this->categoryById($request->input('category_id'));
+            $category = $this->categoryService->firstByIdOrSlug($request->input('category_id'));
             array_push($categoryIds, $request->input('category_id'));
 
             if ($category) {
@@ -132,7 +131,7 @@ class NewsService
         if ($request->filled('location_id')) {
             $locationIds = [];
 
-            $location = $this->locationById($request->input('location_id'));
+            $location = $this->locationService->firstByIdOrSlug($request->input('location_id'));
             array_push($locationIds, $request->input('location_id'));
 
             if ($location) {
@@ -518,12 +517,7 @@ class NewsService
 
     public function newsPlacementFind(string $newsPlacementSlug): NewsPlacement
     {
-        return NewsPlacement::where("slug", $newsPlacementSlug)->firstOrFail();
-    }
-
-    public function newsPlacementLoadRelations(NewsPlacement $newsPlacement): NewsPlacement
-    {
-        $newsPlacement->load([
+        return NewsPlacement::with([
             'createdBy',
 
             'news',
@@ -534,9 +528,7 @@ class NewsService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $newsPlacement;
+        ])->where('slug', $newsPlacementSlug)->firstOrFail();
     }
 
     public function newsPlacementHomeLead()
@@ -1136,15 +1128,5 @@ class NewsService
             }
 
         }
-    }
-
-    private function categoryById(string | int $slugOrId): Category
-    {
-        return Category::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
-    }
-
-    private function locationById(string | int $slugOrId): Location
-    {
-        return Location::with("children")->where("id", $slugOrId)->orWhere("slug", $slugOrId)->first();
     }
 }

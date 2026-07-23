@@ -18,17 +18,7 @@ class TrendService
 
     public function find(string $slug): Trend
     {
-        return Trend::where('slug', $slug)->firstOrFail();
-    }
-
-    public function requestedTrend($slug): Trend
-    {
-        return Trend::where("slug", $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Trend $trend): Trend
-    {
-        $trend->load([
+        return Trend::with([
             'tag',
             'tag.language',
 
@@ -39,9 +29,12 @@ class TrendService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
+        ])->where('slug', $slug)->firstOrFail();
+    }
 
-        return $trend;
+    public function requestedTrend(string $slug): Trend
+    {
+        return Trend::where("slug", $slug)->firstOrFail();
     }
 
     public function search(Request $request)

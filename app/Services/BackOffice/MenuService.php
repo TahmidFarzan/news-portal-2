@@ -25,12 +25,7 @@ class MenuService
 
     public function find(string $slug): Menu
     {
-        return Menu::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Menu $menu): Menu
-    {
-        $menu->load([
+        return Menu::with([
             'language',
             'menuType',
 
@@ -45,9 +40,7 @@ class MenuService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $menu;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)
@@ -143,29 +136,25 @@ class MenuService
         return new MenuItem();
     }
 
-    public function menuItemfind(Menu $menu, string $menuSlug): MenuItem
+    public function menuItemFind(Menu $menu, string $menuSlug): MenuItem
     {
-        return $menu->menuItems()->where('slug', $menuSlug)->firstOrFail();
-    }
+        return $menu->menuItems()
+            ->with([
+                'parent',
 
-    public function menuItemLoadRelations(MenuItem $menuItem): MenuItem
-    {
-        $menuItem->load([
-            "parent",
+                'model',
+                'language',
 
-            'model',
-            'language',
+                'createdBy',
 
-            'createdBy',
+                'activityLogs' => fn($query) => $query->latest()->limit(10),
+                'activityLogs.causer',
 
-            'activityLogs' => fn($query) => $query->latest()->limit(10),
-            'activityLogs.causer',
-
-            'latestActivityLog',
-            'latestActivityLog.causer',
-        ]);
-
-        return $menuItem;
+                'latestActivityLog',
+                'latestActivityLog.causer',
+            ])
+            ->where('slug', $menuSlug)
+            ->firstOrFail();
     }
 
     public function menuItemSearch(Menu $menu, Request $request)

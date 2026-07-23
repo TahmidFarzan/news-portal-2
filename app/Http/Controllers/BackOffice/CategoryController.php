@@ -32,7 +32,6 @@ class CategoryController extends Controller
     public function details(string $slug)
     {
         $category = $this->categoryService->find($slug);
-        $category = $this->categoryService->loadRelations($category);
 
         Gate::authorize('view', $category);
 
@@ -54,7 +53,6 @@ class CategoryController extends Controller
     public function edit(string $slug)
     {
         $category = $this->categoryService->find($slug);
-        $category = $this->categoryService->loadRelations($category);
 
         Gate::authorize('update', $category);
 

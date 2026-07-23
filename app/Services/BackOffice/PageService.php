@@ -25,12 +25,7 @@ class PageService
 
     public function find(string $slug): Page
     {
-        return Page::where('slug', $slug)->firstOrFail();
-    }
-
-    public function loadRelations(Page $page): Page
-    {
-        $page->load([
+        return Page::with([
             'language',
 
             'parent',
@@ -43,9 +38,7 @@ class PageService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ]);
-
-        return $page;
+        ])->where('slug', $slug)->firstOrFail();
     }
 
     public function search(Request $request)

@@ -32,7 +32,6 @@ class EventController extends Controller
     public function details(string $slug)
     {
         $event = $this->eventService->find($slug);
-        $event = $this->eventService->loadRelations($event);
 
         Gate::authorize('view', $event);
 
@@ -54,7 +53,6 @@ class EventController extends Controller
     public function edit(string $slug)
     {
         $event = $this->eventService->find($slug);
-        $event = $this->eventService->loadRelations($event);
 
         Gate::authorize('update', $event);
 
