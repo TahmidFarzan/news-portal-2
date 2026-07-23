@@ -245,10 +245,11 @@ class NewsService
                     $this->syncGalleryImagesMedia($request, $news);
                 }
                 $this->syncNewPlacementAfterNewsCreate($news);
+                $this->newsCacheService->clearCacheByNewsForNewlyAddedNews($news);
             }
 
-            if ($request->boolean("clear_cache", false)) {
-                $this->newsCacheService->clearCacheByNews($news);
+            if (!$isNew & $request->boolean("clear_cache", false)) {
+                $this->newsCacheService->clearCacheByNewsForUpdateNews($news);
             }
 
             return [

@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Str;
 
 class NewsCacheService
 {
@@ -636,11 +637,16 @@ class NewsCacheService
 
     public function getLastPageNo(string $cacheKey, Language $language, ?int $perPage = null, ?int $cachedTTL = null): int
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
         $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNo($cacheKey, $this->secondKey, $language);
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
-            [$this->mainTag, $cacheKey]
+            $tags
         );
 
         if ($lastPage === null) {
@@ -653,6 +659,7 @@ class NewsCacheService
                 [
                     $cacheKey,
                     $this->mainTag,
+                    $language->code,
                 ]
             );
         }
@@ -662,11 +669,22 @@ class NewsCacheService
 
     public function getLastPageNoByFilter(string $cacheKey, Language $language, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, ?int $perPage = null, ?int $cachedTTL = null): int
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
+        if ($filterModel) {
+            $modelName = class_basename($filterModel);
+
+            $tags[] = Str::slug($modelName) . ':' . Str::slug($filterModel->name);
+        }
+
         $cacheKey = CacheHelper::cacheKeyGenerateForLastPageNoByFilter($cacheKey, $this->secondKey, $request, $filterModel, $language);
 
         $lastPage = CacheServerHelper::getCachedData(
             $cacheKey,
-            [$this->mainTag, $cacheKey]
+            $tags
         );
 
         if ($lastPage === null) {
@@ -676,10 +694,7 @@ class NewsCacheService
                 $cacheKey,
                 $lastPage,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                ]
+                $tags
             );
         }
 
@@ -690,9 +705,20 @@ class NewsCacheService
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForNews($cacheKey, $this->secondKey, $request, $filterModel, $language, $perPage);
 
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
+        if ($filterModel) {
+            $modelName = class_basename($filterModel);
+
+            $tags[] = Str::slug($modelName) . ':' . Str::slug($filterModel->name);
+        }
+
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
-            [$this->mainTag, $cacheKey]
+            $tags
         );
 
         if ($records === null) {
@@ -702,10 +728,7 @@ class NewsCacheService
                 $cacheKey,
                 $records,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                ]
+                $tags
             );
         }
 
@@ -714,11 +737,22 @@ class NewsCacheService
 
     public function getRecordsLimit(string $cacheKey, Language $language, ?Request $request = null, NewsType | Category | Tag | Contributor | Event | Location | null $filterModel = null, int $limit = 4, ?int $cachedTTL = null): SupportCollection
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
+        if ($filterModel) {
+            $modelName = class_basename($filterModel);
+
+            $tags[] = Str::slug($modelName) . ':' . Str::slug($filterModel->name);
+        }
+
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordByLimit($cacheKey, $this->secondKey, $filterModel, $request, $language, $limit);
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
-            [$this->mainTag, $cacheKey]
+            $tags
         );
 
         if ($records === null) {
@@ -728,10 +762,7 @@ class NewsCacheService
                 $cacheKey,
                 $records,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                ]
+                $tags
             );
         }
 
@@ -740,11 +771,16 @@ class NewsCacheService
 
     public function getRecordsLimitAccrodingNewsPlacement(string $cacheKey, Language $language, ?string $pageName = null, ?string $pageSection = null, ?Category $category = null, int $limit = 4, ?int $cachedTTL = null): SupportCollection
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
         $cacheKey = CacheHelper::cacheKeyGenerateForRecordByLimitAccrodingNewsPlacement($cacheKey, $this->secondKey, $pageName, $pageSection, $category, $limit, $language);
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
-            [$this->mainTag, $cacheKey]
+            $tags
         );
 
         if ($records === null) {
@@ -754,10 +790,7 @@ class NewsCacheService
                 $cacheKey,
                 $records,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                ]
+                $tags
             );
         }
 
@@ -766,9 +799,17 @@ class NewsCacheService
 
     public function getLatestRecord(string $cacheKey, Language $language, ?int $limit = null, bool $isCursorPaginate = false, ?int $cachedTTL = null): SupportCollection | CursorPaginator
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
         $cacheKey = CacheHelper::cacheKeyGenerateForLatest($cacheKey, $this->secondKey, $language, $isCursorPaginate);
 
-        $records = CacheServerHelper::getCachedData($cacheKey);
+        $records = CacheServerHelper::getCachedData(
+            $cacheKey,
+            $tags
+        );
 
         if ($records === null) {
             $records = $this->dbLatest($language, $limit, $isCursorPaginate);
@@ -780,6 +821,7 @@ class NewsCacheService
                 [
                     $cacheKey,
                     $this->mainTag,
+                    $language->code,
                 ]
             );
         }
@@ -789,21 +831,26 @@ class NewsCacheService
 
     public function getPopulerRecord(string $cacheKey, Language $language, ?int $limit = null, ?int $cachedTTL = null): SupportCollection
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
         $cacheKey = CacheHelper::cacheKeyGenerateForPopuler($cacheKey, $this->secondKey, $language);
 
-        $records = CacheServerHelper::getCachedData($cacheKey);
+        $records = CacheServerHelper::getCachedData(
+            $cacheKey,
+            $tags
+        );
 
         if ($records === null) {
-            $records = $this->dbPopuler($language, $limit, );
+            $records = $this->dbPopuler($language, $limit);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
                 $records,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                ]
+                $tags
             );
         }
 
@@ -812,14 +859,16 @@ class NewsCacheService
 
     public function getRecordBySlug(string $cacheKey, Language $language, string $slug, ?int $cachedTTL = null): News
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordBySlug($cacheKey, $this->secondKey, $slug, $language);
 
         $record = CacheServerHelper::getCachedData(
             $cacheKey,
-            [
-                $cacheKey,
-                $this->mainTag,
-            ]
+            $tags
         );
 
         if (! $record) {
@@ -829,10 +878,7 @@ class NewsCacheService
                 $cacheKey,
                 $record,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                ]
+                $tags
             );
         }
 
@@ -841,14 +887,16 @@ class NewsCacheService
 
     public function getRecordById(string $cacheKey, Language $language, string $id, ?int $cachedTTL = null): News
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
         $cacheKey = CacheHelper::cacheKeyGenerateSingleRecordById($cacheKey, $this->secondKey, $id, $language);
 
         $record = CacheServerHelper::getCachedData(
             $cacheKey,
-            [
-                $cacheKey,
-                $this->mainTag,
-            ]
+            $tags
         );
 
         if (! $record) {
@@ -858,10 +906,7 @@ class NewsCacheService
                 $cacheKey,
                 $record,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                ]
+                $tags
             );
         }
 
@@ -870,9 +915,17 @@ class NewsCacheService
 
     public function getBreakingNews(string $cacheKey, Language $language, ?Request $request = null, int $limit = 10, ?int $cachedTTL = null): CursorPaginator
     {
+        $tags = [
+            $cacheKey,
+            $this->mainTag,
+            $language->code,
+        ];
         $cacheKey = CacheHelper::cacheKeyGenerateForBreakingNews($cacheKey, $this->secondKey, $request, $language, $limit);
 
-        $records = CacheServerHelper::getCachedData($cacheKey);
+        $records = CacheServerHelper::getCachedData(
+            $cacheKey,
+            $tags
+        );
 
         if ($records === null) {
             $records = $this->dbBreakingNews($language, $request, $limit);
@@ -881,17 +934,14 @@ class NewsCacheService
                 $cacheKey,
                 $records,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                ]
+                $tags
             );
         }
 
         return $records;
     }
 
-    public function clearCacheByNews(News $news)
+    public function clearCacheByNewsForUpdateNews(News $news)
     {
         $pageCacheKey    = CacheHelper::cacheKeyGenerateSingleRecordBySlug(CacheHelper::TAG_PAGE, $this->secondKey, $news->slug, $news->language ?? null);
         $feedCacheKey    = CacheHelper::cacheKeyGenerateSingleRecordBySlug(CacheHelper::TAG_FEED, $this->secondKey, $news->slug, $news->language ?? null);
@@ -900,5 +950,31 @@ class NewsCacheService
         CacheServerHelper::clearCached($pageCacheKey, [$pageCacheKey, $this->mainTag]);
         CacheServerHelper::clearCached($feedCacheKey, [$feedCacheKey, $this->mainTag]);
         CacheServerHelper::clearCached($sitemapCacheKey, [$sitemapCacheKey, $this->mainTag]);
+    }
+
+    public function clearCacheByNewsForNewlyAddedNews(News $news): void
+    {
+        foreach ([
+            $news->category,
+            $news->event,
+            $news->tag,
+            $news->location,
+            $news->contributor,
+        ] as $model) {
+            if (! $model) {
+                continue;
+            }
+
+            $modelTag = Str::slug(class_basename($model)) . ':' . Str::slug($model->name);
+
+            foreach ([CacheHelper::KEY_PAGE_HOME, CacheHelper::KEY_PAGE] as $cacheKey) {
+                CacheServerHelper::clearCachedByTag([
+                    $cacheKey,
+                    $this->mainTag,
+                    $news->language->code,
+                    $modelTag,
+                ]);
+            }
+        }
     }
 }

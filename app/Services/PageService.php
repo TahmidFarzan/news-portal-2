@@ -97,7 +97,6 @@ class PageService
             CacheHelper::KEY_PAGE,
             $language,
             $slugTree,
-
             $this->cachedTTL
         );
     }
