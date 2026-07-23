@@ -24,7 +24,7 @@ class AuthService
 {
     public function authUser(): User
     {
-        return Auth::user();
+        return $this->findBySlug(Auth::user()->slug);
     }
 
     public function findBySlug(int | string $slugOrId): User
