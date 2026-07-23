@@ -67,6 +67,9 @@ const currentLanguage = ref({})
 const year = new Date().getFullYear()
 const appName = import.meta.env.VITE_APP_NAME
 const appLogo = import.meta.env.VITE_APP_LOGO
+const appEnv = import.meta.env.VITE_APP_ENV
+
+const showLoginUrl = appEnv !== 'production'
 
 const authUser = computed(() => {
     return page.props.auth?.user ?? null
@@ -346,7 +349,7 @@ watch(
                             class="hidden min-[300px]:inline" />
                     </div>
 
-                    <a v-if="!authUser" :href="route('login')"
+                    <a v-if="!authUser && showLoginUrl" :href="route('login')"
                         class="flex items-center gap-1 text-gray-300 hover:text-white max-[450px]:flex-shrink-0">
                         <FontAwesomeIcon icon="arrow-right-to-bracket" />
 
