@@ -234,8 +234,9 @@ onMounted(
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.name') }}</span>
-                        <span class="font-medium">{{ survey?.name ||
-                            t('common.labels.notAvailable') }}</span>
+                        <span class="font-medium">
+                            {{ survey?.name || t('common.labels.notAvailable') }}
+                        </span>
                     </div>
 
                     <div class="flex justify-between">
@@ -249,8 +250,8 @@ onMounted(
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.date') }}</span>
                         <span class="font-medium">
-                            {{ survey?.date || t('common.labels.notAvailable') }}
-
+                            {{ survey?.start_date || t('common.labels.notAvailable') }} -
+                            {{ survey?.end_date || t('common.labels.notAvailable') }}
                         </span>
                     </div>
 

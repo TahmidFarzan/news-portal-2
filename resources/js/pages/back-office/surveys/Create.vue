@@ -43,7 +43,8 @@ const pageTitle = computed(() => {
 const saveForm = useForm({
     name: survey?.name || '',
     brief: survey?.brief || '',
-    date: survey?.date ? formatDate(survey?.date, 'Y-m-d') : null,
+    start_date: survey?.date ? formatDate(survey?.start_date, 'Y-m-d') : null,
+    end_date: survey?.date ? formatDate(survey?.end_date, 'Y-m-d') : null,
     language_id: survey?.language_id || null,
     is_active: survey?.is_active || false,
 })
@@ -58,8 +59,13 @@ function validateForm() {
         valid = false
     }
 
-    if (!saveForm.date) {
-        saveForm.setError('date', t('admin.surveys.create.validation.date'))
+    if (!saveForm.start_date) {
+        saveForm.setError('start_date', t('admin.surveys.create.validation.startDate'))
+        valid = false
+    }
+
+    if (!saveForm.end_date) {
+        saveForm.setError('end_date', t('admin.surveys.create.validation.endDate'))
         valid = false
     }
 
@@ -163,12 +169,10 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('common.labels.name') }} <span
-                                    class="text-red-500">*</span>
+                                {{ t('common.labels.name') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <input v-model="saveForm.name"
-                                :placeholder="t('common.placeholders.enterName')"
+                            <input v-model="saveForm.name" :placeholder="t('common.placeholders.enterName')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'" />
 
@@ -179,10 +183,19 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('common.labels.date') }}
+                                {{ t('common.labels.startDate') }}
                             </label>
 
-                            <input type="date" v-model="saveForm.date"
+                            <input type="date" v-model="saveForm.start_date"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('common.labels.endDate') }}
+                            </label>
+
+                            <input type="date" v-model="saveForm.end_date"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none border-gray-300" />
                         </div>
 

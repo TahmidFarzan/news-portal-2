@@ -334,7 +334,10 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.date ? formatDate(item.date) :
+                                {{ item.start_date ? formatDate(item.start_date) :
+                                    t('common.labels.notAvailable') }}
+
+                                - {{ item.end_date ? formatDate(item.end_date) :
                                     t('common.labels.notAvailable') }}
                             </td>
 

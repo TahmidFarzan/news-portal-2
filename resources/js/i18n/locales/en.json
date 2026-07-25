@@ -115,6 +115,8 @@
             "saving": "Saving...",
             "editRobotsTxt": "Edit Robots.txt",
             "date": "Date",
+            "startDate": "Start Date",
+            "endDate": "End Date",
             "isActive": "Is active",
             "status": "Status",
             "activityLogs2": "Activity logs",
@@ -725,7 +727,8 @@
                     "createSurvey": "Create survey"
                 },
                 "validation": {
-                    "date": "Date is required."
+                    "startDate": "Start Date is required.",
+                    "endDate": "End Date is required."
                 }
             },
             "details": {

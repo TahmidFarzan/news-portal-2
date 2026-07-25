@@ -15,7 +15,8 @@ return new class extends Migration
 
             $table->text('brief')->nullable();
 
-            $table->date('date')->useCurrent();
+            $table->date('start_date')->useCurrent();
+            $table->date('end_date')->useCurrent();
 
             $table->foreignId('created_by_id')->constrained('users')->cascadeOnDelete();
             $table->string('slug', 255)->unique();

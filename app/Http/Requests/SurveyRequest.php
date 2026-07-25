@@ -25,7 +25,16 @@ class SurveyRequest extends FormRequest
         return [
             "name"        => ["required", "string"],
             "brief"       => ["nullable"],
-            "date"        => ["nullable"],
+            'start_date'  => [
+                'required',
+                'date',
+            ],
+
+            'end_date'    => [
+                'required',
+                'date',
+                'after_or_equal:start_date',
+            ],
             "language_id" => ["required"],
         ];
     }
@@ -33,10 +42,17 @@ class SurveyRequest extends FormRequest
     public function messages()
     {
         return [
-            "name.required"        => __("form-requests.survey.name.required"),
-            "name.string"          => __("form-requests.survey.name.string"),
+            "name.required"           => __("form-requests.survey.name.required"),
+            "name.string"             => __("form-requests.survey.name.string"),
 
-            "language_id.required" => __("form-requests.survey_question.language_id.required"),
+            "language_id.required"    => __("form-requests.survey.language_id.required"),
+
+            'start_date.required'     => __('form-requests.survey.start_date.required'),
+            'start_date.date'         => __('form-requests.survey.start_date.date'),
+
+            'end_date.required'       => __('form-requests.survey.end_date.required'),
+            'end_date.date'           => __('form-requests.survey.end_date.date'),
+            'end_date.after_or_equal' => __('form-requests.survey.end_date.after_or_equal'),
         ];
     }
 
@@ -51,7 +67,7 @@ class SurveyRequest extends FormRequest
                 if ($languageQuery->count() === 0) {
                     $validator->errors()->add(
                         'language_id',
-                        __("form-requests.survey_question.language_id.not_found")
+                        __("form-requests.survey.language_id.not_found")
                     );
                 }
             }

@@ -645,10 +645,20 @@ return [
     ],
 
     'survey'          => [
-        'name' => [
+        'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be a string.',
             'max'      => 'Name may not be greater than :max characters.',
+        ],
+        'start_date'        => [
+            'required' => 'Start date is required.',
+            'date'     => 'Start date must be a valid date.',
+        ],
+
+        'end_date'          => [
+            'required'       => 'End date is required.',
+            'date'           => 'End date must be a valid date.',
+            'after_or_equal' => 'End date must be after or equal to start date.',
         ],
         'language_id' => [
             'required'  => 'Language is required.',
@@ -657,7 +667,7 @@ return [
     ],
 
     'survey_question' => [
-        'question'    => [
+        'question' => [
             'required' => 'Question is required.',
             'string'   => 'Question must be a string.',
         ],

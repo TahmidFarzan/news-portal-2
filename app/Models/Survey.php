@@ -23,7 +23,7 @@ use Spatie\Sluggable\SlugOptions;
 #[Table('surveys')]
 #[Fillable([
         'name', 'brief', 'slug',
-        'date', 'created_by_id',
+        'start_date', 'end_date', 'created_by_id',
         "is_active",'language_id'
     ])]
 #[UsePolicy(SurveyPolicy::class)]
@@ -37,7 +37,8 @@ class Survey extends Model
     protected function casts(): array
     {
         return [
-            'date'   => 'date',
+            'start_date'   => 'date',
+            'end_date'   => 'date',
             'is_active'  => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
@@ -49,6 +50,7 @@ class Survey extends Model
         return LogOptions::defaults()
             ->logOnly([
                 'name', 'brief', 'slug',
+                'start_date', 'end_date',
                 'date', 'created_by_id',
                 "is_active",
             ])

@@ -49,8 +49,8 @@ class SurveyService
         if ($request->filled('date')) {
             $date = $request->input('date');
             $date = is_string($date) ? new \DateTime($date) : $date;
-            $query->whereDate('date', '<=', $date)
-                ->orWhereDate('created_at', '<=', $date);
+            $query->whereDate('start_date', '<=', $date)
+                ->whereDate('end_date', '>=', $date);
         }
 
         if ($request->filled('search')) {
@@ -75,9 +75,11 @@ class SurveyService
         try {
 
             DB::transaction(function () use ($request, $survey, $isNew) {
-                $survey->name        = $request->input('name');
-                $survey->brief       = $request->input('brief');
-                $survey->date        = $request->input('date', now());
+                $survey->name  = $request->input('name');
+                $survey->brief = $request->input('brief');
+
+                $survey->start_date  = $request->input('start_date', now());
+                $survey->end_date    = $request->input('end_date', now());
                 $survey->language_id = $request->input('language_id');
 
                 $survey->is_active = $request->input('is_active') ? true : false;

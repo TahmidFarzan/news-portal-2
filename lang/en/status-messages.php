@@ -364,7 +364,7 @@ return [
 
         'update' => [
             'success' => 'Google adsence update successfully.',
-            'failed'  => 'Failed to save update',
+            'failed'  => 'Failed to update google adsence',
         ],
 
         'delete' => [
@@ -381,7 +381,7 @@ return [
 
         'update'   => [
             'success' => 'Survey update successfully.',
-            'failed'  => 'Failed to save update',
+            'failed'  => 'Failed to update survey',
         ],
 
         'delete'   => [
@@ -408,7 +408,7 @@ return [
 
         'update' => [
             'success' => 'Survey question update successfully.',
-            'failed'  => 'Failed to save update',
+            'failed'  => 'Failed to update survey question',
         ],
 
         'delete' => [

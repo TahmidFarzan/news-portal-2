@@ -115,6 +115,8 @@
             "saving": "সেভ হচ্ছে...",
             "editRobotsTxt": "Robots.txt সম্পাদনা করুন",
             "date": "তারিখ",
+            "startDate": "শুরু তারিখ",
+            "endDate": "শেষ তারিখ",
             "isActive": "সক্রিয় কিনা",
             "status": "স্ট্যাটাস",
             "activityLogs2": "অ্যাক্টিভিটি লগ",
@@ -725,7 +727,8 @@
                     "createSurvey": "সার্ভে তৈরি করুন"
                 },
                 "validation": {
-                    "date": "তারিখ আবশ্যক।"
+                    "startDate": "শুরু তারিখ আবশ্যক।",
+                    "endDate": "শেষ তারিখ আবশ্যক।"
                 }
             },
             "details": {

@@ -29,7 +29,8 @@ class SurveyFactory extends Factory
         return [
             'name'          => $name,
             'brief'         => $brief,
-            'date'          => now(),
+            'start_date'    => now(),
+            'end_date'      => now(),
             "language_id"   => $language?->id ?? "1",
             "created_by_id" => $user?->id ?? "1",
             "is_active"     => $isActive,
