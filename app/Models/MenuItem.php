@@ -96,7 +96,7 @@ class MenuItem extends Model
 
     public function getHasDescendantsAttribute(): bool
     {
-        return ($this->descendants()->count() > 0) ? true : false;
+        return $this->descendants()->exists() ? true : false;
     }
 
     public function getIndentationNameAttribute(): ?string
