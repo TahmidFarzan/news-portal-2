@@ -253,7 +253,7 @@ onMounted(async () => {
                     :placeholder="t('common.labels.perPage')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
-                    :selectedItem="filterForm.created_by_id" :apiUrl="route('search.surveys')" :multiple="false"
+                    :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     :placeholder="t('common.labels.createdBy')" />
 
                 <SelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
