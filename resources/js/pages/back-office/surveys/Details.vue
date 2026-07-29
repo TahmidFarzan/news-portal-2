@@ -206,13 +206,13 @@ onMounted(
                     {{ t('common.actions.delete') }}
                 </button>
 
-                <a v-if="canAccessQuestion(survey)" :href="route('back-office.surveys.survey-questions.index', { slug: survey?.slug })"
+                <a v-if="canAccessQuestion()" :href="route('back-office.surveys.survey-questions.index', { slug: survey?.slug })"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="list" />
                     {{ t('common.messages.questions') }}
                 </a>
 
-                <a v-if="canCreateQuestion(survey)" :href="route('back-office.surveys.survey-questions.create', { slug: survey?.slug })"
+                <a v-if="canCreateQuestion()" :href="route('back-office.surveys.survey-questions.create', { slug: survey?.slug })"
                     class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="add" />
                     {{ t('common.messages.createQuestion') }}
