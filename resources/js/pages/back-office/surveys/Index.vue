@@ -394,14 +394,14 @@ onMounted(async () => {
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
 
-                                    <a v-if="canAccessQuestion(item)"
+                                    <a v-if="canAccessQuestion()"
                                         :href="route('back-office.surveys.survey-questions.index', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-500 hover:bg-blue-50 border"
                                         :title="t('common.messages.questions')">
                                         <FontAwesomeIcon icon="list" />
                                     </a>
 
-                                    <a v-if="canCreateQuestion(item)"
+                                    <a v-if="canCreateQuestion()"
                                         :href="route('back-office.surveys.survey-questions.create', { slug: item.slug })"
                                         class="p-2 rounded-md text-green-600 hover:bg-green-50 border"
                                         :title="t('common.messages.createQuestion')">
