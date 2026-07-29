@@ -14,7 +14,7 @@
         "romanzipp/laravel-queue-monitor": "^5.4",
         "spatie/laravel-activitylog": "^5.0",
         "spatie/laravel-medialibrary": "^11.21",
-        "spatie/laravel-sluggable": "4.0.2",
+        "spatie/laravel-sluggable": "^4.0",
         "staudenmeir/laravel-adjacency-list": "^1.26",
         "tightenco/ziggy": "^2.6"
     },
