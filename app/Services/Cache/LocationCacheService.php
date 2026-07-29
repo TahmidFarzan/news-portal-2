@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Cache;
 
 use App\Helpers\CacheHelper;
@@ -9,6 +10,7 @@ use App\Models\Location;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class LocationCacheService
 {
@@ -47,21 +49,63 @@ class LocationCacheService
         return $records;
     }
 
-    private function dbRecordMaxDepthAndLevel(Language $language, ?Category $category, ): object
+    private function dbRecordMaxDepthAndLevel(Language $language, ?Category $category,): object
     {
-        $maxDepth = Location::withQueryConstraint(
-            function (Builder $query) use ($category, $language) {
-                $query->where('locations.category_id', $category?->id)
-                    ->where('locations.language_id', $language?->id);
-            },
-            function () use ($category) {
-                return Location::treeOf(function (Builder $query) use ($category) {
-                    $query->whereNull('locations.parent_id')
-                        ->where('locations.category_id', $category?->id);
-                })
-                    ->max('depth');
-            }
-        );
+
+        $maxDepth = 0;
+        if (DB::connection()->getDriverName() === 'sqlite') {
+
+            $bindings = [
+                $category?->id,
+                $language->id,
+                $category?->id,
+                $language->id,
+            ];
+
+            $row = DB::selectOne(
+                <<<SQL
+            WITH RECURSIVE location_tree AS (
+                SELECT
+                    id,
+                    parent_id,
+                    0 AS depth
+                FROM locations
+                WHERE parent_id IS NULL
+                  AND category_id = ?
+                  AND language_id = ?
+
+                UNION ALL
+
+                SELECT
+                    l.id,
+                    l.parent_id,
+                    lt.depth + 1
+                FROM locations l
+                INNER JOIN location_tree lt
+                    ON lt.id = l.parent_id
+                WHERE l.category_id = ?
+                  AND l.language_id = ?
+            )
+            SELECT COALESCE(MAX(depth), 0) AS max_depth
+            FROM location_tree
+            SQL,
+                $bindings
+            );
+
+            $maxDepth = (int) ($row->max_depth ?? 0);
+        } else {
+
+            $maxDepth = Location::withQueryConstraint(
+                fn(Builder $query) => $query
+                    ->where('locations.category_id', $category?->id)
+                    ->where('locations.language_id', $language->id),
+
+                fn() => Location::treeOf(
+                    fn(Builder $query) => $query
+                        ->whereNull('parent_id')
+                )
+            )->max('depth') ?? 0;
+        }
 
         $maxDepth = $maxDepth !== null ? (int) $maxDepth : null;
 
@@ -90,7 +134,7 @@ class LocationCacheService
         return $records;
     }
 
-    private function dbRecordByIdOrSlug(Language $language, string | int $idOrSlug, ): Location
+    private function dbRecordByIdOrSlug(Language $language, string | int $idOrSlug,): Location
     {
         $record = Location::with(['language', 'parent', 'children']);
 
@@ -105,7 +149,7 @@ class LocationCacheService
         return $record;
     }
 
-    private function dbRecordSlugTree(Language $language, string $slugTree, ): Location
+    private function dbRecordSlugTree(Language $language, string $slugTree,): Location
     {
         $record = Location::with(['language', 'parent', 'children']);
 
@@ -178,7 +222,7 @@ class LocationCacheService
         );
 
         if (! $data) {
-            $data = $this->dbRecordMaxDepthAndLevel($language, $category, );
+            $data = $this->dbRecordMaxDepthAndLevel($language, $category,);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -207,7 +251,7 @@ class LocationCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordSlugTree($language, $slugTree, );
+            $record = $this->dbRecordSlugTree($language, $slugTree,);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -236,7 +280,7 @@ class LocationCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($language, $id, );
+            $record = $this->dbRecordByIdOrSlug($language, $id,);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -265,7 +309,7 @@ class LocationCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($language, $slug, );
+            $record = $this->dbRecordByIdOrSlug($language, $slug,);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
