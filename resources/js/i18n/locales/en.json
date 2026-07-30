@@ -140,7 +140,8 @@
             "option" : "Option",
             "correct" : "Correct",
             "answerType" : "Answer type",
-            "point" : "Point"
+            "point" : "Point",
+            "options" : "Options"
         },
         "actions": {
             "details": "Details",
@@ -170,7 +171,8 @@
             "inactivating": "Inactivating...",
             "inactive": "Inactive",
             "activating": "Activating...",
-            "active": "Active"
+            "active": "Active",
+            "add" : "Add"
         },
         "placeholders": {
             "parent": "Parent",
@@ -291,7 +293,12 @@
             "bodyIsRequired": "Body is required.",
             "optionIsRequired": "Option is required.",
             "pointIsRequired": "Point is required.",
-            "answerTypeIsRequired": "Answer type is required."
+            "answerTypeIsRequired": "Answer type is required.",
+            "optionDuplicate": "Duplicate option is added.",
+            "singleCorrectRequired" : "Only one can be correct answer.",
+            "multipleCorrectRequired" : "One or multiple can be correct answer.",
+            "optionsRequired" : "Options are needed",
+            "optionTextRequired" : "Option is required."
         },
         "cursorPagination": {
             "actions": {
