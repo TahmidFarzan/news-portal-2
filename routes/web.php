@@ -9,6 +9,7 @@ use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
 use App\Http\Controllers\BackOffice\GoogleAdsenceController;
+use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
 use App\Http\Controllers\BackOffice\MediaController;
 use App\Http\Controllers\BackOffice\MenuController;
@@ -20,7 +21,7 @@ use App\Http\Controllers\BackOffice\TagController;
 use App\Http\Controllers\BackOffice\ThemeController;
 use App\Http\Controllers\BackOffice\TrendController;
 use App\Http\Controllers\BackOffice\UserController;
-use App\Http\Controllers\BackOffice\LanguageController;
+use App\Http\Controllers\BackOffice\QuizController;
 
 //
 use App\Http\Controllers\FeedController;
@@ -102,6 +103,7 @@ Route::prefix('search')->name('search.')->group(function () {
 
         Route::get('google-adsence-types', [SearchController::class, 'googleAdsenceTypes'])->name('google-adsence-types');
         Route::get('google-adsence-positions', [SearchController::class, 'googleAdsencePositions'])->name('google-adsence-positions');
+        Route::get('quiz-question-answer-types', [SearchController::class, 'quizQuestionAnswerTypes'])->name('quiz-question-answer-types');
     });
 
     Route::middleware(['response.cache:60,public,30,etag'])->group(function () {
@@ -150,7 +152,6 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
 
         Route::post('quick-save', [MediaController::class, 'quickSave'])->name('quick-save');
         Route::patch('quick-update/{slug}', [MediaController::class, 'quickUpdate'])->name('quick-update');
-
     });
 
     Route::prefix('users')->name('users.')->group(function () {
@@ -356,6 +357,41 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
         });
     });
 
+    Route::prefix('quizzes')->name('quizzes.')->group(function () {
+        Route::get('/', [QuizController::class, 'index'])->name('index');
+        Route::get('create', [QuizController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [QuizController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [QuizController::class, 'details'])->name('details');
+
+        Route::post('save', [QuizController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [QuizController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [QuizController::class, 'delete'])->name('delete');
+        Route::patch('inactive/{slug}', [QuizController::class, 'inactive'])->name('inactive');
+        Route::patch('active/{slug}', [QuizController::class, 'active'])->name('active');
+
+        Route::prefix('{slug}/quiz-questions')->name('quiz-questions.')->group(function () {
+            Route::get('/', [QuizController::class, 'quizQuestionIndex'])->name('index');
+            Route::get('create', [QuizController::class, 'quizQuestionCreate'])->name('create');
+            Route::get('edit/{quizQuestionSlug}', [QuizController::class, 'quizQuestionEdit'])->name('edit');
+            Route::get('details/{quizQuestionSlug}', [QuizController::class, 'quizQuestionDetails'])->name('details');
+
+            Route::post('save', [QuizController::class, 'quizQuestionSave'])->name('save');
+            Route::patch('update/{quizQuestionSlug}', [QuizController::class, 'quizQuestionUpdate'])->name('update');
+            Route::delete('delete/{quizQuestionSlug}', [QuizController::class, 'quizQuestionDelete'])->name('delete');
+
+            Route::prefix('{quizQuestionSlug}/quiz-question-options')->name('quiz-question-options.')->group(function () {
+                Route::get('/', [QuizController::class, 'quizQuestionOptionIndex'])->name('index');
+                Route::get('details/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionDetails'])->name('details');
+                Route::get('create', [QuizController::class, 'quizQuestionOptionCreate'])->name('create');
+                Route::get('edit/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionEdit'])->name('edit');
+
+                Route::post('save', [QuizController::class, 'quizQuestionOptionSave'])->name('save');
+                Route::patch('update/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionUpdate'])->name('update');
+                Route::delete('delete/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionDelete'])->name('delete');
+            });
+        });
+    });
+
     Route::prefix('activity-logs')->name('activity-logs.')->middleware(['is.super.admin'])->group(function () {
         Route::get('index', [ActivityLogController::class, 'index'])->name('index');
 
@@ -423,7 +459,6 @@ Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'e
         Route::get('events/{slug}/news.xml', [SitemapController::class, 'localizedEventNews'])->name('event.news');
         Route::get('tags/{slug}/news.xml', [SitemapController::class, 'localizedTagNews'])->name('tag.news');
         Route::get('contributors/{slug}/news.xml', [SitemapController::class, 'localizedContributorNews'])->name('contributor.news');
-
     });
 
     Route::prefix('feeds')->name('feeds.')->group(function () {
@@ -475,7 +510,6 @@ Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'e
                 Route::get('get', [PageController::class, 'localizedHomeSurveys'])->name('get');
                 Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'localizedHomeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
             });
-
         });
 
         Route::get('latest', [PageController::class, 'localizedLatest'])->name('latest');
@@ -515,7 +549,6 @@ Route::prefix('sitemaps')->name('sitemaps.')->middleware(['xml.response'])->grou
     Route::get('events/{slug}/news.xml', [SitemapController::class, 'eventNews'])->name('event.news');
     Route::get('tags/{slug}/news.xml', [SitemapController::class, 'tagNews'])->name('tag.news');
     Route::get('contributors/{slug}/news.xml', [SitemapController::class, 'contributorNews'])->name('contributor.news');
-
 });
 
 Route::prefix('feeds')->name('feeds.')->group(function () {
@@ -575,7 +608,6 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
             Route::get('get', [PageController::class, 'homeSurveys'])->name('get');
             Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'homeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
         });
-
     });
 
     Route::get('latest', [PageController::class, 'latest'])->name('latest');
@@ -595,5 +627,4 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
     Route::get('news/{slug}', [PageController::class, 'newsDetails'])->name('news.details');
 
     Route::get('{slugTree}', [PageController::class, 'page'])->where('slugTree', '.*')->name('page');
-
 });

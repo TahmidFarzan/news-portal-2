@@ -85,6 +85,13 @@ class SearchController extends Controller
         );
     }
 
+    public function quizQuestionAnswerTypes(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->quizQuestionAnswerTypes($request)
+        );
+    }
+
     public function pageSections(Request $request): JsonResponse
     {
         return response()->json(

@@ -33,6 +33,10 @@ class UserPermissionHelper
     public const MODULE_SURVEY          = 'Survey';
     public const MODULE_SURVEY_QUESTION = 'Survey question';
 
+    public const MODULE_QUIZ                 = 'Quiz';
+    public const MODULE_QUIZ_QUESTION        = 'Quiz question';
+    public const MODULE_QUIZ_QUESTION_OPTION = 'Quiz question option';
+
     public static function modules(): Collection
     {
         return SystemHelper::toOptions([
@@ -53,6 +57,9 @@ class UserPermissionHelper
             self::MODULE_USER,
             self::MODULE_SURVEY,
             self::MODULE_SURVEY_QUESTION,
+            self::MODULE_QUIZ,
+            self::MODULE_QUIZ_QUESTION,
+            self::MODULE_QUIZ_QUESTION_OPTION,
         ]);
     }
 
@@ -64,6 +71,7 @@ class UserPermissionHelper
             self::MODULE_PAGE,
             self::MODULE_USER,
             self::MODULE_SURVEY,
+            self::MODULE_QUIZ,
         ];
 
         if (in_array($moduleName, $fullPermissionModules, true)) {

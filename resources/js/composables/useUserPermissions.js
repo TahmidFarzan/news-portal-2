@@ -22,6 +22,9 @@ export const groups = {
     User: 'User',
     Survey: 'Survey',
     SurveyQuestion: 'Survey question',
+    Quiz: 'Quiz',
+    QuizQuestion: 'Quiz question',
+    QuizQuestionOption: 'Quiz question option',
 }
 
 export const access = {
@@ -217,6 +220,23 @@ export const canAccessSurveyQuestion = async (authUser) => hasPermission(authUse
 export const canCreateSurveyQuestion = async (authUser) => hasPermission(authUser, groups.SurveyQuestion, access.Create)
 export const canUpdateSurveyQuestion = async (authUser, surveyQuestion) => hasPermission(authUser, groups.SurveyQuestion, access.Update)
 export const canDeleteSurveyQuestion = async (authUser, surveyQuestion) => hasPermission(authUser, groups.SurveyQuestion, access.Delete)
+
+export const canAccessQuiz = async (authUser) => hasPermission(authUser, groups.Quiz, access.ViewAny)
+export const canCreateQuiz = async (authUser) => hasPermission(authUser, groups.Quiz, access.Create)
+export const canUpdateQuiz = async (authUser, quiz) => hasPermission(authUser, groups.Quiz, access.Update)
+export const canInactiveQuiz = async (authUser, quiz) => hasPermission(authUser, groups.Quiz, access.Delete)
+export const canActiveQuiz = async (authUser, quiz) => hasPermission(authUser, groups.Quiz, access.Restore)
+export const canDeleteQuiz = async (authUser, quiz) => hasPermission(authUser, groups.Quiz, access.ForceDelete)
+
+export const canAccessQuizQuestion = async (authUser) => hasPermission(authUser, groups.QuizQuestion, access.ViewAny)
+export const canCreateQuizQuestion = async (authUser) => hasPermission(authUser, groups.QuizQuestion, access.Create)
+export const canUpdateQuizQuestion = async (authUser, quiz) => hasPermission(authUser, groups.QuizQuestion, access.Update)
+export const canDeleteQuizQuestion = async (authUser, quiz) => hasPermission(authUser, groups.QuizQuestion, access.Delete)
+
+export const canAccessQuizQuestionOption = async (authUser) => hasPermission(authUser, groups.QuizQuestionOption, access.ViewAny)
+export const canCreateQuizQuestionOption = async (authUser) => hasPermission(authUser, groups.QuizQuestionOption, access.Create)
+export const canUpdateQuizQuestionOption = async (authUser, quiz) => hasPermission(authUser, groups.QuizQuestionOption, access.Update)
+export const canDeleteQuizQuestionOption = async (authUser, quiz) => hasPermission(authUser, groups.QuizQuestionOption, access.Delete)
 
 export const canAccessNewsAttributes = async (authUser) =>
     (

@@ -24,7 +24,8 @@ import {
     faFile,
     faBullhorn,
     faSquarePollHorizontal,
-    faLanguage
+    faLanguage,
+    faQuestionCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
@@ -48,7 +49,8 @@ library.add(
     faFile,
     faBullhorn,
     faSquarePollHorizontal,
-    faLanguage
+    faLanguage,
+    faQuestionCircle
 )
 const { t } = useTranslate()
 
@@ -68,7 +70,8 @@ import {
     canAccessEvent,
     canAccessLocation,
     canAccessContributor,
-    canAccessSurvey
+    canAccessSurvey,
+    canAccessQuiz
 } from '@/composables/useUserPermissions'
 
 const {
@@ -165,6 +168,10 @@ const canAccessGoogleAdsenceComputed = computed(() => {
 
 const canAccessSurveyComputed = computed(() => {
     return canAccessSurvey(authUser)
+})
+
+const canAccessQuizComputed = computed(() => {
+    return canAccessQuiz(authUser)
 })
 
 const toggleShowSubMenu = (key) => {
@@ -358,6 +365,13 @@ const isSubMenuVisible = (key) => {
             :class="isCurrentPage('/back-office/surveys/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="square-poll-horizontal" />
             {{ t("common.labels.surveys") }}
+        </a>
+
+        <a v-if="canAccessQuizComputed" :href="route('back-office.quizzes.index')"
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            :class="isCurrentPage('/back-office/quizzes/*') ? 'bg-gray-200 font-medium' : ''">
+            <FontAwesomeIcon icon="question-circle" />
+            {{ t("common.labels.quizzes") }}
         </a>
     </div>
 </template>

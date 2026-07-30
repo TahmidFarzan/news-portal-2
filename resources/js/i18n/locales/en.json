@@ -41,6 +41,7 @@
             "users": "Users",
             "themes": "Themes",
             "surveys": "Surveys",
+            "quizzes" : "Quizzes",
             "loading": "Loading",
             "languages": "Languages",
             "noMenuFound": "No menu found",
@@ -132,7 +133,14 @@
             "category": "Category",
             "video": "Video",
             "image_gallery": "Image gallery",
-            "clear_cache" : "Clear cache"
+            "clear_cache" : "Clear cache",
+            "quiz" : "Quiz",
+            "quizQuestions" : "Quiz questions",
+            "quizQuestionOptions" : "Quiz question options",
+            "option" : "Option",
+            "correct" : "Correct",
+            "answerType" : "Answer type",
+            "point" : "Point"
         },
         "actions": {
             "details": "Details",
@@ -181,7 +189,12 @@
             "addKeywords": "Add keywords",
             "selectPosition": "Select position",
             "selectCategory": "Select category",
-            "searchSurvey": "Search survey..."
+            "searchSurvey": "Search survey...",
+            "searchQuiz": "Search quiz...",
+            "searchQuizQuestion": "Search quiz question...",
+            "searchQuizQuestionOption": "Search quiz question option...",
+            "position" : "Enter position.",
+            "point" : "Enter point"
         },
         "messages": {
             "showAll": "Show All",
@@ -225,7 +238,9 @@
             "createQuestion": "Create question",
             "isTrend": "Is Trend",
             "isCurrentTrend": "Is current trend",
-            "text": "©"
+            "text": "©",
+            "questionOptions" : "Question options",
+            "createQuestionOption" : "Question option create"
         },
         "modals": {
             "deleteConfirmation": "Delete Confirmation",
@@ -273,7 +288,10 @@
             "titleIsRequired": "Title is required.",
             "typeIsRequired": "Type is required.",
             "briefIsRequired": "Brief is required.",
-            "bodyIsRequired": "Body is required."
+            "bodyIsRequired": "Body is required.",
+            "optionIsRequired": "Option is required.",
+            "pointIsRequired": "Point is required.",
+            "answerTypeIsRequired": "Answer type is required."
         },
         "cursorPagination": {
             "actions": {
@@ -626,6 +644,71 @@
                 },
                 "deleteModal": {
                     "title": "Delete Page"
+                }
+            }
+        },
+        "quizzes": {
+            "create": {
+                "labels": {
+                    "createQuiz": "Create quiz"
+                },
+                "validation": {
+                    "startDate": "Start Date is required.",
+                    "endDate": "End Date is required."
+                }
+            },
+            "details": {
+                "labels": {
+                    "quizDetails": "Quiz details"
+                }
+            },
+            "index": {
+                "labels": {
+                    "noQuizFound": "No quiz found."
+                }
+            }
+        },
+        "quizQuestions": {
+            "create": {
+                "labels": {
+                    "createQuiz": "Create Quiz Question"
+                },
+                "validation": {
+                    "question": "Question is required.",
+                    "answer_type": "Answer type is required.",
+                    "point": "Point is required.",
+                    "position": "Position is required."
+                }
+            },
+            "details": {
+                "labels": {
+                    "quizQuestion": "Quiz Question details"
+                }
+            },
+            "index": {
+                "labels": {
+                    "noQuizQuestionFound": "No quiz question found."
+                }
+            }
+        },
+        "quizQuestionOptions": {
+            "create": {
+                "labels": {
+                    "createQuiz": "Create quiz question"
+                },
+                "validation": {
+                    "option": "Option is required.",
+                    "position": "Position is required."
+                }
+            },
+            "details": {
+                "labels": {
+                    "quizQuestionOption": "Quiz question option details"
+                }
+            },
+            "index": {
+                "labels": {
+                    "noQuizQuestionOptionFound": "No quiz question found."
                 }
             }
         },

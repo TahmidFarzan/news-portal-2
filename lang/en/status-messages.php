@@ -417,6 +417,67 @@ return [
         ],
     ],
 
+    'quiz-question' => [
+        'save'   => [
+            'success' => 'Quiz question saved successfully.',
+            'failed'  => 'Failed to save quiz question.',
+        ],
+
+        'update' => [
+            'success' => 'Quiz question update successfully.',
+            'failed'  => 'Failed to update quiz question',
+        ],
+
+        'delete' => [
+            'success' => 'Quiz question deleted successfully.',
+            'failed'  => 'Failed to delete quiz question.',
+        ],
+    ],
+
+    'quiz-question-option' => [
+        'save'   => [
+            'success' => 'Quiz question option saved successfully.',
+            'failed'  => 'Failed to save quiz question option.',
+        ],
+
+        'update' => [
+            'success' => 'Quiz question option update successfully.',
+            'failed'  => 'Failed to update quiz question option',
+        ],
+
+        'delete' => [
+            'success' => 'Quiz question option deleted successfully.',
+            'failed'  => 'Failed to delete quiz question option.',
+        ],
+    ],
+
+    'quiz' => [
+        'save'   => [
+            'success' => 'Quiz saved successfully.',
+            'failed'  => 'Failed to save quiz.',
+        ],
+
+        'update' => [
+            'success' => 'Quiz update successfully.',
+            'failed'  => 'Failed to update quiz',
+        ],
+
+        'delete' => [
+            'success' => 'Quiz deleted successfully.',
+            'failed'  => 'Failed to delete quiz.',
+        ],
+
+        'active'   => [
+            'success' => 'Quiz active successfully.',
+            'failed'  => 'Failed to active quiz.',
+        ],
+
+        'inactive' => [
+            'success' => 'Quiz inactive successfully.',
+            'failed'  => 'Failed to inactive quiz.',
+        ],
+    ],
+
     // Auth
     'auth'            => [
         'login'              => [

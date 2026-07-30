@@ -241,7 +241,6 @@ class PageService
             CacheHelper::KEY_PAGE,
             $language,
             $category,
-
             $this->cachedTTL
         );
     }
@@ -437,7 +436,7 @@ class PageService
 
     public function homeCategoryNews(Request $request, Language $language, Category $category): Collection
     {
-        return $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
+        $news = $this->newsCacheService->getRecordsLimitAccrodingNewsPlacement(
             CacheHelper::KEY_PAGE_HOME,
             $language,
             PageHelper::PAGE_HOME,
@@ -447,6 +446,7 @@ class PageService
             $request->input('limit', 4),
             $this->cachedTTL
         );
+        return $news;
     }
 
     public function homeNewsTypeNews(NewsType $newsType, Language $language): Collection

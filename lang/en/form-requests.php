@@ -1,11 +1,11 @@
 <?php
 
 return [
-    "api"             => [
+    "api"                  => [
         'timeout' => 'Api responce timeout.',
     ],
 
-    'auth'            => [
+    'auth'                 => [
         'login'           => [
             'email'    => [
                 'required' => 'Please enter your email address.',
@@ -117,7 +117,7 @@ return [
         ],
     ],
 
-    'media_quick'     => [
+    'media_quick'          => [
         'alt'     => [
             'string' => 'Alt must be string.',
         ],
@@ -131,7 +131,7 @@ return [
         ],
     ],
 
-    'user'            => [
+    'user'                 => [
         'name'                  => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -189,7 +189,7 @@ return [
         ],
     ],
 
-    'language'        => [
+    'language'             => [
         'name'   => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -211,7 +211,7 @@ return [
         ],
     ],
 
-    'category'        => [
+    'category'             => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -230,7 +230,7 @@ return [
         ],
     ],
 
-    'tag'             => [
+    'tag'                  => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -244,7 +244,7 @@ return [
         ],
     ],
 
-    'trend'           => [
+    'trend'                => [
         'tag_id'   => [
             'required'  => 'Tag is required.',
             "not_found" => 'Tag is not exit.',
@@ -256,7 +256,7 @@ return [
         ],
     ],
 
-    'location'        => [
+    'location'             => [
         'name'             => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -313,7 +313,7 @@ return [
         ],
     ],
 
-    'event'           => [
+    'event'                => [
         'name'                 => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -343,7 +343,7 @@ return [
         ],
     ],
 
-    'contributor'     => [
+    'contributor'          => [
         'name'          => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -359,7 +359,7 @@ return [
 
     ],
 
-    'news'            => [
+    'news'                 => [
         'title'                             => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -482,7 +482,7 @@ return [
 
     ],
 
-    'breaking_news'   => [
+    'breaking_news'        => [
         'title'       => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -501,7 +501,7 @@ return [
         ],
     ],
 
-    'page'            => [
+    'page'                 => [
         'title'          => [
             'required' => 'Title is required.',
             'string'   => 'Title must be string.',
@@ -529,7 +529,7 @@ return [
 
     ],
 
-    'menu'            => [
+    'menu'                 => [
         'name'         => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -548,7 +548,7 @@ return [
         ],
     ],
 
-    'menu_item'       => [
+    'menu_item'            => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be string.',
@@ -585,7 +585,7 @@ return [
 
     ],
 
-    'theme'           => [
+    'theme'                => [
         'group' => [
             'required' => 'Group is required.',
             'string'   => 'Group must be a string.',
@@ -616,7 +616,7 @@ return [
         ],
     ],
 
-    'google_adsence'  => [
+    'google_adsence'       => [
         'name'     => [
             'required' => 'Group is required.',
             'string'   => 'Group must be a string.',
@@ -644,18 +644,18 @@ return [
         ],
     ],
 
-    'survey'          => [
+    'survey'               => [
         'name'        => [
             'required' => 'Name is required.',
             'string'   => 'Name must be a string.',
             'max'      => 'Name may not be greater than :max characters.',
         ],
-        'start_date'        => [
+        'start_date'  => [
             'required' => 'Start date is required.',
             'date'     => 'Start date must be a valid date.',
         ],
 
-        'end_date'          => [
+        'end_date'    => [
             'required'       => 'End date is required.',
             'date'           => 'End date must be a valid date.',
             'after_or_equal' => 'End date must be after or equal to start date.',
@@ -666,10 +666,164 @@ return [
         ],
     ],
 
-    'survey_question' => [
+    'survey_question'      => [
         'question' => [
             'required' => 'Question is required.',
             'string'   => 'Question must be a string.',
         ],
     ],
+
+    'quiz'                 => [
+
+        'name'              => [
+            'required' => 'Quiz name is required.',
+            'string'   => 'Quiz name must be a string.',
+            'max'      => 'Quiz name may not be greater than 255 characters.',
+        ],
+
+        'language_id'       => [
+            'required'  => 'Language is required.',
+            'not_found' => 'Selected language was not found.',
+        ],
+
+        'brief'             => [
+            'string' => 'Brief must be a string.',
+        ],
+
+        'start_date'        => [
+            'required' => 'Start date is required.',
+            'date'     => 'Start date must be a valid date.',
+        ],
+
+        'end_date'          => [
+            'required'       => 'End date is required.',
+            'date'           => 'End date must be a valid date.',
+            'after_or_equal' => 'End date must be after or equal to the start date.',
+        ],
+
+        'is_active'        => [
+            'required' => 'Current status is required.',
+            'boolean'  => 'Current status must be true or false.',
+        ],
+
+        'show_bellow_event' => [
+            'required' => 'Show below event field is required.',
+            'boolean'  => 'Show below event must be true or false.',
+        ],
+
+        'questions'         => [
+            'required' => 'At least one question is required.',
+            'array'    => 'Questions must be a valid array.',
+            'min'      => 'At least one question is required.',
+        ],
+
+        'question'          => [
+            'required' => 'Question is required.',
+            'string'   => 'Question must be a string.',
+        ],
+
+        'answer_type'       => [
+            'required' => 'Answer type is required.',
+            'in'       => 'Answer type must be either Single or Multiple.',
+        ],
+
+        'point'             => [
+            'required' => 'Point is required.',
+            'numeric'  => 'Point must be a number.',
+            'min'      => 'Point must be at least 0.',
+        ],
+
+        'position'          => [
+            'integer' => 'Position must be an integer.',
+            'min'     => 'Position must be at least 1.',
+        ],
+
+        'options'           => [
+            'required' => 'At least one options are required.',
+            'array'    => 'Options must be a valid array.',
+            'min'      => 'At least one options are required.',
+        ],
+
+        'option'            => [
+            'required' => 'Option is required.',
+            'string'   => 'Option must be a string.',
+        ],
+
+        'is_correct'        => [
+            'required' => 'Please specify whether the option is correct.',
+            'boolean'  => 'Correct value must be true or false.',
+        ],
+
+        'answer'            => [
+            'single'   => 'A Single answer question must have exactly one correct option.',
+            'multiple' => 'A Multiple answer question must have at least one correct option.',
+        ],
+
+    ],
+
+    'quiz_question'        => [
+
+        'question'    => [
+            'required' => 'Question is required.',
+            'string'   => 'Question must be a string.',
+        ],
+
+        'answer_type' => [
+            'required' => 'Answer type is required.',
+            'in'       => 'Answer type must be either Single or Multiple.',
+        ],
+
+        'point'       => [
+            'required' => 'Point is required.',
+            'numeric'  => 'Point must be a number.',
+            'min'      => 'Point must be at least 0.',
+        ],
+
+        'position'    => [
+            'integer' => 'Position must be an integer.',
+            'min'     => 'Position must be at least 1.',
+        ],
+
+        'options'     => [
+            'required' => 'At least one options are required.',
+            'array'    => 'Options must be a valid array.',
+            'min'      => 'At least one options are required.',
+        ],
+
+        'option'      => [
+            'required' => 'Option is required.',
+            'string'   => 'Option must be a string.',
+        ],
+
+        'is_correct'  => [
+            'required' => 'Please specify whether the option is correct.',
+            'boolean'  => 'Correct value must be true or false.',
+        ],
+
+        'answer'      => [
+            'single'   => 'A Single answer question must have exactly one correct option.',
+            'multiple' => 'A Multiple answer question must have at least one correct option.',
+        ],
+
+    ],
+
+    'quiz_question_option' => [
+
+        'option'     => [
+            'required' => 'Option is required.',
+            'string'   => 'Option must be a string.',
+        ],
+
+        'is_correct' => [
+            'required' => 'Please specify whether the option is correct.',
+            'boolean'  => 'Correct value must be true or false.',
+        ],
+
+        'position'   => [
+            'integer' => 'Position must be an integer.',
+            'min'     => 'Position must be at least 1.',
+        ],
+
+    ],
+
 ];

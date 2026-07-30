@@ -41,6 +41,7 @@
             "users": "ইউজারসমূহ",
             "themes": "থিমসমূহ",
             "surveys": "সার্ভেসমূহ",
+            "quizzes": "কুইজ",
             "loading": "লোড হচ্ছে",
             "languages": "ভাষা",
             "noMenuFound": "কোনো মেনু পাওয়া যায়নি",
@@ -132,7 +133,11 @@
             "category": "ক্যাটাগরি",
             "video": "ভিডিও",
             "image_gallery": "ইমেজ গ্যালারি",
-            "clear_cache" : "ক্লিয়ার ক্যাশ"
+            "clear_cache": "ক্লিয়ার ক্যাশ",
+            "quiz": "কুইজ",
+            "quizQuestions": "কুইজ প্রশ্ন",
+            "quizQuestionOptions": "কুইজের প্রশ্ন বিকল্প",
+            "option" : "Option"
         },
         "actions": {
             "details": "বিস্তারিত",
@@ -181,7 +186,8 @@
             "addKeywords": "কীওয়ার্ড যোগ করুন",
             "selectPosition": "পজিশন নির্বাচন করুন",
             "selectCategory": "ক্যাটাগরি নির্বাচন করুন",
-            "searchSurvey": "সার্ভে খুঁজুন..."
+            "searchSurvey": "সার্ভে খুঁজুন...",
+            "searchQuiz": "কুইজ খুঁজুন..."
         },
         "messages": {
             "showAll": "সব দেখুন",
@@ -225,7 +231,9 @@
             "createQuestion": "প্রশ্ন তৈরি করুন",
             "isTrend": "ট্রেন্ড কিনা",
             "isCurrentTrend": "বর্তমান ট্রেন্ড কিনা",
-            "text": "©"
+            "text": "©",
+            "questionOptions": "প্রশ্ন পছন্দ",
+            "createQuestionOption": "প্রশ্ন পছন্দ তৈরি করুন"
         },
         "modals": {
             "deleteConfirmation": "মুছে ফেলার নিশ্চিতকরণ",
@@ -626,6 +634,50 @@
                 },
                 "deleteModal": {
                     "title": "পেজ মুছুন"
+                }
+            }
+        },
+        "quizzes": {
+            "create": {
+                "labels": {
+                    "createQuiz": "কুইজ তৈরি করুন"
+                },
+                "validation": {
+                    "startDate": "শুরু তারিখ আবশ্যক।",
+                    "endDate": "শেষ তারিখ আবশ্যক।"
+                }
+            },
+            "details": {
+                "labels": {
+                    "quizDetails": "কুইজ বিস্তারিত"
+                }
+            },
+            "index": {
+                "labels": {
+                    "noQuizFound": "কোনো কুইজ পাওয়া যায়নি।."
+                }
+            }
+        },
+        "quizQuestions": {
+            "create": {
+                "labels": {
+                    "createQuiz": "কুইজ প্রশ্ন তৈরি করুন"
+                },
+                "validation": {
+                    "question": "প্রশ্ন আবশ্যক।",
+                    "answer_type": "উত্তরের ধরন আবশ্যক।",
+                    "point": "পয়েন্ট আবশ্যক।",
+                    "position": "অবস্থান আবশ্যক।"
+                }
+            },
+            "details": {
+                "labels": {
+                    "quizQuestion": "কুইজ প্রশ্নের বিস্তারিত"
+                }
+            },
+            "index": {
+                "labels": {
+                    "noQuizQuestionFound": "কোনো কুইজ প্রশ্ন পাওয়া যায়নি।"
                 }
             }
         },
