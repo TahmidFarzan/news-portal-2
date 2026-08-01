@@ -449,6 +449,11 @@ return [
             'success' => 'Quiz question option deleted successfully.',
             'failed'  => 'Failed to delete quiz question option.',
         ],
+
+        'reorder' => [
+            'success' => 'Quiz question option reorder successfully.',
+            'failed'  => 'Failed to reorder quiz question option.',
+        ],
     ],
 
     'quiz' => [

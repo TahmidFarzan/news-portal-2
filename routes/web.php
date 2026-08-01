@@ -388,6 +388,8 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
                 Route::post('save', [QuizController::class, 'quizQuestionOptionSave'])->name('save');
                 Route::patch('update/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionUpdate'])->name('update');
                 Route::delete('delete/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionDelete'])->name('delete');
+
+                Route::patch('reorder', [QuizController::class, 'quizQuestionOptionReorder'])->name('reorder');
             });
         });
     });

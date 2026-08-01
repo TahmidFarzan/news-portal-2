@@ -2,47 +2,45 @@
 import { ref, watch } from 'vue'
 import { Toaster, toast } from 'vue-sonner'
 
-const {
-    flashMessage
-} = defineProps({
+const { flashMessage } = defineProps({
     flashMessage: {
         type: Object,
-        default: null
-    }
+        default: null,
+    },
 })
 
 const lastFlashKey = ref(null)
 
-watch(() => flashMessage, (value) => {
-    if (!value?.message) return
+watch(
+    () => flashMessage,
+    (value) => {
+        if (!value?.message) return
 
-    const flashKey = `${value.status ?? 'default'}-${value.message}`
+        const flashKey = `${value.status ?? 'default'}-${value.message}-${value.timestamp ?? Date.now()}`
 
-    if (flashKey === lastFlashKey.value) return
+        if (flashKey === lastFlashKey.value) return
 
-    lastFlashKey.value = flashKey
+        lastFlashKey.value = flashKey
 
-    switch (value.status) {
-        case 'success':
-            toast.success(value.message)
-            break
-
-        case 'error':
-            toast.error(value.message)
-            break
-
-        case 'warning':
-            toast.warning(value.message)
-            break
-
-        case 'info':
-            toast.info(value.message)
-            break
-
-        default:
-            toast.info(value.message)
-    }
-}, { immediate: true })
+        switch (value.status) {
+            case 'success':
+                toast.success(value.message)
+                break
+            case 'error':
+                toast.error(value.message)
+                break
+            case 'warning':
+                toast.warning(value.message)
+                break
+            case 'info':
+                toast.info(value.message)
+                break
+            default:
+                toast.info(value.message)
+        }
+    },
+    { immediate: true, deep: true }
+)
 </script>
 
 <template>

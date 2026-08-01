@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\BackOffice;
 
 use App\Http\Requests\QuizQuestionOptionRequest;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class QuizQuestionOptionService
 {
-    public function new (): QuizQuestionOption
+    public function new(): QuizQuestionOption
     {
         return new QuizQuestionOption();
     }
@@ -38,7 +39,7 @@ class QuizQuestionOptionService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = QuizQuestionOption::query()->where("quiz_question_id",$quizQuestion->id);
+        $query = QuizQuestionOption::query()->where("quiz_question_id", $quizQuestion->id);
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
@@ -86,7 +87,7 @@ class QuizQuestionOptionService
                 $quizQuestionOption->save();
             });
             return [
-                "redirect_back_to_same_page" => $request->boolean('redirect_back_to_same_page', false) ? true: false,
+                "redirect_back_to_same_page" => $request->boolean('redirect_back_to_same_page', false) ? true : false,
                 'status'  => 'success',
                 'message' => __("status-messages.quiz-question-option.{$statusEvent}.success"),
             ];
@@ -141,4 +142,48 @@ class QuizQuestionOptionService
         }
     }
 
+    public function reorder(Quiz $quiz, QuizQuestion $quizQuestion, Request $request): array
+    {
+        try {
+            $options = $request->input('options', []);
+
+            DB::transaction(function () use ($quizQuestion, $options) {
+                foreach ($options as $index => $item) {
+                    $quizQuestion
+                        ->quizQuestionOptions()
+                        ->where('slug', $item['slug'])
+                        ->update([
+                            'position' => - ($index + 1),
+                        ]);
+                }
+
+                foreach ($options as $item) {
+                    $quizQuestion
+                        ->quizQuestionOptions()
+                        ->where('slug', $item['slug'])
+                        ->update([
+                            'position' => (int) $item['position'],
+                        ]);
+                }
+            });
+
+            return [
+                'status'                     => 'success',
+                'message'                    => __('status-messages.quiz-question-option.reorder.success'),
+                'redirect_back_to_same_page' => (bool) $request->boolean('redirect_back_to_same_page'),
+            ];
+        } catch (Exception $exception) {
+            Log::error('Failed to reorder quiz question options.', [
+                'quiz_id'          => $quiz->id ?? null,
+                'quiz_question_id' => $quizQuestion->id ?? null,
+                'exception'        => $exception,
+            ]);
+
+            return [
+                'status'                     => 'error',
+                'message'                    => __('status-messages.quiz-question-option.reorder.failed'),
+                'redirect_back_to_same_page' => (bool) $request->boolean('redirect_back_to_same_page'),
+            ];
+        }
+    }
 }

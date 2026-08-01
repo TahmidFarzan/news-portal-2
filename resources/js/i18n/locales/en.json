@@ -242,7 +242,8 @@
             "isCurrentTrend": "Is current trend",
             "text": "©",
             "questionOptions" : "Question options",
-            "createQuestionOption" : "Question option create"
+            "createQuestionOption" : "Question option create",
+            "onlyLastTenOptionsAvailableForQuickEdit" : "Only the last 10 options are available for quick edit. For additional options, please navigate to the options index and select them from there."
         },
         "modals": {
             "deleteConfirmation": "Delete Confirmation",

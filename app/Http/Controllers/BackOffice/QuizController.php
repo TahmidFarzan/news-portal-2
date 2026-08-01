@@ -357,4 +357,40 @@ class QuizController extends Controller
             'status'  => $result['status'],
         ]);
     }
+
+    public function quizQuestionOptionReorder(string $slug, string $quizQuestionSlug, Request $request)
+    {
+        $request->validate([
+            'options'                      => ['required', 'array', 'min:1'],
+            'options.*.slug'               => ['required', 'string'],
+            'options.*.position'           => ['required', 'integer', 'min:1'],
+            'redirect_back_to_same_page'   => ['nullable', 'boolean'],
+        ]);
+
+        $quiz = $this->quizService->find($slug);
+        $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
+
+        $result = $this->quizQuestionOptionService->reorder(
+            $quiz,
+            $quizQuestion,
+            $request
+        );
+
+        if (($result['redirect_back_to_same_page'] ?? false) === true) {
+            return back()->with('flash_message', [
+                'message' => $result['message'],
+                'status'  => $result['status'],
+                'timestamp' => now()->timestamp,
+            ]);
+        }
+
+        return to_route('back-office.quizzes.quiz-questions.quiz-question-options.index', [
+            'slug'             => $quiz->slug,
+            'quizQuestionSlug' => $quizQuestion->slug,
+        ])->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+            'timestamp' => now()->timestamp,
+        ]);
+    }
 }
