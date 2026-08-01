@@ -379,6 +379,8 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
             Route::patch('update/{quizQuestionSlug}', [QuizController::class, 'quizQuestionUpdate'])->name('update');
             Route::delete('delete/{quizQuestionSlug}', [QuizController::class, 'quizQuestionDelete'])->name('delete');
 
+            Route::patch('reorder', [QuizController::class, 'quizQuestionReorder'])->name('reorder');
+
             Route::prefix('{quizQuestionSlug}/quiz-question-options')->name('quiz-question-options.')->group(function () {
                 Route::get('/', [QuizController::class, 'quizQuestionOptionIndex'])->name('index');
                 Route::get('details/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionDetails'])->name('details');

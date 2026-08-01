@@ -1,6 +1,6 @@
 <script setup>
 import Layout from "@/pages/layouts/AuthLayout.vue";
-import { computed, onMounted, nextTick, watch } from "vue";
+import { computed, onMounted, nextTick, watch, inject } from "vue";
 import { Head, useForm, router as inertiaJsRoute } from "@inertiajs/vue3";
 import { useTranslate } from "@/composables/useTranslate";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -14,12 +14,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { VueDraggable } from "vue-draggable-plus";
 import SelectInfinityLoadingApi from "@/components/common/multi-select/SelectInfinityLoadingApi.vue";
+import CreateUpdateQuizQuestionTable from "@/components/back-office/quiz-question/CreateUpdateQuizQuestionTable.vue";
+
+import { formatDate } from '@/composables/useDateTime'
 
 FontAwesomeLibrary.add(faSave, faSpinner, faPlus, faTrash, faGripVertical);
 
 defineOptions({ layout: Layout });
 
 const { t } = useTranslate();
+const authUser = inject("authUser");
 
 const { quiz } = defineProps({
     quiz: Object,
@@ -56,8 +60,8 @@ const saveForm = useForm({
     language_id: quiz?.language_id || null,
     name: quiz?.name || "",
     brief: quiz?.brief || "",
-    start_date: quiz?.start_date || "",
-    end_date: quiz?.end_date || "",
+    start_date: quiz?.start_date ? formatDate(quiz?.start_date, 'Y-m-d') : null,
+    end_date: quiz?.end_date ? formatDate(quiz?.end_date, 'Y-m-d') : null,
     is_active: quiz?.is_active ?? true,
     show_bellow_event: quiz?.show_bellow_event ?? false,
     questions: isUpdate.value ? [] : [createEmptyQuestion(1)],
@@ -297,8 +301,10 @@ function handleSave() {
     if (saveForm.processing) return;
     if (!validateForm()) return;
 
-    reindexPositions(saveForm.questions);
-    saveForm.questions.forEach((q) => reindexPositions(q.options));
+    if (!isUpdate.value) {
+        reindexPositions(saveForm.questions);
+        saveForm.questions.forEach((q) => reindexPositions(q.options));
+    }
 
     const requestConfig = {
         preserveScroll: true,
@@ -378,7 +384,9 @@ onMounted(async () => {
                             </label>
                             <input v-model="saveForm.name" type="text"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.name ? 'border-red-500' : 'border-gray-300'
+                                :class="saveForm.errors.name
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
                                     " :placeholder="t('common.placeholders.name') || 'Quiz name'" />
                             <p v-if="saveForm.errors.name" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.name }}
@@ -391,9 +399,11 @@ onMounted(async () => {
                             </label>
                             <textarea v-model="saveForm.brief" rows="3"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="saveForm.errors.brief ? 'border-red-500' : 'border-gray-300'
+                                :class="saveForm.errors.brief
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
                                     " :placeholder="t('common.placeholders.brief') || 'Brief description'
-                    "></textarea>
+                                    "></textarea>
                             <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.brief }}
                             </p>
@@ -455,7 +465,10 @@ onMounted(async () => {
 
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t("common.labels.show_bellow_event") || "Show below event" }}
+                                {{
+                                    t("common.labels.show_bellow_event") ||
+                                    "Show below event"
+                                }}
                                 <span class="text-red-500">*</span>
                             </label>
                             <label class="inline-flex cursor-pointer items-center gap-3">
@@ -507,9 +520,8 @@ onMounted(async () => {
                                 <div class="flex-1 space-y-4">
                                     <div class="flex items-center justify-between">
                                         <span class="text-sm font-semibold text-gray-700">
-                                            {{ t("common.labels.question") || "Question" }} #{{
-                                                qIndex + 1
-                                            }}
+                                            {{ t("common.labels.question") || "Question" }}
+                                            #{{ qIndex + 1 }}
                                         </span>
                                         <button v-if="saveForm.questions.length > 1" type="button"
                                             @click="removeQuestion(qIndex)"
@@ -526,27 +538,42 @@ onMounted(async () => {
                                         </label>
                                         <textarea v-model="question.question" rows="2"
                                             class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                            :class="saveForm.errors[`questions.${qIndex}.question`]
+                                            :class="saveForm.errors[
+                                                    `questions.${qIndex}.question`
+                                                ]
                                                     ? 'border-red-500'
                                                     : 'border-gray-300'
-                                                " :placeholder="t('common.placeholders.question') || 'Enter question'
-                        "></textarea>
-                                        <p v-if="saveForm.errors[`questions.${qIndex}.question`]"
-                                            class="text-red-500 text-sm mt-1">
-                                            {{ saveForm.errors[`questions.${qIndex}.question`] }}
+                                                " :placeholder="t('common.placeholders.question') ||
+                                                'Enter question'
+                                                "></textarea>
+                                        <p v-if="
+                                            saveForm.errors[
+                                            `questions.${qIndex}.question`
+                                            ]
+                                        " class="text-red-500 text-sm mt-1">
+                                            {{
+                                                saveForm.errors[
+                                                `questions.${qIndex}.question`
+                                                ]
+                                            }}
                                         </p>
                                     </div>
 
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                             <label class="block text-sm font-medium mb-1">
-                                                {{ t("common.labels.answer_type") || "Answer Type" }}
+                                                {{
+                                                    t("common.labels.answer_type") ||
+                                                    "Answer Type"
+                                                }}
                                                 <span class="text-red-500">*</span>
                                             </label>
                                             <select v-model="question.answer_type"
                                                 @change="handleAnswerTypeChange(qIndex)"
                                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                                :class="saveForm.errors[`questions.${qIndex}.answer_type`]
+                                                :class="saveForm.errors[
+                                                        `questions.${qIndex}.answer_type`
+                                                    ]
                                                         ? 'border-red-500'
                                                         : 'border-gray-300'
                                                     ">
@@ -556,10 +583,14 @@ onMounted(async () => {
                                                 </option>
                                             </select>
                                             <p v-if="
-                                                saveForm.errors[`questions.${qIndex}.answer_type`]
+                                                saveForm.errors[
+                                                `questions.${qIndex}.answer_type`
+                                                ]
                                             " class="text-red-500 text-sm mt-1">
                                                 {{
-                                                    saveForm.errors[`questions.${qIndex}.answer_type`]
+                                                    saveForm.errors[
+                                                    `questions.${qIndex}.answer_type`
+                                                    ]
                                                 }}
                                             </p>
                                         </div>
@@ -571,29 +602,50 @@ onMounted(async () => {
                                             </label>
                                             <input v-model.number="question.point" type="number" min="0" step="0.01"
                                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                                :class="saveForm.errors[`questions.${qIndex}.point`]
+                                                :class="saveForm.errors[
+                                                        `questions.${qIndex}.point`
+                                                    ]
                                                         ? 'border-red-500'
                                                         : 'border-gray-300'
                                                     " />
-                                            <p v-if="saveForm.errors[`questions.${qIndex}.point`]"
-                                                class="text-red-500 text-sm mt-1">
-                                                {{ saveForm.errors[`questions.${qIndex}.point`] }}
+                                            <p v-if="
+                                                saveForm.errors[
+                                                `questions.${qIndex}.point`
+                                                ]
+                                            " class="text-red-500 text-sm mt-1">
+                                                {{
+                                                    saveForm.errors[
+                                                    `questions.${qIndex}.point`
+                                                    ]
+                                                }}
                                             </p>
                                         </div>
 
                                         <div>
                                             <label class="block text-sm font-medium mb-1">
-                                                {{ t("common.labels.position") || "Position" }}
+                                                {{
+                                                    t("common.labels.position") ||
+                                                    "Position"
+                                                }}
                                             </label>
                                             <input v-model.number="question.position" type="number" min="1"
                                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                                :class="saveForm.errors[`questions.${qIndex}.position`]
+                                                :class="saveForm.errors[
+                                                        `questions.${qIndex}.position`
+                                                    ]
                                                         ? 'border-red-500'
                                                         : 'border-gray-300'
                                                     " />
-                                            <p v-if="saveForm.errors[`questions.${qIndex}.position`]"
-                                                class="text-red-500 text-sm mt-1">
-                                                {{ saveForm.errors[`questions.${qIndex}.position`] }}
+                                            <p v-if="
+                                                saveForm.errors[
+                                                `questions.${qIndex}.position`
+                                                ]
+                                            " class="text-red-500 text-sm mt-1">
+                                                {{
+                                                    saveForm.errors[
+                                                    `questions.${qIndex}.position`
+                                                    ]
+                                                }}
                                             </p>
                                         </div>
                                     </div>
@@ -601,19 +653,32 @@ onMounted(async () => {
                                     <div class="border-t pt-4 space-y-3">
                                         <div class="flex items-center justify-between">
                                             <h4 class="text-sm font-semibold text-gray-700">
-                                                {{ t("common.labels.options") || "Options" }}
+                                                {{
+                                                    t("common.labels.options") ||
+                                                    "Options"
+                                                }}
                                                 <span class="text-red-500">*</span>
                                             </h4>
                                             <button type="button" @click="addOption(qIndex)"
                                                 class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1">
                                                 <FontAwesomeIcon icon="plus" />
-                                                {{ t("common.actions.add") || "Add Option" }}
+                                                {{
+                                                    t("common.actions.add") ||
+                                                    "Add Option"
+                                                }}
                                             </button>
                                         </div>
 
-                                        <p v-if="saveForm.errors[`questions.${qIndex}.options`]"
-                                            class="text-red-500 text-sm">
-                                            {{ saveForm.errors[`questions.${qIndex}.options`] }}
+                                        <p v-if="
+                                            saveForm.errors[
+                                            `questions.${qIndex}.options`
+                                            ]
+                                        " class="text-red-500 text-sm">
+                                            {{
+                                                saveForm.errors[
+                                                `questions.${qIndex}.options`
+                                                ]
+                                            }}
                                         </p>
 
                                         <VueDraggable v-model="question.options" :animation="200"
@@ -629,7 +694,10 @@ onMounted(async () => {
                                                 <div class="flex-1 grid grid-cols-1 md:grid-cols-12 gap-2 items-start">
                                                     <div class="md:col-span-6">
                                                         <label class="block text-xs font-medium mb-1">
-                                                            {{ t("common.labels.option") || "Option" }}
+                                                            {{
+                                                                t("common.labels.option") ||
+                                                                "Option"
+                                                            }}
                                                             <span class="text-red-500">*</span>
                                                         </label>
                                                         <input v-model="option.option" type="text"
@@ -639,9 +707,10 @@ onMounted(async () => {
                                                                 ]
                                                                     ? 'border-red-500'
                                                                     : 'border-gray-300'
-                                                                " :placeholder="t('common.placeholders.option') ||
-                                'Option text'
-                                " />
+                                                                " :placeholder="t(
+                                                                'common.placeholders.option'
+                                                            ) || 'Option text'
+                                                                " />
                                                         <p v-if="
                                                             saveForm.errors[
                                                             `questions.${qIndex}.options.${oIndex}.option`
@@ -650,14 +719,18 @@ onMounted(async () => {
                                                             {{
                                                                 saveForm.errors[
                                                                 `questions.${qIndex}.options.${oIndex}.option`
-                                                            ]
+                                                                ]
                                                             }}
                                                         </p>
                                                     </div>
 
                                                     <div class="md:col-span-2">
                                                         <label class="block text-xs font-medium mb-1">
-                                                            {{ t("common.labels.position") || "Position" }}
+                                                            {{
+                                                                t(
+                                                                    "common.labels.position"
+                                                                ) || "Position"
+                                                            }}
                                                         </label>
                                                         <input v-model.number="option.position" type="number" min="1"
                                                             class="w-full border rounded-md px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -671,22 +744,32 @@ onMounted(async () => {
 
                                                     <div class="md:col-span-3 flex items-end pb-1">
                                                         <label class="inline-flex cursor-pointer items-center gap-2">
-                                                            <input type="checkbox" :checked="option.is_correct"
-                                                                @change="handleCorrectChange(qIndex, oIndex)"
-                                                                class="peer sr-only" />
+                                                            <input type="checkbox" :checked="option.is_correct" @change="
+                                                                handleCorrectChange(
+                                                                    qIndex,
+                                                                    oIndex
+                                                                )
+                                                                " class="peer sr-only" />
                                                             <span
                                                                 class="relative h-6 w-11 rounded-full bg-gray-300 transition after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-5"></span>
                                                             <span class="text-xs text-gray-600">
-                                                                {{ t("common.labels.correct") || "Correct" }}
+                                                                {{
+                                                                    t(
+                                                                        "common.labels.correct"
+                                                                    ) || "Correct"
+                                                                }}
                                                             </span>
                                                         </label>
                                                     </div>
 
                                                     <div class="md:col-span-1 flex items-end justify-end pb-1">
-                                                        <button v-if="question.options.length > 2" type="button"
-                                                            @click="removeOption(qIndex, oIndex)"
-                                                            class="text-red-500 hover:text-red-700 p-1"
-                                                            :title="t('common.actions.remove') || 'Remove'">
+                                                        <button v-if="
+                                                            question.options.length > 2
+                                                        " type="button" @click="
+                                                                removeOption(qIndex, oIndex)
+                                                                " class="text-red-500 hover:text-red-700 p-1" :title="t('common.actions.remove') ||
+                                                                'Remove'
+                                                                ">
                                                             <FontAwesomeIcon icon="trash" />
                                                         </button>
                                                     </div>
@@ -698,6 +781,10 @@ onMounted(async () => {
                             </div>
                         </div>
                     </VueDraggable>
+                </div>
+
+                <div v-if="isUpdate">
+                    <CreateUpdateQuizQuestionTable :quiz="quiz" />
                 </div>
 
                 <div class="flex justify-center">

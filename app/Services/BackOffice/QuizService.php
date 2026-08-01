@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\BackOffice;
 
 use App\Http\Requests\QuizRequest;
@@ -17,10 +18,9 @@ class QuizService
     public function __construct(QuizQuestionService $quizQuestionService)
     {
         $this->quizQuestionService = $quizQuestionService;
-
     }
 
-    public function new (): Quiz
+    public function new(): Quiz
     {
         return new Quiz();
     }
@@ -29,6 +29,7 @@ class QuizService
     {
         return Quiz::with([
             'quizQuestions' => fn($query) => $query->latest()->limit(10),
+            'quizQuestions.quizQuestionOptions' => fn($query) => $query->latest()->limit(10),
             'language',
 
             'createdBy',
@@ -126,7 +127,7 @@ class QuizService
         }
     }
 
-        public function active(Quiz $quiz): array
+    public function active(Quiz $quiz): array
     {
 
         try {
@@ -203,5 +204,4 @@ class QuizService
             ];
         }
     }
-
 }

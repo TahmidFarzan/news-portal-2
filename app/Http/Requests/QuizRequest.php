@@ -23,7 +23,7 @@ class QuizRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('quizzes')->ignore($this->route('slug'), 'slug'),
+                // Rule::unique('quizzes','name')->ignore($this->route('slug'), 'slug'),
             ],
 
             'language_id' => [

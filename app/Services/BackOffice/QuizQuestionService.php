@@ -106,9 +106,10 @@ class QuizQuestionService
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.quiz-question.{$statusEvent}.success"),
+                'redirect_back_to_same_page' => (bool) $request->boolean('redirect_back_to_same_page'),
             ];
         } catch (Exception $exception) {
-            Log::error("Failed to {$statusEvent} quiz.", [
+            Log::error("Failed to {$statusEvent} quiz question.", [
                 'exception' => $exception,
             ]);
 
@@ -159,6 +160,50 @@ class QuizQuestionService
             return [
                 'status'  => 'error',
                 'message' => __('status-messages.quiz-question.delete.failed'),
+            ];
+        }
+    }
+
+    public function reorder(Quiz $quiz, Request $request): array
+    {
+        try {
+            $questions = $request->input('questions', []);
+
+            DB::transaction(function () use ($quiz,$questions) {
+                foreach ($questions as $index => $item) {
+                    $quiz->quizQuestions()
+                        ->where('slug', $item['slug'])
+                        ->update([
+                            'position' => - ($index + 1),
+                        ]);
+                }
+
+                foreach ($questions as $item) {
+                    $quiz
+                        ->quizQuestions()
+                        ->where('slug', $item['slug'])
+                        ->update([
+                            'position' => (int) $item['position'],
+                        ]);
+                }
+            });
+
+            return [
+                'status'                     => 'success',
+                'message'                    => __('status-messages.quiz-question.reorder.success'),
+                'redirect_back_to_same_page' => (bool) $request->boolean('redirect_back_to_same_page'),
+            ];
+        } catch (Exception $exception) {
+            Log::error('Failed to reorder quiz questions.', [
+                'quiz_id'          => $quiz->id ?? null,
+                'quiz_question_id' => $quizQuestion->id ?? null,
+                'exception'        => $exception,
+            ]);
+
+            return [
+                'status'                     => 'error',
+                'message'                    => __('status-messages.quiz-question.reorder.failed'),
+                'redirect_back_to_same_page' => (bool) $request->boolean('redirect_back_to_same_page'),
             ];
         }
     }
