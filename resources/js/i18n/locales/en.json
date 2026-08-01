@@ -41,7 +41,7 @@
             "users": "Users",
             "themes": "Themes",
             "surveys": "Surveys",
-            "quizzes" : "Quizzes",
+            "quizzes": "Quizzes",
             "loading": "Loading",
             "languages": "Languages",
             "noMenuFound": "No menu found",
@@ -133,15 +133,23 @@
             "category": "Category",
             "video": "Video",
             "image_gallery": "Image gallery",
-            "clear_cache" : "Clear cache",
-            "quiz" : "Quiz",
-            "quizQuestions" : "Quiz questions",
-            "quizQuestionOptions" : "Quiz question options",
-            "option" : "Option",
-            "correct" : "Correct",
-            "answerType" : "Answer type",
-            "point" : "Point",
-            "options" : "Options"
+            "clear_cache": "Clear cache",
+            "quiz": "Quiz",
+            "quizQuestions": "Quiz questions",
+            "quizQuestionOptions": "Quiz question options",
+            "option": "Option",
+            "correct": "Correct",
+            "answerType": "Answer type",
+            "point": "Point",
+            "options": "Options",
+            "start_date": "Start date",
+            "end_date": "End date",
+            "is_active": "Is active",
+            "show_bellow_event": "Show bellow event",
+            "single": "Single",
+            "multiple": "Multiple",
+            "questions": "Questions",
+            "answer_type": "Answer type"
         },
         "actions": {
             "details": "Details",
@@ -172,7 +180,8 @@
             "inactive": "Inactive",
             "activating": "Activating...",
             "active": "Active",
-            "add" : "Add"
+            "add": "Add",
+            "remove" : "Remove"
         },
         "placeholders": {
             "parent": "Parent",
@@ -195,8 +204,14 @@
             "searchQuiz": "Search quiz...",
             "searchQuizQuestion": "Search quiz question...",
             "searchQuizQuestionOption": "Search quiz question option...",
-            "position" : "Enter position.",
-            "point" : "Enter point"
+            "position": "Enter position.",
+            "point": "Enter point",
+            "select": "Select",
+            "name": "Name",
+            "brief": "Brief",
+            "question": "Question",
+            "options": "Options",
+            "option": "Option"
         },
         "messages": {
             "showAll": "Show All",
@@ -241,9 +256,9 @@
             "isTrend": "Is Trend",
             "isCurrentTrend": "Is current trend",
             "text": "©",
-            "questionOptions" : "Question options",
-            "createQuestionOption" : "Question option create",
-            "onlyLastTenOptionsAvailableForQuickEdit" : "Only the last 10 options are available for quick edit. For additional options, please navigate to the options index and select them from there."
+            "questionOptions": "Question options",
+            "createQuestionOption": "Question option create",
+            "onlyLastTenOptionsAvailableForQuickEdit": "Only the last 10 options are available for quick edit. For additional options, please navigate to the options index and select them from there."
         },
         "modals": {
             "deleteConfirmation": "Delete Confirmation",
@@ -296,10 +311,10 @@
             "pointIsRequired": "Point is required.",
             "answerTypeIsRequired": "Answer type is required.",
             "optionDuplicate": "Duplicate option is added.",
-            "singleCorrectRequired" : "Only one can be correct answer.",
-            "multipleCorrectRequired" : "One or multiple can be correct answer.",
-            "optionsRequired" : "Options are needed",
-            "optionTextRequired" : "Option is required."
+            "singleCorrectRequired": "Only one can be correct answer.",
+            "multipleCorrectRequired": "One or multiple can be correct answer.",
+            "optionsRequired": "Options are needed",
+            "optionTextRequired": "Option is required."
         },
         "cursorPagination": {
             "actions": {
