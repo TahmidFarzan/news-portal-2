@@ -329,6 +329,13 @@ class QuizController extends Controller
 
         $result = $this->quizQuestionOptionService->save($quizQuestion, $request, $quizQuestionOption);
 
+        if ($result["redirect_back_to_same_page"] == true) {
+            return back()->with('flash_message', [
+                'message' => $result['message'],
+                'status'  => $result['status'],
+            ]);
+        }
+
         return to_route('back-office.quizzes.quiz-questions.quiz-question-options.index', ['slug' => $quiz->slug, 'quizQuestionSlug' => $quizQuestion->slug])->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],

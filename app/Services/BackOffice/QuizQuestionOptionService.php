@@ -86,6 +86,7 @@ class QuizQuestionOptionService
                 $quizQuestionOption->save();
             });
             return [
+                "redirect_back_to_same_page" => $request->boolean('redirect_back_to_same_page', false) ? true: false,
                 'status'  => 'success',
                 'message' => __("status-messages.quiz-question-option.{$statusEvent}.success"),
             ];
