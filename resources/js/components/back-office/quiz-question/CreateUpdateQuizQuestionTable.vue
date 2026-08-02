@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, inject, nextTick, computed } from "vue";
+import { ref, watch, inject, nextTick } from "vue";
 import { useForm, router as inertiaJsRoute } from "@inertiajs/vue3";
 import { useTranslate } from "@/composables/useTranslate";
 import { VueDraggable } from "vue-draggable-plus";
@@ -14,6 +14,8 @@ import {
     faTimes,
     faSave,
     faSpinner,
+    faChevronDown,
+    faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     canAccessQuizQuestion,
@@ -33,7 +35,9 @@ FontAwesomeLibrary.add(
     faList,
     faTimes,
     faSave,
-    faSpinner
+    faSpinner,
+    faChevronDown,
+    faChevronRight
 );
 
 const props = defineProps({
@@ -81,16 +85,36 @@ function reindexPositions(items) {
     });
 }
 
+const openCreateQuestionIndex = ref(0);
+
+function toggleCreateQuestion(index) {
+    openCreateQuestionIndex.value =
+        openCreateQuestionIndex.value === index ? null : index;
+}
+
+function isCreateQuestionOpen(index) {
+    return openCreateQuestionIndex.value === index;
+}
+
 function addQuestion() {
     if (!props.quizSaveForm) return;
     const nextPos = props.quizSaveForm.questions.length + 1;
     props.quizSaveForm.questions.push(createEmptyQuestion(nextPos));
+    openCreateQuestionIndex.value = props.quizSaveForm.questions.length - 1;
 }
 
 function removeQuestion(index) {
     if (!props.quizSaveForm || props.quizSaveForm.questions.length <= 1) return;
     props.quizSaveForm.questions.splice(index, 1);
     reindexPositions(props.quizSaveForm.questions);
+    if (openCreateQuestionIndex.value === index) {
+        openCreateQuestionIndex.value = 0;
+    } else if (
+        openCreateQuestionIndex.value !== null &&
+        openCreateQuestionIndex.value > index
+    ) {
+        openCreateQuestionIndex.value -= 1;
+    }
 }
 
 function onCreateQuestionDragEnd() {
@@ -144,8 +168,7 @@ function handleCorrectChange(qIndex, oIndex) {
 }
 
 watch(
-    () =>
-        props.quizSaveForm?.questions?.map((q) => q.answer_type) ?? [],
+    () => props.quizSaveForm?.questions?.map((q) => q.answer_type) ?? [],
     (newTypes, oldTypes) => {
         if (!oldTypes?.length || !props.quizSaveForm) return;
         newTypes.forEach((type, index) => {
@@ -158,14 +181,26 @@ watch(
 
 const questions = ref([]);
 const reorderProcessing = ref(false);
+const openQuestionSlug = ref(null);
 
 watch(
     () => props.quiz?.quiz_questions,
     (val) => {
         questions.value = val ? val.map((q) => ({ ...q })) : [];
+        if (questions.value.length && !openQuestionSlug.value) {
+            openQuestionSlug.value = questions.value[0]?.slug || null;
+        }
     },
     { immediate: true, deep: true }
 );
+
+function toggleQuestion(slug) {
+    openQuestionSlug.value = openQuestionSlug.value === slug ? null : slug;
+}
+
+function isQuestionOpen(slug) {
+    return openQuestionSlug.value === slug;
+}
 
 function reindexQuestionPositions() {
     questions.value.forEach((q, index) => {
@@ -500,216 +535,230 @@ function handleQuizQuestionDelete(quizQuestion) {
         </p>
 
         <VueDraggable v-model="quizSaveForm.questions" :animation="200" handle=".question-drag-handle"
-            @end="onCreateQuestionDragEnd" class="space-y-4">
+            @end="onCreateQuestionDragEnd" class="space-y-3">
             <div v-for="(question, qIndex) in quizSaveForm.questions" :key="qIndex"
-                class="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-4">
-                <div class="flex items-start gap-3">
+                class="border border-gray-200 rounded-lg overflow-hidden">
+                <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 cursor-pointer select-none"
+                    @click="toggleCreateQuestion(qIndex)">
                     <button type="button"
-                        class="question-drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 mt-2">
+                        class="question-drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
+                        @click.stop>
                         <FontAwesomeIcon icon="grip-vertical" />
                     </button>
 
-                    <div class="flex-1 space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-semibold text-gray-700">
-                                {{ t("common.labels.question") || "Question" }}
-                                #{{ qIndex + 1 }}
-                            </span>
-                            <button v-if="quizSaveForm.questions.length > 1" type="button"
-                                @click="removeQuestion(qIndex)"
-                                class="text-red-500 hover:text-red-700 text-sm flex items-center gap-1">
-                                <FontAwesomeIcon icon="trash" />
-                                {{ t("common.actions.remove") || "Remove" }}
-                            </button>
+                    <FontAwesomeIcon :icon="isCreateQuestionOpen(qIndex)
+                            ? 'chevron-down'
+                            : 'chevron-right'
+                        " class="text-gray-500 text-sm w-3" />
+
+                    <div class="flex-1 min-w-0">
+                        <span class="text-sm font-medium text-gray-800">
+                            #{{ qIndex + 1 }} —
+                            {{
+                                question.question ||
+                                t("common.labels.question") ||
+                                "Question"
+                            }}
+                        </span>
+                        <span class="ml-2 text-xs text-gray-500 capitalize">
+                            ({{ question.answer_type }} · {{ question.point }}
+                            {{ t("common.labels.point") || "pt" }})
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2" @click.stop>
+                        <input v-model.number="question.position" type="number" min="1"
+                            class="w-16 border border-gray-300 rounded-md px-2 py-1 text-sm text-center focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                        <button v-if="quizSaveForm.questions.length > 1" type="button" @click="removeQuestion(qIndex)"
+                            class="text-red-500 hover:text-red-700 p-1">
+                            <FontAwesomeIcon icon="trash" />
+                        </button>
+                    </div>
+                </div>
+
+                <div v-show="isCreateQuestionOpen(qIndex)" class="p-4 border-t border-gray-200 bg-white space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">
+                            {{ t("common.labels.question") || "Question" }}
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <textarea v-model="question.question" rows="2"
+                            class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            :class="quizSaveForm.errors[`questions.${qIndex}.question`]
+                                    ? 'border-red-500'
+                                    : 'border-gray-300'
+                                " :placeholder="t('common.placeholders.question') || 'Enter question'
+                                "></textarea>
+                        <p v-if="quizSaveForm.errors[`questions.${qIndex}.question`]" class="text-red-500 text-sm mt-1">
+                            {{ quizSaveForm.errors[`questions.${qIndex}.question`] }}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t("common.labels.answer_type") || "Answer Type" }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <SelectInfinityLoadingApi :form="question" fieldName="answer_type" :selectedItem="question.answer_type
+                                    ? {
+                                        id: question.answer_type,
+                                        name: question.answer_type,
+                                    }
+                                    : null
+                                " :apiUrl="route('search.quiz-question-answer-types')" :error="quizSaveForm.errors[
+                                    `questions.${qIndex}.answer_type`
+                                    ]
+                                    " :multiple="false" :placeholder="t('common.labels.answerType') || 'Answer Type'
+                                    " />
+                            <p v-if="
+                                quizSaveForm.errors[
+                                `questions.${qIndex}.answer_type`
+                                ]
+                            " class="text-red-500 text-sm mt-1">
+                                {{
+                                    quizSaveForm.errors[
+                                    `questions.${qIndex}.answer_type`
+                                    ]
+                                }}
+                            </p>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
-                                {{ t("common.labels.question") || "Question" }}
+                                {{ t("common.labels.point") || "Point" }}
                                 <span class="text-red-500">*</span>
                             </label>
-                            <textarea v-model="question.question" rows="2"
+                            <input v-model.number="question.point" type="number" min="0" step="0.01"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :class="quizSaveForm.errors[`questions.${qIndex}.question`]
-                                    ? 'border-red-500'
-                                    : 'border-gray-300'
-                                    " :placeholder="t('common.placeholders.question') || 'Enter question'
-                                        "></textarea>
-                            <p v-if="quizSaveForm.errors[`questions.${qIndex}.question`]"
+                                :class="quizSaveForm.errors[`questions.${qIndex}.point`]
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
+                                    " />
+                            <p v-if="quizSaveForm.errors[`questions.${qIndex}.point`]"
                                 class="text-red-500 text-sm mt-1">
-                                {{ quizSaveForm.errors[`questions.${qIndex}.question`] }}
+                                {{ quizSaveForm.errors[`questions.${qIndex}.point`] }}
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">
-                                    {{ t("common.labels.answer_type") || "Answer Type" }}
-                                    <span class="text-red-500">*</span>
-                                </label>
-                                <SelectInfinityLoadingApi :form="question" fieldName="answer_type"
-                                    :selectedItem="question.answer_type || null"
-                                    :apiUrl="route('search.quiz-question-answer-types')" :error="quizSaveForm.errors[
-                                        `questions.${qIndex}.answer_type`
-                                    ]
-                                        " :multiple="false" :placeholder="t('common.labels.answerType') || 'Answer Type'
-                                            " />
-                                <p v-if="
-                                    quizSaveForm.errors[
-                                    `questions.${qIndex}.answer_type`
-                                    ]
-                                " class="text-red-500 text-sm mt-1">
-                                    {{
-                                        quizSaveForm.errors[
-                                        `questions.${qIndex}.answer_type`
-                                        ]
-                                    }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-1">
-                                    {{ t("common.labels.point") || "Point" }}
-                                    <span class="text-red-500">*</span>
-                                </label>
-                                <input v-model.number="question.point" type="number" min="0" step="0.01"
-                                    class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    :class="quizSaveForm.errors[`questions.${qIndex}.point`]
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t("common.labels.position") || "Position" }}
+                            </label>
+                            <input v-model.number="question.position" type="number" min="1"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="quizSaveForm.errors[`questions.${qIndex}.position`]
                                         ? 'border-red-500'
                                         : 'border-gray-300'
-                                        " />
-                                <p v-if="quizSaveForm.errors[`questions.${qIndex}.point`]"
-                                    class="text-red-500 text-sm mt-1">
-                                    {{ quizSaveForm.errors[`questions.${qIndex}.point`] }}
-                                </p>
-                            </div>
+                                    " />
+                            <p v-if="
+                                quizSaveForm.errors[`questions.${qIndex}.position`]
+                            " class="text-red-500 text-sm mt-1">
+                                {{
+                                    quizSaveForm.errors[`questions.${qIndex}.position`]
+                                }}
+                            </p>
+                        </div>
+                    </div>
 
-                            <div>
-                                <label class="block text-sm font-medium mb-1">
-                                    {{ t("common.labels.position") || "Position" }}
-                                </label>
-                                <input v-model.number="question.position" type="number" min="1"
-                                    class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    :class="quizSaveForm.errors[
-                                        `questions.${qIndex}.position`
-                                    ]
-                                        ? 'border-red-500'
-                                        : 'border-gray-300'
-                                        " />
-                                <p v-if="
-                                    quizSaveForm.errors[
-                                    `questions.${qIndex}.position`
-                                    ]
-                                " class="text-red-500 text-sm mt-1">
-                                    {{
-                                        quizSaveForm.errors[
-                                        `questions.${qIndex}.position`
-                                        ]
-                                    }}
-                                </p>
-                            </div>
+                    <div class="border-t pt-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-sm font-semibold text-gray-700">
+                                {{ t("common.labels.options") || "Options" }}
+                                <span class="text-red-500">*</span>
+                            </h4>
+                            <button type="button" @click="addOption(qIndex)"
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1">
+                                <FontAwesomeIcon icon="plus" />
+                                {{ t("common.actions.add") || "Add Option" }}
+                            </button>
                         </div>
 
-                        <div class="border-t pt-4 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <h4 class="text-sm font-semibold text-gray-700">
-                                    {{ t("common.labels.options") || "Options" }}
-                                    <span class="text-red-500">*</span>
-                                </h4>
-                                <button type="button" @click="addOption(qIndex)"
-                                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1">
-                                    <FontAwesomeIcon icon="plus" />
-                                    {{ t("common.actions.add") || "Add Option" }}
+                        <p v-if="quizSaveForm.errors[`questions.${qIndex}.options`]" class="text-red-500 text-sm">
+                            {{ quizSaveForm.errors[`questions.${qIndex}.options`] }}
+                        </p>
+
+                        <VueDraggable v-model="question.options" :animation="200" handle=".option-drag-handle"
+                            @end="() => onCreateOptionDragEnd(qIndex)" class="space-y-2">
+                            <div v-for="(option, oIndex) in question.options" :key="oIndex"
+                                class="flex items-start gap-2 bg-gray-50 border border-gray-200 rounded-md p-3">
+                                <button type="button"
+                                    class="option-drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 mt-2">
+                                    <FontAwesomeIcon icon="grip-vertical" />
                                 </button>
-                            </div>
 
-                            <p v-if="quizSaveForm.errors[`questions.${qIndex}.options`]" class="text-red-500 text-sm">
-                                {{ quizSaveForm.errors[`questions.${qIndex}.options`] }}
-                            </p>
-
-                            <VueDraggable v-model="question.options" :animation="200" handle=".option-drag-handle"
-                                @end="() => onCreateOptionDragEnd(qIndex)" class="space-y-2">
-                                <div v-for="(option, oIndex) in question.options" :key="oIndex"
-                                    class="flex items-start gap-2 bg-white border border-gray-200 rounded-md p-3">
-                                    <button type="button"
-                                        class="option-drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 mt-2">
-                                        <FontAwesomeIcon icon="grip-vertical" />
-                                    </button>
-
-                                    <div class="flex-1 grid grid-cols-1 md:grid-cols-12 gap-2 items-start">
-                                        <div class="md:col-span-6">
-                                            <label class="block text-xs font-medium mb-1">
-                                                {{ t("common.labels.option") || "Option" }}
-                                                <span class="text-red-500">*</span>
-                                            </label>
-                                            <input v-model="option.option" type="text"
-                                                class="w-full border rounded-md px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                                :class="quizSaveForm.errors[
+                                <div class="flex-1 grid grid-cols-1 md:grid-cols-12 gap-2 items-start">
+                                    <div class="md:col-span-6">
+                                        <label class="block text-xs font-medium mb-1">
+                                            {{ t("common.labels.option") || "Option" }}
+                                            <span class="text-red-500">*</span>
+                                        </label>
+                                        <input v-model="option.option" type="text"
+                                            class="w-full border rounded-md px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                            :class="quizSaveForm.errors[
                                                     `questions.${qIndex}.options.${oIndex}.option`
                                                 ]
                                                     ? 'border-red-500'
                                                     : 'border-gray-300'
-                                                    " :placeholder="t('common.placeholders.option') ||
-                                                        'Option text'
-                                                        " />
-                                            <p v-if="
+                                                " :placeholder="t('common.placeholders.option') ||
+                                                'Option text'
+                                                " />
+                                        <p v-if="
+                                            quizSaveForm.errors[
+                                            `questions.${qIndex}.options.${oIndex}.option`
+                                            ]
+                                        " class="text-red-500 text-xs mt-1">
+                                            {{
                                                 quizSaveForm.errors[
                                                 `questions.${qIndex}.options.${oIndex}.option`
                                                 ]
-                                            " class="text-red-500 text-xs mt-1">
-                                                {{
-                                                    quizSaveForm.errors[
-                                                    `questions.${qIndex}.options.${oIndex}.option`
-                                                    ]
-                                                }}
-                                            </p>
-                                        </div>
+                                            }}
+                                        </p>
+                                    </div>
 
-                                        <div class="md:col-span-2">
-                                            <label class="block text-xs font-medium mb-1">
-                                                {{
-                                                    t("common.labels.position") ||
-                                                    "Position"
-                                                }}
-                                            </label>
-                                            <input v-model.number="option.position" type="number" min="1"
-                                                class="w-full border rounded-md px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                                :class="quizSaveForm.errors[
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-medium mb-1">
+                                            {{
+                                                t("common.labels.position") || "Position"
+                                            }}
+                                        </label>
+                                        <input v-model.number="option.position" type="number" min="1"
+                                            class="w-full border rounded-md px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                            :class="quizSaveForm.errors[
                                                     `questions.${qIndex}.options.${oIndex}.position`
                                                 ]
                                                     ? 'border-red-500'
                                                     : 'border-gray-300'
-                                                    " />
-                                        </div>
+                                                " />
+                                    </div>
 
-                                        <div class="md:col-span-3 flex items-end pb-1">
-                                            <label class="inline-flex cursor-pointer items-center gap-2">
-                                                <input type="checkbox" :checked="option.is_correct" @change="
-                                                    handleCorrectChange(qIndex, oIndex)
-                                                    " class="peer sr-only" />
-                                                <span
-                                                    class="relative h-6 w-11 rounded-full bg-gray-300 transition after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-5"></span>
-                                                <span class="text-xs text-gray-600">
-                                                    {{
-                                                        t("common.labels.correct") ||
-                                                        "Correct"
-                                                    }}
-                                                </span>
-                                            </label>
-                                        </div>
+                                    <div class="md:col-span-3 flex items-end pb-1">
+                                        <label class="inline-flex cursor-pointer items-center gap-2">
+                                            <input type="checkbox" :checked="option.is_correct" @change="
+                                                handleCorrectChange(qIndex, oIndex)
+                                                " class="peer sr-only" />
+                                            <span
+                                                class="relative h-6 w-11 rounded-full bg-gray-300 transition after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-5"></span>
+                                            <span class="text-xs text-gray-600">
+                                                {{
+                                                    t("common.labels.correct") ||
+                                                    "Correct"
+                                                }}
+                                            </span>
+                                        </label>
+                                    </div>
 
-                                        <div class="md:col-span-1 flex items-end justify-end pb-1">
-                                            <button v-if="question.options.length > 2" type="button"
-                                                @click="removeOption(qIndex, oIndex)"
-                                                class="text-red-500 hover:text-red-700 p-1" :title="t('common.actions.remove') || 'Remove'
-                                                    ">
-                                                <FontAwesomeIcon icon="trash" />
-                                            </button>
-                                        </div>
+                                    <div class="md:col-span-1 flex items-end justify-end pb-1">
+                                        <button v-if="question.options.length > 2" type="button"
+                                            @click="removeOption(qIndex, oIndex)"
+                                            class="text-red-500 hover:text-red-700 p-1" :title="t('common.actions.remove') || 'Remove'
+                                                ">
+                                            <FontAwesomeIcon icon="trash" />
+                                        </button>
                                     </div>
                                 </div>
-                            </VueDraggable>
-                        </div>
+                            </div>
+                        </VueDraggable>
                     </div>
                 </div>
             </div>
@@ -728,77 +777,53 @@ function handleQuizQuestionDelete(quizQuestion) {
             </button>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse">
-                <thead>
-                    <tr class="bg-gray-50 border-b">
-                        <th class="w-10 px-2 py-2"></th>
-                        <th class="text-left px-3 py-2 font-medium">
-                            {{ t("common.labels.question") || "Question" }}
-                        </th>
-                        <th class="text-center px-3 py-2 font-medium w-28">
-                            {{ t("common.labels.answer_type") || "Answer Type" }}
-                        </th>
-                        <th class="text-center px-3 py-2 font-medium w-20">
-                            {{ t("common.labels.point") || "Point" }}
-                        </th>
-                        <th class="text-center px-3 py-2 font-medium w-24">
-                            {{ t("common.labels.position") || "Position" }}
-                        </th>
-                        <th class="text-center px-3 py-2 font-medium w-28">
-                            {{ t("common.labels.action") || "Action" }}
-                        </th>
-                    </tr>
-                </thead>
-                <VueDraggable v-model="questions" tag="tbody" :animation="150" handle=".drag-handle"
-                    :disabled="reorderProcessing" @end="onQuestionDragEnd">
-                    <tr v-for="q in questions" :key="q.slug || q.id" class="border-b hover:bg-gray-50">
-                        <td class="px-2 py-2 text-center">
-                            <span
-                                class="drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
-                                :class="{
-                                    'opacity-50 pointer-events-none': reorderProcessing,
-                                }">
-                                <FontAwesomeIcon icon="grip-vertical" />
-                            </span>
-                        </td>
-                        <td class="px-3 py-2">
-                            {{ q.question }}
-                        </td>
-                        <td class="px-3 py-2 text-center capitalize">
-                            {{ q.answer_type }}
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            {{ q.point }}
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            <input v-model.number="q.position" type="number" min="1"
-                                class="w-20 border border-gray-300 rounded-md px-2 py-1.5 text-sm text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                :disabled="reorderProcessing" @change="onQuestionManualPositionChange(q.slug)" />
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            <div class="flex items-center justify-center gap-3">
-                                <button v-if="canUpdateQuestion(q)" type="button" @click="openEditQuestionModal(q)"
-                                    class="text-blue-600 hover:text-blue-800">
-                                    <FontAwesomeIcon icon="pencil" />
-                                </button>
-                                <button v-if="canDeleteQuestion(q)" type="button" @click="openDeleteModal(q)"
-                                    class="text-red-500 hover:text-red-700">
-                                    <FontAwesomeIcon icon="trash" />
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </VueDraggable>
-            </table>
-        </div>
+        <VueDraggable v-model="questions" :animation="150" handle=".drag-handle" :disabled="reorderProcessing"
+            @end="onQuestionDragEnd" class="space-y-3">
+            <div v-for="(q, qIndex) in questions" :key="q.slug || q.id"
+                class="border border-gray-200 rounded-lg overflow-hidden">
+                <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 cursor-pointer select-none"
+                    @click="toggleQuestion(q.slug)">
+                    <span class="drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
+                        :class="{
+                            'opacity-50 pointer-events-none': reorderProcessing,
+                        }" @click.stop>
+                        <FontAwesomeIcon icon="grip-vertical" />
+                    </span>
 
-        <div v-for="q in questions" :key="`options-${q.slug || q.id}`" class="mt-4">
-            <div class="mb-2 text-sm font-medium text-gray-700">
-                {{ t("common.labels.options") || "Options" }} — {{ q.question }}
+                    <FontAwesomeIcon :icon="isQuestionOpen(q.slug) ? 'chevron-down' : 'chevron-right'"
+                        class="text-gray-500 text-sm w-3" />
+
+                    <div class="flex-1 min-w-0">
+                        <span class="text-sm font-medium text-gray-800">
+                            #{{ qIndex + 1 }} —
+                            {{ q.question || t("common.labels.question") }}
+                        </span>
+                        <span class="ml-2 text-xs text-gray-500 capitalize">
+                            ({{ q.answer_type }} · {{ q.point }}
+                            {{ t("common.labels.point") || "pt" }})
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2" @click.stop>
+                        <input v-model.number="q.position" type="number" min="1"
+                            class="w-16 border border-gray-300 rounded-md px-2 py-1 text-sm text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            :disabled="reorderProcessing" @change="onQuestionManualPositionChange(q.slug)" />
+                        <button v-if="canUpdateQuestion(q)" type="button" @click="openEditQuestionModal(q)"
+                            class="text-blue-600 hover:text-blue-800 p-1">
+                            <FontAwesomeIcon icon="pencil" />
+                        </button>
+                        <button v-if="canDeleteQuestion(q)" type="button" @click="openDeleteModal(q)"
+                            class="text-red-500 hover:text-red-700 p-1">
+                            <FontAwesomeIcon icon="trash" />
+                        </button>
+                    </div>
+                </div>
+
+                <div v-show="isQuestionOpen(q.slug)" class="p-4 border-t border-gray-200 bg-white">
+                    <CreateUpdateQuizQuestionOptionTable :quiz="quiz" :quizQuestion="q" :isUpdate="true" />
+                </div>
             </div>
-            <CreateUpdateQuizQuestionOptionTable :quiz="quiz" :quizQuestion="q" :isUpdate="true" />
-        </div>
+        </VueDraggable>
 
         <div class="space-y-3 pt-2">
             <div class="flex justify-start">
@@ -838,8 +863,8 @@ function handleQuizQuestionDelete(quizQuestion) {
                 <textarea v-model="saveQuizQuestionForm.question" rows="3"
                     class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     :class="saveQuizQuestionForm.errors.question
-                        ? 'border-red-500'
-                        : 'border-gray-300'
+                            ? 'border-red-500'
+                            : 'border-gray-300'
                         " :placeholder="t('common.placeholders.question') || 'Enter question'"></textarea>
                 <p v-if="saveQuizQuestionForm.errors.question" class="text-red-500 text-sm mt-1">
                     {{ saveQuizQuestionForm.errors.question }}
@@ -853,11 +878,11 @@ function handleQuizQuestionDelete(quizQuestion) {
                         <span class="text-red-500">*</span>
                     </label>
                     <SelectInfinityLoadingApi :form="saveQuizQuestionForm" fieldName="answer_type" :selectedItem="saveQuizQuestionForm.answer_type
-                        ? {
-                            id: saveQuizQuestionForm.answer_type,
-                            name: saveQuizQuestionForm.answer_type,
-                        }
-                        : null
+                            ? {
+                                id: saveQuizQuestionForm.answer_type,
+                                name: saveQuizQuestionForm.answer_type,
+                            }
+                            : null
                         " :apiUrl="route('search.quiz-question-answer-types')"
                         :error="saveQuizQuestionForm.errors.answer_type" :multiple="false"
                         :placeholder="t('common.labels.answerType') || 'Answer Type'" />
@@ -874,8 +899,8 @@ function handleQuizQuestionDelete(quizQuestion) {
                     <input v-model.number="saveQuizQuestionForm.point" type="number" min="0" step="0.01"
                         class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         :class="saveQuizQuestionForm.errors.point
-                            ? 'border-red-500'
-                            : 'border-gray-300'
+                                ? 'border-red-500'
+                                : 'border-gray-300'
                             " />
                     <p v-if="saveQuizQuestionForm.errors.point" class="text-red-500 text-sm mt-1">
                         {{ saveQuizQuestionForm.errors.point }}
@@ -889,8 +914,8 @@ function handleQuizQuestionDelete(quizQuestion) {
                     <input v-model.number="saveQuizQuestionForm.position" type="number" min="1"
                         class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         :class="saveQuizQuestionForm.errors.position
-                            ? 'border-red-500'
-                            : 'border-gray-300'
+                                ? 'border-red-500'
+                                : 'border-gray-300'
                             " />
                     <p v-if="saveQuizQuestionForm.errors.position" class="text-red-500 text-sm mt-1">
                         {{ saveQuizQuestionForm.errors.position }}
