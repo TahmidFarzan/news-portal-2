@@ -101,6 +101,8 @@ class QuizService
                 $quiz->end_date          = $request->input('end_date', now());
                 $quiz->is_active         = $request->boolean('is_active', false) ? true : false;
                 $quiz->show_bellow_event = $request->boolean('show_bellow_event', false) ? true : false;
+                $quiz->show_result = $request->boolean('show_result', false) ? true : false;
+                $quiz->max_winner             = $request->input('max_winner', 1);
                 $quiz->created_by_id     = $isNew ? Auth::id() : $quiz->created_by_id;
 
                 $save = $quiz->save();

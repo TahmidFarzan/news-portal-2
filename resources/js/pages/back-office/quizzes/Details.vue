@@ -34,6 +34,7 @@ import {
 
 import { useTranslate } from '@/composables/useTranslate'
 
+
 FontAwesomeLibrary.add(
     faTrash,
     faPen,
@@ -182,8 +183,8 @@ onMounted(
                     {{ t('common.actions.edit') }}
                 </a>
 
-                <button v-if="quiz?.is_active && canInactive(quiz)" type="button"
-                    @click="openStatusModal('inactive')" :disabled="inactiveProcessing"
+                <button v-if="quiz?.is_active && canInactive(quiz)" type="button" @click="openStatusModal('inactive')"
+                    :disabled="inactiveProcessing"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 disabled:opacity-60">
                     <FontAwesomeIcon v-if="inactiveProcessing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="eye-slash" /> {{ inactiveProcessing ?
@@ -206,13 +207,15 @@ onMounted(
                     {{ t('common.actions.delete') }}
                 </button>
 
-                <a v-if="canAccessQuestion(quiz)" :href="route('back-office.quizzes.quiz-questions.index', { slug: quiz?.slug })"
+                <a v-if="canAccessQuestion(quiz)"
+                    :href="route('back-office.quizzes.quiz-questions.index', { slug: quiz?.slug })"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="list" />
                     {{ t('common.messages.questions') }}
                 </a>
 
-                <a v-if="canCreateQuestion(quiz)" :href="route('back-office.quizzes.quiz-questions.create', { slug: quiz?.slug })"
+                <a v-if="canCreateQuestion(quiz)"
+                    :href="route('back-office.quizzes.quiz-questions.create', { slug: quiz?.slug })"
                     class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="add" />
                     {{ t('common.messages.createQuestion') }}
@@ -225,7 +228,7 @@ onMounted(
                 {{ t('common.labels.basicInformation') }}
             </h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
@@ -246,13 +249,32 @@ onMounted(
                                 t('common.labels.notAvailable') }}
                         </span>
                     </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('common.labels.date') }}</span>
-                        <span class="font-medium">
-                            {{ quiz?.start_date || t('common.labels.notAvailable') }} -
-                            {{ quiz?.end_date || t('common.labels.notAvailable') }}
+                        <span class="text-gray-500">{{ t('common.labels.show_bellow_event') }}</span>
+                        <span :class="quiz?.show_bellow_event ? 'text-green-600' : 'text-red-500'" class="font-medium">
+                            {{ quiz?.show_bellow_event ? t('common.boolean.yes') :
+                                t('common.boolean.no') }}
                         </span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.show_result') }}</span>
+                        <span :class="quiz?.show_result ? 'text-green-600' : 'text-red-500'" class="font-medium">
+                            {{ quiz?.show_result ? t('common.boolean.yes') :
+                                t('common.boolean.no') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.max_winner') }}</span>
+                        {{ quiz?.max_winner || t('common.labels.notAvailable') }}
                     </div>
 
 
@@ -263,6 +285,8 @@ onMounted(
                                 t('common.actions.inactive') }}
                         </span>
                     </div>
+
+
                 </div>
             </div>
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Observers\QuizObserver;
@@ -22,12 +23,18 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('quizzes')]
 #[Fillable([
-        'name', 'brief', 'slug',
-        'language_id',
-        "start_date", 'end_date',
-        "is_active", 'created_by_id',
-        "show_bellow_event",
-    ])]
+    'name',
+    'brief',
+    'slug',
+    'language_id',
+    "start_date",
+    'end_date',
+    "is_active",
+    'created_by_id',
+    "show_bellow_event",
+    'show_result',
+    'max_winner',
+])]
 #[UsePolicy(QuizPolicy::class)]
 #[ObservedBy([QuizObserver::class])]
 class Quiz extends Model
@@ -42,6 +49,9 @@ class Quiz extends Model
             'start_date'        => 'date',
             'end_date'          => 'date',
 
+            'show_result' => 'boolean',
+            'max_winner' => 'integer',
+
             'is_active'        => 'boolean',
             'show_bellow_event' => 'boolean',
             'created_at'        => 'datetime',
@@ -53,9 +63,16 @@ class Quiz extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'brief', 'slug', "is_active",
-                "language_id", "start_date", 'end_date',
+                'name',
+                'brief',
+                'slug',
+                "is_active",
+                "language_id",
+                "start_date",
+                'end_date',
                 "show_bellow_event",
+                'show_result',
+                'max_winner',
             ])
             ->useLogName('Quiz')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")

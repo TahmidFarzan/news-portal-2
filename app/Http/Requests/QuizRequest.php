@@ -57,6 +57,16 @@ class QuizRequest extends FormRequest
                 'required',
                 'boolean',
             ],
+
+            'show_result' => [
+                'required',
+                'boolean',
+            ],
+
+            'max_winner' => [
+                'required',
+                'min:1',
+            ],
         ];
 
         if (! $isUpdate) {
@@ -142,6 +152,12 @@ class QuizRequest extends FormRequest
 
             'show_bellow_event.required' => __('form-requests.quiz.show_bellow_event.required'),
             'show_bellow_event.boolean' => __('form-requests.quiz.show_bellow_event.boolean'),
+
+            'show_result.required' => __('form-requests.quiz.show_result.required'),
+            'show_result.boolean' => __('form-requests.quiz.show_result.boolean'),
+
+            'max_winner.required' => __('form-requests.quiz.max_winner.required'),
+            'max_winner.boolean' => __('form-requests.quiz.max_winner.min'),
 
             'questions.required' => __('form-requests.quiz.questions.required'),
             'questions.array' => __('form-requests.quiz.questions.array'),

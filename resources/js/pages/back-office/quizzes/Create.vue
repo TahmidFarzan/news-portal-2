@@ -52,6 +52,8 @@ const saveForm = useForm({
     end_date: quiz?.end_date ? formatDate(quiz?.end_date, "Y-m-d") : null,
     is_active: quiz?.is_active ?? true,
     show_bellow_event: quiz?.show_bellow_event ?? false,
+    max_winner: quiz?.max_winner ?? 1,
+    show_result: quiz?.show_result ?? false,
     questions: isUpdate.value ? [] : [createEmptyQuestion(1)],
 });
 
@@ -316,8 +318,8 @@ onMounted(async () => {
                             <input v-model="saveForm.name" type="text"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.name
-                                        ? 'border-red-500'
-                                        : 'border-gray-300'
+                                    ? 'border-red-500'
+                                    : 'border-gray-300'
                                     " :placeholder="t('common.placeholders.name') || 'Quiz name'" />
                             <p v-if="saveForm.errors.name" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.name }}
@@ -331,10 +333,10 @@ onMounted(async () => {
                             <textarea v-model="saveForm.brief" rows="3"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.brief
-                                        ? 'border-red-500'
-                                        : 'border-gray-300'
+                                    ? 'border-red-500'
+                                    : 'border-gray-300'
                                     " :placeholder="t('common.placeholders.brief') || 'Brief description'
-                                    "></textarea>
+                                        "></textarea>
                             <p v-if="saveForm.errors.brief" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.brief }}
                             </p>
@@ -348,8 +350,8 @@ onMounted(async () => {
                             <input v-model="saveForm.start_date" type="date"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.start_date
-                                        ? 'border-red-500'
-                                        : 'border-gray-300'
+                                    ? 'border-red-500'
+                                    : 'border-gray-300'
                                     " />
                             <p v-if="saveForm.errors.start_date" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.start_date }}
@@ -364,11 +366,49 @@ onMounted(async () => {
                             <input v-model="saveForm.end_date" type="date"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.end_date
-                                        ? 'border-red-500'
-                                        : 'border-gray-300'
+                                    ? 'border-red-500'
+                                    : 'border-gray-300'
                                     " />
                             <p v-if="saveForm.errors.end_date" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.end_date }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t("common.labels.max_winner") }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <input v-model="saveForm.max_winner" type="number"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.max_winner
+                                    ? 'border-red-500'
+                                    : 'border-gray-300'
+                                    " :placeholder="t('common.placeholders.max_winner')" min="1" step="1" />
+                            <p v-if="saveForm.errors.max_winner" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.max_winner }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="mb-1 block text-sm font-medium text-gray-700">
+                                {{ t("common.labels.show_result") }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <label class="inline-flex cursor-pointer items-center gap-3">
+                                <input v-model="saveForm.show_result" type="checkbox" class="peer sr-only" />
+                                <span
+                                    class="relative h-7 w-14 rounded-full bg-gray-300 transition after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-7"></span>
+                                <span class="text-sm text-gray-600">
+                                    {{
+                                        saveForm.show_result
+                                            ? t("common.boolean.yes")
+                                            : t("common.boolean.no")
+                                    }}
+                                </span>
+                            </label>
+                            <p v-if="saveForm.errors.show_result" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.show_result }}
                             </p>
                         </div>
 

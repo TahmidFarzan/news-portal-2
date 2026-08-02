@@ -149,7 +149,9 @@
             "single": "Single",
             "multiple": "Multiple",
             "questions": "Questions",
-            "answer_type": "Answer type"
+            "answer_type": "Answer type",
+            "max_winner" : "Max winner",
+            "show_result" : "Show result"
         },
         "actions": {
             "details": "Details",
@@ -211,7 +213,8 @@
             "brief": "Brief",
             "question": "Question",
             "options": "Options",
-            "option": "Option"
+            "option": "Option",
+            "max_winner" : "Max winner"
         },
         "messages": {
             "showAll": "Show All",

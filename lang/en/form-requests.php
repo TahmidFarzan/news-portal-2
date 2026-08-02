@@ -706,6 +706,16 @@ return [
             'boolean'  => 'Current status must be true or false.',
         ],
 
+        'show_result'        => [
+            'required' => 'Show result is required.',
+            'boolean'  => 'Show result must be true or false.',
+        ],
+
+        'max_winner'        => [
+            'required' => 'Max winner is required.',
+            'min'  => 'Max winner at least 1.',
+        ],
+
         'show_bellow_event' => [
             'required' => 'Show below event field is required.',
             'boolean'  => 'Show below event must be true or false.',
