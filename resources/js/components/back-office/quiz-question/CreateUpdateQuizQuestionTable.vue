@@ -331,6 +331,7 @@ function openEditQuestionModal(q) {
 }
 
 function closeQuestionModal() {
+    if (saveQuizQuestionForm.processing) return;
     showQuestionModal.value = false;
     editingQuestion.value = null;
     saveQuizQuestionForm.reset();
@@ -490,6 +491,7 @@ function openDeleteModal(q) {
 }
 
 function closeDeleteModal() {
+    if (deleteProcessing.value) return;
     showDeleteModal.value = false;
     deletingRow.value = null;
 }
@@ -839,139 +841,179 @@ function handleQuizQuestionDelete(quizQuestion) {
         </div>
     </div>
 
-    <div v-if="showQuestionModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold">
-                    {{
-                        editingQuestion
-                            ? t("common.actions.edit")
-                            : t("common.actions.add")
-                    }}
-                    {{ t("common.labels.question") || "Question" }}
-                </h3>
-                <button type="button" @click="closeQuestionModal" class="text-gray-400 hover:text-gray-600">
-                    <FontAwesomeIcon icon="times" />
-                </button>
-            </div>
+    <Teleport to="body">
+        <Transition name="modal">
+            <div v-if="showQuestionModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+                @click.self="closeQuestionModal">
+                <div
+                    class="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold">
+                            {{
+                                editingQuestion
+                                    ? t("common.actions.edit")
+                                    : t("common.actions.add")
+                            }}
+                            {{ t("common.labels.question") || "Question" }}
+                        </h3>
+                        <button type="button" @click="closeQuestionModal" class="text-gray-400 hover:text-gray-600"
+                            :disabled="saveQuizQuestionForm.processing">
+                            <FontAwesomeIcon icon="times" />
+                        </button>
+                    </div>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">
-                    {{ t("common.labels.question") || "Question" }}
-                    <span class="text-red-500">*</span>
-                </label>
-                <textarea v-model="saveQuizQuestionForm.question" rows="3"
-                    class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    :class="saveQuizQuestionForm.errors.question
-                            ? 'border-red-500'
-                            : 'border-gray-300'
-                        " :placeholder="t('common.placeholders.question') || 'Enter question'"></textarea>
-                <p v-if="saveQuizQuestionForm.errors.question" class="text-red-500 text-sm mt-1">
-                    {{ saveQuizQuestionForm.errors.question }}
-                </p>
-            </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">
+                            {{ t("common.labels.question") || "Question" }}
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <textarea v-model="saveQuizQuestionForm.question" rows="3"
+                            class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            :class="saveQuizQuestionForm.errors.question
+                                    ? 'border-red-500'
+                                    : 'border-gray-300'
+                                " :disabled="saveQuizQuestionForm.processing" :placeholder="t('common.placeholders.question') || 'Enter question'
+                                "></textarea>
+                        <p v-if="saveQuizQuestionForm.errors.question" class="text-red-500 text-sm mt-1">
+                            {{ saveQuizQuestionForm.errors.question }}
+                        </p>
+                    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">
-                        {{ t("common.labels.answer_type") || "Answer Type" }}
-                        <span class="text-red-500">*</span>
-                    </label>
-                    <SelectInfinityLoadingApi :form="saveQuizQuestionForm" fieldName="answer_type" :selectedItem="saveQuizQuestionForm.answer_type
-                            ? {
-                                id: saveQuizQuestionForm.answer_type,
-                                name: saveQuizQuestionForm.answer_type,
-                            }
-                            : null
-                        " :apiUrl="route('search.quiz-question-answer-types')"
-                        :error="saveQuizQuestionForm.errors.answer_type" :multiple="false"
-                        :placeholder="t('common.labels.answerType') || 'Answer Type'" />
-                    <p v-if="saveQuizQuestionForm.errors.answer_type" class="text-red-500 text-sm mt-1">
-                        {{ saveQuizQuestionForm.errors.answer_type }}
-                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t("common.labels.answer_type") || "Answer Type" }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <SelectInfinityLoadingApi :form="saveQuizQuestionForm" fieldName="answer_type"
+                                :selectedItem="saveQuizQuestionForm.answer_type
+                                        ? {
+                                            id: saveQuizQuestionForm.answer_type,
+                                            name: saveQuizQuestionForm.answer_type,
+                                        }
+                                        : null
+                                    " :apiUrl="route('search.quiz-question-answer-types')"
+                                :error="saveQuizQuestionForm.errors.answer_type" :multiple="false" :placeholder="t('common.labels.answerType') || 'Answer Type'
+                                    " />
+                            <p v-if="saveQuizQuestionForm.errors.answer_type" class="text-red-500 text-sm mt-1">
+                                {{ saveQuizQuestionForm.errors.answer_type }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t("common.labels.point") || "Point" }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <input v-model.number="saveQuizQuestionForm.point" type="number" min="0" step="0.01"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveQuizQuestionForm.errors.point
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
+                                    " :disabled="saveQuizQuestionForm.processing" />
+                            <p v-if="saveQuizQuestionForm.errors.point" class="text-red-500 text-sm mt-1">
+                                {{ saveQuizQuestionForm.errors.point }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t("common.labels.position") || "Position" }}
+                            </label>
+                            <input v-model.number="saveQuizQuestionForm.position" type="number" min="1"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveQuizQuestionForm.errors.position
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
+                                    " :disabled="saveQuizQuestionForm.processing" />
+                            <p v-if="saveQuizQuestionForm.errors.position" class="text-red-500 text-sm mt-1">
+                                {{ saveQuizQuestionForm.errors.position }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div v-if="!editingQuestion">
+                        <CreateUpdateQuizQuestionOptionTable :quiz="quiz" :quizQuestion="null" :isUpdate="false"
+                            :quizQuestionSaveForm="saveQuizQuestionForm" />
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" @click="closeQuestionModal"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
+                            :disabled="saveQuizQuestionForm.processing">
+                            {{ t("common.actions.cancel") }}
+                        </button>
+                        <button type="button" @click="handleQuizQuestionSave"
+                            :disabled="saveQuizQuestionForm.processing"
+                            class="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2">
+                            <FontAwesomeIcon v-if="saveQuizQuestionForm.processing" icon="spinner" spin />
+                            <FontAwesomeIcon v-else icon="save" />
+                            {{
+                                saveQuizQuestionForm.processing
+                                    ? t("common.actions.saving")
+                                    : t("common.actions.save")
+                            }}
+                        </button>
+                    </div>
                 </div>
+            </div>
+        </Transition>
+    </Teleport>
 
-                <div>
-                    <label class="block text-sm font-medium mb-1">
-                        {{ t("common.labels.point") || "Point" }}
-                        <span class="text-red-500">*</span>
-                    </label>
-                    <input v-model.number="saveQuizQuestionForm.point" type="number" min="0" step="0.01"
-                        class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        :class="saveQuizQuestionForm.errors.point
-                                ? 'border-red-500'
-                                : 'border-gray-300'
-                            " />
-                    <p v-if="saveQuizQuestionForm.errors.point" class="text-red-500 text-sm mt-1">
-                        {{ saveQuizQuestionForm.errors.point }}
+    <Teleport to="body">
+        <Transition name="modal">
+            <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+                @click.self="closeDeleteModal">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-sm mx-4 p-6 space-y-4">
+                    <h3 class="text-lg font-semibold">
+                        {{ t("common.actions.delete") }}
+                    </h3>
+                    <p class="text-sm text-gray-600">
+                        {{ t("common.messages.confirmDelete") }}
                     </p>
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" @click="closeDeleteModal"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
+                            :disabled="deleteProcessing">
+                            {{ t("common.actions.cancel") }}
+                        </button>
+                        <button type="button" @click="handleQuizQuestionDelete(deletingRow)"
+                            :disabled="deleteProcessing"
+                            class="bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2">
+                            <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
+                            <FontAwesomeIcon v-else icon="trash" />
+                            {{
+                                deleteProcessing
+                                    ? t("common.actions.deleting")
+                                    : t("common.actions.delete")
+                            }}
+                        </button>
+                    </div>
                 </div>
-
-                <div>
-                    <label class="block text-sm font-medium mb-1">
-                        {{ t("common.labels.position") || "Position" }}
-                    </label>
-                    <input v-model.number="saveQuizQuestionForm.position" type="number" min="1"
-                        class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        :class="saveQuizQuestionForm.errors.position
-                                ? 'border-red-500'
-                                : 'border-gray-300'
-                            " />
-                    <p v-if="saveQuizQuestionForm.errors.position" class="text-red-500 text-sm mt-1">
-                        {{ saveQuizQuestionForm.errors.position }}
-                    </p>
-                </div>
             </div>
-
-            <div v-if="!editingQuestion">
-                <CreateUpdateQuizQuestionOptionTable :quiz="quiz" :quizQuestion="null" :isUpdate="false"
-                    :quizQuestionSaveForm="saveQuizQuestionForm" />
-            </div>
-
-            <div class="flex justify-end gap-3 pt-2">
-                <button type="button" @click="closeQuestionModal"
-                    class="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50">
-                    {{ t("common.actions.cancel") }}
-                </button>
-                <button type="button" @click="handleQuizQuestionSave" :disabled="saveQuizQuestionForm.processing"
-                    class="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2">
-                    <FontAwesomeIcon v-if="saveQuizQuestionForm.processing" icon="spinner" spin />
-                    <FontAwesomeIcon v-else icon="save" />
-                    {{
-                        saveQuizQuestionForm.processing
-                            ? t("common.actions.saving")
-                            : t("common.actions.save")
-                    }}
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-sm mx-4 p-6 space-y-4">
-            <h3 class="text-lg font-semibold">
-                {{ t("common.actions.delete") }}
-            </h3>
-            <p class="text-sm text-gray-600">
-                {{ t("common.messages.confirmDelete") }}
-            </p>
-            <div class="flex justify-end gap-3 pt-2">
-                <button type="button" @click="closeDeleteModal"
-                    class="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
-                    :disabled="deleteProcessing">
-                    {{ t("common.actions.cancel") }}
-                </button>
-                <button type="button" @click="handleQuizQuestionDelete(deletingRow)" :disabled="deleteProcessing"
-                    class="bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2">
-                    <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                    <FontAwesomeIcon v-else icon="trash" />
-                    {{
-                        deleteProcessing
-                            ? t("common.actions.deleting")
-                            : t("common.actions.delete")
-                    }}
-                </button>
-            </div>
-        </div>
-    </div>
+        </Transition>
+    </Teleport>
 </template>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.2s ease;
+}
+
+.modal-enter-active>div,
+.modal-leave-active>div {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+}
+
+.modal-enter-from>div,
+.modal-leave-to>div {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+}
+</style>
