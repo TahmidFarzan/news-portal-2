@@ -1,7 +1,7 @@
 <script setup>
 import SurveyQuestion from '@/components/common/page/home/SurveyQuestion.vue'
 
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
@@ -15,19 +15,14 @@ import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
 
-const {
-    surveys: initialSurveys,
-    currentLanguage,
-} = defineProps({
-    surveys: {
-        type: [Array, Object],
-        default: () => [],
-    },
+const { currentLanguage } = defineProps({
     currentLanguage: {
         type: Object,
         required: true,
     },
 })
+
+const surveys = ref([])
 
 const normalizeSurveys = (value) => {
     if (Array.isArray(value)) {
@@ -41,18 +36,17 @@ const normalizeSurveys = (value) => {
     return []
 }
 
-const surveys = ref(normalizeSurveys(initialSurveys))
-
 const getSurveysApiUrl = () => {
     return currentLanguage?.is_default
         ? route('home.surveys.get')
         : route('localized.home.surveys.get', {
             languageCode: currentLanguage?.code,
-        });
+        })
 }
 
 const load = async () => {
     if (!currentLanguage?.is_default && !currentLanguage?.code) {
+        surveys.value = []
         return
     }
 
@@ -76,13 +70,7 @@ const load = async () => {
 
 const useSwiper = computed(() => surveys.value.length > 1)
 
-watch(
-    () => initialSurveys,
-    value => {
-        surveys.value = normalizeSurveys(value)
-    },
-    { deep: true }
-)
+onMounted(load)
 
 watch(
     () => [
@@ -109,7 +97,7 @@ watch(
                         <div v-for="surveyQuestion in survey.survey_questions" :key="surveyQuestion.id"
                             class="col-span-12">
                             <SurveyQuestion :key="`${survey.id}-${surveyQuestion.id}`" :survey="survey"
-                                :survey-question="surveyQuestion" :currentLanguage="currentLanguage" @updated="load" />
+                                :survey-question="surveyQuestion" :current-language="currentLanguage" @updated="load" />
                         </div>
                     </div>
 

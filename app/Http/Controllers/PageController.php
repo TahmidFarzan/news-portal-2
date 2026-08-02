@@ -27,7 +27,6 @@ class PageController extends Controller
         $topEvents    = $this->pageService->homeTopEvents($language);
         $bottomEvents = $this->pageService->homeBottomEvents($language);
         $trends       = $this->pageService->homeTrends($language);
-        $surveys      = $this->pageService->homeSurveys($language);
 
         return Inertia::render('Home', [
             'page'         => $page,
@@ -37,7 +36,6 @@ class PageController extends Controller
             'topEvents'    => $topEvents,
             'bottomEvents' => $bottomEvents,
             'trends'       => $trends,
-            'surveys'      => $surveys,
         ]);
     }
 

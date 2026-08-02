@@ -25,7 +25,7 @@ defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
 
-const { page, leadNews, recentNews, popularNews, topEvents, bottomEvents, trends, surveys } = defineProps({
+const { page, leadNews, recentNews, popularNews, topEvents, bottomEvents, trends,} = defineProps({
     page: {
         type: Object,
         required: true,
@@ -52,11 +52,6 @@ const { page, leadNews, recentNews, popularNews, topEvents, bottomEvents, trends
     },
 
     trends: {
-        type: Object,
-        required: true,
-    },
-
-    surveys: {
         type: Object,
         required: true,
     },
@@ -190,7 +185,7 @@ const componentRefreshKey = (componentName) => {
             </div>
         </div>
 
-        <Surveys :key="componentRefreshKey('survey-section')" v-if="showSurveys" :surveys="surveys"
+        <Surveys :key="componentRefreshKey('survey-section')" v-if="showSurveys"
             :currentLanguage="currentLanguage"  class="home-surveys mt-4"/>
 
         <div v-if="bottomEvents" class="home-bottom-events">
