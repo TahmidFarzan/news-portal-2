@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library as FontAwesomeLibrary } from "@fortawesome/fontawesome-svg-core";
 import { faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import SelectInfinityLoadingApi from "@/components/common/multi-select/SelectInfinityLoadingApi.vue";
-import CreateUpdateQuizQuestionTable from "@/components/back-office/quiz-question/CreateUpdateQuizQuestionTable.vue";
+import CreateUpdateQuizQuestionTableByQuiz from "@/components/back-office/quiz-question/CreateUpdateQuizQuestionTableByQuiz.vue";
 import { formatDate } from "@/composables/useDateTime";
 import { quizQuestionTypes } from "@/composables/useQuiz";
 
@@ -53,7 +53,7 @@ const saveForm = useForm({
     is_active: quiz?.is_active ?? true,
     show_bellow_event: quiz?.show_bellow_event ?? false,
     max_winner: quiz?.max_winner ?? 1,
-    show_result: quiz?.show_result ?? false,
+    enable_result: quiz?.enable_result ?? false,
     questions: isUpdate.value ? [] : [createEmptyQuestion(1)],
 });
 
@@ -392,23 +392,23 @@ onMounted(async () => {
 
                         <div>
                             <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t("common.labels.show_result") }}
+                                {{ t("common.labels.enable_result") }}
                                 <span class="text-red-500">*</span>
                             </label>
                             <label class="inline-flex cursor-pointer items-center gap-3">
-                                <input v-model="saveForm.show_result" type="checkbox" class="peer sr-only" />
+                                <input v-model="saveForm.enable_result" type="checkbox" class="peer sr-only" />
                                 <span
                                     class="relative h-7 w-14 rounded-full bg-gray-300 transition after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-7"></span>
                                 <span class="text-sm text-gray-600">
                                     {{
-                                        saveForm.show_result
+                                        saveForm.enable_result
                                             ? t("common.boolean.yes")
                                             : t("common.boolean.no")
                                     }}
                                 </span>
                             </label>
-                            <p v-if="saveForm.errors.show_result" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.show_result }}
+                            <p v-if="saveForm.errors.enable_result" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.enable_result }}
                             </p>
                         </div>
 
@@ -461,7 +461,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <CreateUpdateQuizQuestionTable :quiz="quiz" :isUpdate="isUpdate" :quizSaveForm="saveForm" />
+                <CreateUpdateQuizQuestionTableByQuiz :quiz="quiz" :isUpdate="isUpdate" :quizSaveForm="saveForm" />
 
                 <div class="flex justify-center">
                     <button type="submit" :disabled="saveForm.processing"

@@ -706,9 +706,9 @@ return [
             'boolean'  => 'Current status must be true or false.',
         ],
 
-        'show_result'        => [
-            'required' => 'Show result is required.',
-            'boolean'  => 'Show result must be true or false.',
+        'enable_result'        => [
+            'required' => 'Enable result is required.',
+            'boolean'  => 'Enable result must be true or false.',
         ],
 
         'max_winner'        => [

@@ -15,7 +15,7 @@ class QuizUpdateForShowResultAndMaxWinnerSeeder extends Seeder
     {
         Quiz::query()->each(function (Quiz $quiz) {
             $quiz->update([
-                'show_result' => true,
+                'enable_result' => true,
                 'max_winner' => random_int(7, 13),
             ]);
         });

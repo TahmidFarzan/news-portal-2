@@ -15,6 +15,10 @@ use App\Models\Page;
 use App\Models\Survey;
 use App\Models\SurveyQuestion;
 use App\Models\SurveyQuestionResult;
+
+use App\Models\Quiz;
+use App\Models\QuizQuestion;
+use App\Models\QuizQuestionOption;
 use App\Models\Tag;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\ContributorCacheService;
@@ -24,6 +28,7 @@ use App\Services\Cache\NewsCacheService;
 use App\Services\Cache\NewsTypeCacheService;
 use App\Services\Cache\PageCacheService;
 use App\Services\Cache\SurveyCacheService;
+use App\Services\Cache\QuizCacheService;
 use App\Services\Cache\TagCacheService;
 use App\Services\SiteService;
 use Exception;
@@ -32,6 +37,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PageService
 {
@@ -57,6 +63,9 @@ class PageService
 
     protected SurveyCacheService $surveyCacheService;
 
+    protected QuizCacheService $quizCacheService;
+
+
     public function __construct(
         SiteService $siteService,
         NewsCacheService $newsCacheService,
@@ -67,7 +76,8 @@ class PageService
         PageCacheService $pageCacheService,
         NewsTypeCacheService $newsTypeCacheService,
         LocationCacheService $locationCacheService,
-        SurveyCacheService $surveyCacheService
+        SurveyCacheService $surveyCacheService,
+        QuizCacheService $quizCacheService
     ) {
         $this->siteService             = $siteService;
         $this->newsCacheService        = $newsCacheService;
@@ -79,6 +89,7 @@ class PageService
         $this->newsTypeCacheService    = $newsTypeCacheService;
         $this->locationCacheService    = $locationCacheService;
         $this->surveyCacheService      = $surveyCacheService;
+        $this->quizCacheService      = $quizCacheService;
     }
 
     public function language(string $code): Language
@@ -598,6 +609,58 @@ class PageService
             ];
         }
 
+    }
+
+    public function homeQuizzes(Language $language, Request $request): Collection
+    {
+        return $this->quizCacheService->getQuizzesByDate(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            now()->toDateString(),
+            $request,
+            $this->cachedTTL
+        );
+    }
+
+    public function homeQuiz(Language $language, string $slug): Quiz
+    {
+        return $this->quizCacheService->getQuizBySlug(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            $slug,
+            $this->cachedTTL
+        );
+    }
+
+    public function homePreviousQuiz(Language $language): Quiz|null
+    {
+        return $this->quizCacheService->getPreviousQuiz(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            now()->toDateString(),
+            $this->cachedTTL
+        );
+    }
+
+    public function homeQuizWinnserResultsByQuiz(Language $language, Quiz $quiz)
+    {
+        return $this->quizCacheService->getQuizWinnerResultsByQuiz(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            $quiz,
+            $this->cachedTTL
+        );
+    }
+
+    public function homeQuizQuestions(Language $language, Quiz $quiz, Request $request): LengthAwarePaginator
+    {
+        return $this->quizCacheService->getQuizQuestionsByQuiz(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            $quiz,
+            $request,
+            $this->cachedTTL
+        );
     }
 
     public function newsHitCounterCalculate(News $news): void

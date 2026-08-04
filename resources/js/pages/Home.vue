@@ -13,6 +13,7 @@ import ImageGalleryNewsSection from '@/components/common/page/home/ImageGalleryN
 import CategoryNewsSection from '@/components/common/page/home/CategoryNewsSection.vue'
 import Trends from '@/components/common/page/home/Trends.vue'
 import Surveys from '@/components/common/page/home/Surveys.vue'
+import Quizzes from '@/components/common/page/home/Quizzes.vue'
 import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
 import { loweriseText } from '@/composables/useUtil'
 
@@ -60,6 +61,7 @@ const { page, leadNews, recentNews, popularNews, topEvents, bottomEvents, trends
 const showGoogleAd = inject('showGoogleAd', computed(() => false))
 const showTrends = inject('showTrends', computed(() => false))
 const showSurveys = inject('showSurveys', computed(() => false))
+const showQuizzes = inject('showQuizzes', computed(() => false))
 const currentLanguage = inject('currentLanguage', computed(() => null))
 
 const leadNewsItems = computed(() => {
@@ -129,8 +131,10 @@ const componentRefreshKey = (componentName) => {
     </Head>
 
     <section class="home-page min-h-screen">
-        <div :key="componentRefreshKey('event-top')" v-if="topEvents" class="home-top-events">
-            <EventNewsSection :events="topEvents" :currentLanguage="currentLanguage" class="mb-4" />
+        <div v-if="topEvents" :key="componentRefreshKey('event-section-top')"  class="home-top-events">
+            <EventNewsSection :events="topEvents" :currentLanguage="currentLanguage" />
+            <Quizzes v-if="showQuizzes"
+            :currentLanguage="currentLanguage" :belowEvent="true"  class="home-quizzes mt-4"/>
         </div>
 
         <Trends :key="componentRefreshKey('trend')" v-if="showTrends" class="home-trends" :trends="trends" />
@@ -185,13 +189,17 @@ const componentRefreshKey = (componentName) => {
             </div>
         </div>
 
+        <div v-if="bottomEvents" :key="componentRefreshKey('event-section-bottom')" class="home-bottom-events">
+            <EventNewsSection :events="bottomEvents"
+                :currentLanguage="currentLanguage" class="mt-4" />
+            <Quizzes v-if="showQuizzes"
+            :currentLanguage="currentLanguage" :belowEvent="true"  class="home-quizzes mt-4"/>
+        </div>
+
         <Surveys :key="componentRefreshKey('survey-section')" v-if="showSurveys"
             :currentLanguage="currentLanguage"  class="home-surveys mt-4"/>
-
-        <div v-if="bottomEvents" class="home-bottom-events">
-            <EventNewsSection :key="componentRefreshKey('event-section-bottom')" :events="bottomEvents"
-                :currentLanguage="currentLanguage" class="mt-4" />
-        </div>
+        <Quizzes :key="componentRefreshKey('quiz-section')" v-if="showQuizzes"
+            :currentLanguage="currentLanguage" :belowEvent="false"  class="home-quizzes mt-4"/>
 
         <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
 
@@ -332,6 +340,10 @@ const componentRefreshKey = (componentName) => {
 }
 
 .home-surveys {
+    display: block;
+}
+
+.home-quizzes {
     display: block;
 }
 

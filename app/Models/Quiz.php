@@ -32,7 +32,7 @@ use Spatie\Sluggable\SlugOptions;
     "is_active",
     'created_by_id',
     "show_bellow_event",
-    'show_result',
+    'enable_result',
     'max_winner',
 ])]
 #[UsePolicy(QuizPolicy::class)]
@@ -41,7 +41,7 @@ class Quiz extends Model
 {
     use HasFactory, LogsActivity, HasSlug;
 
-    protected $appends = [];
+    protected $appends = ["public_url", "show_result"];
 
     protected function casts(): array
     {
@@ -49,7 +49,7 @@ class Quiz extends Model
             'start_date'        => 'date',
             'end_date'          => 'date',
 
-            'show_result' => 'boolean',
+            'enable_result' => 'boolean',
             'max_winner' => 'integer',
 
             'is_active'        => 'boolean',
@@ -71,7 +71,7 @@ class Quiz extends Model
                 "start_date",
                 'end_date',
                 "show_bellow_event",
-                'show_result',
+                'enable_result',
                 'max_winner',
             ])
             ->useLogName('Quiz')
@@ -100,6 +100,33 @@ class Quiz extends Model
         return 'slug';
     }
 
+    public function getPublicUrlAttribute(): ?string
+    {
+        $url = null;
+        if (! $this->slug) {
+            return $url;
+        }
+
+        $url = route("home.quizzes.details", ["slug" => $this->slug]);
+
+        if ($this->language?->is_default == false) {
+            $url = route("localized.home.quizzes.details", ["languageCode" => $this->language?->code, "slug" => $this->slug]);
+        }
+
+        return $url;
+    }
+
+    public function getShowResultAttribute(): bool
+    {
+        if (! $this->enable_result) {
+            return false;
+        }
+
+        $endDate = $this->end_date ?? now();
+
+        return $endDate->copy()->addDays(30)->gte(now());
+    }
+
     public function activityLogs(): MorphMany
     {
         return $this->morphMany(Activity::class, 'subject');
@@ -120,8 +147,18 @@ class Quiz extends Model
         return $this->morphOne(Activity::class, 'subject')->latestOfMany();
     }
 
-    public function QuizQuestions(): HasMany
+    public function quizQuestions(): HasMany
     {
         return $this->hasMany(QuizQuestion::class)->orderBy('position');
+    }
+
+    public function quizResults(): HasMany
+    {
+        return $this->hasMany(QuizResult::class);
+    }
+
+    public function quizParticipants(): HasMany
+    {
+        return $this->hasMany(QuizParticipant::class);
     }
 }

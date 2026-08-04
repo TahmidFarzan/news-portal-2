@@ -18,7 +18,8 @@ import {
     faEyeSlash,
     faSpinner,
     faAdd,
-    faList
+    faList,
+    faSquarePollHorizontal
 } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate,formatDateTime } from '@/composables/useDateTime'
@@ -45,7 +46,8 @@ FontAwesomeLibrary.add(
     faEyeSlash,
     faSpinner,
     faAdd,
-    faList
+    faList,
+    faSquarePollHorizontal
 )
 
 defineOptions({
@@ -406,6 +408,12 @@ onMounted(async () => {
                                         class="p-2 rounded-md text-green-600 hover:bg-green-50 border"
                                         :title="t('common.messages.createQuestion')">
                                         <FontAwesomeIcon icon="add" />
+                                    </a>
+
+                                    <a  :href="route('back-office.quizzes.quiz-results.index', { slug: item.slug })"
+                                        class="p-2 rounded-md text-green-300 hover:bg-green-50 border"
+                                        :title="t('common.messages.quizResults')">
+                                        <FontAwesomeIcon icon="square-poll-horizontal" />
                                     </a>
                                 </div>
                             </td>

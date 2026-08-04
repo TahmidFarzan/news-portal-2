@@ -42,6 +42,8 @@ class DatabaseSeeder extends Seeder
         $this->call(QuizSeeder::class);
         $this->call(QuizQuestionSeeder::class);
         $this->call(QuizQuestionOptionSeeder::class);
+        $this->call(QuizUpdateForShowResultAndMaxWinnerSeeder::class);
+        $this->call(QuizParticipantSeeder::class);
 
         $this->call(NewsSeeder::class);
         $this->call(NewsPlacementSeeder::class);

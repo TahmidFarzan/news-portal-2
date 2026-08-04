@@ -51,6 +51,7 @@
     --news-event-top-gradient: linear-gradient(135deg, #ffffff 0%, #fff7f7 62%, #f8fafc 100%);
     --news-event-bottom-gradient: linear-gradient(135deg, #ffffff 0%, #f8fafc 64%, #f0fdfa 120%);
     --news-survey-gradient: linear-gradient(135deg, #f8fafc 0%, #ffffff 52%, #fff7ed 120%);
+    --news-quiz-gradient: linear-gradient(135deg, #f8fafc 0%, #ffffff 52%, #fff7ed 120%);
     --news-video-gradient: linear-gradient(135deg, #111827 0%, #1f2937 34%, #ffffff 34.2%, #ffffff 100%);
     --news-video-gradient-mobile: linear-gradient(180deg, #111827 0%, #1f2937 5.5rem, #ffffff 5.6rem, #ffffff 100%);
     --news-gallery-gradient: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
@@ -91,6 +92,7 @@
     --news-page-title-size: clamp(1.5rem, 3vw, 2.25rem);
     --news-popup-text-size: 0.75rem;
     --news-survey-title-size: clamp(1.15rem, 2vw, 1.5rem);
+    --news-quiz-title-size: clamp(1.15rem, 2vw, 1.5rem);
     --news-article-title-size: clamp(1.55rem, 3vw, 2.35rem);
     --news-article-subtitle-size: clamp(0.98rem, 1.4vw, 1.1rem);
     --news-body-size: clamp(1rem, 1.2vw, 1.12rem);

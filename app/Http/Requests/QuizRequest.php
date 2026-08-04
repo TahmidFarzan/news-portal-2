@@ -58,7 +58,7 @@ class QuizRequest extends FormRequest
                 'boolean',
             ],
 
-            'show_result' => [
+            'enable_result' => [
                 'required',
                 'boolean',
             ],
@@ -153,8 +153,8 @@ class QuizRequest extends FormRequest
             'show_bellow_event.required' => __('form-requests.quiz.show_bellow_event.required'),
             'show_bellow_event.boolean' => __('form-requests.quiz.show_bellow_event.boolean'),
 
-            'show_result.required' => __('form-requests.quiz.show_result.required'),
-            'show_result.boolean' => __('form-requests.quiz.show_result.boolean'),
+            'enable_result.required' => __('form-requests.quiz.enable_result.required'),
+            'enable_result.boolean' => __('form-requests.quiz.enable_result.boolean'),
 
             'max_winner.required' => __('form-requests.quiz.max_winner.required'),
             'max_winner.boolean' => __('form-requests.quiz.max_winner.min'),

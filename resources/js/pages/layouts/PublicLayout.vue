@@ -265,6 +265,15 @@ const showSurveys = computed(() => {
     return isTruthyValue(theme?.value)
 })
 
+const showQuizzes = computed(() => {
+    const theme = getTheme(
+        themeOptions.SHOW_QUIZZES,
+        themeGroups.App
+    )
+
+    return isTruthyValue(theme?.value)
+})
+
 const selectedLanguageCode = computed(() => {
     return (
         currentLanguage.value?.code ??
@@ -300,6 +309,7 @@ const searchUrl = computed(() => {
 provide('showGoogleAd', showGoogleAd)
 provide('showTrends', showTrends)
 provide('showSurveys', showSurveys)
+provide('showQuizzes', showQuizzes)
 provide('currentLanguage', currentLanguage)
 
 onMounted(async () => {

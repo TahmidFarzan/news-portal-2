@@ -150,8 +150,24 @@
             "multiple": "Multiple",
             "questions": "Questions",
             "answer_type": "Answer type",
-            "max_winner" : "Max winner",
-            "show_result" : "Show result"
+            "max_winner": "Max winner",
+            "enable_result": "Enable result",
+            "quizResults": "Quiz Results",
+            "quizResult": "Quiz Result",
+            "quizParticipants": "Quiz participants",
+            "device": "Device",
+            "phone": "Phone",
+            "duration": "Duration",
+            "quizParticipantInformation" : "Quiz Participant Information",
+            "ip" : "Ip",
+            "ongoing": "Ongoing",
+            "until": "Until",
+            "to": "To",
+            "schedule" : "Schedule",
+            "result" : "Result",
+            "quizParticipant" : "Quiz participant",
+            "previous": "Previous",
+            "next": "Next"
         },
         "actions": {
             "details": "Details",
@@ -183,7 +199,8 @@
             "activating": "Activating...",
             "active": "Active",
             "add": "Add",
-            "remove" : "Remove"
+            "remove": "Remove",
+            "quizResult" : "Quiz Result"
         },
         "placeholders": {
             "parent": "Parent",
@@ -214,7 +231,8 @@
             "question": "Question",
             "options": "Options",
             "option": "Option",
-            "max_winner" : "Max winner"
+            "max_winner": "Max winner",
+            "searchQuizResult" : "Search quiz result"
         },
         "messages": {
             "showAll": "Show All",
@@ -261,7 +279,9 @@
             "text": "©",
             "questionOptions": "Question options",
             "createQuestionOption": "Question option create",
-            "onlyLastTenOptionsAvailableForQuickEdit": "Only the last 10 options are available for quick edit. For additional options, please navigate to the options index and select them from there."
+            "onlyLastTenOptionsAvailableForQuickEdit": "Only the last 10 options are available for quick edit. For additional options, please navigate to the options index and select them from there.",
+            "quizResults": "Quiz Results",
+            "quizResult": "Quiz Result"
         },
         "modals": {
             "deleteConfirmation": "Delete Confirmation",
@@ -717,6 +737,29 @@
                 }
             }
         },
+        "quizResults": {
+            "create": {
+                "labels": {
+                    "createQuiz": "Create Quiz Result"
+                },
+                "validation": {
+                    "result": "Result is required.",
+                    "answer_type": "Answer type is required.",
+                    "point": "Point is required.",
+                    "position": "Position is required."
+                }
+            },
+            "details": {
+                "labels": {
+                    "quizResult": "Quiz Result details"
+                }
+            },
+            "index": {
+                "labels": {
+                    "noQuizResultFound": "No quiz result found."
+                }
+            }
+        },
         "quizQuestionOptions": {
             "create": {
                 "labels": {
@@ -1146,6 +1189,12 @@
                 "labels": {
                     "noSurveyQuestionAdded": "No question added"
                 }
+            },
+
+            "quizzes": {
+                "labels": {
+                    "viewQuiz": "View Quiz"
+                }
             }
         },
         "common": {
@@ -1244,5 +1293,55 @@
         "8": "8",
         "9": "9",
         "0": "0"
+    },
+    "date": {
+        "months": {
+            "1": "January",
+            "2": "February",
+            "3": "March",
+            "4": "April",
+            "5": "May",
+            "6": "June",
+            "7": "July",
+            "8": "August",
+            "9": "September",
+            "10": "October",
+            "11": "November",
+            "12": "December"
+        },
+        "months_short": {
+            "1": "Jan",
+            "2": "Feb",
+            "3": "Mar",
+            "4": "Apr",
+            "5": "May",
+            "6": "Jun",
+            "7": "Jul",
+            "8": "Aug",
+            "9": "Sep",
+            "10": "Oct",
+            "11": "Nov",
+            "12": "Dec"
+        },
+        "weekdays": {
+            "0": "Sunday",
+            "1": "Monday",
+            "2": "Tuesday",
+            "3": "Wednesday",
+            "4": "Thursday",
+            "5": "Friday",
+            "6": "Saturday"
+        },
+        "weekdays_short": {
+            "0": "Sun",
+            "1": "Mon",
+            "2": "Tue",
+            "3": "Wed",
+            "4": "Thu",
+            "5": "Fri",
+            "6": "Sat"
+        },
+        "am": "AM",
+        "pm": "PM"
     }
 }

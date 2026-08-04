@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
-import RecentQuizQuestionOptions from '@/components/back-office/quiz-question-option/RecentQuizQuestionOptions.vue'
+import RecentQuizQuestionOptionsByQuizQuestion from '@/components/back-office/quiz-question-option/RecentQuizQuestionOptionsByQuizQuestion.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as inertiaJsRoute } from '@inertiajs/vue3'

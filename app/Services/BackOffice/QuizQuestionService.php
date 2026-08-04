@@ -5,6 +5,8 @@ namespace App\Services\BackOffice;
 use App\Http\Requests\QuizQuestionRequest;
 use App\Models\Quiz;
 use App\Models\QuizQuestion;
+use App\Models\QuizResult;
+use App\Services\BackOffice\QuizResultService;
 use App\Services\BackOffice\QuizQuestionOptionService;
 use Exception;
 use Illuminate\Http\Request;
@@ -15,9 +17,11 @@ use Illuminate\Support\Facades\Log;
 class QuizQuestionService
 {
     protected QuizQuestionOptionService $quizQuestionOptionService;
+    protected QuizResultService $quizResultService;
 
-    public function __construct(QuizQuestionOptionService $quizQuestionOptionService)
+    public function __construct(QuizQuestionOptionService $quizQuestionOptionService, QuizResultService $quizResultService)
     {
+        $this->quizResultService = $quizResultService;
         $this->quizQuestionOptionService = $quizQuestionOptionService;
     }
 
@@ -85,6 +89,9 @@ class QuizQuestionService
         try {
 
             DB::transaction(function () use ($request, $quiz, $quizQuestion, $isNew) {
+                $oldPoint = $quizQuestion->point;
+                $newPoint = (float) $request->input('point', 1);
+
                 $quizQuestion->quiz_id     = $quiz->id;
                 $quizQuestion->question    = $request->input("question");
                 $quizQuestion->point       = $request->input("point", 1);
@@ -94,6 +101,11 @@ class QuizQuestionService
                 $quizQuestion->created_by_id = $isNew ? Auth::id() : $quizQuestion->created_by_id;
 
                 $save = $quizQuestion->save();
+
+                if($save && ($oldPoint != $newPoint)){
+                    $difference = abs($newPoint - $oldPoint);
+                    $this->quizResultService->syncQuizResultPointByQuiz($quiz, $difference, ($newPoint > $oldPoint));
+                }
 
                 if ($save && $isNew) {
                     if ($request->filled('options')) {
@@ -143,9 +155,11 @@ class QuizQuestionService
 
         try {
 
-            DB::transaction(function () use ($quizQuestion) {
+            DB::transaction(function () use ($quiz, $quizQuestion) {
+                $this->quizResultService->syncQuizResultPointByQuiz($quiz, $quizQuestion->point ?? 0, false);
                 $quizQuestion->delete();
             });
+
 
             return [
                 'status'  => 'success',
@@ -169,7 +183,7 @@ class QuizQuestionService
         try {
             $questions = $request->input('questions', []);
 
-            DB::transaction(function () use ($quiz,$questions) {
+            DB::transaction(function () use ($quiz, $questions) {
                 foreach ($questions as $index => $item) {
                     $quiz->quizQuestions()
                         ->where('slug', $item['slug'])

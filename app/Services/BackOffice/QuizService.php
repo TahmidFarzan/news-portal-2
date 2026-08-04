@@ -5,6 +5,7 @@ namespace App\Services\BackOffice;
 use App\Http\Requests\QuizRequest;
 use App\Models\Quiz;
 use App\Services\BackOffice\QuizQuestionService;
+use App\Services\BackOffice\QuizResultService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class QuizService
 {
     protected QuizQuestionService $quizQuestionService;
 
-    public function __construct(QuizQuestionService $quizQuestionService)
+    public function __construct(QuizQuestionService $quizQuestionService, QuizResultService $quizResultService)
     {
         $this->quizQuestionService = $quizQuestionService;
     }
@@ -29,7 +30,12 @@ class QuizService
     {
         return Quiz::with([
             'quizQuestions' => fn($query) => $query->latest()->limit(10),
+            'quizQuestions.quiz' => fn($query) => $query->latest()->limit(10),
             'quizQuestions.quizQuestionOptions' => fn($query) => $query->latest()->limit(10),
+
+            'quizResults' => fn($query) => $query->latest()->limit(10),
+            'quizResults.quizParticipant',
+
             'language',
 
             'createdBy',
@@ -101,7 +107,7 @@ class QuizService
                 $quiz->end_date          = $request->input('end_date', now());
                 $quiz->is_active         = $request->boolean('is_active', false) ? true : false;
                 $quiz->show_bellow_event = $request->boolean('show_bellow_event', false) ? true : false;
-                $quiz->show_result = $request->boolean('show_result', false) ? true : false;
+                $quiz->enable_result = $request->boolean('enable_result', false) ? true : false;
                 $quiz->max_winner             = $request->input('max_winner', 1);
                 $quiz->created_by_id     = $isNew ? Auth::id() : $quiz->created_by_id;
 
@@ -205,5 +211,14 @@ class QuizService
                 'message' => __('status-messages.quiz.delete.failed'),
             ];
         }
+    }
+
+    public function quizWinnerResults(Quiz $quiz)
+    {
+        return $quiz->quizResults()->with(["quiz","quizParticipant"])
+            ->orderByDesc('total_point')
+            ->orderBy('duration')
+            ->take($quiz->max_winner ?? 1)
+            ->get();
     }
 }

@@ -394,6 +394,37 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
                 Route::patch('reorder', [QuizController::class, 'quizQuestionOptionReorder'])->name('reorder');
             });
         });
+
+        Route::prefix('{slug}/quiz-questions')->name('quiz-questions.')->group(function () {
+            Route::get('/', [QuizController::class, 'quizQuestionIndex'])->name('index');
+            Route::get('create', [QuizController::class, 'quizQuestionCreate'])->name('create');
+            Route::get('edit/{quizQuestionSlug}', [QuizController::class, 'quizQuestionEdit'])->name('edit');
+            Route::get('details/{quizQuestionSlug}', [QuizController::class, 'quizQuestionDetails'])->name('details');
+
+            Route::post('save', [QuizController::class, 'quizQuestionSave'])->name('save');
+            Route::patch('update/{quizQuestionSlug}', [QuizController::class, 'quizQuestionUpdate'])->name('update');
+            Route::delete('delete/{quizQuestionSlug}', [QuizController::class, 'quizQuestionDelete'])->name('delete');
+
+            Route::patch('reorder', [QuizController::class, 'quizQuestionReorder'])->name('reorder');
+
+            Route::prefix('{quizQuestionSlug}/quiz-question-options')->name('quiz-question-options.')->group(function () {
+                Route::get('/', [QuizController::class, 'quizQuestionOptionIndex'])->name('index');
+                Route::get('details/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionDetails'])->name('details');
+                Route::get('create', [QuizController::class, 'quizQuestionOptionCreate'])->name('create');
+                Route::get('edit/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionEdit'])->name('edit');
+
+                Route::post('save', [QuizController::class, 'quizQuestionOptionSave'])->name('save');
+                Route::patch('update/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionUpdate'])->name('update');
+                Route::delete('delete/{quizQuestionOptionSlug}', [QuizController::class, 'quizQuestionOptionDelete'])->name('delete');
+
+                Route::patch('reorder', [QuizController::class, 'quizQuestionOptionReorder'])->name('reorder');
+            });
+        });
+
+        Route::prefix('{slug}/quiz-results')->name('quiz-results.')->group(function () {
+            Route::get('/', [QuizController::class, 'quizResultIndex'])->name('index');
+            Route::get('details/{quizResultSlug}', [QuizController::class, 'quizResultDetails'])->name('details');
+        });
     });
 
     Route::prefix('activity-logs')->name('activity-logs.')->middleware(['is.super.admin'])->group(function () {
@@ -514,6 +545,13 @@ Route::prefix('{languageCode}')->name('localized.')->where(['languageCode' => 'e
                 Route::get('get', [PageController::class, 'localizedHomeSurveys'])->name('get');
                 Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'localizedHomeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
             });
+
+
+            Route::prefix('quizzes')->name('quizzes.')->group(function () {
+                Route::get('get', [PageController::class, 'localizedHomeQuizzes'])->name('get');
+                Route::get('details/{slug}', [PageController::class, 'localizedHomeQuizDetails'])->name('details');
+                Route::post('submit/{slug}', [PageController::class, 'localizedHomeQuizSubmit'])->name('submit');
+            });
         });
 
         Route::get('latest', [PageController::class, 'localizedLatest'])->name('latest');
@@ -611,6 +649,12 @@ Route::middleware(['response.cache:30,public,15,etag'])->group(function () {
         Route::prefix('surveys')->name('surveys.')->group(function () {
             Route::get('get', [PageController::class, 'homeSurveys'])->name('get');
             Route::post('{slug}/survey-questions/{surveyQuestionSlug}/submit', [PageController::class, 'homeSurveySurveyQuestionSubmit'])->name('survey-questions-submit');
+        });
+
+        Route::prefix('quizzes')->name('quizzes.')->group(function () {
+            Route::get('get', [PageController::class, 'homeQuizzes'])->name('get');
+            Route::get('details/{slug}', [PageController::class, 'homeQuizDetails'])->name('details');
+            Route::post('submit/{slug}', [PageController::class, 'homeQuizSubmit'])->name('submit');
         });
     });
 

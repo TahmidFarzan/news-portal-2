@@ -1,7 +1,9 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
-import RecentQuizQuestions from '@/components/back-office/quiz-question/RecentQuizQuestions.vue'
+import RecentQuizQuestionsByQuiz from '@/components/back-office/quiz-question/RecentQuizQuestionsByQuiz.vue'
+import RecentQuizResultsByQuiz from '@/components/back-office/quiz-result/RecentQuizResultsByQuiz.vue'
+import WinnerQuizResults from '@/components/back-office/quiz-result/WinnerQuizResults.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -18,7 +20,8 @@ import {
     faSpinner,
     faCircleCheck,
     faAdd,
-    faList
+    faList,
+    faTrophy
 } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDate, formatDateTime } from '@/composables/useDateTime'
@@ -43,7 +46,8 @@ FontAwesomeLibrary.add(
     faSpinner,
     faCircleCheck,
     faAdd,
-    faList
+    faList,
+    faTrophy
 )
 
 defineOptions({
@@ -61,8 +65,9 @@ const deleteProcessing = ref(false)
 const activeProcessing = ref(false)
 const inactiveProcessing = ref(false)
 
-const { quiz } = defineProps({
-    quiz: Object
+const { quiz, quizWinnerResults } = defineProps({
+    quiz: Object,
+    quizWinnerResults: Object
 })
 
 const pageTitle = computed(() => `${quiz?.name} ${t('common.actions.details')}`)
@@ -228,7 +233,7 @@ onMounted(
                 {{ t('common.labels.basicInformation') }}
             </h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 text-sm">
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
@@ -245,38 +250,48 @@ onMounted(
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.brief') }}</span>
                         <span class="font-medium">
-                            {{ quiz?.brief ||
-                                t('common.labels.notAvailable') }}
+                            {{ quiz?.brief || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.start_date') }}</span>
+                        <span class="font-medium">
+                            {{ quiz?.start_date ? formatDate(quiz.start_date) : t('common.labels.notAvailable') }}
+                        </span>
+                    </div>
 
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.end_date') }}</span>
+                        <span class="font-medium">
+                            {{ quiz?.end_date ? formatDate(quiz.end_date) : t('common.labels.notAvailable') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.show_bellow_event') }}</span>
                         <span :class="quiz?.show_bellow_event ? 'text-green-600' : 'text-red-500'" class="font-medium">
-                            {{ quiz?.show_bellow_event ? t('common.boolean.yes') :
-                                t('common.boolean.no') }}
+                            {{ quiz?.show_bellow_event ? t('common.boolean.yes') : t('common.boolean.no') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('common.labels.show_result') }}</span>
-                        <span :class="quiz?.show_result ? 'text-green-600' : 'text-red-500'" class="font-medium">
-                            {{ quiz?.show_result ? t('common.boolean.yes') :
-                                t('common.boolean.no') }}
+                        <span class="text-gray-500">{{ t('common.labels.enable_result') }}</span>
+                        <span :class="quiz?.enable_result ? 'text-green-600' : 'text-red-500'" class="font-medium">
+                            {{ quiz?.enable_result ? t('common.boolean.yes') : t('common.boolean.no') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.max_winner') }}</span>
                         {{ quiz?.max_winner || t('common.labels.notAvailable') }}
                     </div>
-
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.status') }}</span>
@@ -285,8 +300,6 @@ onMounted(
                                 t('common.actions.inactive') }}
                         </span>
                     </div>
-
-
                 </div>
             </div>
 
@@ -301,40 +314,32 @@ onMounted(
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('common.labels.createdAt')
-                            }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdAt') }}</span>
                         <span class="font-medium">
-                            {{ quiz?.created_at ? formatDateTime(quiz.created_at) :
-                                t('common.labels.notAvailable') }}
+                            {{ quiz?.created_at ? formatDateTime(quiz.created_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('common.labels.createdBy')
-                            }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.createdBy') }}</span>
                         <span class="font-medium">
-                            {{ quiz?.created_by?.name || t('common.labels.notAvailable')
-                            }}
+                            {{ quiz?.created_by?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('common.labels.updatedAt')
-                            }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedAt') }}</span>
                         <span class="font-medium">
-                            {{ quiz?.updated_at ? formatDateTime(quiz.updated_at) :
-                                t('common.labels.notAvailable') }}
+                            {{ quiz?.updated_at ? formatDateTime(quiz.updated_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('common.labels.updatedBy')
-                            }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.updatedBy') }}</span>
                         <span class="font-medium">
-                            {{ quiz?.latest_activity_log?.caquiz?.name ||
-                                t('common.labels.notAvailable') }}
+                            {{ quiz?.latest_activity_log?.caquiz?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -355,7 +360,23 @@ onMounted(
                 {{ t('common.labels.quizQuestions') }}
             </h3>
 
-            <RecentQuizQuestions :quiz="quiz" />
+            <RecentQuizQuestionsByQuiz :quiz="quiz" />
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">
+                <FontAwesomeIcon icon="trophy" /> {{ t('common.labels.quizResults') }}
+            </h3>
+
+            <WinnerQuizResults :quizResults="quizWinnerResults" />
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('common.labels.quizResults') }}
+            </h3>
+
+            <RecentQuizResultsByQuiz :quiz="quiz" />
         </div>
 
         <Teleport to="body">

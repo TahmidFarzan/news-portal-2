@@ -30,6 +30,7 @@ export const themeOptions = Object.freeze({
     SHOW_GOOGLE_AD  : "Show Google Ad",
     SHOW_TRENDS : "Show Trends",
     SHOW_SURVEYS : "Show Surveys",
+    SHOW_QUIZZES : "Show Quizzes",
     GOOGLE_SEARCH_CONSOLE_HEADER  : "Google Search Console Header",
     GOOGLE_ANALYTIC_HEADER  : "Google Analytic Header",
     GOOGLE_TAG_MANAGER_HEADER  : "Google Tag Manager Header",

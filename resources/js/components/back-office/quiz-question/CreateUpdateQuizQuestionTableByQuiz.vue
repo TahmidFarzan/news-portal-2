@@ -23,7 +23,7 @@ import {
     canUpdateQuizQuestion,
     canDeleteQuizQuestion,
 } from "@/composables/useUserPermissions";
-import CreateUpdateQuizQuestionOptionTable from "@/components/back-office/quiz-question-option/CreateUpdateQuizQuestionOptionTable.vue";
+import CreateUpdateQuizQuestionOptionTableByQuizQuestion from "@/components/back-office/quiz-question-option/CreateUpdateQuizQuestionOptionTableByQuizQuestion.vue";
 import SelectInfinityLoadingApi from "@/components/common/multi-select/SelectInfinityLoadingApi.vue";
 import { quizQuestionTypes } from "@/composables/useQuiz";
 
@@ -822,7 +822,7 @@ function handleQuizQuestionDelete(quizQuestion) {
                 </div>
 
                 <div v-show="isQuestionOpen(q.slug)" class="p-4 border-t border-gray-200 bg-white">
-                    <CreateUpdateQuizQuestionOptionTable :quiz="quiz" :quizQuestion="q" :isUpdate="true" />
+                    <CreateUpdateQuizQuestionOptionTableByQuizQuestion :quizQuestion="q" :isUpdate="true" />
                 </div>
             </div>
         </VueDraggable>
@@ -933,7 +933,7 @@ function handleQuizQuestionDelete(quizQuestion) {
                     </div>
 
                     <div v-if="!editingQuestion">
-                        <CreateUpdateQuizQuestionOptionTable :quiz="quiz" :quizQuestion="null" :isUpdate="false"
+                        <CreateUpdateQuizQuestionOptionTableByQuizQuestion :quizQuestion="null" :isUpdate="false"
                             :quizQuestionSaveForm="saveQuizQuestionForm" />
                     </div>
 

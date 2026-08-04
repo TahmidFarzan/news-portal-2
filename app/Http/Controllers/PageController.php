@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Services\PageService;
@@ -59,7 +60,7 @@ class PageController extends Controller
         return response()->json($news);
     }
 
-    public function homeCategoryNews(Request $request, int | string $slug, ): JsonResponse
+    public function homeCategoryNews(Request $request, int | string $slug,): JsonResponse
     {
         $language = $this->pageService->defaultLanguage();
 
@@ -69,7 +70,7 @@ class PageController extends Controller
         return response()->json($news);
     }
 
-    public function homeCategory(int | string $slug, ): JsonResponse
+    public function homeCategory(int | string $slug,): JsonResponse
     {
         $language = $this->pageService->defaultLanguage();
 
@@ -82,9 +83,33 @@ class PageController extends Controller
     {
         $language = $this->pageService->defaultLanguage();
 
-        $category = $this->pageService->homeSurveys($language);
+        $surveys = $this->pageService->homeSurveys($language);
 
-        return response()->json($category);
+        return response()->json($surveys);
+    }
+
+    public function homeQuizzes(Request $request): JsonResponse
+    {
+        $language = $this->pageService->defaultLanguage();
+
+        $quizzes = $this->pageService->homeQuizzes($language, $request);
+
+        return response()->json($quizzes);
+    }
+
+    public function homeQuizDetails(string $slug): InertiaResponse
+    {
+        $language = $this->pageService->defaultLanguage();
+
+        $quiz         = $this->pageService->homeQuiz($language, $slug);
+        $previousQuiz         = $this->pageService->homePreviousQuiz($language);
+        $previousQuizWinnerResults         = $this->pageService->homeQuizWinnserResultsByQuiz($language, $previousQuiz);
+
+        return Inertia::render('QuizDetails', [
+            'quiz'         => $quiz,
+            'previousQuiz'         => $previousQuiz,
+            'previousQuizWinnerResults'         => $previousQuizWinnerResults,
+        ]);
     }
 
     public function latest(Request $request): InertiaResponse | JsonResponse
@@ -379,9 +404,33 @@ class PageController extends Controller
     {
         $language = $this->pageService->language($languageCode);
 
-        $category = $this->pageService->homeSurveys($language);
+        $surveys = $this->pageService->homeSurveys($language);
 
-        return response()->json($category);
+        return response()->json($surveys);
+    }
+
+    public function localizedHomeQuizzes(string $languageCode, Request $request): JsonResponse
+    {
+        $language = $this->pageService->language($languageCode);
+
+        $quizzes = $this->pageService->homeQuizzes($language, $request);
+
+        return response()->json($quizzes);
+    }
+
+    public function localizedHomeQuizDetails(string $languageCode, string $slug): InertiaResponse
+    {
+        $language = $this->pageService->language($languageCode);
+
+        $quiz         = $this->pageService->homeQuiz($language, $slug);
+        $previousQuiz         = $this->pageService->homePreviousQuiz($language);
+        $previousQuizWinnerResults         = $this->pageService->homeQuizWinnserResultsByQuiz($language, $previousQuiz);
+
+        return Inertia::render('QuizDetails', [
+            'quiz'         => $quiz,
+            'previousQuiz'         => $previousQuiz,
+            'previousQuizWinnerResults'         => $previousQuizWinnerResults,
+        ]);
     }
 
     public function localizedLatest(Request $request, string $languageCode): InertiaResponse | JsonResponse

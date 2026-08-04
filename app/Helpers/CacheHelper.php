@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use App\Models\Category;
@@ -10,6 +11,7 @@ use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\NewsType;
 use App\Models\Survey;
+use App\Models\Quiz;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -62,6 +64,11 @@ class CacheHelper
 
     public const KEY_SURVEY_QUESTION = 'survey-question';
 
+    public const KEY_QUIZ = 'quiz';
+    public const KEY_PREVIOUS_QUIZ = 'previous-quiz';
+
+    public const KEY_QUIZ_QUESTION = 'quiz-question';
+
     public const KEY_LOCATION = 'location';
 
     public const KEY_CONTRIBUTOR = 'contributor';
@@ -103,6 +110,7 @@ class CacheHelper
     public const KEY_USE_AS = 'by:use-as';
 
     public const KEY_BY_SLUG = 'by:slug';
+    public const KEY_BY_DATE = 'by:date';
 
     public const KEY_BY_SLUG_TREE = 'by:slug-tree';
 
@@ -111,6 +119,8 @@ class CacheHelper
     public const KEY_BY_DEFAULT = 'by:default';
 
     public const KEY_MAX_DEPTH_AND_LEVEL = 'max-depth-and-level';
+
+    public const KEY_QUIZ_WINNER_RESULTS = 'quiz-winner-results';
 
     public const TAG_PAGE = 'page';
 
@@ -135,6 +145,10 @@ class CacheHelper
     public const TAG_SURVEY = 'survey';
 
     public const TAG_SURVEY_QUESTION = 'survey-question';
+
+    public const TAG_QUIZ = 'quiz';
+
+    public const TAG_QUIZ_QUESTION = 'quiz-question';
 
     public const TAG_MENU = 'menu';
 
@@ -220,7 +234,7 @@ class CacheHelper
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateSingleRecordBySlugWithoutLanguage(string $key, string $secondKey, string | int $slug, ): string
+    public static function cacheKeyGenerateSingleRecordBySlugWithoutLanguage(string $key, string $secondKey, string | int $slug,): string
     {
         $cacheKey = "{$key}:{$secondKey}:";
 
@@ -609,6 +623,90 @@ class CacheHelper
         if ($slug) {
             $cacheKey .= ':' . CacheHelper::KEY_SURVEY_QUESTION . ":{$slug}";
         }
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateForQuizzesByDate(string $key, string $secondKey, string $date, ?Language $language = null, Request|null $request = null): string
+    {
+        $request ??= request();
+
+        $cacheKey = "{$key}:{$secondKey}";
+        $cacheKey .= ':' . CacheHelper::KEY_QUIZ;
+
+        if ($language && $language?->id) {
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
+        }
+
+        if ($date) {
+            $cacheKey .= ':' . CacheHelper::KEY_DATE . ":{$date}";
+        }
+        if ($request) {
+            $cacheData = $request->except([
+                '_token',
+            ]);
+
+            ksort($cacheData);
+
+            $cacheKey .= ':' . md5(json_encode($cacheData));
+        }
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateForQuizQuestionByQuiz(string $key, string $secondKey, Quiz $quiz, ?Language $language = null, ?Request $request = null,  int $perPage = 10): string
+    {
+        $request ??= request();
+
+        $cacheKey = "{$key}:{$secondKey}";
+
+        $cacheKey .= ':' . CacheHelper::KEY_SURVEY_QUESTION;
+
+        if ($language && $language?->id) {
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
+        }
+
+
+        if ($quiz && $quiz?->id) {
+            $cacheKey .= ':' . CacheHelper::KEY_QUIZ . ":{$quiz?->slug}";
+        }
+
+        if ($request->input()) {
+            $cacheData = $request->except([
+                '_token',
+            ]);
+
+            ksort($cacheData);
+
+            $cacheKey .= ':' . md5(json_encode($cacheData));
+        }
+        $cacheKey .= ':' . CacheHelper::KEY_PER_PAGE . ":{$perPage}";
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateForQuizWinnerResultsByQuiz(string $key, string $secondKey,  Quiz $quiz, ?Language $language = null,)
+    {
+        $cacheKey = "{$key}:{$secondKey}";
+        if ($language && $language?->id) {
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
+        }
+        $cacheKey .= ':' . CacheHelper::KEY_QUIZ .':' . CacheHelper::KEY_BY_SLUG . ":{$quiz->slug}";
+
+        $cacheKey .= ':' . CacheHelper::KEY_QUIZ_WINNER_RESULTS;
+
+        return $cacheKey;
+    }
+
+    public static function cacheKeyGenerateForPreviousQuiz(string $key, string $secondKey, string $nowDate, ?Language $language = null,)
+    {
+        $cacheKey = "{$key}:{$secondKey}";
+        if ($language && $language?->id) {
+            $cacheKey .= ':' . CacheHelper::KEY_LANGUAGE . ":{$language?->slug}";
+        }
+
+        $cacheKey .= ':' . CacheHelper::KEY_PREVIOUS_QUIZ .':' . CacheHelper::KEY_BY_DATE . ":{$nowDate}";
+
 
         return $cacheKey;
     }

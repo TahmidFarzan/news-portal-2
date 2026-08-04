@@ -35,15 +35,10 @@ FontAwesomeLibrary.add(
 )
 
 const {
-    quiz,
     quizQuestion,
     isUpdate,
     quizQuestionSaveForm,
 } = defineProps({
-    quiz: {
-        type: Object,
-        required: true,
-    },
     quizQuestion: {
         type: Object,
         default: null,
@@ -169,7 +164,7 @@ async function onQuestionOptionDragEnd() {
 
     inertiaJsRoute.post(
         route('back-office.quizzes.quiz-questions.quiz-question-options.reorder', {
-            slug: quiz?.slug,
+            slug: quizQuestion?.quiz?.slug,
             quizQuestionSlug: quizQuestion?.slug,
         }),
         {
@@ -291,7 +286,7 @@ function handleSaveQuizQuestionOption() {
     if (editingOption.value?.slug) {
         inertiaJsRoute.post(
             route('back-office.quizzes.quiz-questions.quiz-question-options.update', {
-                slug: quiz?.slug,
+                slug: quizQuestion?.quiz?.slug,
                 quizQuestionSlug: quizQuestion?.slug,
                 quizQuestionOptionSlug: editingOption.value.slug,
             }),
@@ -301,7 +296,7 @@ function handleSaveQuizQuestionOption() {
     } else {
         saveFormSaveQuizQuestionOption.post(
             route('back-office.quizzes.quiz-questions.quiz-question-options.save', {
-                slug: quiz?.slug,
+                slug: quizQuestion?.quiz?.slug,
                 quizQuestionSlug: quizQuestion?.slug,
             }),
             requestConfig
@@ -329,7 +324,7 @@ const handleDelete = (quizQuestionOption) => {
     deleteProcessing.value = true
     inertiaJsRoute.delete(
         route('back-office.quizzes.quiz-questions.quiz-question-options.delete', {
-            slug: quiz?.slug,
+            slug: quizQuestion?.quiz?.slug,
             quizQuestionSlug: quizQuestion?.slug,
             quizQuestionOptionSlug: quizQuestionOption?.slug,
         }),
@@ -492,7 +487,7 @@ const handleDelete = (quizQuestionOption) => {
                 <a v-if="canAccessQuestionOption()" :href="route(
                     'back-office.quizzes.quiz-questions.quiz-question-options.index',
                     {
-                        slug: quiz?.slug,
+                        slug: quizQuestion?.quiz?.slug,
                         quizQuestionSlug: quizQuestion?.slug,
                     }
                 )

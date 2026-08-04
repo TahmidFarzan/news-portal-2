@@ -9,13 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->boolean('show_result')
+            $table->boolean('enable_result')
                 ->default(false)
                 ->after('show_bellow_event');
 
             $table->integer('max_winner')
                 ->default(1)
-                ->after('show_result');
+                ->after('enable_result');
         });
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
     {
         Schema::table('quizzes', function (Blueprint $table) {
             $table->dropColumn([
-                'show_result',
+                'enable_result',
                 'max_winner',
             ]);
         });

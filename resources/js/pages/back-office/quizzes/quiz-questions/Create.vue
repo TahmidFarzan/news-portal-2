@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import CreateUpdateQuizQuestionOptionTable from '@/components/back-office/quiz-question-option/CreateUpdateQuizQuestionOptionTable.vue'
+import CreateUpdateQuizQuestionOptionTableByQuizQuestion from '@/components/back-office/quiz-question-option/CreateUpdateQuizQuestionOptionTableByQuizQuestion.vue'
 import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
 import { useTranslate } from '@/composables/useTranslate'
@@ -238,7 +238,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <CreateUpdateQuizQuestionOptionTable :quiz="quiz" :quizQuestion="quizQuestion" :isUpdate="isUpdate" :quizQuestionSaveForm="saveForm" />
+                <CreateUpdateQuizQuestionOptionTableByQuizQuestion :quizQuestion="quizQuestion" :isUpdate="isUpdate" :quizQuestionSaveForm="saveForm" />
 
                 <div class="flex justify-center">
                     <button type="submit" :disabled="saveForm.processing"

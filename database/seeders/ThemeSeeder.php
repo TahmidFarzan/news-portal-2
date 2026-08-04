@@ -139,5 +139,13 @@ class ThemeSeeder extends Seeder
             'value' => true,
         ])->create();
 
+
+        Theme::factory()->state([
+            'group' => ThemeHelper::GROUP_APP,
+            'label' => ThemeHelper::OPTION_SHOW_QUIZZES,
+            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
+            'value' => true,
+        ])->create();
+
     }
 }

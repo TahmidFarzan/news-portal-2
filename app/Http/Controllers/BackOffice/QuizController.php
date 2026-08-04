@@ -9,6 +9,7 @@ use App\Http\Requests\QuizQuestionOptionRequest;
 use App\Services\BackOffice\QuizService;
 use App\Services\BackOffice\QuizQuestionService;
 use App\Services\BackOffice\QuizQuestionOptionService;
+use App\Services\BackOffice\QuizResultService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -19,11 +20,14 @@ class QuizController extends Controller
     protected QuizQuestionService $quizQuestionService;
     protected QuizQuestionOptionService $quizQuestionOptionService;
 
-    public function __construct(QuizService $quizService, QuizQuestionService $quizQuestionService, QuizQuestionOptionService $quizQuestionOptionService)
+    protected QuizResultService $quizResultService;
+
+    public function __construct(QuizService $quizService, QuizQuestionService $quizQuestionService, QuizQuestionOptionService $quizQuestionOptionService, QuizResultService $quizResultService)
     {
         $this->quizService         = $quizService;
         $this->quizQuestionService = $quizQuestionService;
         $this->quizQuestionOptionService = $quizQuestionOptionService;
+        $this->quizResultService = $quizResultService;
     }
 
     public function index(Request $request)
@@ -42,10 +46,13 @@ class QuizController extends Controller
     {
         $quiz = $this->quizService->find($slug);
 
+        $quizWinnerResults = $this->quizService->quizWinnerResults($quiz);
+
         Gate::authorize('view', $quiz);
 
         return Inertia::render('back-office/quizzes/Details', [
             'quiz' => $quiz,
+            'quizWinnerResults' => $quizWinnerResults,
         ]);
     }
 
@@ -440,4 +447,28 @@ class QuizController extends Controller
             'timestamp' => now()->timestamp,
         ]);
     }
+
+    public function quizResultIndex(string $slug, Request $request)
+    {
+        $quiz = $this->quizService->find($slug);
+
+        $quizResults = $this->quizResultService->search($quiz, $request);
+
+        return Inertia::render('back-office/quizzes/quiz-results/Index', [
+            'quiz' => $quiz,
+            'quizResults' => $quizResults,
+        ]);
+    }
+
+    public function quizResultDetails(string $slug, string $quizResultSlug)
+    {
+        $quiz = $this->quizService->find($slug);
+        $quizResult = $this->quizResultService->find($quiz, $quizResultSlug);
+
+        return Inertia::render('back-office/quizzes/quiz-results/Details', [
+            'quiz' => $quiz,
+            'quizResult' => $quizResult,
+        ]);
+    }
+
 }
