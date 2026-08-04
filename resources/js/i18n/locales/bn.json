@@ -2,266 +2,314 @@
     "common": {
         "app": {
             "name": "নিউজ পোর্টাল",
-            "copyright": "?",
-            "developedBy": "ডেভেলপ করেছেন",
+            "copyright": "©",
+            "developedBy": "নির্মাণ করেছেন",
             "developerName": "শেখ মোঃ তাহমিদ ফারজান"
         },
         "labels": {
-            "sl": "ক্রমিক",
-            "description": "বিবরণ",
+            "sl": "ক্রমিক নং",
+            "description": "বর্ণনা",
             "causer": "কারণকারী",
-            "createdAt": "তৈরির সময়",
-            "action": "অ্যাকশন",
-            "noRecordsFound": "কোনো রেকর্ড পাওয়া যায়নি।",
+            "createdAt": "তৈরি করা হয়েছে",
+            "action": "কর্ম",
+            "noRecordsFound": "কোন রেকর্ড পাওয়া যায়নি।",
             "name": "নাম",
             "default": "ডিফল্ট",
             "language": "ভাষা",
-            "position": "পজিশন",
-            "galleryImages": "গ্যালারি ছবি",
+            "position": "অবস্থান",
+            "galleryImages": "গ্যালারির ছবি",
             "image": "ছবি",
             "preview": "প্রিভিউ",
             "caption": "ক্যাপশন",
-            "altText": "Alt টেক্সট",
-            "orderColumn": "ক্রম কলাম",
-            "page": "পেজ",
+            "altText": "বিকল্প টেক্সট",
+            "orderColumn": "অর্ডার কলাম",
+            "page": "পৃষ্ঠা",
             "section": "সেকশন",
             "question": "প্রশ্ন",
-            "actions": "অ্যাকশনসমূহ",
+            "actions": "কর্মসমূহ",
             "profile": "প্রোফাইল",
             "account": "অ্যাকাউন্ট",
-            "activityLogs": "অ্যাক্টিভিটি লগ",
+            "activityLogs": "কার্যকলাপ লগ",
             "dashboard": "ড্যাশবোর্ড",
-            "media": "মিডিয়া",
-            "tags": "ট্যাগসমূহ",
-            "trends": "ট্রেন্ডসমূহ",
-            "location": "লোকেশন",
-            "contributors": "কন্ট্রিবিউটরসমূহ",
-            "news": "নিউজ",
-            "menus": "মেনুসমূহ",
-            "users": "ইউজারসমূহ",
-            "themes": "থিমসমূহ",
-            "surveys": "সার্ভেসমূহ",
+            "media": "মিডিয়া",
+            "tags": "ট্যাগ",
+            "trends": "ট্রেন্ড",
+            "location": "অবস্থান",
+            "contributors": "অবদানকারী",
+            "news": "খবর",
+            "menus": "মেনু",
+            "users": "ব্যবহারকারী",
+            "themes": "থিম",
+            "surveys": "জরিপ",
             "quizzes": "কুইজ",
             "loading": "লোড হচ্ছে",
-            "languages": "ভাষা",
-            "noMenuFound": "কোনো মেনু পাওয়া যায়নি",
-            "relatedNews": "সম্পর্কিত নিউজ",
-            "relevantNews": "প্রাসঙ্গিক নিউজ",
-            "copied": "কপি হয়েছে",
-            "copy": "কপি",
-            "source": "সোর্স",
-            "recentNews": "সাম্প্রতিক নিউজ",
-            "popularNews": "জনপ্রিয় সংবাদ",
+            "languages": "ভাষাসমূহ",
+            "noMenuFound": "কোন মেনু পাওয়া যায়নি",
+            "relatedNews": "সম্পর্কিত খবর",
+            "relevantNews": "প্রাসঙ্গিক খবর",
+            "copied": "কপি করা হয়েছে",
+            "copy": "কপি করুন",
+            "source": "সূত্র",
+            "recentNews": "সাম্প্রতিক খবর",
+            "popularNews": "জনপ্রিয় খবর",
             "login": "লগইন",
             "email": "ইমেইল",
             "gender": "লিঙ্গ",
             "notAvailable": "প্রযোজ্য নয়",
             "maritalStatus": "বৈবাহিক অবস্থা",
             "mobile": "মোবাইল",
-            "birthDate": "জন্মতারিখ",
-            "age": "বয়স",
+            "birthDate": "জন্ম তারিখ",
+            "age": "বয়স",
             "address": "ঠিকানা",
             "religion": "ধর্ম",
             "profileImage": "প্রোফাইল ছবি",
             "basicInformation": "মৌলিক তথ্য",
             "system": "সিস্টেম",
             "systemInformation": "সিস্টেম তথ্য",
-            "perPage": "প্রতি পেজে",
+            "perPage": "প্রতি পৃষ্ঠায়",
             "event": "ইভেন্ট",
             "title": "শিরোনাম",
             "publishSettings": "প্রকাশনা সেটিংস",
             "published": "প্রকাশিত",
-            "url": "URL",
-            "createdBy": "তৈরি করেছেন",
-            "updatedAt": "আপডেটের সময়",
+            "url": "ইউআরএল",
+            "createdBy": "নির্মাণ করেছেন",
+            "updatedAt": "আপডেট করা হয়েছে",
             "updatedBy": "আপডেট করেছেন",
-            "newsType": "নিউজ টাইপ",
-            "isPublished": "প্রকাশিত কিনা",
+            "newsType": "খবরের ধরন",
+            "isPublished": "প্রকাশিত হয়েছে কি",
             "brief": "সংক্ষিপ্ত বিবরণ",
-            "hierarchy": "হায়ারার্কি",
-            "hasParent": "প্যারেন্ট আছে কিনা",
-            "seoSettings": "SEO সেটিংস",
-            "seoTitle": "SEO শিরোনাম",
-            "seoBrief": "SEO সংক্ষিপ্ত বিবরণ",
-            "seoKeywords": "SEO কীওয়ার্ড",
-            "tree": "ট্রি",
-            "contributorCreate": "কন্ট্রিবিউটর তৈরি",
-            "profileDetails": "প্রোফাইল বিস্তারিত",
-            "isCurrent": "বর্তমান কিনা",
+            "hierarchy": "শ্রেণিবিন্যাস",
+            "hasParent": "প্যারেন্ট আছে কি",
+            "seoSettings": "এসইও সেটিংস",
+            "seoTitle": "এসইও শিরোনাম",
+            "seoBrief": "এসইও সংক্ষিপ্ত বিবরণ",
+            "seoKeywords": "এসইও কীওয়ার্ড",
+            "tree": "গাছ",
+            "contributorCreate": "অবদানকারী তৈরি করুন",
+            "profileDetails": "প্রোফাইল বিবরণ",
+            "isCurrent": "বর্তমান",
             "desktopBannerImage": "ডেস্কটপ ব্যানার ছবি",
             "mobileBannerImage": "মোবাইল ব্যানার ছবি",
             "slotId": "স্লট আইডি",
-            "type": "টাইপ",
-            "useFullWidthResponsive": "পূর্ণ প্রস্থ রেসপন্সিভ ব্যবহার করুন",
-            "mapInformation": "ম্যাপ তথ্য",
-            "latitude": "ল্যাটিটিউড",
-            "longitude": "লংগিটিউড",
+            "type": "ধরন",
+            "useFullWidthResponsive": "পূর্ণ প্রস্থ রেস্পন্সিভ ব্যবহার করুন",
+            "mapInformation": "মানচিত্র তথ্য",
+            "latitude": "অক্ষাংশ",
+            "longitude": "দ্রাঘিমাংশ",
             "boundaryNorth": "উত্তর সীমানা",
             "boundarySouth": "দক্ষিণ সীমানা",
             "boundaryEast": "পূর্ব সীমানা",
             "boundaryWest": "পশ্চিম সীমানা",
-            "boundaryGeojson": "সীমানা GeoJSON",
-            "menuType": "মেনু টাইপ",
-            "videoUrl": "ভিডিও URL",
+            "boundaryGeojson": "সীমানা জিওজেএসন",
+            "menuType": "মেনুর ধরন",
+            "videoUrl": "ভিডিও ইউআরএল",
             "model": "মডেল",
-            "subtitle": "সাবটাইটেল",
-            "contentShoulder": "কনটেন্ট শোল্ডার",
+            "subtitle": "উপশিরোনাম",
+            "contentShoulder": "কন্টেন্ট শোল্ডার",
             "body": "বডি",
             "featureImage": "ফিচার ছবি",
             "mobileFeatureImage": "মোবাইল ফিচার ছবি",
             "writer": "লেখক",
-            "defaultUseAs": "ডিফল্ট ব্যবহার",
+            "defaultUseAs": "ডিফল্ট ব্যবহার করুন",
             "editAdsTxt": "Ads.txt সম্পাদনা করুন",
-            "back": "ফিরে যান",
-            "saving": "সেভ হচ্ছে...",
+            "back": "পিছনে",
+            "saving": "সংরক্ষণ করা হচ্ছে...",
             "editRobotsTxt": "Robots.txt সম্পাদনা করুন",
             "date": "তারিখ",
-            "startDate": "শুরু তারিখ",
-            "endDate": "শেষ তারিখ",
-            "isActive": "সক্রিয় কিনা",
-            "status": "স্ট্যাটাস",
-            "activityLogs2": "অ্যাক্টিভিটি লগ",
-            "surveyQuestions": "সার্ভে প্রশ্নসমূহ",
+            "startDate": "শুরুর তারিখ",
+            "endDate": "শেষের তারিখ",
+            "isActive": "সক্রিয় কি",
+            "status": "অবস্থা",
+            "activityLogs2": "কার্যকলাপ লগ",
+            "surveyQuestions": "জরিপ প্রশ্ন",
             "all": "সব",
             "true": "সত্য",
             "false": "মিথ্যা",
             "group": "গ্রুপ",
             "label": "লেবেল",
             "tag": "ট্যাগ",
-            "isSuperAdmin": "সুপার অ্যাডমিন কিনা",
-            "userPermisssion": "ইউজার পারমিশন",
-            "category": "ক্যাটাগরি",
+            "isSuperAdmin": "সুপার অ্যাডমিন",
+            "userPermisssion": "ব্যবহারকারী অনুমতি",
+            "category": "বিভাগ",
             "video": "ভিডিও",
-            "image_gallery": "ইমেজ গ্যালারি",
-            "clear_cache": "ক্লিয়ার ক্যাশ",
+            "image_gallery": "ছবি গ্যালারি",
+            "clear_cache": "ক্যাশে সাফ করুন",
             "quiz": "কুইজ",
             "quizQuestions": "কুইজ প্রশ্ন",
-            "quizQuestionOptions": "কুইজের প্রশ্ন বিকল্প",
-            "option" : "Option"
+            "quizQuestionOptions": "কুইজ প্রশ্নের অপশন",
+            "option": "অপশন",
+            "correct": "সঠিক",
+            "answerType": "উত্তরের ধরন",
+            "point": "পয়েন্ট",
+            "options": "অপশনসমূহ",
+            "start_date": "শুরুর তারিখ",
+            "end_date": "শেষের তারিখ",
+            "is_active": "সক্রিয় কি",
+            "show_bellow_event": "ইভেন্টের নিচে দেখান",
+            "single": "একক",
+            "multiple": "একাধিক",
+            "questions": "প্রশ্নসমূহ",
+            "answer_type": "উত্তরের ধরন",
+            "max_winner": "সর্বোচ্চ বিজয়ী",
+            "enable_result": "ফলাফল সক্রিয় করুন",
+            "quizResults": "কুইজ ফলাফল",
+            "quizResult": "কুইজ ফলাফল",
+            "quizParticipants": "কুইজ অংশগ্রহণকারী",
+            "device": "ডিভাইস",
+            "phone": "ফোন",
+            "duration": "সময়কাল",
+            "quizParticipantInformation" : "কুইজ অংশগ্রহণকারীর তথ্য",
+            "ip" : "আইপি",
+            "ongoing": "চলমান",
+            "until": "পর্যন্ত",
+            "to": "থেকে",
+            "schedule" : "সময়সূচী",
+            "result" : "ফলাফল",
+            "quizParticipant" : "কুইজ অংশগ্রহণকারী",
+            "previous": "পূর্ববর্তী",
+            "next": "পরবর্তী"
         },
         "actions": {
-            "details": "বিস্তারিত",
+            "details": "বিবরণ",
             "edit": "সম্পাদনা",
             "addImage": "ছবি যোগ করুন",
-            "dragAndSequence": "ড্র্যাগ ও সিকোয়েন্স",
+            "dragAndSequence": "টেনে আনুন ও ক্রম নির্ধারণ করুন",
             "cancel": "বাতিল",
-            "save": "সেভ",
+            "save": "সংরক্ষণ",
             "addImage2": "ছবি যোগ করুন",
-            "saving": "সেভ হচ্ছে",
+            "saving": "সংরক্ষণ",
             "update": "আপডেট",
             "deleting": "মুছে ফেলা হচ্ছে",
-            "delete": "মুছুন",
-            "setingAsDefault": "ডিফল্ট হিসাবে সেট করা",
-            "setAsDefault": "ডিফল্ট হিসাবে সেট করুন",
+            "delete": "মুছে ফেলুন",
+            "setingAsDefault": "ডিফল্ট হিসেবে সেট করা হচ্ছে",
+            "setAsDefault": "ডিফল্ট হিসেবে সেট করুন",
             "logout": "লগআউট",
             "loadMore": "আরও লোড করুন",
             "select": "নির্বাচন করুন",
-            "search": "সার্চ",
-            "applyingFilter": "ফিল্টার প্রয়োগ হচ্ছে...",
-            "applyFilter": "ফিল্টার প্রয়োগ করুন",
-            "restore": "রিস্টোর",
+            "search": "অনুসন্ধান",
+            "applyingFilter": "ফিল্টার প্রয়োগ করা হচ্ছে...",
+            "applyFilter": "ফিল্টার প্রয়োগ করুন",
+            "restore": "পুনরুদ্ধার",
             "trash": "ট্র্যাশ",
             "create": "তৈরি করুন",
             "useExample": "উদাহরণ ব্যবহার করুন",
             "reset": "রিসেট",
-            "inactivating": "নিষ্ক্রিয় করা হচ্ছে...",
-            "inactive": "নিষ্ক্রিয়",
-            "activating": "সক্রিয় করা হচ্ছে...",
-            "active": "সক্রিয়"
+            "inactivating": "নিষ্ক্রিয় করা হচ্ছে...",
+            "inactive": "নিষ্ক্রিয়",
+            "activating": "সক্রিয় করা হচ্ছে...",
+            "active": "সক্রিয়",
+            "add": "যোগ করুন",
+            "remove": "সরান",
+            "quizResult" : "কুইজ ফলাফল"
         },
         "placeholders": {
             "parent": "প্যারেন্ট",
-            "exampleEmailCom": "example@email.com",
-            "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
-            "enterNewPassword": "নতুন পাসওয়ার্ড লিখুন",
-            "enterName": "নাম লিখুন",
-            "enterAddress": "ঠিকানা লিখুন",
+            "exampleEmailCom": "উদাহরণ@ইমেইল.কম",
+            "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
+            "enterNewPassword": "নতুন পাসওয়ার্ড দিন",
+            "enterName": "নাম দিন",
+            "enterAddress": "ঠিকানা দিন",
             "selectLanguage": "ভাষা নির্বাচন করুন",
-            "enterTitle": "শিরোনাম লিখুন",
-            "searchNews": "নিউজ খুঁজুন...",
-            "enterBrief": "সংক্ষিপ্ত বিবরণ লিখুন",
+            "enterTitle": "শিরোনাম দিন",
+            "searchNews": "খবর অনুসন্ধান...",
+            "enterBrief": "সংক্ষিপ্ত বিবরণ দিন",
             "selectParent": "প্যারেন্ট নির্বাচন করুন",
-            "enterSeoTitle": "SEO শিরোনাম লিখুন",
-            "enterSeoBrief": "SEO সংক্ষিপ্ত বিবরণ লিখুন",
-            "addKeywords": "কীওয়ার্ড যোগ করুন",
-            "selectPosition": "পজিশন নির্বাচন করুন",
-            "selectCategory": "ক্যাটাগরি নির্বাচন করুন",
-            "searchSurvey": "সার্ভে খুঁজুন...",
-            "searchQuiz": "কুইজ খুঁজুন..."
+            "enterSeoTitle": "এসইও শিরোনাম দিন",
+            "enterSeoBrief": "এসইও সংক্ষিপ্ত বিবরণ দিন",
+            "addKeywords": "কীওয়ার্ড যোগ করুন",
+            "selectPosition": "অবস্থান নির্বাচন করুন",
+            "selectCategory": "বিভাগ নির্বাচন করুন",
+            "searchSurvey": "জরিপ অনুসন্ধান...",
+            "searchQuiz": "কুইজ অনুসন্ধান...",
+            "searchQuizQuestion": "কুইজ প্রশ্ন অনুসন্ধান...",
+            "searchQuizQuestionOption": "কুইজ প্রশ্নের অপশন অনুসন্ধান...",
+            "position": "অবস্থান দিন।",
+            "point": "পয়েন্ট দিন",
+            "select": "নির্বাচন করুন",
+            "name": "নাম",
+            "brief": "সংক্ষিপ্ত বিবরণ",
+            "question": "প্রশ্ন",
+            "options": "অপশনসমূহ",
+            "option": "অপশন",
+            "max_winner": "সর্বোচ্চ বিজয়ী",
+            "searchQuizResult" : "কুইজ ফলাফল অনুসন্ধান"
         },
         "messages": {
-            "showAll": "সব দেখুন",
+            "showAll": "সব দেখান",
             "imageIsRequired": "ছবি আবশ্যক",
-            "invalidData": "ডেটা সঠিক নয়",
-            "sequenceIsRequired": "সিকোয়েন্স আবশ্যক",
-            "categories": "ক্যাটাগরিসমূহ",
+            "invalidData": "অবৈধ তথ্য",
+            "sequenceIsRequired": "ক্রম আবশ্যক",
+            "categories": "বিভাগসমূহ",
             "events": "ইভেন্টসমূহ",
             "breakingNews": "ব্রেকিং নিউজ",
-            "googleAdsense": "Google AdSense",
-            "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন",
-            "alreadyHaveAnAccount": "আগেই অ্যাকাউন্ট আছে?",
+            "googleAdsense": "গুগল অ্যাডসেন্স",
+            "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন",
+            "alreadyHaveAnAccount": "ইতিমধ্যে একটি অ্যাকাউন্ট আছে?",
             "backToLogin": "লগইনে ফিরে যান",
-            "hidePassword": "পাসওয়ার্ড লুকান",
-            "showPassword": "পাসওয়ার্ড দেখান",
-            "register": "রেজিস্টার",
-            "hideConfirmPassword": "কনফার্ম পাসওয়ার্ড লুকান",
-            "showConfirmPassword": "কনফার্ম পাসওয়ার্ড দেখান",
-            "resetPassword": "পাসওয়ার্ড রিসেট করুন",
-            "userProfileImage": "ইউজার প্রোফাইল ছবি",
-            "notVerified": "ভেরিফাইড নয়",
-            "changePassword": "পাসওয়ার্ড পরিবর্তন করুন",
-            "newPassword": "নতুন পাসওয়ার্ড",
-            "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
-            "updating": "আপডেট হচ্ছে...",
+            "hidePassword": "পাসওয়ার্ড লুকান",
+            "showPassword": "পাসওয়ার্ড দেখান",
+            "register": "নিবন্ধন",
+            "hideConfirmPassword": "নিশ্চিতকরণ পাসওয়ার্ড লুকান",
+            "showConfirmPassword": "নিশ্চিতকরণ পাসওয়ার্ড দেখান",
+            "resetPassword": "পাসওয়ার্ড রিসেট করুন",
+            "userProfileImage": "ব্যবহারকারী প্রোফাইল ছবি",
+            "notVerified": "যাচাই করা হয়নি",
+            "changePassword": "পাসওয়ার্ড পরিবর্তন",
+            "newPassword": "নতুন পাসওয়ার্ড",
+            "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
+            "updating": "আপডেট করা হচ্ছে...",
             "logName": "লগ নাম",
             "trashing": "ট্র্যাশে পাঠানো হচ্ছে...",
-            "restoring": "রিস্টোর হচ্ছে...",
-            "locations": "লোকেশনসমূহ",
-            "languages": "ভাষা",
+            "restoring": "পুনরুদ্ধার করা হচ্ছে...",
+            "locations": "অবস্থানসমূহ",
+            "languages": "ভাষাসমূহ",
             "seo": "এসইও",
             "sitemapAndFeeds": "সাইটম্যাপ ও ফিড",
             "sitemapUrl": "সাইটম্যাপ ইউআরএল",
             "feedsRss": "ফিড (আরএসএস)",
-            "feedsAtom": "ফিড (অ্যাটম)",
-            "collectionName": "কালেকশন নাম",
+            "feedsAtom": "ফিড (এটম)",
+            "collectionName": "সংগ্রহের নাম",
             "addMenuItem": "মেনু আইটেম যোগ করুন",
             "menuItems": "মেনু আইটেমসমূহ",
             "sitemap": "সাইটম্যাপ",
             "questions": "প্রশ্নসমূহ",
             "createQuestion": "প্রশ্ন তৈরি করুন",
-            "isTrend": "ট্রেন্ড কিনা",
-            "isCurrentTrend": "বর্তমান ট্রেন্ড কিনা",
+            "isTrend": "ট্রেন্ড কি",
+            "isCurrentTrend": "বর্তমান ট্রেন্ড কি",
             "text": "©",
-            "questionOptions": "প্রশ্ন পছন্দ",
-            "createQuestionOption": "প্রশ্ন পছন্দ তৈরি করুন"
+            "questionOptions": "প্রশ্নের অপশন",
+            "createQuestionOption": "প্রশ্নের অপশন তৈরি করুন",
+            "onlyLastTenOptionsAvailableForQuickEdit": "দ্রুত সম্পাদনার জন্য শুধুমাত্র সর্বশেষ ১০টি অপশন উপলব্ধ। অতিরিক্ত অপশনের জন্য, অপশন সূচকে নেভিগেট করুন এবং সেখান থেকে নির্বাচন করুন।",
+            "quizResults": "কুইজ ফলাফল",
+            "quizResult": "কুইজ ফলাফল"
         },
         "modals": {
-            "deleteConfirmation": "মুছে ফেলার নিশ্চিতকরণ",
-            "areYouSureYouWantToDeleteThis": "আপনি কি নিশ্চিত এটি মুছতে চান",
-            "logoutConfirmation": "লগআউট নিশ্চিতকরণ",
-            "areYouSureYouWantToLogout": "আপনি কি নিশ্চিত লগআউট করতে চান?",
-            "deleteActivityLog": "অ্যাক্টিভিটি লগ মুছুন",
-            "thisActionCannotBeUndone": "এই অ্যাকশনটি ফিরিয়ে আনা যাবে না।",
-            "deleteBreakingNews": "ব্রেকিং নিউজ মুছুন",
+            "deleteConfirmation": "মুছে ফেলার নিশ্চয়তা",
+            "areYouSureYouWantToDeleteThis": "আপনি কি নিশ্চিত যে আপনি এটি মুছে ফেলতে চান",
+            "logoutConfirmation": "লগআউট নিশ্চয়তা",
+            "areYouSureYouWantToLogout": "আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?",
+            "deleteActivityLog": "কার্যকলাপ লগ মুছে ফেলুন",
+            "thisActionCannotBeUndone": "এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+            "deleteBreakingNews": "ব্রেকিং নিউজ মুছে ফেলুন",
             "trashBreakingNews": "ব্রেকিং নিউজ ট্র্যাশে পাঠান",
-            "thisBreakingNewsWillBeMovedToTrash": "এই ব্রেকিং নিউজটি ট্র্যাশে সরানো হবে।",
-            "restoreBreakingNews": "ব্রেকিং নিউজ রিস্টোর করুন",
-            "thisActionCanBeUndoneByDeletingBreakingNews": "ব্রেকিং নিউজ মুছে দিয়ে এই অ্যাকশনটি ফিরিয়ে নেওয়া যাবে।",
-            "deleteCategory": "ক্যাটাগরি মুছুন",
-            "deleteEvent": "ইভেন্ট মুছুন",
-            "deleteGoogleAdsense": "Google AdSense মুছুন",
-            "deleteLocation": "লোকেশন মুছুন",
-            "deleteMenu": "মেনু মুছুন",
-            "deleteMenuItem": "মেনু আইটেম মুছুন",
-            "deleteNews": "নিউজ মুছুন",
-            "thisActionCanBeUndoneByRestoringNews": "নিউজ রিস্টোর করে এই অ্যাকশনটি ফিরিয়ে নেওয়া যাবে।",
-            "restoreNews": "নিউজ রিস্টোর করুন",
-            "thisActionCanBeUndoneByDeletingNews": "নিউজ মুছে দিয়ে এই অ্যাকশনটি ফিরিয়ে নেওয়া যাবে।",
-            "deleteTag": "ট্যাগ মুছুন",
-            "deleteTrend": "ট্রেন্ড মুছুন",
-            "deleteUser": "ইউজার মুছুন",
-            "deleteLanguage": "ভাষা মুছুন",
-            "setAsDefaultLanguageMessage": "এটি শুধুমাত্র পাবলিক সাইটের ভাষাকে প্রভাবিত করবে। ব্যাকএন্ডের ভাষা অপরিবর্তিত থাকবে, কারণ তা নির্দিষ্ট।"
+            "thisBreakingNewsWillBeMovedToTrash": "এই ব্রেকিং নিউজ ট্র্যাশে স্থানান্তরিত হবে।",
+            "restoreBreakingNews": "ব্রেকিং নিউজ পুনরুদ্ধার করুন",
+            "thisActionCanBeUndoneByDeletingBreakingNews": "ব্রেকিং নিউজ মুছে ফেলার মাধ্যমে এই কাজটি পূর্বাবস্থায় ফেরানো যাবে।",
+            "deleteCategory": "বিভাগ মুছে ফেলুন",
+            "deleteEvent": "ইভেন্ট মুছে ফেলুন",
+            "deleteGoogleAdsense": "গুগল অ্যাডসেন্স মুছে ফেলুন",
+            "deleteLocation": "অবস্থান মুছে ফেলুন",
+            "deleteMenu": "মেনু মুছে ফেলুন",
+            "deleteMenuItem": "মেনু আইটেম মুছে ফেলুন",
+            "deleteNews": "খবর মুছে ফেলুন",
+            "thisActionCanBeUndoneByRestoringNews": "খবর পুনরুদ্ধারের মাধ্যমে এই কাজটি পূর্বাবস্থায় ফেরানো যাবে।",
+            "restoreNews": "খবর পুনরুদ্ধার করুন",
+            "thisActionCanBeUndoneByDeletingNews": "খবর মুছে ফেলার মাধ্যমে এই কাজটি পূর্বাবস্থায় ফেরানো যাবে।",
+            "deleteTag": "ট্যাগ মুছে ফেলুন",
+            "deleteTrend": "ট্রেন্ড মুছে ফেলুন",
+            "deleteUser": "ব্যবহারকারী মুছে ফেলুন",
+            "setAsDefaultLanguage": "ডিফল্ট ভাষা হিসেবে সেট করুন",
+            "setAsDefaultLanguageMessage": "এটি শুধুমাত্র পাবলিক সাইটের ভাষাকে প্রভাবিত করবে। ব্যাকএন্ড ভাষা অপরিবর্তিত থাকবে, কারণ এটি স্থির।"
         },
         "boolean": {
             "yes": "হ্যাঁ",
@@ -270,18 +318,26 @@
         "validation": {
             "emailIsRequired": "ইমেইল আবশ্যক।",
             "emailMustNotExceed200Characters": "ইমেইল ২০০ অক্ষরের বেশি হতে পারবে না।",
-            "passwordIsRequired": "পাসওয়ার্ড আবশ্যক।",
+            "passwordIsRequired": "পাসওয়ার্ড আবশ্যক।",
             "nameIsRequired": "নাম আবশ্যক।",
-            "passwordConfirmationIsRequired": "পাসওয়ার্ড নিশ্চিতকরণ আবশ্যক।",
-            "passwordConfirmationDoesNotMatch": "পাসওয়ার্ড নিশ্চিতকরণ মিলছে না।",
+            "passwordConfirmationIsRequired": "পাসওয়ার্ড নিশ্চিতকরণ আবশ্যক।",
+            "passwordConfirmationDoesNotMatch": "পাসওয়ার্ড নিশ্চিতকরণ মেলে না।",
             "genderIsRequired": "লিঙ্গ আবশ্যক।",
             "maritalStatusIsRequired": "বৈবাহিক অবস্থা আবশ্যক।",
             "religionIsRequired": "ধর্ম আবশ্যক।",
             "languageIsRequired": "ভাষা আবশ্যক।",
             "titleIsRequired": "শিরোনাম আবশ্যক।",
-            "typeIsRequired": "টাইপ আবশ্যক।",
+            "typeIsRequired": "ধরন আবশ্যক।",
             "briefIsRequired": "সংক্ষিপ্ত বিবরণ আবশ্যক।",
-            "bodyIsRequired": "বডি আবশ্যক।"
+            "bodyIsRequired": "বডি আবশ্যক।",
+            "optionIsRequired": "অপশন আবশ্যক।",
+            "pointIsRequired": "পয়েন্ট আবশ্যক।",
+            "answerTypeIsRequired": "উত্তরের ধরন আবশ্যক।",
+            "optionDuplicate": "ডুপ্লিকেট অপশন যোগ করা হয়েছে।",
+            "singleCorrectRequired": "শুধুমাত্র একটি সঠিক উত্তর হতে পারে।",
+            "multipleCorrectRequired": "এক বা একাধিক সঠিক উত্তর হতে পারে।",
+            "optionsRequired": "অপশন প্রয়োজন",
+            "optionTextRequired": "অপশন আবশ্যক।"
         },
         "cursorPagination": {
             "actions": {
@@ -292,7 +348,7 @@
             "labels": {
                 "showing": "দেখানো হচ্ছে",
                 "to": "থেকে",
-                "of": "মোট",
+                "of": "এর মধ্যে",
                 "entries": "এন্ট্রি"
             }
         }
@@ -302,30 +358,30 @@
             "activityLog": {
                 "recentModelActivityLogs": {
                     "labels": {
-                        "showAll": "সব দেখুন"
+                        "showAll": "সব দেখান"
                     }
                 }
             },
             "news": {
                 "newsImageGalleryDraftGrid": {
                     "messages": {
-                        "imageSaveFailed": "ছবি সেভ করা যায়নি",
-                        "invalidImageResponse": "ছবি সেভ হয়েছে, তবে মিডিয়া রেসপন্স সঠিক নয়"
+                        "imageSaveFailed": "ছবি সংরক্ষণ ব্যর্থ হয়েছে",
+                        "invalidImageResponse": "ছবি সংরক্ষিত হয়েছে কিন্তু অবৈধ মিডিয়া প্রতিক্রিয়া ফিরে এসেছে"
                     }
                 },
                 "newsImageGalleryDraftImageCard": {
                     "messages": {
-                        "missingSlug": "Slug পাওয়া যায়নি। অনুগ্রহ করে backend response থেকে slug রিটার্ন করুন।",
-                        "failToUpdateImage": "ছবি আপডেট করা যায়নি।",
-                        "invalidResponseAfterImageUpdate": "ছবি আপডেট হয়েছে, তবে মিডিয়া রেসপন্স সঠিক নয়",
-                        "failToDeleteImage": "ছবি মুছে ফেলা যায়নি"
+                        "missingSlug": "স্লাগ অনুপস্থিত। ব্যাকএন্ড প্রতিক্রিয়া থেকে স্লাগ ফেরত দিন।",
+                        "failToUpdateImage": "ছবি আপডেট করতে ব্যর্থ হয়েছে।",
+                        "invalidResponseAfterImageUpdate": "ছবি আপডেট হয়েছে কিন্তু অবৈধ মিডিয়া প্রতিক্রিয়া ফিরে এসেছে",
+                        "failToDeleteImage": "ছবি মুছে ফেলতে ব্যর্থ হয়েছে"
                     },
                     "labels": {
-                        "editImage": "ছবি সম্পাদনা করুন",
+                        "editImage": "ছবি সম্পাদনা",
                         "captionWithColon": "ক্যাপশন:"
                     },
                     "actions": {
-                        "updating": "আপডেট হচ্ছে"
+                        "updating": "আপডেট করা হচ্ছে"
                     }
                 },
                 "newsImageGalleryImageCard": {
@@ -335,65 +391,65 @@
                 },
                 "newsPlacementSortableList": {
                     "labels": {
-                        "createNews": "নিউজ তৈরি করুন"
+                        "createNews": "খবর তৈরি করুন"
                     }
                 },
                 "relatedOrRelevantNewsList": {
                     "labels": {
-                        "noNewsFound": "কোনো নিউজ পাওয়া যায়নি।"
+                        "noNewsFound": "কোন খবর পাওয়া যায়নি।"
                     }
                 }
             }
         },
         "activityLogs": {
             "details": {
-                "pageTitle": "অ্যাক্টিভিটি লগ বিস্তারিত",
-                "title": "অ্যাক্টিভিটি লগ বিস্তারিত",
-                "properties": "প্রপার্টিস",
-                "attributeChanges": "অ্যাট্রিবিউট পরিবর্তন",
+                "pageTitle": "কার্যকলাপ লগ বিবরণ",
+                "title": "কার্যকলাপ লগ বিবরণ",
+                "properties": "বৈশিষ্ট্য",
+                "attributeChanges": "বৈশিষ্ট্য পরিবর্তন",
                 "deleteModal": {
-                    "body": "আপনি কি নিশ্চিত এই অ্যাক্টিভিটি লগ মুছতে চান?"
+                    "body": "আপনি কি নিশ্চিত যে আপনি এই কার্যকলাপ লগ মুছে ফেলতে চান?"
                 }
             },
             "index": {
-                "subjectPlaceholder": "সাবজেক্ট",
-                "searchPlaceholder": "লগ খুঁজুন..."
+                "subjectPlaceholder": "বিষয়",
+                "searchPlaceholder": "লগ অনুসন্ধান..."
             }
         },
         "breakingNews": {
             "create": {
                 "form": {
                     "createPageTitle": "ব্রেকিং নিউজ তৈরি",
-                    "newsSettings": "নিউজ সেটিংস",
-                    "newsPlaceholder": "নিউজ নির্বাচন করুন"
+                    "newsSettings": "খবর সেটিংস",
+                    "newsPlaceholder": "খবর নির্বাচন করুন"
                 }
             },
             "details": {
-                "title": "ব্রেকিং নিউজ বিস্তারিত"
+                "title": "ব্রেকিং নিউজ বিবরণ"
             }
         },
         "categories": {
             "create": {
                 "form": {
-                    "createPageTitle": "ক্যাটাগরি তৈরি"
+                    "createPageTitle": "বিভাগ তৈরি"
                 },
                 "validation": {
-                    "parentCategoryIsRequired": "প্যারেন্ট ক্যাটাগরি আবশ্যক।"
+                    "parentCategoryIsRequired": "প্যারেন্ট বিভাগ আবশ্যক।"
                 }
             },
             "details": {
-                "title": "ক্যাটাগরি বিস্তারিত",
-                "recentLocations": "সাম্প্রতিক লোকেশনসমূহ"
+                "title": "বিভাগ বিবরণ",
+                "recentLocations": "সাম্প্রতিক অবস্থান"
             },
             "index": {
-                "searchPlaceholder": "ক্যাটাগরি খুঁজুন..."
+                "searchPlaceholder": "বিভাগ অনুসন্ধান..."
             }
         },
         "contributors": {
             "index": {
-                "searchPlaceholder": "কন্ট্রিবিউটর খুঁজুন...",
+                "searchPlaceholder": "অবদানকারী অনুসন্ধান...",
                 "deleteModal": {
-                    "title": "কন্ট্রিবিউটর মুছুন"
+                    "title": "অবদানকারী মুছে ফেলুন"
                 }
             }
         },
@@ -405,81 +461,81 @@
                 }
             },
             "details": {
-                "title": "ইভেন্ট বিস্তারিত"
+                "title": "ইভেন্ট বিবরণ"
             },
             "index": {
-                "searchPlaceholder": "ইভেন্ট খুঁজুন..."
+                "searchPlaceholder": "ইভেন্ট অনুসন্ধান..."
             }
         },
         "googleAdsences": {
             "create": {
                 "form": {
-                    "createPageTitle": "Google AdSense তৈরি করুন",
-                    "slotIdPlaceholder": "স্লট আইডি লিখুন",
-                    "typePlaceholder": "টাইপ নির্বাচন করুন"
+                    "createPageTitle": "গুগল অ্যাডসেন্স তৈরি করুন",
+                    "slotIdPlaceholder": "স্লট আইডি দিন",
+                    "typePlaceholder": "ধরন নির্বাচন করুন"
                 },
                 "validation": {
                     "slotIdIsRequired": "স্লট আইডি আবশ্যক।",
-                    "positionIsRequired": "পজিশন আবশ্যক।"
+                    "positionIsRequired": "অবস্থান আবশ্যক।"
                 }
             },
             "details": {
-                "title": "Google AdSense বিস্তারিত",
+                "title": "গুগল অ্যাডসেন্স বিবরণ",
                 "labels": {
-                    "clientId": "ক্লায়েন্ট আইডি"
+                    "clientId": "ক্লায়েন্ট আইডি"
                 }
             },
             "index": {
-                "searchPlaceholder": "Google AdSense খুঁজুন..."
+                "searchPlaceholder": "গুগল অ্যাডসেন্স অনুসন্ধান..."
             }
         },
         "locations": {
             "create": {
                 "form": {
-                    "createPageTitle": "লোকেশন তৈরি",
-                    "latitudePlaceholder": "ল্যাটিটিউড লিখুন",
-                    "longitudePlaceholder": "লংগিটিউড লিখুন",
-                    "boundaryNorthPlaceholder": "উত্তর সীমানা লিখুন",
-                    "boundarySouthPlaceholder": "দক্ষিণ সীমানা লিখুন",
-                    "boundaryEastPlaceholder": "পূর্ব সীমানা লিখুন",
-                    "boundaryWestPlaceholder": "পশ্চিম সীমানা লিখুন",
-                    "boundaryGeojsonPlaceholder": "সীমানা GeoJSON লিখুন"
+                    "createPageTitle": "অবস্থান তৈরি",
+                    "latitudePlaceholder": "অক্ষাংশ দিন",
+                    "longitudePlaceholder": "দ্রাঘিমাংশ দিন",
+                    "boundaryNorthPlaceholder": "উত্তর সীমানা দিন",
+                    "boundarySouthPlaceholder": "দক্ষিণ সীমানা দিন",
+                    "boundaryEastPlaceholder": "পূর্ব সীমানা দিন",
+                    "boundaryWestPlaceholder": "পশ্চিম সীমানা দিন",
+                    "boundaryGeojsonPlaceholder": "সীমানা জিওজেএসন দিন"
                 },
                 "validation": {
-                    "parentLocationIsRequired": "প্যারেন্ট লোকেশন আবশ্যক।"
+                    "parentLocationIsRequired": "প্যারেন্ট অবস্থান আবশ্যক।"
                 }
             },
             "details": {
-                "title": "লোকেশন বিস্তারিত"
+                "title": "অবস্থান বিবরণ"
             },
             "index": {
-                "searchPlaceholder": "লোকেশন খুঁজুন..."
+                "searchPlaceholder": "অবস্থান অনুসন্ধান..."
             }
         },
         "languages": {
             "details": {
-                "title": "ভাষার বিবরণ"
+                "title": "ভাষা বিবরণ"
             },
             "index": {
-                "searchPlaceholder": "অনুসন্ধান ভাষা..."
+                "searchPlaceholder": "ভাষা অনুসন্ধান..."
             }
         },
         "medias": {
             "details": {
-                "modelType": "মডেল টাইপ",
-                "mimeType": "MIME টাইপ",
+                "modelType": "মডেল ধরন",
+                "mimeType": "মাইম টাইপ",
                 "disk": "ডিস্ক",
-                "size": "সাইজ",
-                "customProperties": "কাস্টম প্রপার্টিস",
-                "notAvailable": "প্রাপ্য নয়।",
-                "generatedConversions": "জেনারেটেড কনভার্শনসমূহ",
-                "originalUrl": "অরিজিনাল URL",
-                "previewUrl": "প্রিভিউ URL"
+                "size": "আকার",
+                "customProperties": "কাস্টম বৈশিষ্ট্য",
+                "notAvailable": "উপলব্ধ নয়।",
+                "generatedConversions": "উত্পাদিত রূপান্তর",
+                "originalUrl": "মূল ইউআরএল",
+                "previewUrl": "প্রিভিউ ইউআরএল"
             },
             "index": {
-                "searchPlaceholder": "মিডিয়া খুঁজুন...",
+                "searchPlaceholder": "মিডিয়া অনুসন্ধান...",
                 "deleteModal": {
-                    "title": "মিডিয়া মুছুন"
+                    "title": "মিডিয়া মুছে ফেলুন"
                 }
             }
         },
@@ -487,17 +543,17 @@
             "create": {
                 "form": {
                     "createPageTitle": "মেনু তৈরি",
-                    "menuTypePlaceholder": "মেনু টাইপ নির্বাচন করুন"
+                    "menuTypePlaceholder": "মেনুর ধরন নির্বাচন করুন"
                 },
                 "validation": {
-                    "menuTypeIsRequired": "মেনু টাইপ আবশ্যক।"
+                    "menuTypeIsRequired": "মেনুর ধরন আবশ্যক।"
                 }
             },
             "details": {
-                "title": "মেনু বিস্তারিত"
+                "title": "মেনু বিবরণ"
             },
             "index": {
-                "searchPlaceholder": "মেনু খুঁজুন...",
+                "searchPlaceholder": "মেনু অনুসন্ধান...",
                 "details": {
                     "item": "আইটেম"
                 }
@@ -506,99 +562,99 @@
                 "create": {
                     "form": {
                         "createPageTitle": "মেনু আইটেম তৈরি",
-                        "latestUrl": "লেটেস্ট URL",
-                        "homeUrl": "হোম URL",
-                        "imageGalleryUrl": "ইমেজ গ্যালারি URL",
-                        "positionPlaceholder": "পজিশন লিখুন",
-                        "isCustomUrl": "কাস্টম URL কিনা",
+                        "latestUrl": "সর্বশেষ ইউআরএল",
+                        "homeUrl": "হোম ইউআরএল",
+                        "imageGalleryUrl": "ছবি গ্যালারি ইউআরএল",
+                        "positionPlaceholder": "অবস্থান দিন",
+                        "isCustomUrl": "কাস্টম ইউআরএল কি",
                         "modelPlaceholder": "মডেল নির্বাচন করুন",
                         "modelId": "মডেল আইডি",
-                        "tagPlaceholder": "ট্যাগ নির্বাচন করুন",
-                        "categoryPlaceholder": "ক্যাটাগরি নির্বাচন করুন",
-                        "pagePlaceholder": "পেজ নির্বাচন করুন",
-                        "urlPlaceholder": "URL লিখুন",
+                        "tagPlaceholder": "একটি ট্যাগ নির্বাচন করুন",
+                        "categoryPlaceholder": "একটি বিভাগ নির্বাচন করুন",
+                        "pagePlaceholder": "একটি পৃষ্ঠা নির্বাচন করুন",
+                        "urlPlaceholder": "ইউআরএল দিন",
                         "parentPlaceholder": "মেনু আইটেম নির্বাচন করুন"
                     },
                     "validation": {
                         "parentMenuItemIsRequired": "প্যারেন্ট মেনু আইটেম আবশ্যক।",
-                        "urlIsRequired": "URL আবশ্যক।",
+                        "urlIsRequired": "ইউআরএল আবশ্যক।",
                         "modelIsRequired": "মডেল আবশ্যক।",
                         "modelRecordIsRequired": "মডেল রেকর্ড আবশ্যক।"
                     }
                 },
                 "details": {
-                    "title": "মেনু আইটেম বিস্তারিত",
-                    "publicUrl": "পাবলিক URL",
+                    "title": "মেনু আইটেম বিবরণ",
+                    "publicUrl": "পাবলিক ইউআরএল",
                     "labels": {
-                        "isCustom": "কাস্টম কিনা"
+                        "isCustom": "কাস্টম কি"
                     }
                 },
                 "index": {
-                    "searchPlaceholder": "মেনু আইটেম খুঁজুন..."
+                    "searchPlaceholder": "মেনু আইটেম অনুসন্ধান..."
                 }
             }
         },
         "news": {
             "create": {
                 "form": {
-                    "createPageTitle": "নিউজ তৈরি করুন",
+                    "createPageTitle": "খবর তৈরি করুন",
                     "validation": {
-                        "newsTypeRequired": "নিউজ টাইপ আবশ্যক।",
-                        "categoryRequired": "ক্যাটাগরি আবশ্যক।",
-                        "videoUrlRequired": "ভিডিও URL আবশ্যক।",
+                        "newsTypeRequired": "খবরের ধরন আবশ্যক।",
+                        "categoryRequired": "বিভাগ আবশ্যক।",
+                        "videoUrlRequired": "ভিডিও ইউআরএল আবশ্যক।",
                         "galleryImageRequired": "গ্যালারি ছবি আবশ্যক।",
-                        "useOneFeatureImage": "কমপক্ষে একটি ফিচার ছবি ব্যবহার করুন।",
-                        "useOneMobileImage": "কমপক্ষে একটি মোবাইল ছবি ব্যবহার করুন।",
+                        "useOneFeatureImage": "অন্তত একটি ফিচার ছবি ব্যবহার করুন।",
+                        "useOneMobileImage": "অন্তত একটি মোবাইল ছবি ব্যবহার করুন।",
                         "featureImageCaptionRequired": "ফিচার ছবির ক্যাপশন আবশ্যক।"
                     },
-                    "newsTypePlaceholder": "নিউজ টাইপ নির্বাচন করুন",
+                    "newsTypePlaceholder": "খবরের ধরন নির্বাচন করুন",
                     "eventPlaceholder": "ইভেন্ট নির্বাচন করুন",
-                    "locationPlaceholder": "লোকেশন নির্বাচন করুন",
-                    "subTitlePlaceholder": "সাবটাইটেল লিখুন",
-                    "contentShoulderPlaceholder": "কনটেন্ট শোল্ডার লিখুন",
-                    "videoUrlPlaceholder": "ভিডিও URL লিখুন",
-                    "tagsPlaceholder": "ট্যাগসমূহ নির্বাচন করুন",
+                    "locationPlaceholder": "অবস্থান নির্বাচন করুন",
+                    "subTitlePlaceholder": "উপশিরোনাম দিন",
+                    "contentShoulderPlaceholder": "কন্টেন্ট শোল্ডার দিন",
+                    "videoUrlPlaceholder": "ভিডিও ইউআরএল দিন",
+                    "tagsPlaceholder": "ট্যাগ নির্বাচন করুন",
                     "imageSettings": "ছবি সেটিংস",
-                    "captionPlaceholder": "ক্যাপশন লিখুন",
-                    "contributorSettings": "কন্ট্রিবিউটর সেটিংস",
-                    "contributorsPlaceholder": "কন্ট্রিবিউটরসমূহ নির্বাচন করুন",
-                    "writerPlaceholder": "লেখকের নাম লিখুন",
+                    "captionPlaceholder": "ক্যাপশন দিন",
+                    "contributorSettings": "অবদানকারী সেটিংস",
+                    "contributorsPlaceholder": "অবদানকারী নির্বাচন করুন",
+                    "writerPlaceholder": "লেখকের নাম দিন",
                     "extraSettings": "অতিরিক্ত সেটিংস",
-                    "relevantNewsPlaceholder": "প্রাসঙ্গিক নিউজ নির্বাচন করুন",
-                    "relatedNewsPlaceholder": "সম্পর্কিত নিউজ নির্বাচন করুন",
+                    "relevantNewsPlaceholder": "প্রাসঙ্গিক খবর নির্বাচন করুন",
+                    "relatedNewsPlaceholder": "সম্পর্কিত খবর নির্বাচন করুন",
                     "breakingNewsPlaceholder": "ব্রেকিং নিউজ নির্বাচন করুন",
-                    "sourcePlaceholder": "সোর্স লিখুন"
+                    "sourcePlaceholder": "সূত্র দিন"
                 }
             },
             "details": {
-                "pageTitle": "নিউজ বিস্তারিত",
-                "noTagAdded": "কোনো ট্যাগ যোগ করা হয়নি।",
-                "noContributorAdded": "কোনো কন্ট্রিবিউটর যোগ করা হয়নি।",
-                "newsPlacements": "নিউজ প্লেসমেন্টসমূহ"
+                "pageTitle": "খবর বিবরণ",
+                "noTagAdded": "কোন ট্যাগ যোগ করা হয়নি।",
+                "noContributorAdded": "কোন অবদানকারী যোগ করা হয়নি।",
+                "newsPlacements": "খবর স্থাপন"
             },
             "index": {
-                "createdByPlaceholder": "তৈরি করেছেন"
+                "createdByPlaceholder": "নির্মাণ করেছেন"
             },
             "newsPlacement": {
                 "details": {
                     "placementDetails": {
-                        "pageTitle": "নিউজ প্লেসমেন্ট বিস্তারিত",
-                        "heading": "নিউজ প্লেসমেন্ট বিস্তারিত",
+                        "pageTitle": "খবর স্থাপন বিবরণ",
+                        "heading": "খবর স্থাপন বিবরণ",
                         "deleteModal": {
-                            "title": "নিউজ প্লেসমেন্ট মুছুন",
-                            "message": "এই নিউজ প্লেসমেন্টটি মুছুন"
+                            "title": "খবর স্থাপন মুছে ফেলুন",
+                            "message": "এই খবর স্থাপন মুছে ফেলুন"
                         }
                     }
                 },
                 "index": {
                     "placements": {
-                        "pageTitleSuffix": "নিউজ প্লেসমেন্ট",
-                        "autoCreating": "অটো তৈরি হচ্ছে...",
-                        "autoCreate": "অটো তৈরি করুন",
-                        "saveAll": "সব সেভ করুন",
-                        "homeLeadNewsPlacements": "হোম লিড নিউজ প্লেসমেন্টসমূহ",
-                        "homeCategoryNewsPlacements": "হোম ক্যাটাগরি নিউজ প্লেসমেন্টসমূহ",
-                        "categoryLeadNewsPlacements": "ক্যাটাগরি লিড নিউজ প্লেসমেন্টসমূহ"
+                        "pageTitleSuffix": "খবর স্থাপন",
+                        "autoCreating": "স্বয়ংক্রিয় তৈরি হচ্ছে...",
+                        "autoCreate": "স্বয়ংক্রিয় তৈরি",
+                        "saveAll": "সব সংরক্ষণ",
+                        "homeLeadNewsPlacements": "হোম লিড নিউজ স্থাপন",
+                        "homeCategoryNewsPlacements": "হোম বিভাগ নিউজ স্থাপন",
+                        "categoryLeadNewsPlacements": "বিভাগ লিড নিউজ স্থাপন"
                     }
                 }
             }
@@ -606,34 +662,34 @@
         "pages": {
             "create": {
                 "form": {
-                    "createPageTitle": "পেজ তৈরি",
+                    "createPageTitle": "পৃষ্ঠা তৈরি",
                     "validation": {
-                        "pageRequired": "পেজ আবশ্যক।"
+                        "pageRequired": "পৃষ্ঠা আবশ্যক।"
                     }
                 }
             },
             "details": {
                 "form": {
-                    "editPageTitle": "পেজ সম্পাদনা"
+                    "editPageTitle": "পৃষ্ঠা সম্পাদনা"
                 },
                 "labels": {
-                    "keywords": "কীওয়ার্ড"
+                    "keywords": "কীওয়ার্ড"
                 }
             },
             "index": {
-                "searchPlaceholder": "পেজ খুঁজুন...",
-                "isDefault": "ডিফল্ট কিনা",
-                "noPageFound": "কোনো পেজ পাওয়া যায়নি।",
+                "searchPlaceholder": "পৃষ্ঠা অনুসন্ধান...",
+                "isDefault": "ডিফল্ট কি",
+                "noPageFound": "কোন পৃষ্ঠা পাওয়া যায়নি।",
                 "trashModal": {
-                    "title": "পেজ ট্র্যাশে পাঠান",
-                    "body": "পেজ রিস্টোর করে এই অ্যাকশনটি ফিরিয়ে নেওয়া যাবে।"
+                    "title": "পৃষ্ঠা ট্র্যাশে পাঠান",
+                    "body": "পৃষ্ঠা পুনরুদ্ধারের মাধ্যমে এই কাজটি পূর্বাবস্থায় ফেরানো যাবে।"
                 },
                 "restoreModal": {
-                    "title": "পেজ রিস্টোর করুন",
-                    "body": "পেজ ট্র্যাশে পাঠিয়ে এই অ্যাকশনটি ফিরিয়ে নেওয়া যাবে।"
+                    "title": "পৃষ্ঠা পুনরুদ্ধার করুন",
+                    "body": "পৃষ্ঠা ট্র্যাশে পাঠানোর মাধ্যমে এই কাজটি পূর্বাবস্থায় ফেরানো যাবে।"
                 },
                 "deleteModal": {
-                    "title": "পেজ মুছুন"
+                    "title": "পৃষ্ঠা মুছে ফেলুন"
                 }
             }
         },
@@ -643,18 +699,18 @@
                     "createQuiz": "কুইজ তৈরি করুন"
                 },
                 "validation": {
-                    "startDate": "শুরু তারিখ আবশ্যক।",
-                    "endDate": "শেষ তারিখ আবশ্যক।"
+                    "startDate": "শুরুর তারিখ আবশ্যক।",
+                    "endDate": "শেষের তারিখ আবশ্যক।"
                 }
             },
             "details": {
                 "labels": {
-                    "quizDetails": "কুইজ বিস্তারিত"
+                    "quizDetails": "কুইজ বিবরণ"
                 }
             },
             "index": {
                 "labels": {
-                    "noQuizFound": "কোনো কুইজ পাওয়া যায়নি।."
+                    "noQuizFound": "কোন কুইজ পাওয়া যায়নি।"
                 }
             }
         },
@@ -672,12 +728,56 @@
             },
             "details": {
                 "labels": {
-                    "quizQuestion": "কুইজ প্রশ্নের বিস্তারিত"
+                    "quizQuestion": "কুইজ প্রশ্ন বিবরণ"
                 }
             },
             "index": {
                 "labels": {
-                    "noQuizQuestionFound": "কোনো কুইজ প্রশ্ন পাওয়া যায়নি।"
+                    "noQuizQuestionFound": "কোন কুইজ প্রশ্ন পাওয়া যায়নি।"
+                }
+            }
+        },
+        "quizResults": {
+            "create": {
+                "labels": {
+                    "createQuiz": "কুইজ ফলাফল তৈরি করুন"
+                },
+                "validation": {
+                    "result": "ফলাফল আবশ্যক।",
+                    "answer_type": "উত্তরের ধরন আবশ্যক।",
+                    "point": "পয়েন্ট আবশ্যক।",
+                    "position": "অবস্থান আবশ্যক।"
+                }
+            },
+            "details": {
+                "labels": {
+                    "quizResult": "কুইজ ফলাফল বিবরণ"
+                }
+            },
+            "index": {
+                "labels": {
+                    "noQuizResultFound": "কোন কুইজ ফলাফল পাওয়া যায়নি।"
+                }
+            }
+        },
+        "quizQuestionOptions": {
+            "create": {
+                "labels": {
+                    "createQuiz": "কুইজ প্রশ্ন তৈরি করুন"
+                },
+                "validation": {
+                    "option": "অপশন আবশ্যক।",
+                    "position": "অবস্থান আবশ্যক।"
+                }
+            },
+            "details": {
+                "labels": {
+                    "quizQuestionOption": "কুইজ প্রশ্নের অপশন বিবরণ"
+                }
+            },
+            "index": {
+                "labels": {
+                    "noQuizQuestionOptionFound": "কোন কুইজ প্রশ্নের অপশন পাওয়া যায়নি।"
                 }
             }
         },
@@ -685,75 +785,75 @@
             "index": {
                 "labels": {
                     "setting": "সেটিং",
-                    "queueActions": "কিউ অ্যাকশনসমূহ",
-                    "queueActionsDescription": "এখান থেকে কিউ ম্যানেজমেন্ট অ্যাকশন চালান।",
-                    "run": "রান করুন",
-                    "scheduleActions": "শিডিউল অ্যাকশনসমূহ",
-                    "scheduleActionsDescription": "এখান থেকে শিডিউল ম্যানেজমেন্ট অ্যাকশন চালান।",
-                    "sitemapLinks": "Sitemap লিংকসমূহ",
-                    "clickCopySitemapUrl": "Sitemap URL কপি করতে কপি বাটনে ক্লিক করুন।",
-                    "copyEnabled": "কপি সক্রিয়",
-                    "patternOnly": "শুধু প্যাটার্ন",
-                    "feedsRssLinks": "Feeds ও RSS লিংকসমূহ",
-                    "feedsRssPatternsAreDynamic": "এই feed URL গুলো ডায়নামিক প্যাটার্ন। ব্যবহারের আগে placeholder গুলো বাস্তব ভ্যালু দিয়ে বদলে নিন।",
+                    "queueActions": "কিউ কার্যক্রম",
+                    "queueActionsDescription": "এখান থেকে কিউ ব্যবস্থাপনা কার্যক্রম চালান।",
+                    "run": "চালান",
+                    "scheduleActions": "শিডিউল কার্যক্রম",
+                    "scheduleActionsDescription": "এখান থেকে শিডিউল ব্যবস্থাপনা কার্যক্রম চালান।",
+                    "sitemapLinks": "সাইটম্যাপ লিঙ্ক",
+                    "clickCopySitemapUrl": "সাইটম্যাপ ইউআরএল কপি করতে কপি বোতামে ক্লিক করুন।",
+                    "copyEnabled": "কপি সক্ষম",
+                    "patternOnly": "শুধুমাত্র প্যাটার্ন",
+                    "feedsRssLinks": "ফিড ও আরএসএস লিঙ্ক",
+                    "feedsRssPatternsAreDynamic": "এই ফিড ইউআরএলগুলি গতিশীল প্যাটার্ন। ব্যবহারের আগে প্লেসহোল্ডারগুলিকে প্রকৃত মান দিয়ে প্রতিস্থাপন করুন।",
                     "robotsTxtEditDescription": "এখান থেকে আপনার Robots.txt ফাইল সম্পাদনা করুন।",
                     "adsTxtEditDescription": "এখান থেকে আপনার Ads.txt ফাইল সম্পাদনা করুন।"
                 },
                 "tabs": {
                     "queue": "কিউ",
                     "schedule": "শিডিউল",
-                    "feedsRss": "Feeds ও RSS",
+                    "feedsRss": "ফিড ও আরএসএস",
                     "robotsTxt": "Robots.txt",
                     "adsTxt": "Ads.txt"
                 },
                 "queueActions": {
-                    "startQueue": "কিউ চালু করুন",
-                    "restartQueue": "কিউ রিস্টার্ট করুন",
-                    "clearQueue": "কিউ ক্লিয়ার করুন",
+                    "startQueue": "কিউ শুরু করুন",
+                    "restartQueue": "কিউ পুনরায় শুরু করুন",
+                    "clearQueue": "কিউ সাফ করুন",
                     "flushQueue": "কিউ ফ্লাশ করুন",
-                    "monitorStale": "স্টেল জব মনিটর করুন",
-                    "monitorPurge": "মনিটর পার্জ করুন"
+                    "monitorStale": "স্টেল কাজ পর্যবেক্ষণ করুন",
+                    "monitorPurge": "পর্যবেক্ষণ পরিষ্কার করুন"
                 },
                 "scheduleActions": {
-                    "startSchedule": "শিডিউল চালু করুন",
+                    "startSchedule": "শিডিউল শুরু করুন",
                     "stopSchedule": "শিডিউল বন্ধ করুন"
                 },
                 "sitemapLinks": {
-                    "sitemapIndex": "Sitemap Index",
-                    "categoriesSitemap": "ক্যাটাগরি Sitemap",
-                    "tagsSitemap": "ট্যাগ Sitemap",
-                    "eventsSitemap": "ইভেন্ট Sitemap",
-                    "contributorsSitemap": "কন্ট্রিবিউটর Sitemap",
-                    "newsSitemap": "নিউজ Sitemap",
-                    "latestNewsSitemap": "লেটেস্ট নিউজ Sitemap",
-                    "categoryNewsPattern": "ক্যাটাগরি নিউজ Sitemap প্যাটার্ন",
-                    "locationNewsPattern": "লোকেশন নিউজ Sitemap প্যাটার্ন",
-                    "eventNewsPattern": "ইভেন্ট নিউজ Sitemap প্যাটার্ন",
-                    "tagNewsPattern": "ট্যাগ নিউজ Sitemap প্যাটার্ন",
-                    "contributorNewsPattern": "কন্ট্রিবিউটর নিউজ Sitemap প্যাটার্ন"
+                    "sitemapIndex": "সাইটম্যাপ সূচক",
+                    "categoriesSitemap": "বিভাগ সাইটম্যাপ",
+                    "tagsSitemap": "ট্যাগ সাইটম্যাপ",
+                    "eventsSitemap": "ইভেন্ট সাইটম্যাপ",
+                    "contributorsSitemap": "অবদানকারী সাইটম্যাপ",
+                    "newsSitemap": "খবর সাইটম্যাপ",
+                    "latestNewsSitemap": "সর্বশেষ খবর সাইটম্যাপ",
+                    "categoryNewsPattern": "বিভাগ খবর সাইটম্যাপ প্যাটার্ন",
+                    "locationNewsPattern": "অবস্থান খবর সাইটম্যাপ প্যাটার্ন",
+                    "eventNewsPattern": "ইভেন্ট খবর সাইটম্যাপ প্যাটার্ন",
+                    "tagNewsPattern": "ট্যাগ খবর সাইটম্যাপ প্যাটার্ন",
+                    "contributorNewsPattern": "অবদানকারী খবর সাইটম্যাপ প্যাটার্ন"
                 },
                 "feedLinks": {
-                    "rssFeeds": "RSS Feeds",
-                    "atomFeeds": "Atom Feeds",
-                    "newsFeedPattern": "নিউজ Feed প্যাটার্ন",
-                    "latestNewsFeedPattern": "লেটেস্ট নিউজ Feed প্যাটার্ন",
-                    "categoryNewsFeedPattern": "ক্যাটাগরি নিউজ Feed প্যাটার্ন",
-                    "locationNewsFeedPattern": "লোকেশন নিউজ Feed প্যাটার্ন",
-                    "eventNewsFeedPattern": "ইভেন্ট নিউজ Feed প্যাটার্ন",
-                    "tagNewsFeedPattern": "ট্যাগ নিউজ Feed প্যাটার্ন",
-                    "contributorNewsFeedPattern": "কন্ট্রিবিউটর নিউজ Feed প্যাটার্ন"
+                    "rssFeeds": "আরএসএস ফিড",
+                    "atomFeeds": "এটম ফিড",
+                    "newsFeedPattern": "খবর ফিড প্যাটার্ন",
+                    "latestNewsFeedPattern": "সর্বশেষ খবর ফিড প্যাটার্ন",
+                    "categoryNewsFeedPattern": "বিভাগ খবর ফিড প্যাটার্ন",
+                    "locationNewsFeedPattern": "অবস্থান খবর ফিড প্যাটার্ন",
+                    "eventNewsFeedPattern": "ইভেন্ট খবর ফিড প্যাটার্ন",
+                    "tagNewsFeedPattern": "ট্যাগ খবর ফিড প্যাটার্ন",
+                    "contributorNewsFeedPattern": "অবদানকারী খবর ফিড প্যাটার্ন"
                 }
             },
             "adsTxt": {
                 "edit": {
                     "labels": {
-                        "description": "আপনার Ads.txt ফাইলের কনটেন্ট আপডেট করুন।",
-                        "content": "Ads.txt কনটেন্ট",
-                        "contentDescription": "এখানে valid ads.txt seller records লিখুন।",
+                        "description": "আপনার Ads.txt ফাইলের বিষয়বস্তু আপডেট করুন।",
+                        "content": "Ads.txt বিষয়বস্তু",
+                        "contentDescription": "এখানে বৈধ Ads.txt বিক্রেতা রেকর্ড লিখুন।",
                         "placeholder": "google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0",
-                        "save": "Ads.txt সেভ করুন",
-                        "helpTitle": "Ads.txt সহায়তা",
-                        "helpDescription": "Ads.txt অনুমোদিত digital seller তালিকাভুক্ত করে আপনার ad inventory সুরক্ষিত রাখতে সাহায্য করে। প্রতি লাইনে একটি seller record যোগ করুন।",
+                        "save": "Ads.txt সংরক্ষণ",
+                        "helpTitle": "Ads.txt সহায়তা",
+                        "helpDescription": "Ads.txt অনুমোদিত ডিজিটাল বিক্রেতাদের তালিকাভুক্ত করে আপনার বিজ্ঞাপন ইনভেন্টরি রক্ষা করতে সাহায্য করে। প্রতি লাইনে একটি বিক্রেতা রেকর্ড যোগ করুন।",
                         "exampleTitle": "Ads.txt উদাহরণ"
                     }
                 }
@@ -761,13 +861,13 @@
             "robotsTxt": {
                 "edit": {
                     "labels": {
-                        "description": "আপনার Robots.txt ফাইলের কনটেন্ট আপডেট করুন।",
-                        "content": "Robots.txt কনটেন্ট",
-                        "contentDescription": "এখানে valid robots.txt rules লিখুন।",
+                        "description": "আপনার Robots.txt ফাইলের বিষয়বস্তু আপডেট করুন।",
+                        "content": "Robots.txt বিষয়বস্তু",
+                        "contentDescription": "এখানে বৈধ Robots.txt নিয়ম লিখুন।",
                         "placeholder": "User-agent: *\nAllow: /\n\nSitemap: https://example.com/sitemaps.xml",
-                        "save": "Robots.txt সেভ করুন",
-                        "helpTitle": "Robots.txt সহায়তা",
-                        "helpDescription": "Robots.txt সার্চ ইঞ্জিন crawler কে জানায় আপনার ওয়েবসাইটের কোন অংশে তারা অ্যাক্সেস করতে পারবে। কনটেন্ট খুঁজে পেতে crawler দের সাহায্য করার জন্য sitemap URL যোগ করুন।",
+                        "save": "Robots.txt সংরক্ষণ",
+                        "helpTitle": "Robots.txt সহায়তা",
+                        "helpDescription": "Robots.txt সার্চ ইঞ্জিন ক্রলারদের বলে যে আপনার ওয়েবসাইটের কোন অংশগুলি তারা অ্যাক্সেস করতে পারে। ক্রলারদের আপনার কন্টেন্ট আবিষ্কার করতে সাহায্য করতে সাইটম্যাপ ইউআরএল যোগ করুন।",
                         "exampleTitle": "Robots.txt উদাহরণ"
                     }
                 }
@@ -776,31 +876,31 @@
         "surveys": {
             "create": {
                 "labels": {
-                    "createSurvey": "সার্ভে তৈরি করুন"
+                    "createSurvey": "জরিপ তৈরি করুন"
                 },
                 "validation": {
-                    "startDate": "শুরু তারিখ আবশ্যক।",
-                    "endDate": "শেষ তারিখ আবশ্যক।"
+                    "startDate": "শুরুর তারিখ আবশ্যক।",
+                    "endDate": "শেষের তারিখ আবশ্যক।"
                 }
             },
             "details": {
                 "labels": {
-                    "surveyDetails": "সার্ভে বিস্তারিত"
+                    "surveyDetails": "জরিপ বিবরণ"
                 }
             },
             "index": {
                 "labels": {
-                    "noSurveyFound": "কোনো সার্ভে পাওয়া যায়নি।"
+                    "noSurveyFound": "কোন জরিপ পাওয়া যায়নি।"
                 }
             }
         },
         "surveyQuestions": {
             "details": {
                 "labels": {
-                    "surveyQuestion": "সার্ভে প্রশ্ন",
-                    "surveyQuestionResult": "সার্ভে প্রশ্নের ফলাফল",
-                    "noComment": "কোনো মন্তব্য নেই",
-                    "participateCount": "অংশগ্রহণ সংখ্যা"
+                    "surveyQuestion": "জরিপ প্রশ্ন",
+                    "surveyQuestionResult": "জরিপ প্রশ্নের ফলাফল",
+                    "noComment": "কোন মন্তব্য নেই",
+                    "participateCount": "অংশগ্রহণকারী সংখ্যা"
                 }
             }
         },
@@ -811,12 +911,12 @@
                 }
             },
             "details": {
-                "title": "ট্যাগ বিস্তারিত",
+                "title": "ট্যাগ বিবরণ",
                 "trendInformation": "ট্রেন্ড তথ্য"
             },
             "index": {
-                "searchPlaceholder": "ট্যাগ খুঁজুন...",
-                "noTagFound": "কোনো ট্যাগ পাওয়া যায়নি।"
+                "searchPlaceholder": "ট্যাগ অনুসন্ধান...",
+                "noTagFound": "কোন ট্যাগ পাওয়া যায়নি।"
             }
         },
         "themes": {
@@ -826,32 +926,32 @@
                     "validation": {
                         "groupRequired": "গ্রুপ আবশ্যক।",
                         "labelRequired": "লেবেল আবশ্যক।",
-                        "valueRequired": "ভ্যালু আবশ্যক।",
-                        "valueMustBeInteger": "ভ্যালু অবশ্যই integer হতে হবে।",
-                        "valueMustBeText": "ভ্যালু অবশ্যই text হতে হবে।",
-                        "valueMustBeValidNumber": "ভ্যালু অবশ্যই valid number হতে হবে।",
-                        "valueMustBeValidJsonArray": "ভ্যালু অবশ্যই valid JSON array হতে হবে।",
-                        "valueMustBeValidJson": "ভ্যালু অবশ্যই valid JSON হতে হবে।",
-                        "valueMustBeValidUrl": "ভ্যালু অবশ্যই valid URL হতে হবে।",
-                        "valueMustBeValidColor": "ভ্যালু অবশ্যই valid color code হতে হবে।"
+                        "valueRequired": "মান আবশ্যক।",
+                        "valueMustBeInteger": "মানটি একটি পূর্ণসংখ্যা হতে হবে।",
+                        "valueMustBeText": "মানটি একটি টেক্সট হতে হবে।",
+                        "valueMustBeValidNumber": "মানটি একটি বৈধ সংখ্যা হতে হবে।",
+                        "valueMustBeValidJsonArray": "মানটি একটি বৈধ JSON অ্যারে হতে হবে।",
+                        "valueMustBeValidJson": "মানটি বৈধ JSON হতে হবে।",
+                        "valueMustBeValidUrl": "মানটি একটি বৈধ ইউআরএল হতে হবে।",
+                        "valueMustBeValidColor": "মানটি একটি বৈধ রঙ কোড হতে হবে।"
                     },
-                    "invalidThemeData": "থিম ডেটা সঠিক নয়",
-                    "invalidThemeDataBody": "থিম গ্রুপ এবং লেবেল আবশ্যক। অনুগ্রহ করে ফিরে গিয়ে একটি valid থিম নির্বাচন করুন।",
+                    "invalidThemeData": "অবৈধ থিম তথ্য",
+                    "invalidThemeDataBody": "থিম গ্রুপ এবং লেবেল আবশ্যক। অনুগ্রহ করে ফিরে যান এবং একটি বৈধ থিম নির্বাচন করুন।",
                     "jsonPlaceholder": "উদাহরণ: {\"key\": \"value\"} অথবা [\"item1\", \"item2\"]",
                     "urlPlaceholder": "https://example.com",
                     "colorPlaceholder": "#000000"
                 }
             },
             "details": {
-                "title": "থিম বিস্তারিত",
+                "title": "থিম বিবরণ",
                 "labels": {
-                    "value": "ভ্যালু"
+                    "value": "মান"
                 },
                 "themeImageAlt": "থিম ছবি"
             },
             "index": {
-                "searchPlaceholder": "থিম খুঁজুন...",
-                "noThemeFound": "কোনো থিম পাওয়া যায়নি।"
+                "searchPlaceholder": "থিম অনুসন্ধান...",
+                "noThemeFound": "কোন থিম পাওয়া যায়নি।"
             }
         },
         "trends": {
@@ -859,42 +959,42 @@
                 "form": {
                     "createPageTitle": "ট্রেন্ড তৈরি",
                     "tagPlaceholder": "ট্যাগ নির্বাচন করুন",
-                    "isCurrent": "বর্তমান কিনা"
+                    "isCurrent": "বর্তমান কি"
                 },
                 "validation": {
                     "tagIsRequired": "ট্যাগ আবশ্যক।"
                 }
             },
             "details": {
-                "title": "ট্রেন্ড বিস্তারিত",
+                "title": "ট্রেন্ড বিবরণ",
                 "tagInformation": "ট্যাগ তথ্য"
             },
             "index": {
-                "searchPlaceholder": "ট্রেন্ড খুঁজুন...",
-                "noTrendFound": "কোনো ট্রেন্ড পাওয়া যায়নি।"
+                "searchPlaceholder": "ট্রেন্ড অনুসন্ধান...",
+                "noTrendFound": "কোন ট্রেন্ড পাওয়া যায়নি।"
             }
         },
         "users": {
             "create": {
                 "form": {
-                    "createPageTitle": "ইউজার তৈরি",
-                    "emailPlaceholder": "ইমেইল লিখুন",
-                    "setAsVerifyEmail": "ভেরিফাই ইমেইল হিসেবে সেট করুন",
-                    "sendVerifyEmail": "ভেরিফাই ইমেইল পাঠান"
+                    "createPageTitle": "ব্যবহারকারী তৈরি",
+                    "emailPlaceholder": "ইমেইল দিন",
+                    "setAsVerifyEmail": "ইমেইল যাচাইকৃত হিসেবে সেট করুন",
+                    "sendVerifyEmail": "যাচাইকরণ ইমেইল পাঠান"
                 },
                 "validation": {
-                    "userPermissionIsRequired": "ইউজার পারমিশন আবশ্যক।"
+                    "userPermissionIsRequired": "ব্যবহারকারী অনুমতি আবশ্যক।"
                 },
                 "labels": {
-                    "superAdminCreateNotice": "শুধু একজন সুপার অ্যাডমিন সুপার অ্যাডমিন তৈরি করতে পারবেন"
+                    "superAdminCreateNotice": "শুধুমাত্র একজন সুপার অ্যাডমিন একজন সুপার অ্যাডমিন তৈরি করতে পারেন"
                 }
             },
             "details": {
-                "title": "ইউজার বিস্তারিত"
+                "title": "ব্যবহারকারী বিবরণ"
             },
             "index": {
-                "searchPlaceholder": "ইউজার খুঁজুন...",
-                "noUserFound": "কোনো ইউজার পাওয়া যায়নি।"
+                "searchPlaceholder": "ব্যবহারকারী অনুসন্ধান...",
+                "noUserFound": "কোন ব্যবহারকারী পাওয়া যায়নি।"
             }
         }
     },
@@ -902,19 +1002,19 @@
         "auth": {
             "authTopbarDropdownMenu": {
                 "navigation": {
-                    "logViewer": "লগ ভিউয়ার",
+                    "logViewer": "লগ ভিউয়ার",
                     "queueMonitor": "কিউ মনিটর",
                     "settings": "সেটিংস"
                 },
                 "actions": {
-                    "loggingOut": "লগআউট হচ্ছে"
+                    "loggingOut": "লগআউট করা হচ্ছে"
                 }
             },
             "offcanvasMenuItems": {
                 "navigation": {
-                    "newsAttributes": "নিউজ অ্যাট্রিবিউটসমূহ",
-                    "pages": "পেজসমূহ",
-                    "userAnagement": "ইউজার ম্যানেজমেন্ট"
+                    "newsAttributes": "খবরের বৈশিষ্ট্য",
+                    "pages": "পৃষ্ঠাসমূহ",
+                    "userAnagement": "ব্যবহারকারী ব্যবস্থাপনা"
                 }
             }
         },
@@ -934,7 +1034,7 @@
     "media": {
         "mediaRenderer": {
             "labels": {
-                "iframeNotSupport": "আপনার ব্রাউজার এই ফাইল টাইপটি প্রদর্শন করতে পারে না।"
+                "iframeNotSupport": "আপনার ব্রাউজার এই ফাইল টাইপ প্রদর্শন করতে পারে না।"
             },
             "actions": {
                 "download": "ডাউনলোড"
@@ -942,12 +1042,12 @@
         },
         "mediaSelectFromMediaLibery": {
             "actions": {
-                "openMediaLibrary": "মিডিয়া লাইব্রেরি খুলুন",
+                "openMediaLibrary": "মিডিয়া লাইব্রেরি খুলুন",
                 "close": "বন্ধ করুন"
             },
             "labels": {
                 "gallery": "গ্যালারি",
-                "noMediaFound": "কোনো মিডিয়া পাওয়া যায়নি।"
+                "noMediaFound": "কোন মিডিয়া পাওয়া যায়নি।"
             }
         },
         "imageWithLightBox": {
@@ -957,7 +1057,7 @@
             "actions": {
                 "zoomIn": "জুম ইন",
                 "zoomOut": "জুম আউট",
-                "original": "অরিজিনাল"
+                "original": "মূল"
             },
             "aria": {
                 "closeOverlay": "লাইটবক্স ওভারলে বন্ধ করুন",
@@ -971,24 +1071,24 @@
         "components": {
             "list": {
                 "labels": {
-                    "noNewsFound": "কোনো নিউজ পাওয়া যায়নি"
+                    "noNewsFound": "কোন খবর পাওয়া যায়নি"
                 }
             },
             "socialShare": {
                 "labels": {
-                    "share": "শেয়ার"
+                    "share": "শেয়ার করুন"
                 }
             },
             "view": {
                 "imageGallery": {
                     "labels": {
-                        "noGalleryImageFound": "কোনো গ্যালারি ছবি পাওয়া যায়নি"
+                        "noGalleryImageFound": "কোন গ্যালারি ছবি পাওয়া যায়নি"
                     }
                 }
             },
             "writerConstributer": {
                 "labels": {
-                    "by": "লিখেছেন"
+                    "by": "লেখক"
                 }
             }
         }
@@ -997,32 +1097,32 @@
         "components": {
             "categoryHasLocationSection": {
                 "form": {
-                    "locationPlaceholder": "লোকেশন নির্বাচন করুন"
+                    "locationPlaceholder": "একটি অবস্থান নির্বাচন করুন"
                 },
                 "actions": {
-                    "searching": "সার্চ হচ্ছে"
+                    "searching": "অনুসন্ধান করা হচ্ছে"
                 }
             },
             "eventBanners": {
                 "labels": {
-                    "readMore": "আরও পড়ুন"
+                    "readMore": "আরও পড়ুন"
                 }
             }
         },
         "categoryNews": {
             "categories": {
                 "details": {
-                    "categoryImageAlt": "ক্যাটাগরি ছবি"
+                    "categoryImageAlt": "বিভাগ ছবি"
                 }
             }
         },
         "contributorNews": {
             "labels": {
-                "contributor": "কন্ট্রিবিউটর"
+                "contributor": "অবদানকারী"
             },
             "contributors": {
                 "details": {
-                    "contributorImageAlt": "কন্ট্রিবিউটর ছবি"
+                    "contributorImageAlt": "অবদানকারী ছবি"
                 }
             }
         },
@@ -1035,22 +1135,22 @@
         },
         "imageGalleryNews": {
             "labels": {
-                "imageGalleries": "ইমেজ গ্যালারি",
-                "brief": "সর্বশেষ ইমেজ গ্যালারি নিউজ দেখুন।",
-                "keyWords": "নিউজ, ইমেজ গ্যালারি নিউজ"
+                "imageGalleries": "ছবি গ্যালারি",
+                "brief": "সর্বশেষ ছবি গ্যালারি খবর অন্বেষণ করুন।",
+                "keyWords": "খবর, ছবি গ্যালারি খবর"
             }
         },
         "latest": {
             "labels": {
-                "latestNews": "সর্বশেষ নিউজ"
+                "latestNews": "সর্বশেষ খবর"
             }
         },
         "locationNews": {
             "locations": {
                 "details": {
-                    "viewLocation": "লোকেশন দেখুন",
-                    "locationImageAlt": "লোকেশন ছবি",
-                    "parentLocation": "প্যারেন্ট লোকেশন"
+                    "viewLocation": "অবস্থান দেখুন",
+                    "locationImageAlt": "অবস্থান ছবি",
+                    "parentLocation": "প্যারেন্ট অবস্থান"
                 }
             }
         },
@@ -1063,9 +1163,9 @@
         },
         "videoNews": {
             "labels": {
-                "videos": "ভিডিওসমূহ",
-                "brief": "সর্বশেষ ভিডিও নিউজ দেখুন।",
-                "keyWords": "নিউজ, ভিডিও নিউজ"
+                "videos": "ভিডিও",
+                "brief": "সর্বশেষ ভিডিও খবর অন্বেষণ করুন।",
+                "keyWords": "খবর, ভিডিও খবর"
             }
         }
     },
@@ -1073,21 +1173,27 @@
         "utility": {
             "surveyQuestion": {
                 "labels": {
-                    "noComment": "কোনো মন্তব্য নেই",
-                    "noParticipateFound": "কোনো অংশগ্রহণ পাওয়া যায়নি"
+                    "noComment": "কোন মন্তব্য নেই",
+                    "noParticipateFound": "কোন অংশগ্রহণকারী পাওয়া যায়নি"
                 },
                 "api": {
-                    "submitSuccess": "সার্ভে প্রশ্ন সাবমিট হয়েছে",
-                    "submitFail": "সাবমিট ব্যর্থ হয়েছে"
+                    "submitSuccess": "জরিপ প্রশ্ন জমা দেওয়া হয়েছে",
+                    "submitFail": "জমা দিতে ব্যর্থ হয়েছে"
                 },
                 "buttons": {
-                    "changeAnswer": "উত্তর পরিবর্তন করুন",
-                    "submit": "সাবমিট"
+                    "changeAnswer": "উত্তর পরিবর্তন",
+                    "submit": "জমা দিন"
                 }
             },
             "surveys": {
                 "labels": {
-                    "noSurveyQuestionAdded": "কোনো প্রশ্ন যোগ করা হয়নি"
+                    "noSurveyQuestionAdded": "কোন প্রশ্ন যোগ করা হয়নি"
+                }
+            },
+
+            "quizzes": {
+                "labels": {
+                    "viewQuiz": "কুইজ দেখুন"
                 }
             }
         },
@@ -1095,23 +1201,23 @@
             "tinymce": {
                 "editor": {
                     "actions": {
-                        "insertImage": "ছবি ইনসার্ট করুন",
-                        "insertFile": "ফাইল ইনসার্ট করুন",
-                        "insertVideo": "ভিডিও ইনসার্ট করুন",
-                        "insertAudio": "অডিও ইনসার্ট করুন"
+                        "insertImage": "ছবি সন্নিবেশ",
+                        "insertFile": "ফাইল সন্নিবেশ",
+                        "insertVideo": "ভিডিও সন্নিবেশ",
+                        "insertAudio": "অডিও সন্নিবেশ"
                     },
                     "prompts": {
-                        "caption": "{type} ক্যাপশন লিখুন:",
-                        "altText": "{type} alt text লিখুন:",
-                        "embedFile": "আপনি কি ফাইলটি embed করতে চান?",
-                        "linkText": "লিংক টেক্সট লিখুন:",
+                        "caption": "{type} ক্যাপশন দিন:",
+                        "altText": "{type} বিকল্প টেক্সট দিন:",
+                        "embedFile": "আপনি কি ফাইলটি এম্বেড করতে চান?",
+                        "linkText": "লিঙ্ক টেক্সট দিন:",
                         "openInNewTab": "নতুন ট্যাবে খুলবেন?"
                     },
                     "labels": {
-                        "downloadFile": "ফাইল ডাউনলোড করুন"
+                        "downloadFile": "ফাইল ডাউনলোড"
                     },
                     "messages": {
-                        "uploadFailed": "আপলোড ব্যর্থ হয়েছে: {message}"
+                        "uploadFailed": "আপলোড ব্যর্থ হয়েছে: {message}"
                     }
                 }
             }
@@ -1119,57 +1225,57 @@
     },
     "auth": {
         "emailVerification": {
-            "pageTitle": "ইমেইল ভেরিফিকেশন",
-            "imageAlt": "ইউজার ইমেইল ভেরিফিকেশন",
-            "title": "আপনার ইমেইল ভেরিফাই করুন",
-            "description": "চালিয়ে যাওয়ার আগে অনুগ্রহ করে verification link এর জন্য আপনার ইমেইল চেক করুন।",
-            "resendingButton": "আবার পাঠানো হচ্ছে...",
-            "resendButton": "ভেরিফিকেশন ইমেইল আবার পাঠান"
+            "pageTitle": "ইমেইল যাচাইকরণ",
+            "imageAlt": "ব্যবহারকারী ইমেইল যাচাইকরণ",
+            "title": "আপনার ইমেইল যাচাই করুন",
+            "description": "চালিয়ে যাওয়ার আগে, অনুগ্রহ করে একটি যাচাইকরণ লিঙ্কের জন্য আপনার ইমেইল চেক করুন।",
+            "resendingButton": "পুনরায় পাঠানো হচ্ছে...",
+            "resendButton": "যাচাইকরণ ইমেইল পুনরায় পাঠান"
         },
         "forgotPassword": {
-            "pageTitle": "পাসওয়ার্ড ভুলে গেছেন",
-            "description": "রিসেট লিংক পেতে আপনার ইমেইল লিখুন।",
+            "pageTitle": "পাসওয়ার্ড ভুলে গেছেন",
+            "description": "একটি রিসেট লিঙ্ক পেতে আপনার ইমেইল দিন।",
             "sendingButton": "পাঠানো হচ্ছে...",
-            "sendResetLinkButton": "রিসেট লিংক পাঠান"
+            "sendResetLinkButton": "রিসেট লিঙ্ক পাঠান"
         },
         "login": {
             "title": "স্বাগতম",
-            "description": "চালিয়ে যেতে অনুগ্রহ করে লগইন করুন।",
-            "emailPlaceholder": "আপনার ইমেইল লিখুন",
-            "passwordPlaceholder": "আপনার পাসওয়ার্ড লিখুন",
+            "description": "চালিয়ে যেতে অনুগ্রহ করে লগইন করুন।",
+            "emailPlaceholder": "আপনার ইমেইল দিন",
+            "passwordPlaceholder": "আপনার পাসওয়ার্ড দিন",
             "rememberMe": "আমাকে মনে রাখুন",
-            "loggingInButton": "লগইন হচ্ছে...",
-            "loginButton": "লগইন করুন",
-            "createAccount": "অ্যাকাউন্ট তৈরি করুন",
-            "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?"
+            "loggingInButton": "লগইন করা হচ্ছে...",
+            "loginButton": "লগইন",
+            "createAccount": "একটি অ্যাকাউন্ট তৈরি করুন",
+            "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?"
         },
         "register": {
             "validation": {
                 "nameMustNotExceed200Characters": "নাম ২০০ অক্ষরের বেশি হতে পারবে না।"
             },
             "title": "অ্যাকাউন্ট তৈরি করুন",
-            "description": "শুরু করতে আপনার তথ্য পূরণ করুন।",
-            "namePlaceholder": "আপনার পূর্ণ নাম",
-            "passwordPlaceholder": "পাসওয়ার্ড লিখুন",
-            "registeringButton": "রেজিস্টার হচ্ছে...",
+            "description": "শুরু করতে আপনার বিবরণ পূরণ করুন।",
+            "namePlaceholder": "আপনার সম্পূর্ণ নাম",
+            "passwordPlaceholder": "পাসওয়ার্ড দিন",
+            "registeringButton": "নিবন্ধন করা হচ্ছে...",
             "loginHere": "এখানে লগইন করুন"
         },
         "resetPassword": {
-            "description": "আপনার অ্যাকাউন্ট রিসেট করতে নতুন পাসওয়ার্ড লিখুন।",
-            "resettingButton": "রিসেট হচ্ছে..."
+            "description": "আপনার অ্যাকাউন্ট রিসেট করতে একটি নতুন পাসওয়ার্ড দিন।",
+            "resettingButton": "রিসেট করা হচ্ছে..."
         }
     },
     "account": {
         "validation": {
-            "currentPasswordIsRequired": "বর্তমান পাসওয়ার্ড আবশ্যক।"
+            "currentPasswordIsRequired": "বর্তমান পাসওয়ার্ড আবশ্যক।"
         },
         "tabs": {
             "info": "তথ্য"
         },
-        "emailVerified": "ইমেইল ভেরিফাইড",
-        "currentPassword": "বর্তমান পাসওয়ার্ড",
-        "hideCurrentPassword": "বর্তমান পাসওয়ার্ড লুকান",
-        "showCurrentPassword": "বর্তমান পাসওয়ার্ড দেখান"
+        "emailVerified": "ইমেইল যাচাইকৃত",
+        "currentPassword": "বর্তমান পাসওয়ার্ড",
+        "hideCurrentPassword": "বর্তমান পাসওয়ার্ড লুকান",
+        "showCurrentPassword": "বর্তমান পাসওয়ার্ড দেখান"
     },
     "profile": {
         "genderPlaceholder": "লিঙ্গ নির্বাচন করুন",
@@ -1235,7 +1341,7 @@
             "5": "শুক্র",
             "6": "শনি"
         },
-        "am": "পূর্বাহ্ণ",
-        "pm": "অপরাহ্ণ"
+        "am": "এএম",
+        "pm": "পিএম"
     }
 }
