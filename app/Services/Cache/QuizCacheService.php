@@ -34,6 +34,7 @@ class QuizCacheService
     private function dbQuizBySlug(Language $language, string $slug): Quiz
     {
         $record = Quiz::query()->with([
+            'language',
             'quizQuestions',
             'quizQuestions.quizQuestionOptions',
         ])
@@ -106,6 +107,7 @@ class QuizCacheService
         return Quiz::query()
             ->with([
                 'language',
+                'quizQuestions',
             ])
             ->where('language_id', $language->id)
             ->whereDate('end_date', '<', $nowDate)

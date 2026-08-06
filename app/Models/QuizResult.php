@@ -24,6 +24,9 @@ use Illuminate\Support\Str;
     'quiz_participant_id',
     'duration',
     "total_point",
+
+    "ip",
+    "device_info",
 ])]
 
 class QuizResult extends Model
@@ -35,6 +38,8 @@ class QuizResult extends Model
         return [
             'duration' => 'decimal:2',
             'total_point' => 'decimal:2',
+
+            'device_info'        => 'array',
 
             'created_at'        => 'datetime',
             'updated_at'        => 'datetime',
@@ -49,6 +54,8 @@ class QuizResult extends Model
                 'quiz_participant_id',
                 'duration',
                 "total_point",
+                "ip",
+                "device_info",
             ])
             ->useLogName('QuizResult')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")

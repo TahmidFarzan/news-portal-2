@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Helpers\CacheHelper;
@@ -15,10 +16,13 @@ use App\Models\Page;
 use App\Models\Survey;
 use App\Models\SurveyQuestion;
 use App\Models\SurveyQuestionResult;
+use App\Helpers\QuizHelper;
 
 use App\Models\Quiz;
 use App\Models\QuizQuestion;
 use App\Models\QuizQuestionOption;
+use App\Models\QuizResult;
+use App\Models\QuizParticipant;
 use App\Models\Tag;
 use App\Services\Cache\CategoryCacheService;
 use App\Services\Cache\ContributorCacheService;
@@ -38,6 +42,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Http\Requests\QuizSubmitRequest;
 
 class PageService
 {
@@ -516,99 +521,201 @@ class PageService
         );
     }
 
-    public function homeSurveySurveyQuestionSubmit(Request $request, Survey $survey, SurveyQuestion $surveyQuestion): array
+    public function homeQuizSubmit(Quiz $quiz, QuizSubmitRequest $request): array
     {
-        $yes       = $request->boolean('yes');
-        $no        = $request->boolean('no');
-        $noComment = $request->boolean('no_comment');
-
-        if (! $yes && ! $no && ! $noComment) {
-            return [
-                'status'  => 'warning',
-                'message' => __(
-                    'status-messages.site.survey.survey-question.no_answer_selected_warning'
-                ),
-                'data'    => null,
-            ];
-        }
-
-        $answer = null;
-
-        if ($yes) {
-            $answer = 'yes';
-        } elseif ($no) {
-            $answer = 'no';
-        } else {
-            $answer = 'no_comment';
-        }
-
-        $sessionKey = "survey.{$survey->id}.question.{$surveyQuestion->id}";
-
-        $previousData = session()->get($sessionKey);
-
         try {
+            $sessionId  = session()->getId();
+            $sessionKey = "quizzes_submit_{$sessionId}";
 
-            DB::transaction(function () use ($surveyQuestion, $answer, $previousData, $sessionKey, $survey) {
+            $submittedQuizzes = session()->get($sessionKey, []);
 
-                $surveyQuestionResult = SurveyQuestionResult::query()->firstOrCreate(
-                    [
-                        'survey_question_id' => $surveyQuestion->id,
+            if (in_array($quiz->id, $submittedQuizzes, true)) {
+                return [
+                    'status'  => 'success',
+                    'message' => __('status-messages.site.quiz.submit.already_submitted'),
+                    'data'    => [
+                        'quiz_id' => $quiz->id,
+                        'submit'  => true,
                     ],
-                    [
-                        'yes'        => 0,
-                        'no'         => 0,
-                        'no_comment' => 0,
-                    ]);
+                ];
+            }
 
-                $previousAnswer = $previousData['answer'] ?? null;
+            $email = $request->input('email');
+            $phone = $request->input('phone');
 
-                if ($previousAnswer && $previousAnswer !== $answer) {
+            $alreadyExists = QuizResult::query()
+                ->where('quiz_id', $quiz->id)
+                ->whereHas('quizParticipant', function ($query) use ($email, $phone) {
+                    $query->where(function ($query) use ($email, $phone) {
+                        if ($email) {
+                            $query->where('email', $email);
+                        }
 
-                    if ($previousAnswer === 'yes' && $surveyQuestionResult->yes > 0) {
-                        $surveyQuestionResult->decrement('yes');
-                    }
+                        if ($phone) {
+                            $query->orWhere('phone', $phone);
+                        }
+                    });
+                })
+                ->exists();
 
-                    if ($previousAnswer === 'no' && $surveyQuestionResult->no > 0) {
-                        $surveyQuestionResult->decrement('no');
-                    }
-
-                    if ($previousAnswer === 'no_comment' && $surveyQuestionResult->no_comment > 0) {
-                        $surveyQuestionResult->decrement('no_comment');
-                    }
-                }
-
-                if ($previousAnswer !== $answer) {
-                    $surveyQuestionResult->increment($answer);
-                }
+            if ($alreadyExists) {
+                $submittedQuizzes[] = $quiz->id;
 
                 session()->put(
                     $sessionKey,
+                    array_values(array_unique($submittedQuizzes))
+                );
+
+                return [
+                    'status'  => 'success',
+                    'message' => __('status-messages.site.quiz.submit.already_submitted'),
+                    'data'    => [
+                        'quiz_id' => $quiz->id,
+                        'submit'  => true,
+                    ],
+                ];
+            }
+
+            $resultData = DB::transaction(function () use ($quiz, $request, $sessionKey) {
+                $email   = $request->input('email');
+                $phone   = $request->input('phone');
+                $answers = $request->input('answers', []);
+
+                $totalPoint = 0;
+
+                $quizQuestions = $quiz->quizQuestions()
+                    ->with('quizQuestionOptions')
+                    ->get()
+                    ->keyBy('id');
+
+                foreach ($answers as $answer) {
+                    $questionId = (int) ($answer['question_id'] ?? 0);
+                    $question   = $quizQuestions->get($questionId);
+
+                    if (!$question) {
+                        continue;
+                    }
+
+                    if ($question->answer_type === QuizHelper::QUESTION_ANSWER_TYPE_MULTIPLE) {
+                        $selectedOptionIds = collect($answer['selected_option_ids'] ?? [])
+                            ->map(fn($id) => (int) $id)
+                            ->filter()
+                            ->values()
+                            ->all();
+
+                        if (empty($selectedOptionIds)) {
+                            continue;
+                        }
+
+                        $correctOptionIds = $question->quizQuestionOptions
+                            ->where('is_correct', true)
+                            ->pluck('id')
+                            ->map(fn($id) => (int) $id)
+                            ->sort()
+                            ->values()
+                            ->all();
+
+                        $selectedSorted = collect($selectedOptionIds)->sort()->values()->all();
+
+                        if ($selectedSorted === $correctOptionIds) {
+                            $totalPoint += $question->point ?? 1;
+                        }
+                    } else {
+                        $selectedOptionId = (int) ($answer['selected_option_id'] ?? 0);
+
+                        if (!$selectedOptionId) {
+                            continue;
+                        }
+
+                        $selectedOption = $question->quizQuestionOptions
+                            ->firstWhere('id', $selectedOptionId);
+
+                        if ($selectedOption?->is_correct) {
+                            $totalPoint += $question->point ?? 1;
+                        }
+                    }
+                }
+
+                $deviceInfo = [
+                    'user_agent' => $request->userAgent(),
+                    'platform'   => $request->header('sec-ch-ua-platform'),
+                    'browser'    => $request->header('sec-ch-ua'),
+                    'mobile'     => $request->header('sec-ch-ua-mobile'),
+                ];
+
+                $quizParticipant = QuizParticipant::query()
+                    ->where(function ($query) use ($email, $phone) {
+                        if ($phone) {
+                            $query->where('phone', $phone);
+                        }
+
+                        if ($email) {
+                            $query->orWhere('email', $email);
+                        }
+                    })
+                    ->first();
+
+                if (!$quizParticipant) {
+                    $quizParticipant = QuizParticipant::create([
+                        'name'    => $request->input('name'),
+                        'email'   => $email,
+                        'phone'   => $phone,
+                        'address' => $request->input('address'),
+                    ]);
+                } else {
+                    $quizParticipant->update([
+                        'name'    => $request->input('name') ?: $quizParticipant->name,
+                        'email'   => $email ?: $quizParticipant->email,
+                        'phone'   => $phone ?: $quizParticipant->phone,
+                        'address' => $request->input('address') ?: $quizParticipant->address,
+                    ]);
+                }
+
+                QuizResult::updateOrCreate(
                     [
-                        'survey_id'          => $survey->id,
-                        'survey_question_id' => $surveyQuestion->id,
-                        'answer'             => $answer,
-                        'expired_at'         => now()->addHours(6)->timestamp,
+                        'quiz_id'             => $quiz->id,
+                        'quiz_participant_id' => $quizParticipant->id,
+                    ],
+                    [
+                        'total_point' => $totalPoint,
+                        'duration'    => (int) $request->input('duration', 0),
+                        'ip'          => $request->ip(),
+                        'device_info' => $deviceInfo,
                     ]
                 );
+
+                $submittedQuizzes   = session()->get($sessionKey, []);
+                $submittedQuizzes[] = $quiz->id;
+
+                session()->put(
+                    $sessionKey,
+                    array_values(array_unique($submittedQuizzes))
+                );
+
+                return [
+                    'quiz_id'     => $quiz->id,
+                    'submit'      => true,
+                    'total_point' => $totalPoint,
+                ];
             });
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.site.survey.survey-question.success'),
-                'data'    => session()->get($sessionKey),
+                'message' => __('status-messages.site.quiz.submit.success'),
+                'data'    => $resultData,
             ];
-
         } catch (Exception $exception) {
-
-            Log::error('Failed to submit survey question.', ['exception' => $exception]);
+            Log::error('Failed to submit quiz.', [
+                'exception' => $exception->getMessage(),
+                'trace'     => $exception->getTraceAsString(),
+            ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.site.survey.survey-question.fail'),
+                'message' => __('status-messages.site.quiz.submit.fail'),
                 'data'    => null,
             ];
         }
-
     }
 
     public function homeQuizzes(Language $language, Request $request): Collection
@@ -662,6 +769,101 @@ class PageService
             $this->cachedTTL
         );
     }
+
+    public function homeSurveySurveyQuestionSubmit(Request $request, Survey $survey, SurveyQuestion $surveyQuestion): array
+    {
+        $yes       = $request->boolean('yes');
+        $no        = $request->boolean('no');
+        $noComment = $request->boolean('no_comment');
+
+        if (! $yes && ! $no && ! $noComment) {
+            return [
+                'status'  => 'warning',
+                'message' => __(
+                    'status-messages.site.survey.survey-question.no_answer_selected_warning'
+                ),
+                'data'    => null,
+            ];
+        }
+
+        $answer = null;
+
+        if ($yes) {
+            $answer = 'yes';
+        } elseif ($no) {
+            $answer = 'no';
+        } else {
+            $answer = 'no_comment';
+        }
+
+        $sessionKey = "survey.{$survey->id}.question.{$surveyQuestion->id}";
+
+        $previousData = session()->get($sessionKey);
+
+        try {
+
+            DB::transaction(function () use ($surveyQuestion, $answer, $previousData, $sessionKey, $survey) {
+
+                $surveyQuestionResult = SurveyQuestionResult::query()->firstOrCreate(
+                    [
+                        'survey_question_id' => $surveyQuestion->id,
+                    ],
+                    [
+                        'yes'        => 0,
+                        'no'         => 0,
+                        'no_comment' => 0,
+                    ]
+                );
+
+                $previousAnswer = $previousData['answer'] ?? null;
+
+                if ($previousAnswer && $previousAnswer !== $answer) {
+
+                    if ($previousAnswer === 'yes' && $surveyQuestionResult->yes > 0) {
+                        $surveyQuestionResult->decrement('yes');
+                    }
+
+                    if ($previousAnswer === 'no' && $surveyQuestionResult->no > 0) {
+                        $surveyQuestionResult->decrement('no');
+                    }
+
+                    if ($previousAnswer === 'no_comment' && $surveyQuestionResult->no_comment > 0) {
+                        $surveyQuestionResult->decrement('no_comment');
+                    }
+                }
+
+                if ($previousAnswer !== $answer) {
+                    $surveyQuestionResult->increment($answer);
+                }
+
+                session()->put(
+                    $sessionKey,
+                    [
+                        'survey_id'          => $survey->id,
+                        'survey_question_id' => $surveyQuestion->id,
+                        'answer'             => $answer,
+                        'expired_at'         => now()->addHours(6)->timestamp,
+                    ]
+                );
+            });
+
+            return [
+                'status'  => 'success',
+                'message' => __('status-messages.site.survey.survey-question.success'),
+                'data'    => session()->get($sessionKey),
+            ];
+        } catch (Exception $exception) {
+
+            Log::error('Failed to submit survey question.', ['exception' => $exception]);
+
+            return [
+                'status'  => 'error',
+                'message' => __('status-messages.site.survey.survey-question.fail'),
+                'data'    => null,
+            ];
+        }
+    }
+
 
     public function newsHitCounterCalculate(News $news): void
     {

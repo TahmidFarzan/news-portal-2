@@ -25,7 +25,7 @@ import {
 } from "@/composables/useUserPermissions";
 import CreateUpdateQuizQuestionOptionTableByQuizQuestion from "@/components/back-office/quiz-question-option/CreateUpdateQuizQuestionOptionTableByQuizQuestion.vue";
 import SelectInfinityLoadingApi from "@/components/common/multi-select/SelectInfinityLoadingApi.vue";
-import { quizQuestionTypes } from "@/composables/useQuiz";
+import { quizQuestionAnswerTypes } from "@/composables/useQuiz";
 
 FontAwesomeLibrary.add(
     faPlus,
@@ -73,7 +73,7 @@ const createEmptyOption = (position = 1) => ({
 
 const createEmptyQuestion = (position = 1) => ({
     question: "",
-    answer_type: quizQuestionTypes.SINGLE,
+    answer_type: quizQuestionAnswerTypes.SINGLE,
     point: 1,
     position,
     options: [createEmptyOption(1), createEmptyOption(2)],
@@ -145,7 +145,7 @@ function onCreateOptionDragEnd(qIndex) {
 function handleAnswerTypeChange(qIndex) {
     if (!props.quizSaveForm) return;
     const question = props.quizSaveForm.questions[qIndex];
-    if (question.answer_type === quizQuestionTypes.SINGLE) {
+    if (question.answer_type === quizQuestionAnswerTypes.SINGLE) {
         let found = false;
         question.options.forEach((opt) => {
             if (opt.is_correct && !found) {
@@ -160,7 +160,7 @@ function handleAnswerTypeChange(qIndex) {
 function handleCorrectChange(qIndex, oIndex) {
     if (!props.quizSaveForm) return;
     const question = props.quizSaveForm.questions[qIndex];
-    if (question.answer_type === quizQuestionTypes.SINGLE) {
+    if (question.answer_type === quizQuestionAnswerTypes.SINGLE) {
         question.options.forEach((opt, idx) => {
             opt.is_correct = idx === oIndex;
         });
@@ -269,7 +269,7 @@ const editingQuestion = ref(null);
 
 const saveQuizQuestionForm = useForm({
     question: "",
-    answer_type: quizQuestionTypes.SINGLE,
+    answer_type: quizQuestionAnswerTypes.SINGLE,
     point: 1,
     position: null,
     options: [],
@@ -280,7 +280,7 @@ watch(
     () => saveQuizQuestionForm.answer_type,
     (newType, oldType) => {
         if (!oldType || newType === oldType) return;
-        if (newType === quizQuestionTypes.SINGLE) {
+        if (newType === quizQuestionAnswerTypes.SINGLE) {
             let found = false;
             saveQuizQuestionForm.options.forEach((opt) => {
                 if (opt.is_correct && !found) {
@@ -298,7 +298,7 @@ function openAddQuestionModal() {
     saveQuizQuestionForm.reset();
     saveQuizQuestionForm.clearErrors();
     saveQuizQuestionForm.question = "";
-    saveQuizQuestionForm.answer_type = quizQuestionTypes.SINGLE;
+    saveQuizQuestionForm.answer_type = quizQuestionAnswerTypes.SINGLE;
     saveQuizQuestionForm.point = 1;
     saveQuizQuestionForm.position = questions.value.length + 1;
     saveQuizQuestionForm.options = [
@@ -323,7 +323,7 @@ function openEditQuestionModal(q) {
     saveQuizQuestionForm.reset();
     saveQuizQuestionForm.clearErrors();
     saveQuizQuestionForm.question = q.question ?? "";
-    saveQuizQuestionForm.answer_type = q.answer_type ?? quizQuestionTypes.SINGLE;
+    saveQuizQuestionForm.answer_type = q.answer_type ?? quizQuestionAnswerTypes.SINGLE;
     saveQuizQuestionForm.point = q.point ?? 1;
     saveQuizQuestionForm.position = q.position ?? null;
     saveQuizQuestionForm.options = [];
@@ -408,7 +408,7 @@ function validateQuizQuestionForm() {
         ).length;
 
         if (
-            saveQuizQuestionForm.answer_type === quizQuestionTypes.SINGLE &&
+            saveQuizQuestionForm.answer_type === quizQuestionAnswerTypes.SINGLE &&
             correctCount !== 1
         ) {
             saveQuizQuestionForm.setError(
@@ -420,7 +420,7 @@ function validateQuizQuestionForm() {
         }
 
         if (
-            saveQuizQuestionForm.answer_type === quizQuestionTypes.MULTIPLE &&
+            saveQuizQuestionForm.answer_type === quizQuestionAnswerTypes.MULTIPLE &&
             correctCount < 1
         ) {
             saveQuizQuestionForm.setError(

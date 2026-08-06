@@ -9,7 +9,7 @@ import { faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import SelectInfinityLoadingApi from "@/components/common/multi-select/SelectInfinityLoadingApi.vue";
 import CreateUpdateQuizQuestionTableByQuiz from "@/components/back-office/quiz-question/CreateUpdateQuizQuestionTableByQuiz.vue";
 import { formatDate } from "@/composables/useDateTime";
-import { quizQuestionTypes } from "@/composables/useQuiz";
+import { quizQuestionAnswerTypes } from "@/composables/useQuiz";
 
 FontAwesomeLibrary.add(faSave, faSpinner);
 
@@ -38,7 +38,7 @@ const createEmptyOption = (position = 1) => ({
 
 const createEmptyQuestion = (position = 1) => ({
     question: "",
-    answer_type: quizQuestionTypes.SINGLE,
+    answer_type: quizQuestionAnswerTypes.SINGLE,
     point: 1,
     position,
     options: [createEmptyOption(1), createEmptyOption(2)],
@@ -70,7 +70,7 @@ watch(
         if (!isUpdate.value) {
             saveForm.questions.forEach((q, qIndex) => {
                 q.question = "";
-                q.answer_type = quizQuestionTypes.SINGLE;
+                q.answer_type = quizQuestionAnswerTypes.SINGLE;
                 q.point = 1;
                 q.position = qIndex + 1;
                 q.options.forEach((opt, oIndex) => {
@@ -203,7 +203,7 @@ function validateForm() {
 
             const correctCount = q.options.filter((o) => !!o.is_correct).length;
 
-            if (q.answer_type === quizQuestionTypes.SINGLE && correctCount !== 1) {
+            if (q.answer_type === quizQuestionAnswerTypes.SINGLE && correctCount !== 1) {
                 saveForm.setError(
                     `questions.${qIndex}.options`,
                     t("form-requests.quiz.answer.single") ||
@@ -212,7 +212,7 @@ function validateForm() {
                 valid = false;
             }
 
-            if (q.answer_type === quizQuestionTypes.MULTIPLE && correctCount < 1) {
+            if (q.answer_type === quizQuestionAnswerTypes.MULTIPLE && correctCount < 1) {
                 saveForm.setError(
                     `questions.${qIndex}.options`,
                     t("form-requests.quiz.answer.multiple") ||

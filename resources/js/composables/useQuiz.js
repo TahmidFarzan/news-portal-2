@@ -1,4 +1,4 @@
-export const quizQuestionTypes = Object.freeze({
+export const quizQuestionAnswerTypes = Object.freeze({
     SINGLE: 'Single',
     MULTIPLE: "Multiple"
 })

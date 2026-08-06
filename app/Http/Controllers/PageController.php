@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
+use App\Http\Requests\QuizSubmitRequest;
+
 class PageController extends Controller
 {
     protected PageService $pageService;
@@ -111,6 +113,19 @@ class PageController extends Controller
             'previousQuizWinnerResults'         => $previousQuizWinnerResults,
         ]);
     }
+
+    public function homeQuizSubmit(string $slug, QuizSubmitRequest $request)
+    {
+        $language = $this->pageService->defaultLanguage();
+        $quiz         = $this->pageService->homeQuiz($language, $slug);
+        $result         = $this->pageService->homeQuizSubmit($quiz, $request);
+
+        return back()->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+        ]);
+    }
+
 
     public function latest(Request $request): InertiaResponse | JsonResponse
     {
@@ -430,6 +445,18 @@ class PageController extends Controller
             'quiz'         => $quiz,
             'previousQuiz'         => $previousQuiz,
             'previousQuizWinnerResults'         => $previousQuizWinnerResults,
+        ]);
+    }
+
+    public function localizedHomeQuizSubmit(string $languageCode, string $slug, QuizSubmitRequest $request)
+    {
+        $language = $this->pageService->language($languageCode);
+        $quiz         = $this->pageService->homeQuiz($language, $slug);
+        $result         = $this->pageService->homeQuizSubmit($quiz, $request);
+
+        return back()->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
         ]);
     }
 

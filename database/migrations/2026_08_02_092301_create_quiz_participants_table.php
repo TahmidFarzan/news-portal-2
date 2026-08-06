@@ -18,9 +18,6 @@ return new class extends Migration
 
             $table->text('address')->nullable();
 
-            $table->ipAddress('ip');
-            $table->json('device_info')->nullable();
-
             $table->string('slug')->unique();
 
             $table->timestamps();

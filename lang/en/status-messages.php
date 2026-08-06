@@ -547,5 +547,12 @@ return [
                 "no_answer_selected_warning" => 'No answer selected warning.',
             ],
         ],
+        'quiz' => [
+            'submit' => [
+                'success'            => 'Quiz submitted successfully.',
+                'fail'               => 'Failed to submit quiz. Please try again.',
+                'already_submitted'  => 'You have already submitted this quiz.',
+            ],
+        ],
     ],
 ];

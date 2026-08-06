@@ -158,16 +158,30 @@
             "device": "Device",
             "phone": "Phone",
             "duration": "Duration",
-            "quizParticipantInformation" : "Quiz Participant Information",
-            "ip" : "Ip",
+            "quizParticipantInformation": "Quiz Participant Information",
+            "ip": "Ip",
             "ongoing": "Ongoing",
             "until": "Until",
             "to": "To",
-            "schedule" : "Schedule",
-            "result" : "Result",
-            "quizParticipant" : "Quiz participant",
+            "schedule": "Schedule",
+            "result": "Result",
+            "quizParticipant": "Quiz participant",
             "previous": "Previous",
-            "next": "Next"
+            "next": "Next",
+            "startQuestion": "Start question",
+            "participantInfo": "Participant info",
+            "confirmAnswer": "Confirm answer",
+            "updateAnswer": "Update answer",
+            "submit": "Submit",
+            "score": "Score",
+            "submitting": "Submitting",
+            "noWinners": "No winners announced yet.",
+            "noQuestionFound": "No questions found",
+            "quiz_submitted": "Quiz submitted",
+            "time_taken": "Time taken",
+            "minute": "Minute",
+            "seconds": "Seconds",
+            "multipleChoice" :"Multiple choice"
         },
         "actions": {
             "details": "Details",
@@ -200,7 +214,7 @@
             "active": "Active",
             "add": "Add",
             "remove": "Remove",
-            "quizResult" : "Quiz Result"
+            "quizResult": "Quiz Result"
         },
         "placeholders": {
             "parent": "Parent",
@@ -232,7 +246,10 @@
             "options": "Options",
             "option": "Option",
             "max_winner": "Max winner",
-            "searchQuizResult" : "Search quiz result"
+            "searchQuizResult": "Search quiz result",
+            "phone": "Phone",
+            "email": "Email",
+            "address": "Address"
         },
         "messages": {
             "showAll": "Show All",
@@ -281,7 +298,8 @@
             "createQuestionOption": "Question option create",
             "onlyLastTenOptionsAvailableForQuickEdit": "Only the last 10 options are available for quick edit. For additional options, please navigate to the options index and select them from there.",
             "quizResults": "Quiz Results",
-            "quizResult": "Quiz Result"
+            "quizResult": "Quiz Result",
+            "quiz_submitted_success": "Thank you! Your quiz has been submitted successfully."
         },
         "modals": {
             "deleteConfirmation": "Delete Confirmation",
@@ -1190,7 +1208,6 @@
                     "noSurveyQuestionAdded": "No question added"
                 }
             },
-
             "quizzes": {
                 "labels": {
                     "viewQuiz": "View Quiz"

@@ -24,7 +24,15 @@ class QuizResultFactory extends Factory
             'quiz_participant_id' => QuizParticipant::query()->inRandomOrder()->value('id'),
             'duration' => fake()->numberBetween(10000, 300000),
             'total_point' => 0,
-
+            'ip' => $this->faker->ipv4(),
+            'device_info' => [
+                'browser' => fake()->randomElement(['Chrome', 'Firefox', 'Edge', 'Safari']),
+                'browser_version' => fake()->numberBetween(90, 140),
+                'os' => fake()->randomElement(['Windows', 'macOS', 'Linux', 'Android', 'iOS']),
+                'device_type' => fake()->randomElement(['Desktop', 'Laptop', 'Mobile', 'Tablet']),
+                'platform' => fake()->randomElement(['x64', 'ARM64']),
+                'user_agent' => fake()->userAgent(),
+            ],
         ];
     }
 }

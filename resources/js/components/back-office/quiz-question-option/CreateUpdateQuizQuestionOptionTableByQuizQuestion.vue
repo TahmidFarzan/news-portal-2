@@ -2,7 +2,7 @@
 import { ref, watch, inject, nextTick } from 'vue'
 import { useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
 import { useTranslate } from '@/composables/useTranslate'
-import { quizQuestionTypes } from '@/composables/useQuiz'
+import { quizQuestionAnswerTypes } from '@/composables/useQuiz'
 import { VueDraggable } from 'vue-draggable-plus'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -117,7 +117,7 @@ function onManualPositionChange(changedId) {
 
 function onCorrectChange(changedId, checked) {
     if (!quizQuestionSaveForm || !checked) return
-    if (quizQuestionSaveForm.answer_type === quizQuestionTypes.SINGLE) {
+    if (quizQuestionSaveForm.answer_type === quizQuestionAnswerTypes.SINGLE) {
         quizQuestionSaveForm.options.forEach((opt) => {
             opt.is_correct = opt.id === changedId
         })
@@ -128,7 +128,7 @@ watch(
     () => quizQuestionSaveForm?.answer_type,
     (newType) => {
         if (!quizQuestionSaveForm) return
-        if (newType === quizQuestionTypes.SINGLE) {
+        if (newType === quizQuestionAnswerTypes.SINGLE) {
             const firstCorrect = quizQuestionSaveForm.options.find((o) => o.is_correct)
             quizQuestionSaveForm.options.forEach((opt) => {
                 opt.is_correct = firstCorrect ? opt.id === firstCorrect.id : false

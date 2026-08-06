@@ -24,8 +24,6 @@ use Illuminate\Support\Str;
     'phone',
     'email',
     'address',
-    "ip",
-    "device_info",
 ])]
 
 class QuizParticipant extends Model
@@ -35,7 +33,6 @@ class QuizParticipant extends Model
     protected function casts(): array
     {
         return [
-            'device_info'        => 'array',
             'created_at'        => 'datetime',
             'updated_at'        => 'datetime',
         ];
@@ -49,8 +46,6 @@ class QuizParticipant extends Model
                 'phone',
                 'email',
                 'address',
-                "ip",
-                "device_info",
             ])
             ->useLogName('QuizParticipant')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")

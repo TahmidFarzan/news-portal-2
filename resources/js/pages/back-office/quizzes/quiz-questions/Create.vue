@@ -5,7 +5,7 @@ import CreateUpdateQuizQuestionOptionTableByQuizQuestion from '@/components/back
 import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
 import { useTranslate } from '@/composables/useTranslate'
-import { quizQuestionTypes } from '@/composables/useQuiz'
+import { quizQuestionAnswerTypes } from '@/composables/useQuiz'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -88,11 +88,11 @@ function validateForm() {
                 valid = false
             }
             const correctCount = saveForm.options.filter((o) => o.is_correct).length
-            if (saveForm.answer_type === quizQuestionTypes.SINGLE && correctCount !== 1) {
+            if (saveForm.answer_type === quizQuestionAnswerTypes.SINGLE && correctCount !== 1) {
                 saveForm.setError('options', t('common.validation.singleCorrectRequired'))
                 valid = false
             }
-            if (saveForm.answer_type === quizQuestionTypes.MULTIPLE && correctCount < 1) {
+            if (saveForm.answer_type === quizQuestionAnswerTypes.MULTIPLE && correctCount < 1) {
                 saveForm.setError('options', t('common.validation.multipleCorrectRequired'))
                 valid = false
             }

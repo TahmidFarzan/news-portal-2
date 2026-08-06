@@ -836,4 +836,63 @@ return [
 
     ],
 
+    'quiz_submit' => [
+        'name' => [
+            'required' => 'Name is required.',
+            'string'   => 'Name must be a valid string.',
+            'max'      => 'Name may not be greater than 200 characters.',
+        ],
+
+        'phone' => [
+            'string' => 'Phone must be a valid string.',
+            'max'    => 'Phone may not be greater than 30 characters.',
+        ],
+
+        'email' => [
+            'email' => 'Email must be a valid email address.',
+            'max'   => 'Email may not be greater than 200 characters.',
+        ],
+
+        'address' => [
+            'string' => 'Address must be a valid string.',
+            'max'    => 'Address may not be greater than 500 characters.',
+        ],
+
+        'duration' => [
+            'required' => 'Duration is required.',
+            'integer'  => 'Duration must be an integer.',
+            'min'      => 'Duration must be at least 0.',
+        ],
+
+        'phone_or_email' => [
+            'required' => 'Phone or email is required.',
+        ],
+
+        'answers' => [
+            'required'         => 'Answers are required.',
+            'array'            => 'Answers must be an array.',
+            'min'              => 'At least one answer is required.',
+            'no_questions'     => 'No questions found for this quiz.',
+            'incomplete'       => 'Please answer all questions.',
+            'invalid_question' => 'One or more questions are invalid.',
+
+            'question_id' => [
+                'required' => 'Question ID is required.',
+                'integer'  => 'Question ID must be an integer.',
+                'invalid'  => 'Selected question is invalid.',
+            ],
+
+            'selected_option_ids' => [
+                'required' => 'At least one option must be selected.',
+                'array'    => 'Selected options must be an array.',
+                'integer'  => 'Each selected option must be an integer.',
+                'invalid'  => 'One or more selected options are invalid for this question.',
+            ],
+        ],
+
+        'quiz' => [
+            'not_found' => 'Quiz not found.',
+        ],
+    ],
+
 ];

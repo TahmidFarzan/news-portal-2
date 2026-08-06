@@ -23,6 +23,9 @@ return new class extends Migration
 
             $table->decimal('total_point', 10, 2)->default(0);
 
+            $table->ipAddress('ip')->nullable();
+            $table->json('device_info')->nullable();
+
             $table->string('slug')->unique();
 
             $table->timestamps();
