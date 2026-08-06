@@ -351,6 +351,8 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
             Route::get('edit/{surveyQuestionSlug}', [SurveyController::class, 'surveyQuestionEdit'])->name('edit');
             Route::get('details/{surveyQuestionSlug}', [SurveyController::class, 'surveyQuestionDetails'])->name('details');
 
+            Route::patch('reorder', [SurveyController::class, 'surveyQuestionReorder'])->name('reorder');
+
             Route::post('save', [SurveyController::class, 'surveyQuestionSave'])->name('save');
             Route::patch('update/{surveyQuestionSlug}', [SurveyController::class, 'surveyQuestionUpdate'])->name('update');
             Route::delete('delete/{surveyQuestionSlug}', [SurveyController::class, 'surveyQuestiondDelete'])->name('delete');

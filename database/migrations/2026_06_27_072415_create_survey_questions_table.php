@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('survey_id')->constrained('surveys')->cascadeOnDelete();
             $table->text('question');
+            $table->unsignedInteger('position')->nullable();
             $table->foreignId('created_by_id')->constrained('users')->cascadeOnDelete();
             $table->string('slug', 255)->unique();
             $table->timestamps();

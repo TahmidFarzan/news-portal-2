@@ -97,7 +97,7 @@ class Survey extends Model
 
     public function surveyQuestions(): HasMany
     {
-        return $this->hasMany(SurveyQuestion::class);
+        return $this->hasMany(SurveyQuestion::class)->orderBy('position');
     }
 
     public function language(): BelongsTo

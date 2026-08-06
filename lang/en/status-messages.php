@@ -415,6 +415,11 @@ return [
             'success' => 'Survey question deleted successfully.',
             'failed'  => 'Failed to delete survey question.',
         ],
+
+        'reorder' => [
+            'success' => 'Survey question option reorder successfully.',
+            'failed'  => 'Failed to reorder survey question option.',
+        ],
     ],
 
     'quiz-question' => [

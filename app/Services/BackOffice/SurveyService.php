@@ -8,9 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Services\BackOffice\SurveyQuestionService;
 
 class SurveyService
 {
+    protected SurveyQuestionService $surveyQuestionService;
+
+    public function __construct(SurveyQuestionService $surveyQuestionService)
+    {
+        $this->surveyQuestionService = $surveyQuestionService;
+    }
+
     public function new (): Survey
     {
         return new Survey();
@@ -19,7 +27,7 @@ class SurveyService
     public function find(string $slug): Survey
     {
         return Survey::with([
-            'surveyQuestions',
+            'surveyQuestions' => fn($query) => $query->latest()->limit(10),
             'language',
 
             'createdBy',
@@ -86,7 +94,13 @@ class SurveyService
 
                 $survey->created_by_id = $isNew ? Auth::id() : $survey->created_by_id;
 
-                $survey->save();
+                $save = $survey->save();
+
+                if ($save && $isNew) {
+                    if ($request->filled('questions')) {
+                        $this->surveyQuestionService->saveUsingSurvey($survey, $request->input('questions', []));
+                    }
+                }
             });
             return [
                 'status'  => 'success',

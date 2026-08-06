@@ -206,13 +206,15 @@ onMounted(
                     {{ t('common.actions.delete') }}
                 </button>
 
-                <a v-if="canAccessQuestion()" :href="route('back-office.surveys.survey-questions.index', { slug: survey?.slug })"
+                <a v-if="canAccessQuestion()"
+                    :href="route('back-office.surveys.survey-questions.index', { slug: survey?.slug })"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="list" />
                     {{ t('common.messages.questions') }}
                 </a>
 
-                <a v-if="canCreateQuestion()" :href="route('back-office.surveys.survey-questions.create', { slug: survey?.slug })"
+                <a v-if="canCreateQuestion()"
+                    :href="route('back-office.surveys.survey-questions.create', { slug: survey?.slug })"
                     class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="add" />
                     {{ t('common.messages.createQuestion') }}
@@ -247,20 +249,28 @@ onMounted(
                         </span>
                     </div>
 
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('common.labels.date') }}</span>
-                        <span class="font-medium">
-                            {{ survey?.start_date || t('common.labels.notAvailable') }} -
-                            {{ survey?.end_date || t('common.labels.notAvailable') }}
-                        </span>
-                    </div>
-
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.status') }}</span>
                         <span :class="survey?.is_active ? 'text-green-600' : 'text-red-500'" class="font-medium">
                             {{ survey?.is_active ? t('common.actions.active') :
                                 t('common.actions.inactive') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.start_date') }}</span>
+                        <span class="font-medium">
+                            {{ survey?.start_date ? formatDate(survey.start_date) : t('common.labels.notAvailable') }}
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.end_date') }}</span>
+                        <span class="font-medium">
+                            {{ survey?.end_date ? formatDate(survey.end_date) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -278,7 +288,7 @@ onMounted(
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.createdAt')
-                            }}</span>
+                        }}</span>
                         <span class="font-medium">
                             {{ survey?.created_at ? formatDateTime(survey.created_at) :
                                 t('common.labels.notAvailable') }}
@@ -287,7 +297,7 @@ onMounted(
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.createdBy')
-                            }}</span>
+                        }}</span>
                         <span class="font-medium">
                             {{ survey?.created_by?.name || t('common.labels.notAvailable')
                             }}
@@ -298,7 +308,7 @@ onMounted(
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.updatedAt')
-                            }}</span>
+                        }}</span>
                         <span class="font-medium">
                             {{ survey?.updated_at ? formatDateTime(survey.updated_at) :
                                 t('common.labels.notAvailable') }}
@@ -307,7 +317,7 @@ onMounted(
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.updatedBy')
-                            }}</span>
+                        }}</span>
                         <span class="font-medium">
                             {{ survey?.latest_activity_log?.casurvey?.name ||
                                 t('common.labels.notAvailable') }}

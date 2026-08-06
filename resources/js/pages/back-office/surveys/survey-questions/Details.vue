@@ -115,6 +115,13 @@ onMounted(async () => {
                         <span class="font-medium">{{ surveyQuestion?.question ||
                             t('common.labels.notAvailable') }}</span>
                     </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.position') }}</span>
+                        <span class="font-medium">
+                            {{ surveyQuestion?.position || t('common.labels.notAvailable') }}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

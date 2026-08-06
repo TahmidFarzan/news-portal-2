@@ -664,6 +664,22 @@ return [
             'required'  => 'Language is required.',
             "not_found" => 'Language does not exit.',
         ],
+
+        'questions'         => [
+            'required' => 'At least one question is required.',
+            'array'    => 'Questions must be a valid array.',
+            'min'      => 'At least one question is required.',
+        ],
+
+        'question'          => [
+            'required' => 'Question is required.',
+            'string'   => 'Question must be a string.',
+        ],
+
+        'position'    => [
+            'integer' => 'Position must be an integer.',
+            'min'     => 'Position must be at least 1.',
+        ],
     ],
 
     'survey_question'      => [

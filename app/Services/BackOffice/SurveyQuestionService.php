@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\BackOffice;
 
 use App\Http\Requests\SurveyQuestionRequest;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class SurveyQuestionService
 {
-    public function new (): SurveyQuestion
+    public function new(): SurveyQuestion
     {
         return new SurveyQuestion();
     }
@@ -73,6 +74,7 @@ class SurveyQuestionService
 
             DB::transaction(function () use ($request, $survey, $surveyQuestion, $isNew) {
                 $surveyQuestion->question  = $request->input('question');
+                $surveyQuestion->position  = $request->input('position');
                 $surveyQuestion->survey_id = $survey->id;
 
                 $surveyQuestion->created_by_id = $isNew ? Auth::id() : $surveyQuestion->created_by_id;
@@ -82,6 +84,7 @@ class SurveyQuestionService
             return [
                 'status'  => 'success',
                 'message' => __("status-messages.survey-question.{$statusEvent}.success"),
+                'redirect_back_to_same_page' => (bool) $request->boolean('redirect_back_to_same_page'),
             ];
         } catch (Exception $exception) {
             Log::error("Failed to {$statusEvent} survey.", [
@@ -118,5 +121,59 @@ class SurveyQuestionService
                 'message' => __('status-messages.survey-question.delete.failed'),
             ];
         }
+    }
+
+    public function reorder(Survey $survey, Request $request): array
+    {
+        try {
+            $questions = $request->input('questions', []);
+
+            DB::transaction(function () use ($survey, $questions) {
+                foreach ($questions as $index => $item) {
+                    $survey->surveyQuestions()
+                        ->where('slug', $item['slug'])
+                        ->update([
+                            'position' => - ($index + 1),
+                        ]);
+                }
+
+                foreach ($questions as $item) {
+                    $survey
+                        ->surveyQuestions()
+                        ->where('slug', $item['slug'])
+                        ->update([
+                            'position' => (int) $item['position'],
+                        ]);
+                }
+            });
+
+            return [
+                'status'                     => 'success',
+                'message'                    => __('status-messages.survey-question.reorder.success'),
+                'redirect_back_to_same_page' => (bool) $request->boolean('redirect_back_to_same_page'),
+            ];
+        } catch (Exception $exception) {
+            Log::error('Failed to reorder survey questions.', [
+                'survey_id'          => $survey->id ?? null,
+                'survey_question_id' => $surveyQuestion->id ?? null,
+                'exception'        => $exception,
+            ]);
+
+            return [
+                'status'                     => 'error',
+                'message'                    => __('status-messages.survey-question.reorder.failed'),
+                'redirect_back_to_same_page' => (bool) $request->boolean('redirect_back_to_same_page'),
+            ];
+        }
+    }
+
+    public function saveUsingSurvey(Survey $survey, array $surveyQuestionData): void
+    {
+        $surveyQuestion = $this->new();
+
+        $surveyQuestion->survey_id       = $survey->id;
+        $surveyQuestion->question      = $surveyQuestionData['question'];
+        $surveyQuestion->position      = $surveyQuestionData['position'] ?? null;
+        $surveyQuestion->created_by_id = Auth::id();
     }
 }

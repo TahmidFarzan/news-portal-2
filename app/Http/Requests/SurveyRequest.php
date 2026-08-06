@@ -22,7 +22,9 @@ class SurveyRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $isUpdate = $this->route('slug') !== null;
+
+        $rules =[
             "name"        => ["required", "string"],
             "brief"       => ["nullable"],
             'start_date'  => [
@@ -37,6 +39,22 @@ class SurveyRequest extends FormRequest
             ],
             "language_id" => ["required"],
         ];
+
+        if (! $isUpdate) {
+            $rules += [
+                'questions' => [
+                    'required',
+                    'array',
+                    'min:1',
+                ],
+
+                'questions.*.question' => [
+                    'required',
+                    'string',
+                ],
+            ];
+        }
+        return $rules;
     }
 
     public function messages()
@@ -53,6 +71,12 @@ class SurveyRequest extends FormRequest
             'end_date.required'       => __('form-requests.survey.end_date.required'),
             'end_date.date'           => __('form-requests.survey.end_date.date'),
             'end_date.after_or_equal' => __('form-requests.survey.end_date.after_or_equal'),
+
+            'questions.*.question.required' => __('form-requests.survey.question.required'),
+            'questions.*.question.string' => __('form-requests.survey.question.string'),
+
+            'questions.*.position.integer' => __('form-requests.survey.position.integer'),
+            'questions.*.position.min' => __('form-requests.survey.position.min'),
         ];
     }
 

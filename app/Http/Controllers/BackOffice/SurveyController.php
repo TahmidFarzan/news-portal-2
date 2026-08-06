@@ -200,6 +200,13 @@ class SurveyController extends Controller
 
         $result = $this->surveyQuestionService->save($request, $survey, $surveyQuestion);
 
+        if ($result["redirect_back_to_same_page"] == true) {
+            return back()->with('flash_message', [
+                'message' => $result['message'],
+                'status'  => $result['status'],
+            ]);
+        }
+
         return to_route('back-office.surveys.survey-questions.index',["slug" => $slug])->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
@@ -215,6 +222,14 @@ class SurveyController extends Controller
         Gate::authorize('update', $surveyQuestion);
 
         $result = $this->surveyQuestionService->save($request,$survey, $surveyQuestion);
+
+
+        if ($result["redirect_back_to_same_page"] == true) {
+            return back()->with('flash_message', [
+                'message' => $result['message'],
+                'status'  => $result['status'],
+            ]);
+        }
 
         return to_route('back-office.surveys.survey-questions.index',["slug" => $slug])->with('flash_message', [
             'message' => $result['message'],
@@ -235,6 +250,39 @@ class SurveyController extends Controller
         return to_route('back-office.surveys.survey-questions.index',["slug" => $slug])->with('flash_message', [
             'message' => $result['message'],
             'status'  => $result['status'],
+        ]);
+    }
+
+    public function surveyQuestionReorder(string $slug, Request $request)
+    {
+        $request->validate([
+            'questions'                      => ['required', 'array', 'min:1'],
+            'questions.*.slug'               => ['required', 'string'],
+            'questions.*.position'           => ['required', 'integer', 'min:1'],
+            'redirect_back_to_same_page'   => ['nullable', 'boolean'],
+        ]);
+
+        $survey = $this->surveyService->find($slug);
+
+        $result = $this->surveyQuestionService->reorder(
+            $survey,
+            $request
+        );
+
+        if (($result['redirect_back_to_same_page'] ?? false) === true) {
+            return back()->with('flash_message', [
+                'message' => $result['message'],
+                'status'  => $result['status'],
+                'timestamp' => now()->timestamp,
+            ]);
+        }
+
+        return to_route('back-office.surveys.survey-questions.index', [
+            'slug'             => $survey->slug,
+        ])->with('flash_message', [
+            'message' => $result['message'],
+            'status'  => $result['status'],
+            'timestamp' => now()->timestamp,
         ]);
     }
 
