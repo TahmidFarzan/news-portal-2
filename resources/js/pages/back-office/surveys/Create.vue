@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-
 import { formatDate } from '@/composables/useDateTime'
 import {
     showPassword,
@@ -43,8 +42,8 @@ const pageTitle = computed(() => {
 const saveForm = useForm({
     name: survey?.name || '',
     brief: survey?.brief || '',
-    start_date: survey?.date ? formatDate(survey?.start_date, 'Y-m-d') : null,
-    end_date: survey?.date ? formatDate(survey?.end_date, 'Y-m-d') : null,
+    start_date: survey?.start_date ? formatDate(survey?.start_date, 'Y-m-d') : null,
+    end_date: survey?.end_date ? formatDate(survey?.end_date, 'Y-m-d') : null,
     language_id: survey?.language_id || null,
     is_active: survey?.is_active || false,
 })
