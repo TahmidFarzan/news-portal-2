@@ -25,8 +25,10 @@ const { quiz, quizResult } = defineProps({
     quizResult: Object,
 })
 
+console.log(quizResult)
+
 const deviceInfo = computed(() => {
-    const info = quizResult?.quiz_participant?.device_info
+    const info = quizResult?.device_info
 
     if (!info) return null
 
@@ -91,18 +93,61 @@ onMounted(async () => {
                             {{ t('common.labels.point') }}
                         </span>
                         <span class="font-medium">
-                            {{ quizResult?.point || t('common.labels.notAvailable') }}
+                            {{ quizResult?.total_point || t('common.labels.notAvailable') }}
                         </span>
                     </div>
+
+
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">
                             {{ t('common.labels.duration') }}
                         </span>
                         <span class="font-medium">
-                            {{ quizResult?.duration || t('common.labels.notAvailable') }}
+                            {{ quizResult?.duration || t('common.labels.notAvailable') }}(s)
                         </span>
                     </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
+                    <span class="text-gray-500">
+                        {{ t('common.labels.ip') }}
+                    </span>
+
+                    <p>
+                        <span class="font-medium">
+                            {{ quizResult?.ip || t('common.labels.notAvailable') }}
+                        </span>
+                    </p>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
+
+                    <span class="text-gray-500">
+                        {{ t('common.labels.device') }}
+                    </span>
+
+                    <div v-if="deviceInfo" class="space-y-2">
+                        <div v-for="(value, key) in deviceInfo" :key="key" class="grid grid-cols-3 gap-2">
+                            <span class="text-gray-500">
+                                {{ formatKey(key) }}
+                            </span>
+
+                            <span class="col-span-2 font-medium break-all">
+                                {{ value || t('common.labels.notAvailable') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <p v-else class="font-medium">
+                        {{ t('common.labels.notAvailable') }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -135,10 +180,10 @@ onMounted(async () => {
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">
-                            {{ t('common.labels.phone') }}
+                            {{ t('common.labels.mobile') }}
                         </span>
                         <span class="font-medium">
-                            {{ quizResult?.quiz_participant?.phone || t('common.labels.notAvailable') }}
+                            {{ quizResult?.quiz_participant?.mobile || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -156,41 +201,7 @@ onMounted(async () => {
                     </p>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
 
-                    <span class="text-gray-500">
-                        {{ t('common.labels.ip') }}
-                    </span>
-
-                    <p>
-                        <span class="font-medium">
-                            {{ quizResult?.quiz_participant?.ip || t('common.labels.notAvailable') }}
-                        </span>
-                    </p>
-                </div>
-
-                <div class="border border-gray-200 rounded-lg p-4 space-y-2">
-
-                    <span class="text-gray-500">
-                        {{ t('common.labels.device') }}
-                    </span>
-
-                    <div v-if="deviceInfo" class="space-y-2">
-                        <div v-for="(value, key) in deviceInfo" :key="key" class="grid grid-cols-3 gap-2">
-                            <span class="text-gray-500">
-                                {{ formatKey(key) }}
-                            </span>
-
-                            <span class="col-span-2 font-medium break-all">
-                                {{ value || t('common.labels.notAvailable') }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <p v-else class="font-medium">
-                        {{ t('common.labels.notAvailable') }}
-                    </p>
-                </div>
             </div>
         </div>
 
@@ -237,7 +248,7 @@ onMounted(async () => {
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.updatedBy')
-                        }}</span>
+                            }}</span>
                         <span class="font-medium">
                             {{ quizResult?.latest_activity_log?.causer?.name ||
                                 t('common.labels.notAvailable') }}

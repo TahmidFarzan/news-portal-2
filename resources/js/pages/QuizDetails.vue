@@ -85,14 +85,14 @@ let timerInterval = null
 const answers = reactive({})
 const participant = reactive({
     name: '',
-    phone: '',
+    mobile: '',
     email: '',
     address: '',
 })
 
 const formErrors = reactive({
     name: '',
-    phone_or_email: '',
+    mobile_or_email: '',
     questions: '',
 })
 
@@ -108,16 +108,16 @@ const telInputOptions = {
         showSearchBox: true,
     },
     inputOptions: {
-        placeholder: t('common.placeholders.phone') || 'Enter phone number',
+        placeholder: t('common.placeholders.mobile') || 'Enter mobile number',
         showDialCode: true,
     },
 }
 
-const onPhoneInput = (phone, phoneObject) => {
-    if (phoneObject?.valid) {
-        participant.phone = phoneObject.number || phone
+const onMobileInput = (mobile, mobileObject) => {
+    if (mobileObject?.valid) {
+        participant.mobile = mobileObject.number || mobile
     } else {
-        participant.phone = phone || ''
+        participant.mobile = mobile || ''
     }
 }
 
@@ -227,7 +227,7 @@ const isOptionSelected = (question, optionId) => {
 
 const validateForm = () => {
     formErrors.name = ''
-    formErrors.phone_or_email = ''
+    formErrors.mobile_or_email = ''
     formErrors.questions = ''
 
     let valid = true
@@ -237,10 +237,10 @@ const validateForm = () => {
         valid = false
     }
 
-    const hasPhone = participant.phone?.trim()
+    const hasMobile = participant.mobile?.trim()
     const hasEmail = participant.email?.trim()
-    if (!hasPhone && !hasEmail) {
-        formErrors.phone_or_email = t('common.validation.phone_or_email') || 'Phone or email is required'
+    if (!hasMobile && !hasEmail) {
+        formErrors.mobile_or_email = t('common.validation.mobile_or_email') || 'Mobile or email is required'
         valid = false
     }
 
@@ -255,7 +255,7 @@ const validateForm = () => {
 const submitForm = useForm({
     answers: [],
     name: '',
-    phone: '',
+    mobile: '',
     email: '',
     address: '',
     duration: 0,
@@ -282,7 +282,7 @@ const handleSubmit = () => {
 
     submitForm.answers = answersPayload
     submitForm.name = participant.name.trim()
-    submitForm.phone = participant.phone?.trim() || null
+    submitForm.mobile = participant.mobile?.trim() || null
     submitForm.email = participant.email?.trim() || null
     submitForm.address = participant.address?.trim() || null
     submitForm.duration = elapsedSeconds.value
@@ -419,9 +419,9 @@ onUnmounted(() => {
                                                 class="mt-2 break-all text-sm text-gray-600">
                                                 {{ winnerResult?.quiz_participant?.email }}
                                             </p>
-                                            <p v-else-if="winnerResult?.quiz_participant?.phone"
+                                            <p v-else-if="winnerResult?.quiz_participant?.mobile"
                                                 class="mt-2 text-sm text-gray-600">
-                                                {{ winnerResult?.quiz_participant?.phone }}
+                                                {{ winnerResult?.quiz_participant?.mobile }}
                                             </p>
                                             <p v-if="winnerResult?.quiz_participant?.address"
                                                 class="mt-2 text-xs text-gray-500">
@@ -605,10 +605,10 @@ onUnmounted(() => {
 
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">
-                                            {{ t('common.labels.phone') }}
+                                            {{ t('common.labels.mobile') }}
                                         </label>
-                                        <VueTelInput v-model="participant.phone" :disabled="!canEditParticipant"
-                                            v-bind="telInputOptions" @on-input="onPhoneInput"
+                                        <VueTelInput v-model="participant.mobile" :disabled="!canEditParticipant"
+                                            v-bind="telInputOptions" @on-input="onMobileInput"
                                             class="vue-tel-input-custom" />
                                     </div>
 
@@ -621,8 +621,8 @@ onUnmounted(() => {
                                     </div>
 
                                     <div class="md:col-span-2">
-                                        <p v-if="formErrors.phone_or_email" class="text-sm text-red-600 mb-2">
-                                            {{ formErrors.phone_or_email }}
+                                        <p v-if="formErrors.mobile_or_email" class="text-sm text-red-600 mb-2">
+                                            {{ formErrors.mobile_or_email }}
                                         </p>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">
                                             {{ t('common.labels.address') }}

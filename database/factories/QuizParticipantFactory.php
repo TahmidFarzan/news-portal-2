@@ -17,12 +17,16 @@ class QuizParticipantFactory extends Factory
      */
     public function definition(): array
     {
-        $hasPhone = fake()->boolean(70);
+        $hasMobile = fake()->boolean(70);
         $hasEmail = fake()->boolean(70);
+
+        if(!$hasEmail && !$hasMobile){
+            $hasEmail = true;
+        }
 
         return [
             'name' => $this->faker->name(),
-            'phone' => $hasPhone ? $this->faker->unique()->numerify('01#########') : null,
+            'mobile' => $hasMobile ? $this->faker->unique()->numerify('01#########') : null,
             'email' => $hasEmail ? $this->faker->unique()->safeEmail() : null,
             'address' => $this->faker->optional()->address(),
         ];

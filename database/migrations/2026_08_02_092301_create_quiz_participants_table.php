@@ -13,7 +13,7 @@ return new class extends Migration
 
             $table->string('name', 255);
 
-            $table->string('phone', 30)->nullable();
+            $table->string('mobile', 30)->nullable();
             $table->string('email', 255)->nullable();
 
             $table->text('address')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index('phone');
+            $table->index('mobile');
             $table->index('email');
         });
     }

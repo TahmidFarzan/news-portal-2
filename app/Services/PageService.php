@@ -541,18 +541,18 @@ class PageService
             }
 
             $email = $request->input('email');
-            $phone = $request->input('phone');
+            $mobile = $request->input('mobile');
 
             $alreadyExists = QuizResult::query()
                 ->where('quiz_id', $quiz->id)
-                ->whereHas('quizParticipant', function ($query) use ($email, $phone) {
-                    $query->where(function ($query) use ($email, $phone) {
+                ->whereHas('quizParticipant', function ($query) use ($email, $mobile) {
+                    $query->where(function ($query) use ($email, $mobile) {
                         if ($email) {
                             $query->where('email', $email);
                         }
 
-                        if ($phone) {
-                            $query->orWhere('phone', $phone);
+                        if ($mobile) {
+                            $query->orWhere('mobile', $mobile);
                         }
                     });
                 })
@@ -578,7 +578,7 @@ class PageService
 
             $resultData = DB::transaction(function () use ($quiz, $request, $sessionKey) {
                 $email   = $request->input('email');
-                $phone   = $request->input('phone');
+                $mobile   = $request->input('mobile');
                 $answers = $request->input('answers', []);
 
                 $totalPoint = 0;
@@ -644,9 +644,9 @@ class PageService
                 ];
 
                 $quizParticipant = QuizParticipant::query()
-                    ->where(function ($query) use ($email, $phone) {
-                        if ($phone) {
-                            $query->where('phone', $phone);
+                    ->where(function ($query) use ($email, $mobile) {
+                        if ($mobile) {
+                            $query->where('mobile', $mobile);
                         }
 
                         if ($email) {
@@ -659,14 +659,14 @@ class PageService
                     $quizParticipant = QuizParticipant::create([
                         'name'    => $request->input('name'),
                         'email'   => $email,
-                        'phone'   => $phone,
+                        'mobile'   => $mobile,
                         'address' => $request->input('address'),
                     ]);
                 } else {
                     $quizParticipant->update([
                         'name'    => $request->input('name') ?: $quizParticipant->name,
                         'email'   => $email ?: $quizParticipant->email,
-                        'phone'   => $phone ?: $quizParticipant->phone,
+                        'mobile'   => $mobile ?: $quizParticipant->mobile,
                         'address' => $request->input('address') ?: $quizParticipant->address,
                     ]);
                 }

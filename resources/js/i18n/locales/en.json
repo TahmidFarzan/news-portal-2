@@ -156,7 +156,7 @@
             "quizResult": "Quiz Result",
             "quizParticipants": "Quiz participants",
             "device": "Device",
-            "phone": "Phone",
+            "mobile": "Mobile",
             "duration": "Duration",
             "quizParticipantInformation": "Quiz Participant Information",
             "ip": "Ip",
@@ -247,7 +247,7 @@
             "option": "Option",
             "max_winner": "Max winner",
             "searchQuizResult": "Search quiz result",
-            "phone": "Phone",
+            "mobile": "Mobile",
             "email": "Email",
             "address": "Address"
         },

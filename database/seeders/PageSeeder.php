@@ -130,7 +130,7 @@ class PageSeeder extends Seeder
                     </div>
 
                     <div>
-                        <h4 class="font-medium text-gray-500">Phone</h4>
+                        <h4 class="font-medium text-gray-500">Mobile</h4>
                         <p class="text-gray-800">+880 1234 567890</p>
                     </div>
 

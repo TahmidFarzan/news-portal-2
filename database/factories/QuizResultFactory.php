@@ -22,7 +22,7 @@ class QuizResultFactory extends Factory
         return [
             'quiz_id' => Quiz::query()->inRandomOrder()->where("is_active", true)->value('id'),
             'quiz_participant_id' => QuizParticipant::query()->inRandomOrder()->value('id'),
-            'duration' => fake()->numberBetween(10000, 300000),
+            'duration' => fake()->numberBetween(45, 345),
             'total_point' => 0,
             'ip' => $this->faker->ipv4(),
             'device_info' => [

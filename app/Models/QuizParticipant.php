@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
 #[Table('quiz_participants')]
 #[Fillable([
     'name',
-    'phone',
+    'mobile',
     'email',
     'address',
 ])]
@@ -43,7 +43,7 @@ class QuizParticipant extends Model
         return LogOptions::defaults()
             ->logOnly([
                 'name',
-                'phone',
+                'mobile',
                 'email',
                 'address',
             ])

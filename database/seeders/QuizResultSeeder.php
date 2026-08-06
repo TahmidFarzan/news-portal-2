@@ -59,7 +59,7 @@ class QuizResultSeeder extends Seeder
                         'quiz_id' => $quiz->id,
                         'quiz_participant_id' => $participant->id,
 
-                        'duration' => fake()->numberBetween(10000, 300000),
+                        'duration' => fake()->numberBetween(45, 345),
 
                         'total_point' => $totalPoint,
                     ])->create();

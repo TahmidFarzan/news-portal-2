@@ -19,7 +19,7 @@ class QuizSubmitRequest extends FormRequest
     {
         return [
             'name'     => ['required', 'string', 'max:200'],
-            'phone'    => ['nullable', 'string', 'max:30'],
+            'mobile'    => ['nullable', 'string', 'max:30'],
             'email'    => ['nullable', 'email', 'max:200'],
             'address'  => ['nullable', 'string', 'max:500'],
             'duration' => ['required', 'integer', 'min:0'],
@@ -39,8 +39,8 @@ class QuizSubmitRequest extends FormRequest
             'name.string'   => __('form-requests.quiz_submit.name.string'),
             'name.max'      => __('form-requests.quiz_submit.name.max'),
 
-            'phone.string' => __('form-requests.quiz_submit.phone.string'),
-            'phone.max'    => __('form-requests.quiz_submit.phone.max'),
+            'mobile.string' => __('form-requests.quiz_submit.mobile.string'),
+            'mobile.max'    => __('form-requests.quiz_submit.mobile.max'),
 
             'email.email' => __('form-requests.quiz_submit.email.email'),
             'email.max'   => __('form-requests.quiz_submit.email.max'),
@@ -70,17 +70,17 @@ class QuizSubmitRequest extends FormRequest
         $validator->after(function ($validator) {
             $data = $validator->getData();
 
-            $hasPhone = !empty($data['phone']);
+            $hasMobile = !empty($data['mobile']);
             $hasEmail = !empty($data['email']);
 
-            if (!$hasPhone && !$hasEmail) {
+            if (!$hasMobile && !$hasEmail) {
                 $validator->errors()->add(
-                    'phone',
-                    __('form-requests.quiz_submit.phone_or_email.required')
+                    'mobile',
+                    __('form-requests.quiz_submit.mobile_or_email.required')
                 );
                 $validator->errors()->add(
                     'email',
-                    __('form-requests.quiz_submit.phone_or_email.required')
+                    __('form-requests.quiz_submit.mobile_or_email.required')
                 );
             }
 

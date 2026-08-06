@@ -843,9 +843,9 @@ return [
             'max'      => 'Name may not be greater than 200 characters.',
         ],
 
-        'phone' => [
-            'string' => 'Phone must be a valid string.',
-            'max'    => 'Phone may not be greater than 30 characters.',
+        'mobile' => [
+            'string' => 'Mobile must be a valid string.',
+            'max'    => 'Mobile may not be greater than 30 characters.',
         ],
 
         'email' => [
@@ -864,8 +864,8 @@ return [
             'min'      => 'Duration must be at least 0.',
         ],
 
-        'phone_or_email' => [
-            'required' => 'Phone or email is required.',
+        'mobile_or_email' => [
+            'required' => 'Mobile or email is required.',
         ],
 
         'answers' => [
