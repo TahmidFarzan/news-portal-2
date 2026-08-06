@@ -141,8 +141,8 @@ const hasPreviousResult = computed(() => {
                                     <SwiperSlide v-for="winnerResult in previousQuizWinnerResults" :key="winnerResult.id">
                                         <div class="rounded-lg border border-green-100 bg-white p-4 text-center">
                                             <div
-                                                class="mx-auto flex h-25 w-25 items-center justify-center rounded-full bg-green-100 text-xl font-bold text-green-700">
-                                                {{ winnerResult?.total_point || 0 }}
+                                                class="mx-auto flex h-30 w-30 items-center justify-center rounded-full bg-green-100 text-xl font-bold text-green-700">
+                                                {{ winnerResult?.total_point || 0 }} / {{ previousQuiz?.total_point || 0 }}
                                             </div>
 
                                             <h5 class="mt-3 text-base font-semibold text-gray-800">

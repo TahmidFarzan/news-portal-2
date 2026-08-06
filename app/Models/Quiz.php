@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Type\Decimal;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
@@ -41,7 +42,7 @@ class Quiz extends Model
 {
     use HasFactory, LogsActivity, HasSlug;
 
-    protected $appends = ["public_url", "show_result"];
+    protected $appends = ["public_url", "show_result", "total_point"];
 
     protected function casts(): array
     {
@@ -125,6 +126,15 @@ class Quiz extends Model
         $endDate = $this->end_date ?? now();
 
         return $endDate->copy()->addDays(30)->gte(now());
+    }
+
+    public function getTotalPointAttribute(): int|float
+    {
+        if ($this->relationLoaded('quizQuestions')) {
+            return $this->quizQuestions->sum('point');
+        }
+
+        return $this->quizQuestions()->sum('point');
     }
 
     public function activityLogs(): MorphMany
