@@ -35,7 +35,7 @@ export const themeOptions = Object.freeze({
     GOOGLE_ANALYTIC_HEADER  : "Google Analytic Header",
     GOOGLE_TAG_MANAGER_HEADER  : "Google Tag Manager Header",
     GOOGLE_TAG_MANAGER_BODY  : "Google Tag Manager Body",
-    GOOGLE_ADSENCE_CLIENT_ID: "Google GoogleAdsence Client Id"
+    GOOGLE_ADSENCE_CLIENT_ID: "Google GoogleAdSense Client Id"
 })
 
 export function useTheme() {

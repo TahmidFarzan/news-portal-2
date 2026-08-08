@@ -1,13 +1,13 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch,inject } from 'vue'
 
-import CategoryLocationEvent from '@/components/common/news/CategoryLocationEvent.vue'
+import NewsContextLinks from '@/components/common/news/NewsContextLinks.vue'
 import TagTrend from '@/components/common/news/TagTrend.vue'
-import ImageWithLightBox from '@/components/common/media/ImageWithLightBox.vue'
+import ImageWithLightbox from '@/components/common/media/ImageWithLightbox.vue'
 import SocialShare from '@/components/common/news/SocialShare.vue'
-import TitleSubtitleContentShoulder from '@/components/common/news/TitleSubtitleContentShoulder.vue'
+import NewsHeadline from '@/components/common/news/NewsHeadline.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
-import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
 
 import { formatDateTime } from '@/composables/useDateTime'
 
@@ -39,9 +39,9 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 <template>
     <article class="news-detail-article space-y-6">
         <header class="article-header space-y-3 border-b border-gray-200">
-            <CategoryLocationEvent :news="news" />
+            <NewsContextLinks :news="news" />
 
-            <TitleSubtitleContentShoulder :news="news"/>
+            <NewsHeadline :news="news"/>
 
             <p v-if="news?.brief" class="max-w-3xl text-lg leading-8 text-gray-700">
                 {{ news.brief }}
@@ -60,14 +60,14 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </header>
 
         <section v-if="news?.gallery_images" class="gallery-strip flex flex-col gap-8">
-            <ImageWithLightBox v-for="image in news?.gallery_images" :key="image?.id || image?.uuid" :image="image"  :is-image-gallery-item="true" :show-image-galery-counter="true"/>
+            <ImageWithLightbox v-for="image in news?.gallery_images" :key="image?.id || image?.uuid" :image="image"  :is-image-gallery-item="true" :show-image-galery-counter="true"/>
         </section>
 
         <div v-else class="rounded-2xl border border-dashed border-gray-300 p-8 text-center text-gray-500">
             {{ t("news.components.view.imageGallery.labels.noGalleryImageFound") }}
         </div>
 
-       <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+       <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

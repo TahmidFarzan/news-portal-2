@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 
 import { computed, onMounted, nextTick } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -117,7 +117,7 @@ onMounted(async () => {
                                 {{ t('common.labels.tag') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi
+                            <InfiniteScrollApiSelect
                                 :form="saveForm"
                                 fieldName="tag_id"
                                 :selectedItem="trend?.tag"

@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import CreateUpdateQuizQuestionOptionTableByQuizQuestion from '@/components/back-office/quiz-question-option/CreateUpdateQuizQuestionOptionTableByQuizQuestion.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
+import QuizQuestionOptionManager from '@/components/back-office/quiz-question-option/QuizQuestionOptionManager.vue'
 import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
 import { useTranslate } from '@/composables/useTranslate'
@@ -199,7 +199,7 @@ onMounted(async () => {
                                 {{ t('common.labels.answerType') }}
                                 <span class="text-red-500">*</span>
                             </label>
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="answer_type"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="answer_type"
                                 :selectedItem="saveForm.answer_type"
                                 :apiUrl="route('search.quiz-question-answer-types')" :multiple="false"
                                 :placeholder="t('common.labels.answerType')" />
@@ -238,7 +238,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <CreateUpdateQuizQuestionOptionTableByQuizQuestion :quizQuestion="quizQuestion" :isUpdate="isUpdate" :quizQuestionSaveForm="saveForm" />
+                <QuizQuestionOptionManager :quizQuestion="quizQuestion" :isUpdate="isUpdate" :quizQuestionSaveForm="saveForm" />
 
                 <div class="flex justify-center">
                     <button type="submit" :disabled="saveForm.processing"

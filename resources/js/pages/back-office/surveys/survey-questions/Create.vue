@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 
 import { computed, onMounted, nextTick, watch } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'

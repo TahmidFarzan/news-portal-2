@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
+import TaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import Editor from '@/components/common/tinymce/Editor.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
@@ -136,7 +136,7 @@ onMounted(async () => {
                                 {{ t('common.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="language_id"
                                 :selectedItem="contributor?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('common.placeholders.selectLanguage')" />
@@ -262,7 +262,7 @@ onMounted(async () => {
                                 {{ t('common.labels.seoKeywords') }}
                             </label>
 
-                            <SelectTaggable :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
+                            <TaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
                                 :placeholder="t('common.placeholders.addKeywords')" />
 

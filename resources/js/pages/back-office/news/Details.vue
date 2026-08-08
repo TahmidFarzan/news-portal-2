@@ -4,7 +4,7 @@ import RecentActivities from '@/components/back-office/activity-log/RecentModelA
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 import NewsImageGalleryGrid from '@/components/back-office/news/NewsImageGalleryGrid.vue'
 import NewsPlacementList from '@/components/back-office/news/NewsPlacementList.vue'
-import RelatedOrRelevantNewsList from '@/components/back-office/news/RelatedOrRelevantNewsList.vue'
+import NewsRelationTable from '@/components/back-office/news/NewsRelationTable.vue'
 
 import { ref, onMounted, nextTick, inject, computed } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -432,7 +432,7 @@ onMounted(async () => {
                 {{ t('common.labels.relevantNews') }}
             </h3>
 
-            <RelatedOrRelevantNewsList :news="news?.relevant_news" />
+            <NewsRelationTable :news="news?.relevant_news" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
@@ -440,7 +440,7 @@ onMounted(async () => {
                 {{ t('common.labels.relatedNews') }}
             </h3>
 
-            <RelatedOrRelevantNewsList :news="news?.related_news" />
+            <NewsRelationTable :news="news?.related_news" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">

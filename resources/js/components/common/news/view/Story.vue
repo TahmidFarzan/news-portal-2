@@ -1,14 +1,14 @@
 <script setup>
 
-import CategoryLocationEvent from '@/components/common/news/CategoryLocationEvent.vue'
+import NewsContextLinks from '@/components/common/news/NewsContextLinks.vue'
 import TagTrend from '@/components/common/news/TagTrend.vue'
-import ImageWithLightBox from '@/components/common/media/ImageWithLightBox.vue'
+import ImageWithLightbox from '@/components/common/media/ImageWithLightbox.vue'
 import SocialShare from '@/components/common/news/SocialShare.vue'
-import WriterConstributer from '@/components/common/news/WriterConstributer.vue'
-import TitleSubtitleContentShoulder from '@/components/common/news/TitleSubtitleContentShoulder.vue'
+import NewsByline from '@/components/common/news/NewsByline.vue'
+import NewsHeadline from '@/components/common/news/NewsHeadline.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 import NewsBody from '@/components/common/news/NewsBody.vue'
-import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
 
 import { computed,inject } from 'vue'
 import { formatDateTime } from '@/composables/useDateTime'
@@ -41,11 +41,11 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 <template>
     <article class="news-detail-article mx-auto w-full max-w-5xl space-y-6 px-4 py-6">
         <header class="article-header space-y-3">
-            <CategoryLocationEvent :news="news" />
+            <NewsContextLinks :news="news" />
 
-            <TitleSubtitleContentShoulder :news="news"/>
+            <NewsHeadline :news="news"/>
 
-            <WriterConstributer :news="news" />
+            <NewsByline :news="news" />
 
             <div class="flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-gray-500 mb-3">
                 <span v-if="news?.published_at" class="inline-flex items-center gap-1.5">
@@ -72,7 +72,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
         <NewsBody v-if="news?.body" class="prose prose-lg max-w-none" :news="news"/>
 
-        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

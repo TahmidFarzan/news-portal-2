@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
+import TaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 
 import { computed, onMounted, nextTick, watch, ref } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -205,7 +205,7 @@ onMounted(async () => {
                                 {{ t('common.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="language_id"
                                 :selectedItem="location?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('common.placeholders.selectLanguage')" />
@@ -275,7 +275,7 @@ onMounted(async () => {
                                 {{ t('common.placeholders.parent') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :selectedItem="location?.parent" fieldName="parent_id"
+                            <InfiniteScrollApiSelect :selectedItem="location?.parent" fieldName="parent_id"
                                 :form="saveForm" :apiUrl="locationApiUrl" :error="saveForm.errors.parent_id"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
                                 apiValueKey="id" :multiple="false"
@@ -301,7 +301,7 @@ onMounted(async () => {
                                 {{ t('common.labels.category') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :selectedItem="location?.category" fieldName="category_id"
+                            <InfiniteScrollApiSelect :selectedItem="location?.category" fieldName="category_id"
                                 :form="saveForm" :apiUrl="categoryApiUrl" :error="saveForm.errors.category_id"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
                                 apiValueKey="id" :multiple="false"
@@ -472,7 +472,7 @@ onMounted(async () => {
                                 {{ t('common.labels.seoKeywords') }}
                             </label>
 
-                            <SelectTaggable :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
+                            <TaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
                                 :placeholder="t('common.placeholders.addKeywords')" />
 

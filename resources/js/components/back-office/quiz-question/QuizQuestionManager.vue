@@ -23,8 +23,8 @@ import {
     canUpdateQuizQuestion,
     canDeleteQuizQuestion,
 } from "@/composables/useUserPermissions";
-import CreateUpdateQuizQuestionOptionTableByQuizQuestion from "@/components/back-office/quiz-question-option/CreateUpdateQuizQuestionOptionTableByQuizQuestion.vue";
-import SelectInfinityLoadingApi from "@/components/common/multi-select/SelectInfinityLoadingApi.vue";
+import CreateUpdateQuizQuestionOptionTableByQuizQuestion from "@/components/back-office/quiz-question-option/QuizQuestionOptionManager.vue";
+import SelectInfinityLoadingApi from "@/components/common/multi-select/InfiniteScrollApiSelect.vue";
 import { quizQuestionAnswerTypes } from "@/composables/useQuiz";
 
 FontAwesomeLibrary.add(

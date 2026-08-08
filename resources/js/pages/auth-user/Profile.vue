@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { ref, onMounted, nextTick } from 'vue'
@@ -233,7 +233,7 @@ onMounted(async () => {
                                     <span class="text-red-500">*</span>
                                 </label>
 
-                                <SelectInfinityLoadingApi :form="profileUpdateForm" fieldName="gender"
+                                <InfiniteScrollApiSelect :form="profileUpdateForm" fieldName="gender"
                                     :selectedItem="profileUpdateForm.gender" :apiUrl="route('search.genders')"
                                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
                                     apiValueKey="id" :placeholder="t('profile.genderPlaceholder')"
@@ -250,7 +250,7 @@ onMounted(async () => {
                                     <span class="text-red-500">*</span>
                                 </label>
 
-                                <SelectInfinityLoadingApi :form="profileUpdateForm" fieldName="religion"
+                                <InfiniteScrollApiSelect :form="profileUpdateForm" fieldName="religion"
                                     :selectedItem="profileUpdateForm.religion" :apiUrl="route('search.religions')"
                                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name"
                                     apiValueKey="id" :placeholder="t('profile.religionPlaceholder')"
@@ -267,7 +267,7 @@ onMounted(async () => {
                                     <span class="text-red-500">*</span>
                                 </label>
 
-                                <SelectInfinityLoadingApi :form="profileUpdateForm" fieldName="marital_status"
+                                <InfiniteScrollApiSelect :form="profileUpdateForm" fieldName="marital_status"
                                     :selectedItem="profileUpdateForm.marital_status"
                                     :apiUrl="route('search.marital-statuses')" :multiple="false" selectedLabelKey="name"
                                     selectedValueKey="id" apiLabelKey="name" apiValueKey="id"

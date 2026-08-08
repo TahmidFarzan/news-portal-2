@@ -14,7 +14,7 @@ import CategoryNewsSection from '@/components/common/page/home/CategoryNewsSecti
 import Trends from '@/components/common/page/home/Trends.vue'
 import Surveys from '@/components/common/page/home/Surveys.vue'
 import Quizzes from '@/components/common/page/home/Quizzes.vue'
-import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
 import { loweriseText } from '@/composables/useUtil'
 
 import {
@@ -162,7 +162,7 @@ const componentRefreshKey = (componentName) => {
                             </div>
                         </div>
                         <div class="md:col-span-12 lg:col-span-12">
-                            <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION"
+                            <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SECTION"
                                 :position="adPositions.BETWEEN" />
                         </div>
                     </div>
@@ -170,7 +170,7 @@ const componentRefreshKey = (componentName) => {
 
                 <aside class="lg:col-span-4" :key="componentRefreshKey('sidebar')">
                     <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
-                    <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" class="mt-4" />
+                    <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" class="mt-4" />
                 </aside>
             </div>
 
@@ -201,7 +201,7 @@ const componentRefreshKey = (componentName) => {
         <Quizzes :key="componentRefreshKey('quiz-section')" v-if="showQuizzes"
             :currentLanguage="currentLanguage" :belowEvent="false"  class="home-quizzes mt-4"/>
 
-        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
+        <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
 
         <CategoryNewsSection :key="componentRefreshKey('politic-section')" v-if="page?.language?.code == languages.English.Code"
             categorySlug="politics" :currentLanguage="currentLanguage"  :style="1" :limit="4" class="home-politics-section mt-4" />
@@ -213,7 +213,7 @@ const componentRefreshKey = (componentName) => {
         <CategoryNewsSection :key="componentRefreshKey('national-section')" v-if="page?.language?.code == languages.Bangla.Code"
             categorySlug="জাতীয়" :currentLanguage="currentLanguage" :style="1" :limit="4" class="home-national-section mt-4"/>
 
-        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
+        <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
 
         <CategoryNewsSection :key="componentRefreshKey('sport-section')" v-if="page?.language?.code == languages.English.Code"
             categorySlug="sports" :currentLanguage="currentLanguage" :style="2" :limit="6" class="home-sports-section mt-4"/>
@@ -225,7 +225,7 @@ const componentRefreshKey = (componentName) => {
         <CategoryNewsSection :key="componentRefreshKey('entertainment-section')" v-if="page?.language?.code == languages.Bangla.Code"
             categorySlug="বিনোদন" :currentLanguage="currentLanguage" :style="2" :limit="6" class="home-entertainment-section mt-4"/>
 
-        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
+        <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
 
         <VideoNewsSection :key="componentRefreshKey('video-section')" :currentLanguage="currentLanguage" class="home-video-news-section mt-4" />
 
@@ -250,7 +250,7 @@ const componentRefreshKey = (componentName) => {
         <ImageGalleryNewsSection :key="componentRefreshKey('image-gallery-section')"
             :currentLanguage="currentLanguage"  class="home-gallery-news-section mt-4" />
 
-        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -277,7 +277,7 @@ const componentRefreshKey = (componentName) => {
             </div>
         </div>
 
-        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+        <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </section>
 </template>
 

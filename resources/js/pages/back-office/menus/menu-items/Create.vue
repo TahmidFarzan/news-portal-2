@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 
 import { computed, onMounted, nextTick, ref, watch } from 'vue'
 import { Head, useForm, router as inertiaJsRouter } from '@inertiajs/vue3'
@@ -308,7 +308,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="language_id"
                                 :selectedItem="menuItem?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('common.placeholders.selectLanguage')" />
@@ -381,7 +381,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :key="modelTypeKey" :form="saveForm" fieldName="model_type"
+                            <InfiniteScrollApiSelect :key="modelTypeKey" :form="saveForm" fieldName="model_type"
                                 :selectedItem="saveForm?.model_type" :apiUrl="route('search.menu-item-models')"
                                 :error="saveForm.errors.model_type" :multiple="false"
                                 :placeholder="t('admin.menus.menuItems.create.form.modelPlaceholder')" />
@@ -397,20 +397,20 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == menuModels.TAG"
+                            <InfiniteScrollApiSelect v-if="saveForm?.model_type == menuModels.TAG"
                                 :key="`tag-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="saveForm?.model_id" :apiUrl="tagApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                                 :multiple="false" :placeholder="t('admin.menus.menuItems.create.form.tagPlaceholder')" />
 
-                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == menuModels.CATEGORY"
+                            <InfiniteScrollApiSelect v-if="saveForm?.model_type == menuModels.CATEGORY"
                                 :key="`category-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="menuItem?.model" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.model_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
                                 :placeholder="t('admin.menus.menuItems.create.form.categoryPlaceholder')" />
 
-                            <SelectInfinityLoadingApi v-if="saveForm?.model_type == menuModels.PAGE"
+                            <InfiniteScrollApiSelect v-if="saveForm?.model_type == menuModels.PAGE"
                                 :key="`page-${modelIdKey}`" :form="saveForm" fieldName="model_id"
                                 :selectedItem="menuItem?.menu_model" :apiUrl="pageApiUrl" :error="saveForm.errors.model_id"
                                 selectedLabelKey="indentation_title" selectedValueKey="id"
@@ -471,7 +471,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :key="parentKey" :selectedItem="menuItem?.parent"
+                            <InfiniteScrollApiSelect :key="parentKey" :selectedItem="menuItem?.parent"
                                 fieldName="parent_id" :form="saveForm" :apiUrl="menuItemApiUrl"
                                 :error="saveForm.errors.parent_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"

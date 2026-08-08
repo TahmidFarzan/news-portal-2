@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import ModelPagination from '@/components/common/model/Pagination.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import ModelPagination from '@/components/common/pagination/Pagination.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -164,33 +164,33 @@ onMounted(async () => {
 
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
                     :placeholder="t('common.labels.perPage')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="created_by_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     :placeholder="t('admin.news.index.createdByPlaceholder')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id" :apiUrl="route('search.news-types')" :multiple="false"
                     :placeholder="t('common.labels.newsType')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="language_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="language_id"
                     :selectedItem="filterForm.language_id" :apiUrl="route('search.languages')" :multiple="false"
                     :placeholder="t('common.labels.language')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.category_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.category-tree')"
                     :multiple="false" :placeholder="t('common.labels.category')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id" :selectedItem="filterForm.location_id"
                     apiLabelKey="indentation_name" apiValueKey="id" :apiUrl="route('search.location-tree')"
                     :multiple="false" :placeholder="t('common.labels.location')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id" :apiUrl="route('search.events')" :multiple="false"
                     :placeholder="t('common.labels.event')" />
 

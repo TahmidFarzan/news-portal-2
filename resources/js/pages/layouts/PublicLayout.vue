@@ -4,7 +4,7 @@ import OffCanvasMenu from '@/components/common/layout/public-layout/OffCanvasMen
 import AuthTopbarDropdownMenu from '@/components/common/layout/public-layout/AuthTopbarDropdownMenu.vue'
 import TopbarMenu from '@/components/common/layout/public-layout/TopbarMenu.vue'
 import FooterMenu from '@/components/common/layout/public-layout/FooterMenu.vue'
-import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
+import FlashMessageToaster from '@/components/common/layout/FlashMessageToaster.vue'
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
@@ -438,7 +438,7 @@ watch(
             </div>
         </footer>
 
-        <ToasterMessage :flash-message="flashMessage" />
+        <FlashMessageToaster :flash-message="flashMessage" />
     </div>
 </template>
 

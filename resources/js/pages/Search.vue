@@ -4,8 +4,8 @@ import { Head, useForm, router as inertiaRouter } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
+import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useApiClient'
@@ -207,21 +207,21 @@ onMounted(async () => {
 
         <form class="search-filter rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4" @submit.prevent="applyFilter">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="news_type_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="news_type_id"
                     :selectedItem="filterForm.news_type_id || null" :apiUrl="newsTypesApiUrl" :multiple="false"
                     :placeholder="t('common.labels.newsType')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="category_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="category_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.category_id || null" apiLabelKey="indentation_name" apiValueKey="id"
                     :apiUrl="categoryApiUrl" :multiple="false" :placeholder="t('common.labels.category')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="location_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="location_id"
                     selectedLabelKey="indentation_name" selectedValueKey="id"
                     :selectedItem="filterForm.location_id || null" apiLabelKey="indentation_name" apiValueKey="id"
                     :apiUrl="locationApiUrl" :multiple="false" :placeholder="t('common.labels.location')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="event_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="event_id"
                     :selectedItem="filterForm.event_id || null" :apiUrl="eventApiUrl" :multiple="false"
                     :placeholder="t('common.labels.event')" />
 
@@ -244,7 +244,7 @@ onMounted(async () => {
             </div>
         </form>
 
-        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

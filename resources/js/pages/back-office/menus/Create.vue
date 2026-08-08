@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 
 import { computed, onMounted, nextTick } from 'vue'
 import { Head, useForm, router as inertiaJsRouter } from '@inertiajs/vue3'
@@ -135,7 +135,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="language_id"
                                 :selectedItem="menu?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('common.placeholders.selectLanguage')" />
@@ -167,7 +167,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="menu_type_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="menu_type_id"
                                 :selectedItem="menu?.menu_type" :apiUrl="route('search.menu-types')"
                                 :error="saveForm.errors.menu_type_id" :multiple="false"
                                 :placeholder="t('admin.menus.create.form.menuTypePlaceholder')" />

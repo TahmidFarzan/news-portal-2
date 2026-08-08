@@ -1,9 +1,9 @@
 <script setup>
 
-import CategoryLocationEvent from '@/components/common/news/CategoryLocationEvent.vue'
+import NewsContextLinks from '@/components/common/news/NewsContextLinks.vue'
 import TagTrend from '@/components/common/news/TagTrend.vue'
 import SocialShare from '@/components/common/news/SocialShare.vue'
-import TitleSubtitleContentShoulder from '@/components/common/news/TitleSubtitleContentShoulder.vue'
+import NewsHeadline from '@/components/common/news/NewsHeadline.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 
 import { computed,inject } from 'vue'
@@ -15,7 +15,7 @@ import {
     faClock,
 } from '@fortawesome/free-solid-svg-icons'
 
-import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
 
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
 
@@ -78,9 +78,9 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </section>
 
         <header class="article-header space-y-3">
-            <CategoryLocationEvent :news="news" />
+            <NewsContextLinks :news="news" />
 
-            <TitleSubtitleContentShoulder :news="news" />
+            <NewsHeadline :news="news" />
 
             <p v-if="news?.brief" class="max-w-3xl text-lg leading-8 text-gray-700">
                 {{ news.brief }}
@@ -100,7 +100,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </header>
 
 
-        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

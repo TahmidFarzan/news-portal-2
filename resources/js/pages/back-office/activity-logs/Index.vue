@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import ModelPagination from '@/components/common/model/Pagination.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import ModelPagination from '@/components/common/pagination/Pagination.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
@@ -121,17 +121,17 @@ onMounted(async () => {
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="per_page"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="per_page"
                     :selectedItem="filterForm.per_page || null" :apiUrl="route('search.per-pages')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('common.labels.perPage')" />
 
-                <SelectInfinityLoadingApi v-if="showSubjectType" :form="filterForm" fieldName="subject_type"
+                <InfiniteScrollApiSelect v-if="showSubjectType" :form="filterForm" fieldName="subject_type"
                     :selectedItem="filterForm.subject_type || null" :apiUrl="route('search.activity-log-subject-types')"
                     :multiple="false" selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('admin.activityLogs.index.subjectPlaceholder')" />
 
-                <SelectInfinityLoadingApi :form="filterForm" fieldName="causer_id"
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="causer_id"
                     :selectedItem="filterForm.causer_id || null" :apiUrl="route('search.users')" :multiple="false"
                     selectedLabelKey="name" selectedValueKey="id" apiLabelKey="name" apiValueKey="id"
                     :placeholder="t('common.labels.causer')" />

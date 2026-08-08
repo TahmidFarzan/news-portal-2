@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 
 import { computed, onMounted, nextTick, watch } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
@@ -142,7 +142,7 @@ onMounted(async () => {
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="language_id"
                                 :selectedItem="breakingNews?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('common.placeholders.selectLanguage')" />
@@ -183,7 +183,7 @@ onMounted(async () => {
                                 {{ t('common.labels.news') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="news_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="news_id"
                                 :selectedItem="saveForm.news_id ? breakingNews?.news : null" :apiUrl="newsApiUrl"
                                 :error="saveForm.errors.news_id" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"

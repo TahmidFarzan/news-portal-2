@@ -2,8 +2,8 @@
 import { computed, ref, watch } from 'vue'
 
 import ListCard from '@/Components/common/news/ListCard.vue'
-import ModelPagination from '@/components/common/model/Pagination.vue'
-import CursorPagination from '@/components/common/model/CursorPagination.vue'
+import ModelPagination from '@/components/common/pagination/Pagination.vue'
+import CursorPagination from '@/components/common/pagination/CursorPagination.vue'
 import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()

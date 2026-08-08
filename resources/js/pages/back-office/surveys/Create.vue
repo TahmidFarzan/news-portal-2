@@ -6,8 +6,8 @@ import { useTranslate } from "@/composables/useTranslate";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library as FontAwesomeLibrary } from "@fortawesome/fontawesome-svg-core";
 import { faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import SelectInfinityLoadingApi from "@/components/common/multi-select/SelectInfinityLoadingApi.vue";
-import CreateUpdateSurveyQuestionTableBySurvey from "@/components/back-office/survey-question/CreateUpdateSurveyQuestionTableBySurvey.vue";
+import InfiniteScrollApiSelect from "@/components/common/multi-select/InfiniteScrollApiSelect.vue";
+import SurveyQuestionManager from "@/components/back-office/survey-question/SurveyQuestionManager.vue";
 import { formatDate } from "@/composables/useDateTime";
 
 FontAwesomeLibrary.add(faSave, faSpinner);
@@ -204,7 +204,7 @@ onMounted(async () => {
                                 {{ t("common.labels.language") }}
                                 <span class="text-red-500">*</span>
                             </label>
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="language_id"
                                 :selectedItem="survey?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('common.placeholders.selectLanguage')" />
@@ -302,7 +302,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <CreateUpdateSurveyQuestionTableBySurvey :survey="survey" :isUpdate="isUpdate"
+                <SurveyQuestionManager :survey="survey" :isUpdate="isUpdate"
                     :surveySaveForm="saveForm" />
 
                 <div class="flex justify-center">

@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
-import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
@@ -457,7 +457,7 @@ onBeforeUnmount(() => {
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsence v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

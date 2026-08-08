@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
-import GoogleAdsence from '@/components/common/util/GoogleAdsence.vue'
+import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
@@ -49,11 +49,11 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
     </Head>
 
     <div class="static-page space-y-6">
-        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.TOP" />
+        <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.TOP" />
 
         <article v-if="page?.body" class="page-content prose max-w-none" v-html="page.body" />
 
-        <GoogleAdsence v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+        <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </div>
 </template>
 

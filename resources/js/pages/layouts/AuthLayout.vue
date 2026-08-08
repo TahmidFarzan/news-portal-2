@@ -1,8 +1,8 @@
 <script setup>
-import OffcanvasMenu from '@/components/common/layout/auth-layout/OffcanvasMenu.vue'
+import OffCanvasMenu from '@/components/common/layout/auth-layout/OffCanvasMenu.vue'
 import Breadcrumbs from '@/components/common/layout/auth-layout/Breadcrumbs.vue'
 import AuthTopbarDropdownMenu from '@/components/common/layout/auth-layout/AuthTopbarDropdownMenu.vue'
-import ToasterMessage from '@/components/common/layout/ToasterMessage.vue'
+import FlashMessageToaster from '@/components/common/layout/FlashMessageToaster.vue'
 
 import { usePage } from '@inertiajs/vue3'
 import { computed, provide } from 'vue'
@@ -38,7 +38,7 @@ provide('authUser', authUser)
                 <div class="flex items-center gap-3">
 
                     <!-- OFFCANVAS (trigger) -->
-                    <OffcanvasMenu mode="trigger" :auth-user="authUser" />
+                    <OffCanvasMenu mode="trigger" :auth-user="authUser" />
 
                     <!-- USER MENU -->
                     <AuthTopbarDropdownMenu :auth-user="authUser" />
@@ -50,7 +50,7 @@ provide('authUser', authUser)
         <main class="main flex-1 flex pt-16">
 
 
-            <OffcanvasMenu mode="sidebar" :auth-user="authUser" />
+            <OffCanvasMenu mode="sidebar" :auth-user="authUser" />
 
             <div class="flex-1 p-4 min-w-0">
 
@@ -87,7 +87,7 @@ provide('authUser', authUser)
             </div>
         </footer>
 
-        <ToasterMessage :flash-message="flashMessage" />
+        <FlashMessageToaster :flash-message="flashMessage" />
 
     </div>
 </template>

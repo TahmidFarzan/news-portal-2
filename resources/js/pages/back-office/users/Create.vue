@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import SelectByGroupApi from '@/components/common/multi-select/SelectByGroupApi.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
+import ApiGroupedSelect from '@/components/common/multi-select/ApiGroupedSelect.vue'
 
 import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -229,7 +229,7 @@ onMounted(async () => {
                                     class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="gender"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="gender"
                                 :selectedItem="saveForm.gender" :apiUrl="route('search.genders')" :multiple="false"
                                 :placeholder="t('common.actions.select')"
                                 :error="saveForm.errors.gender" />
@@ -245,7 +245,7 @@ onMounted(async () => {
                                     class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="religion"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="religion"
                                 :selectedItem="saveForm.religion" :apiUrl="route('search.religions')" :multiple="false"
                                 :placeholder="t('common.actions.select')"
                                 :error="saveForm.errors.religion" />
@@ -261,7 +261,7 @@ onMounted(async () => {
                                     class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="marital_status"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="marital_status"
                                 :selectedItem="saveForm.marital_status" :apiUrl="route('search.marital-statuses')"
                                 :multiple="false" :placeholder="t('common.actions.select')"
                                 :error="saveForm.errors.marital_status" />
@@ -318,7 +318,7 @@ onMounted(async () => {
                     </div>
 
                     <div v-if="!saveForm.is_super_admin">
-                        <SelectByGroupApi :selectedItem="saveForm.user_permission_ids" fieldName="user_permission_ids"
+                        <ApiGroupedSelect :selectedItem="saveForm.user_permission_ids" fieldName="user_permission_ids"
                             :form="saveForm" :apiUrl="route('search.user-permissions-by-group')" apiLabelKey="access"
                             apiValueKey="id" :isRequired="!saveForm?.is_super_admin"
                             :defaultLabel="t('common.labels.userPermisssion')" />

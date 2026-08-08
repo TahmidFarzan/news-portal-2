@@ -6,8 +6,8 @@ import { useTranslate } from "@/composables/useTranslate";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library as FontAwesomeLibrary } from "@fortawesome/fontawesome-svg-core";
 import { faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import SelectInfinityLoadingApi from "@/components/common/multi-select/SelectInfinityLoadingApi.vue";
-import CreateUpdateQuizQuestionTableByQuiz from "@/components/back-office/quiz-question/CreateUpdateQuizQuestionTableByQuiz.vue";
+import InfiniteScrollApiSelect from "@/components/common/multi-select/InfiniteScrollApiSelect.vue";
+import QuizQuestionManager from "@/components/back-office/quiz-question/QuizQuestionManager.vue";
 import { formatDate } from "@/composables/useDateTime";
 import { quizQuestionAnswerTypes } from "@/composables/useQuiz";
 
@@ -301,7 +301,7 @@ onMounted(async () => {
                                 {{ t("common.labels.language") }}
                                 <span class="text-red-500">*</span>
                             </label>
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="language_id"
                                 :selectedItem="quiz?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('common.placeholders.selectLanguage')" />
@@ -461,7 +461,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <CreateUpdateQuizQuestionTableByQuiz :quiz="quiz" :isUpdate="isUpdate" :quizSaveForm="saveForm" />
+                <QuizQuestionManager :quiz="quiz" :isUpdate="isUpdate" :quizSaveForm="saveForm" />
 
                 <div class="flex justify-center">
                     <button type="submit" :disabled="saveForm.processing"

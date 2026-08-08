@@ -16,7 +16,7 @@
 import { computed, inject, ref } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
 import tinymce from 'tinymce/tinymce'
-import SelectMediaFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
+import SelectMediaFromMediaLibery from '@/components/common/media/MediaLibrarySelector.vue'
 import axios from 'axios'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTranslate } from '@/composables/useTranslate'
@@ -245,4 +245,3 @@ const handleMediaSelected = (selected) => {
     })
 }
 </script>
-

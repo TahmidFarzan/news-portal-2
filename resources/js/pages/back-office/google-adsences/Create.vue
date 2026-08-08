@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
+import TaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import MediaRenderer from '@/components/common/media/MediaRenderer.vue'
 
 import { computed, onMounted, nextTick, ref } from 'vue'
@@ -174,7 +174,7 @@ onMounted(async () => {
                                 {{ t('common.labels.position') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="position"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="position"
                                 :selectedItem="googleAdsence?.position" :apiUrl="route('search.google-adsence-positions')"
                                 :error="saveForm.errors.position" :multiple="false"
                                 :placeholder="t('common.placeholders.selectPosition')" />
@@ -189,7 +189,7 @@ onMounted(async () => {
                                 {{ t('common.labels.type') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="type"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="type"
                                 :selectedItem="googleAdsence?.type" :apiUrl="route('search.google-adsence-types')"
                                 :error="saveForm.errors.type" :multiple="false"
                                 :placeholder="t('admin.googleAdsences.create.form.typePlaceholder')" />

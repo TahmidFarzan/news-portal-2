@@ -1,9 +1,9 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
-import SelectTaggable from '@/components/common/multi-select/SelectTaggable.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
+import TaggableSelect from '@/components/common/multi-select/TaggableSelect.vue'
 import Editor from '@/components/common/tinymce/Editor.vue'
-import MediaSelectFromMediaLibery from '@/components/common/media/MediaSelectFromMediaLibery.vue'
+import MediaLibrarySelector from '@/components/common/media/MediaLibrarySelector.vue'
 import NewsImageGalleryGrid from '@/components/back-office/news/NewsImageGalleryGrid.vue'
 import NewsImageGalleryDraftGrid from '@/components/back-office/news/NewsImageGalleryDraftGrid.vue'
 
@@ -332,7 +332,7 @@ onMounted(async () => {
                                 {{ t('common.labels.newsType') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="news_type_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="news_type_id"
                                 :selectedItem="news?.news_type" :apiUrl="route('search.news-types')"
                                 :error="saveForm.errors.news_type_id" :multiple="false"
                                 :placeholder="t('admin.news.create.form.newsTypePlaceholder')" />
@@ -347,7 +347,7 @@ onMounted(async () => {
                                 {{ t('common.labels.language') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="language_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="language_id"
                                 :selectedItem="news?.language" :apiUrl="route('search.languages')"
                                 :error="saveForm.errors.language_id" :multiple="false"
                                 :placeholder="t('common.placeholders.selectLanguage')" />
@@ -362,7 +362,7 @@ onMounted(async () => {
                                 {{ t('common.labels.category') }} <span class="text-red-500">*</span>
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="category_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="category_id"
                                 :selectedItem="saveForm.category_id ? news?.category : null" :apiUrl="categoryApiUrl"
                                 :error="saveForm.errors.category_id" selectedLabelKey="indentation_name"
                                 selectedValueKey="id" apiLabelKey="indentation_name" apiValueKey="id" :multiple="false"
@@ -378,7 +378,7 @@ onMounted(async () => {
                                 {{ t('common.labels.event') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="event_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="event_id"
                                 :selectedItem="saveForm.event_id ? news?.event : null" :apiUrl="eventApiUrl"
                                 :error="saveForm.errors.event_id" :multiple="false"
                                 :placeholder="t('admin.news.create.form.eventPlaceholder')" />
@@ -393,7 +393,7 @@ onMounted(async () => {
                                 {{ t('common.labels.location') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="location_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="location_id"
                                 :selectedItem="saveForm.location_id ? news?.location : null" :apiUrl="locationApiUrl"
                                 :error="saveForm.errors.location_id" :multiple="false"
                                 selectedLabelKey="indentation_name" selectedValueKey="id" apiLabelKey="indentation_name"
@@ -503,7 +503,7 @@ onMounted(async () => {
                                 {{ t('common.labels.tags') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="tag_ids"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="tag_ids"
                                 :selectedItem="saveForm.tag_ids ? news?.tags : null" :apiUrl="tagApiUrl"
                                 :error="saveForm.errors.tag_ids" :multiple="true"
                                 :placeholder="t('admin.news.create.form.tagsPlaceholder')" />
@@ -521,7 +521,7 @@ onMounted(async () => {
                                     {{ t('common.labels.featureImage') }} <span class="text-red-500">*</span>
                                 </label>
 
-                                <MediaSelectFromMediaLibery :galleryTitle="t('common.labels.featureImage')"
+                                <MediaLibrarySelector :galleryTitle="t('common.labels.featureImage')"
                                     :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
                                     @media-selected="handleSelectedFeatureImage" />
                             </div>
@@ -555,7 +555,7 @@ onMounted(async () => {
                                     {{ t('common.labels.mobileFeatureImage') }}
                                 </label>
 
-                                <MediaSelectFromMediaLibery :galleryTitle="t('common.labels.mobileFeatureImage')"
+                                <MediaLibrarySelector :galleryTitle="t('common.labels.mobileFeatureImage')"
                                     :fetchUrl="route('search.medias')" mediaType="image" :multiple="false"
                                     @media-selected="handleSelectedThumbnail" />
                             </div>
@@ -585,7 +585,7 @@ onMounted(async () => {
                                 {{ t('common.labels.contributors') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="contributor_ids"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="contributor_ids"
                                 :selectedItem="saveForm.contributor_ids ? news?.contributors : null"
                                 :apiUrl="contributorApiUrl" :error="saveForm.errors.contributor_ids" :multiple="true"
                                 :placeholder="t('admin.news.create.form.contributorsPlaceholder')" />
@@ -612,7 +612,7 @@ onMounted(async () => {
                                 {{ t('common.labels.relevantNews') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="relevant_news_ids"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="relevant_news_ids"
                                 :selectedItem="news?.relevant_news || null" :apiUrl="relevantOrRelatedNewsApiUrl"
                                 :error="saveForm.errors.relevant_news_ids" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
@@ -624,7 +624,7 @@ onMounted(async () => {
                                 {{ t('common.labels.relatedNews') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="related_news_ids"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="related_news_ids"
                                 :selectedItem="news?.related_news || null" :apiUrl="relevantOrRelatedNewsApiUrl"
                                 :error="saveForm.errors.related_news_ids" selectedLabelKey="title_with_published_at"
                                 selectedValueKey="id" apiLabelKey="title_with_published_at" apiValueKey="id"
@@ -636,7 +636,7 @@ onMounted(async () => {
                                 {{ t('common.messages.breakingNews') }}
                             </label>
 
-                            <SelectInfinityLoadingApi :form="saveForm" fieldName="breaking_news_id"
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="breaking_news_id"
                                 :selectedItem="news?.breaking_news || null" :apiUrl="breakingNewsApiUrl"
                                 :error="saveForm.errors.breaking_news_id" selectedLabelKey="title" selectedValueKey="id"
                                 apiLabelKey="title" apiValueKey="id" :multiple="false"
@@ -732,7 +732,7 @@ onMounted(async () => {
                                 {{ t('common.labels.seoKeywords') }}
                             </label>
 
-                            <SelectTaggable :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
+                            <TaggableSelect :key="seoKeywordsKey" :selectedItem="saveForm.seo_keywords"
                                 fieldName="seo_keywords" :form="saveForm" :error="saveForm.errors.seo_keywords"
                                 :placeholder="t('common.placeholders.addKeywords')" />
                         </div>

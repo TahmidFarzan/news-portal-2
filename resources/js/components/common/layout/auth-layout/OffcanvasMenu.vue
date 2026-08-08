@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import OffcanvasMenuItems from '@/components/common/layout/auth-layout/OffcanvasMenuItems.vue'
+import OffCanvasMenuItems from '@/components/common/layout/auth-layout/OffCanvasMenuItems.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -90,7 +90,7 @@ onBeforeUnmount(() => {
                     </div>
 
                     <div class="flex-1 min-h-0 overflow-y-auto">
-                        <OffcanvasMenuItems :auth-user="authUser" @navigate="closeOffcanvasSidebar" />
+                        <OffCanvasMenuItems :auth-user="authUser" @navigate="closeOffcanvasSidebar" />
                     </div>
                 </aside>
             </Transition>
@@ -99,7 +99,7 @@ onBeforeUnmount(() => {
 
     <aside v-if="isSidebarMode" class="w-64 border-r border-gray-200 bg-white hidden md:block flex-shrink-0">
         <div class="p-3 sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto">
-            <OffcanvasMenuItems :auth-user="authUser" />
+            <OffCanvasMenuItems :auth-user="authUser" />
         </div>
     </aside>
 </template>

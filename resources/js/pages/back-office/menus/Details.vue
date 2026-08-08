@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
-import MenuItems from '@/components/back-office/menu/MenuItems.vue'
+import MenuItemTable from '@/components/back-office/menu/MenuItemTable.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as inertiaJsRouter } from '@inertiajs/vue3'
@@ -129,7 +129,7 @@ onMounted(async () => {
                     </a>
                 </div>
 
-                <MenuItems :menu="menu" />
+                <MenuItemTable :menu="menu" />
             </div>
         </div>
 

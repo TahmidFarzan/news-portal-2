@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
-import ModelPagination from '@/components/common/model/Pagination.vue'
-import SelectInfinityLoadingApi from '@/components/common/multi-select/SelectInfinityLoadingApi.vue'
+import ModelPagination from '@/components/common/pagination/Pagination.vue'
+import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRouter } from '@inertiajs/vue3'
@@ -165,7 +165,7 @@ onMounted(async () => {
         >
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                <SelectInfinityLoadingApi
+                <InfiniteScrollApiSelect
                     :form="filterForm"
                     fieldName="per_page"
                     :selectedItem="filterForm.per_page"
@@ -174,7 +174,7 @@ onMounted(async () => {
                     :placeholder="t('common.labels.perPage')"
                 />
 
-                <SelectInfinityLoadingApi
+                <InfiniteScrollApiSelect
                     :form="filterForm"
                     fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id"
@@ -183,7 +183,7 @@ onMounted(async () => {
                     :placeholder="t('common.labels.createdBy')"
                 />
 
-                <SelectInfinityLoadingApi
+                <InfiniteScrollApiSelect
                     :form="filterForm"
                     fieldName="language_id"
                     :selectedItem="filterForm.language_id"
@@ -192,7 +192,7 @@ onMounted(async () => {
                     :placeholder="t('common.labels.language')"
                 />
 
-                <SelectInfinityLoadingApi
+                <InfiniteScrollApiSelect
                     :form="filterForm"
                     fieldName="model_type"
                     :selectedItem="filterForm.model_type"
