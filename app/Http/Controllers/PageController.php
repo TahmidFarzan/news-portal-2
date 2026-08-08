@@ -104,7 +104,7 @@ class PageController extends Controller
         $language = $this->pageService->defaultLanguage();
 
         $quiz         = $this->pageService->homeQuiz($language, $slug);
-        $previousQuiz         = $this->pageService->homePreviousQuiz($language);
+        $previousQuiz         = $this->pageService->homeQuizPrevious($language);
         $previousQuizWinnerResults         = $this->pageService->homeQuizWinnserResultsByQuiz($language, $previousQuiz);
 
         return Inertia::render('QuizDetails', [
@@ -438,7 +438,7 @@ class PageController extends Controller
         $language = $this->pageService->language($languageCode);
 
         $quiz         = $this->pageService->homeQuiz($language, $slug);
-        $previousQuiz         = $this->pageService->homePreviousQuiz($language);
+        $previousQuiz         = $this->pageService->homeQuizPrevious($language);
         $previousQuizWinnerResults         = $this->pageService->homeQuizWinnserResultsByQuiz($language, $previousQuiz);
 
         return Inertia::render('QuizDetails', [

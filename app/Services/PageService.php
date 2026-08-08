@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Helpers\CacheHelper;
+use App\Helpers\SessionHelper;
 use App\Helpers\EventHelper;
 use App\Helpers\PageHelper;
 use App\Models\Category;
@@ -521,11 +522,151 @@ class PageService
         );
     }
 
+    public function homeSurveySurveyQuestionSubmit(Request $request, Survey $survey, SurveyQuestion $surveyQuestion): array
+    {
+        $yes = $request->boolean('yes');
+        $no = $request->boolean('no');
+        $noComment = $request->boolean('no_comment');
+        if (! $yes && ! $no && ! $noComment) {
+            return [
+                'status' => 'warning',
+                'message' => __(
+                    'status-messages.site.survey.survey-question.no_answer_selected_warning'
+                ),
+                'data' => null,
+            ];
+        }
+        $answer = null;
+        if ($yes) {
+            $answer = 'yes';
+        } elseif ($no) {
+            $answer = 'no';
+        } else {
+            $answer = 'no_comment';
+        }
+        $sessionId  = session()->getId();
+        $sessionKey = SessionHelper::sessionKeyGenerateSubmitSurveyQuiestion($sessionId, $survey->id, $surveyQuestion->id);
+        $previousData = session()->get($sessionKey);
+        try {
+            $surveyQuestionResult = DB::transaction(function () use ($surveyQuestion, $answer, $previousData, $sessionKey, $survey) {
+                $surveyQuestionResult = SurveyQuestionResult::query()->firstOrCreate(
+                    [
+                        'survey_question_id' => $surveyQuestion->id,
+                    ],
+                    [
+                        'yes' => 0,
+                        'no' => 0,
+                        'no_comment' => 0,
+                    ]
+                );
+                $previousAnswer = $previousData['answer'] ?? null;
+                if ($previousAnswer && $previousAnswer !== $answer) {
+                    if ($previousAnswer === 'yes' && $surveyQuestionResult->yes > 0) {
+                        $surveyQuestionResult->decrement('yes');
+                    }
+                    if ($previousAnswer === 'no' && $surveyQuestionResult->no > 0) {
+                        $surveyQuestionResult->decrement('no');
+                    }
+                    if ($previousAnswer === 'no_comment' && $surveyQuestionResult->no_comment > 0) {
+                        $surveyQuestionResult->decrement('no_comment');
+                    }
+                }
+                if ($previousAnswer !== $answer) {
+                    $surveyQuestionResult->increment($answer);
+                }
+                $surveyQuestionResult->refresh();
+                session()->put(
+                    $sessionKey,
+                    [
+                        'survey_id' => $survey->id,
+                        'survey_question_id' => $surveyQuestion->id,
+                        'answer' => $answer,
+                        'expired_at' => now()->addHours(6)->timestamp,
+                    ]
+                );
+                return $surveyQuestionResult;
+            });
+            $resultData = [
+                'yes' => (int) $surveyQuestionResult->yes,
+                'no' => (int) $surveyQuestionResult->no,
+                'no_comment' => (int) $surveyQuestionResult->no_comment,
+                'participate_count' => (int) ($surveyQuestionResult->yes + $surveyQuestionResult->no + $surveyQuestionResult->no_comment),
+            ];
+            return [
+                'status' => 'success',
+                'message' => __('status-messages.site.survey.survey-question.success'),
+                'data' => array_merge(
+                    session()->get($sessionKey) ?? [],
+                    ['result' => $resultData]
+                ),
+            ];
+        } catch (Exception $exception) {
+            Log::error('Failed to submit survey question.', ['exception' => $exception]);
+            return [
+                'status' => 'error',
+                'message' => __('status-messages.site.survey.survey-question.fail'),
+                'data' => null,
+            ];
+        }
+    }
+
+    public function homeQuizzes(Language $language, Request $request): Collection
+    {
+        return $this->quizCacheService->getQuizzesByDate(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            now()->toDateString(),
+            $request,
+            $this->cachedTTL
+        );
+    }
+
+    public function homeQuiz(Language $language, string $slug): Quiz
+    {
+        return $this->quizCacheService->getQuizBySlug(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            $slug,
+            $this->cachedTTL
+        );
+    }
+
+    public function homeQuizPrevious(Language $language): Quiz|null
+    {
+        return $this->quizCacheService->getPreviousQuiz(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            now()->toDateString(),
+            $this->cachedTTL
+        );
+    }
+
+    public function homeQuizWinnserResultsByQuiz(Language $language, Quiz $quiz)
+    {
+        return $this->quizCacheService->getQuizWinnerResultsByQuiz(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            $quiz,
+            $this->cachedTTL
+        );
+    }
+
+    public function homeQuizQuestions(Language $language, Quiz $quiz, Request $request): LengthAwarePaginator
+    {
+        return $this->quizCacheService->getQuizQuestionsByQuiz(
+            CacheHelper::KEY_PAGE_HOME,
+            $language,
+            $quiz,
+            $request,
+            $this->cachedTTL
+        );
+    }
+
     public function homeQuizSubmit(Quiz $quiz, QuizSubmitRequest $request): array
     {
         try {
             $sessionId  = session()->getId();
-            $sessionKey = "quizzes_submit_{$sessionId}";
+            $sessionKey = SessionHelper::sessionKeyGenerateSubmitQuiz($sessionId);
 
             $submittedQuizzes = session()->get($sessionKey, []);
 
@@ -717,153 +858,6 @@ class PageService
             ];
         }
     }
-
-    public function homeQuizzes(Language $language, Request $request): Collection
-    {
-        return $this->quizCacheService->getQuizzesByDate(
-            CacheHelper::KEY_PAGE_HOME,
-            $language,
-            now()->toDateString(),
-            $request,
-            $this->cachedTTL
-        );
-    }
-
-    public function homeQuiz(Language $language, string $slug): Quiz
-    {
-        return $this->quizCacheService->getQuizBySlug(
-            CacheHelper::KEY_PAGE_HOME,
-            $language,
-            $slug,
-            $this->cachedTTL
-        );
-    }
-
-    public function homePreviousQuiz(Language $language): Quiz|null
-    {
-        return $this->quizCacheService->getPreviousQuiz(
-            CacheHelper::KEY_PAGE_HOME,
-            $language,
-            now()->toDateString(),
-            $this->cachedTTL
-        );
-    }
-
-    public function homeQuizWinnserResultsByQuiz(Language $language, Quiz $quiz)
-    {
-        return $this->quizCacheService->getQuizWinnerResultsByQuiz(
-            CacheHelper::KEY_PAGE_HOME,
-            $language,
-            $quiz,
-            $this->cachedTTL
-        );
-    }
-
-    public function homeQuizQuestions(Language $language, Quiz $quiz, Request $request): LengthAwarePaginator
-    {
-        return $this->quizCacheService->getQuizQuestionsByQuiz(
-            CacheHelper::KEY_PAGE_HOME,
-            $language,
-            $quiz,
-            $request,
-            $this->cachedTTL
-        );
-    }
-
-    public function homeSurveySurveyQuestionSubmit(Request $request, Survey $survey, SurveyQuestion $surveyQuestion): array
-    {
-        $yes       = $request->boolean('yes');
-        $no        = $request->boolean('no');
-        $noComment = $request->boolean('no_comment');
-
-        if (! $yes && ! $no && ! $noComment) {
-            return [
-                'status'  => 'warning',
-                'message' => __(
-                    'status-messages.site.survey.survey-question.no_answer_selected_warning'
-                ),
-                'data'    => null,
-            ];
-        }
-
-        $answer = null;
-
-        if ($yes) {
-            $answer = 'yes';
-        } elseif ($no) {
-            $answer = 'no';
-        } else {
-            $answer = 'no_comment';
-        }
-
-        $sessionKey = "survey.{$survey->id}.question.{$surveyQuestion->id}";
-
-        $previousData = session()->get($sessionKey);
-
-        try {
-
-            DB::transaction(function () use ($surveyQuestion, $answer, $previousData, $sessionKey, $survey) {
-
-                $surveyQuestionResult = SurveyQuestionResult::query()->firstOrCreate(
-                    [
-                        'survey_question_id' => $surveyQuestion->id,
-                    ],
-                    [
-                        'yes'        => 0,
-                        'no'         => 0,
-                        'no_comment' => 0,
-                    ]
-                );
-
-                $previousAnswer = $previousData['answer'] ?? null;
-
-                if ($previousAnswer && $previousAnswer !== $answer) {
-
-                    if ($previousAnswer === 'yes' && $surveyQuestionResult->yes > 0) {
-                        $surveyQuestionResult->decrement('yes');
-                    }
-
-                    if ($previousAnswer === 'no' && $surveyQuestionResult->no > 0) {
-                        $surveyQuestionResult->decrement('no');
-                    }
-
-                    if ($previousAnswer === 'no_comment' && $surveyQuestionResult->no_comment > 0) {
-                        $surveyQuestionResult->decrement('no_comment');
-                    }
-                }
-
-                if ($previousAnswer !== $answer) {
-                    $surveyQuestionResult->increment($answer);
-                }
-
-                session()->put(
-                    $sessionKey,
-                    [
-                        'survey_id'          => $survey->id,
-                        'survey_question_id' => $surveyQuestion->id,
-                        'answer'             => $answer,
-                        'expired_at'         => now()->addHours(6)->timestamp,
-                    ]
-                );
-            });
-
-            return [
-                'status'  => 'success',
-                'message' => __('status-messages.site.survey.survey-question.success'),
-                'data'    => session()->get($sessionKey),
-            ];
-        } catch (Exception $exception) {
-
-            Log::error('Failed to submit survey question.', ['exception' => $exception]);
-
-            return [
-                'status'  => 'error',
-                'message' => __('status-messages.site.survey.survey-question.fail'),
-                'data'    => null,
-            ];
-        }
-    }
-
 
     public function newsHitCounterCalculate(News $news): void
     {
