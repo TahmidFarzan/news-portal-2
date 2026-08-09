@@ -8,7 +8,7 @@ import NewsByline from '@/components/common/news/NewsByline.vue'
 import NewsHeadline from '@/components/common/news/NewsHeadline.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 import NewsBody from '@/components/common/news/NewsBody.vue'
-import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
+import GoogleAdsense from '@/components/common/advertising/GoogleAdsense.vue'
 
 import { computed,inject } from 'vue'
 import { formatDateTime } from '@/composables/useDateTime'
@@ -20,7 +20,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
 
 FontAwesomeLibrary.add(
     faClock
@@ -72,7 +72,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
         <NewsBody v-if="news?.body" class="prose prose-lg max-w-none" :news="news"/>
 
-        <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

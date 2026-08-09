@@ -467,7 +467,7 @@
                 "searchPlaceholder": "ইভেন্ট অনুসন্ধান..."
             }
         },
-        "googleAdsences": {
+        "googleAdsenses": {
             "create": {
                 "form": {
                     "createPageTitle": "গুগল অ্যাডসেন্স তৈরি করুন",

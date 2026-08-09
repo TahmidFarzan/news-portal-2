@@ -17,9 +17,9 @@ class ThemeProvider extends ServiceProvider
         View::composer('app', function ($view) {
             $themeHeader = app(SiteService::class)->themeHeader();
             $themeBody = app(SiteService::class)->themeBody();
-            $themeGoogleAdCLientId = app(SiteService::class)->themeGoogleAdCLientId();
+            $themeGoogleAdsenseClientId = app(SiteService::class)->themeGoogleAdsenseClientId();
 
-            $view->with(compact('themeHeader','themeBody','themeGoogleAdCLientId'));
+            $view->with(compact('themeHeader','themeBody','themeGoogleAdsenseClientId'));
         });
     }
 }

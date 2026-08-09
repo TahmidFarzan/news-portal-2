@@ -4,10 +4,10 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
-import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
+import GoogleAdsense from '@/components/common/advertising/GoogleAdsense.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
 
 
 defineOptions({ layout: Layout })
@@ -66,7 +66,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         <List :news="news" pagination-type="Cursor" />
     </div>
 
-    <GoogleAdSense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+    <GoogleAdsense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
 </template>
 
 <style scoped>

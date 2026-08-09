@@ -8,7 +8,7 @@ use App\Http\Controllers\BackOffice\BreakingNewsController;
 use App\Http\Controllers\BackOffice\CategoryController;
 use App\Http\Controllers\BackOffice\ContributorController;
 use App\Http\Controllers\BackOffice\EventController;
-use App\Http\Controllers\BackOffice\GoogleAdsenceController;
+use App\Http\Controllers\BackOffice\GoogleAdsenseController;
 use App\Http\Controllers\BackOffice\LanguageController;
 use App\Http\Controllers\BackOffice\LocationController;
 use App\Http\Controllers\BackOffice\MediaController;
@@ -101,8 +101,8 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('user-permissions-by-group', [SearchController::class, 'userPermissionsByGroup'])->name('user-permissions-by-group');
         Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
 
-        Route::get('google-adsence-types', [SearchController::class, 'googleAdsenceTypes'])->name('google-adsence-types');
-        Route::get('google-adsence-positions', [SearchController::class, 'googleAdsencePositions'])->name('google-adsence-positions');
+        Route::get('google-adsense-types', [SearchController::class, 'googleAdsenseTypes'])->name('google-adsense-types');
+        Route::get('google-adsense-positions', [SearchController::class, 'googleAdsensePositions'])->name('google-adsense-positions');
         Route::get('quiz-question-answer-types', [SearchController::class, 'quizQuestionAnswerTypes'])->name('quiz-question-answer-types');
     });
 
@@ -322,15 +322,15 @@ Route::prefix('back-office')->name('back-office.')->middleware(['auth', 'verifie
         Route::patch('set-as-default/{slug}', [LanguageController::class, 'setAsDefault'])->name('set-as-default');
     });
 
-    Route::prefix('google-adsences')->name('google-adsences.')->group(function () {
-        Route::get('/', [GoogleAdsenceController::class, 'index'])->name('index');
-        Route::get('create', [GoogleAdsenceController::class, 'create'])->name('create');
-        Route::get('edit/{slug}', [GoogleAdsenceController::class, 'edit'])->name('edit');
-        Route::get('details/{slug}', [GoogleAdsenceController::class, 'details'])->name('details');
+    Route::prefix('google-adsenses')->name('google-adsenses.')->group(function () {
+        Route::get('/', [GoogleAdsenseController::class, 'index'])->name('index');
+        Route::get('create', [GoogleAdsenseController::class, 'create'])->name('create');
+        Route::get('edit/{slug}', [GoogleAdsenseController::class, 'edit'])->name('edit');
+        Route::get('details/{slug}', [GoogleAdsenseController::class, 'details'])->name('details');
 
-        Route::post('save', [GoogleAdsenceController::class, 'save'])->name('save');
-        Route::patch('update/{slug}', [GoogleAdsenceController::class, 'update'])->name('update');
-        Route::delete('delete/{slug}', [GoogleAdsenceController::class, 'delete'])->name('delete');
+        Route::post('save', [GoogleAdsenseController::class, 'save'])->name('save');
+        Route::patch('update/{slug}', [GoogleAdsenseController::class, 'update'])->name('update');
+        Route::delete('delete/{slug}', [GoogleAdsenseController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('surveys')->name('surveys.')->group(function () {
@@ -623,7 +623,7 @@ Route::prefix('site')->name('site.')->group(function () {
 
     Route::get('themes', [SiteController::class, 'themes'])->name('themes');
     Route::get('languages', [SiteController::class, 'languages'])->name('languages');
-    Route::get('google-adsences', [SiteController::class, 'getGoogleAdsence'])->name('google-adsences');
+    Route::get('google-adsenses', [SiteController::class, 'getGoogleAdsense'])->name('google-adsenses');
 
     Route::get('breaking-news', [SiteController::class, 'breakingNews'])->name('breaking-news');
 

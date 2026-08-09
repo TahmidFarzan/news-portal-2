@@ -11,7 +11,7 @@ import {
 
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
 
 const props = defineProps({
     type: {
@@ -125,7 +125,7 @@ const getCacheParamsKey = (params = {}) => {
 }
 
 const fetchAds = async () => {
-    const apiUrl = route('site.google-adsences')
+    const apiUrl = route('site.google-adsenses')
 
     const params = {
         type: type.value,
@@ -138,8 +138,8 @@ const fetchAds = async () => {
         apiUrl,
         params,
         {
-            key: `${apiCacheKey.API_SITE_GOOGLE_ADSENCE}:${apiUrl}:${cacheParamsKey}`,
-            ttl: apiCacheTTL.GOOGLE_ADSENCE,
+            key: `${apiCacheKey.API_SITE_GOOGLE_ADSENSE}:${apiUrl}:${cacheParamsKey}`,
+            ttl: apiCacheTTL.GOOGLE_ADSENSE,
         }
     )
 

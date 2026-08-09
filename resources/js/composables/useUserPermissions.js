@@ -9,7 +9,7 @@ export const groups = {
     Category: 'Category',
     Contributor: 'Contributor',
     Event: 'Event',
-    GoogleAdSense: 'Google adsence',
+    GoogleAdsense: 'Google adsense',
     Location: 'Location',
     Language: 'Language',
     Menu: 'Menu',
@@ -204,10 +204,10 @@ export const canUpdateTheme = async (authUser, theme) => hasPermission(authUser,
 export const canAccessLanguage = async (authUser) => hasPermission(authUser, groups.Language, access.ViewAny)
 export const canUpdateLanguage = async (authUser, language) => hasPermission(authUser, groups.Language, access.Update)
 
-export const canAccessGoogleAdsence = async (authUser) => hasPermission(authUser, groups.GoogleAdSense, access.ViewAny)
-export const canCreateGoogleAdsence = async (authUser) => hasPermission(authUser, groups.GoogleAdSense, access.Create)
-export const canUpdateGoogleAdsence = async (authUser, googleAdsence) => hasPermission(authUser, groups.GoogleAdSense, access.Update)
-export const canDeleteGoogleAdsence = async (authUser, googleAdsence) => hasPermission(authUser, groups.GoogleAdSense, access.Delete)
+export const canAccessGoogleAdsense = async (authUser) => hasPermission(authUser, groups.GoogleAdsense, access.ViewAny)
+export const canCreateGoogleAdsense = async (authUser) => hasPermission(authUser, groups.GoogleAdsense, access.Create)
+export const canUpdateGoogleAdsense = async (authUser, googleAdsense) => hasPermission(authUser, groups.GoogleAdsense, access.Update)
+export const canDeleteGoogleAdsense = async (authUser, googleAdsense) => hasPermission(authUser, groups.GoogleAdsense, access.Delete)
 
 export const canAccessSurvey = async (authUser) => hasPermission(authUser, groups.Survey, access.ViewAny)
 export const canCreateSurvey = async (authUser) => hasPermission(authUser, groups.Survey, access.Create)

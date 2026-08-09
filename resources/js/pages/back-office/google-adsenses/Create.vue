@@ -19,8 +19,8 @@ defineOptions({ layout: Layout })
 
 const { t } = useTranslate()
 
-const { googleAdsence } = defineProps({
-    googleAdsence: {
+const { googleAdsense } = defineProps({
+    googleAdsense: {
         type: Object,
         default: () => ({})
     },
@@ -28,20 +28,20 @@ const { googleAdsence } = defineProps({
 
 const seoKeywordsKey = ref(0)
 
-const isUpdate = computed(() => !!googleAdsence?.slug)
+const isUpdate = computed(() => !!googleAdsense?.slug)
 
 const pageTitle = computed(() => {
     return isUpdate.value
-        ? `${googleAdsence?.name} ${t('common.actions.edit')}`
-        : t('admin.googleAdsences.create.form.createPageTitle')
+        ? `${googleAdsense?.name} ${t('common.actions.edit')}`
+        : t('admin.googleAdsenses.create.form.createPageTitle')
 })
 
 const saveForm = useForm({
-    name: googleAdsence?.name || null,
-    type: googleAdsence?.type || null,
-    position: googleAdsence?.position || null,
-    slot_id: googleAdsence?.slot_id || null,
-    use_full_width_responsive: googleAdsence?.use_full_width_responsive || false,
+    name: googleAdsense?.name || null,
+    type: googleAdsense?.type || null,
+    position: googleAdsense?.position || null,
+    slot_id: googleAdsense?.slot_id || null,
+    use_full_width_responsive: googleAdsense?.use_full_width_responsive || false,
 })
 
 function validateForm() {
@@ -55,12 +55,12 @@ function validateForm() {
     }
 
     if (!saveForm.slot_id) {
-        saveForm.setError('slot_id', t('admin.googleAdsences.create.validation.slotIdIsRequired'))
+        saveForm.setError('slot_id', t('admin.googleAdsenses.create.validation.slotIdIsRequired'))
         valid = false
     }
 
     if (!saveForm.position) {
-        saveForm.setError('position', t('admin.googleAdsences.create.validation.positionIsRequired'))
+        saveForm.setError('position', t('admin.googleAdsenses.create.validation.positionIsRequired'))
         valid = false
     }
 
@@ -98,12 +98,12 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.google-adsences.update', { slug: googleAdsence?.slug }),
+            route('back-office.google-adsenses.update', { slug: googleAdsense?.slug }),
             { ...saveForm.data(), _method: 'patch' },
             requestConfig
         )
     } else {
-        saveForm.post(route('back-office.google-adsences.save'), requestConfig)
+        saveForm.post(route('back-office.google-adsenses.save'), requestConfig)
     }
 }
 
@@ -113,7 +113,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('common.messages.googleAdsense'), href: route('back-office.google-adsences.index') },
+                { text: t('common.messages.googleAdsense'), href: route('back-office.google-adsenses.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -160,7 +160,7 @@ onMounted(async () => {
                             </label>
 
                             <input v-model="saveForm.slot_id"
-                                :placeholder="t('admin.googleAdsences.create.form.slotIdPlaceholder')"
+                                :placeholder="t('admin.googleAdsenses.create.form.slotIdPlaceholder')"
                                 class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 :class="saveForm.errors.slot_id ? 'border-red-500' : 'border-gray-300'" />
 
@@ -175,7 +175,7 @@ onMounted(async () => {
                             </label>
 
                             <InfiniteScrollApiSelect :form="saveForm" fieldName="position"
-                                :selectedItem="googleAdsence?.position" :apiUrl="route('search.google-adsence-positions')"
+                                :selectedItem="googleAdsense?.position" :apiUrl="route('search.google-adsense-positions')"
                                 :error="saveForm.errors.position" :multiple="false"
                                 :placeholder="t('common.placeholders.selectPosition')" />
 
@@ -190,9 +190,9 @@ onMounted(async () => {
                             </label>
 
                             <InfiniteScrollApiSelect :form="saveForm" fieldName="type"
-                                :selectedItem="googleAdsence?.type" :apiUrl="route('search.google-adsence-types')"
+                                :selectedItem="googleAdsense?.type" :apiUrl="route('search.google-adsense-types')"
                                 :error="saveForm.errors.type" :multiple="false"
-                                :placeholder="t('admin.googleAdsences.create.form.typePlaceholder')" />
+                                :placeholder="t('admin.googleAdsenses.create.form.typePlaceholder')" />
 
                             <p v-if="saveForm.errors.type" class="text-red-500 text-sm mt-1">
                                 {{ saveForm.errors.type }}

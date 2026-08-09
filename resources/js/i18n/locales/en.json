@@ -485,7 +485,7 @@
                 "searchPlaceholder": "Search event..."
             }
         },
-        "googleAdsences": {
+        "googleAdsenses": {
             "create": {
                 "form": {
                     "createPageTitle": "Create Google AdSense",

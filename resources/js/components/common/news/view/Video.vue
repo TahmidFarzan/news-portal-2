@@ -15,9 +15,9 @@ import {
     faClock,
 } from '@fortawesome/free-solid-svg-icons'
 
-import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
+import GoogleAdsense from '@/components/common/advertising/GoogleAdsense.vue'
 
-import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
 
 FontAwesomeLibrary.add(
     faClock
@@ -100,7 +100,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </header>
 
 
-        <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

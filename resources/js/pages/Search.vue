@@ -5,7 +5,7 @@ import { Head, useForm, router as inertiaRouter } from '@inertiajs/vue3'
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
 import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
-import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
+import GoogleAdsense from '@/components/common/advertising/GoogleAdsense.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
 import { fetchFromApi } from '@/composables/useApiClient'
@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faFilter, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
 
 FontAwesomeLibrary.add(faFilter, faSpinner)
 
@@ -244,7 +244,7 @@ onMounted(async () => {
             </div>
         </form>
 
-        <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

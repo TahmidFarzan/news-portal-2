@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PageSeeder::class);
         $this->call(MenuSeeder::class);
 
-        $this->call(GoogleAdsenceSeeder::class);
+        $this->call(GoogleAdsenseSeeder::class);
         $this->call(SurveySeeder::class);
         $this->call(SurveyQuestionSeeder::class);
 

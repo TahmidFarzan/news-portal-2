@@ -3,7 +3,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Collection;
 
-class GoogleAdsenceHelper
+class GoogleAdsenseHelper
 {
     public const TYPE_SECTION = "Section";
     public const TYPE_SIDEBAR = "Sidebar";

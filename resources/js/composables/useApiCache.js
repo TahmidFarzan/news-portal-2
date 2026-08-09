@@ -29,7 +29,7 @@ export const apiCacheTTL = Object.freeze({
     LAYOUT_OFFCANVAS_MENU: 1800,
 
     // Layout
-    GOOGLE_ADSENCE: 1800,
+    GOOGLE_ADSENSE: 1800,
 
     // Page
     HOME_PAGE: 30,
@@ -73,7 +73,7 @@ export const apiCacheKey = Object.freeze({
     API_LAYOUT_LANGUAGE: "api:layout:language",
     API_LAYOUT_DEFAULT_LANGUAGE: "api:layout:default-language",
 
-    API_SITE_GOOGLE_ADSENCE: "api:site-google-adsence",
+    API_SITE_GOOGLE_ADSENSE: "api:site-google-adsense",
 
     CURSOR_PAGINATION: "cursor-pagination",
 

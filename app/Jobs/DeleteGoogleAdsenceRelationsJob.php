@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\GoogleAdsence;
+use App\Models\GoogleAdsense;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -13,20 +13,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class DeleteGoogleAdsenceRelationsJob implements ShouldQueue, ShouldBeUnique
+class DeleteGoogleAdsenseRelationsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
-    public int $googleAdsenceId;
+    public int $googleAdsenseId;
 
-    public function __construct(int $googleAdsenceId)
+    public function __construct(int $googleAdsenseId)
     {
-        $this->googleAdsenceId = $googleAdsenceId;
+        $this->googleAdsenseId = $googleAdsenseId;
     }
 
     public function uniqueId(): string
     {
-        return "delete-google_adsence-relations-{$this->googleAdsenceId}";
+        return "delete-google_adsense-relations-{$this->googleAdsenseId}";
     }
 
     public function retryAfter()
@@ -41,22 +41,22 @@ class DeleteGoogleAdsenceRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $googleAdsence = GoogleAdsence::find($this->googleAdsenceId);
+        $googleAdsense = GoogleAdsense::find($this->googleAdsenseId);
 
-        if ($googleAdsence && ($googleAdsence->activities()->exists())) {
+        if ($googleAdsense && ($googleAdsense->activities()->exists())) {
 
             try {
 
-                DB::transaction(function () use ($googleAdsence) {
-                    if ($googleAdsence->activities()->exists()) {
-                        $googleAdsence->activities()->delete();
+                DB::transaction(function () use ($googleAdsense) {
+                    if ($googleAdsense->activities()->exists()) {
+                        $googleAdsense->activities()->delete();
                     }
 
 
                 });
             } catch (Exception $ex) {
 
-                Log::error("Fail to cleanup google adsence relations.", [
+                Log::error("Fail to cleanup google adsense relations.", [
                     'exception' => $ex,
                 ]);
 

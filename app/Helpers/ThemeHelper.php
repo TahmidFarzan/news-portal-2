@@ -40,5 +40,5 @@ class ThemeHelper
     public const OPTION_GOOGLE_ANALYTIC_HEADER       = "Google Analytic Header";
     public const OPTION_GOOGLE_TAG_MANAGER_HEADER    = "Google Tag Manager Header";
     public const OPTION_GOOGLE_TAG_MANAGER_BODY      = "Google Tag Manager Body";
-    public const OPTION_GOOGLE_ADSENCE_CLIENT_ID     = "Google GoogleAdsence Client Id";
+    public const OPTION_GOOGLE_ADSENSE_CLIENT_ID     = "Google Google Adsense Client Id";
 }

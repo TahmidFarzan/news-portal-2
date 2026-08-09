@@ -1,12 +1,12 @@
 <?php
 namespace Database\Seeders;
 
-use App\Helpers\GoogleAdsenceHelper;
-use App\Models\GoogleAdsence;
+use App\Helpers\GoogleAdsenseHelper;
+use App\Models\GoogleAdsense;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class GoogleAdsenceSeeder extends Seeder
+class GoogleAdsenseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,65 +15,65 @@ class GoogleAdsenceSeeder extends Seeder
     {
         if (config('database.default') === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
-            GoogleAdsence::query()->delete();
+            GoogleAdsense::query()->delete();
             DB::statement("DELETE FROM sqlite_sequence WHERE name='ad_sences'");
             DB::statement('PRAGMA foreign_keys = ON;');
         }
 
         if (config('database.default') === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            GoogleAdsence::truncate();
+            GoogleAdsense::truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
 
         if (in_array(config('database.default'), ['pgsql', 'sqlsrv'])) {
-            GoogleAdsence::truncate();
+            GoogleAdsense::truncate();
         }
 
-        GoogleAdsence::factory()->state([
+        GoogleAdsense::factory()->state([
             'name'      => "Section Top",
-            'type'      => GoogleAdsenceHelper::TYPE_SECTION,
-            'position'  => GoogleAdsenceHelper::POSITION_TOP,
+            'type'      => GoogleAdsenseHelper::TYPE_SECTION,
+            'position'  => GoogleAdsenseHelper::POSITION_TOP,
             'slot_id'   => config("util.google-ad.test_ad_slot"),
             'client_id' => config("util.google-ad.test_client_id"),
         ])->create();
 
-        GoogleAdsence::factory()->state([
+        GoogleAdsense::factory()->state([
             'name'      => "Section Bottom",
-            'type'      => GoogleAdsenceHelper::TYPE_SECTION,
-            'position'  => GoogleAdsenceHelper::POSITION_BOTTOM,
+            'type'      => GoogleAdsenseHelper::TYPE_SECTION,
+            'position'  => GoogleAdsenseHelper::POSITION_BOTTOM,
             'slot_id'   => config("util.google-ad.test_ad_slot"),
             'client_id' => config("util.google-ad.test_client_id"),
         ])->create();
 
-        GoogleAdsence::factory()->state([
+        GoogleAdsense::factory()->state([
             'name'      => "Section Bottom",
-            'type'      => GoogleAdsenceHelper::TYPE_SECTION,
-            'position'  => GoogleAdsenceHelper::POSITION_BETWEEN,
+            'type'      => GoogleAdsenseHelper::TYPE_SECTION,
+            'position'  => GoogleAdsenseHelper::POSITION_BETWEEN,
             'slot_id'   => config("util.google-ad.test_ad_slot"),
             'client_id' => config("util.google-ad.test_client_id"),
         ])->create();
 
-        GoogleAdsence::factory()->state([
+        GoogleAdsense::factory()->state([
             'name'      => "Sidebar Top",
-            'type'      => GoogleAdsenceHelper::TYPE_SIDEBAR,
-            'position'  => GoogleAdsenceHelper::POSITION_TOP,
+            'type'      => GoogleAdsenseHelper::TYPE_SIDEBAR,
+            'position'  => GoogleAdsenseHelper::POSITION_TOP,
             'slot_id'   => config("util.google-ad.test_ad_slot"),
             'client_id' => config("util.google-ad.test_client_id"),
         ])->create();
 
-        GoogleAdsence::factory()->state([
+        GoogleAdsense::factory()->state([
             'name'      => "Sidebar Bottom",
-            'type'      => GoogleAdsenceHelper::TYPE_SIDEBAR,
-            'position'  => GoogleAdsenceHelper::POSITION_BETWEEN,
+            'type'      => GoogleAdsenseHelper::TYPE_SIDEBAR,
+            'position'  => GoogleAdsenseHelper::POSITION_BETWEEN,
             'slot_id'   => config("util.google-ad.test_ad_slot"),
             'client_id' => config("util.google-ad.test_client_id"),
         ])->create();
 
-        GoogleAdsence::factory()->state([
+        GoogleAdsense::factory()->state([
             'name'      => "Sidebar Bottom",
-            'type'      => GoogleAdsenceHelper::TYPE_SIDEBAR,
-            'position'  => GoogleAdsenceHelper::POSITION_BOTTOM,
+            'type'      => GoogleAdsenseHelper::TYPE_SIDEBAR,
+            'position'  => GoogleAdsenseHelper::POSITION_BOTTOM,
             'slot_id'   => config("util.google-ad.test_ad_slot"),
             'client_id' => config("util.google-ad.test_client_id"),
         ])->create();

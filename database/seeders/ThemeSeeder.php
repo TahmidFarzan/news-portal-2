@@ -120,7 +120,7 @@ class ThemeSeeder extends Seeder
 
         Theme::factory()->state([
             'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID,
+            'label' => ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID,
             'type'  => ThemeHelper::VALUE_TYPE_TEXT,
             'value' => config("util.google-ad.test_client_id"),
         ])->create();

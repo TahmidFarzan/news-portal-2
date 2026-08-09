@@ -4,16 +4,16 @@ namespace App\Services\Cache;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
-use App\Models\GoogleAdsence;
+use App\Models\GoogleAdsense;
 use Illuminate\Support\Collection;
 
-class GoogleAdsenceCacheService
+class GoogleAdsenseCacheService
 {
     private int $cachedTTL = 86400;
 
-    private string $mainTag = CacheHelper::TAG_GOOGLE_ADSENCE;
+    private string $mainTag = CacheHelper::TAG_GOOGLE_ADSENSE;
 
-    private string $secondKey = CacheHelper::KEY_GOOGLE_ADSENCE;
+    private string $secondKey = CacheHelper::KEY_GOOGLE_ADSENSE;
 
     public function isConnected(): bool
     {
@@ -25,14 +25,14 @@ class GoogleAdsenceCacheService
         CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_PAGE]);
     }
 
-    private function dbGoogleAdsencesByTypeAndPosition(string $type, string $position): Collection
+    private function dbGoogleAdsensesByTypeAndPosition(string $type, string $position): Collection
     {
-        return GoogleAdsence::where('type', $type)->where('position', $position)->orderBy('position', 'asc')->get();
+        return GoogleAdsense::where('type', $type)->where('position', $position)->orderBy('position', 'asc')->get();
     }
 
-    public function getGoogleAdsencesByTypeAndPosition(string $key, string $type, string $position, ?int $cachedTTL = null): Collection
+    public function getGoogleAdsensesByTypeAndPosition(string $key, string $type, string $position, ?int $cachedTTL = null): Collection
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateGoogleAdsencesByTypeAndPosition($key, $this->secondKey, $type, $position);
+        $cacheKey = CacheHelper::cacheKeyGenerateGoogleAdsensesByTypeAndPosition($key, $this->secondKey, $type, $position);
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -43,7 +43,7 @@ class GoogleAdsenceCacheService
         );
 
         if (! $records) {
-            $records = $this->dbGoogleAdsencesByTypeAndPosition($type, $position);
+            $records = $this->dbGoogleAdsensesByTypeAndPosition($type, $position);
 
             CacheServerHelper::cachedData(
                 $cacheKey,

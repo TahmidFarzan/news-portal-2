@@ -3,14 +3,14 @@ namespace App\Services;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
-use App\Helpers\GoogleAdsenceHelper;
+use App\Helpers\GoogleAdsenseHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\SystemHelper;
 use App\Helpers\ThemeHelper;
 use App\Models\Language;
 use App\Models\MenuItem;
 use App\Models\Theme;
-use App\Services\Cache\GoogleAdsenceCacheService;
+use App\Services\Cache\GoogleAdsenseCacheService;
 use App\Services\Cache\MenuCacheService;
 use App\Services\Cache\NewsCacheService;
 use App\Services\Cache\ThemeCacheService;
@@ -29,7 +29,7 @@ class SiteService
 
     protected NewsCacheService $newsCacheService;
 
-    protected GoogleAdsenceCacheService $googleAdsenceCacheService;
+    protected GoogleAdsenseCacheService $googleAdsenseCacheService;
 
         protected LanguageCacheService $languageCacheService;
 
@@ -37,13 +37,13 @@ class SiteService
         MenuCacheService $menuCacheService,
         ThemeCacheService $themeCacheService,
         NewsCacheService $newsCacheService,
-        GoogleAdsenceCacheService $googleAdsenceCacheService,
+        GoogleAdsenseCacheService $googleAdsenseCacheService,
         LanguageCacheService $languageCacheService
     ) {
         $this->menuCacheService          = $menuCacheService;
         $this->themeCacheService         = $themeCacheService;
         $this->newsCacheService          = $newsCacheService;
-        $this->googleAdsenceCacheService = $googleAdsenceCacheService;
+        $this->googleAdsenseCacheService = $googleAdsenseCacheService;
         $this->languageCacheService = $languageCacheService;
     }
 
@@ -229,12 +229,12 @@ class SiteService
         );
     }
 
-    public function themeGoogleAdCLientId(): Theme
+    public function themeGoogleAdsenseClientId(): Theme
     {
         return $this->themeCacheService->getThemeByGroupAndLabel(
             CacheHelper::KEY_LAYOUT,
             ThemeHelper::GROUP_APP,
-            ThemeHelper::OPTION_GOOGLE_ADSENCE_CLIENT_ID,
+            ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID,
             CacheServerHelper::sixHoursInSecond
         );
     }
@@ -250,12 +250,12 @@ class SiteService
         );
     }
 
-    public function getGoogleAdsence(Request $request): Collection
+    public function getGoogleAdsense(Request $request): Collection
     {
-        $type     = $request->input('type', GoogleAdsenceHelper::TYPE_SECTION);
-        $position = $request->input('position', GoogleAdsenceHelper::POSITION_TOP);
+        $type     = $request->input('type', GoogleAdsenseHelper::TYPE_SECTION);
+        $position = $request->input('position', GoogleAdsenseHelper::POSITION_TOP);
 
-        return $this->googleAdsenceCacheService->getGoogleAdsencesByTypeAndPosition(
+        return $this->googleAdsenseCacheService->getGoogleAdsensesByTypeAndPosition(
             CacheHelper::KEY_LAYOUT,
             $type,
             $position,

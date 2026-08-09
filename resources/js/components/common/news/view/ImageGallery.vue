@@ -7,7 +7,7 @@ import ImageWithLightbox from '@/components/common/media/ImageWithLightbox.vue'
 import SocialShare from '@/components/common/news/SocialShare.vue'
 import NewsHeadline from '@/components/common/news/NewsHeadline.vue'
 import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
-import GoogleAdSense from '@/components/common/advertising/GoogleAdSense.vue'
+import GoogleAdsense from '@/components/common/advertising/GoogleAdsense.vue'
 
 import { formatDateTime } from '@/composables/useDateTime'
 
@@ -18,7 +18,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsence'
+import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
 
 FontAwesomeLibrary.add(
     faClock
@@ -67,7 +67,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
             {{ t("news.components.view.imageGallery.labels.noGalleryImageFound") }}
         </div>
 
-       <GoogleAdSense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+       <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 
