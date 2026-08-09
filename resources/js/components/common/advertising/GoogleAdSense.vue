@@ -1,5 +1,13 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
+import {
+    computed,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    toRefs,
+    watch,
+} from 'vue'
 
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
@@ -10,18 +18,22 @@ const props = defineProps({
         type: String,
         default: adTypes.SECTION,
     },
+
     position: {
         type: String,
         default: adPositions.BETWEEN,
     },
+
     label: {
         type: String,
         default: 'Ad',
     },
+
     showLabel: {
         type: Boolean,
         default: true,
     },
+
     class: {
         type: [String, Array, Object],
         default: '',
@@ -35,22 +47,46 @@ const {
     showLabel,
 } = toRefs(props)
 
+const appEnv = import.meta.env.VITE_APP_ENV
+
 const ads = ref([])
 const adRefs = ref([])
 const wrapperRef = ref(null)
-const containerWidth = ref(0)
+
+const adsLoaded = ref(false)
+const adsChecked = ref(false)
 
 let observer = null
 let resizeObserver = null
-let adsLoaded = false
+let statusCheckTimer = null
 
-const hasAds = computed(() => {
+const isProduction = computed(() => {
+    return appEnv === 'production'
+})
+
+const isTestEnvironment = computed(() => {
+    return !isProduction.value
+})
+
+const hasConfiguredAds = computed(() => {
     return ads.value.length > 0
+})
+
+const hasFilledAds = computed(() => {
+    return ads.value.some((ad) => ad.status === 'filled')
+})
+
+const shouldShow = computed(() => {
+    if (isTestEnvironment.value) {
+        return true
+    }
+
+    return hasFilledAds.value
 })
 
 const wrapperClasses = computed(() => {
     return [
-        'relative mx-auto my-6 w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-5 text-center',
+        'relative mx-auto my-4 w-full text-center',
         props.class,
     ]
 })
@@ -65,42 +101,19 @@ const getAdKey = (ad) => {
     return ad?.id ?? `${ad?.client_id}-${ad?.slot_id}`
 }
 
-const updateContainerWidth = () => {
-    if (!wrapperRef.value) return
-
-    containerWidth.value = wrapperRef.value.clientWidth
-}
-
-const getAdStyle = (ad) => {
-    if (isFullWidthResponsive(ad)) {
-        return 'display:block'
-    }
-
-    const width = containerWidth.value
-
-    if (width >= 728) {
-        return 'display:inline-block;width:728px;height:90px'
-    }
-
-    if (width >= 468) {
-        return 'display:inline-block;width:468px;height:60px'
-    }
-
-    if (width >= 320) {
-        return 'display:inline-block;width:320px;height:100px'
-    }
-
-    return `display:inline-block;width:${Math.max(width, 200)}px;height:100px`
-}
-
 const normalizeRows = (response) => {
     const rows = Array.isArray(response)
         ? response
         : response?.data ?? response?.items ?? []
 
-    return rows.filter((row) => {
-        return row?.client_id && row?.slot_id
-    })
+    return rows
+        .filter((row) => {
+            return row?.client_id && row?.slot_id
+        })
+        .map((row) => ({
+            ...row,
+            status: null,
+        }))
 }
 
 const getCacheParamsKey = (params = {}) => {
@@ -113,10 +126,12 @@ const getCacheParamsKey = (params = {}) => {
 
 const fetchAds = async () => {
     const apiUrl = route('site.google-adsences')
+
     const params = {
         type: type.value,
         position: position.value,
     }
+
     const cacheParamsKey = getCacheParamsKey(params)
 
     const response = await fetchFromApi(
@@ -129,29 +144,148 @@ const fetchAds = async () => {
     )
 
     ads.value = normalizeRows(response)
-    adsLoaded = false
+    adRefs.value = []
+    adsLoaded.value = false
+    adsChecked.value = false
+
+    clearStatusCheckTimer()
 
     await nextTick()
 
-    updateContainerWidth()
+    if (!isProduction.value) {
+        return
+    }
+
+    if (!hasConfiguredAds.value) {
+        return
+    }
+
     observeAds()
 }
 
 const pushAdsense = async () => {
-    if (adsLoaded || !hasAds.value) return
+    if (!isProduction.value) {
+        return
+    }
 
-    adsLoaded = true
+    if (adsLoaded.value || !hasConfiguredAds.value) {
+        return
+    }
 
     await nextTick()
+
+    if (!wrapperRef.value) {
+        return
+    }
+
+    const width = wrapperRef.value.clientWidth
+
+    if (width <= 0) {
+        return
+    }
+
+    const slots = adRefs.value.filter(Boolean)
+
+    if (!slots.length) {
+        return
+    }
+
+    adsLoaded.value = true
 
     try {
         window.adsbygoogle = window.adsbygoogle || []
 
-        adRefs.value.forEach(() => {
+        slots.forEach(() => {
             window.adsbygoogle.push({})
         })
+
+        startAdStatusCheck()
     } catch (error) {
         console.warn('Google Adsense error:', error)
+
+        adsLoaded.value = false
+
+        ads.value.forEach((ad) => {
+            ad.status = 'error'
+        })
+
+        adsChecked.value = true
+    }
+}
+
+const checkAdsStatus = () => {
+    if (!adRefs.value.length) {
+        return false
+    }
+
+    let hasPending = false
+
+    adRefs.value.forEach((adRef, index) => {
+        if (!adRef || !ads.value[index]) {
+            return
+        }
+
+        const status = adRef.getAttribute('data-ad-status')
+
+        if (status === 'filled') {
+            ads.value[index].status = 'filled'
+        } else if (status === 'unfilled') {
+            ads.value[index].status = 'unfilled'
+        } else {
+            hasPending = true
+        }
+    })
+
+    if (hasPending) {
+        return false
+    }
+
+    adsChecked.value = true
+
+    clearStatusCheckTimer()
+
+    return true
+}
+
+const startAdStatusCheck = () => {
+    clearStatusCheckTimer()
+
+    let attempts = 0
+    const maxAttempts = 20
+
+    statusCheckTimer = window.setInterval(() => {
+        attempts++
+
+        const resolved = checkAdsStatus()
+
+        if (resolved || attempts >= maxAttempts) {
+            clearStatusCheckTimer()
+
+            if (!resolved) {
+                ads.value.forEach((ad, index) => {
+                    const adRef = adRefs.value[index]
+
+                    if (!adRef) {
+                        return
+                    }
+
+                    const status = adRef.getAttribute('data-ad-status')
+
+                    ad.status = status === 'filled'
+                        ? 'filled'
+                        : 'unfilled'
+                })
+
+                adsChecked.value = true
+            }
+        }
+    }, 500)
+}
+
+const clearStatusCheckTimer = () => {
+    if (statusCheckTimer) {
+        window.clearInterval(statusCheckTimer)
+        statusCheckTimer = null
     }
 }
 
@@ -161,18 +295,25 @@ const observeAds = () => {
         observer = null
     }
 
-    if (!wrapperRef.value || !hasAds.value) return
+    if (!wrapperRef.value || !hasConfiguredAds.value) {
+        return
+    }
 
-    observer = new IntersectionObserver((entries) => {
-        if (!entries[0]?.isIntersecting) return
+    observer = new IntersectionObserver(
+        (entries) => {
+            if (!entries[0]?.isIntersecting) {
+                return
+            }
 
-        pushAdsense()
+            pushAdsense()
 
-        observer.disconnect()
-        observer = null
-    }, {
-        rootMargin: '200px',
-    })
+            observer.disconnect()
+            observer = null
+        },
+        {
+            rootMargin: '100px',
+        }
+    )
 
     observer.observe(wrapperRef.value)
 }
@@ -189,10 +330,14 @@ onMounted(async () => {
 
     await nextTick()
 
-    updateContainerWidth()
-
     resizeObserver = new ResizeObserver(() => {
-        updateContainerWidth()
+        if (
+            isProduction.value &&
+            !adsLoaded.value &&
+            hasConfiguredAds.value
+        ) {
+            observeAds()
+        }
     })
 
     if (wrapperRef.value) {
@@ -210,22 +355,50 @@ onBeforeUnmount(() => {
         resizeObserver.disconnect()
         resizeObserver = null
     }
+
+    clearStatusCheckTimer()
 })
 </script>
 
 <template>
-    <section v-if="hasAds" ref="wrapperRef" :class="wrapperClasses">
-        <span v-if="showLabel"
-            class="absolute -top-2 left-3 bg-gray-50 px-2 text-[10px] font-medium uppercase tracking-wider text-gray-500">
+    <section v-if="shouldShow" ref="wrapperRef" :class="wrapperClasses">
+        <span v-if="showLabel" class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-gray-500">
             {{ label }}
         </span>
 
-        <div class="flex w-full flex-col items-center gap-4">
-            <div v-for="ad in ads" :key="getAdKey(ad)" class="flex w-full justify-center overflow-hidden">
-                <ins ref="adRefs" class="adsbygoogle" :style="getAdStyle(ad)" :data-ad-client="ad.client_id"
-                    :data-ad-slot="ad.slot_id" :data-ad-format="isFullWidthResponsive(ad) ? 'auto' : null"
-                    :data-full-width-responsive="isFullWidthResponsive(ad) ? 'true' : null"></ins>
+        <template v-if="isTestEnvironment">
+            <div class="mx-auto w-full max-w-[815px]">
+                <div class="border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center">
+                    <div class="text-sm font-semibold text-gray-600">
+                        TEST AD
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-500">
+                        Google AdSense unavailable
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-400">
+                        Environment: {{ appEnv }}
+                    </div>
+                </div>
             </div>
-        </div>
+        </template>
+
+        <template v-else>
+            <div v-for="(ad, index) in ads" :key="getAdKey(ad)" class="w-full text-center" :class="{
+                'hidden': adsChecked && ad.status !== 'filled'
+            }">
+                <ins ref="adRefs" class="adsbygoogle" :style="isFullWidthResponsive(ad)
+                    ? 'display:block;width:100%'
+                    : 'display:block;width:100%'
+                    " :data-ad-client="ad.client_id" :data-ad-slot="ad.slot_id" :data-ad-format="isFullWidthResponsive(ad)
+                        ? 'auto'
+                        : null
+                        " :data-full-width-responsive="isFullWidthResponsive(ad)
+                            ? 'true'
+                            : null
+                            "></ins>
+            </div>
+        </template>
     </section>
 </template>
