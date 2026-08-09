@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
-import RecentSurveyQuestions from '@/components/back-office/survey-question/RecentSurveyQuestions.vue'
+import RecentSurveyQuestionsBySurvey from '@/components/back-office/survey-question/RecentSurveyQuestionsBySurvey.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -341,7 +341,7 @@ onMounted(
                 {{ t('common.labels.surveyQuestions') }}
             </h3>
 
-            <RecentSurveyQuestions :survey="survey" />
+            <RecentSurveyQuestionsBySurvey :survey="survey" />
         </div>
 
         <Teleport to="body">

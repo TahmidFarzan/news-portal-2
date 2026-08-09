@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library as FontAwesomeLibrary } from "@fortawesome/fontawesome-svg-core";
 import { faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import InfiniteScrollApiSelect from "@/components/common/multi-select/InfiniteScrollApiSelect.vue";
-import QuizQuestionManager from "@/components/back-office/quiz-question/QuizQuestionManager.vue";
+import QuizQuestionManagerByQuiz from "@/components/back-office/quiz-question/QuizQuestionManagerByQuiz.vue";
 import { formatDate } from "@/composables/useDateTime";
 import { quizQuestionAnswerTypes } from "@/composables/useQuiz";
 
@@ -461,7 +461,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <QuizQuestionManager :quiz="quiz" :isUpdate="isUpdate" :quizSaveForm="saveForm" />
+                <QuizQuestionManagerByQuiz :quiz="quiz" :isUpdate="isUpdate" :quizSaveForm="saveForm" />
 
                 <div class="flex justify-center">
                     <button type="submit" :disabled="saveForm.processing"

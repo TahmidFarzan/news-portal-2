@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
 import InfiniteScrollApiSelect from '@/components/common/multi-select/InfiniteScrollApiSelect.vue'
-import QuizQuestionOptionManager from '@/components/back-office/quiz-question-option/QuizQuestionOptionManager.vue'
+import QuizQuestionOptionManagerByQuizQuestion from '@/components/back-office/quiz-question-option/QuizQuestionOptionManagerByQuizQuestion.vue'
 import { computed, onMounted, nextTick, inject } from 'vue'
 import { Head, useForm, router as inertiaJsRoute } from '@inertiajs/vue3'
 import { useTranslate } from '@/composables/useTranslate'
@@ -238,7 +238,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <QuizQuestionOptionManager :quizQuestion="quizQuestion" :isUpdate="isUpdate" :quizQuestionSaveForm="saveForm" />
+                <QuizQuestionOptionManagerByQuizQuestion :quizQuestion="quizQuestion" :isUpdate="isUpdate" :quizQuestionSaveForm="saveForm" />
 
                 <div class="flex justify-center">
                     <button type="submit" :disabled="saveForm.processing"

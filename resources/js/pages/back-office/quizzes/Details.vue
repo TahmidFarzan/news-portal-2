@@ -3,7 +3,7 @@ import Layout from '@/pages/layouts/AuthLayout.vue'
 import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 import RecentQuizQuestionsByQuiz from '@/components/back-office/quiz-question/RecentQuizQuestionsByQuiz.vue'
 import RecentQuizResultsByQuiz from '@/components/back-office/quiz-result/RecentQuizResultsByQuiz.vue'
-import WinnerQuizResults from '@/components/back-office/quiz-result/WinnerQuizResults.vue'
+import QuizResultsTableByQuiz from '@/components/back-office/quiz-result/QuizResultsTableByQuiz.vue'
 
 import { ref, computed, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -368,7 +368,7 @@ onMounted(
                 <FontAwesomeIcon icon="trophy" /> {{ t('common.labels.quizResults') }}
             </h3>
 
-            <WinnerQuizResults :quizResults="quizWinnerResults" />
+            <QuizResultsTableByQuiz :quizResults="quizWinnerResults" />
         </div>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">

@@ -23,7 +23,7 @@ import {
     canUpdateQuizQuestion,
     canDeleteQuizQuestion,
 } from "@/composables/useUserPermissions";
-import CreateUpdateQuizQuestionOptionTableByQuizQuestion from "@/components/back-office/quiz-question-option/QuizQuestionOptionManager.vue";
+import CreateUpdateQuizQuestionOptionTableByQuizQuestion from "@/components/back-office/quiz-question-option/QuizQuestionOptionManagerByQuizQuestion.vue";
 import SelectInfinityLoadingApi from "@/components/common/multi-select/InfiniteScrollApiSelect.vue";
 import { quizQuestionAnswerTypes } from "@/composables/useQuiz";
 

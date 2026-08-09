@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library as FontAwesomeLibrary } from "@fortawesome/fontawesome-svg-core";
 import { faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import InfiniteScrollApiSelect from "@/components/common/multi-select/InfiniteScrollApiSelect.vue";
-import SurveyQuestionManager from "@/components/back-office/survey-question/SurveyQuestionManager.vue";
+import SurveyQuestionManagerBySurvey from "@/components/back-office/survey-question/SurveyQuestionManagerBySurvey.vue";
 import { formatDate } from "@/composables/useDateTime";
 
 FontAwesomeLibrary.add(faSave, faSpinner);
@@ -302,7 +302,7 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <SurveyQuestionManager :survey="survey" :isUpdate="isUpdate"
+                <SurveyQuestionManagerBySurvey :survey="survey" :isUpdate="isUpdate"
                     :surveySaveForm="saveForm" />
 
                 <div class="flex justify-center">
