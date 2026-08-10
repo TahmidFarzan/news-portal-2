@@ -31,7 +31,7 @@ const metaDescription = computed(() => {
 const metaKeywords = computed(() => {
     return t("pages.videoNews.labels.keyWords") || ''
 })
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 
 </script>
 
@@ -63,7 +63,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

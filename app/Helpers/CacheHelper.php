@@ -65,6 +65,7 @@ class CacheHelper
     public const KEY_SURVEY_QUESTION = 'survey-question';
 
     public const KEY_QUIZ = 'quiz';
+
     public const KEY_PREVIOUS_QUIZ = 'previous-quiz';
 
     public const KEY_QUIZ_QUESTION = 'quiz-question';
@@ -93,9 +94,7 @@ class CacheHelper
 
     public const KEY_PER_PAGE = 'per-page';
 
-    public const KEY_GROUP = 'group';
-
-    public const KEY_LABEL = 'label';
+    public const KEY_NAME = 'event';
 
     public const KEY_TYPE = 'type';
 
@@ -769,27 +768,12 @@ class CacheHelper
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateThemesByGroupAndLabels(string $key, string $secondKey, string $group, array $labels): string
+
+    public static function cacheKeyGenerateThemesByName(string $key, string $secondKey, string $name): string
     {
         $cacheKey = "{$key}:{$secondKey}";
 
-        $cacheKey .= ':' . CacheHelper::KEY_GROUP . ":{$group}";
-
-        $cacheKey .= ':' . CacheHelper::KEY_LABEL . ':' . (
-            is_array($labels) ? implode(',', $labels) : $labels
-        );
-
-        $cacheKey .= ':' . CacheHelper::KEY_THEMES;
-
-        return $cacheKey;
-    }
-
-    public static function cacheKeyGenerateThemesByGroupAndLabel(string $key, string $secondKey, string $group, string $label): string
-    {
-        $cacheKey = "{$key}:{$secondKey}";
-
-        $cacheKey .= ':' . CacheHelper::KEY_GROUP . ":{$group}";
-        $cacheKey .= ':' . CacheHelper::KEY_LABEL . ":{$label}";
+        $cacheKey .= ':' . CacheHelper::KEY_NAME . ":{$name}";
 
         $cacheKey .= ':' . CacheHelper::KEY_THEME;
 

@@ -8,8 +8,7 @@ import FlashMessageToaster from '@/components/common/layout/FlashMessageToaster.
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
-import { ref, computed, watch, nextTick, onMounted, provide, } from 'vue'
-
+import { ref, computed, watch, nextTick, onMounted, provide } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -51,7 +50,7 @@ library.add(
 const page = usePage()
 
 const {
-    themeGroups,
+    themeNames,
     themeOptions,
     isTruthyValue,
 } = useTheme()
@@ -115,6 +114,7 @@ const loadSiteThemes = async () => {
 
 const loadDefaultLanguage = async () => {
     const apiUrl = route('site.default-language')
+
     try {
         const response = await fetchFromApi(
             apiUrl,
@@ -132,7 +132,6 @@ const loadDefaultLanguage = async () => {
 }
 
 const loadLanguageByFirstPathSegment = async () => {
-
     if (!firstPathSegment.value) {
         currentLanguage.value = defaultLanguage.value
         setSelectedLanguage(currentLanguage.value)
@@ -141,7 +140,10 @@ const loadLanguageByFirstPathSegment = async () => {
 
     try {
         currentLanguage.value = defaultLanguage.value
-        const apiUrl = route('site.language', { code: firstPathSegment.value })
+
+        const apiUrl = route('site.language', {
+            code: firstPathSegment.value,
+        })
 
         const response = await fetchFromApi(
             apiUrl,
@@ -163,8 +165,8 @@ const loadLanguageByFirstPathSegment = async () => {
 const getTheme = (field, group = null) => {
     return siteThemes.value.find((theme) => {
         const matchedField =
-            loweriseText(theme?.key) === loweriseText(field) ||
-            loweriseText(theme?.label) === loweriseText(field)
+            loweriseText(theme?.name) === loweriseText(field) ||
+            loweriseText(theme?.slug) === loweriseText(field)
 
         const matchedGroup =
             !group ||
@@ -172,6 +174,14 @@ const getTheme = (field, group = null) => {
 
         return matchedField && matchedGroup
     }) ?? null
+}
+
+const getThemeOption = (theme, option) => {
+    return theme?.options?.[option] ?? null
+}
+
+const getThemeOptionValue = (theme, option) => {
+    return getThemeOption(theme, option)?.value ?? null
 }
 
 const componentRefreshKey = (componentName) => {
@@ -182,96 +192,167 @@ const componentRefreshKey = (componentName) => {
     ].join('-')
 }
 
-const facebookTheme = computed(() => {
+const headerMenuTheme = computed(() => {
     return getTheme(
-        themeOptions.FB_SOCIAL_LINK,
-        themeGroups.SOCIAL_LINK
+        themeNames.HEADER_MENU
+    )
+})
+
+const googleAdTheme = computed(() => {
+    return getTheme(
+        themeNames.GOOGLE_AD
+    )
+})
+
+const siteExtraFeaturesTheme = computed(() => {
+    return getTheme(
+        themeNames.SITE_EXTRA_FEATURE
+    )
+})
+
+const topbarFooterMenuTheme = computed(() => {
+    return getTheme(
+        themeNames.TOPBAR_FOOTER_MENU
+    )
+})
+
+const socialLinksTheme = computed(() => {
+    return getTheme(
+        themeNames.SOCIAL_LINK
+    )
+})
+
+const googleServicesTheme = computed(() => {
+    return getTheme(
+        themeNames.GOOGLE_SEO_SERVICE
+    )
+})
+
+const facebookTheme = computed(() => {
+    return getThemeOption(
+        socialLinksTheme.value,
+        themeOptions.FB_SOCIAL_LINK
     )
 })
 
 const youtubeTheme = computed(() => {
-    return getTheme(
-        themeOptions.YOUTUBE_SOCIAL_LINK,
-        themeGroups.SOCIAL_LINK
+    return getThemeOption(
+        socialLinksTheme.value,
+        themeOptions.YOUTUBE_SOCIAL_LINK
     )
 })
 
 const googleNewsTheme = computed(() => {
-    return getTheme(
-        themeOptions.GOOGLE_NEWS_SOCIAL_LINK,
-        themeGroups.SOCIAL_LINK
+    return getThemeOption(
+        socialLinksTheme.value,
+        themeOptions.GOOGLE_NEWS_SOCIAL_LINK
     )
 })
 
 const showTopbarMenu = computed(() => {
-    return getTheme(
-        themeOptions.SHOW_TOPBAR_MENU,
-        themeGroups.MENU
+    return getThemeOption(
+        topbarFooterMenuTheme.value,
+        themeOptions.SHOW_TOPBAR_MENU
     )
 })
 
 const showFooterMenu = computed(() => {
-    return getTheme(
-        themeOptions.SHOW_FOOTER_MENU,
-        themeGroups.MENU
+    return getThemeOption(
+        topbarFooterMenuTheme.value,
+        themeOptions.SHOW_FOOTER_MENU
     )
 })
 
 const showNameOnHeaderMenu = computed(() => {
-    return getTheme(
-        themeOptions.SHOW_NAME_ON_HEADER_MENU,
-        themeGroups.App
+    return getThemeOption(
+        headerMenuTheme.value,
+        themeOptions.SHOW_NAME_ON_HEADER_MENU
     )
 })
 
 const showLogoOnHeaderMenu = computed(() => {
-    return getTheme(
-        themeOptions.SHOW_LOGO_ON_HEADER_MENU,
-        themeGroups.App
+    return getThemeOption(
+        headerMenuTheme.value,
+        themeOptions.SHOW_LOGO_ON_HEADER_MENU
     )
 })
 
 const showBreakingNews = computed(() => {
-    return getTheme(
-        themeOptions.SHOW_BREAKING_NEWS,
-        themeGroups.App
+    return getThemeOption(
+        siteExtraFeaturesTheme.value,
+        themeOptions.SHOW_BREAKING_NEWS
     )
 })
 
-const showGoogleAd = computed(() => {
-    const theme = getTheme(
-        themeOptions.SHOW_GOOGLE_AD,
-        themeGroups.App
+const googleAdEnable = computed(() => {
+    return isTruthyValue(
+        getThemeOptionValue(
+            googleAdTheme.value,
+            themeOptions.GOOGLE_AD_ENABLE
+        )
     )
+})
 
-    return isTruthyValue(theme?.value)
+const googleAdsenseClientId = computed(() => {
+    return getThemeOptionValue(
+        googleAdTheme.value,
+        themeOptions.GOOGLE_ADSENSE_CLIENT_ID
+    )
+})
+
+const googleSearchConsoleHeader = computed(() => {
+    return getThemeOptionValue(
+        googleServicesTheme.value,
+        themeOptions.GOOGLE_SEARCH_CONSOLE_HEADER
+    )
+})
+
+const googleAnalyticHeader = computed(() => {
+    return getThemeOptionValue(
+        googleServicesTheme.value,
+        themeOptions.GOOGLE_ANALYTIC_HEADER
+    )
+})
+
+const googleTagManagerHeader = computed(() => {
+    return getThemeOptionValue(
+        googleServicesTheme.value,
+        themeOptions.GOOGLE_TAG_MANAGER_HEADER
+    )
+})
+
+const googleTagManagerBody = computed(() => {
+    return getThemeOptionValue(
+        googleServicesTheme.value,
+        themeOptions.GOOGLE_TAG_MANAGER_BODY
+    )
 })
 
 const showTrends = computed(() => {
-    const theme = getTheme(
-        themeOptions.SHOW_TRENDS,
-        themeGroups.App
+    return isTruthyValue(
+        getThemeOptionValue(
+            siteExtraFeaturesTheme.value,
+            themeOptions.SHOW_TRENDS
+        )
     )
-
-    return isTruthyValue(theme?.value)
 })
 
 const showSurveys = computed(() => {
-    const theme = getTheme(
-        themeOptions.SHOW_SURVEYS,
-        themeGroups.App
+    return isTruthyValue(
+        getThemeOptionValue(
+            siteExtraFeaturesTheme.value,
+            themeOptions.SHOW_SURVEYS
+        )
     )
-
-    return isTruthyValue(theme?.value)
 })
 
 const showQuizzes = computed(() => {
-    const theme = getTheme(
-        themeOptions.SHOW_QUIZZES,
-        themeGroups.App
+    return isTruthyValue(
+        getThemeOptionValue(
+            siteExtraFeaturesTheme.value,
+            themeOptions.SHOW_QUIZZES
+        )
     )
-
-    return isTruthyValue(theme?.value)
 })
 
 const selectedLanguageCode = computed(() => {
@@ -306,7 +387,14 @@ const searchUrl = computed(() => {
         })
 })
 
-provide('showGoogleAd', showGoogleAd)
+provide('googleAdEnable', googleAdEnable)
+provide('googleAdsenseClientId', googleAdsenseClientId)
+
+provide('googleSearchConsoleHeader', googleSearchConsoleHeader)
+provide('googleAnalyticHeader', googleAnalyticHeader)
+provide('googleTagManagerHeader', googleTagManagerHeader)
+provide('googleTagManagerBody', googleTagManagerBody)
+
 provide('showTrends', showTrends)
 provide('showSurveys', showSurveys)
 provide('showQuizzes', showQuizzes)
@@ -325,10 +413,10 @@ watch(
         if (!defaultLanguage.value?.code) {
             await loadDefaultLanguage()
         }
+
         await loadLanguageByFirstPathSegment()
     },
 )
-
 </script>
 
 <template>

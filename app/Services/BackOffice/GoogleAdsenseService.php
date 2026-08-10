@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\BackOffice;
 
 use App\Helpers\ThemeHelper;
@@ -20,7 +21,7 @@ class GoogleAdsenseService
         $this->themeService = $themeService;
     }
 
-    public function new (): GoogleAdsense
+    public function new(): GoogleAdsense
     {
         return new GoogleAdsense();
     }
@@ -84,11 +85,16 @@ class GoogleAdsenseService
         try {
 
             DB::transaction(function () use ($request, $googleAdsense, $isNew) {
-                $googleAdsenseClient = $this->themeService->findByGroupAndLabel(ThemeHelper::GROUP_APP, ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID);
+                $googleAd = $this->themeService->findByName(ThemeHelper::NAME_GOOGLE_AD);
 
+                $googleAdsenseClientId = data_get(
+                    $googleAd?->options,
+                    ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID . '.value',
+                    null
+                );
                 $googleAdsense->name                      = $request->input('name');
                 $googleAdsense->slot_id                   = $request->input('slot_id');
-                $googleAdsense->client_id                 = $googleAdsenseClient->value;
+                $googleAdsense->client_id                 = $googleAdsenseClientId;
                 $googleAdsense->type                      = $request->input('type');
                 $googleAdsense->position                  = $request->input('position');
                 $googleAdsense->use_full_width_responsive = $request->boolean('use_full_width_responsive');
@@ -138,5 +144,4 @@ class GoogleAdsenseService
             ];
         }
     }
-
 }

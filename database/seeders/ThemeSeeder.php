@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Helpers\ThemeHelper;
@@ -27,125 +28,114 @@ class ThemeSeeder extends Seeder
             Theme::truncate();
         }
 
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_SHOW_NAME_ON_HEADER_MENU,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
+        $themes = [
+            [
+                'name' => ThemeHelper::NAME_HEADER_MENU,
+                'options' => [
+                    ThemeHelper::OPTION_SHOW_LOGO_ON_HEADER_MENU => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                    ThemeHelper::OPTION_SHOW_NAME_ON_HEADER_MENU => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                ],
+            ],
 
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_SHOW_LOGO_ON_HEADER_MENU,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
+            [
+                'name' =>ThemeHelper::NAME_GOOGLE_AD,
+                'options' => [
+                    ThemeHelper::OPTION_GOOGLE_AD_ENABLE => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                    ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_STRING,
+                        'value' => 'ca-pub-3940256099942544',
+                    ],
+                ],
+            ],
 
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_SHOW_BREAKING_NEWS,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
+            [
+                'name' =>  ThemeHelper::NAME_SITE_EXTRA_FEATURE,
+                'options' => [
+                    ThemeHelper::OPTION_SHOW_BREAKING_NEWS => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                    ThemeHelper::OPTION_SHOW_TRENDS => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                    ThemeHelper::OPTION_SHOW_SURVEYS => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                    ThemeHelper::OPTION_SHOW_QUIZZES => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                ],
+            ],
 
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_MENU,
-            'label' => ThemeHelper::OPTION_SHOW_TOPBAR_MENU,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
+            [
+                'name' => ThemeHelper::NAME_TOPBAR_FOOTER_MENU,
+                'options' => [
+                    ThemeHelper::OPTION_SHOW_TOPBAR_MENU => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                    ThemeHelper::OPTION_SHOW_FOOTER_MENU => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+                        'value' => true,
+                    ],
+                ],
+            ],
 
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_MENU,
-            'label' => ThemeHelper::OPTION_SHOW_FOOTER_MENU,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
+            [
+                'name' => ThemeHelper::NAME_SOCIAL_LINK,
+                'options' => [
+                    ThemeHelper::OPTION_FB_SOCIAL_LINK => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_URL,
+                        'value' => 'https://facebook.com',
+                    ],
+                    ThemeHelper::OPTION_YOUTUBE_SOCIAL_LINK => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_URL,
+                        'value' => 'https://youtube.com',
+                    ],
+                    ThemeHelper::OPTION_GOOGLE_NEWS_SOCIAL_LINK => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_URL,
+                        'value' => 'https://news.google.com',
+                    ],
+                ],
+            ],
 
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_SHOW_GOOGLE_AD,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
+            [
+                'name' => ThemeHelper::NAME_GOOGLE_SEO_SERVICE,
+                'options' => [
+                    ThemeHelper::OPTION_GOOGLE_SEARCH_CONSOLE_HEADER => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_TEXT,
+                        'value' => null,
+                    ],
+                    ThemeHelper::OPTION_GOOGLE_ANALYTIC_HEADER => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_TEXT,
+                        'value' => null,
+                    ],
+                    ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_HEADER => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_TEXT,
+                        'value' => null,
+                    ],
+                    ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY => [
+                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_TEXT,
+                        'value' => null,
+                    ],
+                ],
+            ],
+        ];
 
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_SOCIAL_LINK,
-            'label' => ThemeHelper::OPTION_FB_SOCIAL_LINK,
-            'type'  => ThemeHelper::VALUE_TYPE_URL,
-            'value' => "https://facebook.com",
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_SOCIAL_LINK,
-            'label' => ThemeHelper::OPTION_YOUTUBE_SOCIAL_LINK,
-            'type'  => ThemeHelper::VALUE_TYPE_URL,
-            'value' => "https://youtube.com",
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_SOCIAL_LINK,
-            'label' => ThemeHelper::OPTION_GOOGLE_NEWS_SOCIAL_LINK,
-            'type'  => ThemeHelper::VALUE_TYPE_URL,
-            'value' => "https://news.google.com",
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_GOOGLE_SEARCH_CONSOLE_HEADER,
-            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
-            'value' => null,
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_GOOGLE_ANALYTIC_HEADER,
-            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
-            'value' => null,
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_HEADER,
-            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
-            'value' => null,
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY,
-            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
-            'value' => null,
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID,
-            'type'  => ThemeHelper::VALUE_TYPE_TEXT,
-            'value' => "ca-pub-3940256099942544",
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_SHOW_TRENDS,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_SHOW_SURVEYS,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
-
-
-        Theme::factory()->state([
-            'group' => ThemeHelper::GROUP_APP,
-            'label' => ThemeHelper::OPTION_SHOW_QUIZZES,
-            'type'  => ThemeHelper::VALUE_TYPE_BOOLEAN,
-            'value' => true,
-        ])->create();
-
+        foreach ($themes as $theme) {
+            Theme::factory()->create($theme);
+        }
     }
 }

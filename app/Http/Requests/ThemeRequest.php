@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests;
 
 use App\Helpers\ThemeHelper;
@@ -6,6 +7,7 @@ use App\Models\Theme;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Validation\Rule;
 
 class ThemeRequest extends FormRequest
 {
@@ -19,153 +21,169 @@ class ThemeRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-
     public function rules(): array
     {
+        $theme = Theme::where('slug', $this->route('slug'))->first();
+
         return [
-            'group' => ['required', 'string'],
-            'label' => ['required', 'string'],
-            'type'  => ['required', 'string'],
-            'value' => ['nullable', 'string'],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('themes', 'name')->ignore($theme?->id),
+            ],
+
+            'options' => [
+                'required',
+                'array',
+            ],
+
+            'options.*' => [
+                'required',
+                'array',
+            ],
+
+            'options.*.valueType' => [
+                'required',
+                'string',
+                Rule::in($this->allowedValueTypes()),
+            ],
+
+            'options.*.value' => [
+                'nullable',
+            ],
         ];
     }
 
     public function messages(): array
     {
         return [
-            "group.required" => __("form-requests.theme.group.required"),
-            "group.string"   => __("form-requests.theme.group.string"),
-            "group.max"      => __("form-requests.theme.group.max"),
+            'name.required' => __('form-requests.theme.name.required'),
+            'name.string' => __('form-requests.theme.name.string'),
+            'name.max' => __('form-requests.theme.name.max'),
+            'name.unique' => __('form-requests.theme.name.unique'),
 
-            "label.required" => __("form-requests.theme.label.required"),
-            "label.string"   => __("form-requests.theme.label.string"),
-            "label.max"      => __("form-requests.theme.label.max"),
+            'options.required' => __('form-requests.theme.options.required'),
+            'options.array' => __('form-requests.theme.options.array'),
 
-            "type.required"  => __("form-requests.theme.type.required"),
-            "type.string"    => __("form-requests.theme.type.string"),
-            "type.max"       => __("form-requests.theme.type.max"),
+            'options.*.required' => __('form-requests.theme.options.option.required'),
+            'options.*.array' => __('form-requests.theme.options.option.array'),
 
-            "value.required" => __("form-requests.theme.value.required"),
-            "value.string"   => __("form-requests.theme.value.string"),
-            "value.max"      => __("form-requests.theme.value.max"),
+            'options.*.valueType.required' => __('form-requests.theme.options.value_type.required'),
+            'options.*.valueType.string' => __('form-requests.theme.options.value_type.string'),
+            'options.*.valueType.in' => __('form-requests.theme.options.value_type.invalid'),
+
+            'options.*.value.required' => __('form-requests.theme.options.value.required'),
         ];
     }
 
     public function withValidator($validator): void
     {
-        $theme = Theme::where('slug', $this->route('slug'))->first();
+        $validator->after(function ($validator) {
+            $options = $this->input('options', []);
 
-        $isUpdate = $this->route('slug') ? true : false;
-
-        $validator->after(function ($validator) use ($theme, $isUpdate) {
-            $data = $validator->getData();
-
-            if (! empty($data['group'])) {
-                $allowedGroups = [
-                    ThemeHelper::GROUP_APP,
-                    ThemeHelper::GROUP_MENU,
-                    ThemeHelper::GROUP_SOCIAL_LINK,
-                ];
-
-                if (! in_array($data['group'], $allowedGroups, true)) {
-                    $validator->errors()->add(
-                        'group',
-                        __('form-requests.theme.group.not_exit')
-                    );
-                }
+            if (! is_array($options)) {
+                return;
             }
 
-            if (! empty($data['type'])) {
-                $allowedTypes = [
-                    ThemeHelper::VALUE_TYPE_TEXT,
-                    ThemeHelper::VALUE_TYPE_STRING,
-                    ThemeHelper::VALUE_TYPE_BOOLEAN,
-                    ThemeHelper::VALUE_TYPE_INTEGER,
-                    ThemeHelper::VALUE_TYPE_FLOAT,
-                    ThemeHelper::VALUE_TYPE_DECIMAL,
-                    ThemeHelper::VALUE_TYPE_JSON,
-                    ThemeHelper::VALUE_TYPE_ARRAY,
-                    ThemeHelper::VALUE_TYPE_URL,
-                    ThemeHelper::VALUE_TYPE_IMAGE,
-                    ThemeHelper::VALUE_TYPE_COLOR,
-                ];
-
-                if (! in_array($data['type'], $allowedTypes, true)) {
-                    $validator->errors()->add(
-                        'type',
-                        __('form-requests.theme.type.not_exit')
-                    );
+            foreach ($options as $key => $option) {
+                if (! is_array($option)) {
+                    continue;
                 }
-            }
 
-            if (! empty($data["group"]) && empty($data["label"])) {
-                $sameThemeFound = Theme::where("group", $data["group"])->where("label", $data["label"]);
-                if ($theme && $isUpdate) {
-                    $sameThemeFound = $sameThemeFound->whereNot('id', $sameThemeFound->id);
+                $valueType = $option['valueType'] ?? null;
+                $value = $option['value'] ?? null;
+
+                if (! $valueType) {
+                    continue;
                 }
-                $sameThemeFound = $sameThemeFound->count();
-                if ($sameThemeFound) {
-                    $validator->errors()->add(
-                        'group',
-                        __("form-requests.theme.group.unique")
-                    );
 
-                    $validator->errors()->add(
-                        'label',
-                        __("form-requests.theme.label.unique")
-                    );
+                if (! in_array($valueType, $this->allowedValueTypes(), true)) {
+                    continue;
                 }
-            }
 
-            if (! empty($data["type"]) && empty($data["value"])) {
-                if (! $this->isValidThemeValue($data['type'], $data['value'])) {
+                if (
+                    $value === null ||
+                    $value === ''
+                ) {
+                    continue;
+                }
+
+                if (! $this->isValidThemeValue($valueType, $value)) {
                     $validator->errors()->add(
-                        'value',
-                        __('form-requests.theme.value.invalid_type')
+                        "options.{$key}.value",
+                        __('form-requests.theme.options.value.invalid_type')
                     );
                 }
             }
         });
     }
 
+    private function allowedValueTypes(): array
+    {
+        return [
+            ThemeHelper::OPTION_VALUE_TYPE_TEXT,
+            ThemeHelper::OPTION_VALUE_TYPE_STRING,
+            ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
+            ThemeHelper::OPTION_VALUE_TYPE_INTEGER,
+            ThemeHelper::OPTION_VALUE_TYPE_FLOAT,
+            ThemeHelper::OPTION_VALUE_TYPE_DECIMAL,
+            ThemeHelper::OPTION_VALUE_TYPE_JSON,
+            ThemeHelper::OPTION_VALUE_TYPE_ARRAY,
+            ThemeHelper::OPTION_VALUE_TYPE_URL,
+            ThemeHelper::OPTION_VALUE_TYPE_IMAGE,
+            ThemeHelper::OPTION_VALUE_TYPE_COLOR,
+        ];
+    }
+
     private function isValidThemeValue(string $type, mixed $value): bool
     {
         return match ($type) {
-            ThemeHelper::VALUE_TYPE_TEXT,
-            ThemeHelper::VALUE_TYPE_STRING  => is_string($value),
+            ThemeHelper::OPTION_VALUE_TYPE_TEXT,
+            ThemeHelper::OPTION_VALUE_TYPE_STRING => is_string($value),
 
-            ThemeHelper::VALUE_TYPE_BOOLEAN => is_bool($value)
-            || filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null,
+            ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN => is_bool($value)
+                || filter_var(
+                    $value,
+                    FILTER_VALIDATE_BOOLEAN,
+                    FILTER_NULL_ON_FAILURE
+                ) !== null,
 
-            ThemeHelper::VALUE_TYPE_INTEGER => is_int($value)
-            || filter_var($value, FILTER_VALIDATE_INT) !== false,
+            ThemeHelper::OPTION_VALUE_TYPE_INTEGER => is_int($value)
+                || filter_var($value, FILTER_VALIDATE_INT) !== false,
 
-            ThemeHelper::VALUE_TYPE_FLOAT   => is_float($value)
-            || filter_var($value, FILTER_VALIDATE_FLOAT) !== false,
+            ThemeHelper::OPTION_VALUE_TYPE_FLOAT => is_float($value)
+                || filter_var($value, FILTER_VALIDATE_FLOAT) !== false,
 
-            ThemeHelper::VALUE_TYPE_DECIMAL => is_numeric($value)
-            && preg_match('/^-?\d+(\.\d+)?$/', (string) $value),
+            ThemeHelper::OPTION_VALUE_TYPE_DECIMAL => is_numeric($value)
+                && preg_match(
+                    '/^-?\d+(\.\d+)?$/',
+                    (string) $value
+                ),
 
-            ThemeHelper::VALUE_TYPE_JSON    => $this->isValidJson($value),
+            ThemeHelper::OPTION_VALUE_TYPE_JSON => $this->isValidJson($value),
 
-            ThemeHelper::VALUE_TYPE_ARRAY   => is_array($value),
+            ThemeHelper::OPTION_VALUE_TYPE_ARRAY => is_array($value),
 
-            ThemeHelper::VALUE_TYPE_URL     => is_string($value)
-            && filter_var($value, FILTER_VALIDATE_URL) !== false,
+            ThemeHelper::OPTION_VALUE_TYPE_URL => is_string($value)
+                && filter_var($value, FILTER_VALIDATE_URL) !== false,
 
-            ThemeHelper::VALUE_TYPE_IMAGE   => $value instanceof UploadedFile
-            && str_starts_with($value->getMimeType(), 'image/'),
+            ThemeHelper::OPTION_VALUE_TYPE_IMAGE => $value instanceof UploadedFile
+                && str_starts_with($value->getMimeType(), 'image/'),
 
-            ThemeHelper::VALUE_TYPE_COLOR   => is_string($value)
-            && preg_match('/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/', $value),
+            ThemeHelper::OPTION_VALUE_TYPE_COLOR => is_string($value)
+                && preg_match(
+                    '/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/',
+                    $value
+                ),
 
-            default                     => false,
+            default => false,
         };
     }
 
     private function isValidJson(mixed $value): bool
     {
-        if (is_array($value)) {
+        if (is_array($value) || is_object($value)) {
             return true;
         }
 
@@ -173,7 +191,7 @@ class ThemeRequest extends FormRequest
             return false;
         }
 
-        json_decode($value);
+        json_decode($value, true);
 
         return json_last_error() === JSON_ERROR_NONE;
     }

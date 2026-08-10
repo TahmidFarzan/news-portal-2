@@ -11,10 +11,14 @@ export const titleFormat = (text) => {
 
 export const extractModelName = (fullClassName) => {
     if (!fullClassName) return '';
+
     return fullClassName.split(/\\+/).pop();
-}
+};
 
 export const capitalize = (str) => {
-    if (!str) return 'N/A'
-    return str.charAt(0).toUpperCase() + str.slice(1)
-}
+    if (!str) return 'N/A';
+
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+

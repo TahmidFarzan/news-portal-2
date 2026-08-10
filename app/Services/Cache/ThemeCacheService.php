@@ -30,14 +30,9 @@ class ThemeCacheService
         return Theme::orderBy('id', 'asc')->get();
     }
 
-    private function dbThemesByGroupAndLabels(string $group, array $labels): Collection
+    private function dbThemeByName(string $name): Theme
     {
-        return Theme::where('group', $group)->whereIn('label', $labels)->orderBy('id', 'asc')->get();
-    }
-
-    private function dbThemeByGroupAndLabel(string $group, string $label): Theme
-    {
-        return Theme::where('group', $group)->where('label', $label)->orderBy('id', 'desc')->firstOrFail();
+        return Theme::where('name', $name)->orderBy('id', 'desc')->firstOrFail();
     }
 
     public function getThemes(string $key, ?int $cachedTTL = null): Collection
@@ -69,38 +64,10 @@ class ThemeCacheService
         return $records;
     }
 
-    public function getThemesByGroupAndLabels(string $key, string $group, array $labels, ?int $cachedTTL = null): Collection
+
+    public function getThemeByName(string $key, string $name, ?int $cachedTTL = null): Theme
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateThemesByGroupAndLabels($key, $this->secondKey, $group, $labels);
-
-        $records = CacheServerHelper::getCachedData(
-            $cacheKey,
-            [
-                $key,
-                $this->mainTag,
-            ]
-        );
-
-        if (! $records) {
-            $records = $this->dbThemesByGroupAndLabels($group, $labels);
-
-            CacheServerHelper::cachedData(
-                $cacheKey,
-                $records,
-                $cachedTTL ?? $this->cachedTTL,
-                [
-                    $key,
-                    $this->mainTag,
-                ]
-            );
-        }
-
-        return $records;
-    }
-
-    public function getThemeByGroupAndLabel(string $key, string $group, string $label, ?int $cachedTTL = null): Theme
-    {
-        $cacheKey = CacheHelper::cacheKeyGenerateThemesByGroupAndLabel($key, $this->secondKey, $group, $label);
+        $cacheKey = CacheHelper::cacheKeyGenerateThemesByName($key, $this->secondKey, $name);
 
         $record = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -111,7 +78,7 @@ class ThemeCacheService
         );
 
         if (! $record) {
-            $record = $this->dbThemeByGroupAndLabel($group, $label);
+            $record = $this->dbThemeByName($name);
 
             CacheServerHelper::cachedData(
                 $cacheKey,

@@ -42,7 +42,7 @@ const metaKeywords = computed(() => {
     return page?.seo_keywords ?? ''
 })
 
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 </script>
 
 <template>
@@ -66,7 +66,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         <List :news="news" pagination-type="Cursor" />
     </div>
 
-    <GoogleAdsense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+    <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
 </template>
 
 <style scoped>

@@ -1,45 +1,58 @@
-export const themeValueTypes = Object.freeze({
-    TEXT: 'Text',
-    STRING: 'String',
-    BOOLEAN: 'Boolean',
-    INTEGER: 'Integer',
-    FLOAT: 'Float',
-    DECIMAL: 'Decimal',
-    JSON: 'Json',
-    ARRAY: 'Array',
-    URL: 'Url',
-    IMAGE: 'Image',
-    COLOR: 'Color',
+export const themeNames = Object.freeze({
+    HEADER_MENU: 'Header Menu',
+    GOOGLE_AD: 'Google Ad',
+    SITE_EXTRA_FEATURE: 'Site Extra Feature',
+    TOPBAR_FOOTER_MENU: 'Topbar & Footer Menu',
+    SOCIAL_LINK: 'Social Link',
+    GOOGLE_SEO_SERVICE: 'Google SEO Service',
 })
 
-export const themeGroups = Object.freeze({
-    App: 'App',
-    MENU: 'Menu',
-    SOCIAL_LINK: 'Social Link',
+export const themeOptionValueTypes = Object.freeze({
+    TEXT: 'text',
+    STRING: 'string',
+    BOOLEAN: 'boolean',
+    INTEGER: 'integer',
+    FLOAT: 'float',
+    DECIMAL: 'decimal',
+    JSON: 'json',
+    ARRAY: 'array',
+    URL: 'url',
+    IMAGE: 'image',
+    COLOR: 'color',
 })
 
 export const themeOptions = Object.freeze({
-    SHOW_FOOTER_MENU: 'Show Footer Menu',
-    SHOW_TOPBAR_MENU: 'Show Topbar Menu',
-    FB_SOCIAL_LINK: 'Fb Social Link',
-    YOUTUBE_SOCIAL_LINK: 'Youtube Social Link',
-    GOOGLE_NEWS_SOCIAL_LINK: 'Google News Link',
-    SHOW_LOGO_ON_HEADER_MENU: 'Show Logo On Header Menu',
-    SHOW_NAME_ON_HEADER_MENU: 'Show Name On Header Menu',
-    SHOW_BREAKING_NEWS  : "Show Breaking News",
-    SHOW_GOOGLE_AD  : "Show Google Ad",
-    SHOW_TRENDS : "Show Trends",
-    SHOW_SURVEYS : "Show Surveys",
-    SHOW_QUIZZES : "Show Quizzes",
-    GOOGLE_SEARCH_CONSOLE_HEADER  : "Google Search Console Header",
-    GOOGLE_ANALYTIC_HEADER  : "Google Analytic Header",
-    GOOGLE_TAG_MANAGER_HEADER  : "Google Tag Manager Header",
-    GOOGLE_TAG_MANAGER_BODY  : "Google Tag Manager Body",
-    GOOGLE_ADSENSE_CLIENT_ID: "Google Google Adsense Client Id"
+    SHOW_FOOTER_MENU: 'show-footer-menu',
+    SHOW_TOPBAR_MENU: 'show-topbar-menu',
+    FB_SOCIAL_LINK: 'fb-social-link',
+    YOUTUBE_SOCIAL_LINK: 'youtube-social-link',
+    GOOGLE_NEWS_SOCIAL_LINK: 'google-news-social-link',
+    SHOW_LOGO_ON_HEADER_MENU: 'show-logo-on-header-menu',
+    SHOW_NAME_ON_HEADER_MENU: 'show-name-on-header-menu',
+    SHOW_BREAKING_NEWS: 'show-breaking-news',
+    SHOW_TRENDS: 'show-trends',
+    SHOW_SURVEYS: 'show-surveys',
+    SHOW_QUIZZES: 'show-quizzes',
+    GOOGLE_AD_ENABLE: 'google-ad-enable',
+    GOOGLE_ADSENSE_CLIENT_ID: 'google-adsense-client-id',
+    GOOGLE_SEARCH_CONSOLE_HEADER: 'google-search-console-header',
+    GOOGLE_ANALYTIC_HEADER: 'google-analytic-header',
+    GOOGLE_TAG_MANAGER_HEADER: 'google-tag-manager-header',
+    GOOGLE_TAG_MANAGER_BODY: 'google-tag-manager-body',
 })
 
+export const formatThemeValue = (value) => {
+    if (value === null || value === undefined) {
+        return ''
+    }
+    if (typeof value !== 'object') {
+        return String(value)
+    }
+    return JSON.stringify(value, null, 2)
+}
+
 export function useTheme() {
-    const themeValueTypeOptions = Object.values(themeValueTypes)
+    const themeOptionValueTypeOptions = Object.values(themeOptionValueTypes)
 
     const isEmpty = (value) => {
         return value === null ||
@@ -48,7 +61,9 @@ export function useTheme() {
     }
 
     const hasValue = (value) => {
-        return value !== null && value !== undefined && value !== ''
+        return value !== null &&
+            value !== undefined &&
+            value !== ''
     }
 
     const isTruthyValue = (value) => {
@@ -61,33 +76,30 @@ export function useTheme() {
     }
 
     const getDefaultValueByType = (type) => {
-        if (type === themeValueTypes.BOOLEAN) {
+        if (type === themeOptionValueTypes.BOOLEAN) {
             return false
         }
-
-        if (type === themeValueTypes.ARRAY) {
-            return '[]'
+        if (type === themeOptionValueTypes.ARRAY) {
+            return []
         }
-
-        if (type === themeValueTypes.JSON) {
-            return '{}'
+        if (type === themeOptionValueTypes.JSON) {
+            return {}
         }
-
-        if (type === themeValueTypes.COLOR) {
+        if (type === themeOptionValueTypes.COLOR) {
             return '#000000'
         }
-
         return null
     }
 
     return {
-        themeValueTypes,
-        themeValueTypeOptions,
-        themeGroups,
+        themeOptionValueTypes,
+        themeOptionValueTypeOptions,
         themeOptions,
+        themeNames,
         isEmpty,
         hasValue,
         isTruthyValue,
         getDefaultValueByType,
+        formatThemeValue,
     }
 }

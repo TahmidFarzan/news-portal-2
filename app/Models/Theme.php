@@ -9,26 +9,22 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Illuminate\Support\Str;
 
 #[Table('themes')]
 #[Fillable([
-    'group',
-    'label',
-    'type',
-    'value',
+    'name',
     'slug',
+    'options',
 ])]
 #[UsePolicy(ThemePolicy::class)]
 #[ObservedBy([ThemeObserver::class])]
@@ -41,103 +37,24 @@ class Theme extends Model
     protected function casts(): array
     {
         return [
+            'options' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
-    }
-
-    protected function value(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value, array $attributes) => self::castValueFromStorage(
-                $value,
-                $attributes['type'] ?? null
-            ),
-            set: fn ($value, array $attributes) => self::castValueForStorage(
-                $value,
-                $attributes['type'] ?? $this->type ?? null
-            )
-        );
-    }
-
-    protected static function castValueFromStorage(mixed $value, ?string $type): mixed
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        return match ($type) {
-            ThemeHelper::VALUE_TYPE_BOOLEAN => filter_var($value, FILTER_VALIDATE_BOOLEAN),
-            ThemeHelper::VALUE_TYPE_INTEGER => (int) $value,
-            ThemeHelper::VALUE_TYPE_FLOAT,
-            ThemeHelper::VALUE_TYPE_DECIMAL => (float) $value,
-            ThemeHelper::VALUE_TYPE_JSON,
-            ThemeHelper::VALUE_TYPE_ARRAY => json_decode($value, true),
-            default => $value,
-        };
-    }
-
-    protected static function castValueForStorage(mixed $value, ?string $type): mixed
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        return match ($type) {
-            ThemeHelper::VALUE_TYPE_BOOLEAN => self::prepareBooleanValue($value),
-            ThemeHelper::VALUE_TYPE_INTEGER => (string) ((int) $value),
-            ThemeHelper::VALUE_TYPE_FLOAT,
-            ThemeHelper::VALUE_TYPE_DECIMAL => (string) ((float) $value),
-            ThemeHelper::VALUE_TYPE_JSON,
-            ThemeHelper::VALUE_TYPE_ARRAY => self::prepareJsonValue($value),
-            default => (string) $value,
-        };
-    }
-
-    protected static function prepareBooleanValue(mixed $value): string
-    {
-        $boolean = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-
-        if ($boolean === null) {
-            throw new InvalidArgumentException('The value must be a valid boolean.');
-        }
-
-        return $boolean ? '1' : '0';
-    }
-
-    protected static function prepareJsonValue(mixed $value): string
-    {
-        if (is_array($value) || is_object($value)) {
-            $encoded = json_encode($value);
-
-            if ($encoded !== false) {
-                return $encoded;
-            }
-        }
-
-        if (is_string($value)) {
-            json_decode($value, true);
-
-            if (json_last_error() === JSON_ERROR_NONE) {
-                return $value;
-            }
-        }
-
-        throw new InvalidArgumentException('The value must be an array, object, or valid JSON string.');
     }
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly([
-                'group',
-                'label',
-                'type',
-                'value',
+                'name',
                 'slug',
+                'options',
             ])
             ->useLogName('Theme')
-            ->setDescriptionForEvent(fn (string $eventName) => "The record has been {$eventName}.")
+            ->setDescriptionForEvent(
+                fn (string $eventName) => "The record has been {$eventName}."
+            )
             ->logOnlyDirty()
             ->logExcept([
                 'id',
@@ -151,12 +68,12 @@ class Theme extends Model
     {
         return SlugOptions::create()
             ->saveSlugsTo('slug')
-            ->generateSlugsFrom(function ($model) {
-                return "{$model->group}-{$model->label}";
-            })
+            ->generateSlugsFrom('name')
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
-            ->usingSuffixGenerator(fn () => Str::lower(Str::random(5)) . '-' . now()->format('HisdmY'));
+            ->usingSuffixGenerator(
+                fn () => Str::lower(Str::random(5)) . '-' . now()->format('HisdmY')
+            );
     }
 
     public function getRouteKeyName(): string

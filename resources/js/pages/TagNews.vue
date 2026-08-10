@@ -44,7 +44,7 @@ const metaKeywords = computed(() => {
 const hasBrief = computed(() => {
     return Boolean(tag?.brief)
 })
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 </script>
 
 <template>
@@ -83,7 +83,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

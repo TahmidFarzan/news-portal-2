@@ -199,42 +199,20 @@ class SiteService
         );
     }
 
-    public function themeHeader(): Collection
+    public function themeGoogleService():Theme
     {
-        $labels = [
-            ThemeHelper::OPTION_GOOGLE_SEARCH_CONSOLE_HEADER,
-            ThemeHelper::OPTION_GOOGLE_ANALYTIC_HEADER,
-            ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_HEADER,
-        ];
-
-        return $this->themeCacheService->getThemesByGroupAndLabels(
+        return $this->themeCacheService->getThemeByName(
             CacheHelper::KEY_LAYOUT,
-            ThemeHelper::GROUP_APP,
-            $labels,
+            ThemeHelper::NAME_GOOGLE_SEO_SERVICE,
             CacheServerHelper::sixHoursInSecond
         );
     }
 
-    public function themeBody(): Collection
+    public function themeGoogleAd(): Theme
     {
-        $labels = [
-            ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY,
-        ];
-
-        return $this->themeCacheService->getThemesByGroupAndLabels(
+        return $this->themeCacheService->getThemeByName(
             CacheHelper::KEY_LAYOUT,
-            ThemeHelper::GROUP_APP,
-            $labels,
-            CacheServerHelper::sixHoursInSecond
-        );
-    }
-
-    public function themeGoogleAdsenseClientId(): Theme
-    {
-        return $this->themeCacheService->getThemeByGroupAndLabel(
-            CacheHelper::KEY_LAYOUT,
-            ThemeHelper::GROUP_APP,
-            ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID,
+            ThemeHelper::NAME_GOOGLE_AD,
             CacheServerHelper::sixHoursInSecond
         );
     }

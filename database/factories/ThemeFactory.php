@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Factories;
 
 use App\Models\Theme;
@@ -17,10 +18,13 @@ class ThemeFactory extends Factory
     public function definition(): array
     {
         return [
-            'group'         => "Demo",
-            'label'         => "Name",
-            'type'          => "String",
-            'value'         => $this->faker->name(),
+            'name' => $this->faker->unique()->words(2, true),
+            'options' => [
+                'demo-option' => [
+                    'valueType' => 'String',
+                    'value' => $this->faker->sentence(),
+                ],
+            ],
         ];
     }
 }

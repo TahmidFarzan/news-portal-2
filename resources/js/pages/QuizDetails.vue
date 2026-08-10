@@ -51,7 +51,7 @@ const metaTitle = computed(() => quiz?.name ?? t('common.labels.page'))
 const metaDescription = computed(() => quiz?.brief || '')
 const metaKeywords = computed(() => '')
 
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 
 const getQuizDuration = (quizItem) => {
     const startDate = quizItem?.start_date
@@ -344,7 +344,7 @@ onUnmounted(() => {
     </Head>
 
     <div class="static-page space-y-6">
-        <GoogleAdsense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.TOP" />
+        <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.TOP" />
 
         <section class="quiz-info">
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
@@ -451,7 +451,7 @@ onUnmounted(() => {
             </div>
         </section>
 
-        <GoogleAdsense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BETWEEN" />
+        <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BETWEEN" />
 
         <div v-if="isStarted && !isSubmitted" class="sticky top-4 z-50 flex justify-center">
             <div
@@ -651,7 +651,7 @@ onUnmounted(() => {
             </div>
         </section>
 
-        <GoogleAdsense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+        <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </div>
 </template>
 

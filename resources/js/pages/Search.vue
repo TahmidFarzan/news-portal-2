@@ -59,7 +59,7 @@ const makeLanguageUrl = (routeName) => {
 
     return route(routeName) + `?language_id=${language.id}`
 }
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 
 const newsTypesApiUrl = computed(() => makeLanguageUrl('search.news-types'))
 const categoryApiUrl = computed(() => makeLanguageUrl('search.category-tree'))
@@ -244,7 +244,7 @@ onMounted(async () => {
             </div>
         </form>
 
-        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

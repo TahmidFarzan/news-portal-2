@@ -32,7 +32,7 @@ const { news } = defineProps({
         required: true,
     },
 })
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 
 </script>
 
@@ -67,7 +67,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
             {{ t("news.components.view.imageGallery.labels.noGalleryImageFound") }}
         </div>
 
-       <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+       <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

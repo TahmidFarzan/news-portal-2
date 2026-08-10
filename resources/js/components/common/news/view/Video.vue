@@ -64,7 +64,7 @@ const videoUrl = computed(() => {
 const isEmbedVideo = computed(() => {
     return /youtube\.com|youtu\.be|vimeo\.com/i.test(videoUrl.value)
 })
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 </script>
 
 <template>
@@ -100,7 +100,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
         </header>
 
 
-        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

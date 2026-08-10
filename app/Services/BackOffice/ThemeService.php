@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\BackOffice;
 
 use App\Http\Requests\ThemeRequest;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class ThemeService
 {
-    public function new (): Theme
+    public function new(): Theme
     {
         return new Theme();
     }
@@ -26,7 +27,7 @@ class ThemeService
         ])->where('slug', $slug)->firstOrFail();
     }
 
-    public function findByGroupAndLabel(string $group, string $label): Theme
+    public function findByName(string $name): Theme
     {
         return Theme::with([
             'activityLogs' => fn($query) => $query->latest()->limit(10),
@@ -34,7 +35,7 @@ class ThemeService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ])->where('group', $group)->where('label', $label)->firstOrFail();
+        ])->where('group', $name)->firstOrFail();
     }
 
     public function search(Request $request)
@@ -70,24 +71,14 @@ class ThemeService
     public function save(ThemeRequest $request, Theme $theme): array
     {
         try {
-
             DB::transaction(function () use ($request, $theme) {
-                $theme->value = $request->input("value");
+                $theme->options = $request->input('options', []);
                 $theme->save();
             });
-            return [
-                'status'  => 'success',
-                'message' => __("status-messages.theme.update.success"),
-            ];
+            return ['status' => 'success', 'message' => __('status-messages.theme.update.success'),];
         } catch (Exception $exception) {
-            Log::error("Failed to update theme.", [
-                'exception' => $exception,
-            ]);
-
-            return [
-                'status'  => 'error',
-                'message' => __('status-messages.theme.update.failed'),
-            ];
+            Log::error('Failed to update theme.', ['exception' => $exception,]);
+            return ['status' => 'error', 'message' => __('status-messages.theme.update.failed'),];
         }
     }
 }

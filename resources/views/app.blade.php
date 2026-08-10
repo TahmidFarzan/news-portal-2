@@ -1,14 +1,48 @@
 @php
+    use App\Helpers\ThemeHelper;
+
     $isPublicPage = !request()->is('back-office/*') && !request()->is('auth-user/*');
-    $googleAdsClientId = null;
+
+    $googleAdsenseClientId = data_get(
+        $themeGoogleAd?->options,
+        ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID . '.value',
+        null
+    );
+
+    $googleAdEnable = data_get(
+        $themeGoogleAd?->options,
+        ThemeHelper::OPTION_GOOGLE_AD_ENABLE . '.value',
+        false
+    );
+
+    $googleSearchConsoleHeader = data_get(
+        $themeGoogleService?->options,
+        ThemeHelper::OPTION_GOOGLE_SEARCH_CONSOLE_HEADER . '.value',
+        null
+    );
+
+    $googleAnalyticHeader = data_get(
+        $themeGoogleService?->options,
+        ThemeHelper::OPTION_GOOGLE_ANALYTIC_HEADER . '.value',
+        null
+    );
+
+    $googleTagManagerHeader = data_get(
+        $themeGoogleService?->options,
+        ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_HEADER . '.value',
+        null
+    );
+
+    $googleTagManagerBody = data_get(
+        $themeGoogleService?->options,
+        ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY . '.value',
+        null
+    );
 
     $renderRawHtml = function ($value) {
         return html_entity_decode((string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     };
 
-    if ($themeGoogleAdsenseClientId && $themeGoogleAdsenseClientId->value) {
-        $googleAdsClientId = $themeGoogleAdsenseClientId->value;
-    }
 @endphp
 
 <!DOCTYPE html>
@@ -36,12 +70,22 @@
         <link href="{{ config('app.app_favicon') }}" rel="icon">
 
         @if ($isPublicPage)
-            @foreach ($themeHeader ?? [] as $perHeaderMeta)
-                {!! $renderRawHtml($perHeaderMeta->value) !!}
-            @endforeach
+            @if ($googleSearchConsoleHeader)
+                {!! $renderRawHtml($googleSearchConsoleHeader) !!}
+            @endif
 
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $googleAdsClientId }}"
-                crossorigin="anonymous"></script>
+            @if ($googleAnalyticHeader)
+                {!! $renderRawHtml($googleAnalyticHeader) !!}
+            @endif
+
+            @if ($googleTagManagerHeader)
+                {!! $renderRawHtml($googleTagManagerHeader) !!}
+            @endif
+
+            @if ($googleAdEnable && $googleAdsenseClientId)
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $googleAdsenseClientId }}"
+                    crossorigin="anonymous"></script>
+            @endif
         @endif
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -53,9 +97,9 @@
 
     <body>
         @if ($isPublicPage)
-            @foreach ($themeBody ?? [] as $perBodyMeta)
-                {!! $renderRawHtml($perBodyMeta->value) !!}
-            @endforeach
+            @if ($googleTagManagerBody)
+                {!! $renderRawHtml($googleTagManagerBody) !!}
+            @endif
         @endif
 
         @inertia

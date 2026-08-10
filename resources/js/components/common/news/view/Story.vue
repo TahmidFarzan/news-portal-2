@@ -34,7 +34,7 @@ const { news } = defineProps({
         required: true,
     },
 })
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 
 </script>
 
@@ -72,7 +72,7 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
 
         <NewsBody v-if="news?.body" class="prose prose-lg max-w-none" :news="news"/>
 
-        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <TagTrend :news="news" />
 

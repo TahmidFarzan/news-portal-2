@@ -98,7 +98,7 @@ const secondGridPageSectionNews = computed(() => {
     return pageSectionNewsItems.value.slice(2, 5)
 })
 
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 const currentLanguage = inject('currentLanguage', computed(() => null))
 
 const getFirstGridColumnClass = (index) => {
@@ -189,7 +189,7 @@ const getSecondGridColumnClass = (index) => {
             </div>
         </section>
 
-        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <section class="grid grid-cols-1 items-start gap-5 md:grid-cols-12">
             <div class="space-y-4 md:col-span-8 lg:col-span-8">
@@ -218,13 +218,13 @@ const getSecondGridColumnClass = (index) => {
 
                 <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
 
-                <GoogleAdsense v-if="showGoogleAd" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" class="mt-4" />
+                <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" class="mt-4" />
             </div>
         </section>
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsense v-if="showGoogleAd" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

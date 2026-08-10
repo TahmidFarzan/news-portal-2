@@ -35,7 +35,7 @@ const metaKeywords = computed(() => {
 
     return page?.seo_keywords ?? ''
 })
-const showGoogleAd = inject('showGoogleAd', computed(() => false))
+const googleAdEnable = inject('googleAdEnable', computed(() => false))
 </script>
 
 <template>
@@ -49,11 +49,11 @@ const showGoogleAd = inject('showGoogleAd', computed(() => false))
     </Head>
 
     <div class="static-page space-y-6">
-        <GoogleAdsense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.TOP" />
+        <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.TOP" />
 
         <article v-if="page?.body" class="page-content prose max-w-none" v-html="page.body" />
 
-        <GoogleAdsense v-if="showGoogleAd" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+        <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </div>
 </template>
 
