@@ -1,6 +1,7 @@
 <?php
 namespace Database\Factories;
 
+use App\Helpers\SeederHelper;
 use App\Helpers\GoogleAdsenseHelper;
 use App\Models\GoogleAdsense;
 use App\Models\User;
@@ -28,8 +29,8 @@ class GoogleAdsenseFactory extends Factory
             'type'          => GoogleAdsenseHelper::TYPE_SECTION,
             'position'      => GoogleAdsenseHelper::POSITION_TOP,
             "created_by_id" => $user?->id ?? "1",
-            'slot_id'       => config("util.google-ad.test_ad_slot"),
-            'client_id'     => config("util.google-ad.test_client_id"),
+            'slot_id'       => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
+            'client_id'     => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
         ];
     }
 }

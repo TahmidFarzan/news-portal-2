@@ -9,8 +9,4 @@ return [
     ],
 
 
-    'google-ad' => [
-        'test_client_id' => env('GOOGLE_AD_TEST_CLIENT_ID', "ca-pub-3940256099942544"),
-        'test_ad_slot'   => env('GOOGLE_AD_TEST_AD_SLOT', "6300978111"),
-    ],
 ];

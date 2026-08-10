@@ -6,6 +6,8 @@ class SeederHelper
     public const LANGUAGE_EN_CODE             = 'en';
     public const LANGUAGE_BN_CODE             = 'bn';
     public const SITE_PUBLIC_DEFAULT_LANGUAGE = self::LANGUAGE_EN_CODE;
+    public const GOOGLE_AD_ADSENSE_SLOT_ID = 6300978111;
+    public const GOOGLE_AD_ADSENSE_CLIENT_ID = "ca-pub-3940256099942544";
 
     public static function quizSeederData($languageCode = null): array
     {

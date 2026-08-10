@@ -88,7 +88,7 @@ class GoogleAdsenseService
 
                 $googleAdsense->name                      = $request->input('name');
                 $googleAdsense->slot_id                   = $request->input('slot_id');
-                $googleAdsense->client_id                 = $googleAdsenseClient->value ?? config("util.google-ad.test_client_id");
+                $googleAdsense->client_id                 = $googleAdsenseClient->value;
                 $googleAdsense->type                      = $request->input('type');
                 $googleAdsense->position                  = $request->input('position');
                 $googleAdsense->use_full_width_responsive = $request->boolean('use_full_width_responsive');

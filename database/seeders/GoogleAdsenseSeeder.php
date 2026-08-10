@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use App\Helpers\SeederHelper;
 use App\Helpers\GoogleAdsenseHelper;
 use App\Models\GoogleAdsense;
 use Illuminate\Database\Seeder;
@@ -34,48 +35,48 @@ class GoogleAdsenseSeeder extends Seeder
             'name'      => "Section Top",
             'type'      => GoogleAdsenseHelper::TYPE_SECTION,
             'position'  => GoogleAdsenseHelper::POSITION_TOP,
-            'slot_id'   => config("util.google-ad.test_ad_slot"),
-            'client_id' => config("util.google-ad.test_client_id"),
+            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
+            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
         ])->create();
 
         GoogleAdsense::factory()->state([
             'name'      => "Section Bottom",
             'type'      => GoogleAdsenseHelper::TYPE_SECTION,
             'position'  => GoogleAdsenseHelper::POSITION_BOTTOM,
-            'slot_id'   => config("util.google-ad.test_ad_slot"),
-            'client_id' => config("util.google-ad.test_client_id"),
+            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
+            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
         ])->create();
 
         GoogleAdsense::factory()->state([
             'name'      => "Section Bottom",
             'type'      => GoogleAdsenseHelper::TYPE_SECTION,
             'position'  => GoogleAdsenseHelper::POSITION_BETWEEN,
-            'slot_id'   => config("util.google-ad.test_ad_slot"),
-            'client_id' => config("util.google-ad.test_client_id"),
+            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
+            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
         ])->create();
 
         GoogleAdsense::factory()->state([
             'name'      => "Sidebar Top",
             'type'      => GoogleAdsenseHelper::TYPE_SIDEBAR,
             'position'  => GoogleAdsenseHelper::POSITION_TOP,
-            'slot_id'   => config("util.google-ad.test_ad_slot"),
-            'client_id' => config("util.google-ad.test_client_id"),
+            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
+            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
         ])->create();
 
         GoogleAdsense::factory()->state([
             'name'      => "Sidebar Bottom",
             'type'      => GoogleAdsenseHelper::TYPE_SIDEBAR,
             'position'  => GoogleAdsenseHelper::POSITION_BETWEEN,
-            'slot_id'   => config("util.google-ad.test_ad_slot"),
-            'client_id' => config("util.google-ad.test_client_id"),
+            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
+            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
         ])->create();
 
         GoogleAdsense::factory()->state([
             'name'      => "Sidebar Bottom",
             'type'      => GoogleAdsenseHelper::TYPE_SIDEBAR,
             'position'  => GoogleAdsenseHelper::POSITION_BOTTOM,
-            'slot_id'   => config("util.google-ad.test_ad_slot"),
-            'client_id' => config("util.google-ad.test_client_id"),
+            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
+            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
         ])->create();
     }
 }

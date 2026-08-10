@@ -1,6 +1,6 @@
 @php
     $isPublicPage = !request()->is('back-office/*') && !request()->is('auth-user/*');
-    $googleAdsClientId = config('util.test_client_id');
+    $googleAdsClientId = null;
 
     $renderRawHtml = function ($value) {
         return html_entity_decode((string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
