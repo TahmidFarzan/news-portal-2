@@ -688,7 +688,8 @@
             },
             "details": {
                 "form": {
-                    "editPageTitle": "Page edit"
+                    "editPageTitle": "Page edit",
+                    "detailsPageTitle": "Page details"
                 },
                 "labels": {
                     "keywords": "Keywords"
