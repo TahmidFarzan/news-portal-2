@@ -63,10 +63,8 @@ const {
     isTruthyValue,
 } = useTheme()
 
-const headerNavbar = ref(null)
 const footerElement = ref(null)
 
-const isHeaderSticky = ref(false)
 const breakingNewsBottom = ref(0)
 
 const siteThemes = ref([])
@@ -591,23 +589,14 @@ watch(
             </div>
         </div>
 
-        <div ref="headerNavbar" class="public-header text-white transition-shadow" :class="{
-            'is-sticky sticky top-0 z-50': isHeaderSticky,
-        }">
+        <div ref="headerNavbar" class="public-header sticky top-0 z-50 text-white transition-shadow is-sticky">
             <div class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4">
                 <a :href="homeUrl"
                     class="brand-link flex h-10 flex-shrink-0 items-center pr-4 font-semibold leading-none text-white">
-                    <img v-if="
-                        isTruthyValue(
-                            showLogoOnHeaderMenu?.value,
-                        ) && appLogo
-                    " :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain" />
+                    <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
+                        class="h-10 max-w-40 object-contain" />
 
-                    <b v-if="
-                        isTruthyValue(
-                            showNameOnHeaderMenu?.value,
-                        )
-                    " class="hidden sm:inline">
+                    <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)" class="hidden sm:inline">
                         {{ t('common.app.name') }}
                     </b>
                 </a>
