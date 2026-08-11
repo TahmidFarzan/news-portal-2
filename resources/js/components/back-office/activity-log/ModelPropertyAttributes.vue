@@ -57,13 +57,86 @@ function isThemeOption(value) {
     )
 }
 
+function isEqualValue(first, second) {
+    if (Object.is(first, second)) {
+        return true
+    }
+
+    if (isObject(first) && isObject(second)) {
+        const firstKeys = Object.keys(first)
+        const secondKeys = Object.keys(second)
+
+        if (firstKeys.length !== secondKeys.length) {
+            return false
+        }
+
+        return firstKeys.every(
+            (key) =>
+                Object.prototype.hasOwnProperty.call(second, key) &&
+                isEqualValue(first[key], second[key]),
+        )
+    }
+
+    if (Array.isArray(first) && Array.isArray(second)) {
+        if (first.length !== second.length) {
+            return false
+        }
+
+        return first.every((item, index) =>
+            isEqualValue(item, second[index]),
+        )
+    }
+
+    return false
+}
+
+function getChangedThemeOptions(options) {
+    if (!isThemeSubject() || !isObject(options)) {
+        return options
+    }
+
+    const attributesOptions =
+        activityLog?.attribute_changes?.attributes?.options ?? {}
+
+    const oldOptions =
+        activityLog?.attribute_changes?.old?.options ?? {}
+
+    return Object.fromEntries(
+        Object.entries(options).filter(([optionKey, optionValue]) => {
+            if (!isThemeOption(optionValue)) {
+                return true
+            }
+
+            const attributeOption = attributesOptions[optionKey]
+            const oldOption = oldOptions[optionKey]
+
+            if (!isThemeOption(attributeOption) || !isThemeOption(oldOption)) {
+                return true
+            }
+
+            return !isEqualValue(
+                attributeOption.value,
+                oldOption.value,
+            )
+        }),
+    )
+}
+
 const filteredProperty = computed(() => {
     if (!isObject(property)) {
         return {}
     }
 
     return Object.fromEntries(
-        Object.entries(property).filter(([, value]) => !isEmptyValue(value)),
+        Object.entries(property)
+            .map(([key, value]) => {
+                if (key === 'options' && isThemeSubject()) {
+                    return [key, getChangedThemeOptions(value)]
+                }
+
+                return [key, value]
+            })
+            .filter(([, value]) => !isEmptyValue(value)),
     )
 })
 
@@ -111,14 +184,8 @@ function formatValue(key, value) {
                 <div class="text-sm text-gray-800">
                     <template v-if="isObject(value)">
                         <div class="mt-2 ml-4 border-l-2 border-gray-200 pl-3">
-                            <template
-                                v-for="(optionValue, optionKey) in value"
-                                :key="optionKey"
-                            >
-                                <div
-                                    v-if="!isEmptyValue(optionValue)"
-                                    class="mb-2"
-                                >
+                            <template v-for="(optionValue, optionKey) in value" :key="optionKey">
+                                <div v-if="!isEmptyValue(optionValue)" class="mb-2">
                                     <template v-if="isThemeOption(optionValue)">
                                         <div class="flex items-start gap-3">
                                             <div class="min-w-0 flex-1 font-medium">
@@ -137,10 +204,8 @@ function formatValue(key, value) {
                                         </div>
 
                                         <div class="ml-4 border-l-2 border-gray-200 pl-3">
-                                            <ModelPropertyAttributes
-                                                :property="optionValue"
-                                                :activityLog="activityLog"
-                                            />
+                                            <ModelPropertyAttributes :property="optionValue"
+                                                :activityLog="activityLog" />
                                         </div>
                                     </template>
 
@@ -150,10 +215,7 @@ function formatValue(key, value) {
                                         </div>
 
                                         <ul class="ml-4 list-disc space-y-1">
-                                            <li
-                                                v-for="(item, index) in optionValue"
-                                                :key="index"
-                                            >
+                                            <li v-for="(item, index) in optionValue" :key="index">
                                                 {{ formatValue(optionKey, item) }}
                                             </li>
                                         </ul>
@@ -180,10 +242,7 @@ function formatValue(key, value) {
                             <li v-for="(item, index) in value" :key="index">
                                 <template v-if="isObject(item)">
                                     <div class="rounded border border-gray-200 bg-white p-2">
-                                        <ModelPropertyAttributes
-                                            :property="item"
-                                            :activityLog="activityLog"
-                                        />
+                                        <ModelPropertyAttributes :property="item" :activityLog="activityLog" />
                                     </div>
                                 </template>
 
@@ -202,18 +261,12 @@ function formatValue(key, value) {
 
                     <template v-else-if="isBase64Image(value)">
                         <div class="mt-2">
-                            <img
-                                :src="value"
-                                class="max-w-[150px] rounded-lg border shadow-sm"
-                            >
+                            <img :src="value" class="max-w-[150px] rounded-lg border shadow-sm">
                         </div>
                     </template>
 
                     <template v-else-if="key === 'content'">
-                        <div
-                            class="prose prose-sm max-w-none"
-                            v-html="value"
-                        />
+                        <div class="prose prose-sm max-w-none" v-html="value" />
                     </template>
 
                     <template v-else>
@@ -224,11 +277,7 @@ function formatValue(key, value) {
         </template>
     </div>
 
-    <div
-        v-else-if="property !== null && property !== undefined"
-        class="text-sm text-gray-800"
-    >
+    <div v-else-if="property !== null && property !== undefined" class="text-sm text-gray-800">
         {{ property }}
     </div>
 </template>
-
