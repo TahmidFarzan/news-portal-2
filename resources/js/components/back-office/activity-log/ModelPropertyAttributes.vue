@@ -7,7 +7,7 @@ import { titleFormat } from '@/composables/useUtil'
 import { formatDateTime } from '@/composables/useDateTime'
 import { fetchUser } from '@/composables/useApiClient'
 
-const { property } = defineProps({
+const { property, activityLog } = defineProps({
     property: {
         required: true,
     },
@@ -44,6 +44,19 @@ function isEmptyValue(value) {
     return false
 }
 
+function isThemeSubject() {
+    return activityLog?.subject_type?.includes('Theme') ?? false
+}
+
+function isThemeOption(value) {
+    return (
+        isThemeSubject() &&
+        isObject(value) &&
+        Object.prototype.hasOwnProperty.call(value, 'valueType') &&
+        Object.prototype.hasOwnProperty.call(value, 'value')
+    )
+}
+
 const filteredProperty = computed(() => {
     if (!isObject(property)) {
         return {}
@@ -63,7 +76,7 @@ function formatValue(key, value) {
     }
 
     if (
-        (key === 'user_id' || key === 'created_by_id') &&
+        ['user_id', 'created_by_id'].includes(key) &&
         Number.isInteger(Number(value))
     ) {
         if (!(value in tUser.value)) {
@@ -98,7 +111,67 @@ function formatValue(key, value) {
                 <div class="text-sm text-gray-800">
                     <template v-if="isObject(value)">
                         <div class="mt-2 ml-4 border-l-2 border-gray-200 pl-3">
-                            <ModelPropertyAttributes :property="value" :activityLog="activityLog" />
+                            <template
+                                v-for="(optionValue, optionKey) in value"
+                                :key="optionKey"
+                            >
+                                <div
+                                    v-if="!isEmptyValue(optionValue)"
+                                    class="mb-2"
+                                >
+                                    <template v-if="isThemeOption(optionValue)">
+                                        <div class="flex items-start gap-3">
+                                            <div class="min-w-0 flex-1 font-medium">
+                                                {{ titleFormat(optionKey) }}
+                                            </div>
+
+                                            <div class="min-w-0 flex-1 font-medium">
+                                                {{ formatValue(optionKey, optionValue.value) }}
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <template v-else-if="isObject(optionValue)">
+                                        <div class="mb-1 text-sm font-semibold text-gray-700">
+                                            {{ titleFormat(optionKey) }}
+                                        </div>
+
+                                        <div class="ml-4 border-l-2 border-gray-200 pl-3">
+                                            <ModelPropertyAttributes
+                                                :property="optionValue"
+                                                :activityLog="activityLog"
+                                            />
+                                        </div>
+                                    </template>
+
+                                    <template v-else-if="Array.isArray(optionValue)">
+                                        <div class="mb-1 text-sm font-semibold text-gray-700">
+                                            {{ titleFormat(optionKey) }}
+                                        </div>
+
+                                        <ul class="ml-4 list-disc space-y-1">
+                                            <li
+                                                v-for="(item, index) in optionValue"
+                                                :key="index"
+                                            >
+                                                {{ formatValue(optionKey, item) }}
+                                            </li>
+                                        </ul>
+                                    </template>
+
+                                    <template v-else>
+                                        <div class="flex items-start gap-3">
+                                            <div class="min-w-0 flex-1 font-medium">
+                                                {{ titleFormat(optionKey) }}
+                                            </div>
+
+                                            <div class="min-w-0 flex-1">
+                                                {{ formatValue(optionKey, optionValue) }}
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
                         </div>
                     </template>
 
@@ -107,7 +180,10 @@ function formatValue(key, value) {
                             <li v-for="(item, index) in value" :key="index">
                                 <template v-if="isObject(item)">
                                     <div class="rounded border border-gray-200 bg-white p-2">
-                                        <ModelPropertyAttributes :property="item" :activityLog="activityLog" />
+                                        <ModelPropertyAttributes
+                                            :property="item"
+                                            :activityLog="activityLog"
+                                        />
                                     </div>
                                 </template>
 
@@ -126,12 +202,18 @@ function formatValue(key, value) {
 
                     <template v-else-if="isBase64Image(value)">
                         <div class="mt-2">
-                            <img :src="value" class="max-w-[150px] rounded-lg border shadow-sm">
+                            <img
+                                :src="value"
+                                class="max-w-[150px] rounded-lg border shadow-sm"
+                            >
                         </div>
                     </template>
 
                     <template v-else-if="key === 'content'">
-                        <div class="prose prose-sm max-w-none" v-html="value" />
+                        <div
+                            class="prose prose-sm max-w-none"
+                            v-html="value"
+                        />
                     </template>
 
                     <template v-else>
@@ -142,7 +224,11 @@ function formatValue(key, value) {
         </template>
     </div>
 
-    <div v-else-if="property !== null && property !== undefined" class="text-sm text-gray-800">
+    <div
+        v-else-if="property !== null && property !== undefined"
+        class="text-sm text-gray-800"
+    >
         {{ property }}
     </div>
 </template>
+

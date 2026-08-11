@@ -1,5 +1,6 @@
 <script setup>
 import Layout from '@/pages/layouts/AuthLayout.vue'
+import RecentActivities from '@/components/back-office/activity-log/RecentModelActivityLogs.vue'
 
 import { ref, onMounted, nextTick, inject } from 'vue'
 import { Head, router as intertiaJsRoute } from '@inertiajs/vue3'
@@ -108,7 +109,7 @@ onMounted(async () => {
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
-            <h2 class="text-lg font-semibold">{{ t('admin.pages.details.form.editPageTitle') }}</h2>
+            <h2 class="text-lg font-semibold">{{ t('admin.pages.details.form.detailsPageTitle') }}</h2>
 
             <div class="flex gap-2">
 
@@ -140,7 +141,6 @@ onMounted(async () => {
             </div>
         </div>
 
-        <!-- BASIC INFO -->
         <div class="bg-white border rounded-xl shadow-sm p-5 space-y-4">
             <h3 class="font-semibold border-b pb-2">{{ t('common.labels.basicInformation') }}</h3>
 
@@ -165,13 +165,11 @@ onMounted(async () => {
 
         </div>
 
-        <!-- BODY -->
         <div v-if="!page?.is_default" class="bg-white border rounded-xl p-5">
             <h3 class="font-semibold mb-2">{{ t('common.labels.body') }}</h3>
             <div v-html="page?.body || t('common.labels.notAvailable')" />
         </div>
 
-        <!-- TREE -->
         <div class="bg-white border rounded-xl p-5">
             <h3 class="font-semibold mb-2">{{ t('common.labels.tree') }}</h3>
 
@@ -184,7 +182,6 @@ onMounted(async () => {
             </div>
         </div>
 
-        <!-- SEO -->
         <div class="bg-white border rounded-xl p-5">
             <h3 class="font-semibold mb-3">{{ t('common.labels.seoSettings') }}</h3>
 
@@ -206,10 +203,17 @@ onMounted(async () => {
             </div>
         </div>
 
-        <!-- MODALS -->
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
+            <h3 class="text-base font-semibold border-b pb-2">
+                {{ t('common.labels.activityLogs') }}
+            </h3>
+
+            <RecentActivities :model-slug="'page'" :model="page" />
+        </div>
+
         <Teleport to="body">
 
-            <!-- TRASH -->
             <div v-if="showTrashModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
                 <div class="bg-white p-6 rounded-xl w-[380px] space-y-4">
                     <h3 class="text-red-600 font-semibold">{{ t('common.actions.trash') }}</h3>
