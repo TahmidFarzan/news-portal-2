@@ -161,7 +161,7 @@ onMounted(async () => {
                         {{ titleFormat(propertyIndex) }}
                     </div>
 
-                    <ModelPropertyAttributes :property="property" />
+                    <ModelPropertyAttributes :activityLog="activityLog" :property="property" />
                 </div>
 
             </div>
