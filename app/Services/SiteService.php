@@ -3,14 +3,14 @@ namespace App\Services;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\CacheServerHelper;
-use App\Helpers\GoogleAdsenseHelper;
+use App\Helpers\GoogleAdHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\SystemHelper;
 use App\Helpers\ThemeHelper;
 use App\Models\Language;
 use App\Models\MenuItem;
 use App\Models\Theme;
-use App\Services\Cache\GoogleAdsenseCacheService;
+use App\Services\Cache\GoogleAdCacheService;
 use App\Services\Cache\MenuCacheService;
 use App\Services\Cache\NewsCacheService;
 use App\Services\Cache\ThemeCacheService;
@@ -29,7 +29,7 @@ class SiteService
 
     protected NewsCacheService $newsCacheService;
 
-    protected GoogleAdsenseCacheService $googleAdsenseCacheService;
+    protected GoogleAdCacheService $googleAdCacheService;
 
         protected LanguageCacheService $languageCacheService;
 
@@ -37,13 +37,13 @@ class SiteService
         MenuCacheService $menuCacheService,
         ThemeCacheService $themeCacheService,
         NewsCacheService $newsCacheService,
-        GoogleAdsenseCacheService $googleAdsenseCacheService,
+        GoogleAdCacheService $googleAdCacheService,
         LanguageCacheService $languageCacheService
     ) {
         $this->menuCacheService          = $menuCacheService;
         $this->themeCacheService         = $themeCacheService;
         $this->newsCacheService          = $newsCacheService;
-        $this->googleAdsenseCacheService = $googleAdsenseCacheService;
+        $this->googleAdCacheService = $googleAdCacheService;
         $this->languageCacheService = $languageCacheService;
     }
 
@@ -228,12 +228,12 @@ class SiteService
         );
     }
 
-    public function getGoogleAdsense(Request $request): Collection
+    public function getGoogleAd(Request $request): Collection
     {
-        $type     = $request->input('type', GoogleAdsenseHelper::TYPE_SECTION);
-        $position = $request->input('position', GoogleAdsenseHelper::POSITION_TOP);
+        $type     = $request->input('type', GoogleAdHelper::TYPE_SECTION);
+        $position = $request->input('position', GoogleAdHelper::POSITION_TOP);
 
-        return $this->googleAdsenseCacheService->getGoogleAdsensesByTypeAndPosition(
+        return $this->googleAdCacheService->getGoogleAdsByTypeAndPosition(
             CacheHelper::KEY_LAYOUT,
             $type,
             $position,

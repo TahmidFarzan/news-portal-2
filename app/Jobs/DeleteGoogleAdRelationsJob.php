@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
 
-use App\Models\GoogleAdsense;
+use App\Models\GoogleAd;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -13,20 +13,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class DeleteGoogleAdsenseRelationsJob implements ShouldQueue, ShouldBeUnique
+class DeleteGoogleAdRelationsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
-    public int $googleAdsenseId;
+    public int $googleAdId;
 
-    public function __construct(int $googleAdsenseId)
+    public function __construct(int $googleAdId)
     {
-        $this->googleAdsenseId = $googleAdsenseId;
+        $this->googleAdId = $googleAdId;
     }
 
     public function uniqueId(): string
     {
-        return "delete-google_adsense-relations-{$this->googleAdsenseId}";
+        return "delete-google_ad-relations-{$this->googleAdId}";
     }
 
     public function retryAfter()
@@ -41,22 +41,22 @@ class DeleteGoogleAdsenseRelationsJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $googleAdsense = GoogleAdsense::find($this->googleAdsenseId);
+        $googleAd = GoogleAd::find($this->googleAdId);
 
-        if ($googleAdsense && ($googleAdsense->activities()->exists())) {
+        if ($googleAd && ($googleAd->activities()->exists())) {
 
             try {
 
-                DB::transaction(function () use ($googleAdsense) {
-                    if ($googleAdsense->activities()->exists()) {
-                        $googleAdsense->activities()->delete();
+                DB::transaction(function () use ($googleAd) {
+                    if ($googleAd->activities()->exists()) {
+                        $googleAd->activities()->delete();
                     }
 
 
                 });
             } catch (Exception $ex) {
 
-                Log::error("Fail to cleanup google adsense relations.", [
+                Log::error("Fail to cleanup google ad relations.", [
                     'exception' => $ex,
                 ]);
 

@@ -19,7 +19,7 @@ class UserPermissionHelper
     public const MODULE_CATEGORY        = 'Category';
     public const MODULE_CONTRIBUTOR     = 'Contributor';
     public const MODULE_EVENT           = 'Event';
-    public const MODULE_GOOGLE_ADSENSE  = 'Google adsense';
+    public const MODULE_GOOGLE_AD  = 'Google Ad';
     public const MODULE_LOCATION        = 'Location';
     public const MODULE_LANGUAGE        = 'Language';
     public const MODULE_MENU            = 'Menu';
@@ -44,7 +44,7 @@ class UserPermissionHelper
             self::MODULE_CATEGORY,
             self::MODULE_CONTRIBUTOR,
             self::MODULE_EVENT,
-            self::MODULE_GOOGLE_ADSENSE,
+            self::MODULE_GOOGLE_AD,
             self::MODULE_LOCATION,
             self::MODULE_LANGUAGE,
             self::MODULE_MENU,

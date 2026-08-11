@@ -63,7 +63,7 @@ import {
     canAccessMenu,
     canAccessTheme,
     canAccessLanguage,
-    canAccessGoogleAdsense,
+    canAccessGoogleAd,
     canAccessCategory,
     canAccessTag,
     canAccessTrend,
@@ -162,8 +162,8 @@ const canAccessLanguageComputed = computed(() => {
     return canAccessLanguage(authUser)
 })
 
-const canAccessGoogleAdsenseComputed = computed(() => {
-    return canAccessGoogleAdsense(authUser)
+const canAccessGoogleAdComputed = computed(() => {
+    return canAccessGoogleAd(authUser)
 })
 
 const canAccessSurveyComputed = computed(() => {
@@ -353,11 +353,11 @@ const isSubMenuVisible = (key) => {
             {{ t("common.labels.languages") }}
         </a>
 
-        <a v-if="canAccessGoogleAdsenseComputed" :href="route('back-office.google-adsenses.index')"
+        <a v-if="canAccessGoogleAdComputed" :href="route('back-office.google-ads.index')"
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            :class="isCurrentPage('/back-office/google-adsenses/*') ? 'bg-gray-200 font-medium' : ''">
+            :class="isCurrentPage('/back-office/google-ads/*') ? 'bg-gray-200 font-medium' : ''">
             <FontAwesomeIcon icon="bullhorn" />
-            {{ t("common.messages.googleAdsense") }}
+            {{ t("common.messages.googleAd") }}
         </a>
 
         <a v-if="canAccessSurveyComputed" :href="route('back-office.surveys.index')"

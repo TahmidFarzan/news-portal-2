@@ -356,20 +356,20 @@ return [
         ],
     ],
 
-    'google-adsense'  => [
+    'google-ad'  => [
         'save'   => [
-            'success' => 'Google adsense saved successfully.',
-            'failed'  => 'Failed to save google adsense.',
+            'success' => 'Google Ad saved successfully.',
+            'failed'  => 'Failed to save google ad.',
         ],
 
         'update' => [
-            'success' => 'Google adsense update successfully.',
-            'failed'  => 'Failed to update google adsense',
+            'success' => 'Google Ad update successfully.',
+            'failed'  => 'Failed to update google ad',
         ],
 
         'delete' => [
-            'success' => 'Google adsense deleted successfully.',
-            'failed'  => 'Failed to delete google adsense.',
+            'success' => 'Google Ad deleted successfully.',
+            'failed'  => 'Failed to delete google ad.',
         ],
     ],
 

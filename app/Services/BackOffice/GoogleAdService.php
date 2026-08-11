@@ -3,8 +3,8 @@
 namespace App\Services\BackOffice;
 
 use App\Helpers\ThemeHelper;
-use App\Http\Requests\GoogleAdsenseRequest;
-use App\Models\GoogleAdsense;
+use App\Http\Requests\GoogleAdRequest;
+use App\Models\GoogleAd;
 use App\Services\BackOffice\ThemeService;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class GoogleAdsenseService
+class GoogleAdService
 {
     public ThemeService $themeService;
 
@@ -21,14 +21,14 @@ class GoogleAdsenseService
         $this->themeService = $themeService;
     }
 
-    public function new(): GoogleAdsense
+    public function new(): GoogleAd
     {
-        return new GoogleAdsense();
+        return new GoogleAd();
     }
 
-    public function find(string $slug): GoogleAdsense
+    public function find(string $slug): GoogleAd
     {
-        return GoogleAdsense::with([
+        return GoogleAd::with([
             'createdBy',
 
             'activityLogs' => fn($query) => $query->latest()->limit(10),
@@ -43,7 +43,7 @@ class GoogleAdsenseService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = GoogleAdsense::query();
+        $query = GoogleAd::query();
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
@@ -77,70 +77,71 @@ class GoogleAdsenseService
             ->appends($request->all());
     }
 
-    public function save(GoogleAdsenseRequest $request, GoogleAdsense $googleAdsense): array
+    public function save(GoogleAdRequest $request, GoogleAd $googleAd): array
     {
-        $isNew       = empty($googleAdsense->id);
+        $isNew       = empty($googleAd->id);
         $statusEvent = $isNew ? "save" : "update";
 
         try {
 
-            DB::transaction(function () use ($request, $googleAdsense, $isNew) {
-                $googleAd = $this->themeService->findByName(ThemeHelper::NAME_GOOGLE_AD);
+            DB::transaction(function () use ($request, $googleAd, $isNew) {
+                $theme = $this->themeService->findByName(ThemeHelper::NAME_GOOGLE_AD);
 
                 $googleAdsenseClientId = data_get(
-                    $googleAd?->options,
-                    ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID . '.value',
+                    $theme?->options,
+                    ThemeHelper::OPTION_GOOGLE_AD_ADSENSE_CLIENT_ID . '.value',
                     null
                 );
-                $googleAdsense->name                      = $request->input('name');
-                $googleAdsense->slot_id                   = $request->input('slot_id');
-                $googleAdsense->client_id                 = $googleAdsenseClientId;
-                $googleAdsense->type                      = $request->input('type');
-                $googleAdsense->position                  = $request->input('position');
-                $googleAdsense->use_full_width_responsive = $request->boolean('use_full_width_responsive');
 
-                $googleAdsense->created_by_id = $isNew ? Auth::id() : $googleAdsense->created_by_id;
+                $googleAd->name                      = $request->input('name');
+                $googleAd->slot_id                   = $request->input('slot_id');
+                $googleAd->client_id                 = $googleAdsenseClientId;
+                $googleAd->type                      = $request->input('type');
+                $googleAd->position                  = $request->input('position');
+                $googleAd->use_full_width_responsive = $request->boolean('use_full_width_responsive');
 
-                $googleAdsense->save();
+                $googleAd->created_by_id = $isNew ? Auth::id() : $googleAd->created_by_id;
+
+                $googleAd->save();
             });
             return [
                 'status'  => 'success',
-                'message' => __("status-messages.google-adsense.{$statusEvent}.success"),
+                'message' => __("status-messages.google-ad.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
-            Log::error("Failed to {$statusEvent} google adsense.", [
+            Log::error("Failed to {$statusEvent} google ad.", [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.google-adsense.save.failed'),
+                'message' => __('status-messages.google-ad.save.failed'),
             ];
         }
     }
 
-    public function delete(GoogleAdsense $googleAdsense): array
+    public function delete(GoogleAd $googleAd): array
     {
 
         try {
 
-            DB::transaction(function () use ($googleAdsense) {
-                $googleAdsense->delete();
+            DB::transaction(function () use ($googleAd) {
+                $googleAd->delete();
             });
 
             return [
                 'status'  => 'success',
-                'message' => __('status-messages.google-adsense.delete.success'),
+                'message' => __('status-messages.google-ad.delete.success'),
             ];
         } catch (Exception $exception) {
 
-            Log::error('Google adsense delete failed.', [
+            Log::error('Google Ad delete failed.', [
                 'exception' => $exception,
             ]);
 
             return [
                 'status'  => 'error',
-                'message' => __('status-messages.google-adsense.delete.failed'),
+                'message' => __('status-messages.google-ad.delete.failed'),
             ];
         }
     }

@@ -11,7 +11,7 @@ import {
 
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
+import { adTypes, adPositions } from '@/composables/useGoogleAd'
 
 const props = defineProps({
     type: {
@@ -125,7 +125,7 @@ const getCacheParamsKey = (params = {}) => {
 }
 
 const fetchAds = async () => {
-    const apiUrl = route('site.google-adsenses')
+    const apiUrl = route('site.google-ads')
 
     const params = {
         type: type.value,
@@ -138,8 +138,8 @@ const fetchAds = async () => {
         apiUrl,
         params,
         {
-            key: `${apiCacheKey.API_SITE_GOOGLE_ADSENSE}:${apiUrl}:${cacheParamsKey}`,
-            ttl: apiCacheTTL.GOOGLE_ADSENSE,
+            key: `${apiCacheKey.API_SITE_GOOGLE_AD}:${apiUrl}:${cacheParamsKey}`,
+            ttl: apiCacheTTL.GOOGLE_AD,
         }
     )
 
@@ -201,7 +201,7 @@ const pushAdsense = async () => {
 
         startAdStatusCheck()
     } catch (error) {
-        console.warn('Google Adsense error:', error)
+        console.warn('Google Ad error:', error)
 
         adsLoaded.value = false
 
@@ -374,7 +374,7 @@ onBeforeUnmount(() => {
                     </div>
 
                     <div class="mt-1 text-xs text-gray-500">
-                        Google AdSense unavailable
+                        Google Ad unavailable
                     </div>
 
                     <div class="mt-1 text-xs text-gray-400">

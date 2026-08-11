@@ -30,7 +30,7 @@ class CacheHelper
 
     public const KEY_PAGE_HOME = 'home-page';
 
-    public const KEY_GOOGLE_ADSENSE = 'google-adsense';
+    public const KEY_GOOGLE_AD = 'google-ad';
 
     public const KEY_PAGE_NAME = 'page-name';
 
@@ -153,7 +153,7 @@ class CacheHelper
 
     public const TAG_THEME = 'theme';
 
-    public const TAG_GOOGLE_ADSENSE = 'google-adsense';
+    public const TAG_GOOGLE_AD = 'google-ad';
 
     public const TAG_LANGUAGE = 'language';
 
@@ -806,14 +806,14 @@ class CacheHelper
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateGoogleAdsensesByTypeAndPosition(string $key, string $secondKey, string $type, string $position): string
+    public static function cacheKeyGenerateGoogleAdsByTypeAndPosition(string $key, string $secondKey, string $type, string $position): string
     {
         $cacheKey = "{$key}:{$secondKey}";
 
         $cacheKey .= ':' . CacheHelper::KEY_TYPE . ":{$type}";
         $cacheKey .= ':' . CacheHelper::KEY_POSITION . ":{$position}";
 
-        $cacheKey .= ':' . CacheHelper::KEY_GOOGLE_ADSENSE;
+        $cacheKey .= ':' . CacheHelper::KEY_GOOGLE_AD;
 
         return $cacheKey;
     }

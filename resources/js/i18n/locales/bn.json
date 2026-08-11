@@ -242,7 +242,7 @@
             "categories": "বিভাগসমূহ",
             "events": "ইভেন্টসমূহ",
             "breakingNews": "ব্রেকিং নিউজ",
-            "googleAdsense": "গুগল অ্যাডসেন্স",
+            "googleAd": "গুগল অ্যাডসেন্স",
             "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন",
             "alreadyHaveAnAccount": "ইতিমধ্যে একটি অ্যাকাউন্ট আছে?",
             "backToLogin": "লগইনে ফিরে যান",
@@ -297,7 +297,7 @@
             "thisActionCanBeUndoneByDeletingBreakingNews": "ব্রেকিং নিউজ মুছে ফেলার মাধ্যমে এই কাজটি পূর্বাবস্থায় ফেরানো যাবে।",
             "deleteCategory": "বিভাগ মুছে ফেলুন",
             "deleteEvent": "ইভেন্ট মুছে ফেলুন",
-            "deleteGoogleAdsense": "গুগল অ্যাডসেন্স মুছে ফেলুন",
+            "deleteGoogleAd": "গুগল অ্যাডসেন্স মুছে ফেলুন",
             "deleteLocation": "অবস্থান মুছে ফেলুন",
             "deleteMenu": "মেনু মুছে ফেলুন",
             "deleteMenuItem": "মেনু আইটেম মুছে ফেলুন",
@@ -467,7 +467,7 @@
                 "searchPlaceholder": "ইভেন্ট অনুসন্ধান..."
             }
         },
-        "googleAdsenses": {
+        "googleAds": {
             "create": {
                 "form": {
                     "createPageTitle": "গুগল অ্যাডসেন্স তৈরি করুন",

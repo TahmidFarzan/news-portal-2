@@ -44,7 +44,6 @@ class ThemeHelper
     public const OPTION_GOOGLE_TAG_MANAGER_HEADER    = 'google-tag-manager-header';
     public const OPTION_GOOGLE_TAG_MANAGER_BODY      = 'google-tag-manager-body';
 
-
     public const OPTION_GOOGLE_AD_ENABLE     = 'google-ad-enable';
-    public const OPTION_GOOGLE_ADSENSE_CLIENT_ID     = 'google-adsense-client-id';
+    public const OPTION_GOOGLE_AD_ADSENSE_CLIENT_ID     = 'google-ad-adsense-client-id';
 }

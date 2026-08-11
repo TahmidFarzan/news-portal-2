@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('google_ad_sences', function (Blueprint $table) {
+        Schema::create('google_ads', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
             $table->string('slot_id');
@@ -24,6 +24,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('google_ad_sences');
+        Schema::dropIfExists('google_ads');
     }
 };

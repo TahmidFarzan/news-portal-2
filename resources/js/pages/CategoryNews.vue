@@ -7,10 +7,10 @@ import List from '@/components/common/news/List.vue'
 import PageSidebar from '@/components/common/page/PageSidebar.vue'
 import GridCard from '@/components/common/news/GridCard.vue'
 import CategoryHasLocationSection from '@/components/common/page/CategoryHasLocationSection.vue'
-import GoogleAdsense from '@/components/common/advertising/GoogleAdsense.vue'
+import GoogleAd from '@/components/common/advertising/GoogleAd.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
+import { adTypes, adPositions } from '@/composables/useGoogleAd'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -189,7 +189,7 @@ const getSecondGridColumnClass = (index) => {
             </div>
         </section>
 
-        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <section class="grid grid-cols-1 items-start gap-5 md:grid-cols-12">
             <div class="space-y-4 md:col-span-8 lg:col-span-8">
@@ -218,13 +218,13 @@ const getSecondGridColumnClass = (index) => {
 
                 <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
 
-                <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" class="mt-4" />
+                <GoogleAd v-if="googleAdEnable" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" class="mt-4" />
             </div>
         </section>
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

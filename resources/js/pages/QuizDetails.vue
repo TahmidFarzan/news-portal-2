@@ -2,8 +2,8 @@
 import { computed, inject, ref, reactive, onUnmounted } from 'vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import Layout from '@/pages/layouts/PublicLayout.vue'
-import GoogleAdsense from '@/components/common/advertising/GoogleAdsense.vue'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
+import GoogleAd from '@/components/common/advertising/GoogleAd.vue'
+import { adTypes, adPositions } from '@/composables/useGoogleAd'
 import { useTranslate, translateDate } from '@/composables/useTranslate'
 import { quizQuestionAnswerTypes } from '@/composables/useQuiz'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -344,7 +344,7 @@ onUnmounted(() => {
     </Head>
 
     <div class="static-page space-y-6">
-        <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.TOP" />
+        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.TOP" />
 
         <section class="quiz-info">
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
@@ -451,7 +451,7 @@ onUnmounted(() => {
             </div>
         </section>
 
-        <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BETWEEN" />
+        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BETWEEN" />
 
         <div v-if="isStarted && !isSubmitted" class="sticky top-4 z-50 flex justify-center">
             <div
@@ -651,7 +651,7 @@ onUnmounted(() => {
             </div>
         </section>
 
-        <GoogleAdsense v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
     </div>
 </template>
 

@@ -35,7 +35,7 @@ class ThemeService
 
             'latestActivityLog',
             'latestActivityLog.causer',
-        ])->where('group', $name)->firstOrFail();
+        ])->where('name', $name)->firstOrFail();
     }
 
     public function search(Request $request)

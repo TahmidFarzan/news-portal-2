@@ -17,7 +17,7 @@ import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 import { fetchFromApi } from '@/composables/useApiClient'
 
-import { canCreateGoogleAdsense, canUpdateGoogleAdsense, canDeleteGoogleAdsense } from '@/composables/useUserPermissions'
+import { canCreateGoogleAd, canUpdateGoogleAd, canDeleteGoogleAd } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
@@ -32,17 +32,17 @@ const deletingRow = ref(null)
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { googleAdsenses } = defineProps({
-    googleAdsenses: {
+const { googleAds } = defineProps({
+    googleAds: {
         type: Object,
         default: () => ({})
     },
 })
 
 const paginationOnly = computed(() => {
-    if (!googleAdsenses) return {}
+    if (!googleAds) return {}
 
-    const { data, ...rest } = googleAdsenses
+    const { data, ...rest } = googleAds
     return rest
 })
 
@@ -60,7 +60,7 @@ const applyFilter = () => {
 
     const cleanParams = itemListFilterParameters(filterForm.data())
 
-    intertiaJsRoute.get(route('back-office.google-adsenses.index'), cleanParams, {
+    intertiaJsRoute.get(route('back-office.google-ads.index'), cleanParams, {
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -68,21 +68,21 @@ const applyFilter = () => {
     })
 }
 
-const confirmDelete = (googleAdsense) => {
-    deletingRow.value = googleAdsense
+const confirmDelete = (googleAd) => {
+    deletingRow.value = googleAd
     showDeleteModal.value = true
 }
 
-const canCreate = () => canCreateGoogleAdsense(authUser?.value)
-const canUpdate = (googleAdsense) => canUpdateGoogleAdsense(authUser?.value, googleAdsense)
-const canDelete = (googleAdsense) => canDeleteGoogleAdsense(authUser?.value, googleAdsense)
+const canCreate = () => canCreateGoogleAd(authUser?.value)
+const canUpdate = (googleAd) => canUpdateGoogleAd(authUser?.value, googleAd)
+const canDelete = (googleAd) => canDeleteGoogleAd(authUser?.value, googleAd)
 
-const handleDelete = (googleAdsense) => {
-    if (!googleAdsense || deleteProcessing.value) return
+const handleDelete = (googleAd) => {
+    if (!googleAd || deleteProcessing.value) return
 
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.google-adsenses.delete', { slug: googleAdsense?.slug }), {
+    intertiaJsRoute.delete(route('back-office.google-ads.delete', { slug: googleAd?.slug }), {
         onFinish: () => {
             showDeleteModal.value = false
             deletingRow.value = null
@@ -106,7 +106,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('common.messages.googleAdsense'), active: true },
+                { text: t('common.messages.googleAd'), active: true },
             ],
         })
     )
@@ -115,16 +115,16 @@ onMounted(async () => {
 
 <template>
 
-    <Head :title="t('common.messages.googleAdsense')" />
+    <Head :title="t('common.messages.googleAd')" />
 
     <div class="w-full space-y-6">
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('common.messages.googleAdsense') }}
+                {{ t('common.messages.googleAd') }}
             </h2>
 
-            <a v-if="canCreate()" :href="route('back-office.google-adsenses.create')"
+            <a v-if="canCreate()" :href="route('back-office.google-ads.create')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                 <FontAwesomeIcon icon="plus" />
                 {{ t('common.actions.create') }}
@@ -143,18 +143,18 @@ onMounted(async () => {
                     :placeholder="t('common.labels.createdBy')" />
 
                 <InfiniteScrollApiSelect :form="filterForm" fieldName="position"
-                    :selectedItem="filterForm.position" :apiUrl="route('search.google-adsense-positions')"
+                    :selectedItem="filterForm.position" :apiUrl="route('search.google-ad-positions')"
                     :multiple="false" :placeholder="t('common.labels.position')" />
 
                 <InfiniteScrollApiSelect :form="filterForm" fieldName="type"
-                    :selectedItem="filterForm.type" :apiUrl="route('search.google-adsense-types')"
+                    :selectedItem="filterForm.type" :apiUrl="route('search.google-ad-types')"
                     :multiple="false" :placeholder="t('common.labels.type')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
                 <input type="search" v-model="filterForm.search"
-                    :placeholder="t('admin.googleAdsenses.index.searchPlaceholder')"
+                    :placeholder="t('admin.googleAds.index.searchPlaceholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
 
             </div>
@@ -201,7 +201,7 @@ onMounted(async () => {
                     </thead>
 
                     <tbody class="divide-y">
-                        <tr v-for="(item, index) in googleAdsenses?.data || []" :key="item.id"
+                        <tr v-for="(item, index) in googleAds?.data || []" :key="item.id"
                             class="hover:bg-gray-50 transition">
                             <td class="px-4 py-3">{{ index + 1 }}</td>
 
@@ -229,14 +229,14 @@ onMounted(async () => {
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
 
-                                    <a :href="route('back-office.google-adsenses.details', { slug: item.slug })"
+                                    <a :href="route('back-office.google-ads.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
                                         :title="t('common.actions.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
                                     <a v-if="canUpdate(item)"
-                                        :href="route('back-office.google-adsenses.edit', { slug: item.slug })"
+                                        :href="route('back-office.google-ads.edit', { slug: item.slug })"
                                         class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('common.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />
@@ -252,7 +252,7 @@ onMounted(async () => {
                             </td>
                         </tr>
 
-                        <tr v-if="!googleAdsenses?.data?.length">
+                        <tr v-if="!googleAds?.data?.length">
                             <td colspan="4" class="px-4 py-6 text-center text-gray-500">
                                 {{ t('common.labels.noRecordsFound') }}
                             </td>
@@ -280,7 +280,7 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('common.modals.deleteGoogleAdsense') }}
+                                {{ t('common.modals.deleteGoogleAd') }}
                             </h3>
 
                             <p class="text-sm font-medium">

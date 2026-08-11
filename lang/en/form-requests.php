@@ -616,7 +616,7 @@ return [
         ],
     ],
 
-    'google_adsense'       => [
+    'google_ad'       => [
         'name'     => [
             'required' => 'Group is required.',
             'string'   => 'Group must be a string.',

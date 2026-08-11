@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
 
-use App\Observers\GoogleAdsenseObserver;
-use App\Policies\GoogleAdsensePolicy;
+use App\Observers\GoogleAdObserver;
+use App\Policies\GoogleAdPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -19,7 +19,7 @@ use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[Table('google_ad_sences')]
+#[Table('google_ads')]
 #[Fillable([
         'name',
         'slug',
@@ -29,9 +29,9 @@ use Spatie\Sluggable\SlugOptions;
         "position",
         'created_by_id',
     ])]
-#[UsePolicy(GoogleAdsensePolicy::class)]
-#[ObservedBy([GoogleAdsenseObserver::class])]
-class GoogleAdsense extends Model
+#[UsePolicy(GoogleAdPolicy::class)]
+#[ObservedBy([GoogleAdObserver::class])]
+class GoogleAd extends Model
 {
     use HasFactory, LogsActivity, HasSlug;
 
@@ -57,7 +57,7 @@ class GoogleAdsense extends Model
                 "type",
                 "position",
             ])
-            ->useLogName('GoogleAdsense')
+            ->useLogName('GoogleAd')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
             ->logOnlyDirty()
             ->logExcept([

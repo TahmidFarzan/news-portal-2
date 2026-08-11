@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Requests;
 
-use App\Helpers\GoogleAdsenseHelper;
-use App\Models\GoogleAdsense;
+use App\Helpers\GoogleAdHelper;
+use App\Models\GoogleAd;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GoogleAdsenseRequest extends FormRequest
+class GoogleAdRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,47 +34,47 @@ class GoogleAdsenseRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required'     => __('form-requests.google_adsense.name.required'),
-            'name.string'       => __('form-requests.google_adsense.name.string'),
-            'name.max'          => __('form-requests.google_adsense.name.max'),
+            'name.required'     => __('form-requests.google_ad.name.required'),
+            'name.string'       => __('form-requests.google_ad.name.string'),
+            'name.max'          => __('form-requests.google_ad.name.max'),
 
-            'slot_id.required'  => __('form-requests.google_adsense.slot_id.required'),
-            'slot_id.string'    => __('form-requests.google_adsense.slot_id.string'),
-            'slot_id.max'       => __('form-requests.google_adsense.slot_id.max'),
+            'slot_id.required'  => __('form-requests.google_ad.slot_id.required'),
+            'slot_id.string'    => __('form-requests.google_ad.slot_id.string'),
+            'slot_id.max'       => __('form-requests.google_ad.slot_id.max'),
 
-            'type.required'     => __('form-requests.google_adsense.type.required'),
-            'position.required' => __('form-requests.google_adsense.position.required'),
+            'type.required'     => __('form-requests.google_ad.type.required'),
+            'position.required' => __('form-requests.google_ad.position.required'),
         ];
     }
 
     public function withValidator($validator)
     {
-        $googleAdsense = GoogleAdsense::where('slug', $this->route('slug'))->first();
+        $googleAd = GoogleAd::where('slug', $this->route('slug'))->first();
 
-        $validator->after(function ($validator) use ($googleAdsense) {
+        $validator->after(function ($validator) use ($googleAd) {
             $aVData = $validator->getData();
 
             if (isset($aVData["type"])) {
                 $typeArray = [
-                    GoogleAdsenseHelper::TYPE_SECTION,
-                    GoogleAdsenseHelper::TYPE_SIDEBAR,
+                    GoogleAdHelper::TYPE_SECTION,
+                    GoogleAdHelper::TYPE_SIDEBAR,
                 ];
                 if (! in_array($aVData["type"], $typeArray)) {
                     $validator->errors()->add(
-                        'type', __("form-requests.google_adsense.type.not_exit"),
+                        'type', __("form-requests.google_ad.type.not_exit"),
                     );
                 }
             }
 
             if (isset($aVData["position"])) {
                 $positionArray = [
-                    GoogleAdsenseHelper::POSITION_TOP,
-                    GoogleAdsenseHelper::POSITION_BOTTOM,
-                    GoogleAdsenseHelper::POSITION_BETWEEN,
+                    GoogleAdHelper::POSITION_TOP,
+                    GoogleAdHelper::POSITION_BOTTOM,
+                    GoogleAdHelper::POSITION_BETWEEN,
                 ];
                 if (! in_array($aVData["position"], $positionArray)) {
                     $validator->errors()->add(
-                        'position', __("form-requests.google_adsense.position.not_exit"),
+                        'position', __("form-requests.google_ad.position.not_exit"),
                     );
                 }
             }

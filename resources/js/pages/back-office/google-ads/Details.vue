@@ -11,7 +11,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { formatDateTime } from '@/composables/useDateTime'
-import { canUpdateGoogleAdsense, canDeleteGoogleAdsense } from '@/composables/useUserPermissions'
+import { canUpdateGoogleAd, canDeleteGoogleAd } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
 FontAwesomeLibrary.add(faTrash, faPen, faEye, faEyeSlash, faSpinner)
@@ -25,24 +25,24 @@ const authUser = inject("authUser")
 const showDeleteModal = ref(false)
 const deleteProcessing = ref(false)
 
-const { googleAdsense } = defineProps({
-    googleAdsense: {
+const { googleAd } = defineProps({
+    googleAd: {
         type: Object,
         default: () => ({})
     },
 })
 
-const pageTitle = computed(() => `${googleAdsense?.name} ${t('common.actions.details')}`)
+const pageTitle = computed(() => `${googleAd?.name} ${t('common.actions.details')}`)
 
-const canUpdate = (googleAdsense) => canUpdateGoogleAdsense(authUser?.value, googleAdsense)
-const canDelete = (googleAdsense) => canDeleteGoogleAdsense(authUser?.value, googleAdsense)
+const canUpdate = (googleAd) => canUpdateGoogleAd(authUser?.value, googleAd)
+const canDelete = (googleAd) => canDeleteGoogleAd(authUser?.value, googleAd)
 
 const handleDelete = () => {
     if (deleteProcessing.value) return
 
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.google-adsenses.delete', { slug: googleAdsense?.slug }), {
+    intertiaJsRoute.delete(route('back-office.google-ads.delete', { slug: googleAd?.slug }), {
         onFinish: () => {
             deleteProcessing.value = false
         }
@@ -55,7 +55,7 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('common.messages.googleAdsense'), href: route('back-office.google-adsenses.index') },
+                { text: t('common.messages.googleAd'), href: route('back-office.google-ads.index') },
                 { text: pageTitle.value, active: true }
             ],
         })
@@ -71,17 +71,17 @@ onMounted(async () => {
 
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
-                {{ t('admin.googleAdsenses.details.title') }}
+                {{ t('admin.googleAds.details.title') }}
             </h2>
 
             <div class="flex gap-2">
-                <a v-if="canUpdate(googleAdsense)" :href="route('back-office.google-adsenses.edit', { slug: googleAdsense?.slug })"
+                <a v-if="canUpdate(googleAd)" :href="route('back-office.google-ads.edit', { slug: googleAd?.slug })"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('common.actions.edit') }}
                 </a>
 
-                <button v-if="canDelete(googleAdsense)" @click="showDeleteModal = true"
+                <button v-if="canDelete(googleAd)" @click="showDeleteModal = true"
                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
                     {{ t('common.actions.delete') }}
@@ -99,12 +99,12 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.name') }}</span>
-                        <span class="font-medium">{{ googleAdsense?.name || t('common.labels.notAvailable') }}</span>
+                        <span class="font-medium">{{ googleAd?.name || t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.useFullWidthResponsive') }}</span>
-                        <span class="font-medium">{{ googleAdsense?.use_full_width_responsive ? t('common.boolean.yes') : t('common.boolean.no') }}</span>
+                        <span class="font-medium">{{ googleAd?.use_full_width_responsive ? t('common.boolean.yes') : t('common.boolean.no') }}</span>
                     </div>
 
                 </div>
@@ -113,12 +113,12 @@ onMounted(async () => {
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.position') }}</span>
-                        <span class="font-medium">{{ googleAdsense?.position || t('common.labels.notAvailable') }}</span>
+                        <span class="font-medium">{{ googleAd?.position || t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.type') }}</span>
-                        <span class="font-medium">{{ googleAdsense?.type || t('common.labels.notAvailable') }}</span>
+                        <span class="font-medium">{{ googleAd?.type || t('common.labels.notAvailable') }}</span>
                     </div>
 
                 </div>
@@ -126,12 +126,12 @@ onMounted(async () => {
                 <div class="border border-gray-200 rounded-lg p-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.slotId') }}</span>
-                        <span class="font-medium">{{ googleAdsense?.slot_id || t('common.labels.notAvailable') }}</span>
+                        <span class="font-medium">{{ googleAd?.slot_id || t('common.labels.notAvailable') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('admin.googleAdsenses.details.labels.clientId') }}</span>
-                        <span class="font-medium">{{ googleAdsense?.client_id || t('common.labels.notAvailable') }}</span>
+                        <span class="text-gray-500">{{ t('admin.googleAds.details.labels.clientId') }}</span>
+                        <span class="font-medium">{{ googleAd?.client_id || t('common.labels.notAvailable') }}</span>
                     </div>
 
                 </div>
@@ -150,14 +150,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.createdAt') }}</span>
                         <span class="font-medium">
-                            {{ googleAdsense?.created_at ? formatDateTime(googleAdsense.created_at) : t('common.labels.notAvailable') }}
+                            {{ googleAd?.created_at ? formatDateTime(googleAd.created_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.createdBy') }}</span>
                         <span class="font-medium">
-                            {{ googleAdsense?.created_by?.name || t('common.labels.notAvailable') }}
+                            {{ googleAd?.created_by?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -166,14 +166,14 @@ onMounted(async () => {
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.updatedAt') }}</span>
                         <span class="font-medium">
-                            {{ googleAdsense?.updated_at ? formatDateTime(googleAdsense.updated_at) : t('common.labels.notAvailable') }}
+                            {{ googleAd?.updated_at ? formatDateTime(googleAd.updated_at) : t('common.labels.notAvailable') }}
                         </span>
                     </div>
 
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ t('common.labels.updatedBy') }}</span>
                         <span class="font-medium">
-                            {{ googleAdsense?.latest_activity_log?.causer?.name || t('common.labels.notAvailable') }}
+                            {{ googleAd?.latest_activity_log?.causer?.name || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -186,7 +186,7 @@ onMounted(async () => {
                 {{ t('common.labels.activityLogs') }}
             </h3>
 
-            <RecentActivities :model-slug="'google-adsense'" :model="googleAdsense" />
+            <RecentActivities :model-slug="'google-ad'" :model="googleAd" />
         </div>
 
         <Teleport to="body">
@@ -204,11 +204,11 @@ onMounted(async () => {
                         leave-to-class="opacity-0 scale-95 translate-y-4">
                         <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
-                                {{ t('common.modals.deleteGoogleAdsense') }}
+                                {{ t('common.modals.deleteGoogleAd') }}
                             </h3>
 
                             <p class="text-sm font-medium">
-                                {{ googleAdsense?.name }}
+                                {{ googleAd?.name }}
                             </p>
 
                             <p class="text-sm text-gray-500">

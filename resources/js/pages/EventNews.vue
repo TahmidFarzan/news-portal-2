@@ -4,10 +4,10 @@ import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
 import List from '@/components/common/news/List.vue'
-import GoogleAdsense from '@/components/common/advertising/GoogleAdsense.vue'
+import GoogleAd from '@/components/common/advertising/GoogleAd.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAdsense'
+import { adTypes, adPositions } from '@/composables/useGoogleAd'
 
 defineOptions({ layout: Layout })
 
@@ -86,7 +86,7 @@ const googleAdEnable = inject('googleAdEnable', computed(() => false))
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAdsense v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
 
         <List :news="news" pagination-type="Cursor" />
     </div>

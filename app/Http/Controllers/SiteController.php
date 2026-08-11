@@ -142,10 +142,10 @@ class SiteController extends Controller
         );
     }
 
-    public function getGoogleAdsense(Request $request): JsonResponse
+    public function getGoogleAd(Request $request): JsonResponse
     {
-        $GoogleAdsenses = $this->siteService->getGoogleAdsense($request);
+        $GoogleAds = $this->siteService->getGoogleAd($request);
 
-        return response()->json($GoogleAdsenses);
+        return response()->json($GoogleAds);
     }
 }

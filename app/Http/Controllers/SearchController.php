@@ -71,17 +71,17 @@ class SearchController extends Controller
         );
     }
 
-    public function googleAdsenseTypes(Request $request): JsonResponse
+    public function googleAdTypes(Request $request): JsonResponse
     {
         return response()->json(
-            $this->searchService->googleAdsenseTypes($request)
+            $this->searchService->googleAdTypes($request)
         );
     }
 
-    public function googleAdsensePositions(Request $request): JsonResponse
+    public function googleAdPositions(Request $request): JsonResponse
     {
         return response()->json(
-            $this->searchService->googleAdsensePositions($request)
+            $this->searchService->googleAdPositions($request)
         );
     }
 

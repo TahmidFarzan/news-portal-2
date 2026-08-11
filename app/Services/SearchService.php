@@ -5,7 +5,7 @@ use App\Helpers\ActivityLogHelper;
 use App\Helpers\QuizHelper;
 use App\Helpers\DatatableHelper;
 use App\Helpers\EventHelper;
-use App\Helpers\GoogleAdsenseHelper;
+use App\Helpers\GoogleAdHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\PageHelper;
 use App\Helpers\UserHelper;
@@ -265,9 +265,9 @@ class SearchService
         ];
     }
 
-    public function googleAdsenseTypes(Request $request): array
+    public function googleAdTypes(Request $request): array
     {
-        $options = GoogleAdsenseHelper::types();
+        $options = GoogleAdHelper::types();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');
@@ -291,9 +291,9 @@ class SearchService
         ];
     }
 
-    public function googleAdsensePositions(Request $request): array
+    public function googleAdPositions(Request $request): array
     {
-        $options = GoogleAdsenseHelper::positions();
+        $options = GoogleAdHelper::positions();
 
         if ($request->filled('search')) {
             $search  = $request->input('search');

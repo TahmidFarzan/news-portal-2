@@ -5,7 +5,7 @@
 
     $googleAdsenseClientId = data_get(
         $themeGoogleAd?->options,
-        ThemeHelper::OPTION_GOOGLE_ADSENSE_CLIENT_ID . '.value',
+        ThemeHelper::OPTION_GOOGLE_AD_ADSENSE_CLIENT_ID . '.value',
         null
     );
 

@@ -34,7 +34,7 @@ export const themeOptions = Object.freeze({
     SHOW_SURVEYS: 'show-surveys',
     SHOW_QUIZZES: 'show-quizzes',
     GOOGLE_AD_ENABLE: 'google-ad-enable',
-    GOOGLE_ADSENSE_CLIENT_ID: 'google-adsense-client-id',
+    GOOGLE_AD_ADSENSE_CLIENT_ID: 'google-ad-adsense-client-id',
     GOOGLE_SEARCH_CONSOLE_HEADER: 'google-search-console-header',
     GOOGLE_ANALYTIC_HEADER: 'google-analytic-header',
     GOOGLE_TAG_MANAGER_HEADER: 'google-tag-manager-header',

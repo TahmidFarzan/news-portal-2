@@ -259,7 +259,7 @@
             "categories": "Categories",
             "events": "Events",
             "breakingNews": "Breaking News",
-            "googleAdsense": "Google AdSense",
+            "googleAd": "Google Ad",
             "forgotPassword": "Forgot Password",
             "alreadyHaveAnAccount": "Already have an account?",
             "backToLogin": "Back to login",
@@ -315,7 +315,7 @@
             "thisActionCanBeUndoneByDeletingBreakingNews": "This action can be undone by deleting breaking news.",
             "deleteCategory": "Delete Category",
             "deleteEvent": "Delete Event",
-            "deleteGoogleAdsense": "Delete Google AdSense",
+            "deleteGoogleAd": "Delete Google Ad",
             "deleteLocation": "Delete Location",
             "deleteMenu": "Delete Menu",
             "deleteMenuItem": "Delete Menu Item",
@@ -485,10 +485,10 @@
                 "searchPlaceholder": "Search event..."
             }
         },
-        "googleAdsenses": {
+        "googleAds": {
             "create": {
                 "form": {
-                    "createPageTitle": "Create Google AdSense",
+                    "createPageTitle": "Create Google Ad",
                     "slotIdPlaceholder": "Enter slot id",
                     "typePlaceholder": "Select type"
                 },
@@ -498,13 +498,13 @@
                 }
             },
             "details": {
-                "title": "Google AdSense Details",
+                "title": "Google Ad Details",
                 "labels": {
                     "clientId": "Client id"
                 }
             },
             "index": {
-                "searchPlaceholder": "Search Google AdSense..."
+                "searchPlaceholder": "Search Google Ad..."
             }
         },
         "locations": {
