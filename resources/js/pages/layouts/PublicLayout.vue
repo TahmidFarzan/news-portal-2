@@ -8,7 +8,15 @@ import FlashMessageToaster from '@/components/common/layout/FlashMessageToaster.
 import BreakingNews from '@/components/common/layout/public-layout/BreakingNews.vue'
 import LanguageSelect from '@/components/common/layout/public-layout/LanguageSelect.vue'
 
-import { ref, computed, watch, nextTick, onMounted, provide } from 'vue'
+import {
+    ref,
+    computed,
+    watch,
+    nextTick,
+    onMounted,
+    onBeforeUnmount,
+    provide,
+} from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -44,7 +52,7 @@ library.add(
     faMagnifyingGlass,
     faFacebook,
     faGoogle,
-    faYoutube
+    faYoutube,
 )
 
 const page = usePage()
@@ -56,7 +64,10 @@ const {
 } = useTheme()
 
 const headerNavbar = ref(null)
+const footerElement = ref(null)
+
 const isHeaderSticky = ref(false)
+const breakingNewsBottom = ref(0)
 
 const siteThemes = ref([])
 
@@ -86,7 +97,7 @@ const firstPathSegment = computed(() => {
         return decodeURIComponent(
             pathname
                 .split('/')
-                .filter(Boolean)[0] ?? ''
+                .filter(Boolean)[0] ?? '',
         )
     } catch {
         return pathname
@@ -104,7 +115,7 @@ const loadSiteThemes = async () => {
         {
             key: `${apiCacheKey.API_LAYOUT_THEME}:${apiUrl}`,
             ttl: apiCacheTTL.SYSTEM_LONG,
-        }
+        },
     )
 
     siteThemes.value = Array.isArray(response)
@@ -122,7 +133,7 @@ const loadDefaultLanguage = async () => {
             {
                 key: `${apiCacheKey.API_LAYOUT_DEFAULT_LANGUAGE}:${apiUrl}`,
                 ttl: apiCacheTTL.SYSTEM_SHORT,
-            }
+            },
         )
 
         defaultLanguage.value = response ?? null
@@ -135,6 +146,7 @@ const loadLanguageByFirstPathSegment = async () => {
     if (!firstPathSegment.value) {
         currentLanguage.value = defaultLanguage.value
         setSelectedLanguage(currentLanguage.value)
+
         return
     }
 
@@ -151,13 +163,16 @@ const loadLanguageByFirstPathSegment = async () => {
             {
                 key: `${apiCacheKey.API_LAYOUT_LANGUAGE}:${apiUrl}`,
                 ttl: apiCacheTTL.SYSTEM_SHORT,
-            }
+            },
         )
 
-        currentLanguage.value = response ?? defaultLanguage.value
+        currentLanguage.value =
+            response ?? defaultLanguage.value
+
         setSelectedLanguage(currentLanguage.value)
     } catch {
         currentLanguage.value = defaultLanguage.value
+
         setSelectedLanguage(currentLanguage.value)
     }
 }
@@ -194,93 +209,93 @@ const componentRefreshKey = (componentName) => {
 
 const headerMenuTheme = computed(() => {
     return getTheme(
-        themeNames.HEADER_MENU
+        themeNames.HEADER_MENU,
     )
 })
 
 const googleAdTheme = computed(() => {
     return getTheme(
-        themeNames.GOOGLE_AD
+        themeNames.GOOGLE_AD,
     )
 })
 
 const siteExtraFeaturesTheme = computed(() => {
     return getTheme(
-        themeNames.SITE_EXTRA_FEATURE
+        themeNames.SITE_EXTRA_FEATURE,
     )
 })
 
 const topbarFooterMenuTheme = computed(() => {
     return getTheme(
-        themeNames.TOPBAR_FOOTER_MENU
+        themeNames.TOPBAR_FOOTER_MENU,
     )
 })
 
 const socialLinksTheme = computed(() => {
     return getTheme(
-        themeNames.SOCIAL_LINK
+        themeNames.SOCIAL_LINK,
     )
 })
 
 const googleServicesTheme = computed(() => {
     return getTheme(
-        themeNames.GOOGLE_SEO_SERVICE
+        themeNames.GOOGLE_SEO_SERVICE,
     )
 })
 
 const facebookTheme = computed(() => {
     return getThemeOption(
         socialLinksTheme.value,
-        themeOptions.FB_SOCIAL_LINK
+        themeOptions.FB_SOCIAL_LINK,
     )
 })
 
 const youtubeTheme = computed(() => {
     return getThemeOption(
         socialLinksTheme.value,
-        themeOptions.YOUTUBE_SOCIAL_LINK
+        themeOptions.YOUTUBE_SOCIAL_LINK,
     )
 })
 
 const googleNewsTheme = computed(() => {
     return getThemeOption(
         socialLinksTheme.value,
-        themeOptions.GOOGLE_NEWS_SOCIAL_LINK
+        themeOptions.GOOGLE_NEWS_SOCIAL_LINK,
     )
 })
 
 const showTopbarMenu = computed(() => {
     return getThemeOption(
         topbarFooterMenuTheme.value,
-        themeOptions.SHOW_TOPBAR_MENU
+        themeOptions.SHOW_TOPBAR_MENU,
     )
 })
 
 const showFooterMenu = computed(() => {
     return getThemeOption(
         topbarFooterMenuTheme.value,
-        themeOptions.SHOW_FOOTER_MENU
+        themeOptions.SHOW_FOOTER_MENU,
     )
 })
 
 const showNameOnHeaderMenu = computed(() => {
     return getThemeOption(
         headerMenuTheme.value,
-        themeOptions.SHOW_NAME_ON_HEADER_MENU
+        themeOptions.SHOW_NAME_ON_HEADER_MENU,
     )
 })
 
 const showLogoOnHeaderMenu = computed(() => {
     return getThemeOption(
         headerMenuTheme.value,
-        themeOptions.SHOW_LOGO_ON_HEADER_MENU
+        themeOptions.SHOW_LOGO_ON_HEADER_MENU,
     )
 })
 
 const showBreakingNews = computed(() => {
     return getThemeOption(
         siteExtraFeaturesTheme.value,
-        themeOptions.SHOW_BREAKING_NEWS
+        themeOptions.SHOW_BREAKING_NEWS,
     )
 })
 
@@ -288,43 +303,43 @@ const googleAdEnable = computed(() => {
     return isTruthyValue(
         getThemeOptionValue(
             googleAdTheme.value,
-            themeOptions.GOOGLE_AD_ENABLE
-        )
+            themeOptions.GOOGLE_AD_ENABLE,
+        ),
     )
 })
 
 const googleAdsenseClientId = computed(() => {
     return getThemeOptionValue(
         googleAdTheme.value,
-        themeOptions.GOOGLE_ADSENSE_CLIENT_ID
+        themeOptions.GOOGLE_ADSENSE_CLIENT_ID,
     )
 })
 
 const googleSearchConsoleHeader = computed(() => {
     return getThemeOptionValue(
         googleServicesTheme.value,
-        themeOptions.GOOGLE_SEARCH_CONSOLE_HEADER
+        themeOptions.GOOGLE_SEARCH_CONSOLE_HEADER,
     )
 })
 
 const googleAnalyticHeader = computed(() => {
     return getThemeOptionValue(
         googleServicesTheme.value,
-        themeOptions.GOOGLE_ANALYTIC_HEADER
+        themeOptions.GOOGLE_ANALYTIC_HEADER,
     )
 })
 
 const googleTagManagerHeader = computed(() => {
     return getThemeOptionValue(
         googleServicesTheme.value,
-        themeOptions.GOOGLE_TAG_MANAGER_HEADER
+        themeOptions.GOOGLE_TAG_MANAGER_HEADER,
     )
 })
 
 const googleTagManagerBody = computed(() => {
     return getThemeOptionValue(
         googleServicesTheme.value,
-        themeOptions.GOOGLE_TAG_MANAGER_BODY
+        themeOptions.GOOGLE_TAG_MANAGER_BODY,
     )
 })
 
@@ -332,8 +347,8 @@ const showTrends = computed(() => {
     return isTruthyValue(
         getThemeOptionValue(
             siteExtraFeaturesTheme.value,
-            themeOptions.SHOW_TRENDS
-        )
+            themeOptions.SHOW_TRENDS,
+        ),
     )
 })
 
@@ -341,8 +356,8 @@ const showSurveys = computed(() => {
     return isTruthyValue(
         getThemeOptionValue(
             siteExtraFeaturesTheme.value,
-            themeOptions.SHOW_SURVEYS
-        )
+            themeOptions.SHOW_SURVEYS,
+        ),
     )
 })
 
@@ -350,8 +365,8 @@ const showQuizzes = computed(() => {
     return isTruthyValue(
         getThemeOptionValue(
             siteExtraFeaturesTheme.value,
-            themeOptions.SHOW_QUIZZES
-        )
+            themeOptions.SHOW_QUIZZES,
+        ),
     )
 })
 
@@ -387,6 +402,54 @@ const searchUrl = computed(() => {
         })
 })
 
+const updateBreakingNewsPosition = () => {
+    const footer = footerElement.value
+
+    if (!footer) {
+        breakingNewsBottom.value = 0
+
+        return
+    }
+
+    const footerRect = footer.getBoundingClientRect()
+    const viewportHeight = window.innerHeight
+
+    if (footerRect.top < viewportHeight) {
+        breakingNewsBottom.value = Math.max(
+            0,
+            viewportHeight - footerRect.top,
+        )
+
+        return
+    }
+
+    breakingNewsBottom.value = 0
+}
+
+let breakingNewsAnimationFrame = null
+let footerResizeObserver = null
+
+const scheduleBreakingNewsPositionUpdate = () => {
+    if (breakingNewsAnimationFrame !== null) {
+        return
+    }
+
+    breakingNewsAnimationFrame =
+        window.requestAnimationFrame(() => {
+            breakingNewsAnimationFrame = null
+
+            updateBreakingNewsPosition()
+        })
+}
+
+const handleBreakingNewsScroll = () => {
+    scheduleBreakingNewsPositionUpdate()
+}
+
+const handleBreakingNewsResize = () => {
+    scheduleBreakingNewsPositionUpdate()
+}
+
 provide('googleAdEnable', googleAdEnable)
 provide('googleAdsenseClientId', googleAdsenseClientId)
 
@@ -402,9 +465,66 @@ provide('currentLanguage', currentLanguage)
 
 onMounted(async () => {
     await nextTick()
+
     await loadDefaultLanguage()
     await loadLanguageByFirstPathSegment()
     await loadSiteThemes()
+
+    await nextTick()
+
+    updateBreakingNewsPosition()
+
+    window.addEventListener(
+        'scroll',
+        handleBreakingNewsScroll,
+        {
+            passive: true,
+        },
+    )
+
+    window.addEventListener(
+        'resize',
+        handleBreakingNewsResize,
+    )
+
+    if (
+        typeof ResizeObserver !== 'undefined' &&
+        footerElement.value
+    ) {
+        footerResizeObserver =
+            new ResizeObserver(() => {
+                scheduleBreakingNewsPositionUpdate()
+            })
+
+        footerResizeObserver.observe(
+            footerElement.value,
+        )
+    }
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener(
+        'scroll',
+        handleBreakingNewsScroll,
+    )
+
+    window.removeEventListener(
+        'resize',
+        handleBreakingNewsResize,
+    )
+
+    if (breakingNewsAnimationFrame !== null) {
+        window.cancelAnimationFrame(
+            breakingNewsAnimationFrame,
+        )
+
+        breakingNewsAnimationFrame = null
+    }
+
+    if (footerResizeObserver) {
+        footerResizeObserver.disconnect()
+        footerResizeObserver = null
+    }
 })
 
 watch(
@@ -415,15 +535,19 @@ watch(
         }
 
         await loadLanguageByFirstPathSegment()
+
+        await nextTick()
+
+        scheduleBreakingNewsPositionUpdate()
     },
 )
 </script>
 
 <template>
-    <div class="guest-layout flex flex-col min-h-screen" :data-lang="selectedLanguageCode">
+    <div class="guest-layout flex min-h-screen flex-col" :data-lang="selectedLanguageCode">
         <div class="public-topbar text-white">
-            <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center max-[450px]:gap-2">
-                <div class="flex space-x-3 max-[450px]:space-x-2 max-[450px]:flex-shrink-0">
+            <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 max-[450px]:gap-2">
+                <div class="flex space-x-3 max-[450px]:flex-shrink-0 max-[450px]:space-x-2">
                     <a v-if="facebookTheme?.value" :href="facebookTheme.value" target="_blank" rel="noopener noreferrer"
                         aria-label="Facebook" class="topbar-icon">
                         <FontAwesomeIcon :icon="['fab', 'facebook']" />
@@ -441,7 +565,7 @@ watch(
                 </div>
 
                 <div
-                    class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
+                    class="relative flex items-center space-x-3 max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
                     <div v-if="isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
                         <TopbarMenu :key="componentRefreshKey('topbar-menu')" :currentLanguage="currentLanguage"
                             class="hidden min-[300px]:inline" />
@@ -467,27 +591,35 @@ watch(
             </div>
         </div>
 
-        <div ref="headerNavbar" class="public-header text-white transition-shadow"
-            :class="{ 'is-sticky sticky top-0 z-50': isHeaderSticky, }">
-            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
+        <div ref="headerNavbar" class="public-header text-white transition-shadow" :class="{
+            'is-sticky sticky top-0 z-50': isHeaderSticky,
+        }">
+            <div class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4">
                 <a :href="homeUrl"
-                    class="brand-link h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
-                    <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
-                        class="h-10 max-w-40 object-contain" />
+                    class="brand-link flex h-10 flex-shrink-0 items-center pr-4 font-semibold leading-none text-white">
+                    <img v-if="
+                        isTruthyValue(
+                            showLogoOnHeaderMenu?.value,
+                        ) && appLogo
+                    " :src="appLogo" :alt="appName" class="h-10 max-w-40 object-contain" />
 
-                    <b v-if="isTruthyValue(showNameOnHeaderMenu?.value)" class="hidden sm:inline">
+                    <b v-if="
+                        isTruthyValue(
+                            showNameOnHeaderMenu?.value,
+                        )
+                    " class="hidden sm:inline">
                         {{ t('common.app.name') }}
                     </b>
                 </a>
 
-                <div class="flex-1 min-w-0 h-10 flex items-center">
+                <div class="flex h-10 min-w-0 flex-1 items-center">
                     <HeaderMenu :currentLanguage="currentLanguage" :key="componentRefreshKey('header-menu')"
                         class="hidden min-[401px]:inline" />
                 </div>
 
-                <div class="h-10 flex items-center gap-2 flex-shrink-0">
+                <div class="flex h-10 flex-shrink-0 items-center gap-2">
                     <a :href="searchUrl"
-                        class="header-action w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
+                        class="header-action flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/10"
                         aria-label="Search">
                         <FontAwesomeIcon icon="magnifying-glass" />
                     </a>
@@ -502,11 +634,12 @@ watch(
         </main>
 
         <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('common.messages.breakingNews')"
-            :currentLanguage="currentLanguage" :key="componentRefreshKey('breaking-news')" />
+            :currentLanguage="currentLanguage" :bottom="breakingNewsBottom"
+            :key="componentRefreshKey('breaking-news')" />
 
-        <footer class="public-footer py-4 mt-2 text-sm">
-            <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
-                <span class="text-center md:text-left w-full md:w-auto flex-shrink-0">
+        <footer ref="footerElement" class="public-footer mt-2 py-4 text-sm">
+            <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 md:flex-row md:gap-4">
+                <span class="w-full flex-shrink-0 text-center md:w-auto md:text-left">
                     {{ t('common.messages.text') }}
                     {{ translateNumerText(year) }}
                     {{ t('common.app.name') }}
@@ -515,11 +648,11 @@ watch(
                 <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" :currentLanguage="currentLanguage"
                     :key="componentRefreshKey('footer-menu')" />
 
-                <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
+                <span class="w-full flex-shrink-0 text-center md:w-auto md:text-right">
                     {{ t('common.app.developedBy') }}
 
                     <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank" rel="noopener noreferrer"
-                        class="text-blue-600 hover:underline font-medium">
+                        class="font-medium text-blue-600 hover:underline">
                         {{ t('common.app.developerName') }}
                     </a>
                 </span>

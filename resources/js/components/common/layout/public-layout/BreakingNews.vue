@@ -18,6 +18,7 @@ const {
     title = 'Breaking News',
     speed = 45,
     currentLanguage,
+    bottom = 0,
 } = defineProps({
     title: {
         type: String,
@@ -30,6 +31,10 @@ const {
     currentLanguage: {
         type: Object,
         required: true,
+    },
+    bottom: {
+        type: Number,
+        default: 0,
     },
 })
 
@@ -76,13 +81,19 @@ const displayNews = computed(() => {
     ]
 })
 
+const breakingNewsStyle = computed(() => {
+    return {
+        bottom: `${Math.max(0, Number(bottom) || 0)}px`,
+    }
+})
+
 const getInitialApiUrl = () => {
     return currentLanguage?.is_default
         ? route('site.breaking-news')
         : route('localized.site.breaking-news', {
             languageCode: currentLanguage?.code,
-        });
-};
+        })
+}
 
 const normalizeResponse = (response) => {
     const source =
@@ -136,7 +147,7 @@ const appendUniqueNews = (items = []) => {
     const existingKeys = new Set(
         news.value
             .map(getNewsUniqueKey)
-            .filter(Boolean)
+            .filter(Boolean),
     )
 
     const uniqueItems = items.filter((newsItem) => {
@@ -172,7 +183,7 @@ const loadBreakingNews = async (url = null) => {
             {
                 key: `${apiCacheKey.API_CURSOR_PAGINATION}:${apiUrl}`,
                 ttl: apiCacheTTL.SYSTEM_SHORT,
-            }
+            },
         )
 
         if (currentRequestId !== requestId) {
@@ -194,7 +205,7 @@ const loadBreakingNews = async (url = null) => {
         if (currentRequestId === requestId) {
             console.error(
                 'Failed to load breaking news:',
-                error
+                error,
             )
         }
     } finally {
@@ -253,7 +264,7 @@ const animate = (timestamp) => {
 
     const deltaTime = Math.min(
         timestamp - lastTimestamp,
-        100
+        100,
     )
 
     lastTimestamp = timestamp
@@ -318,9 +329,7 @@ const resetBreakingNews = async () => {
 
     resetTickerPosition()
 
-    if (
-        !currentLanguage
-    ) {
+    if (!currentLanguage) {
         return
     }
 
@@ -334,7 +343,7 @@ watch(
     ],
     async (
         [newIsDefault, newCode],
-        [oldIsDefault, oldCode]
+        [oldIsDefault, oldCode],
     ) => {
         if (
             newIsDefault === oldIsDefault &&
@@ -344,7 +353,7 @@ watch(
         }
 
         await resetBreakingNews()
-    }
+    },
 )
 
 onMounted(async () => {
@@ -352,7 +361,7 @@ onMounted(async () => {
 
     window.addEventListener(
         'resize',
-        handleResize
+        handleResize,
     )
 
     await loadBreakingNews()
@@ -376,14 +385,15 @@ onBeforeUnmount(() => {
 
     window.removeEventListener(
         'resize',
-        handleResize
+        handleResize,
     )
 })
 </script>
 
 <template>
     <section v-if="hasNews"
-        class="fixed bottom-0 left-0 right-0 z-[9999] overflow-hidden border-t border-gray-200 bg-white shadow-lg">
+        class="fixed right-0 left-0 z-[9999] overflow-hidden border-t border-gray-200 bg-white shadow-lg"
+        :style="breakingNewsStyle">
         <div class="mx-auto flex max-w-7xl flex-col overflow-hidden px-3 sm:h-11 sm:flex-row sm:items-center sm:px-4">
             <div
                 class="flex h-9 w-full shrink-0 items-center justify-center bg-red-600 px-4 text-sm font-bold text-white sm:h-full sm:w-auto sm:justify-start sm:text-base">
