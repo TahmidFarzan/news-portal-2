@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Observers\GoogleAdObserver;
@@ -9,9 +10,9 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
@@ -21,14 +22,15 @@ use Spatie\Sluggable\SlugOptions;
 
 #[Table('google_ads')]
 #[Fillable([
-        'name',
-        'slug',
-        "slot_id",
-        "client_id",
-        "type",
-        "position",
-        'created_by_id',
-    ])]
+    'name',
+    'slug',
+    'ad_unit_code',
+    'gpt_slot_id',
+    'ad_sizes',
+    'type',
+    'position',
+    'created_by_id',
+])]
 #[UsePolicy(GoogleAdPolicy::class)]
 #[ObservedBy([GoogleAdObserver::class])]
 class GoogleAd extends Model
@@ -40,9 +42,9 @@ class GoogleAd extends Model
     protected function casts(): array
     {
         return [
-            "use_full_width_responsive" => 'boolean',
-            'created_at'                => 'datetime',
-            'updated_at'                => 'datetime',
+            'ad_sizes' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -52,10 +54,11 @@ class GoogleAd extends Model
             ->logOnly([
                 'name',
                 'slug',
-                "slot_id",
-                "client_id",
-                "type",
-                "position",
+                'ad_unit_code',
+                'gpt_slot_id',
+                'ad_sizes',
+                'type',
+                'position',
             ])
             ->useLogName('GoogleAd')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")
@@ -72,9 +75,7 @@ class GoogleAd extends Model
     {
         return SlugOptions::create()
             ->saveSlugsTo('slug')
-            ->generateSlugsFrom(function ($model) {
-                return "{$model->group}-{$model->label}-{$model->label}";
-            })
+            ->generateSlugsFrom('name')
             ->doNotGenerateSlugsOnUpdate()
             ->slugsShouldBeNoLongerThan(255)
             ->usingSuffixGenerator(fn() => Str::lower(Str::random(5)));

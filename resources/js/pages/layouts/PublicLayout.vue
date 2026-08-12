@@ -293,12 +293,7 @@ const googleAdEnable = computed(() => {
     )
 })
 
-const googleAdsenseClientId = computed(() => {
-    return getThemeOptionValue(
-        googleAdTheme.value,
-        themeOptions.GOOGLE_AD_ADSENSE_CLIENT_ID
-    )
-})
+
 
 const googleSearchConsoleHeader = computed(() => {
     return getThemeOptionValue(
@@ -388,7 +383,6 @@ const searchUrl = computed(() => {
 })
 
 provide('googleAdEnable', googleAdEnable)
-provide('googleAdsenseClientId', googleAdsenseClientId)
 
 provide('googleSearchConsoleHeader', googleSearchConsoleHeader)
 provide('googleAnalyticHeader', googleAnalyticHeader)

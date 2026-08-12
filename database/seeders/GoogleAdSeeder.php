@@ -1,23 +1,22 @@
 <?php
+
 namespace Database\Seeders;
 
-use App\Helpers\SeederHelper;
 use App\Helpers\GoogleAdHelper;
+use App\Helpers\SeederHelper;
 use App\Models\GoogleAd;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class GoogleAdSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         if (config('database.default') === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
             GoogleAd::query()->delete();
-            DB::statement("DELETE FROM sqlite_sequence WHERE name='ad_sences'");
+            DB::statement("DELETE FROM sqlite_sequence WHERE name='google_ads'");
             DB::statement('PRAGMA foreign_keys = ON;');
         }
 
@@ -31,52 +30,132 @@ class GoogleAdSeeder extends Seeder
             GoogleAd::truncate();
         }
 
-        GoogleAd::factory()->state([
-            'name'      => "Section Top",
-            'type'      => GoogleAdHelper::TYPE_SECTION,
-            'position'  => GoogleAdHelper::POSITION_TOP,
-            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
-            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
-        ])->create();
+        $ads = [
+            [
+                'name' => 'Section Top',
+                'type' => GoogleAdHelper::TYPE_SECTION,
+                'position' => GoogleAdHelper::POSITION_TOP,
+            ],
+            [
+                'name' => 'Section Between',
+                'type' => GoogleAdHelper::TYPE_SECTION,
+                'position' => GoogleAdHelper::POSITION_BETWEEN,
+            ],
+            [
+                'name' => 'Section Bottom',
+                'type' => GoogleAdHelper::TYPE_SECTION,
+                'position' => GoogleAdHelper::POSITION_BOTTOM,
+            ],
+            [
+                'name' => 'Sidebar Top',
+                'type' => GoogleAdHelper::TYPE_SIDEBAR,
+                'position' => GoogleAdHelper::POSITION_TOP,
+            ],
+            [
+                'name' => 'Sidebar Between',
+                'type' => GoogleAdHelper::TYPE_SIDEBAR,
+                'position' => GoogleAdHelper::POSITION_BETWEEN,
+            ],
+            [
+                'name' => 'Sidebar Bottom',
+                'type' => GoogleAdHelper::TYPE_SIDEBAR,
+                'position' => GoogleAdHelper::POSITION_BOTTOM,
+            ],
+            [
+                'name' => 'Pop Up - Home Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_HOME_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Latest Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_LATEST_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Search Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_SEARCH_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Video Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_VIDEO_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Image Gallery Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_IMAGE_GALLERY_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Category Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_CATEGORY_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Tag Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_TAG_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Event Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_EVENT_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Location Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_LOCATION_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - News Details Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_NEWS_DETAILS_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Contact Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_CONTACT_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - About Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_ABOUT_PAGE,
+                'position' => null,
+            ],
+            [
+                'name' => 'Pop Up - Other Page',
+                'type' => GoogleAdHelper::TYPE_POPUP_OTHER_PAGE,
+                'position' => null,
+            ],
+        ];
 
-        GoogleAd::factory()->state([
-            'name'      => "Section Bottom",
-            'type'      => GoogleAdHelper::TYPE_SECTION,
-            'position'  => GoogleAdHelper::POSITION_BOTTOM,
-            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
-            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
-        ])->create();
+        $testAds = SeederHelper::GOOGLE_AD_MANAGER_TEST_ADS;
 
-        GoogleAd::factory()->state([
-            'name'      => "Section Bottom",
-            'type'      => GoogleAdHelper::TYPE_SECTION,
-            'position'  => GoogleAdHelper::POSITION_BETWEEN,
-            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
-            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
-        ])->create();
+        $popupTestAd = collect($testAds)->firstWhere(
+            'name',
+            'Popup'
+        );
 
-        GoogleAd::factory()->state([
-            'name'      => "Sidebar Top",
-            'type'      => GoogleAdHelper::TYPE_SIDEBAR,
-            'position'  => GoogleAdHelper::POSITION_TOP,
-            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
-            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
-        ])->create();
+        $regularTestAds = collect($testAds)
+            ->reject(fn($testAd) => $testAd['name'] === 'Popup')
+            ->values();
 
-        GoogleAd::factory()->state([
-            'name'      => "Sidebar Bottom",
-            'type'      => GoogleAdHelper::TYPE_SIDEBAR,
-            'position'  => GoogleAdHelper::POSITION_BETWEEN,
-            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
-            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
-        ])->create();
+        foreach ($ads as $index => $ad) {
+            $isPopup = str_starts_with($ad['type'], 'Pop Up');
 
-        GoogleAd::factory()->state([
-            'name'      => "Sidebar Bottom",
-            'type'      => GoogleAdHelper::TYPE_SIDEBAR,
-            'position'  => GoogleAdHelper::POSITION_BOTTOM,
-            'slot_id'   => SeederHelper::GOOGLE_AD_ADSENSE_SLOT_ID,
-            'client_id' => SeederHelper::GOOGLE_AD_ADSENSE_CLIENT_ID,
-        ])->create();
+            if ($isPopup) {
+                $testAd = $popupTestAd;
+            } else {
+                $testAd = $regularTestAds[$index % $regularTestAds->count()];
+            }
+
+            GoogleAd::factory()->state([
+                'name' => $ad['name'],
+                'type' => $ad['type'],
+                'position' => $ad['position'],
+                'ad_unit_code' => $testAd['ad_unit_code'],
+                'gpt_slot_id' => 'div-gpt-ad-' . Str::uuid(),
+                'ad_sizes' => $testAd['ad_sizes'],
+            ])->create();
+        }
     }
 }

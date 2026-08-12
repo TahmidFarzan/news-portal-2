@@ -57,7 +57,7 @@
             "gender": "Gender",
             "notAvailable": "N/A",
             "maritalStatus": "Marital Status",
-            "mobile": "Mobile",
+            "ad": "Ad",
             "birthDate": "Birth Date",
             "age": "Age",
             "address": "Address",
@@ -181,7 +181,15 @@
             "time_taken": "Time taken",
             "minute": "Minute",
             "seconds": "Seconds",
-            "multipleChoice" :"Multiple choice"
+            "multipleChoice" :"Multiple choice",
+            "googleAdManagerUnavailable" : "Google Ad Manager is unavailable",
+            "environment" : "Environment",
+            "test" : "Test",
+            "adUnitCode" : "Ad Unit Code",
+            "gptSlotId" : "Gpt Slot Id",
+            "adSizes" : "Ad Sizes",
+            "width" : "Width",
+            "height" : "Height"
         },
         "actions": {
             "details": "Details",
@@ -489,8 +497,10 @@
             "create": {
                 "form": {
                     "createPageTitle": "Create Google Ad",
-                    "slotIdPlaceholder": "Enter slot id",
-                    "typePlaceholder": "Select type"
+                    "typePlaceholder": "Select type",
+                    "adSizesDescription" : "Ad Sizes Description",
+                    "adUnitCodePlaceholder" : "Enter ad unit code",
+                    "gptSlotIdPlaceholder" : "Enter gpt slot id"
                 },
                 "validation": {
                     "slotIdIsRequired": "Slot id is required.",

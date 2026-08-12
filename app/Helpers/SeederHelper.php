@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 class SeederHelper
@@ -6,8 +7,59 @@ class SeederHelper
     public const LANGUAGE_EN_CODE             = 'en';
     public const LANGUAGE_BN_CODE             = 'bn';
     public const SITE_PUBLIC_DEFAULT_LANGUAGE = self::LANGUAGE_EN_CODE;
-    public const GOOGLE_AD_ADSENSE_SLOT_ID = 6300978111;
-    public const GOOGLE_AD_ADSENSE_CLIENT_ID = "ca-pub-3940256099942544";
+
+    public const GOOGLE_AD_MANAGER_TEST_ADS = [
+        [
+            'name' => 'Section Top',
+            'ad_unit_code' => '/6355419/Travel',
+            'gpt_slot_id' => 'div-gpt-ad-section-top',
+            'ad_sizes' => [
+                [728, 90],
+                [300, 250],
+            ],
+        ],
+        [
+            'name' => 'Section Between',
+            'ad_unit_code' => '/6355419/Travel/Europe',
+            'gpt_slot_id' => 'div-gpt-ad-section-between',
+            'ad_sizes' => [
+                [728, 90],
+                [300, 250],
+            ],
+        ],
+        [
+            'name' => 'Section Bottom',
+            'ad_unit_code' => '/6355419/Travel/Europe/France',
+            'gpt_slot_id' => 'div-gpt-ad-section-bottom',
+            'ad_sizes' => [
+                [728, 90],
+                [300, 250],
+            ],
+        ],
+        [
+            'name' => 'Sidebar',
+            'ad_unit_code' => '/6355419/Travel/Europe/France/Paris',
+            'gpt_slot_id' => 'div-gpt-ad-sidebar',
+            'ad_sizes' => [
+                [300, 250],
+            ],
+        ],
+        [
+            'name' => 'Header',
+            'ad_unit_code' => '/6355419/Travel/Asia',
+            'gpt_slot_id' => 'div-gpt-ad-header',
+            'ad_sizes' => [
+                [728, 90],
+            ],
+        ],
+
+        [
+            'name' => 'Popup',
+            'ad_unit_code' => '/6355419/Travel',
+            'gpt_slot_id' => 'div-gpt-ad-popup',
+            'ad_sizes' => [],
+        ],
+    ];
 
     public static function quizSeederData($languageCode = null): array
     {

@@ -50,10 +50,6 @@ class ThemeSeeder extends Seeder
                         'valueType' => ThemeHelper::OPTION_VALUE_TYPE_BOOLEAN,
                         'value' => true,
                     ],
-                    ThemeHelper::OPTION_GOOGLE_AD_ADSENSE_CLIENT_ID => [
-                        'valueType' => ThemeHelper::OPTION_VALUE_TYPE_STRING,
-                        'value' => 'ca-pub-3940256099942544',
-                    ],
                 ],
             ],
 

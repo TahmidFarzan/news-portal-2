@@ -15,7 +15,6 @@ import {
 
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
-import { fetchFromApi } from '@/composables/useApiClient'
 
 import { canCreateGoogleAd, canUpdateGoogleAd, canDeleteGoogleAd } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
@@ -118,7 +117,6 @@ onMounted(async () => {
     <Head :title="t('common.messages.googleAd')" />
 
     <div class="w-full space-y-6">
-
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">
                 {{ t('common.messages.googleAd') }}
@@ -133,22 +131,20 @@ onMounted(async () => {
 
         <form @submit.prevent="applyFilter" class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-                <InfiniteScrollApiSelect :form="filterForm" fieldName="per_page"
-                    :selectedItem="filterForm.per_page" :apiUrl="route('search.per-pages')" :multiple="false"
-                    :placeholder="t('common.labels.perPage')" />
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="per_page" :selectedItem="filterForm.per_page"
+                    :apiUrl="route('search.per-pages')" :multiple="false" :placeholder="t('common.labels.perPage')" />
 
                 <InfiniteScrollApiSelect :form="filterForm" fieldName="created_by_id"
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     :placeholder="t('common.labels.createdBy')" />
 
-                <InfiniteScrollApiSelect :form="filterForm" fieldName="position"
-                    :selectedItem="filterForm.position" :apiUrl="route('search.google-ad-positions')"
-                    :multiple="false" :placeholder="t('common.labels.position')" />
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="position" :selectedItem="filterForm.position"
+                    :apiUrl="route('search.google-ad-positions')" :multiple="false"
+                    :placeholder="t('common.labels.position')" />
 
-                <InfiniteScrollApiSelect :form="filterForm" fieldName="type"
-                    :selectedItem="filterForm.type" :apiUrl="route('search.google-ad-types')"
-                    :multiple="false" :placeholder="t('common.labels.type')" />
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="type" :selectedItem="filterForm.type"
+                    :apiUrl="route('search.google-ad-types')" :multiple="false"
+                    :placeholder="t('common.labels.type')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
@@ -156,7 +152,6 @@ onMounted(async () => {
                 <input type="search" v-model="filterForm.search"
                     :placeholder="t('admin.googleAds.index.searchPlaceholder')"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-
             </div>
 
             <div class="flex justify-end">
@@ -165,35 +160,46 @@ onMounted(async () => {
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
                     <FontAwesomeIcon v-else icon="filter" />
 
-                    {{ filterForm.processing ? t('common.actions.applyingFilter') :
-                        t('common.actions.applyFilter') }}
+                    {{
+                        filterForm.processing
+                            ? t('common.actions.applyingFilter')
+                            : t('common.actions.applyFilter')
+                    }}
                 </button>
             </div>
         </form>
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm">
-
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
                         <tr>
                             <th class="px-4 py-3 text-left">#</th>
+
                             <th class="px-4 py-3 text-left">
                                 {{ t('common.labels.name') }}
                             </th>
+
                             <th class="px-4 py-3 text-left">
                                 {{ t('common.labels.position') }}
                             </th>
+
                             <th class="px-4 py-3 text-left">
                                 {{ t('common.labels.type') }}
                             </th>
+
                             <th class="px-4 py-3 text-left">
-                                {{ t('common.labels.slotId') }}
+                                {{ t('common.labels.adUnitCode') }}
                             </th>
+
+                            <th class="px-4 py-3 text-left">
+                                {{ t('common.labels.gptSlotId') }}
+                            </th>
+
                             <th class="px-4 py-3 text-left">
                                 {{ t('common.labels.createdAt') }}
                             </th>
+
                             <th class="px-4 py-3 text-right">
                                 {{ t('common.labels.action') }}
                             </th>
@@ -203,7 +209,9 @@ onMounted(async () => {
                     <tbody class="divide-y">
                         <tr v-for="(item, index) in googleAds?.data || []" :key="item.id"
                             class="hover:bg-gray-50 transition">
-                            <td class="px-4 py-3">{{ index + 1 }}</td>
+                            <td class="px-4 py-3">
+                                {{ index + 1 }}
+                            </td>
 
                             <td class="px-4 py-3 font-medium">
                                 {{ item.name }}
@@ -218,17 +226,23 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.slot_id || t('common.labels.notAvailable') }}
+                                {{ item.ad_unit_code || t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item.created_at ? formatDateTime(item.created_at) :
-                                    t('common.labels.notAvailable') }}
+                                {{ item.gpt_slot_id || t('common.labels.notAvailable') }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-500">
+                                {{
+                                    item.created_at
+                                        ? formatDateTime(item.created_at)
+                                        : t('common.labels.notAvailable')
+                                }}
                             </td>
 
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
-
                                     <a :href="route('back-office.google-ads.details', { slug: item.slug })"
                                         class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
                                         :title="t('common.actions.details')">
@@ -247,18 +261,16 @@ onMounted(async () => {
                                         :title="t('common.actions.delete')">
                                         <FontAwesomeIcon icon="trash" />
                                     </button>
-
                                 </div>
                             </td>
                         </tr>
 
                         <tr v-if="!googleAds?.data?.length">
-                            <td colspan="4" class="px-4 py-6 text-center text-gray-500">
+                            <td colspan="8" class="px-4 py-6 text-center text-gray-500">
                                 {{ t('common.labels.noRecordsFound') }}
                             </td>
                         </tr>
                     </tbody>
-
                 </table>
             </div>
         </div>
@@ -271,7 +283,6 @@ onMounted(async () => {
                 leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <div v-if="showDeleteModal"
                     class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-
                     <Transition enter-active-class="transition ease-out duration-200"
                         enter-from-class="opacity-0 scale-95 translate-y-4"
                         enter-to-class="opacity-100 scale-100 translate-y-0"
@@ -288,9 +299,7 @@ onMounted(async () => {
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{
-                                    t('common.modals.thisActionCannotBeUndone')
-                                }}
+                                {{ t('common.modals.thisActionCannotBeUndone') }}
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
@@ -302,14 +311,16 @@ onMounted(async () => {
                                 <button @click="handleDelete(deletingRow)" :disabled="deleteProcessing"
                                     class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                                     <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
-                                    {{ deleteProcessing ? t('common.actions.deleting')
-                                        :
-                                        t('common.actions.delete') }}
+
+                                    {{
+                                        deleteProcessing
+                                            ? t('common.actions.deleting')
+                                            : t('common.actions.delete')
+                                    }}
                                 </button>
                             </div>
                         </div>
                     </Transition>
-
                 </div>
             </Transition>
         </Teleport>

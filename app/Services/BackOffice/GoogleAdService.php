@@ -2,10 +2,8 @@
 
 namespace App\Services\BackOffice;
 
-use App\Helpers\ThemeHelper;
 use App\Http\Requests\GoogleAdRequest;
 use App\Models\GoogleAd;
-use App\Services\BackOffice\ThemeService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,13 +12,6 @@ use Illuminate\Support\Facades\Log;
 
 class GoogleAdService
 {
-    public ThemeService $themeService;
-
-    public function __construct(ThemeService $themeService)
-    {
-        $this->themeService = $themeService;
-    }
-
     public function new(): GoogleAd
     {
         return new GoogleAd();
@@ -79,33 +70,25 @@ class GoogleAdService
 
     public function save(GoogleAdRequest $request, GoogleAd $googleAd): array
     {
-        $isNew       = empty($googleAd->id);
-        $statusEvent = $isNew ? "save" : "update";
+        $isNew = empty($googleAd->id);
+        $statusEvent = $isNew ? 'save' : 'update';
 
         try {
-
             DB::transaction(function () use ($request, $googleAd, $isNew) {
-                $theme = $this->themeService->findByName(ThemeHelper::NAME_GOOGLE_AD);
-
-                $googleAdsenseClientId = data_get(
-                    $theme?->options,
-                    ThemeHelper::OPTION_GOOGLE_AD_ADSENSE_CLIENT_ID . '.value',
-                    null
-                );
-
-                $googleAd->name                      = $request->input('name');
-                $googleAd->slot_id                   = $request->input('slot_id');
-                $googleAd->client_id                 = $googleAdsenseClientId;
-                $googleAd->type                      = $request->input('type');
-                $googleAd->position                  = $request->input('position');
-                $googleAd->use_full_width_responsive = $request->boolean('use_full_width_responsive');
+                $googleAd->name = $request->input('name');
+                $googleAd->ad_unit_code = $request->input('ad_unit_code');
+                $googleAd->gpt_slot_id = $request->input('gpt_slot_id');
+                $googleAd->ad_sizes = $request->input('ad_sizes');
+                $googleAd->type = $request->input('type');
+                $googleAd->position = $request->input('position');
 
                 $googleAd->created_by_id = $isNew ? Auth::id() : $googleAd->created_by_id;
 
                 $googleAd->save();
             });
+
             return [
-                'status'  => 'success',
+                'status' => 'success',
                 'message' => __("status-messages.google-ad.{$statusEvent}.success"),
             ];
         } catch (Exception $exception) {
@@ -114,8 +97,8 @@ class GoogleAdService
             ]);
 
             return [
-                'status'  => 'error',
-                'message' => __('status-messages.google-ad.save.failed'),
+                'status' => 'error',
+                'message' => __("status-messages.google-ad.{$statusEvent}.failed"),
             ];
         }
     }

@@ -3,12 +3,6 @@
 
     $isPublicPage = !request()->is('back-office/*') && !request()->is('auth-user/*');
 
-    $googleAdsenseClientId = data_get(
-        $themeGoogleAd?->options,
-        ThemeHelper::OPTION_GOOGLE_AD_ADSENSE_CLIENT_ID . '.value',
-        null
-    );
-
     $googleAdEnable = data_get(
         $themeGoogleAd?->options,
         ThemeHelper::OPTION_GOOGLE_AD_ENABLE . '.value',
@@ -82,9 +76,8 @@
                 {!! $renderRawHtml($googleTagManagerHeader) !!}
             @endif
 
-            @if ($googleAdEnable && $googleAdsenseClientId)
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $googleAdsenseClientId }}"
-                    crossorigin="anonymous"></script>
+            @if ($googleAdEnable)
+                <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
             @endif
         @endif
 

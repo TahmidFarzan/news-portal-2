@@ -1,19 +1,32 @@
 <script setup>
 import {
     computed,
+    getCurrentInstance,
     nextTick,
     onBeforeUnmount,
     onMounted,
     ref,
-    toRefs,
     watch,
 } from 'vue'
 
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
-import { adTypes, adPositions } from '@/composables/useGoogleAd'
+import {
+    adTypes,
+    adPositions,
+    defaultAdSizes,
+    popupLabel,
+} from '@/composables/useGoogleAd'
+import { useTranslate } from '@/composables/useTranslate'
 
-const props = defineProps({
+const { t } = useTranslate()
+
+const {
+    type = adTypes.SECTION,
+    position = adPositions.BETWEEN,
+    showLabel = true,
+    class: customClass = '',
+} = defineProps({
     type: {
         type: String,
         default: adTypes.SECTION,
@@ -22,11 +35,6 @@ const props = defineProps({
     position: {
         type: String,
         default: adPositions.BETWEEN,
-    },
-
-    label: {
-        type: String,
-        default: 'Ad',
     },
 
     showLabel: {
@@ -40,25 +48,30 @@ const props = defineProps({
     },
 })
 
-const {
-    type,
-    position,
-    label,
-    showLabel,
-} = toRefs(props)
-
 const appEnv = import.meta.env.VITE_APP_ENV
 
+const instance = getCurrentInstance()
+const componentId = instance?.uid ?? Math.random().toString(36).slice(2)
+
 const ads = ref([])
-const adRefs = ref([])
 const wrapperRef = ref(null)
 
 const adsLoaded = ref(false)
 const adsChecked = ref(false)
+const popupIndex = ref(0)
 
 let observer = null
 let resizeObserver = null
-let statusCheckTimer = null
+
+const getGoogleTagState = () => {
+    window.__googleAdState = window.__googleAdState || {
+        initialized: false,
+        slotEventsInitialized: false,
+        slots: {},
+    }
+
+    return window.__googleAdState
+}
 
 const isProduction = computed(() => {
     return appEnv === 'production'
@@ -68,37 +81,46 @@ const isTestEnvironment = computed(() => {
     return !isProduction.value
 })
 
+const isPopupType = computed(() => {
+    return type.includes(popupLabel)
+})
+
 const hasConfiguredAds = computed(() => {
     return ads.value.length > 0
 })
 
-const hasFilledAds = computed(() => {
-    return ads.value.some((ad) => ad.status === 'filled')
-})
-
 const shouldShow = computed(() => {
-    if (isTestEnvironment.value) {
+    if (isPopupType.value) {
+        return false
+    }
+
+    if (hasConfiguredAds.value) {
         return true
     }
 
-    return hasFilledAds.value
+    return isTestEnvironment.value
 })
 
 const wrapperClasses = computed(() => {
     return [
         'relative mx-auto my-4 w-full text-center',
-        props.class,
+        customClass,
     ]
 })
 
-const truthyValues = [true, 1, '1', 'true', 'yes', 'on']
-
-const isFullWidthResponsive = (ad) => {
-    return truthyValues.includes(ad?.use_full_width_responsive)
+const getAdKey = (ad, index) => {
+    return ad?.slot_element_id
+        ?? ad?.id
+        ?? ad?.gpt_slot_id
+        ?? ad?.slug
+        ?? index
 }
 
-const getAdKey = (ad) => {
-    return ad?.id ?? `${ad?.client_id}-${ad?.slot_id}`
+const createSlotElementId = (ad, index) => {
+    const baseId = ad?.gpt_slot_id
+        ?? `google-ad-${ad?.id ?? index}`
+
+    return `${baseId}-${componentId}-${index}`
 }
 
 const normalizeRows = (response) => {
@@ -108,100 +130,317 @@ const normalizeRows = (response) => {
 
     return rows
         .filter((row) => {
-            return row?.client_id && row?.slot_id
+            return row?.ad_unit_code
         })
-        .map((row) => ({
+        .map((row, index) => ({
             ...row,
+            slot_element_id: createSlotElementId(row, index),
             status: null,
+            slot: null,
+            displayed: false,
         }))
+}
+
+const normalizeAdSizes = (ad) => {
+    const sizes = Array.isArray(ad?.ad_sizes) && ad.ad_sizes.length
+        ? ad.ad_sizes
+        : defaultAdSizes
+
+    return sizes
+        .map((size) => {
+            if (Array.isArray(size) && size.length >= 2) {
+                const width = Number(size[0])
+                const height = Number(size[1])
+
+                if (width > 0 && height > 0) {
+                    return [width, height]
+                }
+            }
+
+            if (size && typeof size === 'object') {
+                const width = Number(size.width)
+                const height = Number(size.height)
+
+                if (width > 0 && height > 0) {
+                    return [width, height]
+                }
+            }
+
+            return null
+        })
+        .filter(Boolean)
 }
 
 const getCacheParamsKey = (params = {}) => {
     return new URLSearchParams(
         Object.entries(params)
-            .filter(([, value]) => value !== undefined && value !== null)
+            .filter(([, value]) => {
+                return value !== undefined && value !== null
+            })
             .sort(([a], [b]) => a.localeCompare(b))
     ).toString()
 }
 
-const fetchAds = async () => {
-    const apiUrl = route('site.google-ads')
-
-    const params = {
-        type: type.value,
-        position: position.value,
+const checkAdsStatus = () => {
+    if (
+        !isPopupType.value &&
+        ads.value.length &&
+        ads.value.every((ad) => {
+            return ad.status !== null
+        })
+    ) {
+        adsChecked.value = true
     }
-
-    const cacheParamsKey = getCacheParamsKey(params)
-
-    const response = await fetchFromApi(
-        apiUrl,
-        params,
-        {
-            key: `${apiCacheKey.API_SITE_GOOGLE_AD}:${apiUrl}:${cacheParamsKey}`,
-            ttl: apiCacheTTL.GOOGLE_AD,
-        }
-    )
-
-    ads.value = normalizeRows(response)
-    adRefs.value = []
-    adsLoaded.value = false
-    adsChecked.value = false
-
-    clearStatusCheckTimer()
-
-    await nextTick()
-
-    if (!isProduction.value) {
-        return
-    }
-
-    if (!hasConfiguredAds.value) {
-        return
-    }
-
-    observeAds()
 }
 
-const pushAdsense = async () => {
-    if (!isProduction.value) {
+const registerAdSlot = (slot, ad) => {
+    if (!slot || !ad) {
         return
     }
 
-    if (adsLoaded.value || !hasConfiguredAds.value) {
+    const slotId = slot.getSlotElementId()
+
+    if (!slotId) {
         return
     }
 
-    await nextTick()
+    const googleState = getGoogleTagState()
 
-    if (!wrapperRef.value) {
+    googleState.slots[slotId] = {
+        ad,
+        componentId,
+        onStatusChange: checkAdsStatus,
+    }
+}
+
+const unregisterAdSlot = (ad) => {
+    if (!ad) {
         return
     }
 
-    const width = wrapperRef.value.clientWidth
+    const googleState = getGoogleTagState()
 
-    if (width <= 0) {
+    if (ad.slot) {
+        const slotId = ad.slot.getSlotElementId()
+
+        if (slotId) {
+            delete googleState.slots[slotId]
+        }
+    }
+
+    if (ad.slot_element_id) {
+        delete googleState.slots[ad.slot_element_id]
+    }
+}
+
+const unregisterAdSlots = () => {
+    ads.value.forEach((ad) => {
+        unregisterAdSlot(ad)
+    })
+}
+
+const getExistingSlot = (slotId) => {
+    if (!slotId || !window.googletag?.pubads) {
+        return null
+    }
+
+    return window.googletag
+        .pubads()
+        .getSlots()
+        .find((slot) => {
+            return slot.getSlotElementId() === slotId
+        }) ?? null
+}
+
+const destroyOwnedSlots = () => {
+    const googleState = getGoogleTagState()
+
+    if (
+        !window.googletag?.cmd ||
+        !googleState.initialized
+    ) {
+        unregisterAdSlots()
         return
     }
 
-    const slots = adRefs.value.filter(Boolean)
+    const slots = ads.value
+        .map((ad) => ad.slot)
+        .filter(Boolean)
+
+    unregisterAdSlots()
 
     if (!slots.length) {
+        return
+    }
+
+    window.googletag.cmd.push(() => {
+        window.googletag.destroySlots(slots)
+    })
+}
+
+const resetAds = () => {
+    adsLoaded.value = false
+    adsChecked.value = false
+    popupIndex.value = 0
+}
+
+const setupSlotEvents = () => {
+    const googleState = getGoogleTagState()
+
+    if (googleState.slotEventsInitialized) {
+        return
+    }
+
+    window.googletag
+        .pubads()
+        .addEventListener('slotRenderEnded', (event) => {
+            const slotId = event.slot.getSlotElementId()
+
+            const registeredSlot = googleState.slots[slotId]
+
+            if (!registeredSlot?.ad) {
+                return
+            }
+
+            registeredSlot.ad.status = event.isEmpty
+                ? 'unfilled'
+                : 'filled'
+
+            registeredSlot.onStatusChange?.()
+        })
+
+    window.googletag
+        .pubads()
+        .addEventListener('slotOnload', (event) => {
+            const slotId = event.slot.getSlotElementId()
+
+            const registeredSlot = googleState.slots[slotId]
+
+            if (!registeredSlot?.ad) {
+                return
+            }
+
+            registeredSlot.ad.status = 'filled'
+
+            registeredSlot.onStatusChange?.()
+        })
+
+    googleState.slotEventsInitialized = true
+}
+
+const initializeGoogleTag = () => {
+    return new Promise((resolve) => {
+        window.googletag = window.googletag || {
+            cmd: [],
+        }
+
+        window.googletag.cmd.push(() => {
+            const googleState = getGoogleTagState()
+
+            if (!googleState.initialized) {
+                window.googletag.setConfig({
+                    singleRequest: true,
+                    collapseDiv: isTestEnvironment.value
+                        ? 'DISABLED'
+                        : 'ON_NO_FILL',
+                })
+
+                window.googletag.enableServices()
+
+                googleState.initialized = true
+            }
+
+            setupSlotEvents()
+
+            resolve()
+        })
+    })
+}
+
+const defineOrGetSlot = (ad) => {
+    if (
+        !ad.slot_element_id ||
+        !ad.ad_unit_code
+    ) {
+        return null
+    }
+
+    const existingSlot = getExistingSlot(
+        ad.slot_element_id
+    )
+
+    if (existingSlot) {
+        return existingSlot
+    }
+
+    const sizes = normalizeAdSizes(ad)
+
+    if (!sizes.length) {
+        return null
+    }
+
+    return window.googletag
+        .defineSlot(
+            ad.ad_unit_code,
+            sizes,
+            ad.slot_element_id
+        )
+        ?.addService(
+            window.googletag.pubads()
+        ) ?? null
+}
+
+const pushGoogleAds = async () => {
+    if (
+        adsLoaded.value ||
+        !hasConfiguredAds.value ||
+        isPopupType.value
+    ) {
+        return
+    }
+
+    if (
+        !wrapperRef.value ||
+        wrapperRef.value.clientWidth <= 0
+    ) {
         return
     }
 
     adsLoaded.value = true
 
     try {
-        window.adsbygoogle = window.adsbygoogle || []
+        await initializeGoogleTag()
 
-        slots.forEach(() => {
-            window.adsbygoogle.push({})
+        window.googletag.cmd.push(() => {
+            ads.value.forEach((ad) => {
+                if (ad.displayed) {
+                    return
+                }
+
+                const slot = defineOrGetSlot(ad)
+
+                if (!slot) {
+                    ad.status = 'error'
+                    return
+                }
+
+                ad.slot = slot
+                ad.displayed = true
+
+                registerAdSlot(slot, ad)
+
+                window.googletag.display(
+                    ad.slot_element_id
+                )
+            })
+
+            checkAdsStatus()
         })
-
-        startAdStatusCheck()
     } catch (error) {
-        console.warn('Google Ad error:', error)
+        console.warn(
+            'Google Ad Manager error:',
+            error
+        )
 
         adsLoaded.value = false
 
@@ -213,79 +452,72 @@ const pushAdsense = async () => {
     }
 }
 
-const checkAdsStatus = () => {
-    if (!adRefs.value.length) {
-        return false
+const loadNextPopupAd = () => {
+    if (!isPopupType.value) {
+        return
     }
 
-    let hasPending = false
+    popupIndex.value++
 
-    adRefs.value.forEach((adRef, index) => {
-        if (!adRef || !ads.value[index]) {
-            return
-        }
-
-        const status = adRef.getAttribute('data-ad-status')
-
-        if (status === 'filled') {
-            ads.value[index].status = 'filled'
-        } else if (status === 'unfilled') {
-            ads.value[index].status = 'unfilled'
-        } else {
-            hasPending = true
-        }
-    })
-
-    if (hasPending) {
-        return false
+    if (popupIndex.value >= ads.value.length) {
+        return
     }
 
-    adsChecked.value = true
-
-    clearStatusCheckTimer()
-
-    return true
+    loadPopupAd()
 }
 
-const startAdStatusCheck = () => {
-    clearStatusCheckTimer()
+const loadPopupAd = async () => {
+    if (
+        !hasConfiguredAds.value ||
+        popupIndex.value >= ads.value.length
+    ) {
+        return
+    }
 
-    let attempts = 0
-    const maxAttempts = 20
+    const ad = ads.value[popupIndex.value]
 
-    statusCheckTimer = window.setInterval(() => {
-        attempts++
+    if (!ad || ad.displayed || !ad.ad_unit_code) {
+        return
+    }
 
-        const resolved = checkAdsStatus()
+    try {
+        await initializeGoogleTag()
 
-        if (resolved || attempts >= maxAttempts) {
-            clearStatusCheckTimer()
+        window.googletag.cmd.push(() => {
+            const slot = window.googletag
+                .defineOutOfPageSlot(
+                    ad.ad_unit_code,
+                    window.googletag.enums
+                        .OutOfPageFormat
+                        .INTERSTITIAL
+                )
 
-            if (!resolved) {
-                ads.value.forEach((ad, index) => {
-                    const adRef = adRefs.value[index]
-
-                    if (!adRef) {
-                        return
-                    }
-
-                    const status = adRef.getAttribute('data-ad-status')
-
-                    ad.status = status === 'filled'
-                        ? 'filled'
-                        : 'unfilled'
-                })
-
-                adsChecked.value = true
+            if (!slot) {
+                ad.status = 'error'
+                loadNextPopupAd()
+                return
             }
-        }
-    }, 500)
-}
 
-const clearStatusCheckTimer = () => {
-    if (statusCheckTimer) {
-        window.clearInterval(statusCheckTimer)
-        statusCheckTimer = null
+            slot.addService(
+                window.googletag.pubads()
+            )
+
+            ad.slot = slot
+            ad.displayed = true
+
+            registerAdSlot(slot, ad)
+
+            window.googletag.display(slot)
+        })
+    } catch (error) {
+        console.warn(
+            'Google Ad Manager popup error:',
+            error
+        )
+
+        ad.status = 'error'
+
+        loadNextPopupAd()
     }
 }
 
@@ -295,7 +527,11 @@ const observeAds = () => {
         observer = null
     }
 
-    if (!wrapperRef.value || !hasConfiguredAds.value) {
+    if (
+        !wrapperRef.value ||
+        !hasConfiguredAds.value ||
+        isPopupType.value
+    ) {
         return
     }
 
@@ -305,9 +541,9 @@ const observeAds = () => {
                 return
             }
 
-            pushAdsense()
+            pushGoogleAds()
 
-            observer.disconnect()
+            observer?.disconnect()
             observer = null
         },
         {
@@ -318,8 +554,56 @@ const observeAds = () => {
     observer.observe(wrapperRef.value)
 }
 
+const fetchAds = async () => {
+    destroyOwnedSlots()
+    resetAds()
+
+    const apiUrl = route('site.google-ads')
+
+    const params = {
+        type,
+        position,
+    }
+
+    const cacheParamsKey = getCacheParamsKey(params)
+
+    try {
+        const response = await fetchFromApi(
+            apiUrl,
+            params,
+            {
+                key: `${apiCacheKey.API_SITE_GOOGLE_AD}:${apiUrl}:${cacheParamsKey}`,
+                ttl: apiCacheTTL.GOOGLE_AD,
+            }
+        )
+
+        ads.value = normalizeRows(response)
+
+        await nextTick()
+
+        if (!hasConfiguredAds.value) {
+            return
+        }
+
+        if (isPopupType.value) {
+            await loadPopupAd()
+            return
+        }
+
+        observeAds()
+    } catch (error) {
+        console.warn(
+            'Failed to fetch Google Ads:',
+            error
+        )
+
+        ads.value = []
+        adsChecked.value = true
+    }
+}
+
 watch(
-    [type, position],
+    () => [type, position],
     async () => {
         await fetchAds()
     }
@@ -330,9 +614,12 @@ onMounted(async () => {
 
     await nextTick()
 
+    if (isPopupType.value) {
+        return
+    }
+
     resizeObserver = new ResizeObserver(() => {
         if (
-            isProduction.value &&
             !adsLoaded.value &&
             hasConfiguredAds.value
         ) {
@@ -341,7 +628,9 @@ onMounted(async () => {
     })
 
     if (wrapperRef.value) {
-        resizeObserver.observe(wrapperRef.value)
+        resizeObserver.observe(
+            wrapperRef.value
+        )
     }
 })
 
@@ -356,48 +645,100 @@ onBeforeUnmount(() => {
         resizeObserver = null
     }
 
-    clearStatusCheckTimer()
+    destroyOwnedSlots()
 })
 </script>
 
 <template>
     <section v-if="shouldShow" ref="wrapperRef" :class="wrapperClasses">
         <span v-if="showLabel" class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-gray-500">
-            {{ label }}
+            {{ t('common.labels.ad') }}
         </span>
 
-        <template v-if="isTestEnvironment">
+        <template v-if="
+            isTestEnvironment &&
+            !hasConfiguredAds
+        ">
             <div class="mx-auto w-full max-w-[815px]">
                 <div class="border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center">
                     <div class="text-sm font-semibold text-gray-600">
-                        TEST AD
+                        {{ t('common.labels.test') }}
                     </div>
 
                     <div class="mt-1 text-xs text-gray-500">
-                        Google Ad unavailable
+                        {{
+                            t(
+                                'common.labels.googleAdManagerUnavailable'
+                            )
+                        }}
                     </div>
 
                     <div class="mt-1 text-xs text-gray-400">
-                        Environment: {{ appEnv }}
+                        {{ t('common.labels.environment') }}:
+                        {{ appEnv }}
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-400">
+                        {{ t('common.labels.type') }}:
+                        {{ type }}
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-400">
+                        {{ t('common.labels.position') }}:
+                        {{ position }}
                     </div>
                 </div>
             </div>
         </template>
 
         <template v-else>
-            <div v-for="(ad, index) in ads" :key="getAdKey(ad)" class="w-full text-center" :class="{
-                'hidden': adsChecked && ad.status !== 'filled'
+            <div v-for="(ad, index) in ads" :key="getAdKey(ad, index)" class="w-full text-center" :class="{
+                hidden:
+                    isProduction &&
+                    adsChecked &&
+                    ad.status !== 'filled',
             }">
-                <ins ref="adRefs" class="adsbygoogle" :style="isFullWidthResponsive(ad)
-                    ? 'display:block;width:100%'
-                    : 'display:block;width:100%'
-                    " :data-ad-client="ad.client_id" :data-ad-slot="ad.slot_id" :data-ad-format="isFullWidthResponsive(ad)
-                        ? 'auto'
-                        : null
-                        " :data-full-width-responsive="isFullWidthResponsive(ad)
-                            ? 'true'
-                            : null
-                            "></ins>
+                <div v-if="ad.slot_element_id" :id="ad.slot_element_id" class="mx-auto"></div>
+
+                <div v-if="
+                    isTestEnvironment &&
+                    adsChecked &&
+                    ad.status !== 'filled'
+                "
+                    class="mx-auto mt-2 max-w-[815px] border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center">
+                    <div class="text-sm font-semibold text-gray-600">
+                        {{ t('common.labels.test') }}
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-500">
+                        Google Ad Manager returned no ad
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-400">
+                        Status:
+                        {{ ad.status || 'pending' }}
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-400">
+                        Slot:
+                        {{ ad.slot_element_id }}
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-400">
+                        GPT Slot:
+                        {{ ad.gpt_slot_id }}
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-400">
+                        Ad Unit:
+                        {{ ad.ad_unit_code }}
+                    </div>
+
+                    <div class="mt-1 text-xs text-gray-400">
+                        Sizes:
+                        {{ normalizeAdSizes(ad) }}
+                    </div>
+                </div>
             </div>
         </template>
     </section>

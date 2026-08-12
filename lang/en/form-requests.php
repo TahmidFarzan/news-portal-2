@@ -616,31 +616,56 @@ return [
         ],
     ],
 
-    'google_ad'       => [
-        'name'     => [
-            'required' => 'Group is required.',
-            'string'   => 'Group must be a string.',
-            'max'      => 'Group may not be greater than :max characters.',
+    'google_ad' => [
+        'name' => [
+            'required' => 'Name is required.',
+            'string' => 'Name must be a string.',
+            'max' => 'Name may not be greater than :max characters.',
         ],
 
-        'slot_id'  => [
-            'required' => 'Label is required.',
-            'string'   => 'Label must be a string.',
-            'max'      => 'Label may not be greater than :max characters.',
+        'ad_unit_code' => [
+            'required' => 'Ad unit code is required.',
+            'string' => 'Ad unit code must be a string.',
+            'max' => 'Ad unit code may not be greater than :max characters.',
         ],
 
-        'type'     => [
+        'gpt_slot_id' => [
+            'required' => 'GPT slot ID is required.',
+            'string' => 'GPT slot ID must be a string.',
+            'max' => 'GPT slot ID may not be greater than :max characters.',
+        ],
+
+        'ad_sizes' => [
+            'array' => 'Ad sizes must be an array.',
+            'item_array' => 'Each ad size must contain width and height.',
+            'item_size' => 'Each ad size must contain exactly width and height.',
+
+            'width' => [
+                'required' => 'Ad width is required.',
+                'integer' => 'Ad width must be an integer.',
+                'min' => 'Ad width must be at least :min.',
+            ],
+
+            'height' => [
+                'required' => 'Ad height is required.',
+                'integer' => 'Ad height must be an integer.',
+                'min' => 'Ad height must be at least :min.',
+            ],
+        ],
+
+        'type' => [
             'required' => 'Type is required.',
-            'string'   => 'Type must be a string.',
-            'max'      => 'Type may not be greater than :max characters.',
+            'string' => 'Type must be a string.',
+            'max' => 'Type may not be greater than :max characters.',
             'not_exit' => 'Selected type does not exist.',
         ],
 
         'position' => [
             'required' => 'Position is required.',
-            'string'   => 'Position must be a string.',
-            'max'      => 'Position may not be greater than :max characters.',
+            'string' => 'Position must be a string.',
+            'max' => 'Position may not be greater than :max characters.',
             'not_exit' => 'Selected position does not exist.',
+            'not_allowed_for_popup' => 'Position is not allowed for popup ads.',
         ],
     ],
 
