@@ -7,7 +7,7 @@ import List from '@/components/common/news/List.vue'
 import GoogleAd from '@/components/common/advertising/GoogleAd.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAd'
+import { adPages, adTypes, adPlacements } from '@/composables/useGoogleAd'
 
 defineOptions({ layout: Layout })
 
@@ -61,11 +61,15 @@ const googleAdEnable = inject('googleAdEnable', computed(() => false))
             </div>
         </section>
 
+        <GoogleAd v-if="googleAdEnable" :page="adPages.VIDEO" :type="adTypes.SECTION" :placement="adPlacements.ONE" />
+
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" :page="adPages.VIDEO" :type="adTypes.SECTION" :placement="adPlacements.TWO" />
 
         <List :news="news" pagination-type="Cursor" />
+
+        <GoogleAd v-if="googleAdEnable" :page="adPages.VIDEO" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </div>
 </template>
 

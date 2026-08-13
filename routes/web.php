@@ -101,8 +101,9 @@ Route::prefix('search')->name('search.')->group(function () {
         Route::get('user-permissions-by-group', [SearchController::class, 'userPermissionsByGroup'])->name('user-permissions-by-group');
         Route::get('menu-types', [SearchController::class, 'menuTypes'])->name('menu-types');
 
+        Route::get('google-ad-pages', [SearchController::class, 'googleAdPages'])->name('google-ad-pages');
         Route::get('google-ad-types', [SearchController::class, 'googleAdTypes'])->name('google-ad-types');
-        Route::get('google-ad-positions', [SearchController::class, 'googleAdPositions'])->name('google-ad-positions');
+        Route::get('google-ad-placements', [SearchController::class, 'googleAdPlacements'])->name('google-ad-placements');
         Route::get('quiz-question-answer-types', [SearchController::class, 'quizQuestionAnswerTypes'])->name('quiz-question-answer-types');
     });
 

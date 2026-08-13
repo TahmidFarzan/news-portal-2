@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Helpers\CacheHelper;
@@ -31,7 +32,7 @@ class SiteService
 
     protected GoogleAdCacheService $googleAdCacheService;
 
-        protected LanguageCacheService $languageCacheService;
+    protected LanguageCacheService $languageCacheService;
 
     public function __construct(
         MenuCacheService $menuCacheService,
@@ -49,7 +50,7 @@ class SiteService
 
     public function language(string $code): Language
     {
-        $language = $this->languageCacheService->getRecordByCodeFirst(CacheHelper::KEY_LAYOUT, $code ,$this->cachedTTL);
+        $language = $this->languageCacheService->getRecordByCodeFirst(CacheHelper::KEY_LAYOUT, $code, $this->cachedTTL);
         if (! $language) {
             return $this->defaultLanguage();
         }
@@ -199,7 +200,7 @@ class SiteService
         );
     }
 
-    public function themeGoogleService():Theme
+    public function themeGoogleService(): Theme
     {
         return $this->themeCacheService->getThemeByName(
             CacheHelper::KEY_LAYOUT,
@@ -230,20 +231,26 @@ class SiteService
 
     public function getGoogleAd(Request $request): Collection
     {
+        $page     = $request->input('page', GoogleAdHelper::PAGE_HOME);
         $type     = $request->input('type', GoogleAdHelper::TYPE_SECTION);
-        $position = $request->input('position', GoogleAdHelper::POSITION_TOP);
+        $placement = null;
 
-        return $this->googleAdCacheService->getGoogleAdsByTypeAndPosition(
+        if ($request->filled('placement') && !($type == GoogleAdHelper::TYPE_POPUP)) {
+            $placement = $request->input('placement');
+        }
+
+        return $this->googleAdCacheService->getGoogleAdsByTypeAndPlacement(
             CacheHelper::KEY_LAYOUT,
+            $page,
             $type,
-            $position,
+            $placement,
             $this->cachedTTL
         );
     }
 
     public function languages(Request $request): array
     {
-        $records = $this->languageCacheService->getRecords(CacheHelper::KEY_LAYOUT, $request ,$this->cachedTTL);
+        $records = $this->languageCacheService->getRecords(CacheHelper::KEY_LAYOUT, $request, $this->cachedTTL);
 
         $list = $records->map(fn($row) => [
             'id'     => $row->id,
@@ -262,7 +269,5 @@ class SiteService
         ];
 
         return $data;
-
     }
-
 }

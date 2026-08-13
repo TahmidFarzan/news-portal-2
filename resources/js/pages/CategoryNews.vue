@@ -10,7 +10,7 @@ import CategoryHasLocationSection from '@/components/common/page/CategoryHasLoca
 import GoogleAd from '@/components/common/advertising/GoogleAd.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAd'
+import { adPages, adTypes, adPlacements } from '@/composables/useGoogleAd'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
@@ -189,7 +189,7 @@ const getSecondGridColumnClass = (index) => {
             </div>
         </section>
 
-        <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" :page="adPages.CATEGORY" :type="adTypes.SECTION" :placement="adPlacements.ONE"/>
 
         <section class="grid grid-cols-1 items-start gap-5 md:grid-cols-12">
             <div class="space-y-4 md:col-span-8 lg:col-span-8">
@@ -214,19 +214,23 @@ const getSecondGridColumnClass = (index) => {
             </div>
 
             <div class="space-y-2 md:col-span-4 lg:col-span-4">
+                <GoogleAd v-if="googleAdEnable" :page="adPages.CATEGORY" :type="adTypes.SIDEBAR" :placement="adPlacements.ONE"/>
+
                 <CategoryHasLocationSection :category="category" :currentLanguage="currentLanguage" />
 
                 <PageSidebar :recentNews="recentNews" :popularNews="popularNews" />
 
-                <GoogleAd v-if="googleAdEnable" :type="adTypes.SIDEBAR" :position="adPositions.BOTTOM" class="mt-4" />
+                <GoogleAd v-if="googleAdEnable" :page="adPages.CATEGORY" :type="adTypes.SIDEBAR" :placement="adPlacements.TWO"/>
             </div>
         </section>
 
         <div class="border-t border-gray-200"></div>
 
-        <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" :page="adPages.CATEGORY" :type="adTypes.SECTION" :placement="adPlacements.TWO"/>
 
         <List :news="news" pagination-type="Cursor" />
+
+        <GoogleAd v-if="googleAdEnable" :page="adPages.CATEGORY" :type="adTypes.SECTION" :placement="adPlacements.THREE"/>
     </div>
 </template>
 

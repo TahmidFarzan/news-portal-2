@@ -12,6 +12,8 @@ import { faCalendar, faChevronRight, faChevronLeft, faTrophy, faPlay, faCheck, f
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
 import { VueTelInput } from 'vue-tel-input'
+import { adPages, adTypes, adPlacements } from '@/composables/useGoogleAd'
+
 import 'vue-tel-input/vue-tel-input.css'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -344,8 +346,6 @@ onUnmounted(() => {
     </Head>
 
     <div class="static-page space-y-6">
-        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.TOP" />
-
         <section class="quiz-info">
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
                 <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
@@ -380,6 +380,8 @@ onUnmounted(() => {
                 </div>
             </div>
         </section>
+
+        <GoogleAd v-if="googleAdEnable" :page="adPages.QUIZ_DETAILS" :type="adTypes.SECTION" :placement="adPlacements.ONE" />
 
         <section v-if="hasPreviousResult" class="previous-quiz-result">
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
@@ -451,7 +453,7 @@ onUnmounted(() => {
             </div>
         </section>
 
-        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BETWEEN" />
+        <GoogleAd v-if="googleAdEnable" :page="adPages.QUIZ_DETAILS" :type="adTypes.SECTION" :placement="adPlacements.TWO" />
 
         <div v-if="isStarted && !isSubmitted" class="sticky top-4 z-50 flex justify-center">
             <div
@@ -600,7 +602,7 @@ onUnmounted(() => {
                                         <input type="text" v-model="participant.name" :disabled="!canEditParticipant"
                                             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-gray-100" />
                                         <p v-if="formErrors.name" class="mt-1 text-sm text-red-600">{{ formErrors.name
-                                            }}</p>
+                                        }}</p>
                                     </div>
 
                                     <div>
@@ -651,7 +653,7 @@ onUnmounted(() => {
             </div>
         </section>
 
-        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+        <GoogleAd v-if="googleAdEnable" :page="adPages.QUIZ_DETAILS" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </div>
 </template>
 

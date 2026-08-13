@@ -99,6 +99,9 @@ class CacheHelper
     public const KEY_TYPE = 'type';
 
     public const KEY_POSITION = 'position';
+        public const KEY_PLACEMENT = 'placement';
+
+
 
     public const KEY_BREAKING_NEWS = 'breaking-news';
 
@@ -806,12 +809,15 @@ class CacheHelper
         return $cacheKey;
     }
 
-    public static function cacheKeyGenerateGoogleAdsByTypeAndPosition(string $key, string $secondKey, string $type, string $position): string
+    public static function cacheKeyGenerateGoogleAdsByTypeAndPlacement(string $key, string $secondKey,string $page, string $type, string|int|null $placement): string
     {
         $cacheKey = "{$key}:{$secondKey}";
 
+        $cacheKey .= ':' . CacheHelper::KEY_PAGE . ":{$page}";
         $cacheKey .= ':' . CacheHelper::KEY_TYPE . ":{$type}";
-        $cacheKey .= ':' . CacheHelper::KEY_POSITION . ":{$position}";
+        if($placement){
+            $cacheKey .= ':' . CacheHelper::KEY_PLACEMENT . ":{$placement}";
+        }
 
         $cacheKey .= ':' . CacheHelper::KEY_GOOGLE_AD;
 

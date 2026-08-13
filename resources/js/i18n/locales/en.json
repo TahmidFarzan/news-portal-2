@@ -195,7 +195,8 @@
             "adUnit" : "Ad Unit",
             "sizes" : "Sizes",
             "googleAdMangerNoAds" : "Google Ad Manager returned no ad",
-            "pending" : "Pending"
+            "pending" : "Pending",
+            "placement" : "Placement"
         },
         "actions": {
             "details": "Details",

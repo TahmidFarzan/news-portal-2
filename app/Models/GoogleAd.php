@@ -28,7 +28,8 @@ use Spatie\Sluggable\SlugOptions;
     'gpt_slot_id',
     'ad_sizes',
     'type',
-    'position',
+    'page',
+    'placement',
     'created_by_id',
 ])]
 #[UsePolicy(GoogleAdPolicy::class)]
@@ -58,7 +59,8 @@ class GoogleAd extends Model
                 'gpt_slot_id',
                 'ad_sizes',
                 'type',
-                'position',
+                'page',
+                'placement',
             ])
             ->useLogName('GoogleAd')
             ->setDescriptionForEvent(fn(string $eventName) => "The record has been {$eventName}.")

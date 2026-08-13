@@ -2,6 +2,7 @@
 
 namespace App\Services\BackOffice;
 
+use App\Helpers\GoogleAdHelper;
 use App\Http\Requests\GoogleAdRequest;
 use App\Models\GoogleAd;
 use Exception;
@@ -75,14 +76,19 @@ class GoogleAdService
 
         try {
             DB::transaction(function () use ($request, $googleAd, $isNew) {
+                $type = $request->input('type');
+
                 $googleAd->name = $request->input('name');
                 $googleAd->ad_unit_code = $request->input('ad_unit_code');
                 $googleAd->gpt_slot_id = $request->input('gpt_slot_id');
                 $googleAd->ad_sizes = $request->input('ad_sizes');
-                $googleAd->type = $request->input('type');
-                $googleAd->position = $request->input('position');
+                $googleAd->type = $type;
+                $googleAd->page = $request->input('page');
+                $googleAd->placement = $type === GoogleAdHelper::TYPE_POPUP ? null : $request->input('placement');
 
-                $googleAd->created_by_id = $isNew ? Auth::id() : $googleAd->created_by_id;
+                $googleAd->created_by_id = $isNew
+                    ? Auth::id()
+                    : $googleAd->created_by_id;
 
                 $googleAd->save();
             });

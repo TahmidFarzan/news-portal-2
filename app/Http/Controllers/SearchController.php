@@ -71,6 +71,12 @@ class SearchController extends Controller
         );
     }
 
+    public function googleAdPages(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->searchService->googleAdPages($request)
+        );
+    }
     public function googleAdTypes(Request $request): JsonResponse
     {
         return response()->json(
@@ -78,10 +84,10 @@ class SearchController extends Controller
         );
     }
 
-    public function googleAdPositions(Request $request): JsonResponse
+    public function googleAdPlacements(Request $request): JsonResponse
     {
         return response()->json(
-            $this->searchService->googleAdPositions($request)
+            $this->searchService->googleAdPlacements($request)
         );
     }
 

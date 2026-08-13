@@ -660,12 +660,19 @@ return [
             'not_exit' => 'Selected type does not exist.',
         ],
 
-        'position' => [
-            'required' => 'Position is required.',
-            'string' => 'Position must be a string.',
-            'max' => 'Position may not be greater than :max characters.',
-            'not_exit' => 'Selected position does not exist.',
-            'not_allowed_for_popup' => 'Position is not allowed for popup ads.',
+        'page' => [
+            'required' => 'Page is required.',
+            'string' => 'Page must be a string.',
+            'max' => 'Page may not be greater than :max characters.',
+            'not_exit' => 'Selected page does not exist.',
+        ],
+
+        'placement' => [
+            'required' => 'Placement is required.',
+            'string' => 'Placement must be a string.',
+            'max' => 'Placement may not be greater than :max characters.',
+            'not_exit' => 'Selected placement does not exist.',
+            'not_allowed_for_popup' => 'Placement is not allowed for popup ads.',
         ],
     ],
 

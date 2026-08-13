@@ -7,7 +7,7 @@ import RelatedNewsGrid from '@/components/common/news/RelatedNewsGrid.vue'
 import GoogleAd from '@/components/common/advertising/GoogleAd.vue'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAd'
+import { adPages, adTypes, adPlacements } from '@/composables/useGoogleAd'
 
 defineOptions({ layout: Layout })
 
@@ -49,11 +49,12 @@ const googleAdEnable = inject('googleAdEnable', computed(() => false))
     </Head>
 
     <div class="static-page space-y-6">
-        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.TOP" />
+        <GoogleAd v-if="googleAdEnable" :page="adPages.OTHER" :type="adTypes.SECTION" :placement="adPlacements.ONE" />
 
         <article v-if="page?.body" class="page-content prose max-w-none" v-html="page.body" />
 
-        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BOTTOM" />
+        <GoogleAd v-if="googleAdEnable" :page="adPages.OTHER" :type="adTypes.SECTION" :placement="adPlacements.TWO" />
+        <GoogleAd v-if="googleAdEnable" :page="adPages.OTHER" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </div>
 </template>
 

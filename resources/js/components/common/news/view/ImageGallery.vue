@@ -18,7 +18,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
-import { adTypes, adPositions } from '@/composables/useGoogleAd'
+import { adPages, adTypes, adPlacements } from '@/composables/useGoogleAd'
 
 FontAwesomeLibrary.add(
     faClock
@@ -67,13 +67,17 @@ const googleAdEnable = inject('googleAdEnable', computed(() => false))
             {{ t("news.components.view.imageGallery.labels.noGalleryImageFound") }}
         </div>
 
-       <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" :page="adPages.NEWS_DETAILS" :type="adTypes.SECTION" :placement="adPlacements.ONE" />
 
         <TagTrend :news="news" />
+
+        <GoogleAd v-if="googleAdEnable" :page="adPages.NEWS_DETAILS" :type="adTypes.SECTION" :placement="adPlacements.TWO" />
 
         <div class="border-t pt-4 text-sm text-gray-500">
             <RelatedNewsGrid :news="news"/>
         </div>
+
+        <GoogleAd v-if="googleAdEnable" :page="adPages.NEWS_DETAILS" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </article>
 </template>
 

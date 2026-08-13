@@ -16,10 +16,23 @@ import {
 import { formatDateTime } from '@/composables/useDateTime'
 import { itemListFilterParameters } from '@/composables/useDataTable'
 
-import { canCreateGoogleAd, canUpdateGoogleAd, canDeleteGoogleAd } from '@/composables/useUserPermissions'
+import {
+    canCreateGoogleAd,
+    canUpdateGoogleAd,
+    canDeleteGoogleAd
+} from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
-FontAwesomeLibrary.add(faTrash, faFilter, faInfo, faPlus, faPen, faEye, faEyeSlash, faSpinner)
+FontAwesomeLibrary.add(
+    faTrash,
+    faFilter,
+    faInfo,
+    faPlus,
+    faPen,
+    faEye,
+    faEyeSlash,
+    faSpinner
+)
 
 defineOptions({ layout: Layout })
 
@@ -42,6 +55,7 @@ const paginationOnly = computed(() => {
     if (!googleAds) return {}
 
     const { data, ...rest } = googleAds
+
     return rest
 })
 
@@ -49,9 +63,17 @@ const filterForm = useForm({
     per_page: null,
     created_by_id: null,
     type: '',
+    page: '',
+    placement: '',
     date: '',
     search: '',
-    position: '',
+})
+
+const googleAdPlacementApiUrl = computed(() => {
+    return route('search.google-ad-placements', {
+        page: filterForm.page || null,
+        type: filterForm.type || null,
+    })
 })
 
 const applyFilter = () => {
@@ -59,12 +81,16 @@ const applyFilter = () => {
 
     const cleanParams = itemListFilterParameters(filterForm.data())
 
-    intertiaJsRoute.get(route('back-office.google-ads.index'), cleanParams, {
-        replace: true,
-        preserveScroll: true,
-        preserveState: true,
-        onFinish: () => filterForm.processing = false,
-    })
+    intertiaJsRoute.get(
+        route('back-office.google-ads.index'),
+        cleanParams,
+        {
+            replace: true,
+            preserveScroll: true,
+            preserveState: true,
+            onFinish: () => filterForm.processing = false,
+        }
+    )
 }
 
 const confirmDelete = (googleAd) => {
@@ -81,13 +107,18 @@ const handleDelete = (googleAd) => {
 
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.google-ads.delete', { slug: googleAd?.slug }), {
-        onFinish: () => {
-            showDeleteModal.value = false
-            deletingRow.value = null
-            deleteProcessing.value = false
+    intertiaJsRoute.delete(
+        route('back-office.google-ads.delete', {
+            slug: googleAd?.slug
+        }),
+        {
+            onFinish: () => {
+                showDeleteModal.value = false
+                deletingRow.value = null
+                deleteProcessing.value = false
+            }
         }
-    })
+    )
 }
 
 onMounted(async () => {
@@ -96,9 +127,10 @@ onMounted(async () => {
     filterForm.per_page = urlParams.get('per_page') || ''
     filterForm.created_by_id = urlParams.get('created_by_id') || ''
     filterForm.type = urlParams.get('type') || ''
+    filterForm.page = urlParams.get('page') || ''
+    filterForm.placement = urlParams.get('placement') || ''
     filterForm.date = urlParams.get('date') || ''
     filterForm.search = urlParams.get('search') || ''
-    filterForm.position = urlParams.get('position') || ''
 
     await nextTick()
 
@@ -138,13 +170,16 @@ onMounted(async () => {
                     :selectedItem="filterForm.created_by_id" :apiUrl="route('search.users')" :multiple="false"
                     :placeholder="t('common.labels.createdBy')" />
 
-                <InfiniteScrollApiSelect :form="filterForm" fieldName="position" :selectedItem="filterForm.position"
-                    :apiUrl="route('search.google-ad-positions')" :multiple="false"
-                    :placeholder="t('common.labels.position')" />
-
                 <InfiniteScrollApiSelect :form="filterForm" fieldName="type" :selectedItem="filterForm.type"
                     :apiUrl="route('search.google-ad-types')" :multiple="false"
                     :placeholder="t('common.labels.type')" />
+
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="page" :selectedItem="filterForm.page"
+                    :apiUrl="route('search.google-ad-pages')" :multiple="false"
+                    :placeholder="t('common.labels.page')" />
+
+                <InfiniteScrollApiSelect :form="filterForm" fieldName="placement" :selectedItem="filterForm.placement"
+                    :apiUrl="googleAdPlacementApiUrl" :multiple="false" :placeholder="t('common.labels.placement')" />
 
                 <input type="date" v-model="filterForm.date"
                     class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
@@ -158,6 +193,7 @@ onMounted(async () => {
                 <button type="submit" :disabled="filterForm.processing"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 transition disabled:opacity-70 disabled:cursor-not-allowed">
                     <FontAwesomeIcon v-if="filterForm.processing" icon="spinner" spin />
+
                     <FontAwesomeIcon v-else icon="filter" />
 
                     {{
@@ -181,7 +217,7 @@ onMounted(async () => {
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('common.labels.position') }}
+                                {{ t('common.labels.page') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
@@ -189,11 +225,7 @@ onMounted(async () => {
                             </th>
 
                             <th class="px-4 py-3 text-left">
-                                {{ t('common.labels.adUnitCode') }}
-                            </th>
-
-                            <th class="px-4 py-3 text-left">
-                                {{ t('common.labels.gptSlotId') }}
+                                {{ t('common.labels.placement') }}
                             </th>
 
                             <th class="px-4 py-3 text-left">
@@ -217,20 +249,16 @@ onMounted(async () => {
                                 {{ item.name }}
                             </td>
 
-                            <td class="px-4 py-3 font-medium">
-                                {{ item.position || t('common.labels.notAvailable') }}
+                            <td class="px-4 py-3 text-gray-500">
+                                {{ item.page || t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
                                 {{ item.type || t('common.labels.notAvailable') }}
                             </td>
 
-                            <td class="px-4 py-3 text-gray-500">
-                                {{ item.ad_unit_code || t('common.labels.notAvailable') }}
-                            </td>
-
-                            <td class="px-4 py-3 text-gray-500">
-                                {{ item.gpt_slot_id || t('common.labels.notAvailable') }}
+                            <td class="px-4 py-3 font-medium">
+                                {{ item.placement || t('common.labels.notAvailable') }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
@@ -243,15 +271,16 @@ onMounted(async () => {
 
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
-                                    <a :href="route('back-office.google-ads.details', { slug: item.slug })"
-                                        class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
+                                    <a :href="route('back-office.google-ads.details', {
+                                        slug: item.slug
+                                    })" class="p-2 rounded-md text-blue-600 hover:bg-blue-50 border"
                                         :title="t('common.actions.details')">
                                         <FontAwesomeIcon icon="info" />
                                     </a>
 
-                                    <a v-if="canUpdate(item)"
-                                        :href="route('back-office.google-ads.edit', { slug: item.slug })"
-                                        class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
+                                    <a v-if="canUpdate(item)" :href="route('back-office.google-ads.edit', {
+                                        slug: item.slug
+                                    })" class="p-2 rounded-md text-yellow-600 hover:bg-yellow-50 border"
                                         :title="t('common.actions.edit')">
                                         <FontAwesomeIcon icon="pen" />
                                     </a>
@@ -266,7 +295,7 @@ onMounted(async () => {
                         </tr>
 
                         <tr v-if="!googleAds?.data?.length">
-                            <td colspan="8" class="px-4 py-6 text-center text-gray-500">
+                            <td colspan="9" class="px-4 py-6 text-center text-gray-500">
                                 {{ t('common.labels.noRecordsFound') }}
                             </td>
                         </tr>

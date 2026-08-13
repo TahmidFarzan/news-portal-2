@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faFilter, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { adTypes, adPositions } from '@/composables/useGoogleAd'
+import { adPages, adTypes, adPlacements } from '@/composables/useGoogleAd'
 
 FontAwesomeLibrary.add(faFilter, faSpinner)
 
@@ -205,6 +205,8 @@ onMounted(async () => {
             <h1>{{ t('common.actions.search') }}</h1>
         </section>
 
+        <GoogleAd v-if="googleAdEnable" :page="adPages.SEARCH" :type="adTypes.SECTION" :placement="adPlacements.ONE" />
+
         <form class="search-filter rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4" @submit.prevent="applyFilter">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <InfiniteScrollApiSelect :form="filterForm" fieldName="news_type_id"
@@ -244,9 +246,11 @@ onMounted(async () => {
             </div>
         </form>
 
-        <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" :page="adPages.SEARCH" :type="adTypes.SECTION" :placement="adPlacements.TWO" />
 
         <List :news="news" pagination-type="Cursor" />
+
+        <GoogleAd v-if="googleAdEnable" :page="adPages.SEARCH" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </div>
 </template>
 

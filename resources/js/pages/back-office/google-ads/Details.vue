@@ -31,7 +31,9 @@ const { googleAd } = defineProps({
     },
 })
 
-const pageTitle = computed(() => `${googleAd?.name} ${t('common.actions.details')}`)
+const pageTitle = computed(
+    () => `${googleAd?.name} ${t('common.actions.details')}`
+)
 
 const formattedAdSizes = computed(() => {
     if (!Array.isArray(googleAd?.ad_sizes) || !googleAd.ad_sizes.length) {
@@ -52,11 +54,16 @@ const handleDelete = () => {
 
     deleteProcessing.value = true
 
-    intertiaJsRoute.delete(route('back-office.google-ads.delete', { slug: googleAd?.slug }), {
-        onFinish: () => {
-            deleteProcessing.value = false
+    intertiaJsRoute.delete(
+        route('back-office.google-ads.delete', {
+            slug: googleAd?.slug
+        }),
+        {
+            onFinish: () => {
+                deleteProcessing.value = false
+            }
         }
-    })
+    )
 }
 
 onMounted(async () => {
@@ -65,8 +72,14 @@ onMounted(async () => {
     window.dispatchEvent(
         new CustomEvent('set-breadcrumb', {
             detail: [
-                { text: t('common.messages.googleAd'), href: route('back-office.google-ads.index') },
-                { text: pageTitle.value, active: true }
+                {
+                    text: t('common.messages.googleAd'),
+                    href: route('back-office.google-ads.index')
+                },
+                {
+                    text: pageTitle.value,
+                    active: true
+                }
             ],
         })
     )
@@ -74,6 +87,7 @@ onMounted(async () => {
 </script>
 
 <template>
+
     <Head :title="pageTitle" />
 
     <div class="w-full space-y-6">
@@ -83,20 +97,16 @@ onMounted(async () => {
             </h2>
 
             <div class="flex gap-2">
-                <a
-                    v-if="canUpdate(googleAd)"
-                    :href="route('back-office.google-ads.edit', { slug: googleAd?.slug })"
-                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition"
-                >
+                <a v-if="canUpdate(googleAd)" :href="route('back-office.google-ads.edit', {
+                    slug: googleAd?.slug
+                })"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="pen" />
                     {{ t('common.actions.edit') }}
                 </a>
 
-                <button
-                    v-if="canDelete(googleAd)"
-                    @click="showDeleteModal = true"
-                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition"
-                >
+                <button v-if="canDelete(googleAd)" @click="showDeleteModal = true"
+                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition">
                     <FontAwesomeIcon icon="trash" />
                     {{ t('common.actions.delete') }}
                 </button>
@@ -122,6 +132,16 @@ onMounted(async () => {
 
                     <div class="flex justify-between gap-4">
                         <span class="text-gray-500">
+                            {{ t('common.labels.page') }}
+                        </span>
+
+                        <span class="font-medium text-right">
+                            {{ googleAd?.page || t('common.labels.notAvailable') }}
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between gap-4">
+                        <span class="text-gray-500">
                             {{ t('common.labels.type') }}
                         </span>
 
@@ -132,11 +152,11 @@ onMounted(async () => {
 
                     <div class="flex justify-between gap-4">
                         <span class="text-gray-500">
-                            {{ t('common.labels.position') }}
+                            {{ t('common.labels.placement') }}
                         </span>
 
                         <span class="font-medium text-right">
-                            {{ googleAd?.position || t('common.labels.notAvailable') }}
+                            {{ googleAd?.placement || t('common.labels.notAvailable') }}
                         </span>
                     </div>
                 </div>
@@ -204,7 +224,7 @@ onMounted(async () => {
                         <span class="font-medium text-right">
                             {{
                                 googleAd?.created_by?.name
-                                    || t('common.labels.notAvailable')
+                                || t('common.labels.notAvailable')
                             }}
                         </span>
                     </div>
@@ -233,7 +253,7 @@ onMounted(async () => {
                         <span class="font-medium text-right">
                             {{
                                 googleAd?.latest_activity_log?.causer?.name
-                                    || t('common.labels.notAvailable')
+                                || t('common.labels.notAvailable')
                             }}
                         </span>
                     </div>
@@ -250,30 +270,18 @@ onMounted(async () => {
         </div>
 
         <Teleport to="body">
-            <Transition
-                enter-active-class="transition ease-out duration-200"
-                enter-from-class="opacity-0"
-                enter-to-class="opacity-100"
-                leave-active-class="transition ease-in duration-150"
-                leave-from-class="opacity-100"
-                leave-to-class="opacity-0"
-            >
-                <div
-                    v-if="showDeleteModal"
-                    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
-                >
-                    <Transition
-                        enter-active-class="transition ease-out duration-200"
+            <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0"
+                enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150"
+                leave-from-class="opacity-100" leave-to-class="opacity-0">
+                <div v-if="showDeleteModal"
+                    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+                    <Transition enter-active-class="transition ease-out duration-200"
                         enter-from-class="opacity-0 scale-95 translate-y-4"
                         enter-to-class="opacity-100 scale-100 translate-y-0"
                         leave-active-class="transition ease-in duration-150"
                         leave-from-class="opacity-100 scale-100 translate-y-0"
-                        leave-to-class="opacity-0 scale-95 translate-y-4"
-                    >
-                        <div
-                            v-if="showDeleteModal"
-                            class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4"
-                        >
+                        leave-to-class="opacity-0 scale-95 translate-y-4">
+                        <div v-if="showDeleteModal" class="bg-white rounded-xl shadow-lg w-[380px] p-6 space-y-4">
                             <h3 class="text-lg font-semibold text-red-600">
                                 {{ t('common.modals.deleteGoogleAd') }}
                             </h3>
@@ -287,23 +295,14 @@ onMounted(async () => {
                             </p>
 
                             <div class="flex justify-end gap-2 pt-2">
-                                <button
-                                    @click="showDeleteModal = false"
-                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm"
-                                >
+                                <button @click="showDeleteModal = false"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm">
                                     {{ t('common.actions.cancel') }}
                                 </button>
 
-                                <button
-                                    @click="handleDelete"
-                                    :disabled="deleteProcessing"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                                >
-                                    <FontAwesomeIcon
-                                        v-if="deleteProcessing"
-                                        icon="spinner"
-                                        spin
-                                    />
+                                <button @click="handleDelete" :disabled="deleteProcessing"
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                                    <FontAwesomeIcon v-if="deleteProcessing" icon="spinner" spin />
 
                                     {{
                                         deleteProcessing
@@ -319,4 +318,3 @@ onMounted(async () => {
         </Teleport>
     </div>
 </template>
-

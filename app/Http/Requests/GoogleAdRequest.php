@@ -39,7 +39,9 @@ class GoogleAdRequest extends FormRequest
 
             'type' => ['required', 'string'],
 
-            'position' => ['nullable', 'string'],
+            'page' => ['required', 'string'],
+
+            'placement' => ['nullable', 'string'],
         ];
     }
 
@@ -71,8 +73,11 @@ class GoogleAdRequest extends FormRequest
             'type.required' => __('form-requests.google_ad.type.required'),
             'type.string' => __('form-requests.google_ad.type.string'),
 
-            'position.string' => __('form-requests.google_ad.position.string'),
-            'position.required' => __('form-requests.google_ad.position.required'),
+            'page.required' => __('form-requests.google_ad.page.required'),
+            'page.string' => __('form-requests.google_ad.page.string'),
+
+            'placement.string' => __('form-requests.google_ad.placement.string'),
+            'placement.required' => __('form-requests.google_ad.placement.required'),
         ];
     }
 
@@ -82,25 +87,12 @@ class GoogleAdRequest extends FormRequest
             $data = $validator->getData();
 
             $type = $data['type'] ?? null;
-            $position = $data['position'] ?? null;
+            $page = $data['page'] ?? null;
+            $placement = $data['placement'] ?? null;
 
-            $types = [
-                GoogleAdHelper::TYPE_SECTION,
-                GoogleAdHelper::TYPE_SIDEBAR,
-                GoogleAdHelper::TYPE_POPUP_HOME_PAGE,
-                GoogleAdHelper::TYPE_POPUP_LATEST_PAGE,
-                GoogleAdHelper::TYPE_POPUP_SEARCH_PAGE,
-                GoogleAdHelper::TYPE_POPUP_VIDEO_PAGE,
-                GoogleAdHelper::TYPE_POPUP_IMAGE_GALLERY_PAGE,
-                GoogleAdHelper::TYPE_POPUP_CATEGORY_PAGE,
-                GoogleAdHelper::TYPE_POPUP_TAG_PAGE,
-                GoogleAdHelper::TYPE_POPUP_EVENT_PAGE,
-                GoogleAdHelper::TYPE_POPUP_LOCATION_PAGE,
-                GoogleAdHelper::TYPE_POPUP_NEWS_DETAILS_PAGE,
-                GoogleAdHelper::TYPE_POPUP_CONTACT_PAGE,
-                GoogleAdHelper::TYPE_POPUP_ABOUT_PAGE,
-                GoogleAdHelper::TYPE_POPUP_OTHER_PAGE,
-            ];
+            $types = GoogleAdHelper::types()
+                ->pluck('value')
+                ->all();
 
             if ($type && !in_array($type, $types, true)) {
                 $validator->errors()->add(
@@ -111,34 +103,47 @@ class GoogleAdRequest extends FormRequest
                 return;
             }
 
-            $isPopup = $type && str_contains($type, GoogleAdHelper::POPUP_LABEL);
+            $pages = GoogleAdHelper::pages()
+                ->pluck('value')
+                ->all();
 
-            if (!$isPopup) {
-                if (!$position) {
-                    $validator->errors()->add(
-                        'position',
-                        __('form-requests.google_ad.position.required')
-                    );
-
-                    return;
-                }
-
-                $positions = [
-                    GoogleAdHelper::POSITION_TOP,
-                    GoogleAdHelper::POSITION_BOTTOM,
-                    GoogleAdHelper::POSITION_BETWEEN,
-                ];
-
-                if (!in_array($position, $positions, true)) {
-                    $validator->errors()->add(
-                        'position',
-                        __('form-requests.google_ad.position.not_exit')
-                    );
-                }
-            } elseif ($position) {
+            if ($page && !in_array($page, $pages, true)) {
                 $validator->errors()->add(
-                    'position',
-                    __('form-requests.google_ad.position.not_allowed_for_popup')
+                    'page',
+                    __('form-requests.google_ad.page.not_exit')
+                );
+
+                return;
+            }
+
+            if ($type === GoogleAdHelper::TYPE_POPUP) {
+                if ($placement) {
+                    $validator->errors()->add(
+                        'placement',
+                        __('form-requests.google_ad.placement.not_allowed_for_popup')
+                    );
+                }
+
+                return;
+            }
+
+            if (!$placement) {
+                $validator->errors()->add(
+                    'placement',
+                    __('form-requests.google_ad.placement.required')
+                );
+
+                return;
+            }
+
+            $placements = GoogleAdHelper::placements($page, $type)
+                ->pluck('value')
+                ->all();
+
+            if (!in_array($placement, $placements, true)) {
+                $validator->errors()->add(
+                    'placement',
+                    __('form-requests.google_ad.placement.not_exit')
                 );
             }
         });

@@ -25,14 +25,19 @@ class GoogleAdCacheService
         CacheServerHelper::clearCachedByTag([$this->mainTag, CacheHelper::TAG_PAGE]);
     }
 
-    private function dbGoogleAdsByTypeAndPosition(string $type, string $position): Collection
+    private function dbGoogleAdsByTypeAndPlacement(string $page, string $type, string|int|null $placement): Collection
     {
-        return GoogleAd::where('type', $type)->where('position', $position)->orderBy('position', 'asc')->get();
+        $googleAds = GoogleAd::where('page', $page)->where('type', $type);
+        if ($placement) {
+            $googleAds = $googleAds->where('placement', $placement);
+        }
+        $googleAds = $googleAds->orderBy('id', 'desc')->get();
+        return $googleAds;
     }
 
-    public function getGoogleAdsByTypeAndPosition(string $key, string $type, string $position, ?int $cachedTTL = null): Collection
+    public function getGoogleAdsByTypeAndPlacement(string $key, string $page, string $type, string|int|null $placement, ?int $cachedTTL = null): Collection
     {
-        $cacheKey = CacheHelper::cacheKeyGenerateGoogleAdsByTypeAndPosition($key, $this->secondKey, $type, $position);
+        $cacheKey = CacheHelper::cacheKeyGenerateGoogleAdsByTypeAndPlacement($key, $this->secondKey, $page, $type, $placement);
 
         $records = CacheServerHelper::getCachedData(
             $cacheKey,
@@ -43,7 +48,7 @@ class GoogleAdCacheService
         );
 
         if (! $records) {
-            $records = $this->dbGoogleAdsByTypeAndPosition($type, $position);
+            $records = $this->dbGoogleAdsByTypeAndPlacement($page, $type, $placement);
 
             CacheServerHelper::cachedData(
                 $cacheKey,

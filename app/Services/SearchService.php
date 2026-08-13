@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Helpers\ActivityLogHelper;
@@ -40,7 +41,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -66,7 +67,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -92,7 +93,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -118,7 +119,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -144,7 +145,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -170,7 +171,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -196,7 +197,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -222,7 +223,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -248,7 +249,33 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
+            );
+        }
+
+        $items = $options->map(fn($row) => [
+            'id'   => $row->id,
+            'name' => $row->name,
+        ]);
+
+        return [
+            'items'        => $items,
+            'total'        => 1,
+            'current_page' => 1,
+            'last_page'    => 1,
+        ];
+    }
+
+    public function googleAdPages(Request $request): array
+    {
+        $options = GoogleAdHelper::pages();
+
+        if ($request->filled('search')) {
+            $search  = $request->input('search');
+            $options = $options->filter(
+                fn($row) =>
+                stripos((string) $row->id, $search) !== false ||
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -274,7 +301,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -291,29 +318,33 @@ class SearchService
         ];
     }
 
-    public function googleAdPositions(Request $request): array
+    public function googleAdPlacements(Request $request): array
     {
-        $options = GoogleAdHelper::positions();
+        $options = GoogleAdHelper::placements(
+            $request->input('page'),
+            $request->input('type')
+        );
 
         if ($request->filled('search')) {
-            $search  = $request->input('search');
+            $search = $request->input('search');
+
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
         $items = $options->map(fn($row) => [
-            'id'   => $row->id,
+            'id' => $row->id,
             'name' => $row->name,
         ]);
 
         return [
-            'items'        => $items,
-            'total'        => 1,
+            'items' => $items,
+            'total' => $items->count(),
             'current_page' => 1,
-            'last_page'    => 1,
+            'last_page' => 1,
         ];
     }
 
@@ -326,7 +357,7 @@ class SearchService
             $options = $options->filter(
                 fn($row) =>
                 stripos((string) $row->id, $search) !== false ||
-                stripos($row->name, $search) !== false
+                    stripos($row->name, $search) !== false
             );
         }
 
@@ -513,7 +544,8 @@ class SearchService
             $query->where('language_id', $request->input('language_id'));
         }
 
-        if ($request->filled('only_main') &&
+        if (
+            $request->filled('only_main') &&
             $request->boolean('only_main') &&
             ! $request->filled('parent_id')
         ) {
@@ -596,7 +628,8 @@ class SearchService
             $query->where('language_id', $request->input('language_id'));
         }
 
-        if ($request->filled('only_main') &&
+        if (
+            $request->filled('only_main') &&
             $request->boolean('only_main') &&
             ! $request->filled('parent_id')
         ) {
@@ -685,14 +718,16 @@ class SearchService
         $query = Media::query();
 
         if ($request->filled('search')) {
-            $query->where(fn($q) =>
+            $query->where(
+                fn($q) =>
                 $q->where('name', 'like', '%' . $request->input('search') . '%')
                     ->orWhere('custom_properties->alt', 'like', '%' . $request->input('search') . '%')
                     ->orWhere('custom_properties->caption', 'like', '%' . $request->input('search') . '%')
             );
         }
 
-        if ($request->filled('media_type') &&
+        if (
+            $request->filled('media_type') &&
             Str::lower($request->input('media_type')) !== 'all'
         ) {
             $query->where('mime_type', 'like', $request->input('media_type') . '%');
@@ -834,7 +869,8 @@ class SearchService
             $query->where('parent_id', $request->input('parent_id'));
         }
 
-        if ($request->filled('only_main') &&
+        if (
+            $request->filled('only_main') &&
             $request->boolean('only_main') &&
             ! $request->filled('parent_id')
         ) {
@@ -874,7 +910,8 @@ class SearchService
             $query->where('language_id', $request->input('language_id'));
         }
 
-        if ($request->filled('only_main') &&
+        if (
+            $request->filled('only_main') &&
             $request->boolean('only_main') &&
             ! $request->filled('parent_id')
         ) {
@@ -1369,5 +1406,4 @@ class SearchService
 
         return $list;
     }
-
 }

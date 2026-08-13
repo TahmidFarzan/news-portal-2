@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Helpers\GoogleAdHelper;
 use App\Helpers\SeederHelper;
 use App\Models\GoogleAd;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -30,132 +31,130 @@ class GoogleAdSeeder extends Seeder
             GoogleAd::truncate();
         }
 
-        $ads = [
-            [
-                'name' => GoogleAdHelper::TYPE_SECTION. GoogleAdHelper::POSITION_TOP,
-                'type' => GoogleAdHelper::TYPE_SECTION,
-                'position' => GoogleAdHelper::POSITION_TOP,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_SECTION. GoogleAdHelper::POSITION_BETWEEN,
-                'type' => GoogleAdHelper::TYPE_SECTION,
-                'position' => GoogleAdHelper::POSITION_BETWEEN,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_SECTION. GoogleAdHelper::POSITION_BOTTOM,
-                'type' => GoogleAdHelper::TYPE_SECTION,
-                'position' => GoogleAdHelper::POSITION_BOTTOM,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_SIDEBAR. GoogleAdHelper::POSITION_TOP,
-                'type' => GoogleAdHelper::TYPE_SIDEBAR,
-                'position' => GoogleAdHelper::POSITION_TOP,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_SIDEBAR. GoogleAdHelper::POSITION_BETWEEN,
-                'type' => GoogleAdHelper::TYPE_SIDEBAR,
-                'position' => GoogleAdHelper::POSITION_BETWEEN,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_SIDEBAR. GoogleAdHelper::POSITION_BOTTOM,
-                'type' => GoogleAdHelper::TYPE_SIDEBAR,
-                'position' => GoogleAdHelper::POSITION_BOTTOM,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_HOME_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_HOME_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => 'Pop Up - Latest Page',
-                'type' => GoogleAdHelper::TYPE_POPUP_LATEST_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_SEARCH_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_SEARCH_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_VIDEO_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_VIDEO_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_IMAGE_GALLERY_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_IMAGE_GALLERY_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_CATEGORY_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_CATEGORY_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_TAG_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_TAG_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_EVENT_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_EVENT_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_LOCATION_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_LOCATION_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_NEWS_DETAILS_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_NEWS_DETAILS_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_CONTACT_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_CONTACT_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_ABOUT_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_ABOUT_PAGE,
-                'position' => null,
-            ],
-            [
-                'name' => GoogleAdHelper::TYPE_POPUP_OTHER_PAGE,
-                'type' => GoogleAdHelper::TYPE_POPUP_OTHER_PAGE,
-                'position' => null,
-            ],
-        ];
+        $user = User::query()
+            ->where('is_super_admin', true)
+            ->inRandomOrder()
+            ->first();
 
-        $testAds = SeederHelper::GOOGLE_AD_MANAGER_TEST_ADS;
+        $pages = GoogleAdHelper::pages()
+            ->pluck('id')
+            ->values()
+            ->all();
 
-        $popupTestAd = collect($testAds)->firstWhere(
-            'name',
-            GoogleAdHelper::POPUP_LABEL
-        );
+        $testAds = collect(SeederHelper::GOOGLE_AD_MANAGER_TEST_ADS);
 
-        $regularTestAds = collect($testAds)
-            ->reject(fn($testAd) => $testAd['name'] === GoogleAdHelper::POPUP_LABEL)
+        $sectionTestAds = $testAds
+            ->where('type', GoogleAdHelper::TYPE_SECTION)
             ->values();
 
-        foreach ($ads as $index => $ad) {
-            $isPopup = str_starts_with($ad['type'], GoogleAdHelper::POPUP_LABEL);
+        $sidebarTestAds = $testAds
+            ->where('type', GoogleAdHelper::TYPE_SIDEBAR)
+            ->values();
 
-            if ($isPopup) {
-                $testAd = $popupTestAd;
-            } else {
-                $testAd = $regularTestAds[$index % $regularTestAds->count()];
+        $popupTestAd = $testAds
+            ->firstWhere('type', GoogleAdHelper::TYPE_POPUP);
+
+        foreach ($pages as $page) {
+            $sectionPlacements = $page === GoogleAdHelper::PAGE_HOME
+                ? [
+                    GoogleAdHelper::PLACEMENT_1,
+                    GoogleAdHelper::PLACEMENT_2,
+                    GoogleAdHelper::PLACEMENT_3,
+                    GoogleAdHelper::PLACEMENT_4,
+                    GoogleAdHelper::PLACEMENT_5,
+                    GoogleAdHelper::PLACEMENT_6,
+                ]
+                : [
+                    GoogleAdHelper::PLACEMENT_1,
+                    GoogleAdHelper::PLACEMENT_2,
+                    GoogleAdHelper::PLACEMENT_3,
+                ];
+
+            foreach ($sectionPlacements as $index => $placement) {
+                $testAd = $sectionTestAds[$index % $sectionTestAds->count()];
+
+                GoogleAd::create([
+                    'name' => "{$page} Section {$placement}",
+                    'type' => GoogleAdHelper::TYPE_SECTION,
+                    'page' => $page,
+                    'placement' => $placement,
+                    'ad_unit_code' => $testAd['ad_unit_code'],
+                    'gpt_slot_id' => $this->generateGptSlotId(
+                        $page,
+                        GoogleAdHelper::TYPE_SECTION,
+                        $placement
+                    ),
+                    'ad_sizes' => $testAd['ad_sizes'],
+                    'created_by_id' => $user?->id ?? 1,
+                ]);
             }
 
-            GoogleAd::factory()->state([
-                'name' => $ad['name'],
-                'type' => $ad['type'],
-                'position' => $ad['position'],
-                'ad_unit_code' => $testAd['ad_unit_code'],
-                'gpt_slot_id' => ($testAd['gpt_slot_id'] ?? "div-gpt-ad").'-' . Str::uuid(),
-                'ad_sizes' => $testAd['ad_sizes'],
-            ])->create();
+            $sidebarPlacements = $page === GoogleAdHelper::PAGE_HOME
+                ? [
+                    GoogleAdHelper::PLACEMENT_2,
+                ]
+                : [
+                    GoogleAdHelper::PLACEMENT_1,
+                    GoogleAdHelper::PLACEMENT_2,
+                ];
+
+            foreach ($sidebarPlacements as $index => $placement) {
+                $testAd = $sidebarTestAds[$index % $sidebarTestAds->count()];
+
+                GoogleAd::create([
+                    'name' => "{$page} Sidebar {$placement}",
+                    'type' => GoogleAdHelper::TYPE_SIDEBAR,
+                    'page' => $page,
+                    'placement' => $placement,
+                    'ad_unit_code' => $testAd['ad_unit_code'],
+                    'gpt_slot_id' => $this->generateGptSlotId(
+                        $page,
+                        GoogleAdHelper::TYPE_SIDEBAR,
+                        $placement
+                    ),
+                    'ad_sizes' => $testAd['ad_sizes'],
+                    'created_by_id' => $user?->id ?? 1,
+                ]);
+            }
+
+            GoogleAd::create([
+                'name' => "{$page} Pop Up",
+                'type' => GoogleAdHelper::TYPE_POPUP,
+                'page' => $page,
+                'placement' => null,
+                'ad_unit_code' => $popupTestAd['ad_unit_code'],
+                'gpt_slot_id' => $this->generateGptSlotId(
+                    $page,
+                    GoogleAdHelper::TYPE_POPUP
+                ),
+                'ad_sizes' => $popupTestAd['ad_sizes'],
+                'created_by_id' => $user?->id ?? 1,
+            ]);
         }
+    }
+
+    private function generateGptSlotId(
+        string $page,
+        string $type,
+        ?string $placement = null
+    ): string {
+        $parts = [
+            'div-gpt-ad',
+            $this->slug($page),
+            $this->slug($type),
+        ];
+
+        if ($placement !== null) {
+            $parts[] = $placement;
+        }
+
+        $parts[] = Str::uuid();
+
+        return implode('-', $parts);
+    }
+
+    private function slug(string $value): string
+    {
+        return Str::slug($value);
     }
 }

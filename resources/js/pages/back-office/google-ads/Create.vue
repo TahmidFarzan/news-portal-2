@@ -52,8 +52,20 @@ const saveForm = useForm({
     ad_unit_code: googleAd?.ad_unit_code || null,
     gpt_slot_id: googleAd?.gpt_slot_id || null,
     ad_sizes: [],
+    page: googleAd?.page || null,
     type: googleAd?.type || null,
-    position: googleAd?.position || null,
+    placement: googleAd?.placement || null,
+})
+
+const isPopup = computed(() => {
+    return saveForm.type === 'Pop Up'
+})
+
+const placementApiUrl = computed(() => {
+    return route('search.google-ad-placements', {
+        page: saveForm.page || null,
+        type: saveForm.type || null,
+    })
 })
 
 const syncAdSizes = () => {
@@ -109,26 +121,28 @@ function validateForm() {
         valid = false
     }
 
-    if (!saveForm.type) {
-        saveForm.setError('type', t('common.validation.typeIsRequired'))
+    if (!saveForm.page) {
+        saveForm.setError(
+            'page',
+            t('common.validation.pageIsRequired')
+        )
         valid = false
     }
 
-    const hasPosition = saveForm.position !== null
-        && saveForm.position !== ''
-        && saveForm.position !== undefined
+    if (!saveForm.type) {
+        saveForm.setError(
+            'type',
+            t('common.validation.typeIsRequired')
+        )
+        valid = false
+    }
 
-    if (!hasPosition) {
-        const isPopup = typeof saveForm.type === 'string'
-            && saveForm.type.startsWith('Pop Up')
-
-        if (!isPopup) {
-            saveForm.setError(
-                'position',
-                t('admin.googleAds.create.validation.positionIsRequired')
-            )
-            valid = false
-        }
+    if (!isPopup.value && !saveForm.placement) {
+        saveForm.setError(
+            'placement',
+            t('admin.googleAds.create.validation.placementIsRequired')
+        )
+        valid = false
     }
 
     syncAdSizes()
@@ -192,8 +206,13 @@ function handleSave() {
 
     if (isUpdate.value) {
         intertiaJsRoute.post(
-            route('back-office.google-ads.update', { slug: googleAd?.slug }),
-            { ...saveForm.data(), _method: 'patch' },
+            route('back-office.google-ads.update', {
+                slug: googleAd?.slug
+            }),
+            {
+                ...saveForm.data(),
+                _method: 'patch'
+            },
             requestConfig
         )
     } else {
@@ -286,6 +305,21 @@ onMounted(async () => {
 
                         <div>
                             <label class="block text-sm font-medium mb-1">
+                                {{ t('common.labels.page') }}
+                                <span class="text-red-500">*</span>
+                            </label>
+
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="page" :selectedItem="googleAd?.page"
+                                :apiUrl="route('search.google-ad-pages')" :error="saveForm.errors.page"
+                                :multiple="false" :placeholder="t('common.placeholders.selectPage')" />
+
+                            <p v-if="saveForm.errors.page" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.page }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
                                 {{ t('common.labels.type') }}
                                 <span class="text-red-500">*</span>
                             </label>
@@ -299,18 +333,19 @@ onMounted(async () => {
                             </p>
                         </div>
 
-                        <div>
+                        <div v-if="!isPopup">
                             <label class="block text-sm font-medium mb-1">
-                                {{ t('common.labels.position') }}
+                                {{ t('common.labels.placement') }}
+                                <span class="text-red-500">*</span>
                             </label>
 
-                            <InfiniteScrollApiSelect :form="saveForm" fieldName="position"
-                                :selectedItem="googleAd?.position" :apiUrl="route('search.google-ad-positions')"
-                                :error="saveForm.errors.position" :multiple="false"
-                                :placeholder="t('common.placeholders.selectPosition')" />
+                            <InfiniteScrollApiSelect :form="saveForm" fieldName="placement"
+                                :selectedItem="googleAd?.placement" :apiUrl="placementApiUrl"
+                                :error="saveForm.errors.placement" :multiple="false"
+                                :placeholder="t('common.placeholders.selectPlacement')" />
 
-                            <p v-if="saveForm.errors.position" class="text-red-500 text-sm mt-1">
-                                {{ saveForm.errors.position }}
+                            <p v-if="saveForm.errors.placement" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.placement }}
                             </p>
                         </div>
                     </div>
