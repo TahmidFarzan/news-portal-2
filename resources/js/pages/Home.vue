@@ -250,7 +250,7 @@ const componentRefreshKey = (componentName) => {
         <ImageGalleryNewsSection :key="componentRefreshKey('image-gallery-section')"
             :currentLanguage="currentLanguage"  class="home-gallery-news-section mt-4" />
 
-        <GoogleAd v-if="googleAdEnable" class="mt-4 mb-4" :type="adTypes.SECTION" :position="adPositions.BETWEEN"/>
+        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :position="adPositions.BETWEEN" class="mt-4 mb-4"/>
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">

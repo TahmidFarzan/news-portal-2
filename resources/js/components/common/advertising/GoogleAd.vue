@@ -53,6 +53,11 @@ const appEnv = import.meta.env.VITE_APP_ENV
 const instance = getCurrentInstance()
 const componentId = instance?.uid ?? Math.random().toString(36).slice(2)
 
+const currentUrl = window.location.href
+const AD_SLOT_CACHE_TTL = 120 * 1000
+const DESKTOP_BREAKPOINT = 992
+const DESKTOP_AD_MIN_WIDTH = 728
+
 const ads = ref([])
 const wrapperRef = ref(null)
 
@@ -62,6 +67,71 @@ const popupIndex = ref(0)
 
 let observer = null
 let resizeObserver = null
+
+const getGoogleAdSlotCache = () => {
+    window.__googleAdSlotCache = window.__googleAdSlotCache || {}
+
+    const now = Date.now()
+
+    Object.keys(window.__googleAdSlotCache).forEach((url) => {
+        const cache = window.__googleAdSlotCache[url]
+
+        if (
+            !cache?.createdAt ||
+            now - cache.createdAt >= AD_SLOT_CACHE_TTL
+        ) {
+            delete window.__googleAdSlotCache[url]
+        }
+    })
+
+    if (!window.__googleAdSlotCache[currentUrl]) {
+        window.__googleAdSlotCache[currentUrl] = {
+            createdAt: now,
+            gptSlotIds: {},
+            slotElementIds: {},
+        }
+    }
+
+    return window.__googleAdSlotCache[currentUrl]
+}
+
+const registerCachedSlot = (
+    gptSlotId,
+    slotElementId
+) => {
+    if (!gptSlotId || !slotElementId) {
+        return
+    }
+
+    const cache = getGoogleAdSlotCache()
+
+    cache.gptSlotIds[gptSlotId] = (
+        cache.gptSlotIds[gptSlotId] || 0
+    ) + 1
+
+    cache.slotElementIds[slotElementId] = true
+}
+
+const createSlotElementId = (ad, index) => {
+    const baseId = ad?.gpt_slot_id
+        ?? `google-ad-${ad?.id ?? index}`
+
+    const cache = getGoogleAdSlotCache()
+
+    if (!cache.gptSlotIds[baseId]) {
+        return baseId
+    }
+
+    let slotElementId = `${baseId}-${componentId}-${index}`
+    let duplicateIndex = 1
+
+    while (cache.slotElementIds[slotElementId]) {
+        slotElementId = `${baseId}-${componentId}-${index}-${duplicateIndex}`
+        duplicateIndex++
+    }
+
+    return slotElementId
+}
 
 const getGoogleTagState = () => {
     window.__googleAdState = window.__googleAdState || {
@@ -103,7 +173,7 @@ const shouldShow = computed(() => {
 
 const wrapperClasses = computed(() => {
     return [
-        'relative mx-auto my-4 w-full text-center',
+        'relative mx-auto my-4 flex w-full flex-col items-center text-center',
         customClass,
     ]
 })
@@ -116,13 +186,6 @@ const getAdKey = (ad, index) => {
         ?? index
 }
 
-const createSlotElementId = (ad, index) => {
-    const baseId = ad?.gpt_slot_id
-        ?? `google-ad-${ad?.id ?? index}`
-
-    return `${baseId}-${componentId}-${index}`
-}
-
 const normalizeRows = (response) => {
     const rows = Array.isArray(response)
         ? response
@@ -132,23 +195,39 @@ const normalizeRows = (response) => {
         .filter((row) => {
             return row?.ad_unit_code
         })
-        .map((row, index) => ({
-            ...row,
-            slot_element_id: createSlotElementId(row, index),
-            status: null,
-            slot: null,
-            displayed: false,
-        }))
+        .map((row, index) => {
+            const slotElementId = createSlotElementId(
+                row,
+                index
+            )
+
+            registerCachedSlot(
+                row?.gpt_slot_id
+                ?? `google-ad-${row?.id ?? index}`,
+                slotElementId
+            )
+
+            return {
+                ...row,
+                slot_element_id: slotElementId,
+                status: null,
+                slot: null,
+                displayed: false,
+            }
+        })
 }
 
-const normalizeAdSizes = (ad) => {
-    const sizes = Array.isArray(ad?.ad_sizes) && ad.ad_sizes.length
-        ? ad.ad_sizes
-        : defaultAdSizes
+const normalizeSizes = (sizes) => {
+    if (!Array.isArray(sizes)) {
+        return []
+    }
 
     return sizes
         .map((size) => {
-            if (Array.isArray(size) && size.length >= 2) {
+            if (
+                Array.isArray(size) &&
+                size.length >= 2
+            ) {
                 const width = Number(size[0])
                 const height = Number(size[1])
 
@@ -157,7 +236,10 @@ const normalizeAdSizes = (ad) => {
                 }
             }
 
-            if (size && typeof size === 'object') {
+            if (
+                size &&
+                typeof size === 'object'
+            ) {
                 const width = Number(size.width)
                 const height = Number(size.height)
 
@@ -169,6 +251,61 @@ const normalizeAdSizes = (ad) => {
             return null
         })
         .filter(Boolean)
+}
+
+const normalizeAdSizes = (ad) => {
+    const adSizes = normalizeSizes(ad?.ad_sizes)
+
+    if (adSizes.length) {
+        return adSizes
+    }
+
+    return normalizeSizes(defaultAdSizes)
+}
+
+const createSizeMapping = (ad) => {
+    const sizes = normalizeAdSizes(ad)
+
+    if (!sizes.length) {
+        return null
+    }
+
+    if (sizes.length === 1) {
+        return window.googletag
+            .sizeMapping()
+            .addSize(
+                [0, 0],
+                sizes
+            )
+            .build()
+    }
+
+    const desktopSizes = sizes.filter(([width]) => {
+        return width >= DESKTOP_AD_MIN_WIDTH
+    })
+
+    const mobileSizes = sizes.filter(([width]) => {
+        return width < DESKTOP_AD_MIN_WIDTH
+    })
+
+    const sizeMapping = window.googletag
+        .sizeMapping()
+
+    if (desktopSizes.length) {
+        sizeMapping.addSize(
+            [DESKTOP_BREAKPOINT, 0],
+            desktopSizes
+        )
+    }
+
+    if (mobileSizes.length) {
+        sizeMapping.addSize(
+            [0, 0],
+            mobileSizes
+        )
+    }
+
+    return sizeMapping.build()
 }
 
 const getCacheParamsKey = (params = {}) => {
@@ -379,15 +516,26 @@ const defineOrGetSlot = (ad) => {
         return null
     }
 
-    return window.googletag
+    const slot = window.googletag
         .defineSlot(
             ad.ad_unit_code,
             sizes,
             ad.slot_element_id
         )
-        ?.addService(
-            window.googletag.pubads()
-        ) ?? null
+
+    if (!slot) {
+        return null
+    }
+
+    const sizeMapping = createSizeMapping(ad)
+
+    if (sizeMapping) {
+        slot.defineSizeMapping(sizeMapping)
+    }
+
+    return slot.addService(
+        window.googletag.pubads()
+    )
 }
 
 const pushGoogleAds = async () => {
@@ -659,83 +807,87 @@ onBeforeUnmount(() => {
             isTestEnvironment &&
             !hasConfiguredAds
         ">
-            <div class="mx-auto w-full max-w-[815px]">
-                <div class="border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center">
-                    <div class="text-sm font-semibold text-gray-600">
-                        {{ t('common.labels.test') }}
-                    </div>
+            <div class="mx-auto flex w-full justify-center">
+                <div class="w-full max-w-[815px]">
+                    <div class="border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center">
+                        <div class="text-sm font-semibold text-gray-600">
+                            {{ t('common.labels.test') }}
+                        </div>
 
-                    <div class="mt-1 text-xs text-gray-500">
-                        {{
-                            t(
-                                'common.labels.googleAdManagerUnavailable'
-                            )
-                        }}
-                    </div>
+                        <div class="mt-1 text-xs text-gray-500">
+                            {{
+                                t(
+                                    'common.labels.googleAdManagerUnavailable'
+                                )
+                            }}
+                        </div>
 
-                    <div class="mt-1 text-xs text-gray-400">
-                        {{ t('common.labels.environment') }}:
-                        {{ appEnv }}
-                    </div>
+                        <div class="mt-1 text-xs text-gray-400">
+                            {{ t('common.labels.environment') }}:
+                            {{ appEnv }}
+                        </div>
 
-                    <div class="mt-1 text-xs text-gray-400">
-                        {{ t('common.labels.type') }}:
-                        {{ type }}
-                    </div>
+                        <div class="mt-1 text-xs text-gray-400">
+                            {{ t('common.labels.type') }}:
+                            {{ type }}
+                        </div>
 
-                    <div class="mt-1 text-xs text-gray-400">
-                        {{ t('common.labels.position') }}:
-                        {{ position }}
+                        <div class="mt-1 text-xs text-gray-400">
+                            {{ t('common.labels.position') }}:
+                            {{ position }}
+                        </div>
                     </div>
                 </div>
             </div>
         </template>
 
         <template v-else>
-            <div v-for="(ad, index) in ads" :key="getAdKey(ad, index)" class="w-full text-center" :class="{
-                hidden:
-                    isProduction &&
-                    adsChecked &&
-                    ad.status !== 'filled',
-            }">
-                <div v-if="ad.slot_element_id" :id="ad.slot_element_id" class="mx-auto"></div>
+            <div v-for="(ad, index) in ads" :key="getAdKey(ad, index)"
+                class="flex w-full flex-col items-center justify-center text-center" :class="{
+                    hidden:
+                        isProduction &&
+                        adsChecked &&
+                        ad.status !== 'filled',
+                }">
+                <div v-if="ad.slot_element_id" :id="ad.slot_element_id" class="mx-auto flex max-w-full justify-center">
+                </div>
 
                 <div v-if="
                     isTestEnvironment &&
                     adsChecked &&
                     ad.status !== 'filled'
                 "
-                    class="mx-auto mt-2 max-w-[815px] border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center">
+                    class="mx-auto mt-2 w-full max-w-[815px] border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center">
                     <div class="text-sm font-semibold text-gray-600">
                         {{ t('common.labels.test') }}
                     </div>
 
                     <div class="mt-1 text-xs text-gray-500">
-                        Google Ad Manager returned no ad
+                        {{ t('common.labels.googleAdMangerNoAds') }}
                     </div>
 
                     <div class="mt-1 text-xs text-gray-400">
-                        Status:
-                        {{ ad.status || 'pending' }}
+                        {{ t('common.labels.status') }}:
+                        {{ ad.status || t('common.labels.pending') }}
                     </div>
 
                     <div class="mt-1 text-xs text-gray-400">
-                        Slot:
+                        {{ t('common.labels.slot') }}:
                         {{ ad.slot_element_id }}
                     </div>
 
                     <div class="mt-1 text-xs text-gray-400">
-                        GPT Slot:
+                        {{ t('common.labels.gptSlot') }}:
                         {{ ad.gpt_slot_id }}
                     </div>
 
                     <div class="mt-1 text-xs text-gray-400">
-                        Ad Unit:
+                        {{ t('common.labels.adUnit') }}:
                         {{ ad.ad_unit_code }}
                     </div>
 
                     <div class="mt-1 text-xs text-gray-400">
-                        Sizes:
+                        {{ t('common.labels.sizes') }}:
                         {{ normalizeAdSizes(ad) }}
                     </div>
                 </div>

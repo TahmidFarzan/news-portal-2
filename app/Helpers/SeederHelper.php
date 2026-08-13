@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Helpers\GoogleAdHelper;
+
 class SeederHelper
 {
     public const LANGUAGE_EN_CODE             = 'en';
@@ -10,7 +12,7 @@ class SeederHelper
 
     public const GOOGLE_AD_MANAGER_TEST_ADS = [
         [
-            'name' => 'Section Top',
+            'name' => GoogleAdHelper::TYPE_SECTION. GoogleAdHelper::POSITION_TOP,
             'ad_unit_code' => '/6355419/Travel',
             'gpt_slot_id' => 'div-gpt-ad-section-top',
             'ad_sizes' => [
@@ -19,7 +21,7 @@ class SeederHelper
             ],
         ],
         [
-            'name' => 'Section Between',
+            'name' => GoogleAdHelper::TYPE_SECTION. GoogleAdHelper::POSITION_BETWEEN,
             'ad_unit_code' => '/6355419/Travel/Europe',
             'gpt_slot_id' => 'div-gpt-ad-section-between',
             'ad_sizes' => [
@@ -28,7 +30,7 @@ class SeederHelper
             ],
         ],
         [
-            'name' => 'Section Bottom',
+            'name' => GoogleAdHelper::TYPE_SECTION. GoogleAdHelper::POSITION_BOTTOM,
             'ad_unit_code' => '/6355419/Travel/Europe/France',
             'gpt_slot_id' => 'div-gpt-ad-section-bottom',
             'ad_sizes' => [
@@ -37,24 +39,31 @@ class SeederHelper
             ],
         ],
         [
-            'name' => 'Sidebar',
+            'name' => GoogleAdHelper::TYPE_SIDEBAR. GoogleAdHelper::POSITION_TOP,
             'ad_unit_code' => '/6355419/Travel/Europe/France/Paris',
-            'gpt_slot_id' => 'div-gpt-ad-sidebar',
+            'gpt_slot_id' => 'div-gpt-ad-sidebar-top',
             'ad_sizes' => [
                 [300, 250],
             ],
         ],
         [
-            'name' => 'Header',
-            'ad_unit_code' => '/6355419/Travel/Asia',
-            'gpt_slot_id' => 'div-gpt-ad-header',
+            'name' => GoogleAdHelper::TYPE_SIDEBAR. GoogleAdHelper::POSITION_BETWEEN,
+            'ad_unit_code' => '/6355419/Travel/Europe/France/Paris',
+            'gpt_slot_id' => 'div-gpt-ad-sidebar-between',
             'ad_sizes' => [
-                [728, 90],
+                [300, 250],
             ],
         ],
-
         [
-            'name' => 'Popup',
+            'name' => GoogleAdHelper::TYPE_SIDEBAR. GoogleAdHelper::POSITION_BOTTOM,
+            'ad_unit_code' => '/6355419/Travel/Europe/France/Paris',
+            'gpt_slot_id' => 'div-gpt-ad-sidebar-bottom',
+            'ad_sizes' => [
+                [300, 250],
+            ],
+        ],
+        [
+            'name' => GoogleAdHelper::POPUP_LABEL,
             'ad_unit_code' => '/6355419/Travel',
             'gpt_slot_id' => 'div-gpt-ad-popup',
             'ad_sizes' => [],

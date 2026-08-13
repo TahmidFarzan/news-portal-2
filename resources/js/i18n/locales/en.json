@@ -189,7 +189,13 @@
             "gptSlotId" : "Gpt Slot Id",
             "adSizes" : "Ad Sizes",
             "width" : "Width",
-            "height" : "Height"
+            "height" : "Height",
+            "slot" : "Slot",
+            "gptSlot" : "Gpt Slot",
+            "adUnit" : "Ad Unit",
+            "sizes" : "Sizes",
+            "googleAdMangerNoAds" : "Google Ad Manager returned no ad",
+            "pending" : "Pending"
         },
         "actions": {
             "details": "Details",
