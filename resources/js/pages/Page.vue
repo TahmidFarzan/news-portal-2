@@ -1,5 +1,5 @@
 <script setup>
-import { computed,inject } from 'vue'
+import { computed, inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
 import Layout from '@/pages/layouts/PublicLayout.vue'
@@ -56,6 +56,10 @@ const googleAdEnable = inject('googleAdEnable', computed(() => false))
         <GoogleAd v-if="googleAdEnable" :page="adPages.OTHER" :type="adTypes.SECTION" :placement="adPlacements.TWO" />
         <GoogleAd v-if="googleAdEnable" :page="adPages.OTHER" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </div>
+
+    <Teleport to="body">
+        <GoogleAd v-if="googleAdEnable" :page="adPages.OTHER" :type="adTypes.POPUP" />
+    </Teleport>
 </template>
 
 <style scoped>

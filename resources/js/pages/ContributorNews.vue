@@ -100,6 +100,10 @@ const googleAdEnable = inject('googleAdEnable', computed(() => false))
 
         <GoogleAd v-if="googleAdEnable" :page="adPages.CONTRIBUTOR" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </div>
+
+    <Teleport to="body">
+        <GoogleAd v-if="googleAdEnable" :page="adPages.CONTRIBUTOR" :type="adTypes.POPUP"/>
+    </Teleport>
 </template>
 
 <style scoped>

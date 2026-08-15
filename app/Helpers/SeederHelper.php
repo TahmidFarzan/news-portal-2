@@ -45,7 +45,7 @@ class SeederHelper
         [
             'type' => GoogleAdHelper::TYPE_POPUP,
             'ad_unit_code' => '/6355419/Travel',
-            'ad_sizes' => [],
+            'ad_sizes' => [[300, 250], [728, 90]],
         ],
     ];
 

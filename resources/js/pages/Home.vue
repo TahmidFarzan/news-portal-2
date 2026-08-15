@@ -304,6 +304,10 @@ const componentRefreshKey = (componentName) => {
 
         <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.SIX"/>
     </section>
+
+    <Teleport to="body">
+        <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.POPUP"/>
+    </Teleport>
 </template>
 
 <style scoped>

@@ -252,6 +252,10 @@ onMounted(async () => {
 
         <GoogleAd v-if="googleAdEnable" :page="adPages.SEARCH" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </div>
+
+    <Teleport to="body">
+        <GoogleAd v-if="googleAdEnable" :page="adPages.SEARCH" :type="adTypes.POPUP" />
+    </Teleport>
 </template>
 
 <style scoped>

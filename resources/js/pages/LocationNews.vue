@@ -465,6 +465,10 @@ onBeforeUnmount(() => {
 
         <GoogleAd v-if="googleAdEnable" :page="adPages.LOCATION" :type="adTypes.SECTION" :placement="adPlacements.THREE" />
     </div>
+
+    <Teleport to="body">
+        <GoogleAd v-if="googleAdEnable" :page="adPages.LOCATION" :type="adTypes.POPUP"/>
+    </Teleport>
 </template>
 
 <style scoped>
