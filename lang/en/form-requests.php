@@ -341,6 +341,18 @@ return [
             'required'  => 'Language is required.',
             "not_found" => 'Language is not exit.',
         ],
+
+        'start_date'           => [
+            'date' => 'Start date must be a valid date.',
+        ],
+
+        'end_date'             => [
+            'date' => 'End date must be a valid date.',
+        ],
+
+        'is_active'            => [
+            'boolean' => 'Is active must be true or false.',
+        ],
     ],
 
     'contributor'          => [

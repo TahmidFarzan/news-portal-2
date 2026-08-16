@@ -131,13 +131,12 @@ const componentRefreshKey = (componentName) => {
     </Head>
 
     <section class="home-page min-h-screen">
+        <Trends :key="componentRefreshKey('trend')" v-if="showTrends" class="home-trends" :trends="trends" />
+
         <div v-if="topEvents" :key="componentRefreshKey('event-section-top')" class="home-top-events">
             <EventNewsSection :events="topEvents" :currentLanguage="currentLanguage" />
-            <Quizzes v-if="showQuizzes" :currentLanguage="currentLanguage" :belowEvent="true"
-                class="home-quizzes mt-4" />
+            <Quizzes v-if="showQuizzes" :currentLanguage="currentLanguage" :belowEvent="true" class="home-quizzes mt-4" />
         </div>
-
-        <Trends :key="componentRefreshKey('trend')" v-if="showTrends" class="home-trends" :trends="trends" />
 
         <div class="home-lead-shell rounded-2xl border border-slate-100 p-2">
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">

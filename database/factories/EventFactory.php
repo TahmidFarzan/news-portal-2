@@ -30,7 +30,9 @@ class EventFactory extends Factory
             'brief'         => $brief,
             'seo_title'     => $name,
             'seo_brief'     => $brief,
-            "is_current"    => false,
+            "start_date"    => now()->toDateString(),
+            "end_date"      => now()->addDays(rand(1, 30))->toDateString(),
+            "is_active"     => false,
             "language_id"   => $language?->id ?? "1",
             "created_by_id" => $user?->id ?? "1",
         ];

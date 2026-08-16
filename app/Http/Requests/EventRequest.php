@@ -26,6 +26,10 @@ class EventRequest extends FormRequest
 
             "position"              => ["nullable"],
 
+            "start_date"            => ["nullable", "date"],
+            "end_date"              => ["nullable", "date"],
+            "is_active"             => ["nullable", "boolean"],
+
             "desktop_banner_image" => ["nullable", "image", "mimetypes:image/*", "dimensions:width=1300,height=90"],
             "mobile_banner_image"  => ["nullable", "image", "mimetypes:image/*", "dimensions:width=400,height=90"],
         ];
@@ -45,6 +49,10 @@ class EventRequest extends FormRequest
             "mobile_banner_image.image"      => __("form-requests.event.mobile_banner_image.image"),
             "mobile_banner_image.mimes"      => __("form-requests.event.mobile_banner_image.mimes"),
             "mobile_banner_image.dimensions" => __("form-requests.event.mobile_banner_image.dimensions"),
+
+            "start_date.date"                  => __("form-requests.event.start_date.date"),
+            "end_date.date"                    => __("form-requests.event.end_date.date"),
+            "is_active.boolean"                => __("form-requests.event.is_active.boolean"),
         ];
     }
 

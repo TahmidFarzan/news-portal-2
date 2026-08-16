@@ -12,6 +12,7 @@ import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core
 import { faSave, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { useTranslate } from '@/composables/useTranslate'
+import { formatDate } from '@/composables/useDateTime'
 
 FontAwesomeLibrary.add(faSave, faEye, faEyeSlash, faSpinner)
 
@@ -43,7 +44,9 @@ const saveForm = useForm({
     language_id: event?.language_id || null,
     desktop_banner_image: null,
     mobile_banner_image: null,
-    is_current: event?.is_current || false,
+    is_active: event?.is_active || false,
+    start_date: event?.start_date ? formatDate(event.start_date, "Y-m-d") : null,
+    end_date: event?.end_date ? formatDate(event.end_date, "Y-m-d") : null,
     seo_brief: event?.seo_brief || null,
     seo_title: event?.seo_title || null,
     seo_keywords: event?.seo_keywords ? event.seo_keywords.split(',') : [],
@@ -195,12 +198,39 @@ onMounted(async () => {
                         </div>
 
                         <div>
-                            <label class="mb-1 block text-sm font-medium text-gray-700">
-                                {{ t('common.labels.isCurrent') }}
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('common.labels.startDate') }}
+                            </label>
 
+                            <input v-model="saveForm.start_date" type="date"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.start_date ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.start_date" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.start_date }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">
+                                {{ t('common.labels.endDate') }}
+                            </label>
+
+                            <input v-model="saveForm.end_date" type="date"
+                                class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                :class="saveForm.errors.end_date ? 'border-red-500' : 'border-gray-300'" />
+
+                            <p v-if="saveForm.errors.end_date" class="text-red-500 text-sm mt-1">
+                                {{ saveForm.errors.end_date }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="mb-1 block text-sm font-medium text-gray-700">
+                                {{ t('common.labels.isActive') }}
                             </label>
                             <label class="inline-flex cursor-pointer items-center gap-3">
-                                <input v-model="saveForm.is_current" type="checkbox" class="peer sr-only" :checked="saveForm.is_current"/>
+                                <input v-model="saveForm.is_active" type="checkbox" class="peer sr-only" :checked="saveForm.is_active"/>
 
                                 <span class="relative h-7 w-14 rounded-full bg-gray-300 transition
                                     after:absolute after:left-1 after:top-1 after:h-5 after:w-5
@@ -209,13 +239,13 @@ onMounted(async () => {
                                 </span>
 
                                 <span class="text-sm text-gray-600">
-                                    {{ saveForm.is_current ? t('common.boolean.yes') :
+                                    {{ saveForm.is_active ? t('common.boolean.yes') :
                                         t('common.boolean.no') }}
                                 </span>
                             </label>
 
-                            <p v-if="saveForm.errors.is_current" class="mt-1 text-sm text-red-500">
-                                {{ saveForm.errors.is_current }}
+                            <p v-if="saveForm.errors.is_active" class="mt-1 text-sm text-red-500">
+                                {{ saveForm.errors.is_active }}
                             </p>
                         </div>
 

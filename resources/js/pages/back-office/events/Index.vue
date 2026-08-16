@@ -186,7 +186,7 @@ onMounted(async () => {
                                 {{ t('common.labels.position') }}
                             </th>
                             <th class="px-4 py-3 text-left">
-                                {{ t('common.labels.isCurrent') }}
+                                {{ t('common.labels.isActive') }}
                             </th>
                             <th class="px-4 py-3 text-left">
                                 {{ t('common.labels.createdAt') }}
@@ -211,7 +211,7 @@ onMounted(async () => {
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">
-                                {{ item?.is_current ? t('common.boolean.yes') :
+                                {{ item?.is_active ? t('common.boolean.yes') :
                                     t('common.boolean.no') }}
                             </td>
 

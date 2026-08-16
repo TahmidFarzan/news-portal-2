@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 // use App\Models\User;
@@ -53,5 +54,7 @@ class DatabaseSeeder extends Seeder
         $this->call(NewsTagSyncSeeder::class);
         $this->call(NewsContributorSyncSeeder::class);
         $this->call(NewsMediaSeeder::class);
+
+        $this->call(UpdateEventSeeder::class);
     }
 }

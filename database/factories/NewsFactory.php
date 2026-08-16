@@ -92,6 +92,6 @@ class NewsFactory extends Factory
 
     private function getRandomEvent(Language $language): ?Event
     {
-        return Event::where("language_id", $language->id)->where("is_current", true)->inRandomOrder()->first() ?? null;
+        return Event::where("language_id", $language->id)->where("is_active", true)->inRandomOrder()->first() ?? null;
     }
 }

@@ -69,12 +69,18 @@ class EventCacheService
     private function dbRecordsByPosition(Language $language, string $position = EventHelper::POSITION_TOP, ): Collection
     {
         return Event::with(['desktopBannerImage', 'mobileBannerImage'])->where('language_id', $language->id)
-            ->where('position', $position)->where('is_current', true)->get();
+            ->where('position', $position)
+            ->where('is_active', true)
+            ->whereNotNull('start_date')
+            ->whereNotNull('end_date')
+            ->whereDate('start_date', '<=', now()->toDateString())
+            ->whereDate('end_date', '>=', now()->toDateString())
+            ->get();
     }
 
     private function dbRecordByIdOrSlug(Language $language,string|int $idOrSlug, ): Event
     {
-        $record = Event::with(['language', 'desktopBannerImage', 'mobileBannerImage'])->where('is_current', true);
+        $record = Event::with(['language', 'desktopBannerImage', 'mobileBannerImage'])->where('is_active', true);
 
         if ($language && $language?->id) {
             $record = $record->where('language_id', $language?->id);

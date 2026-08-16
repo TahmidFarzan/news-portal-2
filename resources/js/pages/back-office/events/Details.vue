@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faTrash, faPen, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { formatDateTime } from '@/composables/useDateTime'
+import { formatDate, formatDateTime } from '@/composables/useDateTime'
 import { canUpdateEvent, canDeleteEvent } from '@/composables/useUserPermissions'
 import { useTranslate } from '@/composables/useTranslate'
 
@@ -118,8 +118,18 @@ onMounted(async () => {
                     </div>
 
                     <div class="flex justify-between">
-                        <span class="text-gray-500">{{ t('common.labels.isCurrent') }}</span>
-                        <span class="font-medium">{{ event?.is_current ? t('common.boolean.yes') : t('common.boolean.no') }}</span>
+                        <span class="text-gray-500">{{ t('common.labels.isActive') }}</span>
+                        <span class="font-medium">{{ event?.is_active ? t('common.boolean.yes') : t('common.boolean.no') }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.startDate') }}</span>
+                        <span class="font-medium">{{ event?.start_date ? formatDate(event.start_date) : t('common.labels.notAvailable') }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">{{ t('common.labels.endDate') }}</span>
+                        <span class="font-medium">{{ event?.end_date ? formatDate(event.end_date) : t('common.labels.notAvailable') }}</span>
                     </div>
 
                 </div>
