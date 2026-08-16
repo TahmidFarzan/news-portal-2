@@ -13,6 +13,7 @@ class SeederHelper
     public const GOOGLE_AD_MANAGER_TEST_ADS = [
         [
             'type' => GoogleAdHelper::TYPE_SECTION,
+            'placement' => GoogleAdHelper::PLACEMENT_1,
             'ad_unit_code' => '/6355419/Travel',
             'ad_sizes' => [
                 [728, 90],
@@ -21,6 +22,7 @@ class SeederHelper
         ],
         [
             'type' => GoogleAdHelper::TYPE_SECTION,
+            'placement' => GoogleAdHelper::PLACEMENT_2,
             'ad_unit_code' => '/6355419/Travel/Europe',
             'ad_sizes' => [
                 [728, 90],
@@ -29,6 +31,7 @@ class SeederHelper
         ],
         [
             'type' => GoogleAdHelper::TYPE_SECTION,
+            'placement' => GoogleAdHelper::PLACEMENT_3,
             'ad_unit_code' => '/6355419/Travel/Europe/France',
             'ad_sizes' => [
                 [728, 90],
@@ -36,15 +39,52 @@ class SeederHelper
             ],
         ],
         [
-            'type' => GoogleAdHelper::TYPE_SIDEBAR,
+            'type' => GoogleAdHelper::TYPE_SECTION,
+            'placement' => GoogleAdHelper::PLACEMENT_4,
             'ad_unit_code' => '/6355419/Travel/Europe/France/Paris',
+            'ad_sizes' => [
+                [728, 90],
+                [300, 250],
+            ],
+        ],
+        [
+            'type' => GoogleAdHelper::TYPE_SECTION,
+            'placement' => GoogleAdHelper::PLACEMENT_5,
+            'ad_unit_code' => '/6355419/Travel/Europe/France/Marseille',
+            'ad_sizes' => [
+                [728, 90],
+                [300, 250],
+            ],
+        ],
+        [
+            'type' => GoogleAdHelper::TYPE_SECTION,
+            'placement' => GoogleAdHelper::PLACEMENT_6,
+            'ad_unit_code' => '/6355419/Travel/Europe/France/Lyon',
+            'ad_sizes' => [
+                [728, 90],
+                [300, 250],
+            ],
+        ],
+        [
+            'type' => GoogleAdHelper::TYPE_SIDEBAR,
+            'placement' => GoogleAdHelper::PLACEMENT_1,
+            'ad_unit_code' => '/6355419/Travel/Asia',
+            'ad_sizes' => [
+                [300, 250],
+            ],
+        ],
+        [
+            'type' => GoogleAdHelper::TYPE_SIDEBAR,
+            'placement' => GoogleAdHelper::PLACEMENT_2,
+            'ad_unit_code' => '/6355419/Travel/Sports',
             'ad_sizes' => [
                 [300, 250],
             ],
         ],
         [
             'type' => GoogleAdHelper::TYPE_POPUP,
-            'ad_unit_code' => '/6355419/Travel',
+            'placement' => null,
+            'ad_unit_code' => '/6355419/Travel/News',
             'ad_sizes' => [[300, 250], [728, 90]],
         ],
     ];

@@ -45,11 +45,11 @@ class GoogleAdSeeder extends Seeder
 
         $sectionTestAds = $testAds
             ->where('type', GoogleAdHelper::TYPE_SECTION)
-            ->values();
+            ->keyBy('placement');
 
         $sidebarTestAds = $testAds
             ->where('type', GoogleAdHelper::TYPE_SIDEBAR)
-            ->values();
+            ->keyBy('placement');
 
         $popupTestAd = $testAds
             ->firstWhere('type', GoogleAdHelper::TYPE_POPUP);
@@ -70,8 +70,12 @@ class GoogleAdSeeder extends Seeder
                     GoogleAdHelper::PLACEMENT_3,
                 ];
 
-            foreach ($sectionPlacements as $index => $placement) {
-                $testAd = $sectionTestAds[$index % $sectionTestAds->count()];
+            foreach ($sectionPlacements as $placement) {
+                $testAd = $sectionTestAds->get($placement);
+
+                if ($testAd === null) {
+                    continue;
+                }
 
                 GoogleAd::create([
                     'name' => "{$page} Section {$placement}",
@@ -98,8 +102,12 @@ class GoogleAdSeeder extends Seeder
                     GoogleAdHelper::PLACEMENT_2,
                 ];
 
-            foreach ($sidebarPlacements as $index => $placement) {
-                $testAd = $sidebarTestAds[$index % $sidebarTestAds->count()];
+            foreach ($sidebarPlacements as $placement) {
+                $testAd = $sidebarTestAds->get($placement);
+
+                if ($testAd === null) {
+                    continue;
+                }
 
                 GoogleAd::create([
                     'name' => "{$page} Sidebar {$placement}",
@@ -117,27 +125,25 @@ class GoogleAdSeeder extends Seeder
                 ]);
             }
 
-            GoogleAd::create([
-                'name' => "{$page} Pop Up",
-                'type' => GoogleAdHelper::TYPE_POPUP,
-                'page' => $page,
-                'placement' => null,
-                'ad_unit_code' => $popupTestAd['ad_unit_code'],
-                'gpt_slot_id' => $this->generateGptSlotId(
-                    $page,
-                    GoogleAdHelper::TYPE_POPUP
-                ),
-                'ad_sizes' => $popupTestAd['ad_sizes'],
-                'created_by_id' => $user?->id ?? 1,
-            ]);
+            if ($popupTestAd !== null) {
+                GoogleAd::create([
+                    'name' => "{$page} Pop Up",
+                    'type' => GoogleAdHelper::TYPE_POPUP,
+                    'page' => $page,
+                    'placement' => null,
+                    'ad_unit_code' => $popupTestAd['ad_unit_code'],
+                    'gpt_slot_id' => $this->generateGptSlotId(
+                        $page,
+                        GoogleAdHelper::TYPE_POPUP
+                    ),
+                    'ad_sizes' => $popupTestAd['ad_sizes'],
+                    'created_by_id' => $user?->id ?? 1,
+                ]);
+            }
         }
     }
 
-    private function generateGptSlotId(
-        string $page,
-        string $type,
-        ?string $placement = null
-    ): string {
+    private function generateGptSlotId(string $page, string $type, ?string $placement = null ): string {
         $parts = [
             'div-gpt-ad',
             $this->slug($page),

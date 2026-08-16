@@ -162,8 +162,7 @@ const componentRefreshKey = (componentName) => {
                             </div>
                         </div>
                         <div class="md:col-span-12 lg:col-span-12">
-                            <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION"
-                                :placement="adPlacements.ONE"/>
+                            <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.ONE"/>
                         </div>
                     </div>
                 </main>
@@ -196,16 +195,11 @@ const componentRefreshKey = (componentName) => {
 
         <div v-if="bottomEvents" :key="componentRefreshKey('event-section-bottom')" class="home-bottom-events">
             <EventNewsSection :events="bottomEvents" :currentLanguage="currentLanguage" class="mt-4" />
-            <Quizzes v-if="showQuizzes" :currentLanguage="currentLanguage" :belowEvent="true"
-                class="home-quizzes mt-4" />
+            <Quizzes v-if="showQuizzes" :currentLanguage="currentLanguage" :belowEvent="true" class="home-quizzes mt-4" />
         </div>
 
-        <Surveys :key="componentRefreshKey('survey-section')" v-if="showSurveys" :currentLanguage="currentLanguage"
-            class="home-surveys mt-4" />
-        <Quizzes :key="componentRefreshKey('quiz-section')" v-if="showQuizzes" :currentLanguage="currentLanguage"
-            :belowEvent="false" class="home-quizzes mt-4" />
-
-        <GoogleAd v-if="googleAdEnable" :type="adTypes.SECTION" :placement="adPlacements.TWO" />
+        <Surveys :key="componentRefreshKey('survey-section')" v-if="showSurveys" :currentLanguage="currentLanguage" class="home-surveys mt-4" />
+        <Quizzes :key="componentRefreshKey('quiz-section')" v-if="showQuizzes" :currentLanguage="currentLanguage" :belowEvent="false" class="home-quizzes mt-4" />
 
         <CategoryNewsSection :key="componentRefreshKey('politic-section')"
             v-if="page?.language?.code == languages.English.Code" categorySlug="politics"
@@ -213,6 +207,8 @@ const componentRefreshKey = (componentName) => {
         <CategoryNewsSection :key="componentRefreshKey('politic-section')"
             v-if="page?.language?.code == languages.Bangla.Code" categorySlug="রাজনীতি"
             :currentLanguage="currentLanguage" :style="1" :limit="4" class="home-politics-section mt-4" />
+
+        <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.TWO" />
 
         <CategoryNewsSection :key="componentRefreshKey('national-section')"
             v-if="page?.language?.code == languages.English.Code" categorySlug="national"
@@ -230,6 +226,8 @@ const componentRefreshKey = (componentName) => {
             v-if="page?.language?.code == languages.Bangla.Code" categorySlug="খেলাধুলা"
             :currentLanguage="currentLanguage" :style="2" :limit="6" class="home-sports-section mt-4" />
 
+        <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.FOUR"/>
+
         <CategoryNewsSection :key="componentRefreshKey('entertainment-section')"
             v-if="page?.language?.code == languages.English.Code" categorySlug="entertainment"
             :currentLanguage="currentLanguage" :style="2" :limit="6" class="home-entertainment-section mt-4" />
@@ -237,10 +235,9 @@ const componentRefreshKey = (componentName) => {
             v-if="page?.language?.code == languages.Bangla.Code" categorySlug="বিনোদন"
             :currentLanguage="currentLanguage" :style="2" :limit="6" class="home-entertainment-section mt-4" />
 
-        <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.FOUR"/>
+        <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.FIVE"/>
 
-        <VideoNewsSection :key="componentRefreshKey('video-section')" :currentLanguage="currentLanguage"
-            class="home-video-news-section mt-4" />
+        <VideoNewsSection :key="componentRefreshKey('video-section')" :currentLanguage="currentLanguage" class="home-video-news-section mt-4" />
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -266,10 +263,9 @@ const componentRefreshKey = (componentName) => {
             </div>
         </div>
 
-        <ImageGalleryNewsSection :key="componentRefreshKey('image-gallery-section')" :currentLanguage="currentLanguage"
-            class="home-gallery-news-section mt-4" />
+        <ImageGalleryNewsSection :key="componentRefreshKey('image-gallery-section')" :currentLanguage="currentLanguage" class="home-gallery-news-section mt-4" />
 
-        <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.FIVE"/>
+        <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.SIX"/>
 
         <div class="mt-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -302,7 +298,6 @@ const componentRefreshKey = (componentName) => {
             </div>
         </div>
 
-        <GoogleAd v-if="googleAdEnable" :page="adPages.HOME" :type="adTypes.SECTION" :placement="adPlacements.SIX"/>
     </section>
 
     <Teleport to="body">

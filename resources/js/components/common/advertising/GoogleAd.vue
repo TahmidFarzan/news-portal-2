@@ -68,6 +68,10 @@ const AD_SLOT_CACHE_TTL = 120 * 1000
 const DESKTOP_BREAKPOINT = 992
 const DESKTOP_AD_MIN_WIDTH = 728
 
+const appEnv = import.meta.env.VITE_APP_ENV
+
+const isProduction = appEnv !== 'production'
+
 const ads = ref([])
 const wrapperRef = ref(null)
 
@@ -215,6 +219,15 @@ const normalizeRows = (response) => {
             return row?.ad_unit_code
         })
         .map((row, index) => {
+            if (isPopupType.value) {
+                return {
+                    ...row,
+                    status: null,
+                    slot: null,
+                    displayed: false,
+                }
+            }
+
             const slotElementId =
                 createSlotElementId(
                     row,
@@ -738,6 +751,7 @@ const loadNextPopupAd = () => {
 
 const loadPopupAd = async () => {
     if (
+        !isPopupType.value ||
         isDisplaying.value ||
         !hasConfiguredAds.value ||
         popupIndex.value >= ads.value.length
@@ -793,6 +807,8 @@ const loadPopupAd = async () => {
                 window.googletag.display(
                     slot
                 )
+
+                adsLoaded.value = true
 
                 resolve()
             })
@@ -927,11 +943,11 @@ watch(
 onMounted(async () => {
     await fetchAds()
 
-    await nextTick()
-
     if (isPopupType.value) {
         return
     }
+
+    await nextTick()
 
     resizeObserver =
         new ResizeObserver(() => {
@@ -967,33 +983,23 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <section v-if="hasConfiguredAds" ref="wrapperRef" :class="[
-        'relative mx-auto flex w-full flex-col items-center text-center',
-        {
-            'my-4':
-                !isPopupType &&
-                hasVisibleAds,
-
-            'hidden':
-                !isPopupType &&
-                adsLoaded &&
-                !hasVisibleAds,
-        },
-        customClass,
-    ]">
-        <span v-if="
-            !isPopupType &&
-            showLabel &&
-            hasVisibleAds
-        " class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-gray-500">
+    <section v-if=" hasConfiguredAds && !isPopupType " ref="wrapperRef" :class="[
+            'relative mx-auto flex w-full flex-col items-center text-center',
+            {
+                'my-4': hasVisibleAds,
+                'hidden':
+                    adsLoaded &&
+                    !hasVisibleAds,
+            },
+            customClass,
+        ]">
+        <span v-if="showLabel &&  hasVisibleAds " class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-gray-500">
             {{ t('common.labels.ad') }}
         </span>
 
-        <div v-for="(ad, index) in ads" :key="getAdKey(ad, index)" v-show="isPopupType ||
-            ad.status === 'filled'
-            " class="flex w-full flex-col items-center justify-center text-center">
-            <div v-if="ad.slot_element_id" :id="ad.slot_element_id" class="mx-auto flex max-w-full justify-center">
-            </div>
+        <div v-for="(ad, index) in ads" :key="getAdKey(ad, index)" v-show="ad.status === 'filled'" class="flex w-full flex-col items-center justify-center text-center">
+            <span v-if="isProduction && ad.placement" class="mb-1">{{ ad.placement }}</span>
+            <div v-if="ad.slot_element_id" :id="ad.slot_element_id" class="mx-auto flex max-w-full justify-center"></div>
         </div>
     </section>
 </template>
