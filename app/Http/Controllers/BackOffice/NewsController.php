@@ -6,9 +6,11 @@ use App\Http\Requests\NewsGalleryImageRequest;
 use App\Http\Requests\NewsGalleryImageSequenceUpdateRequest;
 use App\Http\Requests\NewsRequest;
 use App\Services\BackOffice\NewsService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class NewsController extends Controller
 {
@@ -19,7 +21,7 @@ class NewsController extends Controller
         $this->newsService = $newsService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $news = $this->newsService->new();
         Gate::authorize('viewAny', $news);
@@ -31,7 +33,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -42,7 +44,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $news = $this->newsService->new();
         Gate::authorize('create', $news);
@@ -52,7 +54,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -63,7 +65,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function save(NewsRequest $request)
+    public function save(NewsRequest $request): RedirectResponse
     {
         $news = $this->newsService->new();
 
@@ -74,7 +76,7 @@ class NewsController extends Controller
         return $this->redirectAfterNewsSave($result);
     }
 
-    public function update(NewsRequest $request, string $slug)
+    public function update(NewsRequest $request, string $slug): RedirectResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -85,7 +87,7 @@ class NewsController extends Controller
         return $this->redirectAfterNewsSave($result);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -99,7 +101,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function restore(string $slug)
+    public function restore(string $slug): RedirectResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -113,7 +115,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function galleryImageSave(NewsGalleryImageRequest $request, string $slug)
+    public function galleryImageSave(NewsGalleryImageRequest $request, string $slug): RedirectResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -127,7 +129,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function galleryImageUpdate(NewsGalleryImageRequest $request, string $slug, string $mediaSlug)
+    public function galleryImageUpdate(NewsGalleryImageRequest $request, string $slug, string $mediaSlug): RedirectResponse
     {
         $news  = $this->newsService->find($slug);
         $media = $this->newsService->galleryImageFind($news, $mediaSlug);
@@ -141,7 +143,7 @@ class NewsController extends Controller
             'status'  => $result['status'],
         ]);
     }
-    public function galleryImageUpdateSequence(NewsGalleryImageSequenceUpdateRequest $request, string $slug)
+    public function galleryImageUpdateSequence(NewsGalleryImageSequenceUpdateRequest $request, string $slug): RedirectResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -155,7 +157,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function galleryImageDelete(string $slug, string $mediaSlug)
+    public function galleryImageDelete(string $slug, string $mediaSlug): RedirectResponse
     {
         $news  = $this->newsService->find($slug);
         $media = $this->newsService->galleryImageFind($news, $mediaSlug);
@@ -170,7 +172,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function newsPlacementByNewsIndex(string $slug)
+    public function newsPlacementByNewsIndex(string $slug): InertiaResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -188,7 +190,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function newsPlacementDetails(string $slug, string $newsPlacementSlug)
+    public function newsPlacementDetails(string $slug, string $newsPlacementSlug): InertiaResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -202,7 +204,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function newsPlacementGenerateForNews(string $slug)
+    public function newsPlacementGenerateForNews(string $slug): RedirectResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -216,7 +218,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function newsPlacementUpdateForNews(Request $request, string $slug)
+    public function newsPlacementUpdateForNews(Request $request, string $slug): RedirectResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -230,7 +232,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function newsPlacementDelete(string $slug, string $newsPlacementSlug)
+    public function newsPlacementDelete(string $slug, string $newsPlacementSlug): RedirectResponse
     {
         $news = $this->newsService->find($slug);
 
@@ -246,7 +248,7 @@ class NewsController extends Controller
         ]);
     }
 
-    private function redirectAfterNewsSave(array $result)
+    private function redirectAfterNewsSave(array $result): RedirectResponse
     {
         if (empty($result['data']['news_slug'])) {
             return to_route('back-office.news.index')->with('flash_message', [

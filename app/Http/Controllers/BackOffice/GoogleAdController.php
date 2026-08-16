@@ -5,9 +5,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GoogleAdRequest;
 use App\Services\BackOffice\GoogleAdService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 
 class GoogleAdController extends Controller
@@ -19,7 +21,7 @@ class GoogleAdController extends Controller
         $this->googleAdService = $googleAdService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $googleAd = $this->googleAdService->new();
         Gate::authorize('viewAny', $googleAd);
@@ -31,7 +33,7 @@ class GoogleAdController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $googleAd = $this->googleAdService->find($slug);
 
@@ -42,7 +44,7 @@ class GoogleAdController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $googleAd = $this->googleAdService->new();
         Gate::authorize('create', $googleAd);
@@ -52,7 +54,7 @@ class GoogleAdController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $googleAd = $this->googleAdService->find($slug);
 
@@ -63,7 +65,7 @@ class GoogleAdController extends Controller
         ]);
     }
 
-    public function save(GoogleAdRequest $request)
+    public function save(GoogleAdRequest $request): RedirectResponse
     {
         $googleAd = $this->googleAdService->new();
         Gate::authorize('create', $googleAd);
@@ -76,7 +78,7 @@ class GoogleAdController extends Controller
         ]);
     }
 
-    public function update(GoogleAdRequest $request, string $slug)
+    public function update(GoogleAdRequest $request, string $slug): RedirectResponse
     {
         $googleAd = $this->googleAdService->find($slug);
 
@@ -90,7 +92,7 @@ class GoogleAdController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $googleAd = $this->googleAdService->find($slug);
 

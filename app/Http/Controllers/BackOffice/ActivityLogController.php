@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\BackOffice;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Services\BackOffice\ActivityLogService;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class ActivityLogController extends Controller
 {
@@ -17,7 +19,7 @@ class ActivityLogController extends Controller
         $this->activityLogService = $activityLogService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $showSubjectType = true;
 
@@ -29,7 +31,7 @@ class ActivityLogController extends Controller
         ]);
     }
 
-    public function indexForModel(?string $modelSlug = null, ?string $recordSlug = null, Request $request)
+    public function indexForModel(?string $modelSlug = null, ?string $recordSlug = null, Request $request): InertiaResponse
     {
         $showSubjectType = false;
 
@@ -41,7 +43,7 @@ class ActivityLogController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $activityLog = $this->activityLogService->findBySlug($slug);
 
@@ -50,7 +52,7 @@ class ActivityLogController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $activityLog = $this->activityLogService->findBySlug($slug);
 

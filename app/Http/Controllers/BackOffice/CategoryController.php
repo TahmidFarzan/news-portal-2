@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Services\BackOffice\CategoryService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class CategoryController extends Controller
 {
@@ -17,7 +19,7 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $category = $this->categoryService->new();
         Gate::authorize('viewAny', $category);
@@ -29,7 +31,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $category = $this->categoryService->find($slug);
 
@@ -40,7 +42,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $category = $this->categoryService->new();
         Gate::authorize('create', $category);
@@ -50,7 +52,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $category = $this->categoryService->find($slug);
 
@@ -61,7 +63,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function save(CategoryRequest $request)
+    public function save(CategoryRequest $request): RedirectResponse
     {
         $category = $this->categoryService->new();
         Gate::authorize('create', $category);
@@ -74,7 +76,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function update(CategoryRequest $request, string $slug)
+    public function update(CategoryRequest $request, string $slug): RedirectResponse
     {
         $category = $this->categoryService->find($slug);
 
@@ -88,7 +90,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $category = $this->categoryService->find($slug);
 

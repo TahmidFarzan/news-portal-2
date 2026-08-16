@@ -3,9 +3,11 @@ namespace App\Http\Controllers\BackOffice;
 
 use App\Http\Controllers\Controller;
 use App\Services\BackOffice\LanguageService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class LanguageController extends Controller
 {
@@ -16,7 +18,7 @@ class LanguageController extends Controller
         $this->languageService = $languageService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $language = $this->languageService->new();
         Gate::authorize('viewAny', $language);
@@ -28,7 +30,7 @@ class LanguageController extends Controller
         ]);
     }
 
-    public function setAsDefault(string $slug)
+    public function setAsDefault(string $slug): RedirectResponse
     {
         $language = $this->languageService->find($slug);
 

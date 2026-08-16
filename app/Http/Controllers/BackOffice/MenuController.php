@@ -5,9 +5,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuRequest;
 use App\Http\Requests\MenuItemRequest;
 use App\Services\BackOffice\MenuService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class MenuController extends Controller
 {
@@ -18,7 +20,7 @@ class MenuController extends Controller
         $this->menuService = $menuService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $menu = $this->menuService->new();
         Gate::authorize('viewAny', $menu);
@@ -30,7 +32,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $menu = $this->menuService->find($slug);
 
@@ -41,7 +43,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $menu = $this->menuService->new();
         Gate::authorize('create', $menu);
@@ -51,7 +53,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $menu = $this->menuService->find($slug);
 
@@ -62,7 +64,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function save(MenuRequest $request)
+    public function save(MenuRequest $request): RedirectResponse
     {
         $menu = $this->menuService->new();
         Gate::authorize('create', $menu);
@@ -75,7 +77,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function update(MenuRequest $request, string $slug)
+    public function update(MenuRequest $request, string $slug): RedirectResponse
     {
         $menu = $this->menuService->find($slug);
 
@@ -89,7 +91,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $menu = $this->menuService->find($slug);
 
@@ -103,7 +105,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function menuItemIndex(Request $request, string $slug)
+    public function menuItemIndex(Request $request, string $slug): InertiaResponse
     {
         $menu     = $this->menuService->find($slug);
         $menuItem = $this->menuService->menuItemNew();
@@ -117,7 +119,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function menuItemCreate(string $slug)
+    public function menuItemCreate(string $slug): InertiaResponse
     {
         $menu     = $this->menuService->find($slug);
         $menuItem = $this->menuService->menuItemNew();
@@ -128,7 +130,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function menuItemEdit(string $slug, string $menuItemSlug)
+    public function menuItemEdit(string $slug, string $menuItemSlug): InertiaResponse
     {
         $menu = $this->menuService->find($slug);
 
@@ -141,7 +143,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function menuItemDetails(string $slug, string $menuItemSlug)
+    public function menuItemDetails(string $slug, string $menuItemSlug): InertiaResponse
     {
         $menu = $this->menuService->find($slug);
 
@@ -155,7 +157,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function menuItemSave(MenuItemRequest $request, string $slug)
+    public function menuItemSave(MenuItemRequest $request, string $slug): RedirectResponse
     {
         $menu = $this->menuService->find($slug);
         $menuItem = $this->menuService->menuItemNew();
@@ -170,7 +172,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function menuItemUpdate(MenuItemRequest $request, string $slug, string $menuItemSlug)
+    public function menuItemUpdate(MenuItemRequest $request, string $slug, string $menuItemSlug): RedirectResponse
     {
         $menu = $this->menuService->find($slug);
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);
@@ -185,7 +187,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function menuItemDelete(string $slug, string $menuItemSlug)
+    public function menuItemDelete(string $slug, string $menuItemSlug): RedirectResponse
     {
         $menu = $this->menuService->find($slug);
         $menuItem = $this->menuService->menuItemfind($menu, $menuItemSlug);

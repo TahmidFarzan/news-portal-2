@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TagRequest;
 use App\Services\BackOffice\TagService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class TagController extends Controller
 {
@@ -17,7 +19,7 @@ class TagController extends Controller
         $this->tagService = $tagService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $tag = $this->tagService->new();
         Gate::authorize('viewAny', $tag);
@@ -29,7 +31,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $tag = $this->tagService->find($slug);
 
@@ -40,7 +42,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $tag = $this->tagService->new();
         Gate::authorize('create', $tag);
@@ -50,7 +52,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $tag = $this->tagService->find($slug);
 
@@ -61,7 +63,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function save(TagRequest $request)
+    public function save(TagRequest $request): RedirectResponse
     {
         $tag = $this->tagService->new();
         Gate::authorize('create', $tag);
@@ -74,7 +76,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function update(TagRequest $request, string $slug)
+    public function update(TagRequest $request, string $slug): RedirectResponse
     {
         $tag = $this->tagService->find($slug);
 
@@ -88,7 +90,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $tag = $this->tagService->find($slug);
 

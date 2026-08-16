@@ -4,8 +4,10 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MediaQuickRequest;
 use App\Services\BackOffice\MediaService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class MediaController extends Controller
 {
@@ -16,7 +18,7 @@ class MediaController extends Controller
         $this->mediaService = $mediaService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $medias = $this->mediaService->search($request);
 
@@ -25,7 +27,7 @@ class MediaController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $media = $this->mediaService->find($slug);
         return Inertia::render('back-office/medias/Details', [
@@ -33,18 +35,18 @@ class MediaController extends Controller
         ]);
     }
 
-    public function quickSave(MediaQuickRequest $request)
+    public function quickSave(MediaQuickRequest $request): array
     {
         return $this->mediaService->quickSave($request);
     }
 
-    public function quickUpdate(MediaQuickRequest $request, string $slug)
+    public function quickUpdate(MediaQuickRequest $request, string $slug): array
     {
         $media = $this->mediaService->find($slug);
         return $this->mediaService->quickUpdate($request, $media);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $media = $this->mediaService->find($slug);
 

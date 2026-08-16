@@ -3,8 +3,10 @@ namespace App\Http\Controllers\BackOffice;
 
 use App\Http\Controllers\Controller;
 use App\Services\BackOffice\SettingService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class SettingController extends Controller
 {
@@ -15,12 +17,12 @@ class SettingController extends Controller
         $this->settingService = $settingService;
     }
 
-    public function index()
+    public function index(): InertiaResponse
     {
         return Inertia::render('back-office/settings/Index');
     }
 
-    public function robotsTxtEdit()
+    public function robotsTxtEdit(): InertiaResponse
     {
         $robotsTxt = $this->settingService->getRobotsTxt();
 
@@ -29,7 +31,7 @@ class SettingController extends Controller
         ]);
     }
 
-    public function adsTxtEdit()
+    public function adsTxtEdit(): InertiaResponse
     {
         $adsTxt = $this->settingService->getAdsTxt();
 
@@ -38,7 +40,7 @@ class SettingController extends Controller
         ]);
     }
 
-    public function queueStart()
+    public function queueStart(): RedirectResponse
     {
         if (! app()->environment('production')) {
             return redirect()->route('back-office.settings.index');
@@ -49,7 +51,7 @@ class SettingController extends Controller
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function queueRestart()
+    public function queueRestart(): RedirectResponse
     {
         if (! app()->environment('production')) {
             return redirect()->route('back-office.settings.index');
@@ -60,7 +62,7 @@ class SettingController extends Controller
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function queueClear()
+    public function queueClear(): RedirectResponse
     {
         if (! app()->environment('production')) {
             return redirect()->route('back-office.settings.index');
@@ -71,7 +73,7 @@ class SettingController extends Controller
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function queueFlush()
+    public function queueFlush(): RedirectResponse
     {
         if (! app()->environment('production')) {
             return redirect()->route('back-office.settings.index');
@@ -82,7 +84,7 @@ class SettingController extends Controller
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function queueMonitorStale()
+    public function queueMonitorStale(): RedirectResponse
     {
         if (! app()->environment('production')) {
             return redirect()->route('back-office.settings.index');
@@ -93,7 +95,7 @@ class SettingController extends Controller
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function queueMonitorPurge()
+    public function queueMonitorPurge(): RedirectResponse
     {
         if (! app()->environment('production')) {
             return redirect()->route('back-office.settings.index');
@@ -104,7 +106,7 @@ class SettingController extends Controller
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function scheduleStart()
+    public function scheduleStart(): RedirectResponse
     {
         if (! app()->environment('production')) {
             return redirect()->route('back-office.settings.index');
@@ -115,7 +117,7 @@ class SettingController extends Controller
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function scheduleStop()
+    public function scheduleStop(): RedirectResponse
     {
         if (! app()->environment('production')) {
             return redirect()->route('back-office.settings.index');
@@ -126,14 +128,14 @@ class SettingController extends Controller
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function robotsTxtSave(Request $request)
+    public function robotsTxtSave(Request $request): RedirectResponse
     {
         $result = $this->settingService->saveRobotsTxt($request);
 
         return to_route('back-office.settings.index')->with('flash_message', $result);
     }
 
-    public function adsTxtSave(Request $request)
+    public function adsTxtSave(Request $request): RedirectResponse
     {
         $result = $this->settingService->saveAdsTxt($request);
 

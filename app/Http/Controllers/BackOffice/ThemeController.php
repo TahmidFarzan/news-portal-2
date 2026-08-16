@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ThemeRequest;
 use App\Services\BackOffice\ThemeService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class ThemeController extends Controller
 {
@@ -17,7 +19,7 @@ class ThemeController extends Controller
         $this->themeService = $themeService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $theme = $this->themeService->new();
         Gate::authorize('viewAny', $theme);
@@ -29,7 +31,7 @@ class ThemeController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $theme = $this->themeService->find($slug);
 
@@ -40,7 +42,7 @@ class ThemeController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $theme = $this->themeService->find($slug);
 
@@ -51,7 +53,7 @@ class ThemeController extends Controller
         ]);
     }
 
-    public function update(ThemeRequest $request, string $slug)
+    public function update(ThemeRequest $request, string $slug): RedirectResponse
     {
         $theme = $this->themeService->find($slug);
 

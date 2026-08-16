@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
 use App\Services\BackOffice\EventService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class EventController extends Controller
 {
@@ -17,7 +19,7 @@ class EventController extends Controller
         $this->eventService = $eventService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $event = $this->eventService->new();
         Gate::authorize('viewAny', $event);
@@ -29,7 +31,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $event = $this->eventService->find($slug);
 
@@ -40,7 +42,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $event = $this->eventService->new();
         Gate::authorize('create', $event);
@@ -50,7 +52,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $event = $this->eventService->find($slug);
 
@@ -61,7 +63,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function save(EventRequest $request)
+    public function save(EventRequest $request): RedirectResponse
     {
         $event = $this->eventService->new();
         Gate::authorize('create', $event);
@@ -74,7 +76,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function update(EventRequest $request, string $slug)
+    public function update(EventRequest $request, string $slug): RedirectResponse
     {
         $event = $this->eventService->find($slug);
 
@@ -88,7 +90,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $event = $this->eventService->find($slug);
 

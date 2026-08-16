@@ -10,9 +10,11 @@ use App\Services\BackOffice\QuizService;
 use App\Services\BackOffice\QuizQuestionService;
 use App\Services\BackOffice\QuizQuestionOptionService;
 use App\Services\BackOffice\QuizResultService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class QuizController extends Controller
 {
@@ -30,7 +32,7 @@ class QuizController extends Controller
         $this->quizResultService = $quizResultService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $quiz = $this->quizService->new();
         Gate::authorize('viewAny', $quiz);
@@ -42,7 +44,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -56,7 +58,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $quiz = $this->quizService->new();
         Gate::authorize('create', $quiz);
@@ -66,7 +68,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -77,7 +79,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function save(QuizRequest $request)
+    public function save(QuizRequest $request): RedirectResponse
     {
         $quiz = $this->quizService->new();
         Gate::authorize('create', $quiz);
@@ -90,7 +92,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function update(QuizRequest $request, string $slug)
+    public function update(QuizRequest $request, string $slug): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -104,7 +106,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function active(string $slug)
+    public function active(string $slug): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -118,7 +120,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function inactive(string $slug)
+    public function inactive(string $slug): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -132,7 +134,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -146,7 +148,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionIndex(string $slug, Request $request)
+    public function quizQuestionIndex(string $slug, Request $request): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -161,7 +163,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionDetails(string $slug, string $quizQuestionSlug)
+    public function quizQuestionDetails(string $slug, string $quizQuestionSlug): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -174,7 +176,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionCreate(string $slug)
+    public function quizQuestionCreate(string $slug): InertiaResponse
     {
 
         $quiz = $this->quizService->find($slug);
@@ -188,7 +190,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionEdit(string $slug, string $quizQuestionSlug)
+    public function quizQuestionEdit(string $slug, string $quizQuestionSlug): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -201,7 +203,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionSave(string $slug, QuizQuestionRequest $request)
+    public function quizQuestionSave(string $slug, QuizQuestionRequest $request): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -224,7 +226,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionUpdate(string $slug, QuizQuestionRequest $request,  string $quizQuestionSlug)
+    public function quizQuestionUpdate(string $slug, QuizQuestionRequest $request,  string $quizQuestionSlug): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -246,7 +248,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionDelete(string $slug, string $quizQuestionSlug)
+    public function quizQuestionDelete(string $slug, string $quizQuestionSlug): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -261,7 +263,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionReorder(string $slug, Request $request)
+    public function quizQuestionReorder(string $slug, Request $request): RedirectResponse
     {
         $request->validate([
             'questions'                      => ['required', 'array', 'min:1'],
@@ -294,7 +296,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionOptionIndex(string $slug, string $quizQuestionSlug, Request $request)
+    public function quizQuestionOptionIndex(string $slug, string $quizQuestionSlug, Request $request): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -311,7 +313,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionOptionDetails(string $slug, string $quizQuestionSlug, string $quizQuestionOptionSlug)
+    public function quizQuestionOptionDetails(string $slug, string $quizQuestionSlug, string $quizQuestionOptionSlug): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -326,7 +328,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionOptionCreate(string $slug, string $quizQuestionSlug)
+    public function quizQuestionOptionCreate(string $slug, string $quizQuestionSlug): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -341,7 +343,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionOptionEdit(string $slug, string $quizQuestionSlug, string $quizQuestionOptionSlug)
+    public function quizQuestionOptionEdit(string $slug, string $quizQuestionSlug, string $quizQuestionOptionSlug): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -356,7 +358,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionOptionSave(string $slug,  string $quizQuestionSlug, QuizQuestionOptionRequest $request)
+    public function quizQuestionOptionSave(string $slug,  string $quizQuestionSlug, QuizQuestionOptionRequest $request): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -373,7 +375,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionOptionUpdate(string $slug, string $quizQuestionSlug, QuizQuestionOptionRequest $request, string $quizQuestionOptionSlug)
+    public function quizQuestionOptionUpdate(string $slug, string $quizQuestionSlug, QuizQuestionOptionRequest $request, string $quizQuestionOptionSlug): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -396,7 +398,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionOptionDelete(string $slug, string $quizQuestionSlug, string $quizQuestionOptionSlug)
+    public function quizQuestionOptionDelete(string $slug, string $quizQuestionSlug, string $quizQuestionOptionSlug): RedirectResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizQuestion = $this->quizQuestionService->find($quiz, $quizQuestionSlug);
@@ -412,7 +414,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizQuestionOptionReorder(string $slug, string $quizQuestionSlug, Request $request)
+    public function quizQuestionOptionReorder(string $slug, string $quizQuestionSlug, Request $request): RedirectResponse
     {
         $request->validate([
             'options'                      => ['required', 'array', 'min:1'],
@@ -448,7 +450,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizResultIndex(string $slug, Request $request)
+    public function quizResultIndex(string $slug, Request $request): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
 
@@ -460,7 +462,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function quizResultDetails(string $slug, string $quizResultSlug)
+    public function quizResultDetails(string $slug, string $quizResultSlug): InertiaResponse
     {
         $quiz = $this->quizService->find($slug);
         $quizResult = $this->quizResultService->find($quiz, $quizResultSlug);

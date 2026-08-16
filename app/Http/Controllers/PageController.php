@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\PageService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -114,7 +115,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function homeQuizSubmit(string $slug, QuizSubmitRequest $request)
+    public function homeQuizSubmit(string $slug, QuizSubmitRequest $request): RedirectResponse
     {
         $language = $this->pageService->defaultLanguage();
         $quiz         = $this->pageService->homeQuiz($language, $slug);
@@ -448,7 +449,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function localizedHomeQuizSubmit(string $languageCode, string $slug, QuizSubmitRequest $request)
+    public function localizedHomeQuizSubmit(string $languageCode, string $slug, QuizSubmitRequest $request): RedirectResponse
     {
         $language = $this->pageService->language($languageCode);
         $quiz         = $this->pageService->homeQuiz($language, $slug);

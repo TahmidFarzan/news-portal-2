@@ -6,9 +6,11 @@ use App\Http\Requests\SurveyRequest;
 use App\Http\Requests\SurveyQuestionRequest;
 use App\Services\BackOffice\SurveyService;
 use App\Services\BackOffice\SurveyQuestionService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class SurveyController extends Controller
 {
@@ -21,7 +23,7 @@ class SurveyController extends Controller
         $this->surveyQuestionService = $surveyQuestionService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $survey = $this->surveyService->new();
         Gate::authorize('viewAny', $survey);
@@ -33,7 +35,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -44,7 +46,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $survey = $this->surveyService->new();
         Gate::authorize('create', $survey);
@@ -54,7 +56,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -65,7 +67,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function save(SurveyRequest $request)
+    public function save(SurveyRequest $request): RedirectResponse
     {
         $survey = $this->surveyService->new();
         Gate::authorize('create', $survey);
@@ -78,7 +80,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function update(SurveyRequest $request, string $slug)
+    public function update(SurveyRequest $request, string $slug): RedirectResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -92,7 +94,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function active(string $slug)
+    public function active(string $slug): RedirectResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -106,7 +108,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function inactive(string $slug)
+    public function inactive(string $slug): RedirectResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -120,7 +122,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -134,7 +136,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function surveyQuestionIndex(Request $request, string $slug)
+    public function surveyQuestionIndex(Request $request, string $slug): InertiaResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -149,7 +151,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function surveyQuestionDetails(string $slug, string $surveyQuestionSlug)
+    public function surveyQuestionDetails(string $slug, string $surveyQuestionSlug): InertiaResponse
     {
         $survey = $this->surveyService->find($slug);
         $surveyQuestion = $this->surveyQuestionService->find($survey, $surveyQuestionSlug);
@@ -162,7 +164,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function surveyQuestionCreate(string $slug)
+    public function surveyQuestionCreate(string $slug): InertiaResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -176,7 +178,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function surveyQuestionEdit(string $slug, string $surveyQuestionSlug)
+    public function surveyQuestionEdit(string $slug, string $surveyQuestionSlug): InertiaResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -190,7 +192,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function surveyQuestionSave(SurveyQuestionRequest $request, string $slug)
+    public function surveyQuestionSave(SurveyQuestionRequest $request, string $slug): RedirectResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -213,7 +215,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function surveyQuestionUpdate(SurveyQuestionRequest $request, string $slug, string $surveyQuestionSlug)
+    public function surveyQuestionUpdate(SurveyQuestionRequest $request, string $slug, string $surveyQuestionSlug): RedirectResponse
     {
         $survey = $this->surveyService->find($slug);
 
@@ -238,7 +240,7 @@ class SurveyController extends Controller
     }
 
 
-    public function surveyQuestionDelete(string $slug, string $surveyQuestionSlug)
+    public function surveyQuestionDelete(string $slug, string $surveyQuestionSlug): RedirectResponse
     {
         $survey = $this->surveyService->find($slug);
         $surveyQuestion = $this->surveyQuestionService->find($survey, $surveyQuestionSlug);
@@ -253,7 +255,7 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function surveyQuestionReorder(string $slug, Request $request)
+    public function surveyQuestionReorder(string $slug, Request $request): RedirectResponse
     {
         $request->validate([
             'questions'                      => ['required', 'array', 'min:1'],

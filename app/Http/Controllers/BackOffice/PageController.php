@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PageRequest;
 use App\Services\BackOffice\PageService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class PageController extends Controller
 {
@@ -17,7 +19,7 @@ class PageController extends Controller
         $this->pageService = $pageService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $page = $this->pageService->new();
         Gate::authorize('viewAny', $page);
@@ -29,7 +31,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $page = $this->pageService->find($slug);
 
@@ -40,7 +42,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $page = $this->pageService->new();
         Gate::authorize('create', $page);
@@ -50,7 +52,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $page = $this->pageService->find($slug);
 
@@ -61,7 +63,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function save(PageRequest $request)
+    public function save(PageRequest $request): RedirectResponse
     {
         $page = $this->pageService->new();
 
@@ -75,7 +77,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function update(PageRequest $request, string $slug)
+    public function update(PageRequest $request, string $slug): RedirectResponse
     {
         $page = $this->pageService->find($slug);
 
@@ -89,7 +91,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function trash(string $slug)
+    public function trash(string $slug): RedirectResponse
     {
         $page = $this->pageService->find($slug);
 
@@ -103,7 +105,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function restore(string $slug)
+    public function restore(string $slug): RedirectResponse
     {
         $page = $this->pageService->find($slug);
 
@@ -117,7 +119,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $page = $this->pageService->find($slug);
 

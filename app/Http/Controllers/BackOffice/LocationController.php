@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationRequest;
 use App\Services\BackOffice\LocationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class LocationController extends Controller
 {
@@ -17,7 +19,7 @@ class LocationController extends Controller
         $this->locationService = $locationService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $location = $this->locationService->new();
         Gate::authorize('viewAny', $location);
@@ -29,7 +31,7 @@ class LocationController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $location = $this->locationService->find($slug);
 
@@ -40,7 +42,7 @@ class LocationController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $location = $this->locationService->new();
         Gate::authorize('create', $location);
@@ -50,7 +52,7 @@ class LocationController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $location = $this->locationService->find($slug);
 
@@ -61,7 +63,7 @@ class LocationController extends Controller
         ]);
     }
 
-    public function save(LocationRequest $request)
+    public function save(LocationRequest $request): RedirectResponse
     {
         $location = $this->locationService->new();
         Gate::authorize('create', $location);
@@ -74,7 +76,7 @@ class LocationController extends Controller
         ]);
     }
 
-    public function update(LocationRequest $request, string $slug)
+    public function update(LocationRequest $request, string $slug): RedirectResponse
     {
         $location = $this->locationService->find($slug);
 
@@ -88,7 +90,7 @@ class LocationController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $location = $this->locationService->find($slug);
 

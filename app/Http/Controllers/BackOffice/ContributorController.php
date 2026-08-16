@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContributorRequest;
 use App\Services\BackOffice\ContributorService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class ContributorController extends Controller
 {
@@ -17,7 +19,7 @@ class ContributorController extends Controller
         $this->contributorService = $contributorService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $contributor = $this->contributorService->new();
         Gate::authorize('viewAny', $contributor);
@@ -29,7 +31,7 @@ class ContributorController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $contributor = $this->contributorService->find($slug);
 
@@ -40,7 +42,7 @@ class ContributorController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $contributor = $this->contributorService->new();
         Gate::authorize('create', $contributor);
@@ -50,7 +52,7 @@ class ContributorController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $contributor = $this->contributorService->find($slug);
 
@@ -61,7 +63,7 @@ class ContributorController extends Controller
         ]);
     }
 
-    public function save(ContributorRequest $request)
+    public function save(ContributorRequest $request): RedirectResponse
     {
         $contributor = $this->contributorService->new();
         Gate::authorize('create', $contributor);
@@ -74,7 +76,7 @@ class ContributorController extends Controller
         ]);
     }
 
-    public function update(ContributorRequest $request, string $slug)
+    public function update(ContributorRequest $request, string $slug): RedirectResponse
     {
         $contributor = $this->contributorService->find($slug);
 
@@ -88,7 +90,7 @@ class ContributorController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $contributor = $this->contributorService->find($slug);
 

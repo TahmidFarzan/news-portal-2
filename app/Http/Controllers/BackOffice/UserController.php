@@ -5,9 +5,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Services\BackOffice\UserService;
 use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class UserController extends Controller
 {
@@ -18,7 +20,7 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $user = $this->userService->new();
         Gate::authorize('viewAny', $user);
@@ -30,7 +32,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $user = $this->userService->findWithTrashedBySlug($slug);
 
@@ -41,7 +43,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $user = $this->userService->new();
         Gate::authorize('view', $user);
@@ -51,7 +53,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $user = $this->userService->findWithTrashedBySlug($slug);
 
@@ -62,7 +64,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function save(UserRequest $request)
+    public function save(UserRequest $request): RedirectResponse
     {
         $user = $this->userService->new();
         Gate::authorize('create', $user);
@@ -75,7 +77,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(UserRequest $request, string $slug)
+    public function update(UserRequest $request, string $slug): RedirectResponse
     {
         $user = $this->userService->findWithTrashedBySlug($slug);
 
@@ -89,7 +91,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function active(string $slug)
+    public function active(string $slug): RedirectResponse
     {
         $user = $this->userService->findTrashedBySlug($slug);
 
@@ -103,7 +105,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function inactive(string $slug)
+    public function inactive(string $slug): RedirectResponse
     {
         $user = $this->userService->findBySlug($slug);
 
@@ -117,7 +119,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $user = $this->userService->findWithTrashedBySlug($slug);
 

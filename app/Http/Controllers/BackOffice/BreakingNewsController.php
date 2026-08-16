@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BackOffice;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BreakingNewsRequest;
 use App\Services\BackOffice\BreakingNewsService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class BreakingNewsController extends Controller
 {
@@ -17,7 +19,7 @@ class BreakingNewsController extends Controller
         $this->breakingNewsService = $breakingNewsService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $breakingNews = $this->breakingNewsService->new();
         Gate::authorize('viewAny', $breakingNews);
@@ -29,7 +31,7 @@ class BreakingNewsController extends Controller
         ]);
     }
 
-    public function details(string $slug)
+    public function details(string $slug): InertiaResponse
     {
         $breakingNews = $this->breakingNewsService->find($slug);
 
@@ -40,7 +42,7 @@ class BreakingNewsController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
         $breakingNews = $this->breakingNewsService->new();
         Gate::authorize('create', $breakingNews);
@@ -50,7 +52,7 @@ class BreakingNewsController extends Controller
         ]);
     }
 
-    public function edit(string $slug)
+    public function edit(string $slug): InertiaResponse
     {
         $breakingNews = $this->breakingNewsService->find($slug);
 
@@ -61,7 +63,7 @@ class BreakingNewsController extends Controller
         ]);
     }
 
-    public function save(BreakingNewsRequest $request)
+    public function save(BreakingNewsRequest $request): RedirectResponse
     {
         $breakingNews = $this->breakingNewsService->new();
         Gate::authorize('create', $breakingNews);
@@ -74,7 +76,7 @@ class BreakingNewsController extends Controller
         ]);
     }
 
-    public function update(BreakingNewsRequest $request, string $slug)
+    public function update(BreakingNewsRequest $request, string $slug): RedirectResponse
     {
         $breakingNews = $this->breakingNewsService->find($slug);
 
@@ -88,7 +90,7 @@ class BreakingNewsController extends Controller
         ]);
     }
 
-    public function trash(string $slug)
+    public function trash(string $slug): RedirectResponse
     {
         $breakingNews = $this->breakingNewsService->find($slug);
 
@@ -102,7 +104,7 @@ class BreakingNewsController extends Controller
         ]);
     }
 
-    public function restore(string $slug)
+    public function restore(string $slug): RedirectResponse
     {
         $breakingNews = $this->breakingNewsService->find($slug);
 
@@ -116,7 +118,7 @@ class BreakingNewsController extends Controller
         ]);
     }
 
-    public function delete(string $slug)
+    public function delete(string $slug): RedirectResponse
     {
         $breakingNews = $this->breakingNewsService->find($slug);
 

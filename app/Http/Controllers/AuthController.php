@@ -9,8 +9,10 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Services\AuthService;
 use App\Services\DashboardService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class AuthController extends Controller
 {
@@ -36,22 +38,22 @@ class AuthController extends Controller
         $this->dashboardService = $dashboardService;
     }
 
-    public function loginForm()
+    public function loginForm(): InertiaResponse
     {
         return Inertia::render('auth/Login');
     }
 
-    public function registerForm()
+    public function registerForm(): never
     {
         abort(401, __('form-requests.auth.register.is_not_allow'));
     }
 
-    public function forgetPasswordForm()
+    public function forgetPasswordForm(): InertiaResponse
     {
         return Inertia::render('auth/ForgotPassword');
     }
 
-    public function resetPasswordForm($token, $email)
+    public function resetPasswordForm($token, $email): InertiaResponse
     {
         return Inertia::render('auth/ResetPassword', [
             'token' => $token,
@@ -59,12 +61,12 @@ class AuthController extends Controller
         ]);
     }
 
-    public function emailVerificationNotice()
+    public function emailVerificationNotice(): InertiaResponse
     {
         return Inertia::render('auth/EmailVerification');
     }
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): RedirectResponse
     {
         $result = $this->authService->login($request);
 
@@ -83,12 +85,12 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): never
     {
         abort(401, __('form-requests.auth.register.is_not_allow'));
     }
 
-    public function logout()
+    public function logout(): RedirectResponse
     {
         $result = $this->authService->logout();
 
@@ -98,7 +100,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function forgotPassword(ForgotPasswordRequest $request)
+    public function forgotPassword(ForgotPasswordRequest $request): RedirectResponse
     {
         $result = $this->authService->forgotPassword($request);
 
@@ -108,7 +110,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function resetPassword(ResetPasswordRequest $request, string $token, string $email)
+    public function resetPassword(ResetPasswordRequest $request, string $token, string $email): RedirectResponse
     {
         $result = $this->authService->resetPassword($request, $token, $email);
 
@@ -118,7 +120,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function emailVerification(Request $request, $id, $hash)
+    public function emailVerification(Request $request, $id, $hash): RedirectResponse
     {
         $result = $this->authService->emailVerification($request, $id, $hash);
 
@@ -132,34 +134,34 @@ class AuthController extends Controller
         ]);
     }
 
-    public function emailVerificationResend(Request $request)
+    public function emailVerificationResend(Request $request): RedirectResponse
     {
         $result = $this->authService->emailVerificationResend($request);
 
         return back()->with('status', $result['message']);
     }
 
-    public function profileIndex()
+    public function profileIndex(): InertiaResponse
     {
         $user = $this->authService->authUser();
 
         return Inertia::render('auth-user/Profile', ['user' => $user]);
     }
 
-    public function accountIndex()
+    public function accountIndex(): InertiaResponse
     {
         $user = $this->authService->authUser();
 
         return Inertia::render('auth-user/Account', ['user' => $user]);
     }
 
-    public function dashboard()
+    public function dashboard(): InertiaResponse
     {
 
         return Inertia::render('auth-user/Dashboard');
     }
 
-    public function profileUpdate(AuthUserProfileRequest $request)
+    public function profileUpdate(AuthUserProfileRequest $request): RedirectResponse
     {
         $user   = $this->authService->authUser();
         $result = $this->authService->profileUpdate($request, $user);
@@ -170,7 +172,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function accountUpdate(AuthUserAccountRequest $request)
+    public function accountUpdate(AuthUserAccountRequest $request): RedirectResponse
     {
         $user   = $this->authService->authUser();
         $result = $this->authService->accountUpdate($request, $user);
