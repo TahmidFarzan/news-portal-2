@@ -3,7 +3,7 @@
 import { useTranslate } from '@/composables/useTranslate'
 const { t } = useTranslate()
 
-const props = defineProps({
+const { media, mediaClass } = defineProps({
     media: { type: Object, required: true },
     mediaClass: {
         type: String,

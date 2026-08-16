@@ -40,7 +40,7 @@ FontAwesomeLibrary.add(
     faChevronRight
 );
 
-const props = defineProps({
+const { quiz, isUpdate, quizSaveForm } = defineProps({
     quiz: {
         type: Object,
         default: null,
@@ -97,16 +97,16 @@ function isCreateQuestionOpen(index) {
 }
 
 function addQuestion() {
-    if (!props.quizSaveForm) return;
-    const nextPos = props.quizSaveForm.questions.length + 1;
-    props.quizSaveForm.questions.push(createEmptyQuestion(nextPos));
-    openCreateQuestionIndex.value = props.quizSaveForm.questions.length - 1;
+    if (!quizSaveForm) return;
+    const nextPos = quizSaveForm.questions.length + 1;
+    quizSaveForm.questions.push(createEmptyQuestion(nextPos));
+    openCreateQuestionIndex.value = quizSaveForm.questions.length - 1;
 }
 
 function removeQuestion(index) {
-    if (!props.quizSaveForm || props.quizSaveForm.questions.length <= 1) return;
-    props.quizSaveForm.questions.splice(index, 1);
-    reindexPositions(props.quizSaveForm.questions);
+    if (!quizSaveForm || quizSaveForm.questions.length <= 1) return;
+    quizSaveForm.questions.splice(index, 1);
+    reindexPositions(quizSaveForm.questions);
     if (openCreateQuestionIndex.value === index) {
         openCreateQuestionIndex.value = 0;
     } else if (
@@ -118,33 +118,33 @@ function removeQuestion(index) {
 }
 
 function onCreateQuestionDragEnd() {
-    if (!props.quizSaveForm) return;
-    reindexPositions(props.quizSaveForm.questions);
+    if (!quizSaveForm) return;
+    reindexPositions(quizSaveForm.questions);
 }
 
 function addOption(qIndex) {
-    if (!props.quizSaveForm) return;
-    const options = props.quizSaveForm.questions[qIndex].options;
+    if (!quizSaveForm) return;
+    const options = quizSaveForm.questions[qIndex].options;
     const nextPos = options.length + 1;
     options.push(createEmptyOption(nextPos));
 }
 
 function removeOption(qIndex, oIndex) {
-    if (!props.quizSaveForm) return;
-    const options = props.quizSaveForm.questions[qIndex].options;
+    if (!quizSaveForm) return;
+    const options = quizSaveForm.questions[qIndex].options;
     if (options.length <= 2) return;
     options.splice(oIndex, 1);
     reindexPositions(options);
 }
 
 function onCreateOptionDragEnd(qIndex) {
-    if (!props.quizSaveForm) return;
-    reindexPositions(props.quizSaveForm.questions[qIndex].options);
+    if (!quizSaveForm) return;
+    reindexPositions(quizSaveForm.questions[qIndex].options);
 }
 
 function handleAnswerTypeChange(qIndex) {
-    if (!props.quizSaveForm) return;
-    const question = props.quizSaveForm.questions[qIndex];
+    if (!quizSaveForm) return;
+    const question = quizSaveForm.questions[qIndex];
     if (question.answer_type === quizQuestionAnswerTypes.SINGLE) {
         let found = false;
         question.options.forEach((opt) => {
@@ -158,8 +158,8 @@ function handleAnswerTypeChange(qIndex) {
 }
 
 function handleCorrectChange(qIndex, oIndex) {
-    if (!props.quizSaveForm) return;
-    const question = props.quizSaveForm.questions[qIndex];
+    if (!quizSaveForm) return;
+    const question = quizSaveForm.questions[qIndex];
     if (question.answer_type === quizQuestionAnswerTypes.SINGLE) {
         question.options.forEach((opt, idx) => {
             opt.is_correct = idx === oIndex;
@@ -168,9 +168,9 @@ function handleCorrectChange(qIndex, oIndex) {
 }
 
 watch(
-    () => props.quizSaveForm?.questions?.map((q) => q.answer_type) ?? [],
+    () => quizSaveForm?.questions?.map((q) => q.answer_type) ?? [],
     (newTypes, oldTypes) => {
-        if (!oldTypes?.length || !props.quizSaveForm) return;
+        if (!oldTypes?.length || !quizSaveForm) return;
         newTypes.forEach((type, index) => {
             if (type !== oldTypes[index]) {
                 handleAnswerTypeChange(index);
@@ -184,7 +184,7 @@ const reorderProcessing = ref(false);
 const openQuestionSlug = ref(null);
 
 watch(
-    () => props.quiz?.quiz_questions,
+    () => quiz?.quiz_questions,
     (val) => {
         questions.value = val ? val.map((q) => ({ ...q })) : [];
         if (questions.value.length && !openQuestionSlug.value) {
@@ -209,13 +209,13 @@ function reindexQuestionPositions() {
 }
 
 async function submitQuestionReorder() {
-    if (reorderProcessing.value || !props.quiz?.slug) return;
+    if (reorderProcessing.value || !quiz?.slug) return;
 
     reorderProcessing.value = true;
 
     inertiaJsRoute.post(
         route("back-office.quizzes.quiz-questions.reorder", {
-            slug: props.quiz?.slug,
+            slug: quiz?.slug,
         }),
         {
             questions: questions.value.map((q) => ({
@@ -457,7 +457,7 @@ function handleQuizQuestionSave() {
     if (editingQuestion.value?.slug) {
         inertiaJsRoute.post(
             route("back-office.quizzes.quiz-questions.update", {
-                slug: props.quiz?.slug,
+                slug: quiz?.slug,
                 quizQuestionSlug: editingQuestion.value.slug,
             }),
             { ...saveQuizQuestionForm.data(), _method: "patch" },
@@ -474,7 +474,7 @@ function handleQuizQuestionSave() {
         };
         saveQuizQuestionForm.transform(() => payload).post(
             route("back-office.quizzes.quiz-questions.save", {
-                slug: props.quiz?.slug,
+                slug: quiz?.slug,
             }),
             requestConfig
         );
@@ -503,7 +503,7 @@ function handleQuizQuestionDelete(quizQuestion) {
 
     inertiaJsRoute.delete(
         route("back-office.quizzes.quiz-questions.delete", {
-            slug: props.quiz?.slug,
+            slug: quiz?.slug,
             quizQuestionSlug: quizQuestion?.slug,
         }),
         {

@@ -7,7 +7,7 @@ import { useTranslate } from '@/composables/useTranslate'
 
 const { t } = useTranslate()
 
-const props = defineProps({
+const { disableOpenMediaButton, mediaType, galleryTitle, fetchUrl, multiple, hideDefaultOpenButton, cacheKey, cacheTtl } = defineProps({
     disableOpenMediaButton: {
         type: Boolean,
         default: false,
@@ -56,8 +56,8 @@ const loading = ref(false)
 let loadedPages = new Set()
 
 const hasSelection = computed(() => selectedMediaList.value.length > 0)
-const resolvedCacheKey = computed(() => props.cacheKey || apiCacheKey.DEFAULT)
-const resolvedCacheTtl = computed(() => props.cacheTtl ?? apiCacheTTL.DEFAULT)
+const resolvedCacheKey = computed(() => cacheKey || apiCacheKey.DEFAULT)
+const resolvedCacheTtl = computed(() => cacheTtl ?? apiCacheTTL.DEFAULT)
 
 const openModal = () => {
     showModal.value = true
@@ -86,7 +86,7 @@ const isSelected = (id) => {
 }
 
 const toggleMedia = (media) => {
-    if (props.multiple) {
+    if (multiple) {
         const index = selectedMediaList.value.findIndex((item) => item.id === media.id)
 
         if (index >= 0) {
@@ -104,7 +104,7 @@ const confirmSelection = () => {
 
     emit(
         'media-selected',
-        props.multiple ? selectedMediaList.value : selectedMediaList.value[0]
+        multiple ? selectedMediaList.value : selectedMediaList.value[0]
     )
 
     showModal.value = false
@@ -120,13 +120,13 @@ const loadMedia = async (clear = false) => {
             page: page.value,
             per_page: perPage,
             search: search.value,
-            media_type: props.mediaType,
+            media_type: mediaType,
         }
         const data = await fetchFromApi(
-            props.fetchUrl,
+            fetchUrl,
             params,
             {
-                key: `${resolvedCacheKey.value}:${props.fetchUrl}`,
+                key: `${resolvedCacheKey.value}:${fetchUrl}`,
                 ttl: resolvedCacheTtl.value,
             }
         )
