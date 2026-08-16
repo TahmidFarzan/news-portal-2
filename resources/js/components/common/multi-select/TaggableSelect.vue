@@ -3,15 +3,13 @@ import { ref, watch, onMounted } from "vue"
 import Multiselect from "vue-multiselect"
 import "vue-multiselect/dist/vue-multiselect.css"
 
-const props = defineProps({
+const { selectedItem, fieldName, form, error, placeholder } = defineProps({
     selectedItem: { type: [String, Number, Object, Array], default: null },
     fieldName: { type: String, required: true },
     form: { type: Object, required: true },
     error: { type: [String, Boolean], default: null },
     placeholder: { type: String, default: "Select" },
 })
-
-const { selectedItem, fieldName, form } = props
 
 const proxyModel = ref([])
 const options = ref([])

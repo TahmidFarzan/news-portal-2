@@ -37,7 +37,7 @@ FontAwesomeLibrary.add(
     faChevronRight
 );
 
-const props = defineProps({
+const { survey, isUpdate, surveySaveForm } = defineProps({
     survey: {
         type: Object,
         default: null,
@@ -85,16 +85,16 @@ function isCreateQuestionOpen(index) {
 }
 
 function addQuestion() {
-    if (!props.surveySaveForm) return;
-    const nextPos = props.surveySaveForm.questions.length + 1;
-    props.surveySaveForm.questions.push(createEmptyQuestion(nextPos));
-    openCreateQuestionIndex.value = props.surveySaveForm.questions.length - 1;
+    if (!surveySaveForm) return;
+    const nextPos = surveySaveForm.questions.length + 1;
+    surveySaveForm.questions.push(createEmptyQuestion(nextPos));
+    openCreateQuestionIndex.value = surveySaveForm.questions.length - 1;
 }
 
 function removeQuestion(index) {
-    if (!props.surveySaveForm || props.surveySaveForm.questions.length <= 1) return;
-    props.surveySaveForm.questions.splice(index, 1);
-    reindexPositions(props.surveySaveForm.questions);
+    if (!surveySaveForm || surveySaveForm.questions.length <= 1) return;
+    surveySaveForm.questions.splice(index, 1);
+    reindexPositions(surveySaveForm.questions);
     if (openCreateQuestionIndex.value === index) {
         openCreateQuestionIndex.value = 0;
     } else if (
@@ -106,8 +106,8 @@ function removeQuestion(index) {
 }
 
 function onCreateQuestionDragEnd() {
-    if (!props.surveySaveForm) return;
-    reindexPositions(props.surveySaveForm.questions);
+    if (!surveySaveForm) return;
+    reindexPositions(surveySaveForm.questions);
 }
 
 const questions = ref([]);
@@ -115,7 +115,7 @@ const reorderProcessing = ref(false);
 const openQuestionSlug = ref(null);
 
 watch(
-    () => props.survey?.survey_questions,
+    () => survey?.survey_questions,
     (val) => {
         questions.value = val ? val.map((q) => ({ ...q })) : [];
         if (questions.value.length && !openQuestionSlug.value) {
@@ -140,13 +140,13 @@ function reindexQuestionPositions() {
 }
 
 async function submitQuestionReorder() {
-    if (reorderProcessing.value || !props.survey?.slug) return;
+    if (reorderProcessing.value || !survey?.slug) return;
 
     reorderProcessing.value = true;
 
     inertiaJsRoute.post(
         route("back-office.surveys.survey-questions.reorder", {
-            slug: props.survey?.slug,
+            slug: survey?.slug,
         }),
         {
             questions: questions.value.map((q) => ({
@@ -267,7 +267,7 @@ function handleSurveyQuestionSave() {
     if (editingQuestion.value?.slug) {
         inertiaJsRoute.post(
             route("back-office.surveys.survey-questions.update", {
-                slug: props.survey?.slug,
+                slug: survey?.slug,
                 surveyQuestionSlug: editingQuestion.value.slug,
             }),
             { ...saveSurveyQuestionForm.data(), _method: "patch" },
@@ -276,7 +276,7 @@ function handleSurveyQuestionSave() {
     } else {
         saveSurveyQuestionForm.post(
             route("back-office.surveys.survey-questions.save", {
-                slug: props.survey?.slug,
+                slug: survey?.slug,
             }),
             requestConfig
         );
@@ -305,7 +305,7 @@ function handleSurveyQuestionDelete(surveyQuestion) {
 
     inertiaJsRoute.delete(
         route("back-office.surveys.survey-questions.delete", {
-            slug: props.survey?.slug,
+            slug: survey?.slug,
             surveyQuestionSlug: surveyQuestion?.slug,
         }),
         {
