@@ -2,9 +2,7 @@
 import {
     computed,
     getCurrentInstance,
-    nextTick,
     onBeforeUnmount,
-    onMounted,
     ref,
     watch,
 } from 'vue'
@@ -17,11 +15,10 @@ import {
 import {
     adPages,
     adTypes,
-    defaultAdSizes,
 } from '@/composables/useGoogleAd'
-import { useTranslate } from '@/composables/useTranslate'
 
-const { t } = useTranslate()
+import GoogleAdBanner from './GoogleAdBanner.vue'
+import GoogleAdPopup from './GoogleAdPopup.vue'
 
 const {
     page,
@@ -65,22 +62,9 @@ const componentId =
 const currentUrl = window.location.href
 
 const AD_SLOT_CACHE_TTL = 120 * 1000
-const DESKTOP_BREAKPOINT = 992
-const DESKTOP_AD_MIN_WIDTH = 728
-
-const appEnv = import.meta.env.VITE_APP_ENV
-
-const isProduction = appEnv !== 'production'
 
 const ads = ref([])
-const wrapperRef = ref(null)
-
-const adsLoaded = ref(false)
-const isDisplaying = ref(false)
-const popupIndex = ref(0)
-
-let observer = null
-let resizeObserver = null
+const requestVersion = ref(0)
 
 const isPopupType = computed(() => {
     return type === adTypes.POPUP
@@ -88,12 +72,6 @@ const isPopupType = computed(() => {
 
 const hasConfiguredAds = computed(() => {
     return ads.value.length > 0
-})
-
-const hasVisibleAds = computed(() => {
-    return ads.value.some((ad) => {
-        return ad.status === 'filled'
-    })
 })
 
 const getGoogleAdSlotCache = () => {
@@ -186,25 +164,22 @@ const createSlotElementId = (
     return slotElementId
 }
 
-const getGoogleTagState = () => {
-    window.__googleAdState =
-        window.__googleAdState || {
-            initialized: false,
-            slotEventsInitialized: false,
-            slots: {},
-        }
-
-    return window.__googleAdState
-}
-
-const getAdKey = (ad, index) => {
-    return (
-        ad?.slot_element_id ??
-        ad?.id ??
-        ad?.gpt_slot_id ??
-        ad?.slug ??
-        index
-    )
+const getCacheParamsKey = (
+    params = {}
+) => {
+    return new URLSearchParams(
+        Object.entries(params)
+            .filter(([, value]) => {
+                return (
+                    value !== undefined &&
+                    value !== null &&
+                    value !== ''
+                )
+            })
+            .sort(([a], [b]) => {
+                return a.localeCompare(b)
+            })
+    ).toString()
 }
 
 const normalizeRows = (response) => {
@@ -219,15 +194,6 @@ const normalizeRows = (response) => {
             return row?.ad_unit_code
         })
         .map((row, index) => {
-            if (isPopupType.value) {
-                return {
-                    ...row,
-                    status: null,
-                    slot: null,
-                    displayed: false,
-                }
-            }
-
             const slotElementId =
                 createSlotElementId(
                     row,
@@ -245,631 +211,16 @@ const normalizeRows = (response) => {
                 slot_element_id:
                     slotElementId,
                 status: null,
-                slot: null,
-                displayed: false,
             }
         })
-}
-
-const normalizeSizes = (sizes) => {
-    if (!Array.isArray(sizes)) {
-        return []
-    }
-
-    return sizes
-        .map((size) => {
-            if (
-                Array.isArray(size) &&
-                size.length >= 2
-            ) {
-                const width = Number(size[0])
-                const height = Number(size[1])
-
-                if (
-                    width > 0 &&
-                    height > 0
-                ) {
-                    return [
-                        width,
-                        height,
-                    ]
-                }
-            }
-
-            if (
-                size &&
-                typeof size === 'object'
-            ) {
-                const width = Number(
-                    size.width
-                )
-
-                const height = Number(
-                    size.height
-                )
-
-                if (
-                    width > 0 &&
-                    height > 0
-                ) {
-                    return [
-                        width,
-                        height,
-                    ]
-                }
-            }
-
-            return null
-        })
-        .filter(Boolean)
-}
-
-const normalizeAdSizes = (ad) => {
-    const adSizes = normalizeSizes(
-        ad?.ad_sizes
-    )
-
-    if (adSizes.length) {
-        return adSizes
-    }
-
-    return normalizeSizes(
-        defaultAdSizes
-    )
-}
-
-const createSizeMapping = (ad) => {
-    const sizes = normalizeAdSizes(ad)
-
-    if (!sizes.length) {
-        return null
-    }
-
-    if (sizes.length === 1) {
-        return window.googletag
-            .sizeMapping()
-            .addSize([0, 0], sizes)
-            .build()
-    }
-
-    const desktopSizes = sizes.filter(
-        ([width]) => {
-            return (
-                width >=
-                DESKTOP_AD_MIN_WIDTH
-            )
-        }
-    )
-
-    const mobileSizes = sizes.filter(
-        ([width]) => {
-            return (
-                width <
-                DESKTOP_AD_MIN_WIDTH
-            )
-        }
-    )
-
-    const sizeMapping =
-        window.googletag.sizeMapping()
-
-    if (desktopSizes.length) {
-        sizeMapping.addSize(
-            [DESKTOP_BREAKPOINT, 0],
-            desktopSizes
-        )
-    }
-
-    if (mobileSizes.length) {
-        sizeMapping.addSize(
-            [0, 0],
-            mobileSizes
-        )
-    }
-
-    if (
-        !desktopSizes.length &&
-        mobileSizes.length
-    ) {
-        sizeMapping.addSize(
-            [DESKTOP_BREAKPOINT, 0],
-            mobileSizes
-        )
-    }
-
-    if (
-        !mobileSizes.length &&
-        desktopSizes.length
-    ) {
-        sizeMapping.addSize(
-            [0, 0],
-            desktopSizes
-        )
-    }
-
-    return sizeMapping.build()
-}
-
-const getCacheParamsKey = (
-    params = {}
-) => {
-    return new URLSearchParams(
-        Object.entries(params)
-            .filter(([, value]) => {
-                return (
-                    value !== undefined &&
-                    value !== null
-                )
-            })
-            .sort(([a], [b]) => {
-                return a.localeCompare(b)
-            })
-    ).toString()
-}
-
-const updateAdStatus = (
-    slotId,
-    status
-) => {
-    const googleState =
-        getGoogleTagState()
-
-    const registeredSlot =
-        googleState.slots[slotId]
-
-    if (!registeredSlot?.ad) {
-        return
-    }
-
-    registeredSlot.ad.status = status
-}
-
-const registerAdSlot = (
-    slot,
-    ad
-) => {
-    if (!slot || !ad) {
-        return
-    }
-
-    const slotId =
-        slot.getSlotElementId()
-
-    if (!slotId) {
-        return
-    }
-
-    const googleState =
-        getGoogleTagState()
-
-    googleState.slots[slotId] = {
-        ad,
-        componentId,
-    }
-}
-
-const unregisterAdSlot = (ad) => {
-    if (!ad) {
-        return
-    }
-
-    const googleState =
-        getGoogleTagState()
-
-    if (ad.slot) {
-        const slotId =
-            ad.slot.getSlotElementId()
-
-        if (slotId) {
-            delete googleState.slots[
-                slotId
-            ]
-        }
-    }
-
-    if (ad.slot_element_id) {
-        delete googleState.slots[
-            ad.slot_element_id
-        ]
-    }
-}
-
-const unregisterAdSlots = () => {
-    ads.value.forEach((ad) => {
-        unregisterAdSlot(ad)
-    })
-}
-
-const getExistingSlot = (slotId) => {
-    if (
-        !slotId ||
-        !window.googletag?.pubads
-    ) {
-        return null
-    }
-
-    return (
-        window.googletag
-            .pubads()
-            .getSlots()
-            .find((slot) => {
-                return (
-                    slot.getSlotElementId() ===
-                    slotId
-                )
-            }) ?? null
-    )
-}
-
-const destroyOwnedSlots = () => {
-    return new Promise((resolve) => {
-        const googleState =
-            getGoogleTagState()
-
-        const slots = ads.value
-            .map((ad) => ad.slot)
-            .filter(Boolean)
-
-        unregisterAdSlots()
-
-        if (
-            !slots.length ||
-            !window.googletag?.cmd ||
-            !googleState.initialized
-        ) {
-            resolve()
-            return
-        }
-
-        window.googletag.cmd.push(() => {
-            window.googletag.destroySlots(
-                slots
-            )
-
-            resolve()
-        })
-    })
-}
-
-const resetAds = () => {
-    adsLoaded.value = false
-    isDisplaying.value = false
-    popupIndex.value = 0
-}
-
-const setupSlotEvents = () => {
-    const googleState =
-        getGoogleTagState()
-
-    if (
-        googleState.slotEventsInitialized
-    ) {
-        return
-    }
-
-    window.googletag
-        .pubads()
-        .addEventListener(
-            'slotRenderEnded',
-            (event) => {
-                const slotId =
-                    event.slot.getSlotElementId()
-
-                updateAdStatus(
-                    slotId,
-                    event.isEmpty
-                        ? 'unfilled'
-                        : 'filled'
-                )
-            }
-        )
-
-    window.googletag
-        .pubads()
-        .addEventListener(
-            'slotOnload',
-            (event) => {
-                const slotId =
-                    event.slot.getSlotElementId()
-
-                updateAdStatus(
-                    slotId,
-                    'filled'
-                )
-            }
-        )
-
-    googleState.slotEventsInitialized = true
-}
-
-const initializeGoogleTag = () => {
-    return new Promise((resolve) => {
-        window.googletag =
-            window.googletag || {
-                cmd: [],
-            }
-
-        window.googletag.cmd.push(() => {
-            const googleState =
-                getGoogleTagState()
-
-            if (
-                !googleState.initialized
-            ) {
-                window.googletag.setConfig({
-                    singleRequest: true,
-                    collapseDiv: 'ON_NO_FILL',
-                })
-
-                window.googletag.enableServices()
-
-                googleState.initialized = true
-            }
-
-            setupSlotEvents()
-
-            resolve()
-        })
-    })
-}
-
-const defineOrGetSlot = (ad) => {
-    if (
-        !ad.slot_element_id ||
-        !ad.ad_unit_code
-    ) {
-        return null
-    }
-
-    const existingSlot =
-        getExistingSlot(
-            ad.slot_element_id
-        )
-
-    if (existingSlot) {
-        return existingSlot
-    }
-
-    const sizes = normalizeAdSizes(ad)
-
-    if (!sizes.length) {
-        return null
-    }
-
-    const slot =
-        window.googletag.defineSlot(
-            ad.ad_unit_code,
-            sizes,
-            ad.slot_element_id
-        )
-
-    if (!slot) {
-        return null
-    }
-
-    const sizeMapping =
-        createSizeMapping(ad)
-
-    if (sizeMapping) {
-        slot.defineSizeMapping(
-            sizeMapping
-        )
-    }
-
-    return slot.addService(
-        window.googletag.pubads()
-    )
-}
-
-const pushGoogleAds = async () => {
-    if (
-        adsLoaded.value ||
-        isDisplaying.value ||
-        !hasConfiguredAds.value ||
-        isPopupType.value
-    ) {
-        return
-    }
-
-    if (
-        !wrapperRef.value ||
-        wrapperRef.value.clientWidth <= 0
-    ) {
-        return
-    }
-
-    isDisplaying.value = true
-
-    try {
-        await initializeGoogleTag()
-
-        await new Promise((resolve) => {
-            window.googletag.cmd.push(() => {
-                ads.value.forEach((ad) => {
-                    if (ad.displayed) {
-                        return
-                    }
-
-                    const slot =
-                        defineOrGetSlot(ad)
-
-                    if (!slot) {
-                        ad.status = 'error'
-                        return
-                    }
-
-                    ad.slot = slot
-                    ad.displayed = true
-
-                    registerAdSlot(
-                        slot,
-                        ad
-                    )
-
-                    window.googletag.display(
-                        ad.slot_element_id
-                    )
-                })
-
-                adsLoaded.value = true
-
-                resolve()
-            })
-        })
-    } catch (error) {
-        console.warn(
-            'Google Ad Manager error:',
-            error
-        )
-
-        adsLoaded.value = false
-
-        ads.value.forEach((ad) => {
-            ad.status = 'error'
-        })
-    } finally {
-        isDisplaying.value = false
-    }
-}
-
-const loadNextPopupAd = () => {
-    if (!isPopupType.value) {
-        return
-    }
-
-    popupIndex.value++
-
-    if (
-        popupIndex.value >=
-        ads.value.length
-    ) {
-        return
-    }
-
-    loadPopupAd()
-}
-
-const loadPopupAd = async () => {
-    if (
-        !isPopupType.value ||
-        isDisplaying.value ||
-        !hasConfiguredAds.value ||
-        popupIndex.value >= ads.value.length
-    ) {
-        return
-    }
-
-    const ad =
-        ads.value[popupIndex.value]
-
-    if (
-        !ad ||
-        ad.displayed ||
-        !ad.ad_unit_code
-    ) {
-        return
-    }
-
-    isDisplaying.value = true
-
-    try {
-        await initializeGoogleTag()
-
-        await new Promise((resolve) => {
-            window.googletag.cmd.push(() => {
-                const slot =
-                    window.googletag
-                        .defineOutOfPageSlot(
-                            ad.ad_unit_code,
-                            window.googletag.enums
-                                .OutOfPageFormat
-                                .INTERSTITIAL
-                        )
-
-                if (!slot) {
-                    ad.status = 'error'
-                    resolve()
-                    return
-                }
-
-                slot.addService(
-                    window.googletag.pubads()
-                )
-
-                ad.slot = slot
-                ad.displayed = true
-
-                registerAdSlot(
-                    slot,
-                    ad
-                )
-
-                window.googletag.display(
-                    slot
-                )
-
-                adsLoaded.value = true
-
-                resolve()
-            })
-        })
-    } catch (error) {
-        console.warn(
-            'Google Ad Manager popup error:',
-            error
-        )
-
-        ad.status = 'error'
-
-        loadNextPopupAd()
-    } finally {
-        isDisplaying.value = false
-    }
-}
-
-const observeAds = () => {
-    if (observer) {
-        observer.disconnect()
-        observer = null
-    }
-
-    if (
-        !wrapperRef.value ||
-        !hasConfiguredAds.value ||
-        isPopupType.value ||
-        adsLoaded.value ||
-        isDisplaying.value
-    ) {
-        return
-    }
-
-    observer = new IntersectionObserver(
-        (entries) => {
-            if (
-                !entries.some((entry) => {
-                    return entry.isIntersecting
-                })
-            ) {
-                return
-            }
-
-            observer?.disconnect()
-            observer = null
-
-            pushGoogleAds()
-        },
-        {
-            rootMargin: '100px',
-        }
-    )
-
-    observer.observe(wrapperRef.value)
 }
 
 const fetchAds = async () => {
-    await destroyOwnedSlots()
+    const version =
+        requestVersion.value + 1
 
-    resetAds()
+    requestVersion.value = version
+    ads.value = []
 
     const apiUrl =
         route('site.google-ads')
@@ -880,7 +231,6 @@ const fetchAds = async () => {
     }
 
     if (
-        !isPopupType.value &&
         placement !== null &&
         placement !== undefined &&
         placement !== ''
@@ -904,22 +254,23 @@ const fetchAds = async () => {
                 }
             )
 
+        if (
+            version !==
+            requestVersion.value
+        ) {
+            return
+        }
+
         ads.value =
             normalizeRows(response)
-
-        await nextTick()
-
-        if (!hasConfiguredAds.value) {
-            return
-        }
-
-        if (isPopupType.value) {
-            await loadPopupAd()
-            return
-        }
-
-        observeAds()
     } catch (error) {
+        if (
+            version !==
+            requestVersion.value
+        ) {
+            return
+        }
+
         console.warn(
             'Failed to fetch Google Ads:',
             error
@@ -927,6 +278,32 @@ const fetchAds = async () => {
 
         ads.value = []
     }
+}
+
+const handleAdStatus = (
+    payload
+) => {
+    if (
+        !payload?.slotElementId ||
+        !payload?.status
+    ) {
+        return
+    }
+
+    const ad = ads.value.find(
+        (item) => {
+            return (
+                item.slot_element_id ===
+                payload.slotElementId
+            )
+        }
+    )
+
+    if (!ad) {
+        return
+    }
+
+    ad.status = payload.status
 }
 
 watch(
@@ -937,69 +314,25 @@ watch(
     ],
     async () => {
         await fetchAds()
+    },
+    {
+        immediate: true,
     }
 )
 
-onMounted(async () => {
-    await fetchAds()
-
-    if (isPopupType.value) {
-        return
-    }
-
-    await nextTick()
-
-    resizeObserver =
-        new ResizeObserver(() => {
-            if (
-                !adsLoaded.value &&
-                !isDisplaying.value &&
-                hasConfiguredAds.value
-            ) {
-                observeAds()
-            }
-        })
-
-    if (wrapperRef.value) {
-        resizeObserver.observe(
-            wrapperRef.value
-        )
-    }
-})
-
 onBeforeUnmount(() => {
-    if (observer) {
-        observer.disconnect()
-        observer = null
-    }
-
-    if (resizeObserver) {
-        resizeObserver.disconnect()
-        resizeObserver = null
-    }
-
-    destroyOwnedSlots()
+    requestVersion.value++
 })
 </script>
 
 <template>
-    <section v-if=" hasConfiguredAds && !isPopupType " ref="wrapperRef" :class="[
-            'relative mx-auto flex w-full flex-col items-center text-center',
-            {
-                'my-4': hasVisibleAds,
-                'hidden':
-                    adsLoaded &&
-                    !hasVisibleAds,
-            },
-            customClass,
-        ]">
-        <span v-if="showLabel &&  hasVisibleAds " class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-gray-500">
-            {{ t('common.labels.ad') }}
-        </span>
+    <GoogleAdPopup v-if="
+        isPopupType &&
+        hasConfiguredAds
+    " :ads="ads" :show-label="showLabel" :custom-class="customClass" @status="handleAdStatus" />
 
-        <div v-for="(ad, index) in ads" :key="getAdKey(ad, index)" v-show="ad.status === 'filled'" class="flex w-full flex-col items-center justify-center text-center">
-            <span v-if="isProduction && ad.placement" class="mb-1">{{ ad.placement }}</span>
-            <div v-if="ad.slot_element_id" :id="ad.slot_element_id" class="mx-auto flex max-w-full justify-center"></div>
-        </div>
-    </section>
+    <GoogleAdBanner v-else-if="
+        !isPopupType &&
+        hasConfiguredAds
+    " :ads="ads" :show-label="showLabel" :custom-class="customClass" @status="handleAdStatus" />
 </template>

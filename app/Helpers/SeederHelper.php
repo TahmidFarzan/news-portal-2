@@ -14,7 +14,7 @@ class SeederHelper
         [
             'type' => GoogleAdHelper::TYPE_SECTION,
             'placement' => GoogleAdHelper::PLACEMENT_1,
-            'ad_unit_code' => '/6355419/Travel',
+            'ad_unit_code' => '/6355419/Travel/Asia/China',
             'ad_sizes' => [
                 [728, 90],
                 [300, 250],
@@ -68,7 +68,7 @@ class SeederHelper
         [
             'type' => GoogleAdHelper::TYPE_SIDEBAR,
             'placement' => GoogleAdHelper::PLACEMENT_1,
-            'ad_unit_code' => '/6355419/Travel/Asia',
+            'ad_unit_code' => '/6355419/Travel/Africa',
             'ad_sizes' => [
                 [300, 250],
             ],
@@ -76,7 +76,7 @@ class SeederHelper
         [
             'type' => GoogleAdHelper::TYPE_SIDEBAR,
             'placement' => GoogleAdHelper::PLACEMENT_2,
-            'ad_unit_code' => '/6355419/Travel/Sports',
+            'ad_unit_code' => '/6355419/Travel/Asia',
             'ad_sizes' => [
                 [300, 250],
             ],
@@ -85,7 +85,7 @@ class SeederHelper
             'type' => GoogleAdHelper::TYPE_POPUP,
             'placement' => null,
             'ad_unit_code' => '/6355419/Travel/News',
-            'ad_sizes' => [[300, 250], [728, 90]],
+            'ad_sizes' => [[660, 480],[320, 480]],
         ],
     ];
 

@@ -3,34 +3,30 @@
 
     $isPublicPage = !request()->is('back-office/*') && !request()->is('auth-user/*');
 
-    $googleAdEnable = data_get(
-        $themeGoogleAd?->options,
-        ThemeHelper::OPTION_GOOGLE_AD_ENABLE . '.value',
-        false
-    );
+    $googleAdEnable = data_get($themeGoogleAd?->options, ThemeHelper::OPTION_GOOGLE_AD_ENABLE . '.value', false);
 
     $googleSearchConsoleHeader = data_get(
         $themeGoogleService?->options,
         ThemeHelper::OPTION_GOOGLE_SEARCH_CONSOLE_HEADER . '.value',
-        null
+        null,
     );
 
     $googleAnalyticHeader = data_get(
         $themeGoogleService?->options,
         ThemeHelper::OPTION_GOOGLE_ANALYTIC_HEADER . '.value',
-        null
+        null,
     );
 
     $googleTagManagerHeader = data_get(
         $themeGoogleService?->options,
         ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_HEADER . '.value',
-        null
+        null,
     );
 
     $googleTagManagerBody = data_get(
         $themeGoogleService?->options,
         ThemeHelper::OPTION_GOOGLE_TAG_MANAGER_BODY . '.value',
-        null
+        null,
     );
 
     $renderRawHtml = function ($value) {
@@ -78,6 +74,10 @@
 
             @if ($googleAdEnable)
                 <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+                <script>
+                    var googletag = googletag || {};
+                    googletag.cmd = googletag.cmd || [];
+                </script>
             @endif
         @endif
 
