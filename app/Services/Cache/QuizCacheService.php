@@ -57,6 +57,8 @@ class QuizCacheService
         $records = Quiz::query()->with([
             'language',
         ])
+            ->whereNotNull('start_date')
+            ->whereNotNull('end_date')
             ->whereDate('start_date', '<=', $nowDate)
             ->whereDate('end_date', '>=', $nowDate)
             ->where('is_active', true);

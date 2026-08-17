@@ -103,8 +103,8 @@ class QuizService
                 $quiz->name              = $request->input('name');
                 $quiz->brief             = $request->input('brief');
                 $quiz->language_id       = $request->input('language_id');
-                $quiz->start_date        = $request->input('start_date', now());
-                $quiz->end_date          = $request->input('end_date', now());
+                $quiz->start_date        = $request->input('start_date');
+                $quiz->end_date          = $request->input('end_date', $request->input('start_date'));
                 $quiz->is_active         = $request->boolean('is_active', false) ? true : false;
                 $quiz->show_bellow_event = $request->boolean('show_bellow_event', false) ? true : false;
                 $quiz->enable_result = $request->boolean('enable_result', false) ? true : false;

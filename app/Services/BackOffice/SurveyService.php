@@ -86,8 +86,8 @@ class SurveyService
                 $survey->name  = $request->input('name');
                 $survey->brief = $request->input('brief');
 
-                $survey->start_date  = $request->input('start_date', now());
-                $survey->end_date    = $request->input('end_date', now());
+                $survey->start_date  = $request->input('start_date');
+                $survey->end_date    = $request->input('end_date', $request->input('start_date'));
                 $survey->language_id = $request->input('language_id');
 
                 $survey->is_active = $request->input('is_active') ? true : false;
