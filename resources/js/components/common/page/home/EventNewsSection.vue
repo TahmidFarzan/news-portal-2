@@ -174,7 +174,7 @@ watch(
                         </div>
                     </div>
 
-                    <div class="hidden lg:grid lg:grid-cols-5 lg:items-stretch lg:gap-4">
+                    <div class="hidden lg:grid lg:grid-cols-4 lg:items-stretch lg:gap-4">
                         <div v-for="(newsItem, newsIndex) in eventNews[event.slug]"
                             :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card h-full">
                             <GridCard :news="newsItem" :hideCategory="true" :hideEvent="true" :hideLocation="true"

@@ -445,8 +445,7 @@ class PageService
             $language,
             null,
             $event,
-
-            10,
+            4,
             $this->cachedTTL
         );
     }
@@ -459,7 +458,6 @@ class PageService
             PageHelper::PAGE_HOME,
             PageHelper::PAGE_SECTION_CATEGORY_NEWS,
             $category,
-
             $request->input('limit', 4),
             $this->cachedTTL
         );
@@ -473,7 +471,6 @@ class PageService
             $language,
             null,
             $newsType,
-
             10,
             $this->cachedTTL
         );
@@ -517,7 +514,6 @@ class PageService
             $language,
             $survey,
             $slug,
-
             $this->cachedTTL
         );
     }
