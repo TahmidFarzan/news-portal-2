@@ -71,8 +71,8 @@ const getEventNewsApiUrl = (event) => {
         : route('localized.home.event-news', {
             languageCode: currentLanguage?.code,
             slug: event.slug,
-        });
-};
+        })
+}
 
 const loadEventNews = async (event) => {
     if (
@@ -115,54 +115,66 @@ watch(
     ([items]) => {
         eventNews.value = {}
         loadingEvents.value = {}
+
         items.forEach(loadEventNews)
     },
     {
         immediate: true,
         deep: true,
-    },
+    }
 )
 </script>
 
 <template>
-    <div v-if="eventItems.length" class="event-news-section space-y-6 rounded-2xl border border-slate-200 bg-white p-3">
+    <div v-if="eventItems.length" class="event-news-section space-y-6 rounded-2xl border bg-white p-3">
         <div v-for="(event, index) in eventItems" :key="event?.id || event?.slug || index"
-            class="event-panel overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 p-3">
+            class="event-panel overflow-hidden rounded-2xl border p-3">
             <img :src="getEventImageUrl(event, 'mobile') || getEventImageUrl(event, 'desktop')" :alt="event?.name || ''"
                 class="event-banner block h-auto w-full rounded-2xl object-cover md:hidden" loading="lazy" />
 
             <img :src="getEventImageUrl(event, 'desktop') || getEventImageUrl(event, 'mobile')" :alt="event?.name || ''"
                 class="event-banner hidden h-auto w-full rounded-2xl object-cover md:block" loading="lazy" />
 
-            <div class="event-news-grid mt-4 grid grid-cols-1 gap-4 md:grid-cols-12">
-                <div v-if="eventNews[event.slug]?.length" class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 md:col-span-5">
-                    <GridCard :news="eventNews[event.slug][0]" :hideCategory="true" :hideEvent="true"
-                        :hideLocation="true" :hideBrief="true" :isCompact="false" :useFullHeight="true" />
+            <div v-if="eventNews[event.slug]?.length" class="event-news-content mt-4">
+                <div class="grid grid-cols-1 gap-3 md:hidden">
+                    <div class="event-news-card">
+                        <GridCard :news="eventNews[event.slug][0]" :hideCategory="true" :hideEvent="true"
+                            :hideLocation="true" :hideBrief="true" :isCompact="false" :useFullHeight="true" />
+                    </div>
+
+                    <div v-for="(newsItem, newsIndex) in eventNews[event.slug].slice(1)"
+                        :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card">
+                        <ListCard :news="newsItem" :hideSubtitle="true" :hideBrief="true" :hideCategory="true"
+                            :hideEvent="true" :hideLocation="true" :hideFeatureImage="true" :isCompact="true" />
+                    </div>
                 </div>
 
-                <div v-if="eventNews[event.slug]?.length > 1" class="md:col-span-7">
-                    <div class="grid grid-cols-1 gap-3 md:hidden">
+                <div class="hidden md:grid md:grid-cols-2 md:items-stretch md:gap-4 lg:hidden">
+                    <div class="event-news-card h-full">
+                        <GridCard :news="eventNews[event.slug][0]" :hideCategory="true" :hideEvent="true"
+                            :hideLocation="true" :hideBrief="true" :isCompact="false" :useFullHeight="true" />
+                    </div>
+
+                    <div class="grid h-full grid-rows-4 gap-3">
                         <div v-for="(newsItem, newsIndex) in eventNews[event.slug].slice(1)"
-                            :key="newsItem?.id || newsItem?.slug || newsIndex"
-                            class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+                            :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card h-full">
                             <ListCard :news="newsItem" :hideSubtitle="true" :hideBrief="true" :hideCategory="true"
                                 :hideEvent="true" :hideLocation="true" :hideFeatureImage="true" :isCompact="true" />
                         </div>
                     </div>
+                </div>
 
-                    <div class="hidden grid-cols-2 gap-4 md:grid">
-                        <div v-for="(newsItem, newsIndex) in eventNews[event.slug].slice(1)"
-                            :key="newsItem?.id || newsItem?.slug || newsIndex"
-                            class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
-                            <GridCard :news="newsItem" :hideCategory="true" :hideEvent="true" :hideLocation="true"
-                                :hideBrief="true" :isCompact="true" :useFullHeight="true" />
-                        </div>
+                <div class="hidden lg:grid lg:grid-cols-5 lg:items-stretch lg:gap-4">
+                    <div v-for="(newsItem, newsIndex) in eventNews[event.slug]"
+                        :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card h-full">
+                        <GridCard :news="newsItem" :hideCategory="true" :hideEvent="true" :hideLocation="true"
+                            :hideBrief="true" :isCompact="true" :useFullHeight="true" />
                     </div>
                 </div>
             </div>
 
             <div class="mt-4 flex justify-center">
-                <a :href="event?.public_url || '#'"
+                <a :href="event?.public_url"
                     class="event-link group inline-flex items-center justify-center gap-2 rounded-full px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5">
                     <FontAwesomeIcon icon="right-long"
                         class="transition-transform duration-300 group-hover:translate-x-1" />
@@ -192,17 +204,26 @@ watch(
     box-shadow: var(--news-shadow-media);
 }
 
-.event-news-grid {
-    min-height: 38rem;
+.event-news-content {
+    min-width: 0;
+}
+
+.event-news-card {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: white;
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
+    ring: 1px;
+}
+
+.event-news-card :deep(> *) {
+    height: 100%;
 }
 
 @media (min-width: 768px) {
     .event-banner {
         aspect-ratio: 130 / 9;
-    }
-
-    .event-news-grid {
-        min-height: 39rem;
     }
 }
 
