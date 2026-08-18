@@ -143,42 +143,95 @@ watch(
                 :loading="eager && index === 0 ? undefined : 'lazy'"
                 :fetchpriority="eager && index === 0 ? 'high' : undefined" />
 
-            <div v-if="eventNews[event.slug]?.length" class="event-news-content mt-4">
-                <div class="grid grid-cols-1 gap-3 md:hidden">
-                    <div class="event-news-card">
-                        <GridCard :news="eventNews[event.slug][0]" :hideCategory="true" :hideEvent="true"
-                            :hideLocation="true" :hideBrief="true" :isCompact="false" :useFullHeight="true" />
-                    </div>
+            <div v-if="eventNews[event.slug] === undefined || eventNews[event.slug]?.length"
+                class="event-news-content mt-4">
+                <template v-if="eventNews[event.slug]?.length">
+                    <div class="grid grid-cols-1 gap-3 md:hidden">
+                        <div class="event-news-card">
+                            <GridCard :news="eventNews[event.slug][0]" :hideCategory="true" :hideEvent="true"
+                                :hideLocation="true" :hideBrief="true" :isCompact="false" :useFullHeight="true" />
+                        </div>
 
-                    <div v-for="(newsItem, newsIndex) in eventNews[event.slug].slice(1)"
-                        :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card">
-                        <ListCard :news="newsItem" :hideSubtitle="true" :hideBrief="true" :hideCategory="true"
-                            :hideEvent="true" :hideLocation="true" :hideFeatureImage="true" :isCompact="true" />
-                    </div>
-                </div>
-
-                <div class="hidden md:grid md:grid-cols-2 md:items-stretch md:gap-4 lg:hidden">
-                    <div class="event-news-card h-full">
-                        <GridCard :news="eventNews[event.slug][0]" :hideCategory="true" :hideEvent="true"
-                            :hideLocation="true" :hideBrief="true" :isCompact="false" :useFullHeight="true" />
-                    </div>
-
-                    <div class="grid h-full grid-rows-4 gap-3">
                         <div v-for="(newsItem, newsIndex) in eventNews[event.slug].slice(1)"
-                            :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card h-full">
+                            :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card">
                             <ListCard :news="newsItem" :hideSubtitle="true" :hideBrief="true" :hideCategory="true"
                                 :hideEvent="true" :hideLocation="true" :hideFeatureImage="true" :isCompact="true" />
                         </div>
                     </div>
-                </div>
 
-                <div class="hidden lg:grid lg:grid-cols-5 lg:items-stretch lg:gap-4">
-                    <div v-for="(newsItem, newsIndex) in eventNews[event.slug]"
-                        :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card h-full">
-                        <GridCard :news="newsItem" :hideCategory="true" :hideEvent="true" :hideLocation="true"
-                            :hideBrief="true" :isCompact="true" :useFullHeight="true" />
+                    <div class="hidden md:grid md:grid-cols-2 md:items-stretch md:gap-4 lg:hidden">
+                        <div class="event-news-card h-full">
+                            <GridCard :news="eventNews[event.slug][0]" :hideCategory="true" :hideEvent="true"
+                                :hideLocation="true" :hideBrief="true" :isCompact="false" :useFullHeight="true" />
+                        </div>
+
+                        <div class="grid h-full grid-rows-4 gap-3">
+                            <div v-for="(newsItem, newsIndex) in eventNews[event.slug].slice(1)"
+                                :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card h-full">
+                                <ListCard :news="newsItem" :hideSubtitle="true" :hideBrief="true" :hideCategory="true"
+                                    :hideEvent="true" :hideLocation="true" :hideFeatureImage="true" :isCompact="true" />
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="hidden lg:grid lg:grid-cols-5 lg:items-stretch lg:gap-4">
+                        <div v-for="(newsItem, newsIndex) in eventNews[event.slug]"
+                            :key="newsItem?.id || newsItem?.slug || newsIndex" class="event-news-card h-full">
+                            <GridCard :news="newsItem" :hideCategory="true" :hideEvent="true" :hideLocation="true"
+                                :hideBrief="true" :isCompact="true" :useFullHeight="true" />
+                        </div>
+                    </div>
+                </template>
+
+                <template v-else>
+                    <div class="grid grid-cols-1 gap-3 md:hidden">
+                        <div class="event-news-card">
+                            <div class="aspect-[16/9] w-full bg-gray-200 animate-pulse"></div>
+                            <div class="space-y-1.5 p-2">
+                                <div class="h-3 w-3/4 rounded bg-gray-200 animate-pulse"></div>
+                                <div class="h-2.5 w-1/2 rounded bg-gray-200 animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div v-for="n in 4" :key="'esk-m-'+n" class="event-news-card">
+                            <div class="flex items-center gap-3 p-2">
+                                <div class="flex-1 space-y-1.5">
+                                    <div class="h-3 w-3/4 rounded bg-gray-200 animate-pulse"></div>
+                                    <div class="h-2.5 w-1/2 rounded bg-gray-200 animate-pulse"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden md:grid md:grid-cols-2 md:items-stretch md:gap-4 lg:hidden">
+                        <div class="event-news-card h-full">
+                            <div class="aspect-[16/9] w-full bg-gray-200 animate-pulse"></div>
+                            <div class="space-y-1.5 p-2">
+                                <div class="h-3 w-3/4 rounded bg-gray-200 animate-pulse"></div>
+                                <div class="h-2.5 w-1/2 rounded bg-gray-200 animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="grid h-full grid-rows-4 gap-3">
+                            <div v-for="n in 4" :key="'esk-t-'+n" class="event-news-card h-full">
+                                <div class="flex items-center gap-3 p-2">
+                                    <div class="flex-1 space-y-1.5">
+                                        <div class="h-3 w-3/4 rounded bg-gray-200 animate-pulse"></div>
+                                        <div class="h-2.5 w-1/2 rounded bg-gray-200 animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden lg:grid lg:grid-cols-5 lg:items-stretch lg:gap-4">
+                        <div v-for="n in 5" :key="'esk-d-'+n" class="event-news-card h-full">
+                            <div class="aspect-[16/9] w-full bg-gray-200 animate-pulse"></div>
+                            <div class="space-y-1.5 p-2">
+                                <div class="h-3 w-3/4 rounded bg-gray-200 animate-pulse"></div>
+                                <div class="h-2.5 w-1/2 rounded bg-gray-200 animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
             </div>
 
             <div class="mt-4 flex justify-center">

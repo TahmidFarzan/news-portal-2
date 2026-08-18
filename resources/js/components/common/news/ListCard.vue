@@ -99,7 +99,7 @@ const {
     },
 })
 
-const windowWidth = ref(0)
+const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
 
 const updateWindowWidth = () => {
     windowWidth.value = window.innerWidth

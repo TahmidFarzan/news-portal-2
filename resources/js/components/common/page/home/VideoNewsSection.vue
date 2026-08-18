@@ -96,13 +96,13 @@ watch(
 </script>
 
 <template>
-    <section v-if="newsItems.length" class="video-section rounded-2xl border border-slate-100 bg-white p-3">
+    <section class="video-section rounded-2xl border border-slate-100 bg-white p-3">
         <div class="section-heading mb-4 flex items-center justify-between gap-3">
             <h2 class="text-xl font-bold text-gray-950">
                 {{ t(`common.labels.${generateTranslationKey(title)}`) }}
             </h2>
 
-            <div class="flex items-center gap-2">
+            <div v-if="newsItems.length" class="flex items-center gap-2">
                 <button type="button" :class="prevButtonClass"
                     class="group relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-br from-blue-600 to-sky-500 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20 transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 hover:from-blue-700 hover:to-sky-600 hover:shadow-xl hover:shadow-blue-500/40 active:translate-y-0 active:scale-95">
                     <span
@@ -123,7 +123,7 @@ watch(
             </div>
         </div>
 
-        <Swiper :modules="modules" :slides-per-view="1" :space-between="12" :loop="newsItems.length > 4" :navigation="{
+        <Swiper v-if="newsItems.length" :modules="modules" :slides-per-view="1" :space-between="12" :loop="newsItems.length > 4" :navigation="{
             prevEl: `.${prevButtonClass}`,
             nextEl: `.${nextButtonClass}`,
         }" :autoplay="{
@@ -148,6 +148,8 @@ watch(
                     :isCompact="true" :useFullHeight="true" />
             </SwiperSlide>
         </Swiper>
+
+        <div v-else class="video-skeleton"></div>
     </section>
 </template>
 
@@ -156,6 +158,18 @@ watch(
     border-color: var(--news-border-soft);
     background: var(--news-video-gradient);
     box-shadow: var(--news-shadow-soft);
+}
+
+.video-skeleton {
+    aspect-ratio: 16 / 5;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.07);
+    animation: videoSkeletonPulse 2s ease-in-out infinite;
+}
+
+@keyframes videoSkeletonPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.25; }
 }
 
 .section-heading h2 {

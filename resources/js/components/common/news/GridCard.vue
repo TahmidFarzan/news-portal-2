@@ -100,7 +100,7 @@ const {
 })
 
 const articleRef = ref(null)
-const windowWidth = ref(0)
+const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
 const articleWidth = ref(0)
 const resizeObserver = ref(null)
 

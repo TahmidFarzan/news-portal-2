@@ -568,10 +568,7 @@ onBeforeUnmount(() => {
         (!allAdsFinished ||
             hasVisibleAds)
     " ref="wrapperRef" :class="[
-            'relative mx-auto flex w-full flex-col items-center text-center',
-            {
-                'my-4': hasVisibleAds,
-            },
+            'relative mx-auto flex w-full flex-col items-center text-center my-4',
             customClass,
         ]">
         <span v-if="
