@@ -134,7 +134,7 @@ const componentRefreshKey = (componentName) => {
         <Trends :key="componentRefreshKey('trend')" v-if="showTrends" class="home-trends" :trends="trends" />
 
         <div v-if="topEvents" :key="componentRefreshKey('event-section-top')" class="home-top-events">
-            <EventNewsSection :events="topEvents" :currentLanguage="currentLanguage" />
+            <EventNewsSection :events="topEvents" :currentLanguage="currentLanguage" eager />
             <Quizzes v-if="showQuizzes" :currentLanguage="currentLanguage" :belowEvent="true" class="home-quizzes mt-4" />
         </div>
 

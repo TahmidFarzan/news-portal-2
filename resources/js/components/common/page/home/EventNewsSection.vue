@@ -19,6 +19,7 @@ const { t } = useTranslate()
 const {
     events,
     currentLanguage,
+    eager,
 } = defineProps({
     events: {
         type: [Array, Object],
@@ -27,6 +28,10 @@ const {
     currentLanguage: {
         type: Object,
         required: true,
+    },
+    eager: {
+        type: Boolean,
+        default: false,
     },
 })
 
@@ -130,10 +135,13 @@ watch(
         <div v-for="(event, index) in eventItems" :key="event?.id || event?.slug || index"
             class="event-panel overflow-hidden rounded-2xl border p-3">
             <img :src="getEventImageUrl(event, 'mobile') || getEventImageUrl(event, 'desktop')" :alt="event?.name || ''"
-                class="event-banner block h-auto w-full rounded-2xl object-cover md:hidden" loading="lazy" />
+                class="event-banner block h-auto w-full rounded-2xl object-cover md:hidden"
+                :loading="eager && index === 0 ? undefined : 'lazy'" />
 
             <img :src="getEventImageUrl(event, 'desktop') || getEventImageUrl(event, 'mobile')" :alt="event?.name || ''"
-                class="event-banner hidden h-auto w-full rounded-2xl object-cover md:block" loading="lazy" />
+                class="event-banner hidden h-auto w-full rounded-2xl object-cover md:block"
+                :loading="eager && index === 0 ? undefined : 'lazy'"
+                :fetchpriority="eager && index === 0 ? 'high' : undefined" />
 
             <div v-if="eventNews[event.slug]?.length" class="event-news-content mt-4">
                 <div class="grid grid-cols-1 gap-3 md:hidden">
