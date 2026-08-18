@@ -19,22 +19,31 @@ const {
     speed = 45,
     currentLanguage,
     bottom = 0,
+    footerElement = null,
 } = defineProps({
     title: {
         type: String,
         default: 'Breaking News',
     },
+
     speed: {
         type: Number,
         default: 45,
     },
+
     currentLanguage: {
         type: Object,
         required: true,
     },
+
     bottom: {
         type: Number,
         default: 0,
+    },
+
+    footerElement: {
+        type: Object,
+        default: null,
     },
 })
 
@@ -46,12 +55,19 @@ const nextPageUrl = ref(null)
 
 const loading = ref(false)
 const fullyLoaded = ref(false)
+
 const translateX = ref(0)
 const isSmallScreen = ref(false)
 
+const footerOffset = ref(0)
+
 let animationFrame = null
 let lastTimestamp = 0
+
 let resizeTimer = null
+let scrollFrame = null
+let resizeObserver = null
+
 let requestId = 0
 
 const hasNews = computed(() => {
@@ -81,9 +97,38 @@ const displayNews = computed(() => {
     ]
 })
 
+const updateFooterOffset = () => {
+    if (!footerElement) {
+        footerOffset.value = Math.max(
+            0,
+            Number(bottom) || 0,
+        )
+
+        return
+    }
+
+    const footerRect =
+        footerElement.getBoundingClientRect()
+
+    const viewportHeight =
+        window.innerHeight ||
+        document.documentElement.clientHeight
+
+    const footerVisibleOffset =
+        Math.max(
+            0,
+            viewportHeight - footerRect.top,
+        )
+
+    footerOffset.value =
+        footerVisibleOffset +
+        Math.max(0, Number(bottom) || 0)
+}
+
+
 const breakingNewsStyle = computed(() => {
     return {
-        bottom: `${Math.max(0, Number(bottom) || 0)}px`,
+        bottom: `${footerOffset.value}px`,
     }
 })
 
@@ -115,6 +160,7 @@ const normalizeResponse = (response) => {
 
     return {
         data: items,
+
         nextPageUrl:
             source?.next_page_url ??
             source?.nextPageUrl ??
@@ -166,7 +212,10 @@ const appendUniqueNews = (items = []) => {
 }
 
 const loadBreakingNews = async (url = null) => {
-    if (loading.value || fullyLoaded.value) {
+    if (
+        loading.value ||
+        fullyLoaded.value
+    ) {
         return
     }
 
@@ -175,41 +224,57 @@ const loadBreakingNews = async (url = null) => {
     loading.value = true
 
     try {
-        const apiUrl = url || getInitialApiUrl()
+        const apiUrl =
+            url ||
+            getInitialApiUrl()
 
-        const response = await fetchFromApi(
-            apiUrl,
-            {},
-            {
-                key: `${apiCacheKey.API_CURSOR_PAGINATION}:${apiUrl}`,
-                ttl: apiCacheTTL.SYSTEM_SHORT,
-            },
-        )
+        const response =
+            await fetchFromApi(
+                apiUrl,
+                {},
+                {
+                    key: `${apiCacheKey.API_CURSOR_PAGINATION}:${apiUrl}`,
+                    ttl: apiCacheTTL.SYSTEM_SHORT,
+                },
+            )
 
-        if (currentRequestId !== requestId) {
+        if (
+            currentRequestId !==
+            requestId
+        ) {
             return
         }
 
-        const result = normalizeResponse(response)
+        const result =
+            normalizeResponse(response)
 
         appendUniqueNews(result.data)
 
-        nextPageUrl.value = result.nextPageUrl
+        nextPageUrl.value =
+            result.nextPageUrl
 
         if (!result.nextPageUrl) {
             fullyLoaded.value = true
         }
 
         await nextTick()
+
+        updateFooterOffset()
     } catch (error) {
-        if (currentRequestId === requestId) {
+        if (
+            currentRequestId ===
+            requestId
+        ) {
             console.error(
                 'Failed to load breaking news:',
                 error,
             )
         }
     } finally {
-        if (currentRequestId === requestId) {
+        if (
+            currentRequestId ===
+            requestId
+        ) {
             loading.value = false
         }
     }
@@ -274,12 +339,15 @@ const animate = (timestamp) => {
         trackRef.value
     ) {
         translateX.value -=
-            (tickerSpeed.value * deltaTime) /
+            (tickerSpeed.value *
+                deltaTime) /
             1000
     }
 
     if (shouldLoadNextPage()) {
-        loadBreakingNews(nextPageUrl.value)
+        loadBreakingNews(
+            nextPageUrl.value,
+        )
     }
 
     if (
@@ -295,7 +363,8 @@ const animate = (timestamp) => {
             Math.abs(translateX.value) >=
             originalTrackWidth
         ) {
-            translateX.value += originalTrackWidth
+            translateX.value +=
+                originalTrackWidth
         }
     }
 
@@ -316,7 +385,22 @@ const handleResize = () => {
     resizeTimer = setTimeout(() => {
         updateScreenSize()
         resetTickerPosition()
+
+        updateFooterOffset()
     }, 150)
+}
+
+const handleScroll = () => {
+    if (scrollFrame) {
+        return
+    }
+
+    scrollFrame =
+        requestAnimationFrame(() => {
+            updateFooterOffset()
+
+            scrollFrame = null
+        })
 }
 
 const resetBreakingNews = async () => {
@@ -334,6 +418,10 @@ const resetBreakingNews = async () => {
     }
 
     await loadBreakingNews()
+
+    await nextTick()
+
+    updateFooterOffset()
 }
 
 watch(
@@ -346,7 +434,8 @@ watch(
         [oldIsDefault, oldCode],
     ) => {
         if (
-            newIsDefault === oldIsDefault &&
+            newIsDefault ===
+            oldIsDefault &&
             newCode === oldCode
         ) {
             return
@@ -359,12 +448,44 @@ watch(
 onMounted(async () => {
     updateScreenSize()
 
+    updateFooterOffset()
+
     window.addEventListener(
         'resize',
         handleResize,
+        {
+            passive: true,
+        },
     )
 
+    window.addEventListener(
+        'scroll',
+        handleScroll,
+        {
+            passive: true,
+        },
+    )
+
+    if (
+        footerElement &&
+        typeof ResizeObserver !==
+        'undefined'
+    ) {
+        resizeObserver =
+            new ResizeObserver(() => {
+                updateFooterOffset()
+            })
+
+        resizeObserver.observe(
+            footerElement,
+        )
+    }
+
     await loadBreakingNews()
+
+    await nextTick()
+
+    updateFooterOffset()
 
     animationFrame =
         requestAnimationFrame(animate)
@@ -374,25 +495,48 @@ onBeforeUnmount(() => {
     requestId++
 
     if (animationFrame) {
-        cancelAnimationFrame(animationFrame)
+        cancelAnimationFrame(
+            animationFrame,
+        )
+
         animationFrame = null
+    }
+
+    if (scrollFrame) {
+        cancelAnimationFrame(
+            scrollFrame,
+        )
+
+        scrollFrame = null
     }
 
     if (resizeTimer) {
         clearTimeout(resizeTimer)
+
         resizeTimer = null
+    }
+
+    if (resizeObserver) {
+        resizeObserver.disconnect()
+
+        resizeObserver = null
     }
 
     window.removeEventListener(
         'resize',
         handleResize,
     )
+
+    window.removeEventListener(
+        'scroll',
+        handleScroll,
+    )
 })
 </script>
 
 <template>
     <section v-if="hasNews"
-        class="fixed right-0 left-0 z-[9999] overflow-hidden border-t border-gray-200 bg-white shadow-lg"
+        class="fixed left-0 right-0 z-[9999] overflow-hidden border-t border-gray-200 bg-white shadow-lg"
         :style="breakingNewsStyle">
         <div class="mx-auto flex max-w-7xl flex-col overflow-hidden px-3 sm:h-11 sm:flex-row sm:items-center sm:px-4">
             <div
@@ -405,8 +549,9 @@ onBeforeUnmount(() => {
                     <div ref="trackRef" class="inline-flex items-center whitespace-nowrap will-change-transform" :style="{
                         transform: `translate3d(${translateX}px, 0, 0)`,
                     }">
-                        <template v-for="(newsItem, index) in displayNews"
-                            :key="`${getNewsUniqueKey(newsItem)}-${index}`">
+                        <template v-for="(
+newsItem, index
+                            ) in displayNews" :key="`${getNewsUniqueKey(newsItem)}-${index}`">
                             <a v-if="hasPublicUrl(newsItem)" :href="newsItem.public_url"
                                 class="inline-flex items-center text-xs font-medium transition duration-200 hover:text-blue-600 hover:underline sm:text-sm md:text-base">
                                 {{ newsItem.title }}

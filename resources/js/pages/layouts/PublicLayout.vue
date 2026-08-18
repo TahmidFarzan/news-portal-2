@@ -56,6 +56,7 @@ const {
 } = useTheme()
 
 const headerNavbar = ref(null)
+const footerRef = ref(null)
 const isHeaderSticky = ref(false)
 
 const siteThemes = ref([])
@@ -193,39 +194,27 @@ const componentRefreshKey = (componentName) => {
 }
 
 const headerMenuTheme = computed(() => {
-    return getTheme(
-        themeNames.HEADER_MENU
-    )
+    return getTheme(themeNames.HEADER_MENU)
 })
 
 const googleAdTheme = computed(() => {
-    return getTheme(
-        themeNames.GOOGLE_AD
-    )
+    return getTheme(themeNames.GOOGLE_AD)
 })
 
 const siteExtraFeaturesTheme = computed(() => {
-    return getTheme(
-        themeNames.SITE_EXTRA_FEATURE
-    )
+    return getTheme(themeNames.SITE_EXTRA_FEATURE)
 })
 
 const topbarFooterMenuTheme = computed(() => {
-    return getTheme(
-        themeNames.TOPBAR_FOOTER_MENU
-    )
+    return getTheme(themeNames.TOPBAR_FOOTER_MENU)
 })
 
 const socialLinksTheme = computed(() => {
-    return getTheme(
-        themeNames.SOCIAL_LINK
-    )
+    return getTheme(themeNames.SOCIAL_LINK)
 })
 
 const googleServicesTheme = computed(() => {
-    return getTheme(
-        themeNames.GOOGLE_SEO_SERVICE
-    )
+    return getTheme(themeNames.GOOGLE_SEO_SERVICE)
 })
 
 const facebookTheme = computed(() => {
@@ -292,8 +281,6 @@ const googleAdEnable = computed(() => {
         )
     )
 })
-
-
 
 const googleSearchConsoleHeader = computed(() => {
     return getThemeOptionValue(
@@ -396,6 +383,7 @@ provide('currentLanguage', currentLanguage)
 
 onMounted(async () => {
     await nextTick()
+
     await loadDefaultLanguage()
     await loadLanguageByFirstPathSegment()
     await loadSiteThemes()
@@ -414,10 +402,10 @@ watch(
 </script>
 
 <template>
-    <div class="guest-layout flex flex-col min-h-screen" :data-lang="selectedLanguageCode">
+    <div class="guest-layout flex min-h-screen flex-col" :data-lang="selectedLanguageCode">
         <div class="public-topbar text-white">
-            <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center max-[450px]:gap-2">
-                <div class="flex space-x-3 max-[450px]:space-x-2 max-[450px]:flex-shrink-0">
+            <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 max-[450px]:gap-2">
+                <div class="flex space-x-3 max-[450px]:flex-shrink-0 max-[450px]:space-x-2">
                     <a v-if="facebookTheme?.value" :href="facebookTheme.value" target="_blank" rel="noopener noreferrer"
                         aria-label="Facebook" class="topbar-icon">
                         <FontAwesomeIcon :icon="['fab', 'facebook']" />
@@ -435,7 +423,7 @@ watch(
                 </div>
 
                 <div
-                    class="flex items-center space-x-3 relative max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:space-x-0 max-[450px]:gap-2">
+                    class="relative flex items-center space-x-3 max-[450px]:flex-1 max-[450px]:min-w-0 max-[450px]:justify-end max-[450px]:gap-2 max-[450px]:space-x-0">
                     <div v-if="isTruthyValue(showTopbarMenu?.value)" class="max-[450px]:flex-1 max-[450px]:min-w-0">
                         <TopbarMenu :key="componentRefreshKey('topbar-menu')" :currentLanguage="currentLanguage"
                             class="hidden min-[300px]:inline" />
@@ -461,11 +449,12 @@ watch(
             </div>
         </div>
 
-        <div ref="headerNavbar" class="public-header text-white transition-shadow"
-            :class="{ 'is-sticky sticky top-0 z-50': isHeaderSticky, }">
-            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
+        <div ref="headerNavbar" class="public-header text-white transition-shadow" :class="{
+            'is-sticky sticky top-0 z-50': isHeaderSticky,
+        }">
+            <div class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4">
                 <a :href="homeUrl"
-                    class="brand-link h-10 flex items-center pr-4 text-white font-semibold flex-shrink-0 leading-none">
+                    class="brand-link flex h-10 flex-shrink-0 items-center pr-4 font-semibold leading-none text-white">
                     <img v-if="isTruthyValue(showLogoOnHeaderMenu?.value) && appLogo" :src="appLogo" :alt="appName"
                         class="h-10 max-w-40 object-contain" />
 
@@ -474,14 +463,14 @@ watch(
                     </b>
                 </a>
 
-                <div class="flex-1 min-w-0 h-10 flex items-center">
+                <div class="flex h-10 min-w-0 flex-1 items-center">
                     <HeaderMenu :currentLanguage="currentLanguage" :key="componentRefreshKey('header-menu')"
                         class="hidden min-[401px]:inline" />
                 </div>
 
-                <div class="h-10 flex items-center gap-2 flex-shrink-0">
+                <div class="flex h-10 flex-shrink-0 items-center gap-2">
                     <a :href="searchUrl"
-                        class="header-action w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10"
+                        class="header-action flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/10"
                         aria-label="Search">
                         <FontAwesomeIcon icon="magnifying-glass" />
                     </a>
@@ -496,11 +485,12 @@ watch(
         </main>
 
         <BreakingNews v-if="isTruthyValue(showBreakingNews?.value)" :title="t('common.messages.breakingNews')"
-            :currentLanguage="currentLanguage" :key="componentRefreshKey('breaking-news')" />
+            :currentLanguage="currentLanguage" :footer-element="footerRef"
+            :key="componentRefreshKey('breaking-news')" />
 
-        <footer class="public-footer py-4 mt-2 text-sm">
-            <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
-                <span class="text-center md:text-left w-full md:w-auto flex-shrink-0">
+        <footer ref="footerRef" class="public-footer mt-2 py-4 text-sm">
+            <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 md:flex-row md:gap-4">
+                <span class="w-full flex-shrink-0 text-center md:w-auto md:text-left">
                     {{ t('common.messages.text') }}
                     {{ translateNumerText(year) }}
                     {{ t('common.app.name') }}
@@ -509,11 +499,11 @@ watch(
                 <FooterMenu v-if="isTruthyValue(showFooterMenu?.value)" :currentLanguage="currentLanguage"
                     :key="componentRefreshKey('footer-menu')" />
 
-                <span class="text-center md:text-right w-full md:w-auto flex-shrink-0">
+                <span class="w-full flex-shrink-0 text-center md:w-auto md:text-right">
                     {{ t('common.app.developedBy') }}
 
                     <a href="https://www.linkedin.com/in/sk-md-tahmid-farzan/" target="_blank" rel="noopener noreferrer"
-                        class="text-blue-600 hover:underline font-medium">
+                        class="font-medium text-blue-600 hover:underline">
                         {{ t('common.app.developerName') }}
                     </a>
                 </span>
