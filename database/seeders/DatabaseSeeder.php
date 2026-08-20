@@ -37,14 +37,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MenuSeeder::class);
 
         $this->call(GoogleAdSeeder::class);
-        $this->call(SurveySeeder::class);
-        $this->call(SurveyQuestionSeeder::class);
-
-        $this->call(QuizSeeder::class);
-        $this->call(QuizQuestionSeeder::class);
-        $this->call(QuizQuestionOptionSeeder::class);
-        $this->call(QuizUpdateForShowResultAndMaxWinnerSeeder::class);
-        $this->call(QuizParticipantSeeder::class);
 
         $this->call(NewsSeeder::class);
         $this->call(NewsPlacementSeeder::class);
@@ -56,5 +48,15 @@ class DatabaseSeeder extends Seeder
         $this->call(NewsMediaSeeder::class);
 
         $this->call(UpdateEventSeeder::class);
+
+
+        $this->call(SurveySeeder::class);
+        $this->call(SurveyQuestionSeeder::class);
+
+        $this->call(QuizSeeder::class);
+        $this->call(QuizQuestionSeeder::class);
+        $this->call(QuizQuestionOptionSeeder::class);
+        $this->call(QuizUpdateForShowResultAndMaxWinnerSeeder::class);
+        $this->call(QuizParticipantSeeder::class);
     }
 }

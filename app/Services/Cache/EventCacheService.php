@@ -66,13 +66,9 @@ class EventCacheService
         return $records;
     }
 
-    private function dbRecordsByPosition(Language $language, string $position = EventHelper::POSITION_TOP): Collection
+    private function dbRecordsByPosition(Language $language, string $position = EventHelper::POSITION_TOP, ): Collection
     {
-        $records = Event::with([
-            'desktopBannerImage',
-            'mobileBannerImage',
-        ])
-            ->where('language_id', $language->id)
+        return Event::with(['desktopBannerImage', 'mobileBannerImage'])->where('language_id', $language->id)
             ->where('position', $position)
             ->where('is_active', true)
             ->whereNotNull('start_date')
@@ -80,56 +76,21 @@ class EventCacheService
             ->whereDate('start_date', '<=', now()->toDateString())
             ->whereDate('end_date', '>=', now()->toDateString())
             ->get();
-
-        return $this->appendMediaSrcset($records);
     }
 
-    private function dbRecordByIdOrSlug(Language $language, string|int $idOrSlug): Event
+    private function dbRecordByIdOrSlug(Language $language,string|int $idOrSlug, ): Event
     {
-        $record = Event::with([
-            'language',
-            'desktopBannerImage',
-            'mobileBannerImage',
-        ])
-            ->where('is_active', true);
+        $record = Event::with(['language', 'desktopBannerImage', 'mobileBannerImage'])->where('is_active', true);
 
-        if ($language->id) {
-            $record->where('language_id', $language->id);
+        if ($language && $language?->id) {
+            $record = $record->where('language_id', $language?->id);
         }
 
-        $record->where(function ($query) use ($idOrSlug) {
-            $query->where('slug', $idOrSlug)
-                ->orWhere('id', $idOrSlug);
-        });
+        $record = $record->where('slug', $idOrSlug)
+            ->orWhere('id', $idOrSlug)
+            ->firstOrFail();
 
-        $event = $record->firstOrFail();
-
-        return $this->appendMediaSrcsetToEvent($event);
-    }
-
-    private function appendMediaSrcset(Collection $events): Collection
-    {
-        $events->each(function (Event $event) {
-            $this->appendMediaSrcsetToEvent($event);
-        });
-
-        return $events;
-    }
-
-    private function appendMediaSrcsetToEvent(Event $event): Event
-    {
-        foreach (['desktopBannerImage', 'mobileBannerImage'] as $relation) {
-            $media = $event->{$relation};
-
-            if ($media) {
-                $media->setAttribute(
-                    'srcset',
-                    $media->getSrcset()
-                );
-            }
-        }
-
-        return $event;
+        return $record;
     }
 
     public function getLastPageNo(string $key, Language $language, ?int $perPage = null, ?int $cachedTTL = null): int
@@ -178,7 +139,7 @@ class EventCacheService
         return $records;
     }
 
-    public function getRecordsByPosition(string $key, Language $language, string $position = EventHelper::POSITION_TOP,  ?int $cachedTTL = null): Collection
+    public function getRecordsByPosition(string $key, Language $language,string $position = EventHelper::POSITION_TOP,  ?int $cachedTTL = null): Collection
     {
         $cacheKey = CacheHelper::cacheKeyGenerateForEventByPosition($key, $this->secondKey, $position, $language);
 
@@ -214,7 +175,7 @@ class EventCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($language, $id,);
+            $record = $this->dbRecordByIdOrSlug($language, $id, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -243,7 +204,7 @@ class EventCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($language, $slug,);
+            $record = $this->dbRecordByIdOrSlug($language, $slug, );
 
             CacheServerHelper::cachedData(
                 $cacheKey,
