@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
+class LatestNewsSitemapCacheClearJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
@@ -27,7 +27,7 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     {
         $currentTime = time();
         $uqRandom    = Str::random(15);
-        return "latest-news-sitemap-sync-jobs-{$uqRandom}-{$currentTime}";
+        return "latest-news-sitemap-cached-clear-jobs-{$uqRandom}-{$currentTime}";
     }
 
     public function retryAfter()
@@ -43,9 +43,9 @@ class SyncLatestNewsSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(SitemapService $sitempapService): void
     {
         try {
-            $sitempapService->cachedLatestNews();
+            $sitempapService->clearLatestNews();
         } catch (Exception $ex) {
-            Log::error('Latest news sitemap job error: ' . $ex->getMessage());
+            Log::error('Latest news sitemap cached clear error: ' . $ex->getMessage());
         }
     }
 }

@@ -934,7 +934,7 @@ class NewsCacheService
         return $records;
     }
 
-    public function cachedLatestRecord(string $cacheKey, ?int $limit = null, bool $isCursorPaginate = false, ?int $cachedTTL = null): void
+    public function cachedLatestNews(string $cacheKey, bool $isCursorPaginate = false, ?int $cachedTTL = null): void
     {
         $languages = Language::orderBy("id", "desc")->get();
         foreach ($languages as $language) {
@@ -945,7 +945,7 @@ class NewsCacheService
             ];
             $cacheKey = CacheHelper::cacheKeyGenerateForLatest($cacheKey, $this->secondKey, $language, $isCursorPaginate);
 
-            $records = $this->dbLatest($language, $limit, $isCursorPaginate);
+            $records = $this->dbLatest($language, null, $isCursorPaginate);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -953,6 +953,20 @@ class NewsCacheService
                 $cachedTTL ?? $this->cachedTTL,
                 $tags
             );
+        }
+    }
+
+    public function clearLatestNews(string $cacheKey, bool $isCursorPaginate = false): void
+    {
+        $languages = Language::orderBy("id", "desc")->get();
+        foreach ($languages as $language) {
+            $tags = [
+                $cacheKey,
+                $this->mainTag,
+                $language->code,
+            ];
+            $cacheKey = CacheHelper::cacheKeyGenerateForLatest($cacheKey, $this->secondKey, $language, $isCursorPaginate);
+            CacheServerHelper::clearCached($cacheKey, $tags);
         }
     }
 

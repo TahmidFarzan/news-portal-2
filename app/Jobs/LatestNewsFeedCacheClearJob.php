@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
+class LatestNewsFeedCacheClearJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
@@ -27,7 +27,7 @@ class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
     {
         $currentTime = time();
         $uqRandom    = Str::random(15);
-        return "latest-news-feed-sync-jobs-{$uqRandom}-{$currentTime}";
+        return "latest-news-feed-cached-clear-jobs-{$uqRandom}-{$currentTime}";
     }
 
     public function retryAfter()
@@ -43,9 +43,9 @@ class SyncLatestNewsFeedJob implements ShouldQueue, ShouldBeUnique
     public function handle(FeedService $feedService): void
     {
         try {
-            $feedService->cachedLatestNews();
+            $feedService->clearLatestNews();
         } catch (Exception $ex) {
-            Log::error('Latest news feed cached job error: ' . $ex->getMessage());
+            Log::error('Latest news feed cached clear job error: ' . $ex->getMessage());
         }
     }
 }

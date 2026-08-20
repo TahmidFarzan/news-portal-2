@@ -588,8 +588,8 @@ The application uses 30 queued jobs for background processing. All jobs implemen
 
 | Job | Purpose |
 |---|---|
-| `SyncLatestNewsSitemapJob` | Refreshes cached latest news for sitemaps |
-| `SyncLatestNewsFeedJob` | Refreshes cached latest news for RSS/Atom feeds |
+| `LatestNewsSitemapCacheClearJob` | Refreshes cached latest news for sitemaps |
+| `LatestNewsFeedCacheClearJob` | Refreshes cached latest news for RSS/Atom feeds |
 | `NewsTagSyncJob` | Synchronizes news-tag many-to-many relationship |
 | `NewsContributorSyncJob` | Synchronizes news-contributor many-to-many relationship |
 | `NewsRelatedNewsSyncJob` | Synchronizes related news self-referential pivot |

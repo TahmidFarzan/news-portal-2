@@ -129,6 +129,10 @@ class FeedService
     }
 
     public function cachedLatestNews(){
-        return $this->newsCacheService->cachedLatestRecord(CacheHelper::KEY_FEED, null, false, $this->cachedTTL);
+        return $this->newsCacheService->cachedLatestNews(CacheHelper::KEY_FEED, false, $this->cachedTTL);
+    }
+
+    public function clearLatestNews(){
+        return $this->newsCacheService->clearLatestNews(CacheHelper::KEY_FEED, false);
     }
 }

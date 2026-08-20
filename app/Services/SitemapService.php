@@ -222,6 +222,10 @@ class SitemapService
     }
 
     public function cachedLatestNews(){
-        return $this->newsCacheService->cachedLatestRecord(CacheHelper::KEY_SITEMAP, null, false, $this->cachedTTL);
+        return $this->newsCacheService->cachedLatestNews(CacheHelper::KEY_SITEMAP, false, $this->cachedTTL);
+    }
+
+    public function clearLatestNews(){
+        return $this->newsCacheService->clearLatestNews(CacheHelper::KEY_SITEMAP, false);
     }
 }
