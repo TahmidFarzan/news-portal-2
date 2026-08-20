@@ -127,4 +127,8 @@ class FeedService
     {
         return $this->newsCacheService->getRecordsLimit(CacheHelper::KEY_FEED, $language, $request, $contributor);
     }
+
+    public function cachedLatestNews(){
+        return $this->newsCacheService->cachedLatestRecord(CacheHelper::KEY_FEED, null, false, $this->cachedTTL);
+    }
 }

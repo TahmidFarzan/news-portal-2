@@ -220,4 +220,8 @@ class SitemapService
     {
         return $this->pageCacheService->getLastPageNo(CacheHelper::KEY_SITEMAP, $language);
     }
+
+    public function cachedLatestNews(){
+        return $this->newsCacheService->cachedLatestRecord(CacheHelper::KEY_SITEMAP, null, false, $this->cachedTTL);
+    }
 }

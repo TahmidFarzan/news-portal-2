@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Cache;
 
 use App\Helpers\CacheHelper;
@@ -412,7 +413,7 @@ class NewsCacheService
         return $records;
     }
 
-    private function dbPopuler(Language $language, ?int $limit = null, ): EloquentCollection
+    private function dbPopuler(Language $language, ?int $limit = null,): EloquentCollection
     {
         $limit = $limit ?? $this->limit;
 
@@ -572,7 +573,7 @@ class NewsCacheService
         return (int) ceil($records->count() / $perPage);
     }
 
-    private function dbRecordByIdOrSlug(Language $language, string | int $idOrSlug, ): News
+    private function dbRecordByIdOrSlug(Language $language, string | int $idOrSlug,): News
     {
         $record = News::with([
             'newsType',
@@ -656,11 +657,7 @@ class NewsCacheService
                 $cacheKey,
                 $lastPage,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                    $language->code,
-                ]
+                $tags
             );
         }
 
@@ -818,11 +815,7 @@ class NewsCacheService
                 $cacheKey,
                 $records,
                 $cachedTTL ?? $this->cachedTTL,
-                [
-                    $cacheKey,
-                    $this->mainTag,
-                    $language->code,
-                ]
+                $tags
             );
         }
 
@@ -872,7 +865,7 @@ class NewsCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($language, $slug, );
+            $record = $this->dbRecordByIdOrSlug($language, $slug,);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -900,7 +893,7 @@ class NewsCacheService
         );
 
         if (! $record) {
-            $record = $this->dbRecordByIdOrSlug($language, $id, );
+            $record = $this->dbRecordByIdOrSlug($language, $id,);
 
             CacheServerHelper::cachedData(
                 $cacheKey,
@@ -941,6 +934,28 @@ class NewsCacheService
         return $records;
     }
 
+    public function cachedLatestRecord(string $cacheKey, ?int $limit = null, bool $isCursorPaginate = false, ?int $cachedTTL = null): void
+    {
+        $languages = Language::orderBy("id", "desc")->get();
+        foreach ($languages as $language) {
+            $tags = [
+                $cacheKey,
+                $this->mainTag,
+                $language->code,
+            ];
+            $cacheKey = CacheHelper::cacheKeyGenerateForLatest($cacheKey, $this->secondKey, $language, $isCursorPaginate);
+
+            $records = $this->dbLatest($language, $limit, $isCursorPaginate);
+
+            CacheServerHelper::cachedData(
+                $cacheKey,
+                $records,
+                $cachedTTL ?? $this->cachedTTL,
+                $tags
+            );
+        }
+    }
+
     public function clearCacheByNewsForUpdateNews(News $news)
     {
         $pageCacheKey    = CacheHelper::cacheKeyGenerateSingleRecordBySlug(CacheHelper::TAG_PAGE, $this->secondKey, $news->slug, $news->language ?? null);
@@ -954,13 +969,15 @@ class NewsCacheService
 
     public function clearCacheByNewsForNewlyAddedNews(News $news): void
     {
-        foreach ([
-            $news->category,
-            $news->event,
-            $news->tag,
-            $news->location,
-            $news->contributor,
-        ] as $model) {
+        foreach (
+            [
+                $news->category,
+                $news->event,
+                $news->tag,
+                $news->location,
+                $news->contributor,
+            ] as $model
+        ) {
             if (! $model) {
                 continue;
             }
