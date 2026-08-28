@@ -18,7 +18,7 @@ class UserPolicy
 
     public function viewAny(User $authUser): Response
     {
-        $module = UserPermissionHelper::MODULE_MENU;
+        $module = UserPermissionHelper::MODULE_USER;
         $access = UserPermissionHelper::ACCESS_VIEW_ANY;
 
         return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
@@ -26,7 +26,7 @@ class UserPolicy
 
     public function view(User $authUser, User $user): Response
     {
-        $module = UserPermissionHelper::MODULE_MENU;
+        $module = UserPermissionHelper::MODULE_USER;
         $access = UserPermissionHelper::ACCESS_VIEW;
 
         return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
@@ -34,7 +34,7 @@ class UserPolicy
 
     public function create(User $authUser): Response
     {
-        $module = UserPermissionHelper::MODULE_MENU;
+        $module = UserPermissionHelper::MODULE_USER;
         $access = UserPermissionHelper::ACCESS_CREATE;
 
         return $authUser->hasUserPermission($module, $access) ? Response::allow() : Response::deny();
