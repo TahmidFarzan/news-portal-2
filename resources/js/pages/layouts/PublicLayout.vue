@@ -28,7 +28,7 @@ import {
 import { fetchFromApi } from '@/composables/useApiClient'
 import { apiCacheKey, apiCacheTTL } from '@/composables/useApiCache'
 import { useTheme } from '@/composables/useTheme'
-import { loweriseText } from '@/composables/useUtil'
+import { loweriseText } from '@/composables/useStringFormat'
 
 import {
     setSelectedLanguage,

@@ -3,7 +3,6 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import { i18n } from './i18n'
 
-import './bootstrap'
 import '../css/app.css'
 import 'vue-sonner/style.css'
 

@@ -15,7 +15,7 @@ import Trends from '@/components/common/page/home/Trends.vue'
 import Surveys from '@/components/common/page/home/Surveys.vue'
 import Quizzes from '@/components/common/page/home/Quizzes.vue'
 import GoogleAd from '@/components/common/advertising/GoogleAd.vue'
-import { loweriseText } from '@/composables/useUtil'
+import { loweriseText } from '@/composables/useStringFormat'
 
 import {
     languages,

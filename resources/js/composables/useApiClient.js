@@ -1,11 +1,12 @@
-import axios from 'axios'
+import apiClient from '@/config/axios'
 import { apiCacheKey, apiCacheTTL, useApiCache } from '@/composables/useApiCache'
 
 const { remember, rememberApi, remove } = useApiCache()
 
 const fetchJson = async (url, params = {}) => {
-    const res = await axios.get(url, { params })
-    return res.data || []
+    const response = await apiClient.get(url, { params })
+
+    return response.data || []
 }
 
 export async function fetchFromApi(url, params = {}, options = {}) {
@@ -24,13 +25,16 @@ export async function fetchFromApi(url, params = {}, options = {}) {
             }
         )
     } catch (error) {
-        console.error(`Failed to fetch from ${url}.`, error);
-        return [];
+        console.error(`Failed to fetch from ${url}.`, error)
+
+        return []
     }
 }
 
 export async function fetchUser(userSlugOrId) {
-    if (!userSlugOrId) return null
+    if (!userSlugOrId) {
+        return null
+    }
 
     const cacheKey = `${apiCacheKey.API_USER}:${userSlugOrId}`
 
@@ -38,27 +42,38 @@ export async function fetchUser(userSlugOrId) {
         return await remember(
             cacheKey,
             async () => {
-                const response = await axios.get(route('search.user', { slugOrId: userSlugOrId }))
+                const response = await apiClient.get(
+                    route('search.user', {
+                        slugOrId: userSlugOrId,
+                    })
+                )
+
                 return response.data || null
             },
             {
                 ttl: apiCacheTTL.SYSTEM_SHORT,
             }
         )
-    }
-    catch (error) {
-        console.error(`Failed to fetch user ${userSlugOrId}.`, error)
+    } catch (error) {
+        console.error(
+            `Failed to fetch user ${userSlugOrId}.`,
+            error
+        )
+
         remove(cacheKey)
+
         return null
     }
 }
 
 export async function postToApi(url, data = {}, config = {}) {
     try {
-        const res = await axios.post(url, data, config)
-        return res.data || null
+        const response = await apiClient.post(url, data, config)
+
+        return response.data || null
     } catch (error) {
         console.error(`Failed to post to ${url}.`, error)
+
         return null
     }
 }
