@@ -24,6 +24,7 @@
         "@vitejs/plugin-vue": "^6.0.6",
         "axios": "^1.15.0",
         "date-fns": "^4.1.0",
+        "fontaine": "^0.8.1",
         "iso-language-codes": "^2.0.0",
         "leaflet": "^1.9.4",
         "locale-codes": "^1.3.1",
