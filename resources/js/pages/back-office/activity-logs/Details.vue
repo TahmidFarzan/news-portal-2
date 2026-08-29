@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
 import { faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { titleFormat } from '@/composables/useUtil'
+import { titleFormat } from '@/composables/useStringFormat'
 import { formatDateTime } from '@/composables/useDateTime'
 
 import {

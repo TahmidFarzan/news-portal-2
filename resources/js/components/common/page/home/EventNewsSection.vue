@@ -50,7 +50,7 @@ const getEventImageUrl = (event, type = 'desktop') => {
     const image = type === 'mobile'
         ? event?.mobile_banner_image
         : event?.desktop_banner_image
-
+console.log(image)
     return image?.preview_url ?? image?.original_url ?? null
 }
 
@@ -135,11 +135,12 @@ watch(
         <div v-for="(event, index) in eventItems" :key="event?.id || event?.slug || index"
             class="event-panel overflow-hidden rounded-2xl border p-3">
             <img :src="getEventImageUrl(event, 'mobile') || getEventImageUrl(event, 'desktop')" :alt="event?.name || ''"
-                class="event-banner block h-auto w-full rounded-2xl object-cover md:hidden"
-                :loading="eager && index === 0 ? undefined : 'lazy'" />
+                class="event-banner sm:block h-auto w-full rounded-2xl object-cover md:hidden"
+                :loading="eager && index === 0 ? undefined : 'lazy'"
+                :fetchpriority="eager && index === 0 ? 'high' : undefined" />
 
             <img :src="getEventImageUrl(event, 'desktop') || getEventImageUrl(event, 'mobile')" :alt="event?.name || ''"
-                class="event-banner hidden h-auto w-full rounded-2xl object-cover md:block"
+                class="event-banner sm:hidden h-auto w-full rounded-2xl object-cover md:block"
                 :loading="eager && index === 0 ? undefined : 'lazy'"
                 :fetchpriority="eager && index === 0 ? 'high' : undefined" />
 
@@ -275,7 +276,6 @@ watch(
     border-radius: 1rem;
     background: white;
     box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
-    ring: 1px;
 }
 
 .event-news-card :deep(> *) {

@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 
 import ModelPropertyAttributes from '@/components/back-office/activity-log/ModelPropertyAttributes.vue'
 
-import { titleFormat } from '@/composables/useUtil'
+import { titleFormat } from '@/composables/useStringFormat'
 import { formatDateTime } from '@/composables/useDateTime'
 import { fetchUser } from '@/composables/useApiClient'
 
