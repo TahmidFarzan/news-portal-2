@@ -142,7 +142,7 @@ class MediaService
         }
     }
 
-    public function quickUpdate(MediaQuickRequest $request, Media $media)
+    public function quickUpdate(MediaQuickRequest $request, $media)
     {
         try {
 
@@ -289,7 +289,7 @@ class MediaService
         }
     }
 
-    public function delete(Media $media): array
+    public function delete($media): array
     {
 
         try {
