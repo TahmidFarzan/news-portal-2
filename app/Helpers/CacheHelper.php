@@ -505,6 +505,7 @@ class CacheHelper
             $cacheData = $request->except([
                 '_token',
             ]);
+            
 
             ksort($cacheData);
 
