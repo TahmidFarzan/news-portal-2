@@ -63,7 +63,11 @@ class LocationService
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Location::query()->with("parent");
+        $query = Location::query()
+            ->with([
+                'parent:id,name,slug,name_tree,slug_tree',
+                'category:id,name,slug,name_tree,slug_tree',
+            ]);
 
         if ($request->filled('created_by_id')) {
             $query->where('created_by_id', $request->input('created_by_id'));
